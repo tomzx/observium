@@ -1,4 +1,5 @@
-<?php // vim:fenc=utf-8:filetype=php:ts=4
+<?php
+
 /**
  * Configuration file for Collectd graph browser
  */
