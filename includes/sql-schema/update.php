@@ -115,9 +115,13 @@ foreach ($filelist as $file)
       {
         echo(" done.\n");
       }
-      else
+      elseif($err)
       {
         echo(" done ($err errors).\n");
+      }
+      else
+      {
+        echo(" done.\n");
       }
     }
     else
