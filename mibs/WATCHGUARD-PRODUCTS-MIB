@@ -1,5 +1,10 @@
 WATCHGUARD-PRODUCTS-MIB DEFINITIONS ::= BEGIN
 
+-- Modified by Adam Armstrong <adama@observium.org>
+-- For Observium <www.observium.org> on 2012-05-30
+-- Corrected XTMSeries to xtmSeries.
+
+
 IMPORTS
 
     MODULE-IDENTITY     FROM    SNMPv2-SMI
@@ -56,19 +61,19 @@ fbX55e-W   OBJECT IDENTIFIER ::= { fbXSeries 22 }
 
 -- xtm series
 xtm1050    OBJECT IDENTIFIER ::= { xtmSeries 1 }
-xtm1050-F  OBJECT IDENTIFIER ::= { XTMSeries 2 }
-xtm830-F   OBJECT IDENTIFIER ::= { XTMSeries 3 }
-xtm830     OBJECT IDENTIFIER ::= { XTMSeries 4 }
-xtm820     OBJECT IDENTIFIER ::= { XTMSeries 5 }
-xtm810     OBJECT IDENTIFIER ::= { XTMSeries 6 }
-xtm530     OBJECT IDENTIFIER ::= { XTMSeries 7 }
-xtm520     OBJECT IDENTIFIER ::= { XTMSeries 8 }
-xtm510     OBJECT IDENTIFIER ::= { XTMSeries 9 }
-xtm23      OBJECT IDENTIFIER ::= { XTMSeries 10 }
-xtm22      OBJECT IDENTIFIER ::= { XTMSeries 11 }
-xtm21      OBJECT IDENTIFIER ::= { XTMSeries 12 }
-xtm23-W    OBJECT IDENTIFIER ::= { XTMSeries 13 }
-xtm22-W    OBJECT IDENTIFIER ::= { XTMSeries 14 }
-xtm21-W    OBJECT IDENTIFIER ::= { XTMSeries 15 }
+xtm1050-F  OBJECT IDENTIFIER ::= { xtmSeries 2 }
+xtm830-F   OBJECT IDENTIFIER ::= { xtmSeries 3 }
+xtm830     OBJECT IDENTIFIER ::= { xtmSeries 4 }
+xtm820     OBJECT IDENTIFIER ::= { xtmSeries 5 }
+xtm810     OBJECT IDENTIFIER ::= { xtmSeries 6 }
+xtm530     OBJECT IDENTIFIER ::= { xtmSeries 7 }
+xtm520     OBJECT IDENTIFIER ::= { xtmSeries 8 }
+xtm510     OBJECT IDENTIFIER ::= { xtmSeries 9 }
+xtm23      OBJECT IDENTIFIER ::= { xtmSeries 10 }
+xtm22      OBJECT IDENTIFIER ::= { xtmSeries 11 }
+xtm21      OBJECT IDENTIFIER ::= { xtmSeries 12 }
+xtm23-W    OBJECT IDENTIFIER ::= { xtmSeries 13 }
+xtm22-W    OBJECT IDENTIFIER ::= { xtmSeries 14 }
+xtm21-W    OBJECT IDENTIFIER ::= { xtmSeries 15 }
 
 END
