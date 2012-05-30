@@ -38,10 +38,9 @@ foreach (dbFetchRows("SELECT * FROM `sensors` WHERE `sensor_class` = ? AND `devi
       break;
   }
 
-  $sensor['sensor_descr_fixed'] = substr(str_pad($sensor['sensor_descr'], $descr_len),0,$descr_len);
   $rrd_file = get_sensor_rrd($device, $sensor);
   $rrd_options .= " DEF:sensor" . $sensor['sensor_id'] . "=$rrd_file:sensor:AVERAGE ";
-  $rrd_options .= " LINE1:sensor" . $sensor['sensor_id'] . "#" . $colour . ":'" . str_replace(':','\:',str_replace('\*','*',$sensor['sensor_descr_fixed'])) . "'";
+  $rrd_options .= " LINE1:sensor" . $sensor['sensor_id'] . "#" . $colour . ":'" . rrdtool_escape($sensor['sensor_descr'],$descr_len) . "'";
   $rrd_options .= " GPRINT:sensor" . $sensor['sensor_id'] . ":LAST:%4.1lf".$unit." ";
   $rrd_options .= " GPRINT:sensor" . $sensor['sensor_id'] . ":MIN:%4.1lf".$unit." ";
   $rrd_options .= " GPRINT:sensor" . $sensor['sensor_id'] . ":MAX:%4.1lf".$unit."\\\l ";

@@ -43,7 +43,7 @@ foreach (dbFetchRows("SELECT * FROM toner where device_id = ?", array($device['d
 
   $hostname = gethostbyid($toner['device_id']);
 
-  $descr = substr(str_pad($toner['toner_descr'], 16),0,16);
+  $descr = rrdtool_escape($toner['toner_descr'], 16);
   $rrd_filename  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("toner-" . $toner['toner_index'] . ".rrd");
   $toner_id = $toner['toner_id'];
 
