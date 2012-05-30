@@ -57,17 +57,21 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GRO
     unset($customer_name);
   }
 
-  echo("<tr bgcolor='$bg_colour'><td></td><td colspan=6>");
+  if ($config['int_customers_graphs']) {
+  
+    echo("<tr bgcolor='$bg_colour'><td></td><td colspan=6>");
 
-  $graph_array['type']   = "customer_bits";
-  $graph_array['height'] = "100";
-  $graph_array['width']  = "220";
-  $graph_array['to']     = $config['time']['now'];
-  $graph_array['id']     = $customer['port_descr_descr'];
+    $graph_array['type']   = "customer_bits";
+    $graph_array['height'] = "100";
+    $graph_array['width']  = "220";
+    $graph_array['to']     = $config['time']['now'];
+    $graph_array['id']     = $customer['port_descr_descr'];
 
   include("includes/print-graphrow.inc.php");
 
-  echo("</tr>");
+    echo("</tr>");
+  }
+  
 }
 
 echo("</table>");
