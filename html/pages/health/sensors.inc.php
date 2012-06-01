@@ -32,11 +32,12 @@ foreach (dbFetchRows($sql, $param) as $sensor)
     if($debug) { echo("Memcached[".'sensor-'.$sensor['sensor_id'].'-value'."=".$sensor['sensor_current']."]"); }
   }
 
+  $alert = "";
   if (empty($sensor['sensor_current']))
   {
     $sensor['sensor_current'] = "NaN";
   } else {
-    if ($sensor['sensor_current'] >= $sensor['sensor_limit']) { $alert = '<img src="images/16/flag_red.png" alt="alert" />'; } else { $alert = ""; }
+    if ($sensor['sensor_current'] >= $sensor['sensor_limit']) { $alert = '<img src="images/16/flag_red.png" alt="alert" />'; } 
   }
 
     // FIXME - make this "four graphs in popup" a function/include and "small graph" a function.
