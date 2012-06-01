@@ -249,7 +249,7 @@ function rrdtool_escape($string, $maxlength = NULL)
   $result = str_replace(':','\:',$string);
   $result = str_replace('%','%%',$result);
 
-  // FIXME: should maybe also probably escape these? # \ + ? [ ^ ] ( $ ) '
+  // FIXME: should maybe also probably escape these? # \ ? [ ^ ] ( $ ) '
   
   if ($maxlength != NULL)
   {
