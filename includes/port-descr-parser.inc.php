@@ -5,7 +5,7 @@
 
 unset ($port_ifAlias);
 
-echo($this_port['ifAlias']);
+if ($debug) { echo($this_port['ifAlias']); }
 
 list($type,$descr) = preg_split("/[\:\[\]\{\}\(\)]/", $this_port['ifAlias']);
 list(,$circuit) = preg_split("/[\{\}]/", $this_port['ifAlias']);
