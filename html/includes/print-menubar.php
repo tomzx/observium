@@ -598,7 +598,6 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
       {
       echo('
         <li><a href="adduser/"><img src="images/16/user_add.png" border="0" align="absmiddle" /> Add User</a></li>
-        <li><a href="deluser/"><img src="images/16/user_delete.png" border="0" align="absmiddle" /> Remove User</a></li>
         ');
       }
       echo('

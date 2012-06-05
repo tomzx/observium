@@ -8,32 +8,66 @@ $pagetitle[] = "Edit user";
 
 if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php"); } else
 {
+
+  print_optionbar_start();
+
+  $user_list = get_userlist();
+
+  echo('<form method="post" action="">
+          <span style="font-weight: bold;">Edit User</span> &#187;
+          <input type="hidden" value="edituser" name="page">
+          <select name="user_id" onchange="location.href=\'/edituser/user_id=\' + this.options[this.selectedIndex].value + \'/\';">');
+  if(!isset($vars['user_id'])) { echo('<option value="">Select User</option>'); }
+
+  foreach ($user_list as $user_entry)
+  {
+    echo("<option value='" . $user_entry['user_id']  . "'");
+    if($user_entry['user_id'] == $vars['user_id']) { echo(' selected '); }
+    #echo(" onchange=\"location.href='/edituser/user_id=' + this.options[this.selectedIndex].value + '/';\" ");
+    echo(">" . $user_entry['username'] . "</option>");
+  }
+
+  echo('</select>');
+
   if ($vars['user_id'])
   {
+    // Load the user's information
     $user_data = dbFetchRow("SELECT * FROM users WHERE user_id = ?", array($vars['user_id']));
-      echo("<p><h2>" . $user_data['realname'] . "</h2><a href='edituser/'>Change...</a></p>");
-      echo("<p><a href='edituser/action=changepass/user_id=".$vars['user_id']."'>Change password...</a></p>");
-      echo("<p><a href='edituser/action=becomeuser/user_id=".$vars['user_id']."'>Become user...</a></p>");
+
+    // Become the selected user. Dirty.
+    echo(" | <a href='edituser/action=becomeuser/user_id=".$vars['user_id']."'>Become User</a>");
+
+    // Delete the selected user.
+    echo(" | <a href='edituser/action=deleteuser/user_id=".$vars['user_id']."'>Delete User</a>");
+
+  }
+
+  echo('</form>');
+
+  print_optionbar_end();
+
+  if ($vars['user_id'])
+  {
+   if($vars['action'] == "deleteuser")
+   {
+
+     include("pages/edituser/deleteuser.inc.php");
+
+   } else {
 
     // Perform actions if requested
 
     if ($vars['action'] == "changepass")
     {
-	echo "</p><div style='width: 300px;'><div style='background-color: #e5e5e5; border: solid #e5e5e5 10px; margin-bottom:10px;'><div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>
-	<form method='post' action='edituser/'>
-        <input type=hidden name='action' value='changepass2'>
-        <input type=hidden value='" . $vars['user_id'] . "' name='user_id'>
-        <table>
-        <tr><td>New Password</td><td><input type=password name=new_pass autocomplete='off'></input></td></tr>
-        <tr><td></td><td align=right><input type=submit class=submit></td></tr></table></form></div></div>";
-	// Change pass
+      if($_POST['new_pass'] == $_POST['new_pass2'])
+      {
+        changepassword($user_data['username'], $_POST['new_pass']);
+        print_message("Password Changed.");
+       } else {
+        print_error("Passwords don't match!");
+      }
     }
-    if ($vars['action'] == "changepass2")
-    {
-      changepassword($user_data['username'],$_POST['new_pass']);
-      echo "</p><div style='width: 300px;'><div style='background-color: #e5e5e5; border: solid #e5e5e5 10px; margin-bottom:10px;'><div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>
-            Password Changed.</div></div>";
-    }
+
     if ($vars['action'] == "becomeuser")
     {
       $_SESSION['origusername'] = $_SESSION['username'];
@@ -42,6 +76,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
       dbInsert(array('user' => $_SESSION['origusername'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Became ' . $_SESSION['username']), 'authlog');
       include("includes/authenticate.inc.php");
     }
+
     if ($vars['action'] == "deldevperm")
     {
       if (dbFetchCell("SELECT COUNT(*) FROM devices_perms WHERE `device_id` = ? AND `user_id` = ?", array($vars['device_id'] ,$vars['user_id'])))
@@ -85,6 +120,20 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
       }
     }
 
+    if (passwordscanchange($vars['user_id']))
+    {
+        echo "<div style='width: 300px;'><div style='background-color: #e5e5e5; border: solid #e5e5e5 10px; margin-bottom:10px;'>
+              <div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>
+        <form method='post' action='edituser/user_id=".$vars['user_id']."'>
+        <input type=hidden name='action' value='changepass'>
+        <input type=hidden value='" . $vars['user_id'] . "' name='user_id'>
+        <table>
+        <tr><td>New Password</td><td><input type=password name=new_pass autocomplete='off'></input></td></tr>
+        <tr><td>Retype Password</td><td><input type=password name=new_pass2 autocomplete='off'></input></td></tr>
+        <tr><td></td><td align=right><input type=submit class=submit></td></tr></table></form></div></div>";
+        // Change pass
+    }
+
     echo("<table width=100%><tr><td valign=top width=33%>");
 
     // Display devices this users has access to
@@ -120,10 +169,10 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
     }
 
     echo("</select> <input type='submit' name='Submit' value='Add'></form>");
+    echo("</td>");
 
-    echo("</td><td valign=top width=33%>");
+    echo("<td valign=top width=33%>");
     echo("<h3>Interface Access</h3>");
-
     $interface_perms = dbFetchRows("SELECT * from ports_perms as P, ports as I, devices as D WHERE `user_id` = ? AND I.port_id = P.port_id AND D.device_id = I.device_id", array($vars['user_id']));
 
     foreach ($interface_perms as $interface_perm)
@@ -197,20 +246,8 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
     echo("</select> <input type='submit' name='Submit' value='Add'></form>");
     echo("</td></table>");
 
-  } else {
+   }
 
-    $user_list = get_userlist();
-
-    echo("<h3>Select a user to edit</h3>");
-
-    echo("<form method='post' action=''>
-            <input type='hidden' value='edituser' name='page'>
-            <select name='user_id'>");
-    foreach ($user_list as $user_entry)
-    {
-      echo("<option value='" . $user_entry['user_id']  . "'>" . $user_entry['username'] . "</option>");
-    }
-    echo("</select><input type='submit' name='Submit' value='Select'></form>");
   }
 
 }
