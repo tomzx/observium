@@ -1,5 +1,7 @@
 <?php
 
+include_once("includes/discovery/functions.inc.php");
+
 global $debug;
 
 if ($device['os_group'] == "unix")
@@ -140,7 +142,7 @@ if ($device['os_group'] == "unix")
           $agent_data['app']['drbd'][$drbd_dev] = $drbd_data;
           if (dbFetchCell("SELECT COUNT(*) FROM `applications` WHERE `device_id` = ? AND `app_type` = ? AND `app_instance` = ?", array($device['device_id'], 'drbd', $drbd_dev)) == "0")
           {
-            echo("Found new application 'DRBd' $drbd_dev\n");
+            echo("Found new application 'DRBD' $drbd_dev\n");
             dbInsert(array('device_id' => $device['device_id'], 'app_type' => 'drbd', 'app_instance' => $drbd_dev), 'applications');
           }
         }
@@ -148,12 +150,9 @@ if ($device['os_group'] == "unix")
     }
   }
 
-  if (!empty($agent_sensors))
-  {
-    echo("Sensors: ");
-    check_valid_sensors($device, 'temperature', $valid['sensor'], 'agent');
-    echo("\n");
-  }
+  echo("Sensors: ");
+  check_valid_sensors($device, 'temperature', $valid['sensor'], 'agent');
+  echo("\n");
 
   echo("\n");
 }
