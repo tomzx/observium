@@ -12,8 +12,36 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
   {
     $user_data = dbFetchRow("SELECT * FROM users WHERE user_id = ?", array($vars['user_id']));
       echo("<p><h2>" . $user_data['realname'] . "</h2><a href='edituser/'>Change...</a></p>");
+      echo("<p><a href='edituser/action=changepass/user_id=".$vars['user_id']."'>Change password...</a></p>");
+      echo("<p><a href='edituser/action=becomeuser/user_id=".$vars['user_id']."'>Become user...</a></p>");
+
     // Perform actions if requested
 
+    if ($vars['action'] == "changepass")
+    {
+	echo "</p><div style='width: 300px;'><div style='background-color: #e5e5e5; border: solid #e5e5e5 10px; margin-bottom:10px;'><div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>
+	<form method='post' action='edituser/'>
+        <input type=hidden name='action' value='changepass2'>
+        <input type=hidden value='" . $vars['user_id'] . "' name='user_id'>
+        <table>
+        <tr><td>New Password</td><td><input type=password name=new_pass autocomplete='off'></input></td></tr>
+        <tr><td></td><td align=right><input type=submit class=submit></td></tr></table></form></div></div>";
+	// Change pass
+    }
+    if ($vars['action'] == "changepass2")
+    {
+      changepassword($user_data['username'],$_POST['new_pass']);
+      echo "</p><div style='width: 300px;'><div style='background-color: #e5e5e5; border: solid #e5e5e5 10px; margin-bottom:10px;'><div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>
+            Password Changed.</div></div>";
+    }
+    if ($vars['action'] == "becomeuser")
+    {
+      $_SESSION['origusername'] = $_SESSION['username'];
+      $_SESSION['username'] = $user_data['username'];
+      header("Location: /");
+      dbInsert(array('user' => $_SESSION['origusername'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Became ' . $_SESSION['username']), 'authlog');
+      include("includes/authenticate.inc.php");
+    }
     if ($vars['action'] == "deldevperm")
     {
       if (dbFetchCell("SELECT COUNT(*) FROM devices_perms WHERE `device_id` = ? AND `user_id` = ?", array($vars['device_id'] ,$vars['user_id'])))
