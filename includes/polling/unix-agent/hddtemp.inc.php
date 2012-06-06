@@ -2,8 +2,6 @@
 
 global $agent_sensors;
 
-include_once("includes/discovery/functions.inc.php");
-
 if ($agent_data['haddtemp'] != '|')
 {
   $disks = explode('||',trim($agent_data['hddtemp'],'|'));

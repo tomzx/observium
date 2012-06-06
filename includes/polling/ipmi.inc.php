@@ -1,13 +1,15 @@
 <?php
 
-$ipmi_rows = dbFetchRows("SELECT * FROM sensors WHERE device_id = ? AND poller_type='ipmi'", array($device['device_id']));
+global $ipmi_sensors;
+
+include_once("includes/discovery/functions.inc.php");
 
 if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
 {
   $ipmi['user'] = get_dev_attrib($device,'ipmi_username');
   $ipmi['password'] = get_dev_attrib($device,'ipmi_password');
 
-  echo("Fetching IPMI sensor data...");
+  echo("IPMI: ");
 
   if ($config['own_hostname'] != $device['hostname'] || $ipmi['host'] != 'localhost')
   {
@@ -15,45 +17,27 @@ if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
   }
 
   $results = external_exec($config['ipmitool'] . " -c " . $remote . " sdr 2>/dev/null");
-  echo(" done.\n");
+
+  $index = 0;
 
   foreach (explode("\n",$results) as $row)
   {
-    list($desc,$value,$type,$status) = explode(',',$row);
-    $ipmi_sensor[$desc][$config['ipmi_unit'][$type]]['value'] = $value;
-    $ipmi_sensor[$desc][$config['ipmi_unit'][$type]]['unit'] = $type;
+    $index++;
+    list($descr,$current,$unit,$status) = explode(',',$row);
+    
+    if (trim($current) != "na" && $config['ipmi_unit'][trim($unit)])
+    {
+      discover_sensor($valid['sensor'], $config['ipmi_unit'][$unit], $device, '', $index, 'ipmi', $descr, '1', '1', NULL, NULL, NULL, NULL, $current, 'ipmi');
+      $ipmi_sensors[$config['ipmi_unit'][$unit]]['ipmi'][$index] = array('description' => $descr, 'current' => $current, 'index' => $index, 'unit' => $unit);
+    }
   }
 
-  foreach ($ipmi_rows as $ipmisensors)
+  foreach ($config['ipmi_unit'] as $type)
   {
-    echo("Updating IPMI sensor " . $ipmisensors['sensor_descr'] . "... ");
-
-    $sensor = $ipmi_sensor[$ipmisensors['sensor_descr']][$ipmisensors['sensor_class']]['value'];
-    $unit   = $ipmi_sensor[$ipmisensors['sensor_descr']][$ipmisensors['sensor_class']]['unit'];
-
-    $rrd_file = get_sensor_rrd($device, $ipmisensors);
-
-    if (is_file($old_rrd_file))
-    {
-      rename($old_rrd_file, $rrd_file);
-    }
-
-    if (!is_file($rrd_file))
-    {
-      rrdtool_create($rrd_file,"--step 300 \
-      DS:sensor:GAUGE:600:-20000:20000 ".$config['rrd_rra']);
-    }
-
-    echo($sensor . " $unit\n");
-
-    rrdtool_update($rrd_file,"N:$sensor");
-
-    // FIXME warnings in event & mail not done here yet!
-
-    dbUpdate(array('sensor_current' => $sensor), 'sensors', 'poller_type = ? AND sensor_class = ? AND sensor_id = ?', array('ipmi', $ipmisensors['sensor_class'], $ipmisensors['sensor_id']));
-
+    check_valid_sensors($device, $type, $valid['sensor'], 'ipmi');
   }
-
+  echo("\n");
+      
   unset($ipmi_sensor);
 }
 

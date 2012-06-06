@@ -2,7 +2,7 @@
 
 function poll_sensor($device, $class, $unit)
 {
-  global $config, $memcache, $agent_sensors;
+  global $config, $memcache, $agent_sensors, $ipmi_sensors;
 
   foreach (dbFetchRows("SELECT * FROM `sensors` WHERE `sensor_class` = ? AND `device_id` = ?", array($class, $device['device_id'])) as $sensor)
   {
@@ -28,6 +28,7 @@ function poll_sensor($device, $class, $unit)
       if (isset($agent_sensors))
       {
         $sensor_value = $agent_sensors[$class][$sensor['sensor_type']][$sensor['sensor_index']]['current'];
+        # FIXME pass unit?
       }
       else
       {
@@ -36,7 +37,16 @@ function poll_sensor($device, $class, $unit)
       }
     } else if ($sensor['poller_type'] == "ipmi")
     {
-      echo " already polled.\n"; # ipmi should probably move here from the ipmi poller file (FIXME)
+      if (isset($agent_sensors))
+      {
+        $sensor_value = $ipmi_sensors[$class][$sensor['sensor_type']][$sensor['sensor_index']]['current'];
+        $unit = $ipmi_sensors[$class][$sensor['sensor_type']][$sensor['sensor_index']]['unit'];
+      }
+      else
+      {
+        echo "no IPMI data!\n";
+        continue;
+      }
       continue;
     }
     else

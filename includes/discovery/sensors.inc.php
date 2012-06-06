@@ -6,7 +6,6 @@ echo("Sensors: ");
 
 include("includes/discovery/cisco-entity-sensor.inc.php");
 include("includes/discovery/entity-sensor.inc.php");
-include("includes/discovery/ipmi.inc.php");
 
 if($device['os'] == "netscaler") { include("includes/discovery/sensors-netscaler.inc.php"); }
 
