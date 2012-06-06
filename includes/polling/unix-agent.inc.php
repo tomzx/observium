@@ -151,9 +151,7 @@ if ($device['os_group'] == "unix")
   }
 
   echo("Sensors: ");
-  check_valid_sensors($device, 'temperature', $valid['sensor'], 'agent');
-  echo("\n");
-
+  check_valid_sensors($device, 'temperature', $valid['sensor'], 'agent'); # FIXME should check all, not just temperature
   echo("\n");
 }
 

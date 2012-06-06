@@ -37,7 +37,7 @@ function poll_sensor($device, $class, $unit)
       }
     } else if ($sensor['poller_type'] == "ipmi")
     {
-      if (isset($agent_sensors))
+      if (isset($ipmi_sensors))
       {
         $sensor_value = $ipmi_sensors[$class][$sensor['sensor_type']][$sensor['sensor_index']]['current'];
         $unit = $ipmi_sensors[$class][$sensor['sensor_type']][$sensor['sensor_index']]['unit'];
@@ -47,7 +47,6 @@ function poll_sensor($device, $class, $unit)
         echo "no IPMI data!\n";
         continue;
       }
-      continue;
     }
     else
     {
