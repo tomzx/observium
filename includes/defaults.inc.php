@@ -357,7 +357,7 @@ $config['device_traffic_iftype'][] = '/ppp/';
 $config['device_traffic_descr'][]  = '/loopback/';
 $config['device_traffic_descr'][]  = '/vlan/';
 $config['device_traffic_descr'][]  = '/tunnel/';
-$config['device_traffic_descr'][]  = '/:\d+/';
+#$config['device_traffic_descr'][]  = '/:\d+/';   ## this breaks on xos (ifName = 1:1)
 $config['device_traffic_descr'][]  = '/bond/';
 $config['device_traffic_descr'][]  = '/null/';
 $config['device_traffic_descr'][]  = '/dummy/';

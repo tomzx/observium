@@ -35,10 +35,10 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
     $user_data = dbFetchRow("SELECT * FROM users WHERE user_id = ?", array($vars['user_id']));
 
     // Become the selected user. Dirty.
-    echo(" | <a href='edituser/action=becomeuser/user_id=".$vars['user_id']."'>Become User</a>");
+    echo(" | <a href='edituser/action=becomeuser/user_id=".$vars['user_id']."/'>Become User</a>");
 
     // Delete the selected user.
-    echo(" | <a href='edituser/action=deleteuser/user_id=".$vars['user_id']."'>Delete User</a>");
+    echo(" | <a href='edituser/action=deleteuser/user_id=".$vars['user_id']."/'>Delete User</a>");
 
   }
 

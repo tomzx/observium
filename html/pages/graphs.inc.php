@@ -75,6 +75,8 @@ if (!$auth)
     onchange="window.open(this.options[this.selectedIndex].value,'_top')" >
           <?php
 
+  sort($types);
+
   foreach ($types as $avail_type)
   {
     echo("<option value='".generate_url($vars, array('type' => $type."_".$avail_type, 'page' => "graphs"))."'");
