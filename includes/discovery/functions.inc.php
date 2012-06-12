@@ -116,9 +116,9 @@ function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, 
 {
   global $config, $debug;
 
-  if ($debug) { echo("Discover sensor: $oid, $index, $type, $descr, $poller_type, $precision, $entPhysicalIndex\n"); }
+  if ($debug) { echo("Discover sensor: $class, $device, $oid, $index, $type, $descr,  $divisor , $multiplier, $low_limit, $low_warn_limit, $warn_limit, $high_limit, $current, $poller_type, $entPhysicalIndex, $entPhysicalIndex_measured\n"); }
 
-  if (is_null($low_warn_limit) || !is_null($warn_limit))
+  if (empty($low_warn_limit) || empty($warn_limit))
   {
     // Warn limits only make sense when we have both a high and a low limit
     $low_warn_limit = NULL;
