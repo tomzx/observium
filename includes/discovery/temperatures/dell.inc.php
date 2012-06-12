@@ -29,7 +29,7 @@
 if (strstr($device['hardware'], "Dell"))
 {
   // stuff partially copied from akcp sensor
-  $oids = snmp_walk($device, "temperatureProbeStatus", "-Osqn", "MIB-Dell-10892");
+  $oids = snmp_walk($device, "temperatureProbeStateSettings", "-Osqn", "MIB-Dell-10892");
   if ($debug) { echo($oids."\n"); }
   $oids = trim($oids);
   if ($oids) echo("Dell OMSA ");
@@ -40,7 +40,7 @@ if (strstr($device['hardware'], "Dell"))
     {
       list($oid,$status) = explode(" ", $data, 2);
       if ($debug) { echo("status : ".$status."\n"); }
-      if ($status == "ok") # 2 = normal, 0 = not connected
+      if ($status == "enabled")
       {
         $split_oid        = explode('.',$oid);
         $temperature_id   = $split_oid[count($split_oid)-2].".".$split_oid[count($split_oid)-1];
@@ -54,11 +54,15 @@ if (strstr($device['hardware'], "Dell"))
         $descr        = trim(snmp_get($device, $descr_oid, "-Oqv", "MIB-Dell-10892"),'"');
         $temperature  = snmp_get($device, $temperature_oid, "-Oqv", "MIB-Dell-10892");
         $lowwarnlimit = snmp_get($device, $lowwarnlimit_oid, "-Oqv", "MIB-Dell-10892");
+        if (empty($lowwarnlimit)) { $lowwarnlimit = null; }
         $warnlimit    = snmp_get($device, $warnlimit_oid, "-Oqv", "MIB-Dell-10892");
+        if (empty($warnlimit)) { $warnlimit = null; }
         $limit        = snmp_get($device, $limit_oid, "-Oqv", "MIB-Dell-10892");
+        if (empty($limit)) { $limit = null; }
         $lowlimit     = snmp_get($device, $lowlimit_oid, "-Oqv", "MIB-Dell-10892");
+        if (empty($lowlimit)) { $lowlimit = null; }
 
-        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'dell', $descr, '10', '1', $lowlimit/10, $low_warn_limit/10, $warnlimit/10, $limit/10, $temperature/10);
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'dell', $descr, '10', '1', $lowlimit/10, $lowwarnlimit/10, $warnlimit/10, $limit/10, $temperature/10);
       }
     }
   }
