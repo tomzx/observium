@@ -83,7 +83,7 @@ if ($device['os_group'] == "unix")
     // Processes
     if (!empty($agent_data['ps']))
     {
-      echo("Processes: ");
+      echo("\nProcesses: ");
       foreach (explode("\n", $agent_data['ps']) as $process)
       {
         $process = preg_replace("/\((.*),([0-9]*),([0-9]*),([0-9\.]*)\)\ (.*)/", "\\1|\\2|\\3|\\4|\\5", $process);

@@ -1,12 +1,26 @@
 <?php
 
-// Polls powerdns statistics from script via SNMP
+if (!empty($agent_data['app']['powerdns']))
+{
+  foreach (explode("\n",$agent_data['app']['powerdns']) as $line)
+  {
+    list($key,$value) = explode("\t",$line,2);
+    # FIXME do this differently when we drop SNMP support (use a keyed array)
+    $powerdns_full[] = $value;
+  }
+
+  $powerdns = implode("\n", $powerdns_full);  
+} else {
+
+  // Polls powerdns statistics from script via SNMP
+
+  $options       = "-O qv";
+  $oid           = "nsExtendOutputFull.8.112.111.119.101.114.100.110.115";
+
+  $powerdns      = snmp_get($device, $oid, $options);
+}
 
 $rrd_filename  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-powerdns-".$app['app_id'].".rrd";
-$options       = "-O qv";
-$oid           = "nsExtendOutputFull.8.112.111.119.101.114.100.110.115";
-
-$powerdns      = snmp_get($device, $oid, $options);
 
 echo(" powerdns");
 
