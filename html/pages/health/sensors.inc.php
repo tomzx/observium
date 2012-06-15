@@ -33,7 +33,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
   }
 
   $alert = "";
-  if (empty($sensor['sensor_current']))
+  if (!is_numeric($sensor['sensor_current']))
   {
     $sensor['sensor_current'] = "NaN";
   } else {
