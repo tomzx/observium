@@ -13,20 +13,28 @@
 
 function discover_new_device($hostname)
 {
-  global $config;
+  global $config, $debug;
 
-  if ($config['autodiscovery']['xdp']) {
-    if ( isDomainResolves($hostname . "." . $config['mydomain']) ) {
+  if ($config['autodiscovery']['xdp'])
+  {
+    if ( isDomainResolves($hostname . "." . $config['mydomain']) )
+    {
+      if ($debug) { echo("appending " . $config['mydomain'] . "!\n"); }
       $dst_host = $hostname . "." . $config['mydomain'];
     } else {
       $dst_host = $hostname;
     }
+    
     $ip = gethostbyname($dst_host);
 
-    if ( match_network($config['nets'], $ip) )
+    if ($debug) { echo("resolving $dst_host to $ip\n"); }
+    
+    if (match_network($config['nets'], $ip))
     {
+      if ($debug) { echo("found $ip inside configured nets, adding!\n");
       $remote_device_id = addHost ($dst_host);
-      if ($remote_device_id) {
+      if ($remote_device_id)
+      {
         $remote_device = device_by_id_cache($remote_device_id, 1);
         echo("+[".$remote_device['hostname']."(".$remote_device['device_id'].")]");
         discover_device($remote_device);
@@ -35,6 +43,7 @@ function discover_new_device($hostname)
       }
     }
   } else {
+    if ($debug) { echo("xdp autodiscovery disabled"); }
     return FALSE;
   }
 }
