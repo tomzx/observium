@@ -243,6 +243,8 @@ if(!isset($vars['ignore']))   { $vars['ignore'] = "0"; }
 if(!isset($vars['disabled'])) { $vars['disabled'] = "0"; }
 if(!isset($vars['deleted']))  { $vars['deleted'] = "0"; }
 
+$where = " WHERE 1";
+
 foreach ($vars as $var => $value)
 {
   if ($value != "")
@@ -251,7 +253,7 @@ foreach ($vars as $var => $value)
     {
       case 'hostname':
       case 'location':
-        $where .= " AND D.$var LIKE ?";
+        $where .= " AND `$var` LIKE ?";
         $param[] = "%".$value."%";
       case 'device_id':
       case 'deleted':
@@ -260,37 +262,37 @@ foreach ($vars as $var => $value)
       case 'ifSpeed':
         if (is_numeric($value))
         {
-          $where .= " AND I.$var = ?";
+          $where .= " AND `ports`.`$var` = ?";
           $param[] = $value;
         }
         break;
       case 'ifType':
-        $where .= " AND I.$var = ?";
+        $where .= " AND `$var` = ?";
         $param[] = $value;
         break;
       case 'ifAlias':
       case 'port_descr_type':
-        $where .= " AND I.$var LIKE ?";
+        $where .= " AND `$var` LIKE ?";
         $param[] = "%".$value."%";
         break;
       case 'errors':
         if ($value == 1)
         {
-          $where .= " AND (I.`ifInErrors_delta` > '0' OR I.`ifOutErrors_delta` > '0')";
+          $where .= " AND (`ifInErrors_delta` > '0' OR `ifOutErrors_delta` > '0')";
         }
         break;
       case 'state':
         if ($value == "down")
         {
-          $where .= "AND I.ifAdminStatus = ? AND I.ifOperStatus = ?";
+          $where .= "AND `ifAdminStatus` = ? AND `ifOperStatus` = ?";
           $param[] = "up";
           $param[] = "down";
         } elseif($value == "up") {
-          $where .= "AND I.ifAdminStatus = ? AND I.ifOperStatus = ?";
+          $where .= "AND `ifAdminStatus` = ? AND `ifOperStatus` = ?";
           $param[] = "up";
           $param[] = "up";
         } elseif($value == "admindown") {
-          $where .= "AND I.ifAdminStatus = ?";
+          $where .= "AND `ifAdminStatus` = ?";
           $param[] = "down";
         }
       break;
@@ -298,28 +300,17 @@ foreach ($vars as $var => $value)
   }
 }
 
-$query = "SELECT * FROM `ports` AS I, `devices` AS D WHERE I.device_id = D.device_id ".$where." ".$query_sort;
+
+$sql  = "SELECT *, `ports`.`port_id` as `port_id`";
+$sql .= " FROM  `ports`";
+$sql .= " JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
+$sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
+$sql .= " ".$where;
 
 $row = 1;
 
 list($format, $subformat) = explode("_", $vars['format']);
-
-$ports = dbFetchRows($query, $param);
-
-// FIXME - only populate what we need to search at this point, because we shouldn't show *all* ports, as it's silly.
-
-foreach ($ports as $port)
-{
-  if ($config['memcached']['enable'])
-  {
-    if ($config['memcached']['enable'])
-    {
-      $state = $memcache->get('port-'.$port['port_id'].'-state');
-      if(is_array($state)) { $ports[$port['port_id']] = array_merge($port, $state); }
-      unset($state);
-    }
-  }
-}
+$ports = dbFetchRows($sql, $param);
 
 switch ($vars['sort'])
 {
@@ -363,7 +354,9 @@ switch ($vars['sort'])
 
 if(file_exists('pages/ports/'.$format.'.inc.php'))
 {
- include('pages/ports/'.$format.'.inc.php');
+  include('pages/ports/'.$format.'.inc.php');
+} else {
+  echo("Invalid Format");
 }
 
 ?>

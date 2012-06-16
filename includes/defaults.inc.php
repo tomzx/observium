@@ -57,16 +57,6 @@ $config['neato']          = "/usr/bin/neato";
 $config['sfdp']           = "/usr/bin/sfdp";
 $config['svn']                  = "/usr/bin/svn";
 
-// Memcached - Keep immediate statistics
-
-$config['memcached']['enable']  = FALSE;
-$config['memcached']['host']    = "localhost";
-$config['memcached']['port']    = 11211;
-
-$config['slow_statistics']      = TRUE; // THIS WILL CHANGE TO FALSE IN FUTURE
-
-
-
 
 // RRD Format Settings
 // These should not normally be changed

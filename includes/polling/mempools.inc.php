@@ -1,6 +1,11 @@
 <?php
 
-foreach (dbFetchRows("SELECT * FROM mempools WHERE device_id = ?", array($device['device_id'])) as $mempool)
+$sql  = "SELECT *, `mempools`.mempool_id as mempool_id";
+$sql .= " FROM  `mempools`";
+$sql .= " LEFT JOIN  `mempools-state` ON  `mempools`.mempool_id =  `mempools-state`.mempool_id";
+$sql .= " WHERE `device_id` = ?";
+
+foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
 {
   echo("Mempool ". $mempool['mempool_descr'] . ": ");
 
@@ -31,16 +36,12 @@ foreach (dbFetchRows("SELECT * FROM mempools WHERE device_id = ?", array($device
   }
   rrdtool_update($mempool_rrd,"N:".$mempool['used'].":".$mempool['free']);
 
-  $mempool['state'] = array('mempool_used' => $mempool['used'], 'mempool_perc' => $percent, 'mempool_free' => $mempool['free'],
+  if(!is_numeric($mempool['mempool_polled'])) { dbInsert(array('mempool_id' => $mempool['mempool_id']), 'mempools-state'); }
+
+  $mempool['state'] = array('mempool_polled' => time(), 'mempool_used' => $mempool['used'], 'mempool_perc' => $percent, 'mempool_free' => $mempool['free'],
                  'mempool_total' => $mempool['total'], 'mempool_largestfree' => $mempool['largestfree'], 'mempool_lowestfree' => $mempool['lowestfree']);
 
-  if ($config['memcached']['enable'])
-  {
-    if($debug) { print_r($mempool['state']); }
-    $memcache->set('mempool-'.$mempool['mempool_id'].'-value', $mempool['state']);
-  } else {
-    dbUpdate($mempool['state'], 'mempools', '`mempool_id` = ?', array($mempool['mempool_id']));
-  }
+  dbUpdate($mempool['state'], 'mempools-state', '`mempool_id` = ?', array($mempool['mempool_id']));
 
   echo("\n");
 }

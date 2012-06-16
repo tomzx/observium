@@ -81,6 +81,8 @@ function generate_url($vars, $new_vars = array())
 function generate_overlib_content($graph_array, $text)
 {
     global $config;
+    $graph_array['height'] = "100";
+    $graph_array['width']  = "210";
 
     $overlib_content = '<div style="width: 590px;"><span style="font-weight: bold; font-size: 16px;">'.$text."</span><br />";
     foreach (array('day','week','month','year') as $period)

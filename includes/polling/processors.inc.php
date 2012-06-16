@@ -1,8 +1,13 @@
 <?php
 
-foreach (dbFetchRows("SELECT * FROM processors WHERE device_id = ?", array($device['device_id'])) as $processor)
+$sql  = "SELECT `processors`.*, `processors-state`.processor_usage, `processors-state`.processor_polled";
+$sql .= " FROM  `processors`";
+$sql .= " LEFT JOIN `processors-state` ON `processors`.processor_id = `processors-state`.processor_id";
+$sql .= " WHERE `device_id` = ?";
+
+foreach (dbFetchRows($sql, array($device['device_id'])) as $processor)
 {
-  echo("Processor " . $processor['processor_descr'] . "... ");
+  echo("Processor " . $processor['processor_descr'] . " ");
 
   $file = $config['install_dir']."/includes/polling/processors/".$processor['processor_type'].".inc.php";
   if (is_file($file))
@@ -28,8 +33,17 @@ foreach (dbFetchRows("SELECT * FROM processors WHERE device_id = ?", array($devi
 
   echo($proc . "%\n");
 
+  // Update RRD
   rrdtool_update($procrrd,"N:$proc");
-  dbUpdate(array('processor_usage' => $proc), 'processors', '`processor_id` = ?', array($processor['processor_id']));
+
+  // Update SQL State
+  if(is_numeric($processor['processor_polled']))
+  {
+    dbUpdate(array('processor_usage' => $proc, 'processor_polled' => time()), 'processors-state', '`processor_id` = ?', array($processor['processor_id']));
+  } else {
+    dbInsert(array('processor_id' => $processor['processor_id'], 'processor_usage' => $proc, 'processor_polled' => time()), 'processors-state');
+  }
+
 }
 
 ?>

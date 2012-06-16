@@ -8,9 +8,8 @@ echo('<tr class="tablehead"><td></td>');
 $cols = array('device' => 'Device',
               'port' => 'Port',
               'speed' => 'Speed',
-              'traffic_in' => 'Down',
-              'traffic_out' => 'Up',
-              'media' => 'Media',
+              'traffic' => 'Traffic',
+              'packets' => 'Packets',
               'descr' => 'Description' );
 
 foreach ($cols as $sort => $col)
@@ -45,18 +44,22 @@ foreach ($ports as $port)
       $error_img = generate_port_link($port,"<img src='images/16/chart_curve_error.png' alt='Interface Errors' border=0>",errors);
     } else { $error_img = ""; }
 
-    $port['in_rate'] = formatRates($port['ifInOctets_rate'] * 8);
-    $port['out_rate'] = formatRates($port['ifOutOctets_rate'] * 8);
+    $port['bps_in'] = formatRates($port['ifInOctets_rate'] * 8);
+    $port['bps_out'] = formatRates($port['ifOutOctets_rate'] * 8);
+
+    $port['pps_in'] = format_si($port['ifInUcastPkts_rate'])."pps";
+    $port['pps_out'] = format_si($port['ifOutUcastPkts_rate'])."pps";
 
     $port = ifLabel($port, $device);
     echo("<tr class='ports'>
           <td width=5></td>
           <td width=200 class=list-bold>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
-          <td width=150 class=list-bold><a class='".$ifclass."'href='" . generate_port_url($port) . "'>".fixIfName($port['label'])." $error_img</td>
-          <td width=110 >$speed</td>
-          <td width=100 class=green>".$port['in_rate']."</td>
-          <td width=100 class=blue>".$port['out_rate']."</td>
-          <td width=150>$type</td>
+          <td width=150 class=list-bold>" . generate_port_link($port, fixIfName($port['label']))." $error_img</td>
+          <td width=110 >$speed<br />$type</td>
+          <td width=100><span class=green>&darr; ".$port['bps_in']."<br />
+                        <span class=blue>&uarr; ".$port['bps_out']."<br />
+          <td width=100><span class=purple>&darr; ".$port['pps_in']."<br />
+                        <span class=orange>&uarr; ".$port['pps_out']."<br />
           <td>" . $port['ifAlias'] . "</td>
         </tr>\n");
   }

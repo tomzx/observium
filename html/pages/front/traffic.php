@@ -144,9 +144,9 @@ if ($_SESSION['userlevel'] >= '5')
   if ($ports['peering'] && $ports['transit'])
   {
     echo("<div style='width: 235px; '>
-    <a href='internet/' onmouseover=\"return overlib('\
-    <img src=\'graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
-    <img src=\'graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
+    <a href='iftype/type=peering,transit/' onmouseover=\"return overlib('\
+    <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
+    <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
     ', CENTER, LEFT, FGCOLOR, '#e5e5e5', BGCOLOR, '#e5e5e5', WIDTH, 400, HEIGHT, 150);\" onmouseout=\"return nd();\"  >".
     "<div style='font-size: 16px; font-weight: bold; color: #555555;'>Aggregate Internet Traffic</div>".
     "<img src='graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit'].
@@ -160,7 +160,7 @@ if ($_SESSION['userlevel'] >= '5')
   if ($ports['transit'])
   {
     echo("<div style='width: 235px; float: left;'>
-    <a href='iftype/transit/' onmouseover=\"return overlib('\
+    <a href='iftype/type=transit/' onmouseover=\"return overlib('\
     <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
     <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
     ', CENTER, LEFT, FGCOLOR, '#e5e5e5', BGCOLOR, '#e5e5e5', WIDTH, 400, HEIGHT, 150);\" onmouseout=\"return nd();\"  >".
@@ -172,7 +172,7 @@ if ($_SESSION['userlevel'] >= '5')
   if ($ports['peering'])
   {
     echo("<div style='width: 235px; float: right;'>
-    <a href='iftype/peering/' onmouseover=\"return overlib('\
+    <a href='iftype/type=peering/' onmouseover=\"return overlib('\
     <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
     <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
     ', CENTER, LEFT, FGCOLOR, '#e5e5e5', BGCOLOR, '#e5e5e5', WIDTH, 400, HEIGHT, 150);\" onmouseout=\"return nd();\"  >".
@@ -184,7 +184,7 @@ if ($_SESSION['userlevel'] >= '5')
   if ($ports['core'])
   {
     echo("<div style='width: 235px;'>
-    <a href='iftype/core/' onmouseover=\"return overlib('\
+    <a href='iftype/type=core/' onmouseover=\"return overlib('\
     <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['core']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
     <img src=\'graph.php?type=multiport_bits&amp;id=".$ports['core']."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150\'>\
     ', CENTER, LEFT, FGCOLOR, '#e5e5e5', BGCOLOR, '#e5e5e5', WIDTH, 400, HEIGHT, 150);\" onmouseout=\"return nd();\"  >".

@@ -2,15 +2,12 @@
 
 if (!isset($vars['view']) ) { $vars['view'] = "graphs"; }
 
-$port = dbFetchRow("SELECT * FROM `ports` WHERE `port_id` = ?", array($vars['port']));
+$sql  = "SELECT *, `ports`.`port_id` as `port_id`";
+$sql .= " FROM  `ports`";
+$sql .= " LEFT JOIN  `ports-state` ON  `ports`.port_id =  `ports-state`.port_id";
+$sql .= " WHERE `ports`.`port_id` = ?";
 
-if ($config['memcached']['enable'])
-{
-  $state = $memcache->get('port-'.$port['port_id'].'-state');
-  if($debug) { print_r($state); }
-  if(is_array($state)) { $port = array_merge($port, $state); }
-  unset($state);
-}
+$port = dbFetchRow($sql, array($vars['port']));
 
 $port_details = 1;
 

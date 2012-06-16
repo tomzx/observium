@@ -9,17 +9,14 @@ $i = '1';
 
 #FIXME css alternating colours
 
-foreach (dbFetchRows("SELECT * FROM `mempools` WHERE device_id = ?", array($device['device_id'])) as $mempool)
+$sql  = "SELECT *, `mempools`.mempool_id as mempool_id";
+$sql .= " FROM  `mempools`";
+$sql .= " LEFT JOIN  `mempools-state` ON  `mempools`.mempool_id =  `mempools-state`.mempool_id";
+$sql .= " WHERE `device_id` = ?";
+
+foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
 {
   if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-
-  if ($config['memcached']['enable'])
-  {
-    $state = $memcache->get('mempool-'.$mempool['mempool_id'].'-state');
-    if($debug) { print_r($state); }
-    if(is_array($state)) { $mempool = array_merge($mempool, $state); }
-    unset($state);
-  }
 
   $text_descr = rewrite_entity_descr($mempool['mempool_descr']);
 

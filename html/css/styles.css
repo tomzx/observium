@@ -1372,6 +1372,14 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
     border-collapse: collapse;
 }
 
+tr.devicetable:nth-child(odd) {
+  background: #e5e5e5;
+}
+
+tr.devicetable:nth-child(even) {
+  background: #ffffff;
+}
+
 tr.iftype:nth-child(odd) {
   background: #e5e5e5;
 }
@@ -1384,8 +1392,15 @@ tr.health:nth-child(odd) {
   background: #ffffff;
 }
 
+tr.health:nth-child(even) {
+  background: #eeeeee;
+}
+
 tr.ports:nth-child(even) {
   background: #ffffff;
+}
+tr.ports:nth-child(odd) {
+  background: #eeeeee;
 }
 
 tr.bgp:nth-child(even) {

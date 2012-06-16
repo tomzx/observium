@@ -2,7 +2,12 @@
 
 $graph_type = "storage_usage";
 
-$drives = dbFetchRows("SELECT * FROM `storage` WHERE device_id = ? ORDER BY `storage_descr` ASC", array($device['device_id']));
+$sql  = "SELECT *, `storage`.`storage_id` as `storage_id`";
+$sql .= " FROM  `storage`";
+$sql .= " LEFT JOIN  `storage-state` ON  `storage`.storage_id =  `storage-state`.storage_id";
+$sql .= " WHERE `device_id` = ?";
+
+$drives = dbFetchRows($sql, array($device['device_id']));
 
 if (count($drives))
 {

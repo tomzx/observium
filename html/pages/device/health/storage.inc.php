@@ -13,7 +13,12 @@ echo("<tr class=tablehead>
 
 $row = 1;
 
-foreach (dbFetchRows("SELECT * FROM `storage` WHERE device_id = ? ORDER BY storage_descr", array($device['device_id'])) as $drive)
+$sql  = "SELECT *, `storage`.`storage_id` as `storage_id`";
+$sql .= " FROM  `storage`";
+$sql .= " LEFT JOIN  `storage-state` ON  `storage`.storage_id =  `storage-state`.storage_id";
+$sql .= " WHERE `device_id` = ?";
+
+foreach (dbFetchRows($sql, array($device['device_id'])) as $drive)
 {
   if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
 

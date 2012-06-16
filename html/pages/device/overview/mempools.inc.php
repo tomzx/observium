@@ -2,7 +2,12 @@
 
 $graph_type = "mempool_usage";
 
-$mempools = dbFetchRows("SELECT * FROM `mempools` WHERE device_id = ?", array($device['device_id']));
+$sql  = "SELECT *, `mempools`.mempool_id as mempool_id";
+$sql .= " FROM  `mempools`";
+$sql .= " LEFT JOIN  `mempools-state` ON  `mempools`.mempool_id =  `mempools-state`.mempool_id";
+$sql .= " WHERE `device_id` = ?";
+
+$mempools = dbFetchRows($sql, array($device['device_id']));
 
 if (count($mempools))
 {
@@ -14,15 +19,6 @@ if (count($mempools))
 
   foreach ($mempools as $mempool)
   {
-
-    if ($config['memcached']['enable'])
-    {
-      $state = $memcache->get('mempool-'.$mempool['mempool_id'].'-state');
-      if($debug) { print_r($state); }
-      if(is_array($state)) { $mempool = array_merge($mempool, $state); }
-      unset($state);
-    }
-
     $percent= round($mempool['mempool_perc'],0);
     $text_descr = rewrite_entity_descr($mempool['mempool_descr']);
     $total = formatStorage($mempool['mempool_total']);

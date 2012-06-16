@@ -1,12 +1,18 @@
 <?php
 
+// Poll a sensor
 function poll_sensor($device, $class, $unit)
 {
-  global $config, $memcache, $agent_sensors, $ipmi_sensors;
+  global $config, $agent_sensors, $ipmi_sensors;
 
-  foreach (dbFetchRows("SELECT * FROM `sensors` WHERE `sensor_class` = ? AND `device_id` = ?", array($class, $device['device_id'])) as $sensor)
+  $sql  = "SELECT *, `sensors`.`sensor_id` AS `sensor_id`";
+  $sql .= " FROM  `sensors`";
+  $sql .= " LEFT JOIN  `sensors-state` ON  `sensors`.sensor_id =  `sensors-state`.sensor_id";
+  $sql .= " WHERE `sensor_class` = ? AND `device_id` = ?";
+
+  foreach (dbFetchRows($sql, array($class, $device['device_id'])) as $sensor)
   {
-    echo("Checking (" . $sensor['poller_type'] . ") $class " . $sensor['sensor_descr'] . "... ");
+    echo("Checking (" . $sensor['poller_type'] . ") $class " . $sensor['sensor_descr'] . " ");
 
     if ($sensor['poller_type'] == "snmp")
     {
@@ -69,7 +75,16 @@ function poll_sensor($device, $class, $unit)
 
     echo("$sensor_value $unit\n");
 
+    // Update RRD
     rrdtool_update($rrd_file,"N:$sensor_value");
+
+    // Update SQL State
+    if(is_numeric($sensor['sensor_polled']))
+    {
+      dbUpdate(array('sensor_value' => $sensor_value, 'sensor_polled' => time()), 'sensors-state', '`sensor_id` = ?', array($sensor['sensor_id']));
+    } else {
+      dbInsert(array('sensor_id' => $sensor['sensor_id'], 'sensor_value' => $sensor_value, 'sensor_polled' => time()), 'sensors-state');
+    }
 
     // FIXME also warn when crossing WARN level!!
     if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_current'] > $sensor['sensor_limit_low'] && $sensor_value <= $sensor['sensor_limit_low'])
@@ -85,13 +100,6 @@ function poll_sensor($device, $class, $unit)
       notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
       echo("Alerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "\n");
       log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " above threshold: " . $sensor_value . " $unit (> " . $sensor['sensor_limit'] . " $unit)", $device, $class, $sensor['sensor_id']);
-    }
-
-    if ($config['memcached']['enable'])
-    {
-      $memcache->set('sensor-'.$sensor['sensor_id'].'-value', $sensor_value);
-    } else {
-      dbUpdate(array('sensor_current' => $sensor_value), 'sensors', '`sensor_class` = ? AND `sensor_id` = ?', array($class, $sensor['sensor_id']));
     }
   }
 }

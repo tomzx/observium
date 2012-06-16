@@ -13,20 +13,17 @@ echo("<tr class=tablehead>
         <th width=50>Used</th>
       </tr>");
 
-foreach (dbFetchRows("SELECT * FROM `mempools` AS M, `devices` as D WHERE D.device_id = M.device_id ORDER BY D.hostname") as $mempool)
+$sql  = "SELECT *, `mempools`.`mempool_id` AS `mempool_id`";
+$sql .= " FROM  `mempools`";
+$sql .= " JOIN `devices` ON  `mempools`.`device_id` =  `devices`.`device_id`";
+$sql .= " LEFT JOIN  `mempools-state` ON  `mempools`.mempool_id =  `mempools-state`.mempool_id";
+$sql .= " ORDER BY `devices`.`hostname`";
+
+foreach (dbFetchRows($sql) as $mempool)
 {
   if (device_permitted($mempool['device_id']))
   {
     $text_descr = $mempool['mempool_descr'];
-
-    if ($config['memcached']['enable'])
-    {
-      $state = $memcache->get('mempool-'.$mempool['mempool_id'].'-state');
-      if($debug) { print_r($state); }
-      if(is_array($state)) { $port = array_merge($mempool, $state); }
-      unset($state);
-    }
-
 
     $mempool_url = "device/device=".$mempool['device_id']."/tab=health/metric=mempool/";
     $mini_url = "graph.php?id=".$mempool['mempool_id']."&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=80&amp;height=20&amp;bg=f4f4f4";

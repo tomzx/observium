@@ -2,7 +2,12 @@
 
 $graph_type = "processor_usage";
 
-$processors = dbFetchRows("SELECT * FROM `processors` WHERE device_id = ?", array($device['device_id']));
+$sql  = "SELECT *, `processors`.`processor_id` as `processor_id`";
+$sql .= " FROM  `processors`";
+$sql .= " LEFT JOIN `processors-state` ON `processors`.processor_id = `processors-state`.processor_id";
+$sql .= " WHERE `device_id` = ?";
+
+$processors = dbFetchRows($sql, array($device['device_id']));
 
 if (count($processors))
 {

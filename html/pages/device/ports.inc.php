@@ -95,7 +95,8 @@ if ($vars['view'] == 'minigraphs')
 
   global $port_cache, $port_index_cache;
 
-  $ports = dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? AND `deleted` = '0' ORDER BY `ifIndex` ASC", array($device['device_id']));
+  $ports = dbFetchRows("SELECT * FROM `ports` AS P, `ports-state` AS S WHERE S.port_id = P.port_id AND P.`device_id` = ? AND P.`deleted` = '0' ORDER BY `ifIndex` ASC", array($device['device_id']));
+
   // As we've dragged the whole database, lets pre-populate our caches :)
   // FIXME - we should probably split the fetching of link/stack/etc into functions and cache them here too to cut down on single row queries.
   foreach ($ports as $port)
@@ -106,14 +107,6 @@ if ($vars['view'] == 'minigraphs')
 
   foreach ($ports as $port)
   {
-    if ($config['memcached']['enable'])
-    {
-      $state = $memcache->get('port-'.$port['port_id'].'-state');
-      if($debug) { print_r($state); }
-      if(is_array($state)) { $port = array_merge($port, $state); }
-      unset($state);
-    }
-
     include("includes/print-interface.inc.php");
 
     $i++;

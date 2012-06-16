@@ -60,7 +60,13 @@ echo('<tr style="height: 30px"><td width=1></td><th></th><th>Peer address</th><t
 
 $i = "1";
 
-foreach (dbFetchRows("SELECT * FROM `bgpPeers` WHERE `device_id` = ? ORDER BY `bgpPEerRemoteAs`, `bgpPeerIdentifier`", array($device['device_id'])) as $peer)
+$sql  = "SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id";
+$sql .= " FROM  `bgpPeers`";
+$sql .= " LEFT JOIN  `bgpPeers-state` ON  `bgpPeers`.bgpPeer_id =  `bgpPeers-state`.bgpPeer_id";
+$sql .= " WHERE `device_id` = ?";
+$sql .= " ORDER BY `bgpPeerRemoteAs`, `bgpPeerIdentifier`";
+
+foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 {
   $has_macaccounting = dbFetchCell("SELECT COUNT(*) FROM `ipv4_mac` AS I, mac_accounting AS M WHERE I.ipv4_address = ? AND M.mac = I.mac_address", array($peer['bgpPeerIdentifier']));
   unset($bg_image);

@@ -6,7 +6,13 @@ global $debug;
 
 if ($config['enable_bgp'])
 {
-  foreach (dbFetchRows("SELECT * FROM bgpPeers WHERE device_id = ?", array($device['device_id'])) as $peer)
+
+  $sql  = "SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id";
+  $sql .= " FROM  `bgpPeers`";
+  $sql .= " LEFT JOIN  `bgpPeers-state` ON  `bgpPeers`.bgpPeer_id =  `bgpPeers-state`.bgpPeer_id";
+  $sql .= " WHERE `device_id` = ?";
+
+  foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
   {
     // Poll BGP Peer
 
@@ -101,6 +107,11 @@ if ($config['enable_bgp'])
       }
     }
 
+    $polled = time();
+    $polled_period = $polled - $peer['bgpPeer_polled'];
+
+    if($debug) { echo("[ polled $polled -> period $polled_period ]"); }
+
     $peerrrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("bgp-" . $peer['bgpPeerIdentifier'] . ".rrd");
     if (!is_file($peerrrd))
     {
@@ -113,16 +124,36 @@ if ($config['enable_bgp'])
       rrdtool_create($peerrrd, $create_rrd);
     }
 
-    rrdtool_update("$peerrrd", "N:$bgpPeerOutUpdates:$bgpPeerInUpdates:$bgpPeerOutTotalMessages:$bgpPeerInTotalMesages:$bgpPeerFsmEstablishedTime");
+    rrdtool_update("$peerrrd", "N:$bgpPeerOutUpdates:$bgpPeerInUpdates:$bgpPeerOutTotalMessages:$bgpPeerInTotalMessages:$bgpPeerFsmEstablishedTime");
 
-    $peer['update']['bgpPeerState'] = $bgpPeerState;
-    $peer['update']['bgpPeerAdminStatus'] = $bgpPeerAdminStatus;
-    $peer['update']['bgpPeerFsmEstablishedTime'] = $bgpPeerFsmEstablishedTime;
-    $peer['update']['bgpPeerInUpdates'] = $bgpPeerInUpdates;
-    $peer['update']['bgpLocalAddr'] = $bgpLocalAddr;
-    $peer['update']['bgpPeerOutUpdates'] = $bgpPeerOutUpdates;
+    // Update config
+    $peer['update'] = array();
+    if($bgpPeerState != $peer['bgpPeerState']) { $peer['update']['bgpPeerState'] = $bgpPeerState; }
+    if($bgpPeerAdminStatus != $peer['bgpPeerAdminStatus']) { $peer['update']['bgpPeerAdminStatus'] = $bgpPeerAdminStatus; }
+    if($bgpLocalAddr != $peer['bgpLocalAddr']) { $peer['update']['bgpLocalAddr'] = $bgpLocalAddr; }
+    if(count($peer['update']))
+    {
+      dbUpdate($peer['update'], 'bgpPeers', '`bgpPeer_id` = ?', array($peer['bgpPeer_id']));
+    }
 
-    dbUpdate($peer['update'], 'bgpPeers', '`device_id` = ? AND `bgpPeerIdentifier` = ?', array($device['device_id'], $peer['bgpPeerIdentifier']));
+    // Update metrics
+    $metrics = array('bgpPeerInUpdates', 'bgpPeerOutUpdates','bgpPeerInTotalMessages','bgpPeerOutTotalMessages');
+    foreach ($metrics as $oid)
+    {
+      $peer['state'][$oid] = $$oid;
+      if (isset($peer[$oid]) && $peer[$oid] != "0")
+      {
+        $peer['state'][$oid.'_delta'] = $peer['state'][$oid] - $peer[$oid];
+        $peer['state'][$oid.'_rate']  = $oid_diff / $polled_period;
+        if ($peer['state'][$oid.'_rate'] < 0) { $peer['state'][$oid.'_rate'] = "0"; echo("$oid went backwards."); }
+      }
+    }
+
+    if(!is_numeric($peer['bgpPeer_polled'])) { dbInsert(array('bgpPeer_id' => $peer['bgpPeer_id']), 'bgpPeers-state'); }
+    $peer['state']['bgpPeerFsmEstablishedTime'] = $bgpPeerFsmEstablishedTime;
+    $peer['state']['bgpPeerInUpdateElapsedTime'] = $bgpPeerInUpdateElapsedTime;
+    $peer['state']['bgpPeer_polled'] = $polled;
+    dbUpdate($peer['state'], 'bgpPeers-state', '`bgpPeer_id` = ?', array($peer['bgpPeer_id']));
 
     if ($device['os_group'] == "cisco" || $device['os'] == "junos")
     {

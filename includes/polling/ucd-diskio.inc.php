@@ -1,5 +1,7 @@
 <?php
 
+// FIXME - store state data in database
+
 $diskio_data = dbFetchRows("SELECT * FROM `ucd_diskio` WHERE `device_id`  = ?",array($device['device_id']));
 
 if (count($diskio_data))

@@ -2,6 +2,11 @@
 
 $storage_cache = array();
 
+$sql  = "SELECT *, `storage`.`storage_id` as `storage_id`";
+$sql .= " FROM  `storage`";
+$sql .= " LEFT JOIN  `storage-state` ON  `storage`.storage_id =  `storage-state`.storage_id";
+$sql .= " WHERE `device_id` = ?";
+
 foreach (dbFetchRows("SELECT * FROM storage WHERE device_id = ?", array($device['device_id'])) as $storage)
 {
   echo("Storage ".$storage['storage_descr'] . ": ");
@@ -36,16 +41,9 @@ foreach (dbFetchRows("SELECT * FROM storage WHERE device_id = ?", array($device[
 
   rrdtool_update($storage_rrd,"N:".$storage['used'].":".$storage['free']);
 
-  if ($config['memcached']['enable'])
-  {
-    $memcache->set('storage-'.$storage['storage_id'].'-used', $storage['used']);
-    $memcache->set('storage-'.$storage['storage_id'].'-free', $storage['free']);
-    $memcache->set('storage-'.$storage['storage_id'].'-size', $storage['size']);
-    $memcache->set('storage-'.$storage['storage_id'].'-units', $storage['units']);
-    $memcache->set('storage-'.$storage['storage_id'].'-used', $percent);
-  } else {
-    $update = dbUpdate(array('storage_used' => $storage['used'], 'storage_free' => $storage['free'], 'storage_size' => $storage['size'], 'storage_units' => $storage['units'], 'storage_perc' => $percent), 'storage', '`storage_id` = ?', array($storage['storage_id']));
-  }
+  if(!is_numeric($storage['storage_polled'])) { dbInsert(array('storage_id' => $storage['storage_id']), 'storage-state'); }
+
+  $update = dbUpdate(array('storage_polled' => time(), 'storage_used' => $storage['used'], 'storage_free' => $storage['free'], 'storage_size' => $storage['size'], 'storage_units' => $storage['units'], 'storage_perc' => $percent), 'storage-state', '`storage_id` = ?', array($storage['storage_id']));
 
   echo("\n");
 }

@@ -1193,22 +1193,6 @@ if (!$observium_link)
 }
 $observium_db = mysql_select_db($config['db_name'], $observium_link);
 
-if ($config['memcached']['enable'])
-{
-  if (class_exists("Memcached"))
-  {
-    $memcache = new Memcached();
-    $memcache->addServer($config['memcached']['host'], $config['memcached']['port']);
-    if ($debug) { print_r($memcache->getStats()); }
-  }
-  else
-  {
-    echo("WARNING: You have enabled memcached but have not installed the PHP bindings. Disabling memcached support.\n");
-    echo("Try 'apt-get install php5-memcached' or 'pecl install memcached'. You will need the php5-dev and libmemcached-dev packages to use pecl.\n\n");
-    $config['memcached']['enable'] = 0;
-  }
-}
-
 # Set some times needed by loads of scripts (it's dynamic, so we do it here!)
 
 $config['time']['now']        = time();
