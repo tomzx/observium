@@ -81,7 +81,7 @@ if (isset($options['d']))
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   ini_set('log_errors', 1);
-  ini_set('error_reporting', 1);
+  ini_set('error_reporting', E_ALL);
 } else {
   $debug = FALSE;
 #  ini_set('display_errors', 0);

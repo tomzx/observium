@@ -106,8 +106,7 @@ function poll_sensor($device, $class, $unit)
 
 function poll_device($device, $options)
 {
-  global $config, $device, $polled_devices, $db_stats, $memcache;
-
+  global $config, $debug, $device, $polled_devices, $db_stats, $memcache;
   $attribs = get_dev_attribs($device['device_id']);
 
   $status = 0; unset($array);
@@ -174,6 +173,7 @@ function poll_device($device, $options)
       {
         if ($attribs['poll_'.$module] || ( $module_status && !isset($attribs['poll_'.$module])))
         {
+          if ($debug) { echo("including: includes/polling/$module.inc.php\n"); }
           include('includes/polling/'.$module.'.inc.php');
         } elseif (isset($attribs['poll_'.$module]) && $attribs['poll_'.$module] == "0") {
           echo("Module [ $module ] disabled on host.\n");

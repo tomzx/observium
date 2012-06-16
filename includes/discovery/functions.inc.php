@@ -31,7 +31,7 @@ function discover_new_device($hostname)
     
     if (match_network($config['nets'], $ip))
     {
-      if ($debug) { echo("found $ip inside configured nets, adding!\n");
+      if ($debug) { echo("found $ip inside configured nets, adding!\n"); }
       $remote_device_id = addHost ($dst_host);
       if ($remote_device_id)
       {
