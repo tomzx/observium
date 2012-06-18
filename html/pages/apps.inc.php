@@ -1,9 +1,12 @@
 <?php
 
+# FIXME should come from somewhere else; these are also kind of duplicated more eloquently in device/apps
 $graphs['apache']     = array('bits', 'hits', 'scoreboard', 'cpu');
 $graphs['drbd']       = array('disk_bits', 'network_bits', 'queue', 'unsynced');
 $graphs['mysql']      = array('network_traffic', 'connections', 'command_counters', 'select_types');
 $graphs['memcached']  = array('bits', 'commands', 'data', 'items');
+$graphs['powerdns']   = array('recursing', 'queries', 'querycache', 'latency');
+# FIXME ^ recursing should be replaced by something else probably.
 
 print_optionbar_start();
 

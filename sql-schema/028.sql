@@ -16,7 +16,6 @@ ALTER TABLE  `sensors` DROP  `sensor_current`;
 CREATE TABLE IF NOT EXISTS `sensors-state` (  `sensor_id` int(11) NOT NULL,  `sensor_value` int(11) NOT NULL,  PRIMARY KEY (`sensor_id`)) ENGINE=MEMORY DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 ALTER TABLE  `sensors-state` ADD  `sensor_polled` INT NOT NULL;
 ALTER TABLE  `processors` DROP  `processor_usage`;
-CREATE TABLE  `observer_dev`.`processors_state` (`processor_id` INT NOT NULL ,`processor_usage` INT NOT NULL ,PRIMARY KEY (  `processor_id` )) ENGINE = MEMORY CHARACTER SET latin1 COLLATE latin1_general_ci COMMENT =  'Processor Usage';
 CREATE TABLE IF NOT EXISTS `processors-state` (  `processor_id` int(11) NOT NULL,  `processor_usage` int(11) NOT NULL,  `processor_polled` int(11) NOT NULL,  PRIMARY KEY (`processor_id`)) ENGINE=MEMORY DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Processor Usage';
 ALTER TABLE  `storage` DROP  `storage_size` ,DROP  `storage_units` ,DROP  `storage_used` ,DROP  `storage_free` ,DROP  `storage_perc` ;
 CREATE TABLE IF NOT EXISTS `ucd_diskio-state` ( `diskio_id` int(11) NOT NULL,  `diskIONReadX` int(11) NOT NULL,  `diskIONReadX_rate` int(11) NOT NULL,  `diskIONWrittenX` int(11) NOT NULL,  `diskIONWrittenX_rate` int(11) NOT NULL,  `diskIOReads` int(11) NOT NULL,  `diskIOReads_rate` int(11) NOT NULL,  `diskIOWrites` int(11) NOT NULL,  `diskIOWrites_rate` int(11) NOT NULL,  `diskio_polled` int(11) NOT NULL,  PRIMARY KEY (`diskio_id`)) ENGINE=MEMORY DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
