@@ -2,9 +2,9 @@
 
 if (!empty($agent_data['app']['powerdns']))
 {
-  foreach (explode("\n",$agent_data['app']['powerdns']) as $line)
+  foreach (explode(",",$agent_data['app']['powerdns']) as $line)
   {
-    list($key,$value) = explode("\t",$line,2);
+    list($key,$value) = explode("=",$line,2);
     # FIXME do this differently when we drop SNMP support (use a keyed array)
     $powerdns_full[] = $value;
   }

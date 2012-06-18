@@ -18,10 +18,7 @@ if ($device['os_group'] == "unix")
   {
     echo "Connection to UNIX agent failed on port ".$port.".";
   } else {
-    while (!feof($agent))
-    {
-      $agent_raw .= fgets($agent, 128);
-    }
+    $agent_raw = stream_get_contents($agent);
   }
   
   $agent_end = utime(); $agent_time = round(($agent_end - $agent_start) * 1000);
