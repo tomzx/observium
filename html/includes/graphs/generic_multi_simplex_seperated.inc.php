@@ -2,7 +2,7 @@
 
 include("includes/graphs/common.inc.php");
 
-if($width > "500")
+if ($width > "500")
 {
   $descr_len = 24; // FIXME may even be more imo?
 } else {
@@ -10,24 +10,16 @@ if($width > "500")
   $descr_len += round(($width - 250) / 8);
 }
 
-if ($nototal) { $descrlen += "2"; $unitlen += "2";}
-$unit_text = str_pad(truncate($unit_text,$unitlen),$unitlen);
-
-if($width > "500")
+if ($width > "500")
 {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
-  if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
-  $rrd_options .= " COMMENT:'\l'";
+  $rrd_options .= " COMMENT:'".str_pad(truncate($unit_text, $descr_len),$descr_len+4)." Now      Min     Max     Avg";
+  if (!$nototal) { $rrd_options .= "      Total"; }
+  $rrd_options .= "\l' COMMENT:'\l'";
 } else {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
-
+  $rrd_options .= " COMMENT:'".str_pad(truncate($unit_text, $descr_len),$descr_len+4)." Now      Min     Max     Avg\l'";
 }
 
-$unitlen  = "10";
-if ($nototal) { $descrlen += "2"; $unitlen += "2";}
-$unit_text = str_pad(truncate($unit_text,$unitlen),$unitlen);
-
-$colour_iter=0;
+$colour_iter = 0;
 foreach ($rrd_list as $i => $rrd)
 {
   if ($rrd['colour'])
@@ -38,8 +30,6 @@ foreach ($rrd_list as $i => $rrd)
     $colour = $config['graph_colours'][$colours][$colour_iter];
     $colour_iter++;
   }
-
-  $descr = rrdtool_escape($rrd['descr'], $descr_len);
 
   $rrd_options .= " DEF:".$rrd['ds'].$i."=".$rrd['filename'].":".$rrd['ds'].":AVERAGE ";
 
@@ -96,32 +86,32 @@ foreach ($rrd_list as $i => $rrd)
     $t_defname = $g_defname;
   }
 
-  $rrd_options .= " AREA:".$g_defname.$i."#".$colour.":'".$descr."':$stack";
+  $rrd_options .= " AREA:".$g_defname.$i."#".$colour.":'".rrdtool_escape($rrd['descr'], $descr_len)."':$stack";
 
   $rrd_options .= " GPRINT:".$t_defname.$i.":LAST:%5.2lf%s GPRINT:".$t_defname.$i."min:MIN:%5.2lf%s";
-  $rrd_options .= " GPRINT:".$t_defname.$i."max:MAX:%5.2lf%s GPRINT:".$t_defname.$i.":AVERAGE:'%5.2lf%s\\n'";
+  $rrd_options .= " GPRINT:".$t_defname.$i."max:MAX:%5.2lf%s GPRINT:".$t_defname.$i.":AVERAGE:%5.2lf%s";
 
-  if (!$nototal) { $rrd_options .= " GPRINT:tot".$rrd['ds'].$i.":%6.2lf%s".rrdtool_escape($total_units).""; }
+  if (!$nototal) { $rrd_options .= " GPRINT:tot".$rrd['ds'].$i.":%5.2lf%s".rrdtool_escape($total_units).""; }
 
-  $rrd_options .= " COMMENT:'\\n'";
+  $rrd_options .= "'\\n' COMMENT:'\\n'";
 }
 
-  if ($_GET['previous'] == "yes")
+if ($_GET['previous'] == "yes")
+{
+  if (is_numeric($multiplier))
   {
-    if (is_numeric($multiplier))
-    {
-      $rrd_options .= " CDEF:X=" . $thingX . $plusesX.",".$multiplier. ",*";
-    } elseif (is_numeric($divider))
-    {
-      $rrd_options .= " CDEF:X=" . $thingX . $plusesX.",".$divider. ",/";
-    } else
-    {
-      $rrd_options .= " CDEF:X=" . $thingX . $plusesX;
-    }
-
-    $rrd_options .= " AREA:X#99999999:";
-    $rrd_options .= " LINE1.25:X#666666:";
-
+    $rrd_options .= " CDEF:X=" . $thingX . $plusesX.",".$multiplier. ",*";
+  } elseif (is_numeric($divider))
+  {
+    $rrd_options .= " CDEF:X=" . $thingX . $plusesX.",".$divider. ",/";
+  } else
+  {
+    $rrd_options .= " CDEF:X=" . $thingX . $plusesX;
   }
+
+  $rrd_options .= " AREA:X#99999999:";
+  $rrd_options .= " LINE1.25:X#666666:";
+
+}
 
 ?>
