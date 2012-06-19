@@ -13,8 +13,6 @@ if(!empty($agent_data['app']['mysql']))
 
 $mysql_rrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-mysql-".$app['app_id'].".rrd";
 
-echo(" mysql");
-
 $data = explode("\n", $mysql);
 
 $map = array();

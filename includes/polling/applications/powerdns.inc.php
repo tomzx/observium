@@ -22,8 +22,6 @@ if (!empty($agent_data['app']['powerdns']))
 
 $rrd_filename  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-powerdns-".$app['app_id'].".rrd";
 
-echo(" powerdns");
-
 list ($corrupt, $def_cacheInserts, $def_cacheLookup, $latency, $pc_hit, $pc_miss, $pc_size, $qsize, $qc_hit,
       $qc_miss, $rec_answers, $rec_questions, $servfail, $tcp_answers, $tcp_queries, $timedout,
       $udp_answers, $udp_queries, $udp4_answers, $udp4_queries, $udp6_answers, $udp6_queries) = explode("\n", $powerdns);

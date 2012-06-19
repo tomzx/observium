@@ -10,14 +10,17 @@ if (count($app_rows))
   echo('Applications: ');
   foreach ($app_rows as $app)
   {
-    $app_include = $config['install_dir'].'/includes/polling/applications/'.$app['app_type'].'.inc.php';
-    if (is_file($app_include))
+    if (!isset($agent_data['app'][$app['app_type']]))
     {
-      include($app_include);
-    }
-    else
-    {
-      echo($app['app_type'].' include missing! ');
+      $app_include = $config['install_dir'].'/includes/polling/applications/'.$app['app_type'].'.inc.php';
+      if (is_file($app_include))
+      {
+        include($app_include);
+      }
+      else
+      {
+        echo($app['app_type'].' include missing! ');
+      }
     }
   }
   echo("\n");
