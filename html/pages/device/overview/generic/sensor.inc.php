@@ -37,7 +37,7 @@ if (count($sensors))
     unset($link_array['height'], $link_array['width'], $link_array['legend']);
     $link = generate_url($link_array);
 
-    $overlib_content = generate_overlib_quad($graph_array);
+    $overlib_content = generate_overlib_content($graph_array);
 
     $graph_array['width'] = 80; $graph_array['height'] = 20; $graph_array['bg'] = 'ffffff00'; # the 00 at the end makes the area transparent.
     $graph_array['from'] = $config['time']['day'];
