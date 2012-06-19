@@ -29,8 +29,8 @@ if ($device['os'] == 'raritan')
             #outletLoadValue: "A non-negative value indicates the measured load in milli Amps"
             $outlet_oid             = ".1.3.6.1.4.1.13742.4.1.2.2.1.4.$outletsuffix";
             $outlet_descr           = snmp_get($device,"outletLabel.$outletsuffix", "-Ovq", "PDU-MIB");
-            $outlet_low_warn_limit  = NULL;
-            $outlet_low_limit       = NULL;
+            $outlet_low_warn_limit  = snmp_get($device,"outletCurrentLowerWarning.$outletsuffix", "-Ovq", "PDU-MIB") / $outlet_divisor;
+            $outlet_low_limit       = snmp_get($device,"outletCurrentLowerCritical.$outletsuffix", "-Ovq", "PDU-MIB") / $outlet_divisor;
             $outlet_high_warn_limit = snmp_get($device,"outletCurrentUpperWarning.$outletsuffix", "-Ovq", "PDU-MIB") / $outlet_divisor;
             $outlet_high_limit      = snmp_get($device,"outletCurrentUpperCritical.$outletsuffix", "-Ovq", "PDU-MIB") / $outlet_divisor;
             $outlet_current         = snmp_get($device,"outletCurrent.$outletsuffix", "-Ovq", "PDU-MIB") / $outlet_divisor;
