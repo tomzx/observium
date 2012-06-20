@@ -243,7 +243,7 @@ if(!isset($vars['ignore']))   { $vars['ignore'] = "0"; }
 if(!isset($vars['disabled'])) { $vars['disabled'] = "0"; }
 if(!isset($vars['deleted']))  { $vars['deleted'] = "0"; }
 
-$where = " WHERE 1";
+$where = " WHERE 1 ";
 
 foreach ($vars as $var => $value)
 {
