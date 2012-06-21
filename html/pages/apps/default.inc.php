@@ -11,7 +11,7 @@ $graph_array['legend']      = "no";
 
 echo('<h2>'.nicecase($vars['app']).'</h2>');
 echo('<table cellpadding=5 cellspacing=0 class=devicetable width=100%>');
-$app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WHERE D.device_id = A.device_id AND A.app_type = ?", array($vars['app']));
+$app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WHERE D.device_id = A.device_id AND A.app_type = ? ORDER BY hostname", array($vars['app']));
 
 foreach ($app_devices as $app_device)
 {
@@ -31,7 +31,7 @@ foreach ($app_devices as $app_device)
     $graph_array_zoom['type']   = "application_".$vars['app']."_".$graph_type;
     $graph_array_zoom['id']     = $app_device['app_id'];
 
-    $link = generate_url(array('tab'=>'apps','app'=>$vars['app']));
+    $link = generate_url(array('device' => $app_device['device_id'], 'tab' => 'apps','app' => $vars['app'], 'page' => 'device'));
 
     echo(overlib_link($link, generate_graph_tag($graph_array), generate_graph_tag($graph_array_zoom),  NULL));
   }
