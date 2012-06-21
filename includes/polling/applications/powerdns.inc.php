@@ -5,30 +5,23 @@ if (!empty($agent_data['app']['powerdns']))
   foreach (explode(",",$agent_data['app']['powerdns']) as $line)
   {
     list($key,$value) = explode("=",$line,2);
-    # FIXME do this differently when we drop SNMP support (use a keyed array)
-    $powerdns_full[] = $value;
+    $powerdns[$key] = $value;
   }
 
-  $powerdns = implode("\n", $powerdns_full);  
-} else {
+  # FIXME should we really use app_id here? means if app is disabled, then reenabled, we will lose the data as a new id will be created...
+  $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-powerdns-".$app['app_id'].".rrd";
+  $rrd_string = '';
 
-  // Polls powerdns statistics from script via SNMP
+  foreach(array('corrupt-packets', 'deferred-cache-inserts', 'deferred-cache-lookup', 'latency', 'packetcache-hit', 'packetcache-miss', 'packetcache-size', 'qsize-q',
+    'query-cache-hit', 'query-cache-miss', 'recursing-answers', 'recursing-questions', 'servfail-packets', 'tcp-answers', 'tcp-queries', 'timedout-packets', 'udp-answers',
+    'udp-queries', 'udp4-answers', 'udp4-queries', 'udp6-answers', 'udp6-queries') as $key)
+  {
+    $rrd_values[] = (is_numeric($powerdns[$key]) ? $powerdns[$key] : "U");
+  }
 
-  $options       = "-O qv";
-  $oid           = "nsExtendOutputFull.8.112.111.119.101.114.100.110.115";
-
-  $powerdns      = snmp_get($device, $oid, $options);
-}
-
-$rrd_filename  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-powerdns-".$app['app_id'].".rrd";
-
-list ($corrupt, $def_cacheInserts, $def_cacheLookup, $latency, $pc_hit, $pc_miss, $pc_size, $qsize, $qc_hit,
-      $qc_miss, $rec_answers, $rec_questions, $servfail, $tcp_answers, $tcp_queries, $timedout,
-      $udp_answers, $udp_queries, $udp4_answers, $udp4_queries, $udp6_answers, $udp6_queries) = explode("\n", $powerdns);
-
-if (!is_file($rrd_filename))
-{
-  rrdtool_create($rrd_filename, "--step 300 \
+  if (!is_file($rrd_filename))
+  {
+    rrdtool_create($rrd_filename, "--step 300 \
         DS:corruptPackets:DERIVE:600:0:125000000000 \
         DS:def_cacheInserts:DERIVE:600:0:125000000000 \
         DS:def_cacheLookup:DERIVE:600:0:125000000000 \
@@ -51,10 +44,9 @@ if (!is_file($rrd_filename))
         DS:q_udp4Queries:DERIVE:600:0:125000000000 \
         DS:q_udp6Answers:DERIVE:600:0:125000000000 \
         DS:q_udp6Queries:DERIVE:600:0:125000000000 ".$config['rrd_rra']);
+  }
+
+  rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));
 }
-
-## FIXME needs to check for numeric or rrdtool_update should escape! this data comes from agent with custom scripts... might become malicious?
-
-rrdtool_update($rrd_filename,  "N:$corrupt:$def_cacheInserts:$def_cacheLookup:$latency:$pc_hit:$pc_miss:$pc_size:$qsize:$qc_hit:$qc_miss:$rec_answers:$rec_questions:$servfail:$tcp_answers:$tcp_queries:$timedout:$udp_answers:$udp_queries:$udp4_answers:$udp4_queries:$udp6_answers:$udp6_queries");
 
 ?>
