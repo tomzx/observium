@@ -392,18 +392,19 @@ function discover_link($local_port_id, $protocol, $remote_port_id, $remote_hostn
   $link_exists[$local_port_id][$remote_hostname][$remote_port] = 1;
 }
 
-function discover_storage(&$valid, $device, $index, $type, $mib, $descr, $size, $units, $used = NULL)
+function discover_storage(&$valid, $device, $index, $type, $mib, $descr, $size, $units, $used, $free, $perc)
 {
   global $config, $debug;
 
-  if ($debug) { echo("$device, $index, $type, $mib, $descr, $units, $used, $size\n"); }
+  if ($debug) { echo("$device, $index, $type, $mib, $descr, $units, $used, $free, $perc %, $size\n"); }
   if ($descr && $size > "0")
   {
     $storage = dbFetchRow("SELECT * FROM `storage` WHERE `storage_index` = ? AND `device_id` = ? AND `storage_mib` = ?", array($index, $device['device_id'], $mib));
     if ($storage === FALSE || !count($storage))
     {
-      $insert = dbInsert(array('device_id' => $device['device_id'], 'storage_descr' => $descr, 'storage_index' => $index, 'storage_mib' => $mib, 'storage_type' => $type,
-                               'storage_units' => $units, 'storage_size' => $size, 'storage_used' => $used), 'storage');
+      $insert = dbInsert(array('device_id' => $device['device_id'], 'storage_descr' => $descr, 'storage_index' => $index, 'storage_mib' => $mib, 'storage_type' => $type), 'storage');
+      dbInsert(array('storage_id' => $inserted, 'storage_used' => $used, 'storage_size' => $size, 'storage_units' => $units, 'storage_free' => $free,
+        'storage_perc' => $perc), 'storage-state');
       if ($debug) { mysql_error(); }
       echo("+");
     }
