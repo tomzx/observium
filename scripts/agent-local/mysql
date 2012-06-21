@@ -270,7 +270,7 @@ function ss_get_mysql_stats( $options ) {
    debug(array('connecting to', $host_str, $user, $pass));
    if (!extension_loaded('mysql') ) {
       debug("The MySQL extension is not loaded");
-      die("The MySQL extension is not loaded");
+      die("The MySQL extension is not loaded\n");
    }
    if ($mysql_ssl || (isset($options['mysql_ssl']) && $options['mysql_ssl']) ) {
       $conn = mysql_connect($host_str, $user, $pass, true, MYSQL_CLIENT_SSL);
