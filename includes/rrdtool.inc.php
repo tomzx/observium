@@ -220,16 +220,19 @@ function rrdtool_update($filename, $options)
   return rrdtool("update", $filename, $options);
 }
 
+// FIXME needs phpdoc
 function rrdtool_fetch($filename, $options)
 {
   return rrdtool("fetch", $filename, $options);
 }
 
+// FIXME needs phpdoc
 function rrdtool_last($filename, $options)
 {
   return rrdtool("last", $filename, $options);
 }
 
+// FIXME needs phpdoc
 function rrdtool_lastupdate($filename, $options)
 {
   return rrdtool("lastupdate", $filename, $options);

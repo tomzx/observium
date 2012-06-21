@@ -53,6 +53,8 @@ if (!is_file($rrd_filename))
         DS:q_udp6Queries:DERIVE:600:0:125000000000 ".$config['rrd_rra']);
 }
 
+## FIXME needs to check for numeric or rrdtool_update should escape! this data comes from agent with custom scripts... might become malicious?
+
 rrdtool_update($rrd_filename,  "N:$corrupt:$def_cacheInserts:$def_cacheLookup:$latency:$pc_hit:$pc_miss:$pc_size:$qsize:$qc_hit:$qc_miss:$rec_answers:$rec_questions:$servfail:$tcp_answers:$tcp_queries:$timedout:$udp_answers:$udp_queries:$udp4_answers:$udp4_queries:$udp6_answers:$udp6_queries");
 
 ?>
