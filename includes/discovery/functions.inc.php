@@ -426,8 +426,13 @@ function discover_processor(&$valid, $device, $oid, $index, $type, $descr, $prec
     $descr = trim(str_replace("\"", "", $descr));
     if (mysql_result(mysql_query("SELECT count(processor_id) FROM `processors` WHERE `processor_index` = '$index' AND `device_id` = '".$device['device_id']."' AND `processor_type` = '$type'"),0) == '0')
     {
-      $query = "INSERT INTO processors (`entPhysicalIndex`, `hrDeviceIndex`, `device_id`, `processor_descr`, `processor_index`, `processor_oid`, `processor_usage`, `processor_type`, `processor_precision`)
-                      values ('$entPhysicalIndex', '$hrDeviceIndex', '".$device['device_id']."', '$descr', '$index', '$oid', '$current', '$type','$precision')";
+      # FIXME dbFacile
+      $query = "INSERT INTO processors (`entPhysicalIndex`, `hrDeviceIndex`, `device_id`, `processor_descr`, `processor_index`, `processor_oid`, `processor_type`, `processor_precision`)
+                      values ('$entPhysicalIndex', '$hrDeviceIndex', '".$device['device_id']."', '$descr', '$index', '$oid', '$type','$precision')";
+      mysql_query($query);
+      if ($debug) { print $query . "\n"; }
+      $query = "INSERT INTO processors-state (`processor_usage`, `processor_id`)
+                      values ('$current', '" . mysql_insert_id() . "')";
       mysql_query($query);
       if ($debug) { print $query . "\n"; }
       echo("+");
