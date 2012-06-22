@@ -7,10 +7,9 @@ echo('<tr class="tablehead"><td></td>');
 
 $cols = array('device' => 'Device',
               'port' => 'Port',
-              'speed' => 'Speed',
               'traffic' => 'Traffic',
               'packets' => 'Packets',
-              'descr' => 'Description' );
+              'speed' => 'Speed', );
 
 foreach ($cols as $sort => $col)
 {
@@ -38,6 +37,7 @@ foreach ($ports as $port)
     $speed = humanspeed($port['ifSpeed']);
     $type = humanmedia($port['ifType']);
     $ifclass = ifclass($port['ifOperStatus'], $port['ifAdminStatus']);
+    $mac = formatMac($port['ifPhysAddress']);
 
     if ($port['in_errors'] > 0 || $port['out_errors'] > 0)
     {
@@ -54,13 +54,14 @@ foreach ($ports as $port)
     echo("<tr class='ports'>
           <td width=5></td>
           <td width=200 class=list-bold>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
-          <td width=150 class=list-bold>" . generate_port_link($port, fixIfName($port['label']))." $error_img</td>
-          <td width=110 >$speed<br />$type</td>
+          <td width=250><span class=list-bold>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
+                                        ".$port['ifAlias']."</td>
           <td width=100><span class=green>&darr; ".$port['bps_in']."<br />
                         <span class=blue>&uarr; ".$port['bps_out']."<br />
           <td width=100><span class=purple>&darr; ".$port['pps_in']."<br />
                         <span class=orange>&uarr; ".$port['pps_out']."<br />
-          <td>" . $port['ifAlias'] . "</td>
+          <td width=110 >$speed<br />".$port['ifMtu']."</td>
+          <td width=110 >$type<br />".$mac."</td>
         </tr>\n");
   }
 }
