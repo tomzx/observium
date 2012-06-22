@@ -41,9 +41,11 @@ foreach (dbFetchRows("SELECT * FROM storage WHERE device_id = ?", array($device[
 
   rrdtool_update($storage_rrd,"N:".$storage['used'].":".$storage['free']);
 
-  if(!is_numeric($storage['storage_polled'])) { dbInsert(array('storage_id' => $storage['storage_id']), 'storage-state'); }
+  if(!is_numeric($storage['storage_polled']) && $storage['storage_polled'] != '') { dbInsert(array('storage_id' => $storage['storage_id'], 'storage_used' => $storage['used'],
+    'storage_free' => $storage['free'], 'storage_size' => $storage['size'], 'storage_units' => $storage['units'], 'storage_perc' => $percent), 'storage-state'); }
 
-  $update = dbUpdate(array('storage_polled' => time(), 'storage_used' => $storage['used'], 'storage_free' => $storage['free'], 'storage_size' => $storage['size'], 'storage_units' => $storage['units'], 'storage_perc' => $percent), 'storage-state', '`storage_id` = ?', array($storage['storage_id']));
+  $update = dbUpdate(array('storage_polled' => time(), 'storage_used' => $storage['used'], 'storage_free' => $storage['free'], 'storage_size' => $storage['size'],
+    'storage_units' => $storage['units'], 'storage_perc' => $percent), 'storage-state', '`storage_id` = ?', array($storage['storage_id']));
 
   echo("\n");
 }

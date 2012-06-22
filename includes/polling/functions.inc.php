@@ -79,7 +79,7 @@ function poll_sensor($device, $class, $unit)
     rrdtool_update($rrd_file,"N:$sensor_value");
 
     // Update SQL State
-    if(is_numeric($sensor['sensor_polled']))
+    if (is_numeric($sensor['sensor_polled']))
     {
       dbUpdate(array('sensor_value' => $sensor_value, 'sensor_polled' => time()), 'sensors-state', '`sensor_id` = ?', array($sensor['sensor_id']));
     } else {
@@ -87,14 +87,14 @@ function poll_sensor($device, $class, $unit)
     }
 
     // FIXME also warn when crossing WARN level!!
-    if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_current'] > $sensor['sensor_limit_low'] && $sensor_value <= $sensor['sensor_limit_low'])
+    if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_value'] > $sensor['sensor_limit_low'] && $sensor_value <= $sensor['sensor_limit_low'])
     {
       $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is under threshold: " . $sensor_value . "$unit (< " . $sensor['sensor_limit'] . "$unit)";
       notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
       echo("Alerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "\n");
       log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " under threshold: " . $sensor_value . " $unit (< " . $sensor['sensor_limit_low'] . " $unit)", $device, $class, $sensor['sensor_id']);
     }
-    else if ($sensor['sensor_limit'] != "" && $sensor['sensor_current'] < $sensor['sensor_limit'] && $sensor_value >= $sensor['sensor_limit'])
+    else if ($sensor['sensor_limit'] != "" && $sensor['sensor_value'] < $sensor['sensor_limit'] && $sensor_value >= $sensor['sensor_limit'])
     {
       $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is over threshold: " . $sensor_value . "$unit (> " . $sensor['sensor_limit'] . "$unit)";
       notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
@@ -107,6 +107,7 @@ function poll_sensor($device, $class, $unit)
 function poll_device($device, $options)
 {
   global $config, $debug, $device, $polled_devices, $db_stats, $memcache;
+
   $attribs = get_dev_attribs($device['device_id']);
 
   $status = 0; unset($array);

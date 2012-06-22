@@ -4,12 +4,12 @@ global $ipmi_sensors;
 
 include_once("includes/discovery/functions.inc.php");
 
+echo("IPMI: ");
+
 if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
 {
   $ipmi['user'] = get_dev_attrib($device,'ipmi_username');
   $ipmi['password'] = get_dev_attrib($device,'ipmi_password');
-
-  echo("IPMI: ");
 
   if ($config['own_hostname'] != $device['hostname'] || $ipmi['host'] != 'localhost')
   {
@@ -40,17 +40,18 @@ if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
         (trim($high_warn) == 'na' ? NULL : trim($high_warn)), (trim($high_limit) == 'na' ? NULL : trim($high_limit)),
         $current, 'ipmi');
 
-      $ipmi_sensors[$config['ipmi_unit'][$unit]]['ipmi'][$index] = array('description' => $desc, 'current' => $current, 'index' => $index, 'unit' => $unit);
+      $ipmi_sensors[$config['ipmi_unit'][trim($unit)]]['ipmi'][$index] = array('description' => $desc, 'current' => $current, 'index' => $index, 'unit' => $unit);
     }
   }
 
-  foreach ($config['ipmi_unit'] as $type)
-  {
-    check_valid_sensors($device, $type, $valid['sensor'], 'ipmi');
-  }
-  echo("\n");
-      
   unset($ipmi_sensor);
 }
+
+foreach ($config['ipmi_unit'] as $type)
+{
+  check_valid_sensors($device, $type, $valid['sensor'], 'ipmi');
+}
+
+echo("\n");      
 
 ?>
