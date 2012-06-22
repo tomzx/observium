@@ -147,7 +147,7 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
     $device['transport'] = "udp";
   }
 
-  if ($device['snmpver'] == 'v1' || $config['os'][$device['os']]['nobulk'])
+  if ($device['snmpver'] == 'v1' || (isset($config['os'][$device['os']]['nobulk']) && $config['os'][$device['os']]['nobulk']))
   {
     $snmpcommand = $config['snmpwalk'];
   }

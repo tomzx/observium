@@ -184,7 +184,7 @@ function poll_device($device, $options)
       }
     }
 
-    if (!$options['m'])
+    if (!isset($options['m']))
     {
       // FIXME EVENTLOGGING -- MAKE IT SO WE DO THIS PER-MODULE?
       // This code cycles through the graphs already known in the database and the ones we've defined as being polled here
