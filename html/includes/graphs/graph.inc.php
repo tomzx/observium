@@ -50,6 +50,8 @@ if (is_file($config['install_dir'] . "/html/includes/graphs/$type/$subtype.inc.p
   {
     foreach ($config['allow_unauth_graphs_cidr'] as $range)
     {
+      # FIXME only v4 works for now...
+      if (!strstr('/',$range)) { $range .= "/32"; }
       if (Net_IPv4::ipInNetwork($_SERVER['REMOTE_ADDR'], $range))
       {
         $auth = "1";
