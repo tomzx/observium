@@ -13,7 +13,13 @@ echo("<tr class=tablehead>
         <th width=50>Used</th>
       </tr>");
 
-foreach (dbFetchRows("SELECT * FROM `storage` AS S, `devices` AS D WHERE S.device_id = D.device_id ORDER BY D.hostname, S.storage_descr") as $drive)
+$sql  = "SELECT *, `storage`.`storage_id` as `storage_id`";
+$sql .= " FROM  `storage`";
+$sql .= " LEFT JOIN  `devices` ON  `storage`.device_id =  `devices`.device_id";
+$sql .= " LEFT JOIN  `storage-state` ON  `storage`.storage_id =  `storage-state`.storage_id";
+$sql .= " ORDER BY `hostname`, `storage_descr`";
+
+foreach (dbFetchRows($sql) as $drive)
 {
   if (device_permitted($drive['device_id']))
   {
