@@ -35,7 +35,7 @@ foreach ($ports as $port)
     $ports_total++;
 
     $speed = humanspeed($port['ifSpeed']);
-    $type = humanmedia($port['ifType']);
+    $type  = fixiftype($port['ifType']);
     $ifclass = ifclass($port['ifOperStatus'], $port['ifAdminStatus']);
     $mac = formatMac($port['ifPhysAddress']);
 
