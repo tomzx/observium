@@ -16,7 +16,7 @@ $app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WH
 foreach ($app_devices as $app_device)
 {
   echo('<tr class="list-device">');
-  echo('<td class="device-head" width=300px>'.generate_device_link($app_device, shorthost($app_device['hostname']), array('tab'=>'apps','app'=>$vars['app'])).'</td>');
+  echo('<td class="device-head" width=300px>'.generate_device_link($app_device, $app_device['hostname'], array('tab'=>'apps','app'=>$vars['app'])).'</td>');
   echo('<td class="device-head" width=100px>'.$app_device['app_instance'].'</td>');
   echo('<td class="device-head" width=100px>'.$app_device['app_status'].'</td>');
   echo('<td></td>');
