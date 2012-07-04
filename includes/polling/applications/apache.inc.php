@@ -1,26 +1,16 @@
 <?php
 
-// Polls Apache statistics from script via SNMP
-
 if (!empty($agent_data['app']['apache']))
 {
-  $apache = $agent_data['app']['apache'];
-} else {
-  $options      = "-O qv";
-  $oid          = "nsExtendOutputFull.6.97.112.97.99.104.101";
-  $apache       = snmp_get($device, $oid, $options);
-}
-$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-apache-".$app['app_id'].".rrd";
+  $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-apache-".$app['app_id'].".rrd";
 
-echo(" apache");
+  list ($total_access, $total_kbyte, $cpuload, $uptime, $reqpersec, $bytespersec, $bytesperreq, $busyworkers, $idleworkers,
+        $score_wait, $score_start, $score_reading, $score_writing, $score_keepalive, $score_dns, $score_closing, $score_logging,
+        $score_graceful, $score_idle, $score_open) = explode("\n", $agent_data['app']['apache']);
 
-list ($total_access, $total_kbyte, $cpuload, $uptime, $reqpersec, $bytespersec, $bytesperreq, $busyworkers, $idleworkers,
-      $score_wait, $score_start, $score_reading, $score_writing, $score_keepalive, $score_dns, $score_closing, $score_logging,
-      $score_graceful, $score_idle, $score_open) = explode("\n", $apache);
-
-if (!is_file($rrd_filename))
-{
-  rrdtool_create($rrd_filename, "--step 300 \
+  if (!is_file($rrd_filename))
+  {
+    rrdtool_create($rrd_filename, "--step 300 \
         DS:access:DERIVE:600:0:125000000000 \
         DS:kbyte:DERIVE:600:0:125000000000 \
         DS:cpu:GAUGE:600:0:125000000000 \
@@ -41,8 +31,9 @@ if (!is_file($rrd_filename))
         DS:sb_graceful:GAUGE:600:0:125000000000 \
         DS:sb_idle:GAUGE:600:0:125000000000 \
         DS:sb_open:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
-}
+  }
 
-rrdtool_update($rrd_filename,  "N:$total_access:$total_kbyte:$cpuload:$uptime:$reqpersec:$bytespersec:$bytesperreq:$busyworkers:$idleworkers:$score_wait:$score_start:$score_reading:$score_writing:$score_keepalive:$score_dns:$score_closing:$score_logging:$score_graceful:$score_idle:$score_open");
+  rrdtool_update($rrd_filename,  "N:$total_access:$total_kbyte:$cpuload:$uptime:$reqpersec:$bytespersec:$bytesperreq:$busyworkers:$idleworkers:$score_wait:$score_start:$score_reading:$score_writing:$score_keepalive:$score_dns:$score_closing:$score_logging:$score_graceful:$score_idle:$score_open");
+}
 
 ?>
