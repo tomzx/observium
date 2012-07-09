@@ -291,7 +291,7 @@ foreach ($ports as $port)
     {
       $port_debug  = $port['port_id']."|".$polled."|".$polled_period."|".$this_port['ifHCInOctets']."|".$this_port['ifHCOutOctets'];
       $port_debug .= "|".$port['stats']['ifInOctets_rate']."|".$port['stats']['ifOutOctets_rate']."\n";
-      file_put_contents("/tmp/port_debug_".$port['port_id'.".txt", $port_debug, FILE_APPEND);
+      file_put_contents("/tmp/port_debug_".$port['port_id'].".txt", $port_debug, FILE_APPEND);
       echo("Wrote port debugging data");
     }
 
