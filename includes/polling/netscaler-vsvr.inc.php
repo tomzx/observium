@@ -66,6 +66,14 @@ if ($device['os'] == "netscaler")
 
   foreach ($vsvr_array as $index => $vsvr)
   {
+    // Use vsvrFullName when it exists.
+    if (isset($vsvr['vsvrFullName']))
+    {
+      #$rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrFullName']).".rrd";
+      #$rrd_file_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrName']).".rrd";
+      #if(is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
+      $vsvr['vsvrName'] = $vsvr['vsvrFullName'];
+    }
     if (isset($vsvr['vsvrName']))
     {
       $vsvr_exist[$vsvr['vsvrName']] = 1;
