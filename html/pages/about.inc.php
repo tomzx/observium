@@ -1,37 +1,83 @@
 <div style="margin: 10px;">
-  <h3>Observium <?php
-
-echo($config['version']);
-
-#if (file_exists('.svn/entries'))
-#{
-#  $svn = File('.svn/entries');
-#  echo('-SVN r' . trim($svn[3]));
-#  unset($svn);
-#}
-
-  ?></h3>
+  <h3>About Observium</h3>
   <div style="float: right; padding: 0px; width: 49%">
 <?php print_optionbar_start(NULL); ?>
     <h3>License</h3>
-    <pre>Observium Network Management and Monitoring System
-Copyright (C) 2006-<?php echo date("Y"); ?> Adam Armstrong
+<pre>
+<?php include("../LICENSE"); ?>
+</pre>
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</pre>
 <?php print_optionbar_end(); ?>
 
-    &nbsp;
+  </div>
+
+  <div style="float: left; padding: 0px; width: 49%">
+<?php
+
+$Observium_version = $config['version'];
+#if (file_exists('.svn/entries'))
+#{
+#  $svn = File('.svn/entries');
+#  $Observium_version .='-SVN r' . trim($svn[3]);
+#  unset($svn);
+#}
+
+print_optionbar_start(NULL);
+
+echo("
+    <h3>Versions</h3>
+    <table width=100% cellpadding=3 cellspacing=0 border=0>
+      <tr valign=top><td width=150><b>Observium</b></td><td>$Observium_version</td></tr>
+      <tr valign=top><td><b>Apache</b></td><td>$apache_version</td></tr>
+      <tr valign=top><td><b>PHP</b></td><td>$php_version</td></tr>
+      <tr valign=top><td><b>MySQL</b></td><td>$mysql_version</td></tr>
+      <tr valign=top><td><b>RRDtool</b></td><td>$rrdtool_version</td></tr>
+    </table>
+");
+
+print_optionbar_end();
+
+?>
+
+    <h5>Observium is an autodiscovering PHP/MySQL based network monitoring system.</h5>
+
+    <p>
+      <a href="http://www.observium.org">Website</a> |
+      <a href="http://www.observium.org/wiki/">Support Wiki</a> |
+      <a href="http://jira.observium.org/">Bugtracker</a> |
+      <a href="http://www.observium.org/wiki/Mailing_Lists">Mailing List</a> |
+      <a href="http://twitter.com/Observium">Twitter</a> |
+      <a href="http://www.facebook.com/pages/Observium/128354461353">Facebook</a>
+    </p>
+
+    <h3>Observium is a Free software project. Please donate to support continued development.</h3>
+
+  <div style="margin-top:10px;">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="W2ZJ3JRZR72Z6">
+    <input type="image" src="https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal . The safer, easier way to pay online.">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+    </form>
+  </div>
+
+    <h4>The Team</h4>
+
+    <img src="images/icons/flags/gb.png"> <strong>Adam Armstrong</strong> Project Founder<br />
+    <img src="images/icons/flags/be.png"> <strong>Geert Hauwaerts</strong> Developer<br />
+    <img src="images/icons/flags/be.png"> <strong>Tom Laermans</strong> Developer<br />
+
+    <h4>Acknowledgements</h4>
+
+    <b>Stu Nicholls</b> Dropdown menu CSS code. <br />
+    <b>Mark James</b> Silk Iconset. <br />
+    <b>Erik Bosrup</b> Overlib Library. <br />
+    <b>Jonathan De Graeve</b> SNMP code improvements. <br />
+    <b>Xiaochi Jin</b> Logo design. <br />
+    <b>Bruno Pramont</b> Collectd code. <br />
+    <b>Dennis de Houx</b> Application monitors for PowerDNS, Shoutcast, NTPD (Client, Server). <br />
+
+&nbsp;
 
 <?php print_optionbar_start(NULL); ?>
 
@@ -104,73 +150,8 @@ echo("
 ");
 
 print_optionbar_end(); ?>
-  </div>
 
-  <div style="float: left; padding: 0px; width: 49%">
-<?php
-
-$Observium_version = $config['version'];
-#if (file_exists('.svn/entries'))
-#{
-#  $svn = File('.svn/entries');
-#  $Observium_version .='-SVN r' . trim($svn[3]);
-#  unset($svn);
-#}
-
-print_optionbar_start(NULL);
-
-echo("
-    <h3>Versions</h3>
-    <table width=100% cellpadding=3 cellspacing=0 border=0>
-      <tr valign=top><td width=150><b>Observium</b></td><td>$Observium_version</td></tr>
-      <tr valign=top><td><b>Apache</b></td><td>$apache_version</td></tr>
-      <tr valign=top><td><b>PHP</b></td><td>$php_version</td></tr>
-      <tr valign=top><td><b>MySQL</b></td><td>$mysql_version</td></tr>
-      <tr valign=top><td><b>RRDtool</b></td><td>$rrdtool_version</td></tr>
-    </table>
-");
-
-print_optionbar_end();
-
-?>
-
-    <h5>Observium is an autodiscovering PHP/MySQL based network monitoring system.</h5>
-
-    <p>
-      <a href="http://www.observium.org">Website</a> |
-      <a href="http://www.observium.org/wiki/">Support Wiki</a> |
-      <a href="http://jira.observium.org/">Bugtracker</a> |
-      <a href="http://www.observium.org/wiki/Mailing_Lists">Mailing List</a> |
-      <a href="http://twitter.com/Observium">Twitter</a> |
-      <a href="http://www.facebook.com/pages/Observium/128354461353">Facebook</a>
-    </p>
-
-    <h3>Observium is a Free, Open project. Please donate to support continued development.</h3>
-
-  <div style="margin-top:10px;">
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="hosted_button_id" value="W2ZJ3JRZR72Z6">
-    <input type="image" src="https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal . The safer, easier way to pay online.">
-    <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-    </form>
-  </div>
-
-    <h4>The Team</h4>
-
-    <img src="images/icons/flags/gb.png"> <strong>Adam Armstrong</strong> Project Founder<br />
-    <img src="images/icons/flags/be.png"> <strong>Geert Hauwaerts</strong> Developer<br />
-    <img src="images/icons/flags/be.png"> <strong>Tom Laermans</strong> Developer<br />
-
-    <h4>Acknowledgements</h4>
-
-    <b>Stu Nicholls</b> Dropdown menu CSS code. <br />
-    <b>Mark James</b> Silk Iconset. <br />
-    <b>Erik Bosrup</b> Overlib Library. <br />
-    <b>Jonathan De Graeve</b> SNMP code improvements. <br />
-    <b>Xiaochi Jin</b> Logo design. <br />
-    <b>Bruno Pramont</b> Collectd code. <br />
-    <b>Dennis de Houx</b> Application monitors for PowerDNS, Shoutcast, NTPD (Client, Server). <br />
 
   </div>
+
 </div>
