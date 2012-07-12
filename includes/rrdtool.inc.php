@@ -115,6 +115,8 @@ function rrdtool_graph($graph_file, $options)
     fclose($rrd_pipes[0]);
 
     while (strlen($line) < 1) {
+      // wait for 10 milliseconds to loosen loop
+      usleep(10000);
       $line = fgets($rrd_pipes[1],1024);
       $data .= $line;
     }
@@ -246,14 +248,14 @@ function rrdtool_lastupdate($filename, $options)
  * @param string string to escape
  * @param integer if passed, string will be padded and trimmed to exactly this length (after rrdtool unescapes it)
  */
-     
+
 function rrdtool_escape($string, $maxlength = NULL)
 {
   $result = str_replace(':','\:',$string);
   $result = str_replace('%','%%',$result);
 
   // FIXME: should maybe also probably escape these? # \ ? [ ^ ] ( $ ) '
-  
+
   if ($maxlength != NULL)
   {
     return substr(str_pad($result, $maxlength),0,$maxlength+(strlen($result)-strlen($string)));
