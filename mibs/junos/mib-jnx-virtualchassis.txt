@@ -20,7 +20,7 @@ IMPORTS
     
     jnxVirtualChassisMemberMIB MODULE-IDENTITY
                                       
-    LAST-UPDATED "200806170000Z" -- 17 June, 2008
+    LAST-UPDATED "201010140000Z" -- 14 October, 2010
     ORGANIZATION "Juniper Networks, Inc."
     CONTACT-INFO
          "Juniper Technical Assistance Center
@@ -39,6 +39,18 @@ IMPORTS
              stack. The EX-Series switches can also be connected by the 10GE (or 1GE) network ports to
              form a stack. These can be used by EX-Series switches that don't have dedicated stacking ports.
              Up to a maximum of 10 boxes can be stacked together."
+
+    REVISION
+        "201007130000Z" -- 13 July, 2010
+
+    DESCRIPTION
+        "Added jnxVccpMemberUp and jnxVccpMemberDown Traps."
+
+    REVISION
+        "201010140000Z" -- 14 October, 2010
+
+    DESCRIPTION
+        "Modified the range for jnxVirtualChassisMemberPriority from 0 to 255."
 
        ::= { jnxExVirtualChassis 1 }
 
@@ -71,7 +83,9 @@ IMPORTS
         jnxVirtualChassisMemberMacAddBase                 MacAddress,
         jnxVirtualChassisMemberSWVersion                  DisplayString ,
         jnxVirtualChassisMemberPriority                   INTEGER,
-        jnxVirtualChassisMemberUptime                     INTEGER
+        jnxVirtualChassisMemberUptime                     INTEGER,
+        jnxVirtualChassisMemberModel                      DisplayString,
+        jnxVirtualChassisMemberLocation                   DisplayString
     }
 
     jnxVirtualChassisMemberId OBJECT-TYPE
@@ -122,12 +136,12 @@ IMPORTS
     ::= {  jnxVirtualChassisMemberEntry 5 }
 
     jnxVirtualChassisMemberPriority OBJECT-TYPE
-    SYNTAX      INTEGER (1..255)
+    SYNTAX      INTEGER (0..255)
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
         "This specifies the priority of the virtual-chassis member which can
-        vary from 1 to 255."
+        vary from 0 to 255."
     ::= {  jnxVirtualChassisMemberEntry 6 }
 
     jnxVirtualChassisMemberUptime OBJECT-TYPE
@@ -137,6 +151,22 @@ IMPORTS
     DESCRIPTION
         "Specifies the virtual-chassis member uptime. "
     ::= {  jnxVirtualChassisMemberEntry 7 }
+
+    jnxVirtualChassisMemberModel OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (1..32))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Specifies the virtual-chassis member model. "
+    ::= {  jnxVirtualChassisMemberEntry 8 }
+
+    jnxVirtualChassisMemberLocation OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (1..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Specifies the virtual-chassis member location. "
+    ::= {  jnxVirtualChassisMemberEntry 9 }
 
 
    -- jnxVirtualChassisPortTable holds the vccp port's admin/operation status
@@ -231,10 +261,12 @@ IMPORTS
 
 jnxVccpPortUp NOTIFICATION-TYPE
     OBJECTS { jnxVirtualChassisPortAdminStatus, 
-              jnxVirtualChassisPortOperStatus }
+              jnxVirtualChassisPortOperStatus,
+              jnxVirtualChassisMemberModel,
+              jnxVirtualChassisMemberLocation }
     STATUS  current
     DESCRIPTION
-            "A MemberUp trap signifies that the SNMP entity, acting in an
+            "A PortUp trap signifies that the SNMP entity, acting in an
             agent role, has detected that the jnxVirtualChassisPortOperStatus 
             object for one of its communication links left the  down state
             and transitioned into some other state (but not into the
@@ -244,15 +276,45 @@ jnxVccpPortUp NOTIFICATION-TYPE
 
 jnxVccpPortDown NOTIFICATION-TYPE
     OBJECTS { jnxVirtualChassisPortAdminStatus, 
-              jnxVirtualChassisPortOperStatus }
+              jnxVirtualChassisPortOperStatus,
+              jnxVirtualChassisMemberModel,
+              jnxVirtualChassisMemberLocation }
     STATUS  current
     DESCRIPTION
-            "A MemberDown trap signifies that the SNMP entity, acting in an
+            "A PortDown trap signifies that the SNMP entity, acting in an
             agent role, has detected that the jnxVirtualChassisPortOperStatus
-            object for one of its communication links left the  down state
-            and transitioned into some other state (but not into the
+            object for one of its communication links is about to enter the
+            down state from some other state (but not into the
             notPresent state).  This other state is indicated by the
             included value of jnxVirtualChassisPortOperStatus."
     ::= { jnxVccpNotificationsPrefix 2 }
+
+jnxVccpMemberUp NOTIFICATION-TYPE
+    OBJECTS { jnxVirtualChassisMemberSerialnumber,
+              jnxVirtualChassisMemberRole,
+              jnxVirtualChassisMemberModel,
+              jnxVirtualChassisMemberLocation }
+    STATUS  current
+    DESCRIPTION
+            "A MemberUp trap signifies that the SNMP entity, acting in an
+            agent role, has detected that the Member present at the location
+            jnxVirtualChassisMemberLocation on one of the Virtual
+            Chassis left the down state and transitioned into some other
+            state (but not into the notPresent state)."
+    ::= { jnxVccpNotificationsPrefix 3 }
+
+jnxVccpMemberDown NOTIFICATION-TYPE
+    OBJECTS { jnxVirtualChassisMemberSerialnumber,
+              jnxVirtualChassisMemberRole,
+              jnxVirtualChassisMemberModel,
+              jnxVirtualChassisMemberLocation }
+    STATUS  current
+    DESCRIPTION
+            "A MemberDown trap signifies that the SNMP entity, acting in an
+            agent role, has detected that the Member present at the location
+            jnxVirtualChassisMemberLocation on one of the Virtual
+            Chassis is about to enter the down state (but not into the notPresent
+            state)."
+    ::= { jnxVccpNotificationsPrefix 4 }
 
 END

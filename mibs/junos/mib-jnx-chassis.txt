@@ -21,7 +21,7 @@ IMPORTS
 
 jnxBoxAnatomy MODULE-IDENTITY
 
-    LAST-UPDATED "200812310000Z" -- Wed Dec 31 00:00:00 2008 UTC
+    LAST-UPDATED "201010220000Z" -- Fri Oct 22 00:00:00 2008 UTC
     ORGANIZATION "Juniper Networks, Inc."
     CONTACT-INFO
             "        Juniper Technical Assistance Center
@@ -34,6 +34,9 @@ jnxBoxAnatomy MODULE-IDENTITY
             "The MIB modules representing Juniper Networks'
 	    implementation of enterprise specific MIBs 
 	    supported by a single SNMP agent."
+    REVISION      "201010220000Z"
+    DESCRIPTION
+               "Added load average variables"
     REVISION      "200403230000Z"
     DESCRIPTION
                "Added chassis identification objects."
@@ -112,7 +115,15 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                      lcc12         (27),
                      lcc13         (28),
                      lcc14         (29),
-                     lcc15         (30)
+                     lcc15         (30),
+                     member0       (31),
+                     member1       (32),
+                     member2       (33),
+                     member3       (34),
+                     member4       (35),
+                     member5       (36),
+                     member6       (37),
+                     member7       (38)
                  }
 
 
@@ -821,7 +832,10 @@ JnxChassisId ::= TEXTUAL-CONVENTION
             jnxOperatingStateOrdered    INTEGER,
             jnxOperatingChassisId       JnxChassisId,
             jnxOperatingChassisDescr    DisplayString,
-            jnxOperatingRestartTime     DateAndTime
+            jnxOperatingRestartTime     DateAndTime,
+            jnxOperating1MinLoadAvg     Gauge32,
+            jnxOperating5MinLoadAvg     Gauge32,
+            jnxOperating15MinLoadAvg     Gauge32
     }
 
     jnxOperatingContentsIndex OBJECT-TYPE
@@ -1020,6 +1034,35 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                 last restarted."
         ::= { jnxOperatingEntry 19 }
 
+        jnxOperating1MinLoadAvg OBJECT-TYPE
+            SYNTAX          Gauge32
+            MAX-ACCESS      read-only
+            STATUS          current
+            DESCRIPTION
+                    "The CPU Load Average over the last 1 minutes
+                     Here it will be shown as percentage value
+                     Zero if unavailable or inapplicable."
+            ::= { jnxOperatingEntry 20 }
+
+        jnxOperating5MinLoadAvg OBJECT-TYPE
+            SYNTAX          Gauge32
+            MAX-ACCESS      read-only
+            STATUS          current
+            DESCRIPTION
+                    "The CPU Load Average over the last 5 minutes
+                     Here it will be shown as percentage value
+                     Zero if unavailable or inapplicable."
+            ::= { jnxOperatingEntry 21 }
+
+        jnxOperating15MinLoadAvg OBJECT-TYPE
+            SYNTAX          Gauge32
+            MAX-ACCESS      read-only
+            STATUS          current
+            DESCRIPTION
+                    "The CPU Load Average over the last 15 minutes
+                     Here it will be shown as percentage value
+                     Zero if unavailable or inapplicable."
+            ::= { jnxOperatingEntry 22 }
 
 --
 -- Box Redundancy Information Table
@@ -1348,7 +1391,9 @@ JnxChassisId ::= TEXTUAL-CONVENTION
 		fan(13),                                -- fan
 		lineCardChassis(14),                    -- LCC
                 forwardingEngineBoard(15),              -- FEB
-                protectedSystemDomain(16)               -- PSD
+                protectedSystemDomain(16),              -- PSD
+		powerDistributionUnit(17),              -- PDU
+		powerSupplyModule(18)                   -- PSM
 	}
 	MAX-ACCESS	read-only
 	STATUS		current
@@ -1455,7 +1500,23 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                 spuIdpdCoreDumpComplete(57),    -- SPU idpd crash with complete core dump
                 spuCoreDumpIncomplete(58),      -- SPU kernel crash with incomplete core dump
                 spuIdpdDown(59),                -- SPU idpd down
-                fruPfeReset(60)                 -- PFE reset
+                fruPfeReset(60),                -- PFE reset
+                fruReconnectNotReady(61),       -- FPC not ready to reconnect
+                fruSfLinkDown(62),              -- FE - Fabric links down
+                fruFabricDown(63),              -- Fabric transitioned from up to down
+                fruAntiCounterfeitRetry(64),    -- FPC offlined due to Anti Counterfeit Retry
+                fruFPCChassisClusterDisable(65), -- FPC offlined due to Chassis Cluster Disable
+                spuFipsError(66),                -- SPU fips error
+                fruFPCFabricDownOffline(67),     -- FPC offlined due to Fabric down
+                febCfgChange(68),                -- FEB config change
+                routeLocalizationRoleChange(69), -- Route localization role change
+                fruFpcUnsupported(70),           -- FPC unsupported
+                psdVersionMismatch(71),          -- PSD version mismatch
+                fruResetThresholdExceeded(72),   -- FRU Reset Threshold Exceeded
+                picBounce(73),                   -- PIC Bounce
+                badVoltage(74),                  -- bad voltage
+                fruFPCReducedFabricBW(75),       -- FPC offlined due to Reduced Fabric Bandwidth
+                fruAutoheal(76)                  -- FRU offlined due to software autoheal action
 	}
 	MAX-ACCESS	read-only
 	STATUS		current
@@ -1814,6 +1875,66 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                 from boot device list."
         ::= { jnxChassisTraps 15 }
 
+    jnxBootFromBackup NOTIFICATION-TYPE
+        OBJECTS         { jnxFruContentsIndex,
+                          jnxFruL1Index,
+                          jnxFruL2Index,
+                          jnxFruL3Index,
+                          jnxFruName,
+                          jnxFruType,
+                          jnxFruSlot }
+         STATUS         current
+         DESCRIPTION
+                 "A jnxBootFromBackup trap signifies that the SNMP
+                 entity, acting in an agent role, has detected that
+                 the specified  routing-engine/member has booted from
+                 the back up root partition"
+         ::= { jnxChassisTraps 16 }     
+
+    jnxFmLinkErr NOTIFICATION-TYPE
+        OBJECTS         { jnxFruContentsIndex,
+                          jnxFruL1Index,
+                          jnxFruL2Index,
+                          jnxFruL3Index,
+                          jnxFruName,
+                          jnxFruType,
+                          jnxFruSlot }
+        STATUS          current
+        DESCRIPTION
+                "A LinkErr trap signifies that the SNMP
+                entity, acting in an agent role, has detected
+                link errors."
+        ::= { jnxChassisTraps 17 }
+
+    jnxFmCellDropErr NOTIFICATION-TYPE
+        OBJECTS         { jnxFruContentsIndex,
+                          jnxFruL1Index,
+                          jnxFruL2Index,
+                          jnxFruL3Index,
+                          jnxFruName,
+                          jnxFruType,
+                          jnxFruSlot }
+        STATUS          current
+        DESCRIPTION
+                "A CellDropErr trap signifies that the SNMP
+                entity, acting in an agent role, has detected 
+                cell drop errors."
+        ::= { jnxChassisTraps 18 }
+
+    jnxExtSrcLockLost NOTIFICATION-TYPE
+        OBJECTS         { jnxFruContentsIndex,
+                          jnxFruL1Index,
+                          jnxFruL2Index,
+                          jnxFruL3Index,
+                          jnxFruName,
+                          jnxFruType,
+                          jnxFruSlot }
+        STATUS          current
+        DESCRIPTION
+                "A ExtSrcLockLost trap signifies that the SNMP
+                entity, acting in an agent role, has detected that
+                a lock for an external clock source has been lost."
+        ::= { jnxChassisTraps 19 }
 
 
     -- Traps for chassis alarm cleared conditions
@@ -1881,6 +2002,21 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                 recovered from previous operational errors and it
                 is in ok state in the chassis."
         ::= { jnxChassisOKTraps 4 }
+
+    jnxExtSrcLockAcquired NOTIFICATION-TYPE
+        OBJECTS         { jnxFruContentsIndex,
+                          jnxFruL1Index,
+                          jnxFruL2Index,
+                          jnxFruL3Index,
+                          jnxFruName,
+                          jnxFruType,
+                          jnxFruSlot }
+        STATUS          current
+        DESCRIPTION
+                "A ExtSrcLockAcquired trap signifies that the SNMP
+                entity, acting in an agent role, has detected that
+                a lock for an external clock source has been acquired."
+        ::= { jnxChassisOKTraps 5 }
 
 
 END

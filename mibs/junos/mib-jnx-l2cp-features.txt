@@ -5,13 +5,13 @@ IMPORTS
 
     OBJECT-TYPE, MODULE-IDENTITY,
     NOTIFICATION-TYPE FROM SNMPv2-SMI
-    TruthValue  FROM SNMPv2-TC
-    ifIndex  FROM IF-MIB
+    DisplayString, TruthValue  FROM SNMPv2-TC
+    InterfaceIndex, ifIndex  FROM IF-MIB
     dot1dStpPort, dot1dStpPortEntry  FROM BRIDGE-MIB
     jnxL2cpMibRoot FROM JUNIPER-SMI;
 
 jnxL2cpFeaturesMIB MODULE-IDENTITY
-    LAST-UPDATED "200712170000Z"
+    LAST-UPDATED "201006110000Z"
     ORGANIZATION "Juniper Networks, Inc."
     CONTACT-INFO
         "Juniper Technical Assistance Center
@@ -22,6 +22,10 @@ jnxL2cpFeaturesMIB MODULE-IDENTITY
     DESCRIPTION
         "This mib module is for Juniper Networks Proprietory
          Layer 2 control protocol (L2CP) features"
+
+    REVISION     "201006110000Z"    -- June 11, 2010
+    DESCRIPTION  "Added new trap jnxLacpTimeOut."
+
     ::= { jnxL2cpMibRoot 1 }
 
 
@@ -200,5 +204,67 @@ jnxPortBpduErrorStatusChangeTrap NOTIFICATION-TYPE
         "Generated when the ports BPDU error state (no-error or detected) 
          changes."
    ::= { jnxL2cpProtectTraps 3 }
+
+    -- ***************************************************************
+    --  Lacp Traps / Notifications Section
+    -- ***************************************************************
+
+    -- Lacp Notification Variables/Objects
+
+    jnxLacpNotifyVars OBJECT IDENTIFIER ::=  { jnxL2cpObjects 3 }
+
+    jnxLacpNotificationsPrefix OBJECT IDENTIFIER ::= { jnxL2cpNotifications 1 }
+
+    jnxLacpInterfaceName OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only 
+        STATUS      current
+        DESCRIPTION
+            "Lacp member interface."
+        ::= { jnxLacpNotifyVars 1 }
+
+    jnxLacpifIndex  OBJECT-TYPE 
+        SYNTAX      InterfaceIndex 
+        MAX-ACCESS  read-only 
+        STATUS      current 
+        DESCRIPTION 
+            "Snmp ifIndex of member interface." 
+        ::= { jnxLacpNotifyVars 2 } 
+
+    jnxLacpAggregateInterfaceName OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION
+            "Lacp Aggregate interface."
+        ::= { jnxLacpNotifyVars 3 }
+
+    jnxLacpAggregateifIndex  OBJECT-TYPE
+        SYNTAX      InterfaceIndex
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION
+            "Snmp ifIndex of Aggregator."
+        ::= { jnxLacpNotifyVars 4 } 
+
+    jnxLacpAggPortActorOperState OBJECT-TYPE
+        SYNTAX       DisplayString
+        MAX-ACCESS   read-only
+        STATUS       current
+        DESCRIPTION
+            "Port actor operational state."
+        ::= { jnxLacpNotifyVars 5 }
+
+    jnxLacpTimeOut NOTIFICATION-TYPE
+        OBJECTS         { jnxLacpInterfaceName,
+                          jnxLacpifIndex,
+                          jnxLacpAggregateInterfaceName,
+                          jnxLacpAggregateifIndex,
+                          jnxLacpAggPortActorOperState
+                        }
+        STATUS          current
+        DESCRIPTION
+            "Lacp times out"
+        ::= { jnxLacpNotificationsPrefix  1 }
 
 END

@@ -561,7 +561,9 @@ MplsLspInfoEntry ::=
         mplsPathInfoExclude         Integer32,
         mplsPathInfoSetupPriority   INTEGER,
         mplsPathInfoHoldPriority    INTEGER,
-        mplsPathInfoProperties      INTEGER
+        mplsPathInfoProperties      INTEGER,
+        mplsLspInfoAggrOctets       Counter64,
+        mplsLspInfoAggrPackets      Counter64
     }
 
 mplsLspInfoName OBJECT-TYPE
@@ -881,7 +883,37 @@ mplsPathInfoProperties OBJECT-TYPE
 	 unless mplsPathInfoName is not empty"
     ::= { mplsLspInfoEntry 27 }
 
+mplsLspInfoAggrOctets OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The number of octets that have beeen forwarded over
+         current LSP. This is an aggregate count of octets
+         forwarded over all LSP instances from the time
+         LSP was up. The number reported is not realtime, may
+         be subject to several minutes delay.  The delay is
+         controllable by mpls statistics gathering interval,
+         which by default is once every 5 minutes.  If mpls
+         statistics gathering is not enabled, this number will
+         not increment."
+    ::= { mplsLspInfoEntry 28 }
 
+mplsLspInfoAggrPackets OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The number of packets that have been forwarded over
+         current LSP. This is an aggregate count of packets
+         forwarded over all LSP instances from the time
+         LSP was up. The number reported is not realtime, may
+         be subject to several minutes delay. The delay is
+         controllable by mpls statistics gathering interval,
+         which by default is once every 5 minutes. If mpls
+         statistics gathering is not enabled, this number will
+         not increment."
+    ::= { mplsLspInfoEntry 29 }
 
 --
 -- definition of MPLS traps
@@ -997,3 +1029,4 @@ mplsPathInfoProperties OBJECT-TYPE
         ::= { mplsLspTraps 5 }
 
 END
+

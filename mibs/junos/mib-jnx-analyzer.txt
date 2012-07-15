@@ -37,6 +37,12 @@ jnxAnalyzerMIB MODULE-IDENTITY
     DESCRIPTION
         "Marking jnxAnalyzerStatus as deprecated"
 
+    REVISION
+        "201007300000Z" -- Fri July 30 00:00:00 2009 UTC
+
+    DESCRIPTION
+        "Marking deprecated OIDs as obsolete"
+
     ::= { jnxExAnalyzer 1 }
 
 jnxAnalyzerMIBObjects      OBJECT IDENTIFIER ::= { jnxAnalyzerMIB 1 }
@@ -82,7 +88,7 @@ jnxAnalyzerName OBJECT-TYPE
 jnxAnalyzerStatus OBJECT-TYPE
     SYNTAX 	TruthValue
     MAX-ACCESS	read-only
-    STATUS	deprecated
+    STATUS	obsolete
     DESCRIPTION
 	"This object identifies whether the mirroring associated with a 
 	particular analyzer is enabled or disabled."
@@ -121,7 +127,7 @@ jnxLossPriority OBJECT-TYPE
 jnxAnalyzerInputTable OBJECT-TYPE
     SYNTAX	SEQUENCE OF JnxAnalyzerInputEntry
     MAX-ACCESS	not-accessible
-    STATUS 	deprecated
+    STATUS 	obsolete
     DESCRIPTION
 	"An anlayzer Session is an association of several source ports to 
 	a destination port.A range or series of ports can be mirrored in
@@ -131,7 +137,7 @@ jnxAnalyzerInputTable OBJECT-TYPE
 jnxAnalyzerInputEntry OBJECT-TYPE
     SYNTAX	JnxAnalyzerInputEntry
     MAX-ACCESS	not-accessible
-    STATUS	deprecated
+    STATUS	obsolete
     DESCRIPTION	
 	"An Entry is created for each Input Source port."
     INDEX { jnxAnalyzerName, jnxAnalyzerInputValue } 
@@ -147,7 +153,7 @@ JnxAnalyzerInputEntry ::=
 jnxAnalyzerInputValue OBJECT-TYPE
     SYNTAX	DisplayString (SIZE(0..255))
     MAX-ACCESS	not-accessible
-    STATUS	deprecated
+    STATUS	obsolete
     DESCRIPTION
 	"This identifies each different analyzer input source.
 	
@@ -164,7 +170,7 @@ jnxAnalyzerInputOption	OBJECT-TYPE
 	egress	(2) 
     }
     MAX-ACCESS	read-only
-    STATUS	deprecated
+    STATUS	obsolete
     DESCRIPTION
 	"A source port is a switch port that is been mirrored. It can be 
 	mirrored based either on Ingress(received) traffic or egress
@@ -191,7 +197,7 @@ jnxAnalyzerInputType OBJECT-TYPE
 	vlanname  (2)
     }
     MAX-ACCESS	read-only
-    STATUS	deprecated
+    STATUS	obsolete
     DESCRIPTION
 	"This specifies whether interfaces or VLANs is mirrored. 
         
