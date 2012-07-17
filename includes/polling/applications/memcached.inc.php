@@ -14,11 +14,11 @@ echo("memcached(".$app['app_instance'].") ");
         DS:rusage_system_ms:DERIVE:600:0:125000000000 \
         DS:curr_items:GAUGE:600:0:125000000000 \
         DS:total_items:DERIVE:600:0:125000000000 \
-        DS:limit_maxbytes:GAUGE:600:0:125000000000 \
+        DS:limit_maxbytes:GAUGE:600:0:U \
         DS:curr_connections:GAUGE:600:0:125000000000 \
         DS:total_connections:DERIVE:600:0:125000000000 \
         DS:conn_structures:GAUGE:600:0:125000000000 \
-        DS:bytes:GAUGE:600:0:125000000000 \
+        DS:bytes:GAUGE:600:0:U \
         DS:cmd_get:DERIVE:600:0:125000000000 \
         DS:cmd_set:DERIVE:600:0:125000000000 \
         DS:get_hits:DERIVE:600:0:125000000000 \
