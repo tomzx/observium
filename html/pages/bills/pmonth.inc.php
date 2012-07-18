@@ -1,77 +1,127 @@
 <?php
 
-  $pagetitle[] = "Previous Billing Period";
-  $i=0;
+$pagetitle[]      = "Previous Billing Period";
+$isAdmin          = (($_SESSION['userlevel'] == "10") ? true : false);
+$disabled         = ($isAdmin ? "" : "disabled=\"disabled\"");
+$links['add']     = ($isAdmin ? generate_url($vars, array('view' => 'add')) : "javascript:;");
+$links['cur']     = generate_url($vars, array('view' => ''));
 
-  echo('<table border=0 cellspacing=0 cellpadding=5 class=devicetable width=100%>
-           <tr style="font-weight: bold;">
-             <td width="7"></td>
-             <td width="250">Billing name</td>
-             <td>Type</td>
-             <td>Allowed</td>
-             <td>Inbound</td>
-             <td>Outbound</td>
-             <td>Total</td>
-             <td>95 percentile</td>
-             <td style="text-align: center;">Overusage</td>
-             <td width="250"></td>
-           </tr>');
 
-  foreach (dbFetchRows("SELECT * FROM `bills` ORDER BY `bill_name`") as $bill)
-  {
-    if (bill_permitted($bill['bill_id']))
-    {
-      $day_data = getDates($bill['bill_day']);
-      $datefrom = $day_data['2'];
-      $dateto   = $day_data['3'];
-      foreach (dbFetchRows("SELECT * FROM `bill_history` WHERE `bill_id` = ? AND `bill_datefrom` = ? ORDER BY `bill_datefrom` LIMIT 1", array($bill['bill_id'], $datefrom, $dateto)) as $history)
-      {
-        unset($class);
-        $type           = $history['bill_type'];
-        $percent        = $history['bill_percent'];
-        $dir_95th       = $history['dir_95th'];
-        $rate_95th      = format_si($history['rate_95th'])."bps";
-        $total_data     = format_bytes_billing($history['traf_total']);
+echo("<table class=\"table table-bordered table-striped\">
+        <thead>
+          <tr>
+            <th>Billing name</th>
+            <th style=\"width: 60px; text-align: center;\">Type</th>
+            <th style=\"width: 70px; text-align: center;\">Allowed</th>
+            <th style=\"width: 70px; text-align: center;\">Used</th>
+            <th style=\"width: 70px; text-align: center;\">Overusage</th>
+            <th style=\"width: 225px;\"></th>
+            <th style=\"width: 215px;\">
+              <div class=\"btn-group\">
+                <a class=\"btn btn-mini btn-primary\" style=\"color: #fff;\" href=\"".$links['cur']."\"><i class=\"icon-chevron-right icon-white\"></i> Current period</a>
+                <a class=\"btn btn-mini btn-success\" style=\"color: #fff;\" href=\"".$links['add']."\"".$disabled."\"><i class=\"icon-plus-sign icon-white\"></i> Add Bill</a>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>\n");
 
+foreach (dbFetchRows("SELECT * FROM `bills` ORDER BY `bill_name`") as $bill) {
+  if (bill_permitted($bill['bill_id'])) {
+    unset($class);
+    $day_data     = getDates($bill['bill_day']);
+    $datefrom     = $day_data['2'];
+    $dateto       = $day_data['3'];
+    foreach (dbFetchRows("SELECT * FROM `bill_history` WHERE `bill_id` = ? AND `bill_datefrom` = ? ORDER BY `bill_datefrom` LIMIT 1", array($bill['bill_id'], $datefrom, $dateto)) as $history) {
+      unset($class);
+      $rate_data    = $history;
+      $rate_95th    = $rate_data['rate_95th'];
+      $dir_95th     = $rate_data['dir_95th'];
+      $total_data   = $rate_data['total_data'];
+      $rate_average = $rate_data['rate_average'];
+      $notes        = $bill['bill_notes'];
+      $custid       = $bill['bill_custid'];
+      $refid        = $bill['bill_ref'];
+      $billid       = $bill['bill_id'];
+
+      if ($history['bill_type'] == "cdr") {
+        $type = "CDR 95th";
+        $allowed = format_si($history['bill_cdr'])."bps";
+        $used    = format_si($rate_data['rate_95th'])."bps";
+        $percent = round(($rate_data['rate_95th'] / $history['bill_cdr']) * 100,2);
         $background = get_percentage_colours($percent);
-        $row_colour = ((!is_integer($i/2)) ? $list_colour_a : $list_colour_b);
+        $overuse = $rate_data['rate_95th'] - $history['bill_cdr'];
+        $overuse = (($overuse <= 0) ? "-" : format_si($overuse)."bps");
+      } elseif ($history['bill_type'] == "quota") {
+        $type = "Quota";
+        $allowed = format_bytes_billing($history['bill_quota']);
+        $used    = format_bytes_billing($rate_data['total_data']);
+        $percent = round(($rate_data['total_data'] / ($history['bill_quota'])) * 100,2);
+        $background = get_percentage_colours($percent);
+        $overuse = $rate_data['total_data'] - $history['bill_quota'];
+        $overuse = (($overuse <= 0) ? "-" : format_bytes_billing($overuse));
+      }
 
-        if ($type == "CDR")
-        {
-          $allowed = format_si($history['bill_allowed'])."bps";
-          $used    = format_si($history['rate_95th'])."bps";
-          $in      = format_si($history['rate_95th_in'])."bps";
-          $out     = format_si($history['rate_95th_out'])."bps";
-          $overuse = (($history['bill_overuse'] <= 0) ? "-" : "<span style=\"color: #".$background['left']."; font-weight: bold;\">".format_si($history['bill_overuse'])."bps</span>");
-        } elseif ($type == "Quota") {
-          $allowed = format_bytes_billing($history['bill_allowed']);
-          $used    = format_bytes_billing($history['total_data']);
-          $in      = format_bytes_billing($history['traf_in']);
-          $out     = format_bytes_billing($history['traf_out']);
-          $overuse = (($history['bill_overuse'] <= 0) ? "-" : "<span style=\"color: #".$background['left']."; font-weight: bold;\">".format_bytes_billing($history['bill_overuse'])."</span>");
-        }
-
-        $total_data     = (($type == "Quota") ? "<b>".$total_data."</b>" : $total_data);
-        $rate_95th      = (($type == "CDR") ? "<b>".$rate_95th."</b>" : $rate_95th);
-
-        echo("
-               <tr style=\"background: $row_colour;\">
-                 <td></td>
-                 <td><a href=\"".generate_url(array('page' => "bill", 'bill_id' => $bill['bill_id']))."/\"><span style=\"font-weight: bold;\" class=\"interface\">".$bill['bill_name']."</a></span><br />from ".strftime("%x", strtotime($datefrom))." to ".strftime("%x", strtotime($dateto))."</td>
-                 <td>$type</td>
-                 <td>$allowed</td>
-                 <td>$in</td>
-                 <td>$out</td>
-                 <td>$total_data</td>
-                 <td>$rate_95th</td>
-                 <td style=\"text-align: center;\">$overuse</td>
-                 <td>".print_percentage_bar (250, 20, $perc, NULL, "ffffff", $background['left'], $percent . "%", "ffffff", $background['right'])."</td>
-               </tr>");
-
-         $i++;
-      } // PERMITTED
+      switch(true) {
+        case ($percent >= 90):
+          $perc['BG'] = "danger";
+          break;
+        case ($percent >= 75):
+          $perc['BG'] = "warning";
+          break;
+        case ($percent >= 50):
+          $perc['BG'] = "success";
+          break;
+        default:
+          $perc['BG'] = "info";
+      }
+      $perc['width']    = (($percent <= "100") ? $percent : "100");
+      $label['type']    = (($type == "Quota") ? "info" : "inverse");
+      $label['overuse'] = (($overuse == "-") ? "success" : "important");
+      $notes            = (!empty($notes) ? "<br /><span class=\"label\"><i class=\"icon-comment icon-white\"></i> &nbsp;".$notes."&nbsp;</span>" : "");
+      $ref['cust']      = (!empty($custid) ? "<a href=\"javascript:;\" rel=\"tooltip\" title=\"".$custid."\"><i class=\"icon-user\"></i></a>" : "");
+      $ref['bill']      = (!empty($refid) ? "<a href=\"javascript:;\" rel=\"tooltip\" title=\"".$refid."\"><i class=\"icon-info-sign\"></i></a>" : "");
+      $ref['html']      = (((!empty($ref['cust']) || !empty($ref['bill'])) && ($isAdmin == true)) ? "<span style=\"float: right;\">".$ref['cust']."".$ref['bill']."</span>" : "");
+      $links['quick']   = generate_url(array('page' => 'bill', 'bill_id' => $billid, 'view' => 'quick'));
+      $links['accurate']= generate_url(array('page' => 'bill', 'bill_id' => $billid, 'view' => 'accurate'));
+      $links['transfer']= generate_url(array('page' => 'bill', 'bill_id' => $billid, 'view' => 'transfer'));
+      $links['history'] = generate_url(array('page' => 'bill', 'bill_id' => $billid, 'view' => 'history'));
+      $links['edit']    = ($isAdmin ? generate_url(array('page' => 'bill', 'bill_id' => $billid, 'view' => 'edit')) : "javascript:;");
+      $links['reset']   = ($isAdmin ? generate_url(array('page' => 'bill', 'bill_id' => $billid, 'view' => 'reset')) : "javascript:;");
+      $links['delete']  = ($isAdmin ? generate_url(array('page' => 'bill', 'bill_id' => $billid, 'view' => 'delete')) : "javascript:;");
+      echo("
+            <tr>
+              <td>
+                <i class=\"icon-hdd\"></i> <a href=\"".$links['quick']."\"><strong class=\"interface\">".$bill['bill_name']."</strong></a>".$ref['html']."<br />
+                <i class=\"icon-calendar\"></i> ".strftime("%F", strtotime($datefrom))." to ".strftime("%F", strtotime($dateto))."
+                ".$notes."
+              </td>
+              <td style=\"text-align: center;\"><span class=\"label label-".$label['type']."\">".$type."</span></td>
+              <td style=\"text-align: center;\"><span class=\"badge badge-success\">".$allowed."</span></td>
+              <td style=\"text-align: center;\"><span class=\"badge badge-warning\">".$used."</span></td>
+              <td style=\"text-align: center;\"><span class=\"badge badge-".$label['overuse']."\">".$overuse."</span></td>
+              <td><div class=\"progress progress-".$perc['BG']." progress-striped active\"><div class=\"bar\" style=\"text-align: middle; width: ".$perc['width']."%;\">".$percent."%</div></div></td>
+              <td>
+                <div class=\"btn-toolbar\" style=\"margin-top: 0px;\">
+                  <div class=\"btn-group\">
+                    <a class=\"btn btn-mini btn-primary\" href=\"".$links['quick']."\" rel=\"tooltip\" title=\"Show quick graphs\"><i class=\"icon-list-alt icon-white\"></i></a>
+                    <a class=\"btn btn-mini btn-primary\" href=\"".$links['accurate']."\" rel=\"tooltip\" title=\"Show accurate graphs\"><i class=\"icon-signal icon-white\"></i></a>
+                    <a class=\"btn btn-mini btn-primary\" href=\"".$links['transfer']."\" rel=\"tooltip\" title=\"Show transfer graphs\"><i class=\"icon-tasks icon-white\"></i></a>
+                    <a class=\"btn btn-mini btn-primary\" href=\"".$links['history']."\" rel=\"tooltip\" title=\"Show historical usage\"><i class=\"icon-calendar icon-white\"></i></a>
+                  </div>
+                  <div class=\"btn-group right\">
+                    <a class=\"btn btn-mini btn-success\" href=\"".$links['edit']."\" rel=\"tooltip\" title=\"Edit bill\"".$disabled."><i class=\"icon-edit icon-white\"></i></a>
+                    <a class=\"btn btn-mini btn-warning\" href=\"".$links['reset']."\" rel=\"tooltip\" title=\"Reset bill\"".$disabled."><i class=\"icon-refresh icon-white\"></i></a>
+                    <a class=\"btn btn-mini btn-danger\" href=\"".$links['delete']."\" rel=\"tooltip\" title=\"Delete bill\"".$disabled."><i class=\"icon-trash icon-white\"></i></a>
+                  </div>
+                </div>
+              </td>
+            </tr>\n");
     }
-  }
-  echo("</table>");
+  } // PERMITTED
+}
+
+echo("  </tbody>\n");
+echo("</table>\n");
 
 ?>
