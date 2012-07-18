@@ -89,6 +89,7 @@ if (isset($_SERVER["SERVER_NAME"]) && isset($_SERVER["SERVER_PORT"]))
 }
 
 $config['title_image']      = "images/observium-logo.png";
+$config['title_url']        = "";
 $config['stylesheet']       = "css/styles.css";
 $config['mono_font']        = "DejaVuSansMono";
 $config['favicon']          = "images/observium-icon.png";
