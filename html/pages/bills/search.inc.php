@@ -1,21 +1,62 @@
-<form class="well form-search" method="post" action="" style="padding-bottom: 10px;">
-  <fieldset>
-    <strong>Search:</strong>
-    <input class="span4" type="text" name="hostname" id="hostname" value="<?php echo($_POST['hostname']); ?>" />
-    <select class="span2" name="os" id="os">
-      <option value="">All Types</option>
-      <option value="">CDR 95th</option>
-      <option value="">Quota</option>
-      <!-- <option value="">Average</option> //-->
-    </select>
-    <select class="span2" name="hardware" id="hardware">
+<?php
+
+  print_optionbar_start('40');
+
+?>
+
+        <table cellpadding=7 cellspacing=0 class=devicetable width=100%>
+<form method='post' action=''>
+<tr>
+             <td width='40' align=center valign=middle><div style='font-weight: bold; font-size: 16px;'>Bills</div></td>
+             <td width='240'><span style='font-weight: bold; font-size: 14px;'></span>
+             <input type="text" name="hostname" id="hostname" size=40 value="<?php echo($_POST['hostname']); ?>" />
+             </td>
+             <td width='100'>
+      <select name='os' id='os'>
+      <option value=''>All Types</option>
+      <option value=''>CDR</option>
+      <option value=''>95th</option>
+      <option value=''>Quota</option>
+       </select>
+             </td>
+             <td width='100'>
+      <select name='hardware' id='hardware'>
       <option value=''>All States</option>
       <option value=''>Under Quota</option>
       <option value=''>Over Quota</option>
-    </select>
-    <select class="span2" name="location" id="location">
+       </select>
+             </td>
+             <td width='100'>
+      <select name='location' id='location'>
       <option value=''>All Customers</option>
-    </select>
-    <input type="submit" class="btn btn-info" value="Search">
-  </fieldset>
-</form>
+       </select>
+     </td>
+                 <td>
+         <input type=submit class=submit value=Search>
+             </td>
+             <td width='170' style='font-weight:bold; font-size: 12px;'>
+<?php
+
+  if ($vars['view'] == "history")
+  {
+    echo('<a href="bills/"><img src="images/16/clock.png" align=absmiddle alt="Current Billing Period"> Current Billing Period</a>');
+  } else
+  {
+    // FIXME - generate_url
+    echo('<a href="bills/view=history/"><img src="images/16/clock_red.png" align=absmiddle alt="Previous Billing Period"> Previous Billing Period</a>');
+  }
+
+?>
+             </td>
+             <td width='80' style='font-weight:bold; font-size: 12px;'>
+                                                   <a href='bills/view=add/'><img src="images/16/add.png" align=absmiddle alt="Add"> Add Bill</a>
+             </td>
+           </tr>
+  </form>
+</table>
+
+<?php
+
+  print_optionbar_end();
+
+?>

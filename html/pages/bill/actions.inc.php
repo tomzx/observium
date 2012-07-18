@@ -31,7 +31,7 @@ if ($_POST['action'] == "reset_bill" && ($_POST['confirm'] == "rrd" || $_POST['c
     dbDelete('bill_data', '`bill_id` = ?', array($bill_id));
   }
   if ($_POST['confirm'] == "rrd") {
-    // TODO: First need to add new rrd with poller/discover, so the default rrd isn't wipped
+    // Stil todo
   }
 
   echo("<div class=infobox>Bill Reseting. Redirecting to Bills list.</div>");
@@ -75,17 +75,11 @@ if ($_POST['action'] == "update_bill")
     }
   }
 
-  if (dbUpdate(array('bill_name' => $_POST['bill_name'], 'bill_day' => $_POST['bill_day'], 'bill_quota' => $bill_quota, 'bill_cdr' => $bill_cdr,
-                     'bill_type' => $_POST['bill_type']), 'bills', '`bill_id` = ?', array($bill_id)))
+  if (dbUpdate(array('bill_name' => $_POST['bill_name'], 'bill_day' => $_POST['bill_day'], 'bill_quota' => $bill_quota,
+                     'bill_cdr' => $bill_cdr, 'bill_type' => $_POST['bill_type'], 'bill_custid' => $_POST['bill_custid'],
+                     'bill_ref' => $_POST['bill_ref'], 'bill_notes' => $_POST['bill_notes']), 'bills', '`bill_id` = ?', array($bill_id)))
   {
     print_message("Bill Properties Updated");
-  }
-}
-if ($_POST['action'] == "update_bill_optional")
-{
-  if (dbUpdate(array('bill_custid' => $_POST['bill_custid'], 'bill_ref' => $_POST['bill_ref'], 'bill_notes' => $_POST['bill_notes']), 'bills', '`bill_id` = ?', array($bill_id)))
-  {
-    print_message("Optional Information Updated");
   }
 }
 

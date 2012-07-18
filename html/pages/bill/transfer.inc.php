@@ -1,222 +1,172 @@
 <?php
 
-$cur_days     = date('d', ($config['time']['now'] - strtotime($datefrom)));
-$total_days   = date('d', (strtotime($dateto)));
+  $pagetitle[]        = "Bandwidth Graphs";
 
-$used         = format_bytes_billing($total_data);
-$average      = format_bytes_billing($total_data / $cur_days);
-$estimated    = format_bytes_billing($total_data / $cur_days * $total_days);
+#  $bill_data          = dbFetchRow("SELECT * FROM bills WHERE bill_id = ?", array($bill_id));
 
-if ($bill_data['bill_type'] == "quota") {
-  $quota      = $bill_data['bill_quota'];
-  $percent    = round(($total_data) / $quota * 100, 2);
-  $allowed    = format_si($quota)."bps";
-  $overuse    = $total_data - $quota;
-  $overuse    = (($overuse <= 0) ? "<span class=\"badge badge-success\">-</span>" : "<span class=\"badge badge-important\">".format_bytes_billing($overuse)."</span>");
-  $type       = "Quota";
-} elseif ($bill_data['bill_type'] == "cdr") {
-  $cdr        = $bill_data['bill_cdr'];
-  $percent    = "0";
-  $allowed    = "-";
-  $overuse    = "<span class=\"badge badge-success\">-</span>";
-  $type       = "CDR / 95th percentile";
-}
+#  $today              = str_replace("-", "", dbFetchCell("SELECT CURDATE()"));
+#  $tomorrow           = str_replace("-", "", dbFetchCell("SELECT DATE_ADD(CURDATE(), INTERVAL 1 DAY)"));
+#  $last_month         = str_replace("-", "", dbFetchCell("SELECT DATE_SUB(CURDATE(), INTERVAL 1 MONTH)"));
 
-$optional['cust']  = (($isAdmin && !empty($bill_data['bill_custid'])) ? $bill_data['bill_custid'] : "n/a");
-$optional['ref']   = (($isAdmin && !empty($bill_data['bill_ref'])) ? $bill_data['bill_ref'] : "n/a");
-$optional['notes'] = (!empty($bill_data['bill_notes']) ? $bill_data['bill_notes'] : "n/a");
+#  $rightnow           = $today . date(His);
+#  $before             = $yesterday . date(His);
+#  $lastmonth          = $last_month . date(His);
 
-$lastmonth    = dbFetchCell("SELECT UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 MONTH))");
-$yesterday    = dbFetchCell("SELECT UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 DAY))");
-$rightnow     = date(U);
+#  $dayofmonth         = $bill_data['bill_day'];
+#  $day_data           = getDates($dayofmonth);
+#  $datefrom           = $day_data['0'];
+#  $dateto             = $day_data['1'];
+#  $lastfrom           = $day_data['2'];
+#  $lastto             = $day_data['3'];
 
-$bi           = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
-$bi          .= "&amp;from=" . $unixfrom .  "&amp;to=" . $unixto;
-$bi          .= "&amp;type=day&amp;imgbill=1";
-$bi          .= "&amp;x=1050&amp;y=275";
-$bi          .= "'>";
+#  print_r($bill_data);
 
-$li           = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
-$li          .= "&amp;from=" . $unix_prev_from .  "&amp;to=" . $unix_prev_to;
-$li          .= "&amp;type=day";
-$li          .= "&amp;x=1050&amp;y=275";
-$li          .= "'>";
+  $total_data         = $bill_data['total_data'];
+  $in_data            = $bill_data['total_data_in'];
+  $out_data           = $bill_data['total_data_out'];
 
-$di           = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
-$di          .= "&amp;from=" . $config['time']['day'] .  "&amp;to=" . $config['time']['now'];
-$di          .= "&amp;type=hour";
-$di          .= "&amp;x=1050&amp;y=275";
-$di          .= "'>";
+  $fromtext           = dbFetchCell("SELECT DATE_FORMAT($datefrom, '%M %D %Y')");
+  $totext             = dbFetchCell("SELECT DATE_FORMAT($dateto, '%M %D %Y')");
+  $unixfrom           = dbFetchCell("SELECT UNIX_TIMESTAMP('$datefrom')");
+  $unixto             = dbFetchCell("SELECT UNIX_TIMESTAMP('$dateto')");
+  $unix_prev_from     = dbFetchCell("SELECT UNIX_TIMESTAMP('$lastfrom')");
+  $unix_prev_to       = dbFetchCell("SELECT UNIX_TIMESTAMP('$lastto')");
+  $lastmonth          = dbFetchCell("SELECT UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 MONTH))");
+  $yesterday          = dbFetchCell("SELECT UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 DAY))");
+  $rightnow           = date(U);
 
-$mi           = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
-$mi          .= "&amp;from=" . $lastmonth .  "&amp;to=" . $rightnow;
-$mi          .= "&amp;type=day";
-$mi          .= "&amp;x=1050&amp;y=275";
-$mi          .= "'>";
+  echo("<h3>Billed Ports</h3>");
 
-switch(true) {
-  case($percent >= 90):
-    $perc['BG'] = "danger";
-    break;
-  case($percent >= 75):
-    $perc['BG'] = "warning";
-    break;
-  case($percent >= 50):
-    $perc['BG'] = "success";
-    break;
-  default:
-    $perc['BG'] = "info";
-}
-$perc['width'] = (($percent <= "100") ? $percent : "100");
-
-// GB Convert (1000 vs 1024)
-function gbConvert($data) {
-  global $config;
-  $count = strlen($data);
-  $div   = floor($count / 4);
-  $res   = round($data / pow(1000, $div) * pow($config['billing']['base'], $div));
-  return $res;
-}
-
-function transferOverview($bill_id, $start, $end) {
-  $tot       = array();
-  $traf      = array();
-  foreach (dbFetch("SELECT DISTINCT UNIX_TIMESTAMP(timestamp) as timestamp, SUM(delta) as traf_total, SUM(in_delta) as traf_in, SUM(out_delta) as traf_out FROM bill_data WHERE `bill_id`= ? AND `timestamp` >= FROM_UNIXTIME(?) AND `timestamp` <= FROM_UNIXTIME(?) GROUP BY DATE(timestamp) ORDER BY timestamp ASC", array($bill_id, $start, $end)) as $data) {
-    $date        = strftime("%A, %e %B %Y", $data['timestamp']);
-    $tot['in']  += gbConvert($data['traf_in']);
-    $tot['out'] += gbConvert($data['traf_out']);
-    $tot['tot'] += gbConvert($data['traf_total']);
-    $traf['in']  = formatStorage(gbConvert($data['traf_in']), "3");
-    $traf['out'] = formatStorage(gbConvert($data['traf_out']), "3");
-    $traf['tot'] = formatStorage(gbConvert($data['traf_total']), "3");
-    $traf['stot'] = formatStorage(gbConvert($tot['tot']), "3");
-    $res    .= "        <tr>";
-    $res    .= "          <td><i class=\"icon-calendar\"></i> ".$date."</td>";
-    $res    .= "          <td style=\"text-align: center;\"><span class=\"badge badge-success\">".$traf['in']."</span></td>";
-    $res    .= "          <td style=\"text-align: center;\"><span class=\"badge badge-info\">".$traf['out']."</span></td>";
-    $res    .= "          <td style=\"text-align: center;\"><span class=\"badge badge-inverse\">".$traf['tot']."</span></td>";
-    $res    .= "          <td style=\"text-align: center;\"><span class=\"badge badge\">".$traf['stot']."</span></td>";
-    $res    .= "        </tr>";
+  foreach ($ports as $port)
+  {
+    echo(generate_port_link($port) . " on " . generate_device_link($port) . "<br />");
   }
-  $tot['in'] = formatStorage($tot['in']);
-  $tot['out']= formatStorage($tot['out']);
-  $tot['tot']= formatStorage($tot['tot']);
-  $res      .= "        <tr>";
-  $res      .= "          <td><strong>Total of this billing period</strong></td>";
-  $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-success\"><strong>".$tot['in']."</strong></span></td>";
-  $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-info\"><strong>".$tot['out']."</strong></span></td>";
-  $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-inverse\"><strong>".$tot['tot']."</strong></span></td>";
-  $res      .= "          <td></td>";
-  $res      .= "        </tr>";
-  return $res;
-}
 
-$detail = transferOverview($bill_id, $unixfrom, $unixto);
+  $cur_days           = date('d', (strtotime("now") - strtotime($datefrom)));
+  $total_days         = date('d', (strtotime($dateto) - strtotime($datefrom)));
+
+  $total['data']      = format_bytes_billing($bill_data['total_data']);
+  if ($bill_data['bill_type'] == "quota") {
+    $total['allow']   = format_bytes_billing($bill_data['bill_quota']);
+  } else {
+    $total['allow']   = "-";
+  }
+  $total['ave']       = format_bytes_billing($bill_data['total_data'] / $cur_days);
+  $total['est']       = format_bytes_billing($bill_data['total_data'] / $cur_days * $total_days);
+  $total['per']       = round(($bill_data['total_data'] / $bill_data['bill_quota'] * 100), 2);
+  $total['bg']        = get_percentage_colours($total['per']);
+
+  $in['data']         = format_bytes_billing($bill_data['total_data_in']);
+  $in['allow']        = $total['allow'];
+  $in['ave']          = format_bytes_billing($bill_data['total_data_in'] / $cur_days);
+  $in['est']          = format_bytes_billing($bill_data['total_data_in'] / $cur_days * $total_days);
+  $in['per']          = round(($bill_data['total_data_in'] / $bill_data['total_data'] * 100), 2);
+  $in['bg']           = get_percentage_colours($in['per']);
+
+  $out['data']        = format_bytes_billing($bill_data['total_data_out']);
+  $out['allow']       = $total['allow'];
+  $out['ave']         = format_bytes_billing($bill_data['total_data_out'] / $cur_days);
+  $out['est']         = format_bytes_billing($bill_data['total_data_out'] / $cur_days * $total_days);
+  $out['per']         = round(($bill_data['total_data_out'] / $bill_data['total_data'] * 100), 2);
+  $out['bg']          = get_percentage_colours($out['per']);
+
+  $ousage['over']     = $bill_data['total_data'] - ($bill_data['bill_quota']);
+  $ousage['over']     = (($ousage['over'] < 0) ? "0" : $ousage['over']);
+  $ousage['data']     = format_number($ousage['over'] , $config['billing']['base']);
+  $ousage['allow']    = $total['allow'];
+  $ousage['ave']      = format_bytes_billing($ousage['over'] / $cur_days );
+  $ousage['est']      = format_bytes_billing($ousage['over'] / $cur_days * $total_days);
+  $ousage['per']      = round((($bill_data['total_data'] / $bill_data['bill_quota'] * 100) - 100), 2);
+  $ousage['per']      = (($ousage['per'] < 0) ? "0" : $ousage['per']);
+  $ousage['bg']       = get_percentage_colours($ousage['per']);
+
+  function showPercent($per) {
+    $background       = get_percentage_colours($per);
+    $right_background = $background['right'];
+    $left_background  = $background['left'];
+    $res              = print_percentage_bar(350, 20, $per, NULL, "ffffff", $left_background, $per."%", "ffffff", $right_background);
+    return $res;
+  }
+
+  echo("<h3>Bill Summary</h3>");
+  echo("<h4>Quota Bill</h4>");
+  echo("<table cellpadding=\"5\" cellspacing=\"0\" border=\"0\" class=\"devicetable\">");
+  echo("  <tr><td colspan=\"7\">Billing Period from ".$fromtext." to ".$totext."</td></tr>");
+  echo("  <tr style=\"font-weight: bold;\">");
+  echo("    <td width=\"125\">Bandwidth</td>");
+  echo("    <td width=\"10\"></td>");
+  echo("    <td width=\"100\">Used</td>");
+  echo("    <td width=\"100\">Allowed</td>");
+  echo("    <td width=\"100\">Average</td>");
+  echo("    <td width=\"100\">Estimated</td>");
+  echo("    <td width=\"360\"></td>");
+  echo("  </tr>");
+  echo("  <tr style=\"background: ".$list_colour_b.";\">");
+  echo("    <td>Transferred</td>");
+  echo("    <td>:</td>");
+  echo("    <td>".$total['data']."</td>");
+  echo("    <td>".$total['allow']."</td>");
+  echo("    <td>".$total['ave']."</td>");
+  echo("    <td>".$total['est']."</td>");
+  echo("    <td width=\"360\">".showPercent($total['per'])."</td>");
+  echo("  </tr>");
+
+  echo("  <tr style=\"background: ".$list_colour_a.";\">");
+  echo("    <td>Inbound</td>");
+  echo("    <td>:</td>");
+  echo("    <td>".$in['data']."</td>");
+  echo("    <td>".$in['allow']."</td>");
+  echo("    <td>".$in['ave']."</td>");
+  echo("    <td>".$in['est']."</td>");
+  echo("    <td>".showPercent($in['per'])."</td>");
+  echo("  </tr>");
+  echo("  <tr style=\"background: ".$list_colour_b.";\">");
+  echo("    <td>Outbound</td>");
+  echo("    <td>:</td>");
+  echo("    <td>".$out['data']."</td>");
+  echo("    <td>".$out['allow']."</td>");
+  echo("    <td>".$out['ave']."</td>");
+  echo("    <td>".$out['est']."</td>");
+  echo("    <td>".showPercent($out['per'])."</td>");
+  echo("  </tr>");
+  if ($ousage['over'] > 0 && $bill_data['bill_type'] == "quota") {
+    echo("  <tr style=\"background: ".$list_colour_a.";\">");
+    echo("    <td>Already overusage</td>");
+    echo("    <td>:</td>");
+    echo("    <td><span style=\"color: #".$total['bg']['left']."; font-weight: bold;\">".$ousage['data']."</span></td>");
+    echo("    <td>".$ousage['allow']."</td>");
+    echo("    <td>".$ousage['ave']."</td>");
+    echo("    <td>".$ousage['est']."</td>");
+    echo("    <td>".showPercent($ousage['per'])."</td>");
+  }
+  echo("</table>");
+
+  $bi  =  "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
+  $bi .= "&amp;from=" . $unixfrom .  "&amp;to=" . $unixto;
+  $bi .= "&amp;type=day&imgbill=1";
+  $bi .= "&amp;x=1190&amp;y=250";
+  $bi .= "$type'>";
+
+  $li  = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
+  $li .= "&amp;from=" . $unix_prev_from .  "&amp;to=" . $unix_prev_to;
+  $li .= "&amp;type=day";
+  $li .= "&amp;x=1190&amp;y=250";
+  $li .= "$type'>";
+
+  $di  = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
+  $di .= "&amp;from=" . $config['time']['day'] .  "&amp;to=" . $config['time']['now'];
+  $di .= "&amp;type=hour";
+  $di .= "&amp;x=1190&amp;y=250";
+  $di .= "$type'>";
+
+  $mi  = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
+  $mi .= "&amp;from=" . $lastmonth .  "&amp;to=" . $rightnow;
+  $mi .= "&amp;&type=day";
+  $mi .= "&amp;x=1190&amp;y=250";
+  $mi .= "$type'>";
+
+  echo("<h3>Billing Period View</h3>$bi");
+  echo("<h3>Rolling 24 Hour View</h3>$di");
+  echo("<h3>Rolling Monthly View</h3>$mi");
 
 ?>
-
-<div class="row-fluid">
-  <div class="span6 well">
-    <h3 class="bill"><i class="icon-tag"></i> Bill summary</h3>
-    <table class="table table-striped table-bordered">
-      <tr>
-        <th style="width: 125px;">Billing period</th>
-        <td style="width: 5px; border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($fromtext." to ".$totext); ?></td>
-      </tr>
-      <tr>
-        <th>Type</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="label label-inverse"><?php echo($type); ?></span></td>
-      </tr>
-      <tr>
-        <th>Allowed</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge badge-success"><?php echo($allowed); ?></span></td>
-      </tr>
-      <tr>
-        <th>Used</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge badge-warning"><?php echo($used); ?></span></td>
-      </tr>
-      <tr>
-        <th>Average</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge"><?php echo($average); ?></span></td>
-      </tr>
-      <tr>
-        <th>Estimated</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge badge-info"><?php echo($estimated); ?></span></td>
-      </tr>
-      <tr>
-        <th>Overusage</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($overuse); ?></td>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <div class="progress progress-<?php echo($perc['BG']); ?> progress-striped active" style="margin-bottom: 0px;"><div class="bar" style="text-align: middle; width:<?php echo($perc['width']); ?>%;"><?php echo($percent); ?>%</div></div>
-        </td>
-    </table>
-  </div>
-  <div class="span6 well">
-    <h3 class="bill"><i class="icon-tags"></i> Optional information</h3>
-    <table class="table table-striped table-bordered">
-      <tr>
-        <th style="width: 175px;"><i class="icon-user"></i> Customer Reference</th>
-        <td style="width: 5px; border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($optional['cust']); ?></td>
-      </tr>
-      <tr>
-        <th><i class="icon-info-sign"></i> Billing Reference</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($optional['ref']); ?></td>
-      </tr>
-      <tr>
-        <th><i class="icon-comment"></i> Notes</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($optional['notes']); ?></td>
-      </tr>
-    </table>
-  </div>
-</div>
-
-<ul class="nav nav-tabs" id="transferBillTab">
-  <li class="active first"><a href="#billingView" data-toggle="tab">Billing view</a></li>
-  <li><a href="#24hourView" data-toggle="tab">Rolling 24 Hour view</a></li>
-  <li><a href="#monthlyView" data-toggle="tab">Rolling Monthly view</a></li>
-  <li><a href="#detailView" data-toggle="tab">Detailed billing view</a></li>
-  <li><a href="#previousView" data-toggle="tab">Rolling Previous billing view</a></li>
-</ul>
-
-<div id="transferBillTabContent" class="tab-content" style="padding-bottom: 10px;">
-  <div class="tab-pane fade active in" id="billingView" style="text-align: center;">
-    <?php echo($bi."\n"); ?>
-  </div>
-  <div class="tab-pane fade in" id="24hourView" style="text-align: center;">
-    <?php echo($di."\n"); ?>
-  </div>
-  <div class="tab-pane fade in" id="monthlyView" style="text-align: center;">
-    <?php echo($mi."\n"); ?>
-  </div>
-  <div class="tab-pane fade in" id="previousView" style="text-align: center;">
-    <?php echo($li."\n"); ?>
-  </div>
-  <div class="tab-pane fade in" id="detailView" style="text-align: center;">
-    <table class="table table-striped table-bordered" style="margin-bottom: 0px;">
-      <thead>
-        <tr>
-          <th>Period</th>
-          <th style="text-align: center;">Inbound</th>
-          <th style="text-align: center;">Outbound</th>
-          <th style="text-align: center;">Total</th>
-          <th style="text-align: center;">Sub Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php echo($detail); ?>
-      </tbody>
-    </table>
-  </div>
-</div>
