@@ -44,21 +44,21 @@ foreach (dbFetchRows("SELECT * FROM `bills` ORDER BY `bill_name`") as $bill) {
       $refid        = $bill['bill_ref'];
       $billid       = $bill['bill_id'];
 
-      if ($history['bill_type'] == "cdr") {
+      if (strtolower($history['bill_type']) == "cdr") {
         $type = "CDR 95th";
-        $allowed = format_si($history['bill_cdr'])."bps";
+        $allowed = format_si($history['bill_allowed'])."bps";
         $used    = format_si($rate_data['rate_95th'])."bps";
-        $percent = round(($rate_data['rate_95th'] / $history['bill_cdr']) * 100,2);
+        $percent = round(($rate_data['rate_95th'] / $history['bill_allowed']) * 100,2);
         $background = get_percentage_colours($percent);
-        $overuse = $rate_data['rate_95th'] - $history['bill_cdr'];
+        $overuse = $rate_data['rate_95th'] - $history['bill_allowed'];
         $overuse = (($overuse <= 0) ? "-" : format_si($overuse)."bps");
-      } elseif ($history['bill_type'] == "quota") {
+      } elseif (strtolower($history['bill_type']) == "quota") {
         $type = "Quota";
-        $allowed = format_bytes_billing($history['bill_quota']);
-        $used    = format_bytes_billing($rate_data['total_data']);
-        $percent = round(($rate_data['total_data'] / ($history['bill_quota'])) * 100,2);
+        $allowed = format_bytes_billing($history['bill_allowed']);
+        $used    = format_bytes_billing($rate_data['traf_total']);
+        $percent = round(($rate_data['traf_total'] / ($history['bill_allowed'])) * 100,2);
         $background = get_percentage_colours($percent);
-        $overuse = $rate_data['total_data'] - $history['bill_quota'];
+        $overuse = $rate_data['traf_total'] - $history['bill_allowed'];
         $overuse = (($overuse <= 0) ? "-" : format_bytes_billing($overuse));
       }
 
