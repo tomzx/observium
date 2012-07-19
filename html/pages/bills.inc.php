@@ -43,10 +43,6 @@ if ($_POST['addbill'] == "yes")
 
 $pagetitle[] = "Billing";
 
-echo("<link rel=\"stylesheet\" href=\"".$config['base_url']."css/bootstrap.min.css\">\n");
-echo("<link rel=\"stylesheet\" href=\"".$config['base_url']."css/bootstrap-responsive.min.css\">\n");
-echo("<link rel=\"stylesheet\" href=\"".$config['base_url']."css/bootstrap.obs.css\">\n");
-
 switch($vars["view"]) {
   case "history":
     echo("<meta http-equiv=\"refresh\" content=\"360\">\n");

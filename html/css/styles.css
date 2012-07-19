@@ -1294,7 +1294,6 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
     overflow: hidden;
     padding: 0px 8px;
     margin-bottom: -1px;
-
 }
 
 .tabBox .tabs li {
@@ -1307,6 +1306,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
     border-bottom: 1px solid #FFF;
 }
 
+.tabBox .tabs li.active,
 .tabBox .tabs li.selected {
     z-index: 3;
 }

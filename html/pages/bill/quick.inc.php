@@ -125,14 +125,15 @@ $perc['width']    = (($percent <= "100") ? $percent : "100");
   </div>
 </div>
 
-<ul class="nav nav-tabs" id="graphsBillTab">
+<div class="tabBox">
+  <ul class="nav-tabs tabs" id="transferBillTab">
   <li class="active first"><a href="#billingView" data-toggle="tab">Billing view</a></li>
   <li><a href="#24hourView" data-toggle="tab">24 Hour view</a></li>
   <li><a href="#monthlyView" data-toggle="tab">Montly view</a></li>
   <li><a href="#previousView" data-toggle="tab">Previous billing view</a></li>
-</ul>
+  </ul>
+  <div class="tabcontent tab-content" id="transferBillTabContent">
 
-<div id="graphsBillTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="billingView" style="text-align: center;">
     <?php echo($bi."\n"); ?>
   </div>
@@ -145,4 +146,8 @@ $perc['width']    = (($percent <= "100") ? $percent : "100");
   <div class="tab-pane fade in" id="previousView" style="text-align: center;">
     <?php echo($li."\n"); ?>
   </div>
+  </div>
 </div>
+
+
+

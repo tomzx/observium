@@ -122,8 +122,9 @@
                   <td>
                     <div class=\"btn-toolbar\" style=\"margin: 0px auto 0px auto;\">
                       <div class=\"btn-group\">
-                        <a class=\"btn btn-mini\" href=\"".$url."\"><img src=\"images/16/chart_curve.png\" alt=\"Show details\" title=\"Show details\" rel=\"tooltip\"/></a>
-                        <a class=\"btn btn-mini\" disabled=\"disabled\" href=\"javascript:;\"><img src=\"images/16/page_white_acrobat.png\" alt=\"PDF Report\" title=\"PDF Report\" rel=\"tooltip\"/></a>");
+                        <a class=\"btn btn-mini\" href=\"".$url."\"><img src=\"images/16/chart_curve.png\" alt=\"Show details\" title=\"Show details\" rel=\"tooltip\"/></a>");
+                        // Don't show things people can't use!
+                        //<a class=\"btn btn-mini\" disabled=\"disabled\" href=\"javascript:;\"><img src=\"images/16/page_white_acrobat.png\" alt=\"PDF Report\" title=\"PDF Report\" rel=\"tooltip\"/></a>
                         //<a href=\"pdf.php?type=billing&report=history&bill_id=".$bill_id."&history_id=".$history['bill_hist_id']."\"><img src=\"images/16/page_white_acrobat.png\" border=\"0\" align=\"absmiddle\" alt=\"PDF Report\" title=\"PDF Report\"/></a>
       echo("
                       </div>

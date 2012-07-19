@@ -4,10 +4,6 @@ $bill_id    = mres($vars['bill_id']);
 $isAdmin    = (($_SESSION['userlevel'] == "10") ? true : false);
 $isUser     = bill_permitted($bill_id);
 
-echo ("<link href=\"".$config['base_url']."css/bootstrap.min.css\" rel=\"stylesheet\">\n");
-echo ("<link href=\"".$config['base_url']."css/bootstrap-responsive.min.css\" rel=\"stylesheet\">\n");
-echo ("<link href=\"".$config['base_url']."css/bootstrap.obs.css\" rel=\"stylesheet\">\n");
-
 //if ($isAdmin && isset($_POST)) { include("pages/bill/actions.inc.php"); }
 //if ($isAdmin && isset($_GET['delete_bill_port'])) { include("pages/bill/actions.inc.php"); }
 include("pages/bill/actions.inc.php");

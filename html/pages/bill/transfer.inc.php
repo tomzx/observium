@@ -182,16 +182,17 @@ $detail = transferOverview($bill_id, $unixfrom, $unixto);
   </div>
 </div>
 
-<ul class="nav nav-tabs" id="transferBillTab">
-  <li class="active first"><a href="#billingView" data-toggle="tab">Billing view</a></li>
-  <li><a href="#24hourView" data-toggle="tab">Rolling 24 Hour view</a></li>
-  <li><a href="#monthlyView" data-toggle="tab">Rolling Monthly view</a></li>
-  <li><a href="#detailView" data-toggle="tab">Detailed billing view</a></li>
-  <li><a href="#previousView" data-toggle="tab">Rolling Previous billing view</a></li>
-</ul>
+<div class="tabBox">
+  <ul class="nav-tabs tabs" id="transferBillTab">
+    <li class="active"><a href="#BillingView" data-toggle="tab">Billing view</a></li>
+    <li><a href="#24hourView" data-toggle="tab">Rolling 24 Hour view</a></li>
+    <li><a href="#monthlyView" data-toggle="tab">Rolling Monthly view</a></li>
+    <li><a href="#detailView" data-toggle="tab">Detailed billing view</a></li>
+    <li><a href="#previousView" data-toggle="tab">Rolling Previous billing view</a></li>
+  </ul>
+  <div class="tabcontent tab-content" id="transferBillTabContent">
 
-<div id="transferBillTabContent" class="tab-content" style="padding-bottom: 10px;">
-  <div class="tab-pane fade active in" id="billingView" style="text-align: center;">
+  <div class="tab-pane fade in active" id="billingView" style="text-align: center;">
     <?php echo($bi."\n"); ?>
   </div>
   <div class="tab-pane fade in" id="24hourView" style="text-align: center;">
@@ -219,4 +220,7 @@ $detail = transferOverview($bill_id, $unixfrom, $unixto);
       </tbody>
     </table>
   </div>
+
+  </div>
 </div>
+

@@ -4,11 +4,12 @@ $url    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 
 
 ?>
 
-<ul class="nav nav-tabs" id="resetBillTab">
+<div class="tabBox">
+  <ul class="nav-tabs tabs" id="transferBillTab">
   <li class="active first"><a href="#reset" data-toggle="tab">Reset bill</a></li>
-</ul>
+  </ul>
+ <div class="tabcontent tab-content" id="resetBillTabContent">
 
-<div id="resetBillTabContent" class="tab-content">
   <form name="form1" action="<?php echo($url); ?>" method="post" class="form-horizontal">
     <script type="text/javascript">
       function showWarning() {
@@ -47,4 +48,5 @@ $url    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 
       <button id="resetBtn" type="submit" class="btn btn-danger" disabled="disabled"><i class="icon-refresh icon-white"></i> <strong>Reset Bill</strong></button>
     </div>
   </form>
+</div>
 </div>

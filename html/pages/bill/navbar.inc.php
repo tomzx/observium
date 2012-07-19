@@ -24,7 +24,16 @@ $active['reset']   = (($vars['view'] == "reset") ? "active " : "");
 $active['delete']  = (($vars['view'] == "delete") ? "active " : "");
 
 if (!$isAdd) {
-  echo("<h2 style=\"margin-bottom: 10px;\">Customer billing: ".$bill_data['bill_name']."</h2>");
+
+echo('<table style="margin: 0px 7px 7px 7px;" cellspacing="0" class="devicetable" width="99%">
+            <tbody><tr bgcolor="" class="div-normal">
+             <td valign="middle" style="padding: 21px;"><span style="font-size: 20px; font-weight: bold;">
+               Billing: '.$bill_data['bill_name'].'
+             </td>
+            </tr>
+          </tbody>
+       </table>
+');
 }
 
 echo("<div class=\"navbar\">
@@ -43,8 +52,9 @@ if ($isAdmin && !$isAdd) {
             <li class=\"spacer\">&nbsp;</li>
             <li class=\"".$active['edit']."first\"><a href=\"".$links['edit']."\"><i class=\"icon-edit\"></i> Edit</a></li>
             <li class=\"".$active['reset']."\"><a href=\"".$links['reset']."\"><i class=\"icon-refresh\"></i> Reset</a></li>
-            <li class=\"".$active['delete']."\"><a href=\"".$links['delete']."\"><i class=\"icon-trash\"></i> Delete</a></li>
-            <li class=\"".$active['api']."\"><a href=\"".$links['api']."\"><i class=\"icon-share\"></i> Api</a></li>");
+            <li class=\"".$active['delete']."\"><a href=\"".$links['delete']."\"><i class=\"icon-trash\"></i> Delete</a></li>");
+// Don't show what doesn't work!
+//            <li class=\"".$active['api']."\"><a href=\"".$links['api']."\"><i class=\"icon-share\"></i> Api</a></li>");
 }
 echo("
           </ul>

@@ -27,14 +27,14 @@ if ($bill_data['bill_type'] == "cdr") {
 
 ?>
 
-<ul class="nav nav-tabs" id="editBillTab">
-  <li class="active first"><a href="#properties" data-toggle="tab">Bill properties</a></li>
-  <li><a href="#optional" data-toggle="tab">Optional information</a></li>
-  <li><a href="#ports" data-toggle="tab">Billed ports</a></li>
-  <li><a href="#addport" data-toggle="tab">Add port</a></li>
-</ul>
-
-<div id="editBillTabContent" class="tab-content">
+<div class="tabBox">
+  <ul class="nav-tabs tabs" id="transferBillTab">
+    <li class="active first"><a href="#properties" data-toggle="tab">Bill properties</a></li>
+    <li><a href="#optional" data-toggle="tab">Optional information</a></li>
+    <li><a href="#ports" data-toggle="tab">Billed ports</a></li>
+    <li><a href="#addport" data-toggle="tab">Add port</a></li>
+  </ul>
+ <div class="tabcontent tab-content" id="transferBillTabContent">
 
   <div class="tab-pane fade active in" id="properties">
     <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
@@ -235,5 +235,5 @@ foreach ($devices as $device)
       </div>
     </form>
   </div>
-
+</div>
 </div>

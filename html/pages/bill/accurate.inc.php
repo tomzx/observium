@@ -138,15 +138,15 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
   </div>
 </div>
 
-<ul class="nav nav-tabs" id="graphsBillTab">
+<div class="tabBox">
+  <ul class="nav-tabs tabs" id="transferBillTab">
   <li class="<?php echo($active['billing']); ?> first"><a href="<?php echo($links['billing']); ?>">Billing view</a></li>
   <li class="<?php echo($active['24hour']); ?>"><a href="<?php echo($links['24hour']); ?>">24 Hour view</a></li>
   <li class="<?php echo($active['monthly']); ?>"><a href="<?php echo($links['monthly']); ?>">Monthly view</a></li>
   <li class="<?php echo($active['previous']); ?>"><a href="<?php echo($links['previous']); ?>">Previous billing view</a></li>
-</ul>
-
-<div id="graphsBillTabContent" class="tab-content" style="padding-bottom: 10px;">
-  <div class="tab-pane fade active in" id="accurateGraph" style="text-align: center;">
-    <?php echo($graph."\n"); ?>
-  </div>
+  </ul>
+  <div class="tabcontent tab-content" id="transferBillTabContent">
+    <div class="tab-pane fade active in" id="accurateGraph" style="text-align: center;">
+      <?php echo($graph."\n"); ?>
+    </div>
 </div>
