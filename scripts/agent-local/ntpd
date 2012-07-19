@@ -14,8 +14,8 @@
 
     // START SETTINGS ///
 
-	$ntpq		= "/usr/sbin/ntpq";
-	$ntpdc		= "/usr/sbin/ntpdc";
+	$ntpq		= "/usr/bin/env ntpq";
+	$ntpdc		= "/usr/bin/env ntpdc";
 
     // END SETTINGS ///
 
