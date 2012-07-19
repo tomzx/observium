@@ -9,8 +9,9 @@ $isUser     = bill_permitted($bill_id);
 include("pages/bill/actions.inc.php");
 
 if ($isUser) {
+  $bill_data    = dbFetchRow("SELECT * FROM bills WHERE bill_id = ?", array($bill_id));
   if ($vars['view'] == "quick" || $vars['view'] == "accurate" || $vars['view'] == "transfer" || $vars['view'] == "edit") {
-    $bill_data    = dbFetchRow("SELECT * FROM bills WHERE bill_id = ?", array($bill_id));
+#    $bill_data    = dbFetchRow("SELECT * FROM bills WHERE bill_id = ?", array($bill_id));
     $bill_name    = $bill_data['bill_name'];
 
     $today        = str_replace("-", "", dbFetchCell("SELECT CURDATE()"));
