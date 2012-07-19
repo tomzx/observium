@@ -15,7 +15,6 @@ if ($_POST['action'] == "delete_bill" && $_POST['confirm'] == "confirm")
   dbDelete('bills', '`bill_id` = ?', array($bill_id));
 
   echo("<div class=infobox>Bill Deleted. Redirecting to Bills list.</div>");
-
   echo("<meta http-equiv='Refresh' content=\"2; url='bills/'\">");
 }
 
@@ -31,21 +30,24 @@ if ($_POST['action'] == "reset_bill" && ($_POST['confirm'] == "rrd" || $_POST['c
     dbDelete('bill_data', '`bill_id` = ?', array($bill_id));
   }
   if ($_POST['confirm'] == "rrd") {
-    // Stil todo
+    // TODO: First need to add new rrd with poller/discover, so the default rrd isn't wipped
   }
 
   echo("<div class=infobox>Bill Reseting. Redirecting to Bills list.</div>");
-
   echo("<meta http-equiv='Refresh' content=\"2; url='bills/'\">");
 }
 
 if ($_POST['action'] == "add_bill_port")
 {
-  dbInsert(array('bill_id' => $_POST['bill_id'], 'port_id' => $_POST['port_id']), 'bill_ports');
+  $check = dbFetchRows("SELECT port_id FROM `bill_ports` WHERE `bill_id` = ? LIMIT 1", array($_POST['bill_id']));
+  if ($check[0]['port_id'] != $_POST['port_id']) {
+    dbInsert(array('bill_id' => $_POST['bill_id'], 'port_id' => $_POST['port_id']), 'bill_ports');
+  }
 }
-if ($_POST['action'] == "delete_bill_port")
+
+if ($_GET['action'] == "delete_bill_port")
 {
-  dbDelete('bill_ports', "`bill_id` =  ? AND `port_id` = ?", array($bill_id, $_POST['port_id']));
+  dbDelete('bill_ports', "`bill_id` =  ? AND `port_id` = ?", array($bill_id, $_GET['port_id']));
 }
 if ($_POST['action'] == "update_bill")
 {
@@ -75,11 +77,17 @@ if ($_POST['action'] == "update_bill")
     }
   }
 
-  if (dbUpdate(array('bill_name' => $_POST['bill_name'], 'bill_day' => $_POST['bill_day'], 'bill_quota' => $bill_quota,
-                     'bill_cdr' => $bill_cdr, 'bill_type' => $_POST['bill_type'], 'bill_custid' => $_POST['bill_custid'],
-                     'bill_ref' => $_POST['bill_ref'], 'bill_notes' => $_POST['bill_notes']), 'bills', '`bill_id` = ?', array($bill_id)))
+  if (dbUpdate(array('bill_name' => $_POST['bill_name'], 'bill_day' => $_POST['bill_day'], 'bill_quota' => $bill_quota, 'bill_cdr' => $bill_cdr,
+                     'bill_type' => $_POST['bill_type']), 'bills', '`bill_id` = ?', array($bill_id)))
   {
     print_message("Bill Properties Updated");
+  }
+}
+if ($_POST['action'] == "update_bill_optional")
+{
+  if (dbUpdate(array('bill_custid' => $_POST['bill_custid'], 'bill_ref' => $_POST['bill_ref'], 'bill_notes' => $_POST['bill_notes']), 'bills', '`bill_id` = ?', array($bill_id)))
+  {
+    print_message("Optional Information Updated");
   }
 }
 
