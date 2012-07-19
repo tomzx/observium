@@ -59,10 +59,10 @@ $mi          .= "&amp;from=" . $lastmonth .  "&amp;to=" . $rightnow;
 $mi          .= "&amp;x=1050&amp;y=275";
 $mi          .= "$imgtype'>";
 
-if ($active['billing'] == "active") { $graph = $bi; echo "BILLING\n";}
-elseif ($active['24hour'] == "active") { $graph = $di; echo "VANDAAG\n"; }
-elseif ($active['monthly'] == "active") { $graph = $mi; echo "MAAND\n"; }
-elseif ($active['previous'] == "active") { $graph = $li; echo "VORIGE PERIODE\n"; }
+if ($active['billing'] == "active") { $graph = $bi; }
+elseif ($active['24hour'] == "active") { $graph = $di; }
+elseif ($active['monthly'] == "active") { $graph = $mi; }
+elseif ($active['previous'] == "active") { $graph = $li; }
 
 switch(true) {
   case($percent >= 90):
