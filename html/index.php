@@ -119,9 +119,9 @@ if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title'
 if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$config['page_refresh'].'" />' . "\n"); }
 ?>
   <link href="<?php echo($config['stylesheet']);  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo($config['base_url']."css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo($config['base_url']."css/bootstrap-responsive.min.css");  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo($config['base_url']."css/bootstrap.obs.css");  ?>" rel="stylesheet" type="text/css" />
+  <link href="<?php echo("css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
+  <link href="<?php echo("css/bootstrap-responsive.min.css");  ?>" rel="stylesheet" type="text/css" />
+  <link href="<?php echo("css/bootstrap.obs.css");  ?>" rel="stylesheet" type="text/css" />
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
   <link rel="stylesheet" href="css/mktree.css" type="text/css" />
 <?php
