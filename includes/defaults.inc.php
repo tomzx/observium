@@ -345,9 +345,9 @@ $config['device_traffic_descr'][]  = '/dummy/';
 
 // IRC Bot configuration
 
-$config['irc_host'] = "chat.eu.freenode.net";
+$config['irc_host'] = "irc.oftc.net";
 $config['irc_port'] = 6667;
-$config['irc_nick'] = "Observium";
+$config['irc_nick'] = "Observium".rand(99999);
 $config['irc_chan'][] = "#observium";
 
 // Authentication

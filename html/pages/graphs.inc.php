@@ -171,6 +171,11 @@ if (!$auth)
         frmdata.action = frmdata.selfaction.value
         return true;
       }
+
+      function applyPreset(frmdata) {
+        var link = frmdata.preset.value;
+        document.location = link;
+      }
     </script>
     <style type='text/css'>
       /* css for timepicker */
@@ -223,7 +228,69 @@ if (!$auth)
     <p>
   ");
   echo("<input type=hidden id='selfaction' value='" . $_SERVER['REQUEST_URI'] . "'>");
+
+  $preset_array = array("today", "yesterday", "tweek", "lweek", "tmonth", "lmonth", "tyear", "lyear");
+  function presetDate($preset) {
+    switch($preset) {
+      case 'today':
+        $tsto = mktime(23, 59 ,59, date("m"), date("d"), date("Y"));
+        $tsfrom = mktime(0, 0 ,0, date("m"), date("d"), date("Y"));
+        $text = "Today";
+        break;
+      case 'yesterday':
+        $tsto = mktime(23, 59 ,59, date("m"), date("d")-1, date("Y"));
+        $tsfrom = mktime(0, 0 ,0, date("m"), date("d")-1, date("Y"));
+        $text = "Yesterday";
+        break;
+      case 'tweek':
+        $tsto = strtotime(date("Y-m-d 23:59", strtotime("next week")));
+        $tsfrom = strtotime(date("Y-m-d 00:00", strtotime("this week")));
+        $text = "This week";
+        break;
+      case 'lweek':
+        $tsto = strtotime(date("Y-m-d 23:59", strtotime("this week")));
+        $tsfrom = strtotime(date("Y-m-d 00:00", strtotime("last week")));
+        $text = "Last week";
+        break;
+      case 'tmonth':
+        $tsto = mktime(23, 59 ,59, date("m")+1, 0, date("Y"));
+        $tsfrom = mktime(0, 0 ,0, date("m"), 1, date("Y"));
+        $text = "This month";
+        break;
+      case 'lmonth':
+        $tsto = mktime(23, 59 ,59, date("m"), 0, date("Y"));
+        $tsfrom = mktime(0, 0 ,0, date("m")-1, 1, date("Y"));
+        $text = "Last month";
+        break;
+      case 'tyear':
+        $tsto = mktime(23, 59 ,59, 13, 0, date("Y"));
+        $tsfrom = mktime(0, 0 ,0, 1, 1, date("Y"));
+        $text = "This year";
+        break;
+      case 'lyear':
+        $tsto = mktime(23, 59 ,59, 13, 0, date("Y")-1);
+        $tsfrom = mktime(0, 0 ,0, 1, 1, date("Y")-1);
+        $text = "Last year";
+        break;
+    }
+    $res = array("from" => $tsfrom, "to" => $tsto, "desc" => $text);
+    return $res;
+  }
   echo("
+    <strong>Presets:</strong>
+    <select name=\"preset\" onchange=\"applyPreset(this.form);\">
+      <option value=\"\">Select preset</option>");
+  foreach ($preset_array as $item=>$value) {
+    $preset = presetDate($value);
+    $link_array = $vars;
+    $link_array['from'] = $preset['from'];
+    $link_array['to'] = $preset['to'];
+    $link_array['page'] = "graphs";
+    $link = generate_url($link_array);
+    echo ("<option value=\"".$link."\">".$preset['desc']."</option>");
+  }
+  echo("
+    </select>
     <strong>From:</strong> <input type='text' id='dtpickerfrom' maxlength=16 value='" . date('Y-m-d H:i', $graph_array['from']) . "'>
     <strong>To:</strong> <input type='text' id='dtpickerto' maxlength=16 value='" . date('Y-m-d H:i', $graph_array['to']) . "'>
     <input type='submit' id='submit' value='Update' onclick='javascript:submitCustomRange(this.form);'>
