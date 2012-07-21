@@ -28,64 +28,62 @@ if ($bill_data['bill_type'] == "cdr") {
 ?>
 
 <div class="tabBox">
-  <ul class="nav-tabs tabs" id="transferBillTab">
+  <ul class="nav-tabs tabs" id="editBillTab">
     <li class="active first"><a href="#properties" data-toggle="tab">Bill properties</a></li>
-    <li><a href="#optional" data-toggle="tab">Optional information</a></li>
     <li><a href="#ports" data-toggle="tab">Billed ports</a></li>
     <li><a href="#addport" data-toggle="tab">Add port</a></li>
   </ul>
- <div class="tabcontent tab-content" id="transferBillTabContent">
-
-  <div class="tab-pane fade active in" id="properties">
-    <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
-      <input type="hidden" name="action" value="update_bill">
-      <script type="text/javascript">
-        function billType() {
-          $('#cdrDiv').toggle();
-          $('#quotaDiv').toggle();
-        }
-      </script>
-      <fieldset>
-        <!-- <legend>Bill Properties</legend> //-->
-        <div class="control-group">
-          <label class="control-label" for="bill_name"><strong>Description</strong></label>
-          <div class="controls">
-            <input class="span4" type="text" name="bill_name" value="<?php echo $bill_data["bill_name"]; ?>" />
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="bill_type"><strong>Billing Type</strong></label>
-          <div class="controls">
-            <input type="radio" style="margin-bottom: 8px;" name="bill_type" value="cdr" onchange="javascript: billType();" <?php if ($bill_data['bill_type'] == "cdr") { echo('checked '); } ?>/> CDR / 95th perecntile
-            <input type="radio" style="margin-bottom: 8px;" name="bill_type" value="quota" onchange="javascript: billType();" <?php if ($bill_data['bill_type'] == "quota") { echo('checked '); } ?>/> Quota
-          <!--
-            <div class="btn-group" data-toggle="buttons-radio" style="margin-bottom: 5px;">
-              <button class="btn btn-small btn-primary<?php if ($bill_data['bill_type'] == "cdr") { echo(' active'); } ?>" name="bill_type" value="cdr" onclick="javascript: billType();">CDR / 95th percentile</button>
-              <button class="btn btn-small btn-primary<?php if ($bill_data['bill_type'] == "quota") { echo(' active'); } ?>" name="bill_type" value="quota" onclick="javascript: billType();">Quota</button>
-            </div>
-          //-->
-            <div id="cdrDiv"<?php if ($bill_data['bill_type'] == "quota") { echo(' style="display: none"'); } ?>>
-              <input class="span1" type="text" name="bill_cdr" value="<?php echo $cdr['data']; ?>">
-              <select name="bill_cdr_type" style="width: 233px;">
-                <option value="Kbps"<?php echo $cdr['select_kbps']; ?>>Kilobits per second (Kbps)</option>
-                <option value="Mbps"<?php echo $cdr['select_mbps']; ?>>Megabits per second (Mbps)</option>
-                <option value="Gbps"<?php echo $cdr['select_gbps']; ?>>Gigabits per second (Gbps)</option>
-              </select>
-            </div>
-            <div id="quotaDiv"<?php if ($bill_data['bill_type'] == "cdr") { echo(' style="display: none"'); } ?>>
-              <input class="span1" type="text" name="bill_quota" value="<?php echo $quota['data']; ?>">
-              <select name="bill_quota_type" style="width: 233px;">
-                <option value="MB"<?php echo $quota['select_mb']; ?>>Megabytes (MB)</option>
-                <option value="GB"<?php echo $quota['select_gb']; ?>>Gigabytes (GB)</option>
-                <option value="TB"<?php echo $quota['select_tb']; ?>>Terabytes (TB)</option>
-              </select>
+  <div class="tabcontent tab-content" id="editBillTabContent" style="min-height: 50px; padding-bottom: 0px;">
+    <div class="tab-pane fade active in" id="properties">
+      <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
+        <input type="hidden" name="action" value="update_bill">
+        <script type="text/javascript">
+          function billType() {
+            $('#cdrDiv').toggle();
+            $('#quotaDiv').toggle();
+          }
+        </script>
+        <fieldset>
+          <legend>Bill Properties</legend>
+          <div class="control-group">
+            <label class="control-label" for="bill_name"><strong>Description</strong></label>
+            <div class="controls">
+              <input class="span4" type="text" name="bill_name" value="<?php echo $bill_data["bill_name"]; ?>" />
             </div>
           </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="bill_day"><strong>Billing Day</strong></label>
-          <div class="controls">
-            <select name="bill_day" style="width: 60px;">
+          <div class="control-group">
+            <label class="control-label" for="bill_type"><strong>Billing Type</strong></label>
+            <div class="controls">
+              <input type="radio" style="margin-bottom: 8px;" name="bill_type" value="cdr" onchange="javascript: billType();" <?php if ($bill_data['bill_type'] == "cdr") { echo('checked '); } ?>/> CDR / 95th perecntile
+              <input type="radio" style="margin-bottom: 8px;" name="bill_type" value="quota" onchange="javascript: billType();" <?php if ($bill_data['bill_type'] == "quota") { echo('checked '); } ?>/> Quota
+            <!--
+              <div class="btn-group" data-toggle="buttons-radio" style="margin-bottom: 5px;">
+                <button class="btn btn-small btn-primary<?php if ($bill_data['bill_type'] == "cdr") { echo(' active'); } ?>" name="bill_type" value="cdr" onclick="javascript: billType();">CDR / 95th percentile</button>
+                <button class="btn btn-small btn-primary<?php if ($bill_data['bill_type'] == "quota") { echo(' active'); } ?>" name="bill_type" value="quota" onclick="javascript: billType();">Quota</button>
+              </div>
+            //-->
+              <div id="cdrDiv"<?php if ($bill_data['bill_type'] == "quota") { echo(' style="display: none"'); } ?>>
+                <input class="span1" type="text" name="bill_cdr" value="<?php echo $cdr['data']; ?>">
+                <select name="bill_cdr_type" style="width: 233px;">
+                  <option value="Kbps"<?php echo $cdr['select_kbps']; ?>>Kilobits per second (Kbps)</option>
+                  <option value="Mbps"<?php echo $cdr['select_mbps']; ?>>Megabits per second (Mbps)</option>
+                  <option value="Gbps"<?php echo $cdr['select_gbps']; ?>>Gigabits per second (Gbps)</option>
+                </select>
+              </div>
+              <div id="quotaDiv"<?php if ($bill_data['bill_type'] == "cdr") { echo(' style="display: none"'); } ?>>
+                <input class="span1" type="text" name="bill_quota" value="<?php echo $quota['data']; ?>">
+                <select name="bill_quota_type" style="width: 233px;">
+                  <option value="MB"<?php echo $quota['select_mb']; ?>>Megabytes (MB)</option>
+                  <option value="GB"<?php echo $quota['select_gb']; ?>>Gigabytes (GB)</option>
+                  <option value="TB"<?php echo $quota['select_tb']; ?>>Terabytes (TB)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="bill_day"><strong>Billing Day</strong></label>
+            <div class="controls">
+              <select name="bill_day" style="width: 60px;">
 <?php
 
 for ($x=1;$x<32;$x++) {
@@ -94,45 +92,36 @@ for ($x=1;$x<32;$x++) {
 }
 
 ?>
-            </select>
+              </select>
+            </div>
           </div>
-        </div>
-      </fieldset>
-      <div class="form-actions">
-        <button type="submit" class="btn btn-success" name="Submit" value="Save" /><i class="icon-ok icon-white"></i> <strong>Save Properties</strong></button>
-      </div>
-    </form>
-  </div>
-
-  <div class="tab-pane fade in" id="optional">
-    <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
-      <input type=hidden name="action" value="update_bill_optional">
-      <fieldset>
-        <!-- <legend>Optional Information</legend> //-->
-        <div class="control-group">
-          <label class="control-label" for="bill_custid"><strong>Customer&nbsp;Reference</strong></label>
-          <div class="controls">
-            <input class="span4" type="text" name="bill_custid" value="<?php echo $bill_data['bill_custid']; ?>" />
+        </fieldset>
+        <fieldset>
+          <legend>Optional Information</legend>
+          <div class="control-group">
+            <label class="control-label" for="bill_custid"><strong>Customer&nbsp;Reference</strong></label>
+            <div class="controls">
+              <input class="span4" type="text" name="bill_custid" value="<?php echo $bill_data['bill_custid']; ?>" />
+            </div>
           </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="bill_ref"><strong>Billing Reference</strong></label>
-          <div class="controls">
-            <input class="span4" type="text" name="bill_ref" value="<?php echo $bill_data['bill_ref']; ?>" />
+          <div class="control-group">
+            <label class="control-label" for="bill_ref"><strong>Billing Reference</strong></label>
+            <div class="controls">
+              <input class="span4" type="text" name="bill_ref" value="<?php echo $bill_data['bill_ref']; ?>" />
+            </div>
           </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="bill_notes"><strong>Notes</strong></label>
-          <div class="controls">
-            <input class="span4" type="text" name="bill_notes" value="<?php echo $bill_data['bill_notes']; ?>" />
+          <div class="control-group">
+            <label class="control-label" for="bill_notes"><strong>Notes</strong></label>
+            <div class="controls">
+              <input class="span4" type="text" name="bill_notes" value="<?php echo $bill_data['bill_notes']; ?>" />
+            </div>
           </div>
+        </fieldset>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success" name="Submit" value="Save" /><i class="icon-ok icon-white"></i> <strong>Save Properties</strong></button>
         </div>
-      </fieldset>
-      <div class="form-actions">
-        <button type="submit" class="btn btn-success" name="Submit" value="Save" /><i class="icon-ok icon-white"></i> <strong>Save Properties</strong></button>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
 
   <div class="tab-pane fade in" id="ports">
     <form class="form-horizontal">

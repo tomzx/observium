@@ -1,5 +1,16 @@
 <?php
 
+$links['billing']   = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => 'billing'));
+$links['24hour']    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => '24hour'));
+$links['monthly']   = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => 'monthly'));
+$links['previous']  = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => 'previous'));
+$active['billing']  = (($vars['tab'] == "billing") ? "active" : "");
+$active['24hour']   = (($vars['tab'] == "24hour") ? "active" : "");
+$active['monthly']  = (($vars['tab'] == "monthly") ? "active" : "");
+$active['previous'] = (($vars['tab'] == "previous") ? "active" : "");
+if (empty($active['billing']) && empty($active['24hour']) && empty($active['monthly']) && empty($active['previous'])) { $active['billing'] = "active"; }
+$graph              = "";
+
 if ($bill_data['bill_type'] == "quota") {
   $quota      = $bill_data['bill_quota'];
   $percent    = round(($total_data) / $quota * 100, 2);
@@ -28,19 +39,24 @@ $rightnow     = date(U);
 
 $bi           = "<img src='graph.php?type=bill_bits&amp;id=" . $bill_id;
 $bi          .= "&amp;from=" . $unixfrom .  "&amp;to=" . $unixto;
-$bi          .= "&amp;width=1050&amp;height=275&amp;total=1'>";
+$bi          .= "&amp;width=1050&amp;height=300&amp;total=1'>";
 
 $li           = "<img src='graph.php?type=bill_bits&amp;id=" . $bill_id;
 $li          .= "&amp;from=" . $unix_prev_from .  "&amp;to=" . $unix_prev_to;
-$li          .= "&amp;width=1050&amp;height=275&amp;total=1'>";
+$li          .= "&amp;width=1050&amp;height=300&amp;total=1'>";
 
 $di           = "<img src='graph.php?type=bill_bits&amp;id=" . $bill_id;
 $di          .= "&amp;from=" . $config['time']['day'] .  "&amp;to=" . $config['time']['now'];
-$di          .= "&amp;width=1050&amp;height=275&amp;total=1'>";
+$di          .= "&amp;width=1050&amp;height=300&amp;total=1'>";
 
 $mi           = "<img src='graph.php?type=bill_bits&amp;id=" . $bill_id;
 $mi          .= "&amp;from=" . $lastmonth .  "&amp;to=" . $rightnow;
-$mi          .= "&amp;width=1050&amp;height=275&amp;total=1'>";
+$mi          .= "&amp;width=1050&amp;height=300&amp;total=1'>";
+
+if ($active['billing'] == "active") { $graph = $bi; }
+elseif ($active['24hour'] == "active") { $graph = $di; }
+elseif ($active['monthly'] == "active") { $graph = $mi; }
+elseif ($active['previous'] == "active") { $graph = $li; }
 
 switch(true) {
   case($percent >= 90):
@@ -58,15 +74,6 @@ switch(true) {
 $perc['width']    = (($percent <= "100") ? $percent : "100");
 
 ?>
-
-<!-- DISABLED, USED PORTS.INC.PHP INSTEAD!!!
-<div class="row-fluid">
-  <div class="span12 well">
-    <h3 class="bill"><i class="icon-random"></i> Billed ports</h3>
-    <?php echo($ports); ?>
-  </div>
-</div>
-//-->
 
 <div class="row-fluid">
   <div class="span6 well">
@@ -126,26 +133,16 @@ $perc['width']    = (($percent <= "100") ? $percent : "100");
 </div>
 
 <div class="tabBox">
-  <ul class="nav-tabs tabs" id="transferBillTab">
-  <li class="active first"><a href="#billingView" data-toggle="tab">Billing view</a></li>
-  <li><a href="#24hourView" data-toggle="tab">24 Hour view</a></li>
-  <li><a href="#monthlyView" data-toggle="tab">Montly view</a></li>
-  <li><a href="#previousView" data-toggle="tab">Previous billing view</a></li>
+  <ul class="nav-tabs tabs" id="quickBillTab">
+    <li class="<?php echo($active['billing']); ?> first"><a href="<?php echo($links['billing']); ?>">Billing view</a></li>
+    <li class="<?php echo($active['24hour']); ?>"><a href="<?php echo($links['24hour']); ?>">24 Hour view</a></li>
+    <li class="<?php echo($active['monthly']); ?>"><a href="<?php echo($links['monthly']); ?>">Monthly view</a></li>
+    <li class="<?php echo($active['previous']); ?>"><a href="<?php echo($links['previous']); ?>">Previous billing view</a></li>
   </ul>
-  <div class="tabcontent tab-content" id="transferBillTabContent">
-
-  <div class="tab-pane fade active in" id="billingView" style="text-align: center;">
-    <?php echo($bi."\n"); ?>
-  </div>
-  <div class="tab-pane fade in" id="24hourView" style="text-align: center;">
-    <?php echo($di."\n"); ?>
-  </div>
-  <div class="tab-pane fade in" id="monthlyView" style="text-align: center;">
-    <?php echo($mi."\n"); ?>
-  </div>
-  <div class="tab-pane fade in" id="previousView" style="text-align: center;">
-    <?php echo($li."\n"); ?>
-  </div>
+  <div class="tabcontent tab-content" id="transferBillTabContent" style="min-height: 300px;">
+    <div class="tab-pane fade active in" id="quickGraph" style="text-align: center;">
+      <?php echo($graph."\n"); ?>
+    </div>
   </div>
 </div>
 

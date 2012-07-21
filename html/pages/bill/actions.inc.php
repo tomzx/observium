@@ -78,16 +78,10 @@ if ($_POST['action'] == "update_bill")
   }
 
   if (dbUpdate(array('bill_name' => $_POST['bill_name'], 'bill_day' => $_POST['bill_day'], 'bill_quota' => $bill_quota, 'bill_cdr' => $bill_cdr,
-                     'bill_type' => $_POST['bill_type']), 'bills', '`bill_id` = ?', array($bill_id)))
+                     'bill_type' => $_POST['bill_type'], 'bill_custid' => $_POST['bill_custid'], 'bill_ref' => $_POST['bill_ref'],
+                     'bill_notes' => $_POST['bill_notes']), 'bills', '`bill_id` = ?', array($bill_id)))
   {
     print_message("Bill Properties Updated");
-  }
-}
-if ($_POST['action'] == "update_bill_optional")
-{
-  if (dbUpdate(array('bill_custid' => $_POST['bill_custid'], 'bill_ref' => $_POST['bill_ref'], 'bill_notes' => $_POST['bill_notes']), 'bills', '`bill_id` = ?', array($bill_id)))
-  {
-    print_message("Optional Information Updated");
   }
 }
 
