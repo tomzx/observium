@@ -1,6 +1,6 @@
 <hr />
 
-  <form method="post" action="">
+  <form method="post" action="" class="form-inline">
   <label><strong>Search</strong>
     <input type="text" name="string" id="string" value="<?php echo($_POST['string']); ?>" />
   </label>
@@ -19,7 +19,7 @@
       ?>
     </select>
   </label>
-  <input class=submit type=submit value=Search>
+  <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
 </form>
 
 <?php

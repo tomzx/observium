@@ -29,7 +29,7 @@ foreach (dbFetchRows("SELECT `device_id`,`hostname` FROM `devices` GROUP BY `hos
 ?>
       </select>
       <br />
-      <input type="hostname" name="hostname" id="hostname" title="Hostname" style='width: 180px;' <?php if (strlen($vars['hostname'])) {echo('value="'.$vars['hostname'].'"');} ?> />
+      <input type="text" name="hostname" id="hostname" title="Hostname" style="width: 180px;" <?php if (strlen($vars['hostname'])) {echo('value="'.$vars['hostname'].'"');} ?> />
     </td>
     <td width="120">
       <select name="state" id="state" style="width: 100px;">
@@ -115,11 +115,9 @@ foreach ($ports as $data)
         <label for="ignore">
         <input type=checkbox id="ignore" name="ignore" value=1 <?php if ($vars['ignore']) { echo("checked"); } ?> ></input> Ignored
         </label>
-        <br />
         <label for="disable">
         <input type=checkbox id="disable" name="disable" value=1 <?php if ($vars['disable']) { echo("checked"); } ?> > Disabled</input>
         </label>
-        <br />
         <label for="deleted">
         <input type=checkbox id="deleted" name="deleted" value=1 <?php if ($vars['deleted']) { echo("checked"); } ?> > Deleted</input>
         </label>
@@ -152,8 +150,8 @@ foreach ($sorts as $sort => $sort_text)
 
         </select>
         </td>
-        <td style="text-align: center;" width=50>
-        <input style="align:right; padding: 10px;" type=submit class=submit value=Search></div>
+        <td style="text-align: center;" width=80>
+        <button type="submit" class="btn btn-large"><i class="icon-search"></i> Search</button>
         <br />
         <a href="<?php echo(generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare']))); ?>" title="Reset critera to default." >Reset</a>
       </td>
