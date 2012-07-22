@@ -58,6 +58,10 @@ foreach ($ports as $port)
                                         ".$port['ifAlias']."</td>
           <td width=100><span class=green>&darr; ".$port['bps_in']."<br />
                         <span class=blue>&uarr; ".$port['bps_out']."<br />
+
+          <td width=100><span class=green>".$port['ifInOctets_perc']."%<br />
+                        <span class=blue>".$port['ifOutOctets_perc']."%<br />
+
           <td width=100><span class=purple>&darr; ".$port['pps_in']."<br />
                         <span class=orange>&uarr; ".$port['pps_out']."<br />
           <td width=110 >$speed<br />".$port['ifMtu']."</td>

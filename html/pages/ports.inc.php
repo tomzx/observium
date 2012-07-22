@@ -130,10 +130,12 @@ foreach ($ports as $data)
 $sorts = array('device' => 'Device',
               'port' => 'Port',
               'speed' => 'Speed',
-              'traffic' => 'Traffic',
+              'traffic' => 'Traffic In+Out',
               'traffic_in' => 'Traffic In',
               'traffic_out' => 'Traffic Out',
-              'packets' => 'Packets',
+              'traffic_perc_in' => 'Traffic Percentage In',
+              'traffic_perc_out' => 'Traffic Percentage Out',
+              'packets' => 'Packets In+Out',
               'packets_in' => 'Packets In',
               'packets_out' => 'Packets Out',
               'errors' => 'Errors',
@@ -322,6 +324,12 @@ switch ($vars['sort'])
     break;
   case 'traffic_out':
     $ports = array_sort($ports, 'ifOutOctets_rate', SORT_DESC);
+    break;
+  case 'traffic_perc_in':
+    $ports = array_sort($ports, 'ifInOctets_perc', SORT_DESC);
+    break;
+  case 'traffic_perc_out':
+    $ports = array_sort($ports, 'ifOutOctets_perc', SORT_DESC);
     break;
   case 'packets':
     $ports = array_sort($ports, 'ifUcastPkts_rate', SORT_DESC);
