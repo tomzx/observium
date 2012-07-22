@@ -68,7 +68,7 @@ if ($device['os_group'] == "cisco")
           if (is_numeric($cef_stat['cefSwitchingHCPunt'])) { $cef_stat['cefSwitchingPunt'] = $cef_stat['cefSwitchingHCPunt']; }
           if (is_numeric($cef_stat['cefSwitchingHCPunt2Host'])) { $cef_stat['cefSwitchingPunt2Host'] = $cef_stat['cefSwitchingHCPunt2Host']; }
 
-          // FIXME -- memcached
+          // FIXME -- memory tables
 
           $cef_stat['update']['drop'] = $cef_stat['cefSwitchingDrop'];
           $cef_stat['update']['punt'] = $cef_stat['cefSwitchingPunt'];

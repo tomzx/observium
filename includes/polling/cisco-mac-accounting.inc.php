@@ -75,7 +75,7 @@ if ($device['os_group'] == "cisco")
           DS:POUT:COUNTER:600:0:12500000000 " . $config['rrd_rra']);
       }
 
-      // FIXME - use memcached to make sure these values don't go backwards?
+      // FIXME - use memory tables to make sure these values don't go backwards?
       $rrdupdate = array($b_in, $b_out, $p_in, $p_out);
       rrdtool_update($rrdfile, $rrdupdate);
 

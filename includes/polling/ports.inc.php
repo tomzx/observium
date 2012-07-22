@@ -387,13 +387,6 @@ foreach ($ports as $port)
     // Do Alcatel Detailed Stats
     if ($device['os'] == "aos") { include("port-alcatel.inc.php"); }
 
-    // Update Memcached
-#    if ($config['memcached']['enable'])
-#    {
-#      if($debug) { print_r($port['state']); }
-#      $memcache->set('port-'.$port['port_id'].'-state', $port['state']);
-#    }
-
     // Update Database
     if (count($port['update']))
     {
