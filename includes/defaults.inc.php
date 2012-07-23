@@ -170,6 +170,11 @@ $config['alerts']['port']['ifdown']        = FALSE;   // Generate alerts for por
 $config['alerts']['port_util_alert'] = FALSE;    // Disabled as default
 $config['alerts']['port_util_perc']  = 85;       // %age above which to alert
 
+// Storage threshold
+
+$config['alerts']['storage']['enable'] = TRUE;     // Enable email alerts
+$config['alerts']['storage']['maximum'] = 90;     // Percentage over which to alert
+
 $config['uptime_warning']                  = "84600"; // Time in seconds to display a "Device Rebooted" Alert. 0 to disable warnings.
 
 // Cosmetics
@@ -451,6 +456,7 @@ $config['sla_type_labels']['lspPingPseudowire'] = 'LSP Pseudowire ping';
 
 // Warnings on front page
 $config['warn']['ifdown'] = TRUE;    // Show down interfaces
+$config['warn']['storage']['maximum'] = TRUE;    // Show storages over threshold
 
 // List of poller modules. Need to be in the array to be
 // considered for execution.

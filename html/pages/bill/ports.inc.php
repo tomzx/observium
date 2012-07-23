@@ -5,9 +5,9 @@ $ports = dbFetchRows("SELECT * FROM `bill_ports` AS B, `ports` AS P, `devices` A
                       WHERE B.bill_id = ? AND P.port_id = B.port_id
                       AND D.device_id = P.device_id", array($bill_id));
 
-foreach ($ports as $port) {
-  $emptyCheck = true;
-
+$data = array();
+foreach ($ports as $port)
+{
   $devicebtn = str_replace("list-device", "btn btn-small", generate_device_link($port));
   //$devicebtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $devicebtn);
   //$devicebtn = str_replace("<div>',;", "</div></div>',", $devicebtn);
@@ -23,18 +23,7 @@ foreach ($ports as $port) {
 
   $portalias = (empty($port['ifAlias']) ? "" : " - ".$port['ifAlias']."");
 
-  $res    .= "          <div class=\"btn-toolbar\">\n";
-  $res    .= "            <div class=\"btn-group\">\n";
-  $res    .= "              ".$devicebtn."\n";
-  $res    .= "              ".$portbtn."\n";
-  $res    .= "            </div>\n";
-  $res    .= "          </div>\n";
-}
-
-if (!$emptyCheck) {
-  $res     = "          <div class=\"alert alert-info\">\n";
-  $res    .= "            <i class=\"icon-info-sign\"></i> <strong>There are no ports assigned to this bill</strong>\n";
-  $res    .= "          </div>\n";
+  $data[] = array('devicebtn' => $devicebtn, 'portbtn' => $portbtn);
 }
 
 ?>
@@ -42,6 +31,19 @@ if (!$emptyCheck) {
 <div class="row-fluid">
   <div class="span12 well">
     <h3 class="bill"><i class="icon-random"></i> Billed ports</h3>
-    <?php echo($res); ?>
+    <?php if (count($data) === 0) { ?>
+      <div class="alert alert-info">
+        <i class="icon-info-sign"></i> <strong>There are no ports assigned to this bill</strong>
+      </div>
+    <?php } else { ?>
+      <?php foreach ($data as $item) { ?>
+      <div class="btn-toolbar">
+        <div class="btn-group">
+          <?php echo($item['devicebtn']); ?>
+          <?php echo($item['portbtn']); ?>
+        </div>
+      </div>
+      <?php } ?>
+    <?php } ?>
   </div>
 </div>

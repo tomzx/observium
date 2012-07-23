@@ -379,6 +379,11 @@ function cidr2netmask()
   return (long2ip(ip2long("255.255.255.255") << (32-$netmask)));
 }
 
+function humanReadableTime($diff, $format="long")
+{
+  return formatUptime($diff, $format);
+}
+
 function formatUptime($diff, $format="long")
 {
   $yearsDiff = floor($diff/31536000);
