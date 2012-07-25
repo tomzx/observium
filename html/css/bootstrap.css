@@ -752,7 +752,9 @@ textarea {
 
 label {
   display: block;
-  margin-bottom: 5px;
+
+## Breaks forms in bars
+#  margin-bottom: 5px;
 }
 
 select,
