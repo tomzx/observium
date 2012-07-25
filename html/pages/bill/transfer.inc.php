@@ -186,7 +186,7 @@ elseif ($active['previous'] == "active") { $graph = $li; }
       </tr>
       <tr>
         <td colspan="3">
-          <div class="progress progress-<?php echo($perc['BG']); ?> progress-striped active" style="margin-bottom: 0px;"><div class="bar" style="text-align: middle; width:<?php echo($perc['width']); ?>%;"><?php echo($percent); ?>%</div></div>
+          <div class="progress progress-<?php echo($perc['BG']); ?>  active" style="margin-bottom: 0px;"><div class="bar" style="text-align: middle; width:<?php echo($perc['width']); ?>%;"><?php echo($percent); ?>%</div></div>
         </td>
     </table>
   </div>

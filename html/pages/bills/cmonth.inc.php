@@ -98,7 +98,7 @@ foreach (dbFetchRows("SELECT * FROM `bills` ORDER BY `bill_name`") as $bill) {
             <td style=\"text-align: center;\"><span class=\"badge badge-success\">".$allowed."</span></td>
             <td style=\"text-align: center;\"><span class=\"badge badge-warning\">".$used."</span></td>
             <td style=\"text-align: center;\"><span class=\"badge badge-".$label['overuse']."\">".$overuse."</span></td>
-            <td><div class=\"progress progress-".$perc['BG']." progress-striped active\"><div class=\"bar\" style=\"text-align: middle; width: ".$perc['width']."%;\">".$percent."%</div></div></td>
+            <td><div class=\"progress progress-".$perc['BG']."  active\"><div class=\"bar\" style=\"text-align: middle; width: ".$perc['width']."%;\">".$percent."%</div></div></td>
             <td>
               <div class=\"btn-toolbar\" style=\"margin-top: 0px;\">
                 <div class=\"btn-group\">

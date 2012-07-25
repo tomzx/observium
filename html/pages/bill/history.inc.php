@@ -118,7 +118,7 @@
                   <td>$total_data</td>
                   <td>$rate_95th</td>
                   <td style=\"text-align: center;\">$overuse</td>
-                  <td width=\"225\"><div class=\"progress progress-".$perc['BG']." progress-striped active\" style=\"margin-bottom: 0px;\"><div class=\"bar\" style=\"width: ".$perc['width']."%; text-align: center;\">".$percent."%</div></div></td>
+                  <td width=\"225\"><div class=\"progress progress-".$perc['BG']."  active\" style=\"margin-bottom: 0px;\"><div class=\"bar\" style=\"width: ".$perc['width']."%; text-align: center;\">".$percent."%</div></div></td>
                   <td>
                     <div class=\"btn-toolbar\" style=\"margin: 0px auto 0px auto;\">
                       <div class=\"btn-group\">
