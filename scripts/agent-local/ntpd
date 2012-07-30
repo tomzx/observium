@@ -14,15 +14,15 @@
 
     // START SETTINGS ///
 
-	$ntpq		= "/usr/bin/env ntpq";
-	$ntpdc		= "/usr/bin/env ntpdc";
+	$ntpq		= "ntpq";
+	$ntpdc		= "ntpdc";
 
     // END SETTINGS ///
 
 
 
     ///
-    // DO NOT EDIT BENETH THIS LINE
+    // DO NOT EDIT BENEATH THIS LINE
     ///
     ///////////////////////////////////////////////////////////////////////////////////////
 
