@@ -3,7 +3,7 @@
 $sql  = "SELECT *, `sensors`.`sensor_id` AS `sensor_id`";
 $sql .= " FROM  `sensors`";
 $sql .= " LEFT JOIN  `sensors-state` ON  `sensors`.sensor_id =  `sensors-state`.sensor_id";
-$sql .= " WHERE `sensor_class` = ? AND `device_id` = ?";
+$sql .= " WHERE `sensor_class` = ? AND `device_id` = ? ORDER BY `sensor_index`";
 
 $sensors = dbFetchRows($sql, array($sensor_class, $device['device_id']));
 

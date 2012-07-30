@@ -41,30 +41,66 @@ if ($device['os'] == "apc")
     }
   }
 
-  $oids = snmp_get($device, "1.3.6.1.4.1.318.1.1.1.3.2.4.0", "-OsqnU", "");
+  # Fetch high precision frequency (Precision 0.1)
+  $oids = snmp_get($device, "upsHighPrecInputFrequency.0", "-OsqnU", "PowerNet-MIB");
   if ($debug) { echo($oids."\n"); }
   if ($oids)
   {
     echo(" APC In ");
     list($oid,$current) = explode(" ",$oids);
-    $divisor = 1;
+    $divisor = 10;
+    $current /= $divisor;
     $type = "apc";
-    $index = "3.2.4.0";
+    $index = "3.3.4.0";
     $descr = "Input";
     discover_sensor($valid['sensor'], 'frequency', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
   }
+  else
+  {
+    # If this is not available, fetch regular frequency (Precision 1)
+    $oids = snmp_get($device, "upsAdvInputFrequency.0", "-OsqnU", "PowerNet-MIB");
+    if ($debug) { echo($oids."\n"); }
+    if ($oids)
+    {
+      echo(" APC In ");
+      list($oid,$current) = explode(" ",$oids);
+      $divisor = 1;
+      $type = "apc";
+      $index = "3.2.4.0";
+      $descr = "Input";
+      discover_sensor($valid['sensor'], 'frequency', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+    }
+  }
 
-  $oids = snmp_get($device, "1.3.6.1.4.1.318.1.1.1.4.2.2.0", "-OsqnU", "");
+  # Fetch high precision frequency (Precision 0.1)
+  $oids = snmp_get($device, "upsHighPrecOutputFrequency.0", "-OsqnU", "PowerNet-MIB");
   if ($debug) { echo($oids."\n"); }
   if ($oids)
   {
     echo(" APC Out ");
     list($oid,$current) = explode(" ",$oids);
-    $divisor = 1;
+    $divisor = 10;
+    $current /= $divisor;
     $type = "apc";
-    $index = "4.2.2.0";
-    $descr = "Output";
+    $index = "4.3.2.0";
+    $descr = "Input";
     discover_sensor($valid['sensor'], 'frequency', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+  }
+  else
+  {
+    # If this is not available, fetch regular frequency (Precision 1)
+    $oids = snmp_get($device, "upsAdvOutputFrequency.0", "-OsqnU", "");
+    if ($debug) { echo($oids."\n"); }
+    if ($oids)
+    {
+      echo(" APC Out ");
+      list($oid,$current) = explode(" ",$oids);
+      $divisor = 1;
+      $type = "apc";
+      $index = "4.2.2.0";
+      $descr = "Output";
+      discover_sensor($valid['sensor'], 'frequency', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+    }
   }
 }
 

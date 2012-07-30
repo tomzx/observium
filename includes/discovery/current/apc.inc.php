@@ -41,7 +41,7 @@ if ($device['os'] == "apc")
           $descr     = "Output";
         }
 
-        discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '10', '1', $lowlimit, NULL, $warnlimit, $limit, $current);
+        discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, 10, 1, $lowlimit, NULL, $warnlimit, $limit, $current);
       }
     }
   }
@@ -96,7 +96,7 @@ if ($device['os'] == "apc")
         $lowlimit  = snmp_get($device, $lowlimit_oid, "-Oqv", "");
         $warnlimit = snmp_get($device, $warnlimit_oid, "-Oqv", "");
 
-        discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '10', '1', $lowlimit, NULL, $warnlimit, $limit, $current);
+        discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, 10, 1, $lowlimit, NULL, $warnlimit, $limit, $current);
       }
     }
 
@@ -141,7 +141,7 @@ if ($device['os'] == "apc")
         $warnlimit = snmp_get($device, $warnlimit_oid, "-Oqv", "") / $voltage;
         $descr     = "Outlet " . $index . " - " .  snmp_get($device, $name_oid, "-Oqv", "");
 
-        discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '10', '1', $lowlimit, NULL, $warnlimit, $limit, $current);
+        discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, 10, 1, $lowlimit, NULL, $warnlimit, $limit, $current);
       }
     }
   }
@@ -168,10 +168,86 @@ if ($device['os'] == "apc")
     $warnlimit = snmp_get($device, $warnlimit_oid, "-Oqv", ""); # No / $precision here! Nice, APC!
     $descr     = "Output Feed";
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '10', '1', $lowlimit, NULL, $warnlimit, $limit, $current);
+    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, 10, 1, $lowlimit, NULL, $warnlimit, $limit, $current);
   }
 
   unset($oids);
+
+  # UPS
+  $inputs = snmp_get($device, "upsPhaseNumInputs.0", "-Ovq", "PowerNet-MIB");
+  $outputs = snmp_get($device, "upsPhaseNumOutputs.0", "-Ovq", "PowerNet-MIB");
+
+  if ($inputs || $outputs)
+  {
+    echo("APC PowerNet-MIB UPS");
+
+    $cache['apc'] = snmpwalk_cache_multi_oid($device, "upsPhaseInputCurrent", $cache['apc'], "PowerNet-MIB");
+    $cache['apc'] = snmpwalk_cache_multi_oid($device, "upsPhaseInputMinCurrent", $cache['apc'], "PowerNet-MIB");
+    $cache['apc'] = snmpwalk_cache_multi_oid($device, "upsPhaseInputMaxCurrent", $cache['apc'], "PowerNet-MIB");
+
+    $cache['apc'] = snmpwalk_cache_multi_oid($device, "upsPhaseOutputCurrent", $cache['apc'], "PowerNet-MIB");
+    $cache['apc'] = snmpwalk_cache_multi_oid($device, "upsPhaseOutputMinCurrent", $cache['apc'], "PowerNet-MIB");
+    $cache['apc'] = snmpwalk_cache_multi_oid($device, "upsPhaseOutputMaxCurrent", $cache['apc'], "PowerNet-MIB");
+
+    echo(" In ");
+
+    # Process each input, per phase
+    for ($i = 1;$i <= $inputs;$i++)
+    {
+      # FIXME also cache_multi_oid ?
+      $name = trim(snmp_get($device, "upsPhaseInputName.$i", "-Ovq", "PowerNet-MIB"),'"');
+      $phases = snmp_get($device, "upsPhaseNumInputPhases.$i", "-Ovq","PowerNet-MIB");
+      $tindex = snmp_get($device, "upsPhaseInputTableIndex.$i", "-Ovq", "PowerNet-MIB");
+
+      for ($p = 1;$p <= $phases;$p++)
+      {
+        $type = "apc";
+        
+        $index     = "6.$tindex.1.$p";
+        $current_oid = ".1.3.6.1.4.1.318.1.1.1.9.2.3.1.$index";
+
+        $current   = $cache['apc']["$tindex.1.$p"]['upsPhaseInputCurrent'] / 10;
+        $limit     = $cache['apc']["$tindex.1.$p"]['upsPhaseInputMaxCurrent'];
+        $lowlimit  = $cache['apc']["$tindex.1.$p"]['upsPhaseInputMinCurrent'];
+        
+        $descr     = "$name Phase $p";
+
+        if ($current != -0.1)
+        {
+          discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, 10, 1, $lowlimit, NULL, NULL, $limit, $current);
+        }
+      }
+    }
+
+    echo(" Out ");
+
+    # Process each output, per phase
+    for ($o = 1;$o <= $outputs;$o++)
+    {
+      $name = "Output"; if ($outputs > 1) { $name .= " $o"; } # Output doesn't have a name in the MIB, add number if >1
+      $phases = snmp_get($device, "upsPhaseNumOutputPhases.$o", "-Ovq","PowerNet-MIB");
+      $tindex = snmp_get($device, "upsPhaseOutputTableIndex.$o", "-Ovq", "PowerNet-MIB");
+
+      for ($p = 1;$p <= $phases;$p++)
+      {
+        $type = "apc";
+        
+        $index     = "4.$tindex.1.$p";
+        $current_oid = ".1.3.6.1.4.1.318.1.1.1.9.3.3.1.$index";
+
+        $current   = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputCurrent'] / 10;
+        $limit     = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputMaxCurrent'];
+        $lowlimit  = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputMinCurrent'];
+        
+        $descr     = "$name Phase $p";
+
+        if ($current != -0.1)
+        {
+          discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, 10, 1, $lowlimit, NULL, NULL, $limit, $current);
+        }
+      }
+    }
+  }
 }
 
 ?>

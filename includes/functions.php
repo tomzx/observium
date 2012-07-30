@@ -225,10 +225,10 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
   global $config;
 
   list($hostshort) = explode(".", $host);
-  // Test Database Exists
+  // Test if host exists in database
   if (dbFetchCell("SELECT COUNT(*) FROM `devices` WHERE `hostname` = ?", array($host)) == '0')
   {
-    // Test DNS lookup
+    // Test DNS lookup # FIXME: Not needed, as long as we shellescape the host in isPingable. This breaks v6-only.
     if (gethostbyname($host) != $host)
     {
       // Test reachability
@@ -337,6 +337,7 @@ function scanUDP($host, $port, $timeout)
   $header = fread($handle, 1);
   $endTime = time();
   $timeDiff = $endTime - $startTime;
+
   if ($timeDiff >= $timeout)
   {
     fclose($handle); return 1;
@@ -349,8 +350,8 @@ function deviceArray($host, $community, $snmpver, $port = 161, $transport = 'udp
   $device['hostname'] = $host;
   $device['port'] = $port;
   $device['transport'] = $transport;
-
   $device['snmpver'] = $snmpver;
+
   if ($snmpver === "v2c" or $snmpver === "v1")
   {
     $device['community'] = $community;
@@ -476,7 +477,6 @@ function createHost($host, $community = NULL, $snmpver, $port = 161, $transport 
 
   if ($device['os'])
   {
-
     $device_id = dbInsert($device, 'devices');
 
     if ($device_id)

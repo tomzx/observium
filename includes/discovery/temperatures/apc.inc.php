@@ -6,12 +6,12 @@ if ($device['os'] == "apc")
   if ($debug) { echo($oids."\n"); }
   if ($oids)
   {
-    echo("APC UPS Internal ");
+    echo("APC UPS Battery ");
     list($oid,$current) = explode(' ',$oids);
     $precision = 1;
     $sensorType = "apc";
     $index = 0;
-    $descr = "Internal Temperature";
+    $descr = "Battery Temperature";
 
     discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, $sensorType, $descr, '1', '1', NULL, NULL, NULL, NULL, $current);
   }
