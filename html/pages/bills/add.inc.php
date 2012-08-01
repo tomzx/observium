@@ -28,7 +28,7 @@ if ($_SESSION['userlevel'] == "10") {
       $('#quotaDiv').toggle();
     }
   </script>
-  <div id="addBillTabContent" class="tab-content">
+  <div id="addBillTabContent" class="tabcontent tab-content">
 
 <?php
 
@@ -130,6 +130,7 @@ for ($x=1;$x<32;$x++) {
     <button type="submit" class="btn btn-primary"><i class="icon-ok-sign icon-white"></i> <strong>Add Bill</strong></button>
   </div>
 </form>
+
 <?php
 
   } else {

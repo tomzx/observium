@@ -1,5 +1,8 @@
 <?php
 
+$isAdmin    = (($_SESSION['userlevel'] == "10") ? true : false);
+$isUser     = bill_permitted($bill_id);
+
 if ($_POST['addbill'] == "yes")
 {
   $updated = '1';

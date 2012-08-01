@@ -6,6 +6,7 @@ $disabled         = ($isAdmin ? "" : "disabled=\"disabled\"");
 $links['add']     = ($isAdmin ? generate_url($vars, array('view' => 'add')) : "javascript:;");
 $links['cur']     = generate_url($vars, array('view' => ''));
 
+include_once('searchaction.inc.php');
 
 echo("<table class=\"table table-bordered table-striped\">
         <thead>
@@ -26,7 +27,8 @@ echo("<table class=\"table table-bordered table-striped\">
         </thead>
         <tbody>\n");
 
-foreach (dbFetchRows("SELECT * FROM `bills` ORDER BY `bill_name`") as $bill) {
+//foreach (dbFetchRows("SELECT * FROM `bills` ORDER BY `bill_name`") as $bill) {
+foreach (dbFetchRows("SELECT * FROM `bills` ".$where." ORDER BY `bill_name`", $param) as $bill) {
   if (bill_permitted($bill['bill_id'])) {
     unset($class);
     $day_data     = getDates($bill['bill_day']);
