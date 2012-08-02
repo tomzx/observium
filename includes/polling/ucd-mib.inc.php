@@ -143,7 +143,7 @@ if (is_numeric($load_raw[2]['laLoadInt']))
 {
   if (!is_file($load_rrd))
   {
-    rrdtool_create($load_rrd, " --step 300 DS:1min:GAUGE:600:0:5000 DS:5min:GAUGE:600:0:5000 DS:15min:GAUGE:600:0:5000 ".$config['rrd_rra']);
+    rrdtool_create($load_rrd, " --step 300 DS:1min:GAUGE:600:0:500000 DS:5min:GAUGE:600:0:500000 DS:15min:GAUGE:600:0:500000 ".$config['rrd_rra']);
   }
   rrdtool_update($load_rrd, array($load_raw[1]['laLoadInt'], $load_raw[2]['laLoadInt'], $load_raw[3]['laLoadInt']));
   $graphs['ucd_load'] = "TRUE";
