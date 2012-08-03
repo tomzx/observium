@@ -17,7 +17,7 @@ function discover_new_device($hostname)
 
   if ($config['autodiscovery']['xdp'])
   {
-    if ( isDomainResolves($hostname . "." . $config['mydomain']) )
+    if (!empty($config['mydomain']) && isDomainResolves($hostname . "." . $config['mydomain']) )
     {
       if ($debug) { echo("appending " . $config['mydomain'] . "!\n"); }
       $dst_host = $hostname . "." . $config['mydomain'];
