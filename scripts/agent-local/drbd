@@ -175,7 +175,7 @@ GetOptions(
 my @state = get_state;
 my $status = OK;
 
-print "<<<drbd>>>\n";
+print "<<<app-drbd>>>\n";
 
 foreach my $id (0 .. $#state) {
 	my $device = $state[$id]

@@ -20,7 +20,7 @@ if ($device['os_group'] == "unix")
   } else {
     $agent_raw = stream_get_contents($agent);
   }
-  
+
   $agent_end = utime(); $agent_time = round(($agent_end - $agent_start) * 1000);
 
   if (!empty($agent_raw))
@@ -38,6 +38,9 @@ if ($device['os_group'] == "unix")
     {
       list($section, $data) = explode(">>>", $section);
       list($sa, $sb) = explode("-", $section, 2);
+
+      ## Compatibility with versions of scripts with and without app-
+      ## Disabled for DRBD because it falsely detects the check_mk output
 
       if ($section == "apache") { $sa = "app"; $sb = "apache"; }
       if ($section == "mysql")  { $sa = "app"; $sb = "mysql"; }
@@ -79,7 +82,7 @@ if ($device['os_group'] == "unix")
           @dbInsert(array('device_id' => $device['device_id'], 'app_type' => $key, 'app_state' => 'UNKNOWN'), 'applications');
           echo("+");
         }
-        
+
         if ($debug) { echo("Including: applications/$key.inc.php"); }
 
         echo($key);
