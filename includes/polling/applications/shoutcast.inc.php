@@ -1,13 +1,16 @@
 <?php
 
-// Polls shoutcast statistics from script via SNMP
+if (!empty($agent_data['app']['shoutcast'])) {
+  // Polls shoutcast statistics from agent script
+  $shoutcast = $agent_data['app']['shoutcast'];
+} else {
+  // Polls shoutcast statistics from script via SNMP
+  $options   = "-O qv";
+  $oid       = "nsExtendOutputFull.9.115.104.111.117.116.99.97.115.116";
+  $shoutcast = snmp_get($device, $oid, $options);
+  echo(" shoutcast");
+}
 
-$options   = "-O qv";
-$oid       = "nsExtendOutputFull.9.115.104.111.117.116.99.97.115.116";
-
-$shoutcast = snmp_get($device, $oid, $options);
-
-echo(" shoutcast");
 
 $servers = explode("\n", $shoutcast);
 
@@ -18,7 +21,7 @@ foreach ($servers as $item=>$server)
   if (!empty($server))
   {
     $data              = explode(";", $server);
-    list($host, $port) = split(":", $data['0'], 2);
+    list($host, $port) = explode(":", $data['0'], 2);
     $bitrate           = $data['1'];
     $traf_in           = $data['2'];
     $traf_out          = $data['3'];

@@ -1,6 +1,6 @@
 <?php
 
-$device = device_by_id_cache($vars['id']);
+//$device = device_by_id_cache($vars['id']);
 
 //$colour     = "random";
 $unit_text  = "ShoutCast Server";
