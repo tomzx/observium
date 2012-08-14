@@ -1,10 +1,12 @@
 <?php
 
-$rrd_filename  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-drbd-".$app['app_instance'].".rrd";
+if (!empty($agent_data['app']['drbd'][$app['app_instance']]))
+{
+  $rrd_filename  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-drbd-".$app['app_instance'].".rrd";
 
   foreach (explode("|", $agent_data['app']['drbd'][$app['app_instance']]) as $part)
   {
-    list($stat, $val) = explode("=", $part);
+    list($stat, $val) = explode("=", $part, 2);
     if (!empty($stat))
     {
       $drbd[$stat] = $val;
@@ -29,11 +31,13 @@ $rrd_filename  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-drbd-".$
   $ds_list = array('ns','nr','dw','dr','al','bm','lo','pe','ua','ap','oos');
   foreach ($ds_list as $ds)
   {
-    if (empty($drbd[$ds])) { $drbd[$ds] = "U"; }
+    if (!is_numeric($drbd[$ds])) {
+      $drbd[$ds] = "U";
+    }
   }
 
-  rrdtool_update($rrd_filename, "N:".$drbd['ns'].":".$drbd['nr'].":".$drbd['dw'].":".$drbd['dr'].":".$drbd['al'].":".$drbd['bm'].":".$drbd['lo'].":".$drbd['pe'].":".$drbd['ua'].":".$drbd['ap'].":".$drbd['oop']);
-
-  unset($drbd)
+  rrdtool_update($rrd_filename, "N:".$drbd['ns'].":".$drbd['nr'].":".$drbd['dw'].":".$drbd['dr'].":".$drbd['al'].":".$drbd['bm'].":".$drbd['lo'].":".$drbd['pe'].":".$drbd['ua'].":".$drbd['ap'].":".$drbd['oos']);
+  unset($drbd);
+}
 
 ?>
