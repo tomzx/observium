@@ -9,14 +9,14 @@ if ($device['os_group'] == "unix")
   echo("Observium UNIX Agent: ");
 
   // FIXME - this should be in config and overridable in database
-  $agent_port='6556';
+  $agent_port = '6556';
 
   $agent_start = utime();
-  $agent = fsockopen($device['hostname'], $agent_port, $errno, $errstr, 10);
+  $agent = @fsockopen($device['hostname'], $agent_port, $errno, $errstr, 10);
 
   if (!$agent)
   {
-    echo "Connection to UNIX agent failed on port ".$port.".";
+    echo("Connection to UNIX agent failed on port ".$agent_port.".");
   } else {
     $agent_raw = stream_get_contents($agent);
   }
