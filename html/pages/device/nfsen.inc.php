@@ -1,15 +1,15 @@
 <?php
 
 $datas = array(
-  'Flows' => 'nfsen_flows',
+  'Traffic' => 'nfsen_traffic',
   'Packets' => 'nfsen_packets',
-  'Traffic' => 'nfsen_traffic'
+  'Flows' => 'nfsen_flows'
 );
 
 foreach ($datas as $name=>$type)
 {
   $graph_title = $name;
-  $graph_type = "device_".$type;
+  $graph_array['type'] = "device_".$type;
 
   include("includes/print-device-graph.php");
 }
