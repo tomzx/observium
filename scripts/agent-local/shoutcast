@@ -12,7 +12,7 @@
     //              /usr/lib/check_mk_agent/local/shoutcast makeCache
     //              or your local check_mk directory
     ///
-    //      Version 1.2 By:
+    //      Version 1.3 By:
     //              All In One - Dennis de Houx <info@all-in-one.be>
     ///
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
     // START SETTINGS ///
 
 	$config		= "/usr/lib/check_mk_agent/local/shoutcast.conf";
-	$cache		= "/tmp/shoutcast.cache";
+	$cache		= "/tmp/observium-agent-shoutcast";
 
     // END SETTINGS ///
 
@@ -43,7 +43,7 @@
 	    if(!$fp) { $connect = 0; }
 	    if (!isset($connect)) {
 		fputs($fp, "GET /7.html HTTP/1.0\r\n"
-		    . "User-Agent: All In One - SHOUTcast Stats Parser"
+		    . "User-Agent: Observium Agent - SHOUTcast Stats Parser"
 		    . " (Mozilla Compatible)\r\n\r\n");
 		while (!feof($fp)) {
 		    $rawdata	= fgets($fp, 1024);
@@ -69,11 +69,10 @@
 	    }
 	}
 	
-	function doSNMPv2($vars) {
+	function processData($vars) {
 	    $res = array();
 	    foreach ($vars as $items=>$server) {
 		$var['bitrate']		= (isset($server['5']) ? (($server['5'] / 8) * 1000) : "0");
-		//$var['bitrate']		= (isset($server['5']) ? ($server['5'] * 1024) : "0");
 		$var['traf_in']		= (isset($server['1']) ? ($var['bitrate'] * $server['1']) : "0");
 		$var['traf_out']	= (isset($server['0']) ? ($var['bitrate'] * $server['0']) : "0");
 		$var['current']		= (isset($server['0']) ? $server['0'] : "0");
@@ -112,7 +111,7 @@
 
 	if ($cmd == "makeCache") {
 	    $servers	= get_list($config);
-	    $data	= doSNMPv2($servers);
+	    $data	= processData($servers);
 	    makeCacheFile($data, $cache);
 	} else {
 	    readCacheFile($cache);
