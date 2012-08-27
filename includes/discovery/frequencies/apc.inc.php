@@ -83,7 +83,7 @@ if ($device['os'] == "apc")
     $current /= $divisor;
     $type = "apc";
     $index = "4.3.2.0";
-    $descr = "Input";
+    $descr = "Output";
     discover_sensor($valid['sensor'], 'frequency', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
   }
   else
