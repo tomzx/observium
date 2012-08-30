@@ -1,5 +1,4 @@
 <?php
-
 print_optionbar_start();
 
 echo("<span style='font-weight: bold;'>SLA</span> &#187; ");
@@ -62,6 +61,7 @@ foreach ($slas as $sla)
 
   $graph_array['type'] = "device_sla";
   $graph_array['id'] = $sla['sla_id'];
+  $graph_array['device'] = $device['device_id'];
   echo('<tr><td>');
   echo('<h3>'.htmlentities($name).'</h3>');
 
