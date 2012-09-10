@@ -14,7 +14,7 @@ $colour_area_max = "cc9999";
 $graph_max = 1;
 $graph_min = 0;
 
-$unit_text = "Processes";
+$unit_text = "Users";
 
 include("includes/graphs/generic_simplex.inc.php");
 
