@@ -70,23 +70,26 @@ if ($device['os_group'] == "unix")
       }
     }
 
-    foreach (array_keys($agent_data['app']) as $key)
+    if (is_array($agent_data['app']))
     {
-      if (file_exists("includes/polling/applications/$key.inc.php"))
+      foreach (array_keys($agent_data['app']) as $key)
       {
-        echo(" ");
-        $app = @dbFetchRow("SELECT * FROM `applications` WHERE `device_id` = ? AND `app_type` = ?", array($device['device_id'],$key));
-
-        if (empty($app))
+        if (file_exists("includes/polling/applications/$key.inc.php"))
         {
-          @dbInsert(array('device_id' => $device['device_id'], 'app_type' => $key, 'app_state' => 'UNKNOWN'), 'applications');
-          echo("+");
+          echo(" ");
+          $app = @dbFetchRow("SELECT * FROM `applications` WHERE `device_id` = ? AND `app_type` = ?", array($device['device_id'],$key));
+
+          if (empty($app))
+          {
+            @dbInsert(array('device_id' => $device['device_id'], 'app_type' => $key, 'app_state' => 'UNKNOWN'), 'applications');
+            echo("+");
+          }
+
+          if ($debug) { echo("Including: applications/$key.inc.php"); }
+
+          echo($key);
+          include("applications/$key.inc.php");
         }
-
-        if ($debug) { echo("Including: applications/$key.inc.php"); }
-
-        echo($key);
-        include("applications/$key.inc.php");
       }
     }
 

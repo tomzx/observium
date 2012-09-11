@@ -1052,6 +1052,10 @@ $config['graph_types']['device']['uptime']['section'] = 'system';
 $config['graph_types']['device']['uptime']['order'] = '0';
 $config['graph_types']['device']['uptime']['descr'] = 'System Uptime';
 
+$config['graph_types']['device']['ksm_pages']['section'] = 'system';
+$config['graph_types']['device']['ksm_pages']['order'] = '0';
+$config['graph_types']['device']['ksm_pages']['descr'] = 'KSM Shared Pages';
+
 $config['graph_types']['device']['vpdn_sessions_l2tp']['section'] = 'vpdn';
 $config['graph_types']['device']['vpdn_sessions_l2tp']['order'] = '0';
 $config['graph_types']['device']['vpdn_sessions_l2tp']['descr'] = 'VPDN L2TP Sessions';
