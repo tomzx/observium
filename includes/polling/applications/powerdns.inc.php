@@ -10,7 +10,8 @@ if (!empty($agent_data['app']['powerdns']))
 
   # FIXME should we really use app_id here? means if app is disabled, then reenabled, we will lose the data as a new id will be created...
   $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-powerdns-".$app['app_id'].".rrd";
-  $rrd_string = '';
+
+  unset($rrd_values);
 
   foreach(array('corrupt-packets', 'deferred-cache-inserts', 'deferred-cache-lookup', 'latency', 'packetcache-hit', 'packetcache-miss', 'packetcache-size', 'qsize-q',
     'query-cache-hit', 'query-cache-miss', 'recursing-answers', 'recursing-questions', 'servfail-packets', 'tcp-answers', 'tcp-queries', 'timedout-packets', 'udp-answers',

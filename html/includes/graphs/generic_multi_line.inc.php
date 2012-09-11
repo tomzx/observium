@@ -4,9 +4,9 @@ include("includes/graphs/common.inc.php");
 
 if($width > "500")
 {
-  $descr_len=24;
+  $descr_len=25;
 } else {
-  $descr_len=12;
+  $descr_len=13;
   $descr_len += round(($width - 250) / 8);
 }
 

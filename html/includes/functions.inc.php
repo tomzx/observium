@@ -35,6 +35,8 @@ function nicecase($item)
       return "BIND";
     case "ntpd":
       return "NTPd";
+    case "powerdns-recursor":
+      return "PowerDNS Recursor";
     default:
       return ucfirst($item);
   }

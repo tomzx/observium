@@ -401,8 +401,9 @@ if ($_SESSION['userlevel'] >= '5' && ($app_count) > "0")
 ?>
 
     <li><a href="apps/" class="drop"><img src="images/icons/apps.png" border="0" align="absmiddle" /> Apps</a><!-- Begin Home Item -->
-        <div class="dropdown_1column"><!-- Begin 1 column container -->
-          <ul>
+        <div class="dropdown_2columns"><!-- Begin 2 columns container -->
+          <div class="col_2">
+            <ul>
 <?php
 
   $app_list = dbFetchRows("SELECT `app_type` FROM `applications` GROUP BY `app_type` ORDER BY `app_type`");
@@ -416,6 +417,7 @@ echo('
 
 ?>
           </ul>
+        </div>
       </div>
     </li>
 
