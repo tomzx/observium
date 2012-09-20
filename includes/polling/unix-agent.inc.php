@@ -70,6 +70,8 @@ if ($device['os_group'] == "unix")
       }
     }
 
+<<<<<<< .mine
+=======
     if (is_array($agent_data['app']))
     {
       foreach (array_keys($agent_data['app']) as $key)
@@ -107,6 +109,7 @@ if ($device['os_group'] == "unix")
       echo("\n");
     }
 
+>>>>>>> .r3378
     // Apache
     if (!empty($agent_data['app']['apache']))
     {
@@ -144,15 +147,16 @@ if ($device['os_group'] == "unix")
     }
 
     // DRBD
-    if (!empty($agent_data['drbd']))
+    if (!empty($agent_data['app']['drbd']))
     {
-      $agent_data['app']['drbd'] = array();
-      foreach (explode("\n", $agent_data['drbd']) as $drbd_entry)
+      $values = explode("\n", $agent_data['app']['drbd']);
+      unset($agent_data['app']['drbd']);
+      foreach ($values as $drbd_entry)
       {
-        list($drbd_dev, $drbd_data) = explode(":", $drbd_entry);
+        list($drbd_dev, $drbd_data) = explode(":", $drbd_entry, 2);
         if (preg_match("/^drbd/", $drbd_dev))
         {
-          $agent_data['app']['drbd'][$drbd_dev] = $drbd_data;
+          $agent_data['app']['drbd'][$drbd_dev] = trim($drbd_data);
           if (dbFetchCell("SELECT COUNT(*) FROM `applications` WHERE `device_id` = ? AND `app_type` = ? AND `app_instance` = ?", array($device['device_id'], 'drbd', $drbd_dev)) == "0")
           {
             echo("Found new application 'DRBD' $drbd_dev\n");
@@ -160,7 +164,46 @@ if ($device['os_group'] == "unix")
           }
         }
       }
+      unset($values);
     }
+
+    // DEFAULT ACTION
+    foreach (array_keys($agent_data['app']) as $key)
+    {
+      if (file_exists("includes/polling/applications/$key.inc.php"))
+      {
+        echo(" ");
+        $apps = @dbFetchRows("SELECT * FROM `applications` WHERE `device_id` = ? AND `app_type` = ?", array($device['device_id'],$key));
+
+        if (empty($apps))
+        {
+          @dbInsert(array('device_id' => $device['device_id'], 'app_type' => $key, 'app_state' => 'UNKNOWN'), 'applications');
+          echo("+");
+        }
+
+        if ($debug) { echo("Including: applications/$key.inc.php"); }
+
+        echo($key);
+        foreach ($apps as $item=>$app) {
+          include("applications/$key.inc.php");
+        }
+      }
+    }
+
+    // Processes
+    if (!empty($agent_data['ps']))
+    {
+      echo("\nProcesses: ");
+      foreach (explode("\n", $agent_data['ps']) as $process)
+      {
+        $process = preg_replace("/\((.*),([0-9]*),([0-9]*),([0-9\.]*)\)\ (.*)/", "\\1|\\2|\\3|\\4|\\5", $process);
+        list($user, $vsz, $rss, $pcpu, $command) = explode("|", $process, 5);
+          $processlist[] = array('user' => $user, 'vsz' => $vsz, 'rss' => $rss, 'pcpu' => $pcpu, 'command' => $command);
+      }
+      #print_r($processlist);
+      echo("\n");
+    }
+
   }
 
   echo("Sensors: ");

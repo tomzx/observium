@@ -4,7 +4,7 @@ unset($vars['page']);
 
 // Setup here
 
-if($_SESSION['widescreen'])
+if(isset($_SESSION['widescreen']))
 {
   $graph_width=1700;
   $thumb_width=180;
@@ -351,7 +351,7 @@ if (!$auth)
     print_optionbar_end();
   }
 
-  if ($vars['showcommand'])
+  if (isset($vars['showcommand']))
   {
     $_GET = $graph_array;
     $command_only = 1;
