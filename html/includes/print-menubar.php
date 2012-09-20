@@ -409,8 +409,9 @@ if ($_SESSION['userlevel'] >= '5' && ($app_count) > "0")
   $app_list = dbFetchRows("SELECT `app_type` FROM `applications` GROUP BY `app_type` ORDER BY `app_type`");
   foreach ($app_list as $app)
   {
-    $image = $config['html_dir']."/images/icons/".$row['app_type'].".png";
-    $icon = (file_exists($image) ? $row['app_type'] : "apps");
+    $image = $config['html_dir']."/images/icons/".$app['app_type'].".png";
+    $icon = (file_exists($image) ? $app['app_type'] : "apps");
+    //$icon = $image;
 echo('
         <li><a href="apps/app='.$app['app_type'].'/"><img src="images/icons/'.$icon.'.png" border="0" align="absmiddle" /> '.nicecase($app['app_type']).' </a></li>');
   }
@@ -512,6 +513,24 @@ if ($packages)
     </li>
 <?php
 } # if ($packages)
+
+if ($config['api']['enabled'])
+{
+?>
+
+    <li><a href="<?php echo(generate_url(array('page'=>'simpleapi'))); ?>" class="drop"><img src="images/16/page_white_code.png" border="0" align="absmiddle" /> Simple API</a>
+      <div class="dropdown_1column">
+        <div class="col_1">
+          <ul>
+            <li><a href="<?php echo(generate_url(array('page'=>'simpleapi'))); ?>"><img src="images/16/page_white_code.png" border="0" align="absmiddle" /> API Manual</a></li>
+            <li><a href="<?php echo(generate_url(array('page'=>'simpleapi','api'=>'errorcodes'))); ?>"><img src="images/16/page_white_error.png" border="0" align="absmiddle" /> Error Codes</a></li>
+          </ul>
+        </div>
+      </div>
+    </li>
+<?php
+} # if ($packages)
+
 
 // Custom menubar entries.
 if(is_file("includes/print-menubar-custom.inc.php"))

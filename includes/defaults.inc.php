@@ -521,4 +521,15 @@ $config['modules_compat']['rfc1628']['netmanplus']        = 1;
 $config['modules_compat']['rfc1628']['deltaups']          = 1;
 $config['modules_compat']['rfc1628']['poweralert']        = 1;
 
+
+// Simple Observium API Settings
+
+$config['api']['enabled']			= 0;	// Enable or disable the API
+$config['api']['module']['inventory']		= 0;	// Enable or disable the inventory module for the API
+$config['api']['module']['billing']		= 0;	// Enable or disable the billing module for the API
+$config['api']['module']['packages']		= 0;	// Enable or disable the packages module for the API
+$config['api']['module']['encryption']		= 0;	// Enable encryption of data (be aware that this can be very slow and cpu intensive!!!)
+$config['api']['encryption']['key']		= "I_Need_To_Chance_This_Key";	// Set a random encryption/decryption key
+
+
 ?>
