@@ -33,7 +33,7 @@ if ($bill_data['bill_type'] == "cdr") {
     <li><a href="#ports" data-toggle="tab">Billed ports</a></li>
     <li><a href="#addport" data-toggle="tab">Add port</a></li>
   </ul>
-  <div class="tabcontent tab-content" id="editBillTabContent" style="min-height: 50px; padding-bottom: 0px;">
+  <div class="tabcontent tab-content" id="editBillTabContent" style="min-height: 50px; padding-bottom: 18px;">
     <div class="tab-pane fade active in" id="properties">
       <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
         <input type="hidden" name="action" value="update_bill">

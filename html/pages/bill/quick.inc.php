@@ -129,6 +129,19 @@ $perc['width']    = (($percent <= "100") ? $percent : "100");
         <td style="border-left: none;"><?php echo($optional['notes']); ?></td>
       </tr>
     </table>
+    <h3 class="bill"><i class="icon-tags"></i> Ports information</h3>
+    <table class="table table-striped table-bordered">
+      <tr>
+        <th style="width: 175px;"><i class="icon-random"></i> Number of ports</th>
+        <td style="width: 5px; border-left: none;">:</td>
+        <td style="border-left: none;"><?php echo($ports_info['ports']); ?></td>
+      </tr>
+      <tr>
+        <th><i class="icon-random"></i> Total capacity</th>
+        <td style="border-left: none;">:</td>
+        <td style="border-left: none;"><?php echo(format_si($ports_info['capacity'])); ?>bps</td>
+      </tr>
+    </table>
   </div>
 </div>
 

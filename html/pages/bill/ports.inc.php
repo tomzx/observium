@@ -1,12 +1,17 @@
 <?php
 
 $res   = "";
+$count = 0;
+$speed = 0;
 $ports = dbFetchRows("SELECT * FROM `bill_ports` AS B, `ports` AS P, `devices` AS D
                       WHERE B.bill_id = ? AND P.port_id = B.port_id
                       AND D.device_id = P.device_id", array($bill_id));
 
 foreach ($ports as $port) {
   $emptyCheck = true;
+  $count++;
+  $speed += $port['ifSpeed'];
+  //print_r($port);
 
   $devicebtn = str_replace("list-device", "btn btn-small", generate_device_link($port));
   //$devicebtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $devicebtn);
@@ -36,6 +41,8 @@ if (!$emptyCheck) {
   $res    .= "            <i class=\"icon-info-sign\"></i> <strong>There are no ports assigned to this bill</strong>\n";
   $res    .= "          </div>\n";
 }
+
+$ports_info = array("ports" => $count, "capacity" => $speed);
 
 ?>
 

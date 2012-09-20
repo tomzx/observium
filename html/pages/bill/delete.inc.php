@@ -8,7 +8,7 @@ $url    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 
   <ul class="nav nav-tabs" id="delBillTab">
     <li class="active first"><a href="#delete" data-toggle="tab">Delete bill</a></li>
   </ul>
-  <div id="delBillTabContent" class="tabcontent tab-content" style="min-height: 50px; padding-bottom: 0px;">
+  <div id="delBillTabContent" class="tabcontent tab-content" style="min-height: 50px; padding-bottom: 18px;">
     <form name="form1" action="<?php echo($url); ?>" method="post" class="form-horizontal">
       <script type="text/javascript">
         function showWarning(checked) {
