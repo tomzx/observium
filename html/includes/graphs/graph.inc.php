@@ -50,13 +50,30 @@ if (is_file($config['install_dir'] . "/html/includes/graphs/$type/$subtype.inc.p
   {
     foreach ($config['allow_unauth_graphs_cidr'] as $range)
     {
-      # FIXME only v4 works for now...
-      if (!strstr('/',$range)) { $range .= "/32"; }
-      if (Net_IPv4::ipInNetwork($_SERVER['REMOTE_ADDR'], $range))
+      list($net, $mask) = explode('/', trim($range));
+      if (Net_IPv4::validateIP($net))
       {
-        $auth = "1";
-        if ($debug) { echo("matched $range"); }
-        break;
+        // IPv4
+        $mask = ($mask != NULL) ? $mask : '32';
+        $range = $net.'/'.$mask;
+        if ($mask >= 0 && $mask <= 32 && Net_IPv4::ipInNetwork($_SERVER['REMOTE_ADDR'], $range))
+        {
+          $auth = 1;
+          if ($debug) { echo("matched $range"); }
+          break;
+        }
+      }
+      elseif (Net_IPv6::checkIPv6($net))
+      {
+        // IPv6
+        $mask = ($mask != NULL) ? $mask : '128';
+        $range = $net.'/'.$mask;
+        if ($mask >= 0 && $mask <= 128 && Net_IPv6::isInNetmask($_SERVER['REMOTE_ADDR'], $range))
+        {
+          $auth = 1;
+          if ($debug) { echo("matched $range"); }
+          break;
+        }
       }
     }
   }
