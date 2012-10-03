@@ -248,6 +248,45 @@ if ($device['os'] == "apc")
       }
     }
   }
+  else
+  {
+    # Try other APC MIB parts
+
+    ## UPS ##################################################################################################
+
+    # Fetch high precision current (Precision 0.1)
+    $oids = snmp_get($device, "upsHighPrecOutputCurrent.0", "-OsqnU", "PowerNet-MIB");
+    if ($debug) { echo($oids."\n"); }
+    if ($oids)
+    {
+      echo(" APC Out ");
+      list($oid,$current) = explode(" ",$oids);
+      $divisor = 10;
+      $current /= $divisor;
+      $type = "apc";
+      $index = "4.3.4.0";
+      $descr = "Output Current";
+
+      discover_sensor($valid['sensor'], 'current', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+    }
+    else
+    {
+      # If this is not available, fetch regular voltage (Precision 1)
+      $oids = snmp_get($device, "upsAdvOutputCurrent.0", "-OsqnU", "PowerNet-MIB");
+      if ($debug) { echo($oids."\n"); }
+      if ($oids)
+      {
+        echo(" APC Out ");
+        list($oid,$current) = explode(" ",$oids);
+        $divisor = 1;
+        $type = "apc";
+        $index = "4.2.4.0";
+        $descr = "Output Current";
+
+        discover_sensor($valid['sensor'], 'current', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+      }
+    }
+  }
 }
 
 ?>
