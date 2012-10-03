@@ -282,7 +282,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
   </li>');
     }
 
-    if (dbFetchCell("SELECT COUNT(service_id) FROM services WHERE device_id = '" . $device['device_id'] . "'") > '0')
+    if ($config['show_services'] && dbFetchCell("SELECT COUNT(service_id) FROM services WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
       echo('<li class="' . $select['services'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'services')).'">
