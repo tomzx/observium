@@ -1,12 +1,23 @@
 <?php
 
-echo('<table width="100%">');
-
-// FIXME missing heading
+echo("<table class=\"table table-bordered table-striped\">\n");
+echo("  <thead>\n");
+echo("    <tr>\n");
+echo("      <th>#</th>\n");
+echo("      <th style=\"width: 450px;\">Description</th>\n");
+echo("      <th style=\"width: 100px;\">Graphs</th>\n");
+echo("      <th>Type</th>\n");
+echo("      <th>Status</th>\n");
+echo("      <th>Errors</th>\n");
+echo("      <th>Load</th>\n");
+echo("    </tr>\n");
+echo("  </thead>\n");
+echo("  <tbody>\n");
 
 foreach (dbFetchRows("SELECT * FROM `hrDevice` WHERE `device_id` = ? ORDER BY `hrDeviceIndex`", array($device['device_id'])) as $hrdevice)
 {
-  echo("<tr class='list'><td>".$hrdevice['hrDeviceIndex']."</td>");
+  echo("    <tr>\n");
+  echo("      <td>".$hrdevice['hrDeviceIndex']."</td>\n");
 
   if ($hrdevice['hrDeviceType'] == "hrDeviceProcessor")
   {
@@ -15,7 +26,7 @@ foreach (dbFetchRows("SELECT * FROM `hrDevice` WHERE `device_id` = ? ORDER BY `h
     $proc_popup  = "onmouseover=\"return overlib('<div class=list-large>".$device['hostname']." - ".$hrdevice['hrDeviceDescr'];
     $proc_popup .= "</div><img src=\'graph.php?id=" . $proc_id . "&amp;type=processor_usage&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";
     $proc_popup .= "', RIGHT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\"";
-    echo("<td><a href='$proc_url' $proc_popup>".$hrdevice['hrDeviceDescr']."</a></td>");
+    echo("      <td><a href='$proc_url' $proc_popup>".$hrdevice['hrDeviceDescr']."</a></td>\n");
 
     $graph_array['height'] = "20";
     $graph_array['width']  = "100";
@@ -27,7 +38,7 @@ foreach (dbFetchRows("SELECT * FROM `hrDevice` WHERE `device_id` = ? ORDER BY `h
 
     $mini_graph = overlib_link($proc_url, generate_graph_tag($graph_array), generate_graph_tag($graph_array_zoom),  NULL);
 
-    echo('<td>'.$mini_graph.'</td>');
+    echo("      <td>".$mini_graph."</td>\n");
   }
   elseif ($hrdevice['hrDeviceType'] == "hrDeviceNetwork")
   {
@@ -35,7 +46,7 @@ foreach (dbFetchRows("SELECT * FROM `hrDevice` WHERE `device_id` = ? ORDER BY `h
     $interface = dbFetchRow("SELECT * FROM ports WHERE device_id = ? AND ifDescr = ?", array($device['device_id'], $int));
     if ($interface['ifIndex'])
     {
-      echo("<td>".generate_port_link($interface)."</td>");
+      echo("      <td>".generate_port_link($interface)."</td>\n");
 
       $graph_array['height'] = "20";
       $graph_array['width']  = "100";
@@ -48,22 +59,23 @@ foreach (dbFetchRows("SELECT * FROM `hrDevice` WHERE `device_id` = ? ORDER BY `h
       // FIXME click on graph should also link to port, but can't use generate_port_link here...
       $mini_graph = overlib_link(generate_port_url($interface), generate_graph_tag($graph_array), generate_graph_tag($graph_array_zoom),  NULL);
 
-      echo("<td>$mini_graph</td>");
+      echo("      <td>$mini_graph</td>");
     } else {
-      echo("<td>".$hrdevice['hrDeviceDescr']."</td>");
-      echo("<td></td>");
+      echo("      <td>".$hrdevice['hrDeviceDescr']."</td>");
+      echo("      <td></td>");
     }
   } else {
-    echo("<td>".$hrdevice['hrDeviceDescr']."</td>");
-    echo("<td></td>");
+    echo("      <td>".$hrdevice['hrDeviceDescr']."</td>");
+    echo("      <td></td>");
   }
 
-  echo("<td>".$hrdevice['hrDeviceType'].'</td><td>'.$hrdevice['hrDeviceStatus']."</td>");
-  echo("<td>".$hrdevice['hrDeviceErrors'].'</td><td>'.$hrdevice['hrProcessorLoad']."</td>");
-  echo("</tr>");
+  echo("      <td>".$hrdevice['hrDeviceType'].'</td><td>'.$hrdevice['hrDeviceStatus']."</td>");
+  echo("      <td>".$hrdevice['hrDeviceErrors'].'</td><td>'.$hrdevice['hrProcessorLoad']."</td>");
+  echo("    </tr>");
 }
 
-echo('</table>');
+echo("  </tbody>\n");
+echo("</table>\n");
 
 $pagetitle[] = "Inventory";
 

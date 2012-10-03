@@ -7,9 +7,9 @@ unset($icon);
 $icon = geteventicon($entry['message']);
 if ($icon) { $icon = '<img src="images/16/' . $icon . '" />'; }
 
-echo('<tr class="eventlog">
+echo('<tr>
   <td width="0"></td>
-  <td class="syslog" width="160">
+  <td width="160">
     ' . $entry['datetime'] . '
   </td>');
 
@@ -29,7 +29,6 @@ if ($entry['type'] == "interface")
 }
 
 echo("<td>".$entry['link']."</td>");
-
 echo("<td>".htmlspecialchars($entry['message']) . "</td>
 </tr>");
 
