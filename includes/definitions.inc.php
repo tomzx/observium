@@ -397,6 +397,13 @@ $config['os'][$os]['icon']              = "brocade";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 
+$os = "nos";
+$config['os'][$os]['text']              = "Brocade NOS";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "brocade";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Device Traffic";
+
 $os = "extremeware";
 $config['os'][$os]['text']              = "Extremeware";
 $config['os'][$os]['type']              = "network";
