@@ -313,8 +313,6 @@ $sql .= " JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
 $sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
 $sql .= " ".$where;
 
-print_r($sql);
-
 $row = 1;
 
 list($format, $subformat) = explode("_", $vars['format']);
