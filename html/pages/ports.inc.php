@@ -272,8 +272,14 @@ foreach ($vars as $var => $value)
         break;
       case 'ifAlias':
       case 'port_descr_type':
-        $where .= " AND `$var` LIKE ?";
-        $param[] = "%".$value."%";
+        foreach(explode(",", $value) as $val)
+        {
+          $param[] = $val;
+          $cond[] = "`$var` LIKE ?";
+        }
+        $where .= "AND (";
+        $where .= implode(" OR ", $cond);
+        $where .= ")";
         break;
       case 'errors':
         if ($value == 1)
@@ -306,6 +312,8 @@ $sql .= " FROM  `ports`";
 $sql .= " JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
 $sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
 $sql .= " ".$where;
+
+print_r($sql);
 
 $row = 1;
 
