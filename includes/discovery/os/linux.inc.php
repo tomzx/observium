@@ -19,16 +19,18 @@ if (!$os)
     {
       // Check for Synology DSM
       $hrSystemInitialLoadParameters = trim(snmp_get($device, "hrSystemInitialLoadParameters.0", "-Osqnv"));
-
       if (strpos($hrSystemInitialLoadParameters, "syno_hw_version") !== FALSE) { $os = "dsm"; }
       else
       {
         // Check for Carel PCOweb
         $roomTemp = trim(snmp_get($device,"roomTemp.0", "-OqvU", "CAREL-ug40cdz-MIB"));
-
-        if (is_numeric($roomTemp))
+        if (is_numeric($roomTemp)) { $os = "pcoweb"; }
+        else
         {
-          $os = "pcoweb";
+          // Check for Ubiquiti AirOS
+          # IEEE802dot11-MIB::dot11manufacturerName.5 = STRING: Ubiquiti Networks, Inc.
+          $dot11manufacturerName = trim(snmp_get($device, "dot11manufacturerName.5", "-Osqnv", "IEEE802dot11-MIB"));
+          if (strpos($dot11manufacturerName, "Ubiquiti") !== FALSE) { $os = "airos"; }
         }
       }
     }
