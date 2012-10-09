@@ -452,10 +452,7 @@ function is_odd($number)
 
 function utime()
 {
-  $time = explode(" ", microtime());
-  $usec = (double)$time[0];
-  $sec = (double)$time[1];
-  return $sec + $usec;
+  return microtime(true);
 }
 
 function createHost($host, $community = NULL, $snmpver, $port = 161, $transport = 'udp', $v3 = array())
