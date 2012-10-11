@@ -1,9 +1,9 @@
 <?php
 
 /////////////////////////////////////////////////////////
-#    NO CHANGES TO THIS FILE, IT IS NOT USER-EDITABLE   #
+//  NO CHANGES TO THIS FILE, IT IS NOT USER-EDITABLE   //
 /////////////////////////////////////////////////////////
-#                 YES, THAT MEANS YOU                   #
+//               YES, THAT MEANS YOU                   //
 /////////////////////////////////////////////////////////
 
 $config['os']['default']['over'][0]['graph']       = "device_processor";
@@ -1199,7 +1199,22 @@ if (!isset($config['mibdir']))
 $config['mib_dir'] = $config['mibdir'];
 
 # If we're on SSL, let's properly detect it
-if (isset($_SERVER['HTTPS']))
+#if (isset($_SERVER['HTTPS']))
+function is_ssl()
+{
+  if ( isset($_SERVER['HTTPS']) )
+  {
+      if ( 'on' == strtolower($_SERVER['HTTPS']) )
+          return true;
+      if ( '1' == $_SERVER['HTTPS'] )
+          return true;
+  } elseif ( isset($_SERVER['SERVER_PORT']) && ( '443' == $_SERVER['SERVER_PORT'] ) )
+  {
+    return true;
+  }
+  return false;
+}
+if (is_ssl())
 {
   $config['base_url'] = preg_replace('/^http:/','https:', $config['base_url']);
 }
