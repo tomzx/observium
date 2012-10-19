@@ -4,13 +4,27 @@ global $config;
 
 if($_SESSION['widescreen'])
 {
-  if (!$graph_array['height']) { $graph_array['height'] = "110"; }
-  if (!$graph_array['width']) { $graph_array['width']  = "215"; }
-  $periods = array('sixhour', 'day', 'week', 'month', 'year', 'twoyear');
+  if($_SESSION['big_graphs'])
+  {
+    if (!$graph_array['height']) { $graph_array['height'] = "110"; }
+    if (!$graph_array['width']) { $graph_array['width']  = "355"; }
+    $periods = array('sixhour', 'week', 'month', 'year');
+  } else {
+    if (!$graph_array['height']) { $graph_array['height'] = "110"; }
+    if (!$graph_array['width']) { $graph_array['width']  = "215"; }
+    $periods = array('sixhour', 'day', 'week', 'month', 'year', 'twoyear');
+  }
 } else {
-  if (!$graph_array['height']) { $graph_array['height'] = "100"; }
-  if (!$graph_array['width']) { $graph_array['width']  = "215"; }
-  $periods = array('day', 'week', 'month', 'year');
+  if($_SESSION['big_graphs'])
+  {
+    if (!$graph_array['height']) { $graph_array['height'] = "100"; }
+    if (!$graph_array['width']) { $graph_array['width']  = "310"; }
+    $periods = array('day', 'week', 'month');
+  } else {
+    if (!$graph_array['height']) { $graph_array['height'] = "100"; }
+    if (!$graph_array['width']) { $graph_array['width']  = "215"; }
+    $periods = array('day', 'week', 'month', 'year');
+  }
 }
 
 $graph_array['to']     = $config['time']['now'];

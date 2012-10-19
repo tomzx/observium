@@ -12,14 +12,25 @@
 
 <?php
 
-$toggle_url = preg_replace('/(\?|\&)widescreen=(yes|no)/', '', $_SERVER['REQUEST_URI']);
-if (strstr($toggle_url,'?')) { $toggle_url .= '&amp;'; } else { $toggle_url .= '?'; }
+$toggle_url_biggraphs = preg_replace('/(\?|\&)big_graphs=(yes|no)/', '', $_SERVER['REQUEST_URI']);
+if (strstr($toggle_url_biggraphs,'?')) { $toggle_url_biggraphs .= '&amp;'; } else { $toggle_url_biggraphs .= '?'; }
+
+if($_SESSION['big_graphs'] === 1)
+{
+  echo('<a href="' . $toggle_url_biggraphs . 'big_graphs=no" title="Switch to normal graphs">Normal Graphs</a> | ');
+} else {
+  echo('<a href="' . $toggle_url_biggraphs . 'big_graphs=yes" title="Switch to larger graphs">Big Graphs</a> | ');
+}
+
+
+$toggle_url_wide = preg_replace('/(\?|\&)widescreen=(yes|no)/', '', $_SERVER['REQUEST_URI']);
+if (strstr($toggle_url_wide,'?')) { $toggle_url_wide .= '&amp;'; } else { $toggle_url_wide .= '?'; }
 
 if($_SESSION['widescreen'] === 1)
 {
-  echo('<a href="' . $toggle_url . 'widescreen=no" title="Switch to normal screen width layout">Normal width</a> | ');
+  echo('<a href="' . $toggle_url_wide . 'widescreen=no" title="Switch to normal screen width layout">Normal width</a> | ');
 } else {
-  echo('<a href="' . $toggle_url . 'widescreen=yes" title="Switch to wide screen layout">Widescreen</a> | ');
+  echo('<a href="' . $toggle_url_wide . 'widescreen=yes" title="Switch to wide screen layout">Widescreen</a> | ');
 }
 
 if ($_SESSION['authenticated'])
