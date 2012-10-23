@@ -152,7 +152,7 @@ if ($config['enable_bgp'])
     if(!is_numeric($peer['bgpPeer_polled'])) { dbInsert(array('bgpPeer_id' => $peer['bgpPeer_id']), 'bgpPeers-state'); }
     $peer['state']['bgpPeerFsmEstablishedTime'] = $bgpPeerFsmEstablishedTime;
     $peer['state']['bgpPeerInUpdateElapsedTime'] = $bgpPeerInUpdateElapsedTime;
-    $peer['state']['bgpPeer_polled'] = $polled;
+#    $peer['state']['bgpPeer_polled'] = $polled; #FIXME not in DB
     dbUpdate($peer['state'], 'bgpPeers-state', '`bgpPeer_id` = ?', array($peer['bgpPeer_id']));
 
     if ($device['os_group'] == "cisco" || $device['os'] == "junos")
