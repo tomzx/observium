@@ -20,8 +20,8 @@
       {
         $width_div = 585;
         $width = 507;
-        $height = 129;
-        $height_div = 200;
+        $height = 149;
+        $height_div = 220;
       } else {
         $width_div=349;
         $width=275;
