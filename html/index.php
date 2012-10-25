@@ -86,6 +86,9 @@ include("includes/authenticate.inc.php");
 if (strstr($_SERVER['REQUEST_URI'], 'widescreen=yes')) { $_SESSION['widescreen'] = 1; }
 if (strstr($_SERVER['REQUEST_URI'], 'widescreen=no'))  { unset($_SESSION['widescreen']); }
 
+if (strstr($_SERVER['REQUEST_URI'], 'big_graphs=yes')) { $_SESSION['big_graphs'] = 1; }
+if (strstr($_SERVER['REQUEST_URI'], 'big_graphs=no'))  { unset($_SESSION['big_graphs']); }
+
 # Load the settings for Multi-Tenancy.
 if (isset($config['branding']) && is_array($config['branding']))
 {

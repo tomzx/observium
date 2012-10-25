@@ -7,7 +7,7 @@ if($width > "500")
   $descr_len=25;
 } else {
   $descr_len=13;
-  $descr_len += round(($width - 250) / 8);
+  $descr_len += round(($width - 270) / 8);
 }
 
 if ($nototal) { $descrlen += "2"; $unitlen += "2";}

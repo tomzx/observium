@@ -232,33 +232,11 @@ $query = "SELECT * FROM `devices` WHERE 1 ".$where." ORDER BY hostname";
 
 list($format, $subformat) = explode("_", $vars['format']);
 
-if($format == "graph")
+$devices = dbFetchRows($query, $sql_param);
+
+if(file_exists('pages/devices/'.$format.'.inc.php'))
 {
-  $row = 1;
-  foreach (dbFetchRows($query, $sql_param) as $device)
-  {
-    if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-
-    if (device_permitted($device['device_id']))
-    {
-      if (!$location_filter || ((get_dev_attrib($device,'override_sysLocation_bool') && get_dev_attrib($device,'override_sysLocation_string') == $location_filter)
-        || $device['location'] == $location_filter))
-      {
-        $graph_type = "device_".$subformat;
-
-        if ($_SESSION['widescreen']) { $width=270; } else { $width=315; }
-
-        echo("<div style='display: block; padding: 1px; margin: 2px; min-width: ".($width+78)."px; max-width:".($width+78)."px; min-height:170px; max-height:170px; text-align: center; float: left; background-color: #f5f5f5;'>
-        <a href='device/device=".$device['device_id']."/' onmouseover=\"return overlib('\
-        <div style=\'font-size: 16px; padding:5px; font-weight: bold; color: #e5e5e5;\'>".$device['hostname']." - ".$interface['ifDescr']."</div>\
-        <img src=\'graph.php?type=$graph_type&amp;device=".$device['device_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=450&amp;height=150&amp;title=yes\'>\
-        ', CENTER, LEFT, FGCOLOR, '#e5e5e5', BGCOLOR, '#e5e5e5', WIDTH, 400, HEIGHT, 150);\" onmouseout=\"return nd();\"  >".
-        "<img src='graph.php?type=$graph_type&amp;device=".$device['device_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=".$width."&amp;height=110&amp;legend=no&amp;title=yes'>
-        </a>
-        </div>");
-      }
-    }
-  }
+  include('pages/devices/'.$format.'.inc.php');
 
 } else {
 
@@ -276,7 +254,7 @@ if($format == "graph")
   </tr>');
   }
 
-  foreach (dbFetchRows($query, $sql_param) as $device)
+  foreach ($devices as $device)
   {
     if (device_permitted($device['device_id']))
     {
