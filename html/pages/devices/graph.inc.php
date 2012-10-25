@@ -31,10 +31,10 @@
     } else {
       if($_SESSION['big_graphs'])
       {
-        $width_div = 393;
-        $width = 315;
-        $height = 129;
-        $height_div = 200;
+        $width_div = 593;
+        $width = 512;
+        $height = 159;
+        $height_div = 230;
       } else {
         $width_div=294;
         $width=222;
