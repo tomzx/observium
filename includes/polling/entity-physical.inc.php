@@ -58,7 +58,7 @@ if($device['os'] == "ios")
 
 }
 
-// Set Entity state
+// Remove/Update Entity state
 foreach (dbFetch("SELECT * FROM `entPhysical_state` WHERE `device_id` = ?", array($device['device_id'])) as $entity)
 {
   if (!isset($entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']]))
@@ -68,14 +68,15 @@ foreach (dbFetch("SELECT * FROM `entPhysical_state` WHERE `device_id` = ?", arra
   } else {
     if ($entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']] != $entity['value'])
     {
-      echo("no match!");
+#      echo("no match!");
+      dbUpdate(array('value' => $entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']]), 'entPhysical_state', '`entPhysical_state_id` = ?', array($entity['entPhysical_state_id']));
     }
     unset($entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']]);
   }
 }
-// End Set Entity Attrivs
+// End Remove/Update Entity Attribs
 
-// Delete Entity state
+// Insert state
 foreach ($entPhysical_state as $epi => $entity)
 {
   foreach ($entity as $subindex => $si)
@@ -89,7 +90,7 @@ foreach ($entPhysical_state as $epi => $entity)
     }
   }
 }
-// End Delete Entity state
+// End Insert Entity state
 
 echo("\n");
 
