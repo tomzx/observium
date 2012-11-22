@@ -2,8 +2,7 @@
 
 if (device_permitted($entry['device_id']))
 {
-  echo("<tr>
-    <td width=0></td>");
+  echo("<tr>");
 
   $entry['hostname'] = shorthost($entry['hostname'], 20);
 

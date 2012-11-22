@@ -75,13 +75,25 @@ if ($_SESSION['userlevel'] >= '5')
   $param[] = $_SESSION['user_id'];
 }
 
-echo('<table cellspacing="0" cellpadding="1" width="100%">');
+#echo('<table cellspacing="0" cellpadding="1" width="100%">');
+echo("<table class=\"table table-bordered table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo("  <thead>\n");
+echo("    <tr>\n");
+echo("      <th>Date</th>\n");
+if (!isset($vars['device']) || empty($vars['device'])) {
+  echo("      <th>Host</th>\n");
+}
+echo("      <th>Type</th>\n");
+echo("      <th>Message</th>\n");
+echo("    </tr>\n");
+echo("  </thead>\n");
 
+echo('<tbody>');
 foreach (dbFetchRows($query, $param) as $entry)
 {
   include("includes/print-event.inc.php");
 }
-
+echo('</tbody>');
 echo("</table>");
 
 ?>

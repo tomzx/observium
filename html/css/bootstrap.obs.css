@@ -273,7 +273,11 @@ h3.bill > i {
 }
 .table thead {
     color: #555;
-    background: #e6e6e6;
+    background: #eee;
+}
+
+.table-compact {
+    padding: 4px 8px;
 }
 
 .well > .table {

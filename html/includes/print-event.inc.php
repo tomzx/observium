@@ -8,12 +8,11 @@ $icon = geteventicon($entry['message']);
 if ($icon) { $icon = '<img src="images/16/' . $icon . '" />'; }
 
 echo('<tr>
-  <td width="0"></td>
   <td width="160">
     ' . $entry['datetime'] . '
   </td>');
 
-if (!isset($vars['device'])) {
+if (!isset($vars['device']) || empty($vars['device'])) {
   $dev = device_by_id_cache($entry['host']);
   echo("<td class=list-bold width=150>
     " . generate_device_link($dev, shorthost($dev['hostname'])) . "

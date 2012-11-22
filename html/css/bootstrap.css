@@ -1546,7 +1546,7 @@ table {
 
 .table-bordered {
   border: 1px solid #dddddd;
-  border-collapse: separate;
+  bborder-collapse: separate;
   *border-collapse: collapsed;
   border-left: 0;
   -webkit-border-radius: 4px;
