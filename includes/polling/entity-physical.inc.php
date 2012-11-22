@@ -5,8 +5,9 @@ echo("Entity Physical: ");
 if($device['os'] == "ios")
 {
 
- echo("Cisco Cat6xxx/76xx Crossbar : \n");
+ ## FIXME: We know this only exists on a small number of devices, perhaps we chould check for them?
 
+ echo("Cisco Cat6xxx/76xx Crossbar : \n");
  $mod_stats  = snmpwalk_cache_oid($device, "cc6kxbarModuleModeTable", array(), "CISCO-CAT6K-CROSSBAR-MIB");
  $chan_stats = snmpwalk_cache_oid($device, "cc6kxbarModuleChannelTable", array(), "CISCO-CAT6K-CROSSBAR-MIB");
  $chan_stats = snmpwalk_cache_oid($device, "cc6kxbarStatisticsTable", $chan_stats, "CISCO-CAT6K-CROSSBAR-MIB");
