@@ -2174,6 +2174,7 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
     jnxProductMX80        OBJECT IDENTIFIER ::= { jnxProductVariationMX80 1 }
     jnxProductMX80-48T    OBJECT IDENTIFIER ::= { jnxProductVariationMX80 2 }
     jnxProductMX80-T      OBJECT IDENTIFIER ::= { jnxProductVariationMX80 3 }
+    jnxProductMX80-P      OBJECT IDENTIFIER ::= { jnxProductVariationMX80 4 }
   jnxChassisMX80          OBJECT IDENTIFIER ::= { jnxChassis          57 }
 
   jnxSlotMX80             OBJECT IDENTIFIER ::= { jnxSlot     57 }
@@ -2322,6 +2323,57 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
 
   jnxMediaCardSpaceQFXJVRE    OBJECT IDENTIFIER ::= { jnxMediaCardSpace   62 }
     jnxQFXJVREMediaCardSpacePIC OBJECT IDENTIFIER ::= { jnxMediaCardSpaceQFXJVRE 1 }
+
+--
+-- SRX110
+--
+  jnxProductLineSRX110       OBJECT IDENTIFIER ::= { jnxProductLine      64 }
+  jnxProductNameSRX110       OBJECT IDENTIFIER ::= { jnxProductName      64 }
+  jnxChassisSRX110           OBJECT IDENTIFIER ::= { jnxChassis          64 }
+
+  jnxSlotSRX110              OBJECT IDENTIFIER ::= { jnxSlot    64 }
+    jnxSRX110SlotFPC         OBJECT IDENTIFIER ::= { jnxSlotSRX110  1  }
+    jnxSRX110SlotRE          OBJECT IDENTIFIER ::= { jnxSlotSRX110  2  }
+    jnxSRX110SlotPower       OBJECT IDENTIFIER ::= { jnxSlotSRX110  3  }
+    jnxSRX110SlotFan         OBJECT IDENTIFIER ::= { jnxSlotSRX110  4  }
+
+  jnxMediaCardSpaceSRX110    OBJECT IDENTIFIER ::= { jnxMediaCardSpace       64 }
+    jnxSRX110MediaCardSpacePIC OBJECT IDENTIFIER ::= { jnxMediaCardSpaceSRX110  1 }
+
+  jnxMidplaneSRX110          OBJECT IDENTIFIER ::= { jnxBackplane 64 }
+
+  jnxModuleSRX110            OBJECT IDENTIFIER ::= { jnxModule    64 }
+    jnxSRX110FPC             OBJECT IDENTIFIER ::= { jnxModuleSRX110 1  }
+    jnxSRX110RE              OBJECT IDENTIFIER ::= { jnxModuleSRX110 2  }
+    jnxSRX110Power           OBJECT IDENTIFIER ::= { jnxModuleSRX110 3  }
+    jnxSRX110Fan             OBJECT IDENTIFIER ::= { jnxModuleSRX110 4  }
+
+--
+-- SRX120
+--
+-- NOTE:  These platforms no longer exist. The definitions below are being
+--        retained since the index number 65 has already been allocated to it
+--
+  jnxProductLineSRX120       OBJECT IDENTIFIER ::= { jnxProductLine      65 }
+  jnxProductNameSRX120       OBJECT IDENTIFIER ::= { jnxProductName      65 }
+  jnxChassisSRX120           OBJECT IDENTIFIER ::= { jnxChassis          65 }
+
+  jnxSlotSRX120              OBJECT IDENTIFIER ::= { jnxSlot    65 }
+    jnxSRX120SlotFPC         OBJECT IDENTIFIER ::= { jnxSlotSRX120  1  }
+    jnxSRX120SlotRE          OBJECT IDENTIFIER ::= { jnxSlotSRX120  2  }
+    jnxSRX120SlotPower       OBJECT IDENTIFIER ::= { jnxSlotSRX120  3  }
+    jnxSRX120SlotFan         OBJECT IDENTIFIER ::= { jnxSlotSRX120  4  }
+
+  jnxMediaCardSpaceSRX120    OBJECT IDENTIFIER ::= { jnxMediaCardSpace       65 }
+    jnxSRX120MediaCardSpacePIC OBJECT IDENTIFIER ::= { jnxMediaCardSpaceSRX120  1 }
+
+  jnxMidplaneSRX120          OBJECT IDENTIFIER ::= { jnxBackplane 65 }
+
+  jnxModuleSRX120            OBJECT IDENTIFIER ::= { jnxModule    65 }
+    jnxSRX120FPC             OBJECT IDENTIFIER ::= { jnxModuleSRX120 1  }
+    jnxSRX120RE              OBJECT IDENTIFIER ::= { jnxModuleSRX120 2  }
+    jnxSRX120Power           OBJECT IDENTIFIER ::= { jnxModuleSRX120 3  }
+    jnxSRX120Fan             OBJECT IDENTIFIER ::= { jnxModuleSRX120 4  }
 
 
 
@@ -2790,6 +2842,43 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
     jnxSRX550Fan             OBJECT IDENTIFIER ::= { jnxModuleSRX550 4  }
 
 
+--
+-- ACX
+--
+  jnxProductLineACX      OBJECT IDENTIFIER ::= { jnxProductLine      87 }
+  jnxProductNameACX      OBJECT IDENTIFIER ::= { jnxProductName      87 }
+  jnxProductModelACX     OBJECT IDENTIFIER ::= { jnxProductModel     87 }
+  jnxProductVariationACX OBJECT IDENTIFIER ::= { jnxProductVariation 87 }
+    jnxProductACX1000        OBJECT IDENTIFIER ::= { jnxProductVariationACX 1 }
+    jnxProductACX2000    OBJECT IDENTIFIER ::= { jnxProductVariationACX 2 }
+    jnxProductACX4000    OBJECT IDENTIFIER ::= { jnxProductVariationACX 3 }
+    jnxProductACX2100    OBJECT IDENTIFIER ::= { jnxProductVariationACX 4 }
+    jnxProductACX2200    OBJECT IDENTIFIER ::= { jnxProductVariationACX 5 }
+    jnxProductACX1100    OBJECT IDENTIFIER ::= { jnxProductVariationACX 6 }
+jnxChassisACX          OBJECT IDENTIFIER ::= { jnxChassis          87 }
+
+  jnxSlotACX             OBJECT IDENTIFIER ::= { jnxSlot     87 }
+    jnxACXSlotFPC        OBJECT IDENTIFIER ::= { jnxSlotACX 1  }
+    jnxACXSlotFEB        OBJECT IDENTIFIER ::= { jnxSlotACX 2  }
+    jnxACXSlotRE         OBJECT IDENTIFIER ::= { jnxSlotACX 3  }
+    jnxACXSlotPower      OBJECT IDENTIFIER ::= { jnxSlotACX 4  }
+    jnxACXSlotFan        OBJECT IDENTIFIER ::= { jnxSlotACX 5  }
+
+  jnxMediaCardSpaceACX      OBJECT IDENTIFIER ::= { jnxMediaCardSpace    87 }
+    jnxACXMediaCardSpacePIC OBJECT IDENTIFIER ::= { jnxMediaCardSpaceACX 1 }
+    jnxACXMediaCardSpaceMIC OBJECT IDENTIFIER ::= { jnxMediaCardSpaceACX 2 }
+
+  jnxMidplaneACX         OBJECT IDENTIFIER ::= { jnxBackplane        87 }
+
+  jnxModuleACX           OBJECT IDENTIFIER ::= { jnxModule     87 }
+    jnxACXFPC            OBJECT IDENTIFIER ::= { jnxModuleACX 1  }
+    jnxACXFEB            OBJECT IDENTIFIER ::= { jnxModuleACX 2  }
+    jnxACXRE             OBJECT IDENTIFIER ::= { jnxModuleACX 3  }
+    jnxACXPower          OBJECT IDENTIFIER ::= { jnxModuleACX 4  }
+       jnxACXPowerDC     OBJECT IDENTIFIER ::= { jnxACXPower 1  }
+       jnxACXPowerAC     OBJECT IDENTIFIER ::= { jnxACXPower 2  }
+    jnxACXFan            OBJECT IDENTIFIER ::= { jnxModuleACX 5  }
+
 
 
 
@@ -2816,6 +2905,34 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
     jnxQFXMInterconnectMediaCardSpacePIC OBJECT IDENTIFIER ::= { jnxMediaCardSpaceQFXMInterconnect 1 }
 
 
+--
+-- EX4550
+--
+  jnxProductLineEX4550      OBJECT IDENTIFIER ::= { jnxProductLine      92 }
+  jnxProductNameEX4550      OBJECT IDENTIFIER ::= { jnxProductName      92 }
+  jnxProductModelEX4550     OBJECT IDENTIFIER ::= { jnxProductModel     92 }
+  jnxProductVariationEX4550 OBJECT IDENTIFIER ::= { jnxProductVariation 92 }
+    jnxProductEX4550port32F    OBJECT IDENTIFIER ::= { jnxProductVariationEX4550 1 }
+    jnxProductEX4550port32T    OBJECT IDENTIFIER ::= { jnxProductVariationEX4550 2 }
+
+  jnxChassisEX4550          OBJECT IDENTIFIER ::= { jnxChassis          92 }
+    jnxEX4550RE0            OBJECT IDENTIFIER ::= { jnxChassisEX4550 1 }
+    jnxEX4550RE1            OBJECT IDENTIFIER ::= { jnxChassisEX4550 2 }
+  jnxSlotEX4550             OBJECT IDENTIFIER ::= { jnxSlot             92 }
+    jnxEX4550SlotFPC        OBJECT IDENTIFIER ::= { jnxSlotEX4550 1 }
+      jnxEX4550SlotPower    OBJECT IDENTIFIER ::= { jnxEX4550SlotFPC 1 }
+      jnxEX4550SlotFan      OBJECT IDENTIFIER ::= { jnxEX4550SlotFPC 2 }
+      jnxEX4550SlotRE       OBJECT IDENTIFIER ::= { jnxEX4550SlotFPC 3 }
+  
+  jnxMediaCardSpaceEX4550      OBJECT IDENTIFIER ::= { jnxMediaCardSpace    92 }
+    jnxEX4550MediaCardSpacePIC OBJECT IDENTIFIER ::= { jnxMediaCardSpaceEX4550 1 }
+
+  jnxModuleEX4550            OBJECT IDENTIFIER ::= { jnxModule    92 }
+    jnxEX4550FPC             OBJECT IDENTIFIER ::= { jnxModuleEX4550 1 }
+      jnxEX4550Power         OBJECT IDENTIFIER ::= { jnxEX4550FPC 1 }
+      jnxEX4550Fan           OBJECT IDENTIFIER ::= { jnxEX4550FPC 2 }
+      jnxEX4550RE            OBJECT IDENTIFIER ::= { jnxEX4550FPC 3 }
+
 
 
 --
@@ -2838,6 +2955,9 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
     jnxVseriesRE              OBJECT IDENTIFIER ::= { jnxModuleVseries 2  }
     jnxVseriesPower           OBJECT IDENTIFIER ::= { jnxModuleVseries 3  }
     jnxVseriesFan             OBJECT IDENTIFIER ::= { jnxModuleVseries 4  }
+
+
+
 
 
 -- PLATFORM INDEPENDENT OIDs
@@ -3177,6 +3297,11 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
       jnxPicDellJFX35004x40GEQSFP     OBJECT IDENTIFIER ::= { jnxPic 279 }
 
 --
+-- pics added for EX82xx series
+--
+    jnxPicEX820048TL                 OBJECT IDENTIFIER ::= { jnxPic 280 }
+    jnxPicEX82002XS40T               OBJECT IDENTIFIER ::= { jnxPic 281 }
+
 
     jnxPicType2MSPrism	             OBJECT IDENTIFIER ::= { jnxPic 282 }
     jnxPicMicMSPrism       	     OBJECT IDENTIFIER ::= { jnxPic 283 }
@@ -3189,6 +3314,15 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
       jnxPicDellJFX350016x10GESFPPlus   OBJECT IDENTIFIER ::= { jnxPic 286 }
 
 
+--
+-- pics added for Fortius platforms
+--
+      jnxPic16XT1E1CEMIC                OBJECT IDENTIFIER ::= { jnxPic 289 }
+      jnxPic8XT1E1CEMIC                 OBJECT IDENTIFIER ::= { jnxPic 290 }
+      jnxPic8xGERJ452xPOEMIC            OBJECT IDENTIFIER ::= { jnxPic 291 }
+      jnxPic2xGESFPMIC                  OBJECT IDENTIFIER ::= { jnxPic 292 }
+      jnxPic2x10GESFPPLUSMIC            OBJECT IDENTIFIER ::= { jnxPic 293 }
+      jnxPic4xGESFPRJ45COMBOMIC         OBJECT IDENTIFIER ::= { jnxPic 294 }
 
       jnxPicUplinkDualMedia2port        OBJECT IDENTIFIER ::= { jnxPic 295 }
 
@@ -3196,6 +3330,13 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
 
 
 --
+-- EX4550
+--
+      jnxPicEX4550UplinkEm8XFP          OBJECT IDENTIFIER ::= { jnxPic 298 }
+      jnxPicEX4550UplinkEm8XT           OBJECT IDENTIFIER ::= { jnxPic 299 }
+      jnxPicEX4550UplinkEm2QSFP         OBJECT IDENTIFIER ::= { jnxPic 300 }
+      jnxPicEX4550VC128G                OBJECT IDENTIFIER ::= { jnxPic 301 }
+
 
 --
 -- PIC added for QFX5000
@@ -3224,5 +3365,23 @@ jnxStatusSource	    OBJECT IDENTIFIER ::= { jnxClassStatus 1 }
 --
       jnxPicNPIOC2x10GESFPPLUSPIC      OBJECT IDENTIFIER ::= { jnxPic 321 }
 
+
+--
+
+--
+
+--
+
+--
+
+--
+
+--
+-- Fortius 4x 1GE RJ45 MIC 
+--
+      jnxPic4xGERJ45MIC                OBJECT IDENTIFIER ::= { jnxPic 327 }
+
+
+--
 
  END

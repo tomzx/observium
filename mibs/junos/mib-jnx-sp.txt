@@ -39,7 +39,9 @@ jnxSpMIB  MODULE-IDENTITY
             "Initial revision."
     ::= { jnxMibs 32 }
 
-
+    jnxSpNotifications    OBJECT IDENTIFIER ::= { jnxSpMIB 0 }
+    jnxFlowLimitTrapVars  OBJECT IDENTIFIER ::= { jnxSpMIB 2 }
+    
 --
 -- Per Service Set information
 --
@@ -465,5 +467,31 @@ jnxSpMIB  MODULE-IDENTITY
             "This indicates a Service Pic has crossed below its internal 
             threshold for CPU utilization (85%)."
         ::= { jnxSpNotificationPrefix 4 }
+      
+    jnxSpSvcSetFlowLimitUtil OBJECT-TYPE
+        SYNTAX      Integer32 (0..100)
+        MAX-ACCESS  accessible-for-notify
+       STATUS      current
+        DESCRIPTION
+            "The Total no of flows present in this Service Set, expressed as a
+            percentage of the total maximum flows."
+        ::= { jnxFlowLimitTrapVars 1 }
+
+   jnxSpSvcSetNameUtil OBJECT-TYPE
+        SYNTAX        DisplayString (SIZE(1..96))
+        MAX-ACCESS    accessible-for-notify
+        STATUS        current
+        DESCRIPTION
+            "The Service Set name."
+        ::= { jnxFlowLimitTrapVars 2 }
+
+   jnxSpSvcSetFlowLimitUtilized NOTIFICATION-TYPE
+        OBJECTS {jnxSpSvcSetFlowLimitUtil,
+                 jnxSpSvcSetNameUtil}
+        STATUS  current
+        DESCRIPTION
+            "This indicates a Service Set has reached its upper limit of flows
+            threshold of a maximun flows allowed for a service set."
+        ::= { jnxSpNotifications 1 }
 
 END

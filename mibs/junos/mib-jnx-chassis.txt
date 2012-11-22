@@ -21,7 +21,7 @@ IMPORTS
 
 jnxBoxAnatomy MODULE-IDENTITY
 
-    LAST-UPDATED "201010220000Z" -- Fri Oct 22 00:00:00 2008 UTC
+    LAST-UPDATED "201202210000Z" -- Tue Feb 21 00:00:00 2012 UTC
     ORGANIZATION "Juniper Networks, Inc."
     CONTACT-INFO
             "        Juniper Technical Assistance Center
@@ -34,9 +34,6 @@ jnxBoxAnatomy MODULE-IDENTITY
             "The MIB modules representing Juniper Networks'
 	    implementation of enterprise specific MIBs 
 	    supported by a single SNMP agent."
-    REVISION      "201010220000Z"
-    DESCRIPTION
-               "Added load average variables"
     REVISION      "200403230000Z"
     DESCRIPTION
                "Added chassis identification objects."
@@ -68,11 +65,27 @@ jnxBoxAnatomy MODULE-IDENTITY
                "Added new fru type PSD to jnxFruType enumeration and
                 added jcsX chassis IDs to JnxChassisId enumeration."
     REVISION     "200812310000Z"    -- Dec 31, 2008
-    DESCRIPTION "Added nodeX chassis IDs to JnxChassisId enumeration."
+    DESCRIPTION
+               "Added nodeX chassis IDs to JnxChassisId enumeration."
     REVISION     "200901090000Z"    -- Jan 09, 2009
     DESCRIPTION 
                "Added sfcX and lcc4-lcc15 chassis IDs to JnxChassisId
                 enumeration."
+    REVISION     "201010220000Z"    -- Oct 22, 2010
+    DESCRIPTION
+               "Added load average variables"
+    REVISION     "201109090000Z"    -- Sep 09, 2011
+    DESCRIPTION
+               "Added jnxBoxPersonality for MidRangius Boxes
+                namely MX40/MX10/MX5"
+    REVISION     "201202150000Z"    -- Feb 02, 2012
+    DESCRIPTION 
+               "Added new offline reason builtinPicBounce to
+                jnxFruOfflineReason enumeration."
+    REVISION     "201202210000Z"    -- Feb 21, 2012
+    DESCRIPTION
+               "Added new jnxFruType: PDU and PSM,
+                and new traps: jnxFmLinkErr and jnxFmCellDropErr."
 
 
 
@@ -1516,7 +1529,8 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                 picBounce(73),                   -- PIC Bounce
                 badVoltage(74),                  -- bad voltage
                 fruFPCReducedFabricBW(75),       -- FPC offlined due to Reduced Fabric Bandwidth
-                fruAutoheal(76)                  -- FRU offlined due to software autoheal action
+                fruAutoheal(76),                 -- FRU offlined due to software autoheal action
+                builtinPicBounce(77)             -- Builtin PIC Bounce
 	}
 	MAX-ACCESS	read-only
 	STATUS		current
@@ -1610,6 +1624,20 @@ JnxChassisId ::= TEXTUAL-CONVENTION
 		"The system domain type of this subject, notApplicable will
 		be returned if this feature is not supported."
 	::= { jnxBoxAnatomy 17 }
+
+
+--
+-- Applicable only for MidRangius Systems (MX5/10/40)
+--
+    jnxBoxPersonality OBJECT-TYPE 
+	SYNTAX          OBJECT IDENTIFIER
+	MAX-ACCESS      read-only
+	STATUS          current
+	DESCRIPTION
+	        "The personality of the box, indicating which product line it is currently acting as
+		 for example, 'MX40'."
+	::= { jnxBoxAnatomy 18 }
+
 
 
 --

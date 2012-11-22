@@ -58,6 +58,12 @@ juniperMIB MODULE-IDENTITY
     REVISION    "201101260000Z" -- 26-Jan-11
     DESCRIPTION
             "Added jnxDcfMibRoot branch."
+    REVISION    "201202100000Z" -- 10-Feb-12
+    DESCRIPTION
+            "Added jnxMediaFlow branch."
+    REVISION    "201208010000Z" -- 01-Aug-12
+    DESCRIPTION
+            "Added jnxSDKApplicationsRoot branch."
     ::= { enterprises 2636 }
 
 --
@@ -76,11 +82,20 @@ jnxProducts OBJECT-IDENTITY
     -- The following OIDs are used as the basis for identifying other
     -- Juniper products.
     --
-    jnxReservedProducts1            OBJECT IDENTIFIER ::= { jnxProducts 2 }
-    jnxReservedProducts2            OBJECT IDENTIFIER ::= { jnxProducts 3 }
+    -- jnxMediaFlow refers to the root MIB object for Juniper's 
+    -- Media Flow Controller, a non-JUNOS based product. 
+    jnxMediaFlow                    OBJECT IDENTIFIER ::= { jnxProducts 2 }
+
+    --
+    -- Top-level object identifier registry used by the JunosSpace Products.
+
+    --#if REL13.1
+    jnxJunosSpace                   OBJECT IDENTIFIER ::= { jnxProducts 3 }
+
     jnxReservedProducts3            OBJECT IDENTIFIER ::= { jnxProducts 4 }
     jnxReservedProducts4            OBJECT IDENTIFIER ::= { jnxProducts 5 }
     jnxReservedProducts5            OBJECT IDENTIFIER ::= { jnxProducts 6 }
+    jnxSDKApplicationsRoot          OBJECT IDENTIFIER ::= { jnxProducts 7 }
 
 
 
@@ -147,6 +162,8 @@ jnxMibs OBJECT-IDENTITY
     -- juniper power supply management MIB
     jnxPsuMIBRoot              OBJECT IDENTIFIER ::= { jnxMibs 58 }
 
+    -- juniper NAT MIB
+    jnxSvcsMibRoot             OBJECT IDENTIFIER ::= { jnxMibs 59 }
 
     -- juniper DOM MIB
     jnxDomMibRoot              OBJECT IDENTIFIER ::= { jnxMibs 60 }
@@ -157,7 +174,11 @@ jnxMibs OBJECT-IDENTITY
     -- juniper JDHCPDv6 MIB Release 10.4
     jnxJdhcpv6MibRoot          OBJECT IDENTIFIER ::= { jnxMibs 62 }
 
+    -- juniper License management MIB
+    jnxLicenseMibRoot          OBJECT IDENTIFIER ::= { jnxMibs 63 }
 
+    -- juniper Subscriber MIB
+    jnxSubscriberMibRoot       OBJECT IDENTIFIER ::= { jnxMibs 64 }
 
     --#if REL11.1
     -- juniper MAG MIB 

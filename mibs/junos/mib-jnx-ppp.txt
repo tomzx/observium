@@ -12,7 +12,7 @@
 JNX-PPP-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
-    MODULE-IDENTITY, OBJECT-TYPE, Integer32, Counter32, IpAddress, TimeTicks   
+    MODULE-IDENTITY, OBJECT-TYPE, Integer32, Counter32, IpAddress, TimeTicks, Unsigned32   
         FROM SNMPv2-SMI
     TEXTUAL-CONVENTION, TruthValue, RowStatus
         FROM SNMPv2-TC
@@ -39,6 +39,14 @@ jnxPppMIB  MODULE-IDENTITY
     DESCRIPTION
         "he Point-to-Point Protocol (PPP) MIB for the Juniper enterprise."
     -- Revision History
+
+    REVISION    "201111290000Z"  -- 29-Nov-11 03:12 PM EST  - JUNOS 11.4
+    DESCRIPTION
+        "Deprecated Integer32 type jnxPppLinkStatusLocalMagicNumber, 
+         jnxPppLinkStatusRemoteMagicNumber and added Unsigned32 type
+         jnxPppLinkStatusLocalMagicNumber1, jnxPppLinkStatusLocalMagicNumber1
+         under jnxPppLinkStatusTable"
+    
     REVISION    "201007220942Z"  -- 22-Jul-10 03:12 PM EST  - JUNOS 11.0
     DESCRIPTION
         "Initial version."
@@ -187,7 +195,9 @@ JnxPppLinkStatusEntry ::= SEQUENCE {
     jnxPppLinkStatusRemoteMagicNumber             Integer32,
     jnxPppLinkStatusLocalAuthentication           JnxPppAuthentication2,
     jnxPppLinkStatusTunnelIfIndex                 InterfaceIndexOrZero,
-    jnxPppLinkStatuslcpRenegoTerminates           Counter32}
+    jnxPppLinkStatuslcpRenegoTerminates           Counter32,
+    jnxPppLinkStatusLocalMagicNumber1             Unsigned32,
+    jnxPppLinkStatusRemoteMagicNumber1            Unsigned32}
 
 jnxPppLinkStatusTerminateReason OBJECT-TYPE
     SYNTAX      INTEGER {
@@ -294,17 +304,21 @@ jnxPppLinkStatusKeepaliveFailures OBJECT-TYPE
 jnxPppLinkStatusLocalMagicNumber OBJECT-TYPE
     SYNTAX            Integer32
     MAX-ACCESS         read-only
-    STATUS             current
+    STATUS             deprecated
     DESCRIPTION
-        "Magic number negotiated for the local side."
+        "Magic number negotiated for the local side.
+         This has been deprecated and replaced by 
+         jnxPppLinkStatusLocalMagicNumber1"
     ::= { jnxPppLinkStatusEntry 8 }
 
 jnxPppLinkStatusRemoteMagicNumber OBJECT-TYPE
     SYNTAX            Integer32
     MAX-ACCESS         read-only
-    STATUS             current
+    STATUS             deprecated
     DESCRIPTION
-        "Magic number negotiated for the remote side."
+        "Magic number negotiated for the remote side.
+         This has been deprecated and replaced by
+         jnxPppLinkStatusRemoteMagicNumber1"
     ::= { jnxPppLinkStatusEntry 9 }
 
 jnxPppLinkStatusLocalAuthentication OBJECT-TYPE
@@ -334,6 +348,23 @@ jnxPppLinkStatuslcpRenegoTerminates OBJECT-TYPE
         "Number of times lcp terminated due to peer exceeding max renegotiation 
          attempts."
     ::= { jnxPppLinkStatusEntry 12 }
+
+
+jnxPppLinkStatusLocalMagicNumber1 OBJECT-TYPE
+    SYNTAX             Unsigned32
+    MAX-ACCESS         read-only
+    STATUS             current
+    DESCRIPTION
+        "Magic number negotiated for the local side."
+    ::= { jnxPppLinkStatusEntry 13 }
+
+jnxPppLinkStatusRemoteMagicNumber1 OBJECT-TYPE
+    SYNTAX             Unsigned32
+    MAX-ACCESS         read-only
+    STATUS             current
+    DESCRIPTION
+        "Magic number negotiated for the remote side."
+    ::= { jnxPppLinkStatusEntry 14 }
 
 --
 -- The PPP Link Configuration Table
@@ -1135,7 +1166,11 @@ JnxPppSessionEntry ::= SEQUENCE {
     jnxPppSessionRemoteSecondaryWinsAddress    IpAddress,
     jnxPppSessionRemoteIpv6AddressIfIdentifier Ipv6AddressIfIdentifier,
     jnxPppSessionInhibitIp                     INTEGER,
-    jnxPppSessionInhibitIpv6                   INTEGER }
+    jnxPppSessionInhibitIpv6                   INTEGER,
+    jnxPppSessionInOctets64                    Counter64,
+    jnxPppSessionOutOctets64                   Counter64,
+    jnxPppSessionInPackets64                   Counter64,
+    jnxPppSessionOutPackets64                  Counter64,}
 
 jnxPppSessionGrant OBJECT-TYPE
     SYNTAX      TruthValue
@@ -1185,40 +1220,44 @@ jnxPppSessionInOctets OBJECT-TYPE
     SYNTAX      Counter32
     UNITS       "octets"
     MAX-ACCESS  read-only
-    STATUS      current
+    STATUS      deprecated 
     DESCRIPTION
         "Number of octets received since this session last became active, as 
-        denoted by jnxPppSessionStartTime."
+        denoted by jnxPppSessionStartTime. This has been deprecated and 
+        replaced by jnxPppSessionInOctets64"
     ::= { jnxPppSessionEntry 4 }
 
 jnxPppSessionOutOctets OBJECT-TYPE
     SYNTAX      Counter32
     UNITS       "octets"
     MAX-ACCESS  read-only
-    STATUS      current
+    STATUS      deprecated
     DESCRIPTION
         "Number of octets sent since this session last became active, as 
-        denoted by jnxPppSessionStartTime."
+        denoted by jnxPppSessionStartTime. This has been deprecated and
+        replaced by jnxPppSessionOutOctets64"
     ::= { jnxPppSessionEntry 5 }
 
 jnxPppSessionInPackets OBJECT-TYPE
     SYNTAX      Counter32
     UNITS       "packets"
     MAX-ACCESS  read-only
-    STATUS      current
+    STATUS      deprecated
     DESCRIPTION
         "Number of packets received since this session last became active, as
-         denoted by jnxPppSessionStartTime."
+         denoted by jnxPppSessionStartTime. This has been deprecated and
+         replaced by jnxPppSessionInPackets64"
     ::= { jnxPppSessionEntry 6 }
 
 jnxPppSessionOutPackets OBJECT-TYPE
     SYNTAX      Counter32
     UNITS       "packets"
     MAX-ACCESS  read-only
-    STATUS      current
+    STATUS      deprecated
     DESCRIPTION
         "Number of packets sent since this session last became active, as 
-        denoted by jnxPppSessionStartTime."
+        denoted by jnxPppSessionStartTime. This has been deprecated and
+        replaced by jnxPppSessionOutPackets64"
     ::= { jnxPppSessionEntry 7 }
 
 jnxPppSessionSessionTimeout OBJECT-TYPE
@@ -1322,6 +1361,46 @@ jnxPppSessionInhibitIpv6 OBJECT-TYPE
         "Indicates whether a session has had its IPv6 service inhibited by the
          authentication mechanism."
     ::= { jnxPppSessionEntry 18 }
+
+jnxPppSessionInOctets64 OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "octets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of octets received since this session last became active, as 
+        denoted by jnxPppSessionStartTime."
+    ::= { jnxPppSessionEntry 19 }
+
+jnxPppSessionOutOctets64 OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "octets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of octets sent since this session last became active, as 
+        denoted by jnxPppSessionStartTime."
+    ::= { jnxPppSessionEntry 20 }
+
+jnxPppSessionInPackets64 OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of packets received since this session last became active, as
+         denoted by jnxPppSessionStartTime."
+    ::= { jnxPppSessionEntry 21 }
+
+jnxPppSessionOutPackets64 OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of packets sent since this session last became active, as 
+        denoted by jnxPppSessionStartTime."
+    ::= { jnxPppSessionEntry 22 }
 
 
 -- /////////////////////////////////////////////////////////////////////////////
