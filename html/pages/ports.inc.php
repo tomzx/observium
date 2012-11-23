@@ -271,6 +271,15 @@ foreach ($vars as $var => $value)
         $param[] = $value;
         break;
       case 'ifAlias':
+        foreach(explode(",", $value) as $val)
+        {
+          $param[] = "%".$val."%";
+          $cond[] = "`$var` LIKE ?";
+        }
+        $where .= "AND (";
+        $where .= implode(" OR ", $cond);
+        $where .= ")";
+        break;
       case 'port_descr_type':
         foreach(explode(",", $value) as $val)
         {
