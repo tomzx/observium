@@ -22,28 +22,28 @@ if (is_numeric($vars['page']))
   $start = 0;
 }
 
-$where = "1";
-
-if (is_numeric($_POST['device']))
-{
-  $where .= ' AND E.host = ?';
-  $param[] = $_POST['device'];
-}
-
-if ($_POST['string'])
-{
-  $where .= " AND E.message LIKE ?";
-  $param[] = "%".$_POST['string']."%";
-}
-
 ?>
 
 <form method="post" action="" class="form-inline">
   <span style="font-weight: bold;">Event log</span> &#187;
   <label><strong>Search</strong>
-    <input type="text" name="string" id="string" value="<?php echo($_POST['string']); ?>" />
+    <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
   </label>
   <label>
+    <strong>Type</strong>
+    <select name="type" id="type">
+      <option value="">All Types</option>
+      <option value="system" <?php  if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
+      <?php
+        foreach (dbFetchRows("SELECT `type` FROM `eventlog` GROUP BY `type` ORDER BY `type`") as $data)
+        {
+          echo("<option value='".$data['type']."'");
+          if ($data['type'] == $vars['type']) { echo(" selected"); }
+          echo(">".$data['type']."</option>");
+        }
+      ?>
+    </select>
+  </label>
   <label>
     <strong>Device</strong>
     <select name="device" id="device">
@@ -67,13 +67,47 @@ if ($_POST['string'])
 
 print_optionbar_end();
 
+$param = array();
+$where = " WHERE 1 ";
+
+foreach ($vars as $var => $value)
+{
+  if ($value != "")
+  {
+    switch ($var)
+    {
+      case 'device':
+        $where .= " AND `host` = ?";
+        $param[] = $value;
+        break;
+      case 'type':
+        $where .= " AND `$var` = ?";
+        $param[] = $value;
+        break;
+      case 'message':
+        foreach(explode(",", $value) as $val)
+        {
+          $param[] = "%".$val."%";
+          $cond[] = "`$var` LIKE ?";
+        }
+        $where .= "AND (";
+        $where .= implode(" OR ", $cond);
+        $where .= ")";
+        break;
+    }
+  }
+}
+
+#$sql = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` ".$where." ORDER BY `datetime` DESC LIMIT 0,250";
+
 if ($_SESSION['userlevel'] >= '5')
 {
-  $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` AS E WHERE $where ORDER BY `datetime` DESC LIMIT $start,$numresults";
+  $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` AS E ".$where." ORDER BY `datetime` DESC LIMIT $start,$numresults";
 } else {
-  $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` AS E, devices_perms AS P WHERE $where AND E.host = P.device_id AND P.user_id = ? ORDER BY `datetime` DESC LIMIT $start,$numresults";
+  $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` AS E, devices_perms AS P ".$where." AND E.host = P.device_id AND P.user_id = ? ORDER BY `datetime` DESC LIMIT $start,$numresults";
   $param[] = $_SESSION['user_id'];
 }
+$entries = dbFetchRows($query, $param);
 
 #echo('<table cellspacing="0" cellpadding="1" width="100%">');
 echo("<table class=\"table table-bordered table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
@@ -89,7 +123,7 @@ echo("    </tr>\n");
 echo("  </thead>\n");
 
 echo('<tbody>');
-foreach (dbFetchRows($query, $param) as $entry)
+foreach ($entries as $entry)
 {
   include("includes/print-event.inc.php");
 }
