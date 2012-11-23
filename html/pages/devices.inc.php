@@ -6,12 +6,18 @@ if(!isset($vars['format'])) { $vars['format'] = "list_detail"; }
 
 $sql_param = array();
 
+/// FIXME - new style of searching here
+
 if ($vars['hostname']) { $where .= " AND hostname LIKE ?"; $sql_param[] = "%".$vars['hostname']."%"; }
 if ($vars['os'])       { $where .= " AND os = ?";          $sql_param[] = $vars['os']; }
 if ($vars['version'])  { $where .= " AND version = ?";     $sql_param[] = $vars['version']; }
 if ($vars['hardware']) { $where .= " AND hardware = ?";    $sql_param[] = $vars['hardware']; }
 if ($vars['features']) { $where .= " AND features = ?";    $sql_param[] = $vars['features']; }
 if ($vars['type'])     { $where .= " AND type = ?";        $sql_param[] = $vars['type']; }
+if (isset($vars['status']))   { $where .= " AND status = ?";      $sql_param[] = $vars['status']; }
+if (isset($vars['ignore']))   { $where .= " AND ignore = ?";      $sql_param[] = $vars['ignore']; }
+if (isset($vars['disabled'])) { $where .= " AND disabled = ?";    $sql_param[] = $vars['disabled']; }
+
 
 if ($vars['location'] == "Unset") { $location_filter = ''; }
 if ($vars['location']) { $location_filter = $vars['location']; }

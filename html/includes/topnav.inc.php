@@ -70,25 +70,25 @@ if ($services['down']) { $services['bgcolour'] = "#ffcccc"; } else { $services['
 <table cellpadding="0" cellspacing="0" border="0" width=500>
   <tr style="background-color: <?php echo($devices[bgcolour]); ?>">
     <td width="5"></td>
-    <td><strong>Devices</strong></td>
+    <td><strong><a href="<?php echo(generate_url(array('page' => 'devices'))); ?>">Devices</a></strong></td>
     <td><?php echo($devices['count']) ?></td>
     <td> ( </td>
-    <td style="text-align: right"><span class="green"> <?php echo($devices['up']) ?> up</span></td>
-    <td style="text-align: right"><span class="red"> <?php echo($devices['down']) ?> down</span></td>
-    <td style="text-align: right"><span class="black"> <?php echo($devices['ignored']) ?> ignored</span> </td>
-    <td style="text-align: right"><span class="grey"> <?php echo($devices['disabled']) ?> disabled</span></td>
+    <td style="text-align: right"> <a class=green href="<?php echo(generate_url(array('page' => 'devices', 'status' => '1'))); ?>"><span class="green"><?php echo($devices['up']) ?> up</a></td>
+    <td style="text-align: right"> <a class="red" href="<?php echo(generate_url(array('page' => 'devices', 'status' => '0'))); ?>"><?php echo($devices['down']) ?> down</a></td>
+    <td style="text-align: right"> <a class="black" href="<?php echo(generate_url(array('page' => 'devices', 'ignore' => '1'))); ?>"><?php echo($devices['ignored']) ?> ignored</a> </td>
+    <td style="text-align: right"> <a class="grey" href="<?php echo(generate_url(array('page' => 'devices', 'disabled' => '1'))); ?>"><?php echo($devices['disabled']) ?> disabled</a></td>
     <td> ) </td>
     <td width="5"></td>
   </tr>
   <tr style="background-color: <?php echo($ports['bgcolour']) ?>">
       <td width="5"></td>
-      <td><strong>Ports</strong></td>
+      <td><strong><a href="/ports/">Ports</a></strong></td>
     <td><?php echo($ports['count']) ?></td>
     <td> ( </td>
-    <td style="text-align: right"><span class="green"> <?php echo($ports['up']) ?> up </span></td>
-    <td style="text-align: right"><span class="red"> <?php echo($ports['down']) ?> down </span></td>
-    <td style="text-align: right"><span class="black"> <?php echo($ports['ignored']) ?> ignored </span></td>
-    <td style="text-align: right"><span class="grey"> <?php echo($ports['shutdown']) ?> shutdown</span></td>
+    <td style="text-align: right"> <a class="green" href="<?php echo(generate_url(array('page' => 'ports', 'state' => 'up'))); ?>"><?php echo($ports['up']) ?> up </a></td>
+    <td style="text-align: right"> <a class="red" href="<?php echo(generate_url(array('page' => 'ports', 'state' => 'down'))); ?>"><?php echo($ports['down']) ?> down </a></td>
+    <td style="text-align: right"> <a class="black" href="<?php echo(generate_url(array('page' => 'ports', 'ignore' => '1'))); ?>"><?php echo($ports['ignored']) ?> ignored </a></td>
+    <td style="text-align: right"> <a class="grey" href="<?php echo(generate_url(array('page' => 'ports', 'state' => 'admindown'))); ?>"><?php echo($ports['shutdown']) ?> shutdown</a></td>
     <td> ) </td>
     <td width="5"></td>
   </tr>
