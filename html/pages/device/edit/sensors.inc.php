@@ -21,16 +21,10 @@ if ($_POST['update-sensors'])
     $sid = $sensor['sensor_id'];
     if($su[$sid]['sensor_ignore'] == "on") { $su[$sid]['sensor_ignore'] = "1"; } else { $su[$sid]['sensor_ignore'] = "0"; }
 
-    echo("<pre>");
-    print_r($su[$sid]);
-
     foreach(array('sensor_ignore','sensor_limit_low','sensor_limit') as $field)
     {
       if($su[$sid][$field]    != $sensor[$field])    { $sup[$field] = $su[$sid][$field]; }
     }
-
-    print_r($sup);
-    echo("</pre>");
 
     if(is_array($sup))
     {
