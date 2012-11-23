@@ -2,18 +2,18 @@
 
   <form method="post" action="" class="form-inline">
   <label><strong>Search</strong>
-    <input type="text" name="string" id="string" value="<?php echo($_POST['string']); ?>" />
+    <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
   </label>
   <label>
     <strong>Type</strong>
     <select name="type" id="type">
       <option value="">All Types</option>
-      <option value="system">System</option>
+      <option value="system" <?php  if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
       <?php
         foreach (dbFetchRows("SELECT `type` FROM `eventlog` WHERE device_id = ? GROUP BY `type` ORDER BY `type`", array($device['device_id'])) as $data)
         {
           echo("<option value='".$data['type']."'");
-          if ($data['type'] == $_POST['type']) { echo("selected"); }
+          if ($data['type'] == $vars['type']) { echo(" selected"); }
           echo(">".$data['type']."</option>");
         }
       ?>
@@ -26,7 +26,40 @@
 
 print_optionbar_end();
 
-$entries = dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` WHERE `host` = ? ORDER BY `datetime` DESC LIMIT 0,250", array($device['device_id']));
+$param = array();
+$where = " WHERE 1 ";
+
+foreach ($vars as $var => $value)
+{
+  if ($value != "")
+  {
+    switch ($var)
+    {
+      case 'device':
+        $where .= " AND `host` = ?";
+        $param[] = $value;
+        break;
+      case 'type':
+        $where .= " AND `$var` = ?";
+        $param[] = $value;
+        break;
+      case 'message':
+        foreach(explode(",", $value) as $val)
+        {
+          $param[] = "%".$val."%";
+          $cond[] = "`$var` LIKE ?";
+        }
+        $where .= "AND (";
+        $where .= implode(" OR ", $cond);
+        $where .= ")";
+        break;
+    }
+  }
+}
+
+$sql = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` ".$where." ORDER BY `datetime` DESC LIMIT 0,250";
+$entries = dbFetchRows($sql, $param);
+
 echo("<table class=\"table table-bordered table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
