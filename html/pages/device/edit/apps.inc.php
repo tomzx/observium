@@ -99,6 +99,7 @@ foreach ($applications as $app)
 echo('<tr><td></td><td><input type="submit" value="Save"></td></tr>');
 echo('</table>');
 echo('</form>');
-echo('</div>');
+echo("</div>");
+
 
 ?>

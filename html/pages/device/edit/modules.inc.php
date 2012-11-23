@@ -28,10 +28,14 @@ if($_POST['toggle_discovery'] && isset($config['discovery_modules'][$_POST['togg
   $attribs = get_dev_attribs($device['device_id']);
 }
 
-echo('<div style="margin: 0px 10px; width: 500px; float: left;">');
+echo('
+<div class="row-fluid">
+    <div class="row-fluid">
+      <div class="span6">');
+
 $i=0;
 
-echo('<div style="padding:4px 0px 4px 8px;" class=graphhead>Poller Modules</div>');
+echo('<h3>Poller Modules</h3>');
 
 echo('<table width="100%" cellpadding=5>');
 echo('<tr><th>Module</th><th>Global</th><th>Device</th></tr>');
@@ -63,12 +67,13 @@ foreach ($config['poller_modules'] as $module => $module_status)
   echo('</td></tr>');
   $i++;
 }
-echo('</table>');
-echo('</div>');
+echo('</table>
 
-echo('<div style="margin: 0px 10px; width: 500px; float: right;">');
+</div>
+      <div class="span6">');
+
 $i=0;
-echo('<div style="padding:4px 0px 4px 8px;" class=graphhead>Discovery Modules</div>');
+echo('<h3>Discovery Modules</h3>');
 echo('<table width="100%" cellpadding=5>');
 echo('<tr><th>Module</th><th>Global</th><th>Device</th></tr>');
 foreach ($config['discovery_modules'] as $module => $module_status)
@@ -99,7 +104,11 @@ foreach ($config['discovery_modules'] as $module => $module_status)
 
   $i++;
 }
-echo('</table>');
-echo('</div>');
+echo('</table>
+
+</div>
+    </div>
+  </div>
+</div>');
 
 ?>
