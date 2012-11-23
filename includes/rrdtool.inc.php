@@ -114,12 +114,15 @@ function rrdtool_graph($graph_file, $options)
 
     fclose($rrd_pipes[0]);
 
-    while (strlen($line) < 1) {
+    $iter = 0;
+    while (strlen($line) < 1 && $iter < 1000) {
       // wait for 10 milliseconds to loosen loop
       usleep(10000);
       $line = fgets($rrd_pipes[1],1024);
       $data .= $line;
+      $iter++;
     }
+    unset($iter);
 
     $return_value = rrdtool_pipe_close($rrd_process, $rrd_pipes);
 

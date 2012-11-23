@@ -377,7 +377,7 @@ function print_percentage_bar($width, $height, $percent, $left_text, $left_colou
   return $output;
 }
 
-function generate_entity_link($type, $entity, $text = NULL, $graph_type=NULL)
+function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
 {
   global $config, $entity_cache;
 
@@ -398,9 +398,7 @@ function generate_entity_link($type, $entity, $text = NULL, $graph_type=NULL)
     default:
       $link = $entity[$type.'_id'];
   }
-
   return($link);
-
 }
 
 function generate_port_link($port, $text = NULL, $type = NULL)
