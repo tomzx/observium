@@ -11,7 +11,9 @@ if ($_SESSION['userlevel'] < '7')
 
   $panes['device']   = 'Device Settings';
   $panes['snmp']     = 'SNMP';
-  $panes['ports']    = 'Port Settings';
+  $panes['ports']    = 'Ports';
+
+  $panes['sensors']   = "Sensors";
 
   if (count($config['os'][$device['os']]['icons']))
   {

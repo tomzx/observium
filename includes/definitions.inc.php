@@ -1146,6 +1146,16 @@ if (isset($config['enable_printers']) && $config['enable_printers'])
   $config['device_types'][$i]['icon'] = 'printer.png';
 }
 
+$config['sensor_classes'] = array('current' => 'A',
+                           'frequency' => 'Hz',
+                           'humidity' => '%',
+                           'fanspeed' => 'RPM',
+                           'power' => 'W',
+                           'voltage' => 'V',
+                           'temperature' => 'C',
+                           'dbm' => 'dBm');
+
+
 //////////////////////////////
 # No changes below this line #
 //////////////////////////////

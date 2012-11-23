@@ -73,7 +73,29 @@ function poll_sensor($device, $class, $unit)
       DS:sensor:GAUGE:600:-20000:20000 ".$config['rrd_rra']);
     }
 
-    echo("$sensor_value $unit\n");
+    echo("$sensor_value $unit ");
+
+    // FIXME also warn when crossing WARN level!!
+    if($sensor['sensor_ignore'] != "1")
+     {
+     if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_value'] > $sensor['sensor_limit_low'] && $sensor_value <= $sensor['sensor_limit_low'])
+     {
+      $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is under threshold: " . $sensor_value . "$unit (< " . $sensor['sensor_limit'] . "$unit)";
+      notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
+      print Console_Color::convert("[%rAlerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "%n\n");
+      log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " under threshold: " . $sensor_value . " $unit (< " . $sensor['sensor_limit_low'] . " $unit)", $device, $class, $sensor['sensor_id']);
+     }
+     else if ($sensor['sensor_limit'] != "" && $sensor['sensor_value'] < $sensor['sensor_limit'] && $sensor_value >= $sensor['sensor_limit'])
+     {
+      $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is over threshold: " . $sensor_value . "$unit (> " . $sensor['sensor_limit'] . "$unit)";
+      notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
+      print Console_Color::convert("[%rAlerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "%n\n");
+      log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " above threshold: " . $sensor_value . " $unit (> " . $sensor['sensor_limit'] . " $unit)", $device, $class, $sensor['sensor_id']);
+     }
+    } else {
+      print Console_Color::convert("[%ySensor Ignored%n]");
+    }
+    echo("\n");
 
     // Update RRD
     rrdtool_update($rrd_file,"N:$sensor_value");
@@ -86,21 +108,6 @@ function poll_sensor($device, $class, $unit)
       dbInsert(array('sensor_id' => $sensor['sensor_id'], 'sensor_value' => $sensor_value, 'sensor_polled' => time()), 'sensors-state');
     }
 
-    // FIXME also warn when crossing WARN level!!
-    if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_value'] > $sensor['sensor_limit_low'] && $sensor_value <= $sensor['sensor_limit_low'])
-    {
-      $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is under threshold: " . $sensor_value . "$unit (< " . $sensor['sensor_limit'] . "$unit)";
-      notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
-      echo("Alerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "\n");
-      log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " under threshold: " . $sensor_value . " $unit (< " . $sensor['sensor_limit_low'] . " $unit)", $device, $class, $sensor['sensor_id']);
-    }
-    else if ($sensor['sensor_limit'] != "" && $sensor['sensor_value'] < $sensor['sensor_limit'] && $sensor_value >= $sensor['sensor_limit'])
-    {
-      $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is over threshold: " . $sensor_value . "$unit (> " . $sensor['sensor_limit'] . "$unit)";
-      notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
-      echo("Alerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "\n");
-      log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " above threshold: " . $sensor_value . " $unit (> " . $sensor['sensor_limit'] . " $unit)", $device, $class, $sensor['sensor_id']);
-    }
   }
 }
 
