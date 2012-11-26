@@ -1,3 +1,10 @@
+.btn-small-thin {
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 14px;
+  margin: 2px;
+}
+
 .progress {
   height: 18px;
   margin-bottom: 18px;

@@ -6,7 +6,7 @@
     //      A small script to grab the NTPD Server statistics from a NTPD server
     //      Needed commands: php, ntpd, ntpq, ntpdc
     ///
-    //      Version 1.2 By:
+    //      Version 1.3 By:
     //              All In One - Dennis de Houx <info@all-in-one.be>
     ///
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -31,10 +31,11 @@
 	$vars	= array();
 	$vars2	= array();
 	$vars	= explode(',', $cmd);
-	$vars2	= eregi_replace(' ', '', $cmd2);
+	//$vars2	= eregi_replace(' ', '', $cmd2);
+	$vars2	= preg_replace('/ /', '', $cmd2);
 	$vars2	= explode("\n", $vars2);
 
-	function doSNMPv2($vars, $vars2) {
+	function doUnixAgent($vars, $vars2) {
 	    $ntpd	= array();
 	    foreach ($vars as $item=>$value) {
 		if (!empty($value)) {
@@ -82,6 +83,6 @@
 	    }
 	}
 
-	doSNMPv2($vars, $vars2);
+	doUnixAgent($vars, $vars2);
 
 ?>

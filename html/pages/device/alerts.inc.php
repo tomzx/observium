@@ -9,7 +9,6 @@ $glo_conditions = cache_conditions_global();
 echo("<table class=\"table table-bordered table-striped\">
   <thead>
     <tr>
-      <th style=\"width: 10px;\"></th>
       <th style=\"width: 150px;\">Type</th>
       <th style=\"width: 150px;\">Subtype</th>
       <th style=\"width: 150px;\">Metric</th>
@@ -67,7 +66,7 @@ foreach ($glo_conditions as $type => $subtypes)
       {
         if ($entry['enable'] == 1) { $enabled = '<img align=absmiddle src="images/16/tick.png" />'; } else { $enabled = '<img align=absmiddle src="images/16/stop.png" />'; }
         echo("<tr>\n");
-        echo('<td></td><td><strong>'.$type.'</strong></td><td>'.$subtype.'</td><td>'.$metric.'</td><td>'.htmlentities($entry['operator']).'</td><td>'.$entry['value'].'</td><td>'.$entry['severity'].'</td><td>'.$enabled.'</td>');
+        echo('<td><strong>'.$type.'</strong></td><td>'.$subtype.'</td><td>'.$metric.'</td><td>'.htmlentities($entry['operator']).'</td><td>'.$entry['value'].'</td><td>'.$entry['severity'].'</td><td>'.$enabled.'</td>');
         echo("<td></td><td></td>\n");
         echo("</tr>\n");
 
@@ -79,7 +78,7 @@ foreach ($glo_conditions as $type => $subtypes)
           echo("<tr><td></td><td colspan=\"9\"><strong>");
           foreach ($entities as $entity)
           {
-           echo('<button class="btn btn-small" type="button">'.generate_entity_link($type, $entity).'</button>');
+           echo('<button class="btn btn-small-thin" type="button">'.generate_entity_link($type, $entity).'</button>');
           }
           echo("</strong></td></tr>\n");
         }
