@@ -5,7 +5,7 @@
 if ($_SESSION['userlevel'] >= "5" || $auth)
 {
   $id = mres($vars['id']);
-  $title = generate_device_link($device);
+  $title = "Customer :: ".mres($vars['id']);
   $auth = TRUE;
 }
 
