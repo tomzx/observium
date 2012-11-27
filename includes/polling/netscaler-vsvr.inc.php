@@ -1,5 +1,7 @@
 <?php
 
+/// VServers
+
 # NS-ROOT-MIB::vsvrName."observium" = STRING: "observium"
 # NS-ROOT-MIB::vsvrIpAddress."observium" = IpAddress: 195.78.84.141
 # NS-ROOT-MIB::vsvrPort."observium" = INTEGER: 80
@@ -33,6 +35,52 @@
 
 if ($device['os'] == "netscaler")
 {
+
+  /// Services <> Vservers
+
+  echo("Netscaler services <> vservers\n");
+
+  echo(str_pad("VServer", 25) . " | " . str_pad("Service",25) . " | " .  str_pad("Type",16) ." | ". str_pad("Weight",16) . "\n".
+       str_pad("", 90, "-")."\n");
+
+  $sv_db    = dbFetchRows("SELECT * FROM `netscaler_services_vservers` WHERE `device_id` = ?", array($device['device_id']));
+  foreach ($sv_db as $sv) { $svs_db[$sv['vsvr_name']][$sv['svc_name']] = $sv; $svs_exist[$sv['sv_id']] = array('vsvr_name' => $sv['vsvr_name'], 'svc_name' => $sv['svc_name']); }
+  if ($debug) { print_r($svs_db); }
+
+  $svc_vsvrs = snmp_walk_parser($device, "vserverServiceEntry", 3, "NS-ROOT-MIB");
+  foreach ($svc_vsvrs as $vserver => $svs)
+  {
+    foreach ($svs as $service => $sv)
+    {
+      echo(str_pad($vserver, 25) . " | " . str_pad($service,25) . " | " .  str_pad($sv['vsvrServiceEntityType'],16) ." | ". str_pad($sv['serviceWeight'],16));
+
+      if(is_array($svs_db[$vserver][$service]))
+      {
+        /// FIXME Update Code
+        dbUpdate(array('service_weight' => $sv['serviceWeight']), 'netscaler_services_vservers', '`device_id` = ? AND `vsvr_name` = ? AND `svc_name` = ?', array($device['device_id'], $vserver, $service));
+        echo("U");
+        unset($svs_exist[$svs_db[$vserver][$service]['sv_id']]);
+      } else {
+        dbInsert(array('device_id' => $device['device_id'], 'vsvr_name' => $vserver, 'svc_name' => $service, 'service_weight' => $sv['serviceWeight']), 'netscaler_services_vservers');
+        echo("+");
+      }
+      echo("\n");
+    }
+  }
+
+    if ($debug) { print_r($vsvr_exist); }
+
+  foreach ($svs_exist as $sv_id => $sv)
+  {
+    echo("-".$sv['vsvr_name']."/".$sv['svc_name']." ");
+    dbDelete('netscaler_services_vservers', "`sv_id` =  ?", array($sv_id));
+  }
+
+
+  echo("\n");
+
+  /// VServers
+
   echo("Netscaler VServers\n");
 
   $oids_gauge   = array('vsvrCurClntConnections','vsvrCurSrvrConnections');
@@ -61,7 +109,7 @@ if ($device['os'] == "netscaler")
   $vsvr_array = snmpwalk_cache_oid($device, "vserverEntry", array(), "NS-ROOT-MIB");
 
   $vsvr_db    = dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ?", array($device['device_id']));
-  foreach ($vsvr_db as $vsvr) { $vsvrs[$vsvr['vsvr_name']] = $vsvr; print_r($vsvr); }
+  foreach ($vsvr_db as $vsvr) { $vsvrs[$vsvr['vsvr_name']] = $vsvr; }
   if ($debug) { print_r($vsvrs); }
 
   foreach ($vsvr_array as $index => $vsvr)
@@ -123,6 +171,159 @@ if ($device['os'] == "netscaler")
       dbDelete('netscaler_vservers', "`vsvr_id` =  ?", array($db_id));
     }
   }
+
+  echo("\n");
+
+/// Services
+
+# NS-ROOT-MIB::svcServiceName."http81_observium-server" = STRING: "http81_observium-server"
+# NS-ROOT-MIB::svcIpAddress."http81_observium-server" = IpAddress: 46.105.127.13
+# NS-ROOT-MIB::svcPort."http81_observium-server" = INTEGER: 81
+# NS-ROOT-MIB::svcServiceType."http81_observium-server" = INTEGER: http(0)
+# NS-ROOT-MIB::svcState."http81_observium-server" = INTEGER: up(7)
+# NS-ROOT-MIB::svcMaxReqPerConn."http81_observium-server" = INTEGER: 0
+# NS-ROOT-MIB::svcAvgTransactionTime."http81_observium-server" = Wrong Type (should be Timeticks): INTEGER: 137870
+# NS-ROOT-MIB::svcEstablishedConn."http81_observium-server" = Counter32: 4
+# NS-ROOT-MIB::svcActiveConn."http81_observium-server" = Gauge32: 3
+# NS-ROOT-MIB::svcSurgeCount."http81_observium-server" = Counter32: 0
+# NS-ROOT-MIB::svcTotalRequests."http81_observium-server" = Counter64: 3227
+# NS-ROOT-MIB::svcTotalRequestBytes."http81_observium-server" = Counter64: 1947816
+# NS-ROOT-MIB::svcTotalResponses."http81_observium-server" = Counter64: 3227
+# NS-ROOT-MIB::svcTotalResponseBytes."http81_observium-server" = Counter64: 43924021
+# NS-ROOT-MIB::svcTotalPktsRecvd."http81_observium-server" = Counter64: 37739
+# NS-ROOT-MIB::svcTotalPktsSent."http81_observium-server" = Counter64: 23972
+# NS-ROOT-MIB::svcTotalSynsRecvd."http81_observium-server" = Counter64: 0
+# NS-ROOT-MIB::svcGslbSiteName."http81_observium-server" = STRING: "N/A"
+# NS-ROOT-MIB::svcAvgSvrTTFB."http81_observium-server" = Gauge32: 0
+# NS-ROOT-MIB::svctotalJsTransactions."http81_observium-server" = Counter64: 0
+# NS-ROOT-MIB::svcdosQDepth."http81_observium-server" = Counter32: 0
+# NS-ROOT-MIB::svcCurClntConnections."http81_observium-server" = Gauge32: 3
+# NS-ROOT-MIB::svcRequestRate."http81_observium-server" = STRING: "0"
+# NS-ROOT-MIB::svcRxBytesRate."http81_observium-server" = STRING: "0"
+# NS-ROOT-MIB::svcTxBytesRate."http81_observium-server" = STRING: "0"
+# NS-ROOT-MIB::svcSynfloodRate."http81_observium-server" = STRING: "0"
+# NS-ROOT-MIB::svcTicksSinceLastStateChange."http81_observium-server" = Timeticks: (371894) 1:01:58.94
+# NS-ROOT-MIB::svcTotalClients."http81_observium-server" = Counter64: 3228
+# NS-ROOT-MIB::svcTotalServers."http81_observium-server" = Counter64: 464
+# NS-ROOT-MIB::svcMaxClients."http81_observium-server" = INTEGER: 0
+# NS-ROOT-MIB::svcActiveTransactions."http81_observium-server" = Gauge32: 3
+# NS-ROOT-MIB::svcServiceFullName."http81_observium-server" = STRING: "http81_observium-server"
+# NS-ROOT-MIB::svcInetAddressType."http81_observium-server" = INTEGER: ipv4(1)
+# NS-ROOT-MIB::svcInetAddress."http81_observium-server" = Hex-STRING: 2E 69 7F 0D
+# NS-ROOT-MIB::monsvcServiceName."http81_observium-server"."tcp-default" = STRING: "http81_observium-server"
+# NS-ROOT-MIB::monitorRTO."http81_observium-server"."tcp-default" = Gauge32: 0
+# NS-ROOT-MIB::monitorState."http81_observium-server"."tcp-default" = INTEGER: monitorStateUp(7)
+# NS-ROOT-MIB::drtmRTO."http81_observium-server"."tcp-default" = Gauge32: 0
+# NS-ROOT-MIB::drtmLearningProbes."http81_observium-server"."tcp-default" = Gauge32: 0
+# NS-ROOT-MIB::monitorCurFailedCount."http81_observium-server"."tcp-default" = Gauge32: 0
+# NS-ROOT-MIB::monitorWeight."http81_observium-server"."tcp-default" = INTEGER: 1
+# NS-ROOT-MIB::monitorProbes."http81_observium-server"."tcp-default" = Counter32: 329
+# NS-ROOT-MIB::monitorFailed."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorMaxClient."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedCon."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedCode."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedStr."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedTimeout."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedSend."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedFTP."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedPort."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedResponse."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorFailedId."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorProbesNoChange."http81_observium-server"."tcp-default" = Counter32: 0
+# NS-ROOT-MIB::monitorResponseTimeoutThreshExceed."http81_observium-server"."tcp-default" = Counter32: 0
+
+  echo("Netscaler Services\n");
+
+  $oids_gauge   = array('svcActiveConn','svcActiveTransactions','svcAvgTransactionTime');
+  $oids_counter = array('svcEstablishedConn', 'svcSurgeCount', 'svcTotalRequests', 'svcTotalRequestBytes',
+    'svcTotalResponses', 'svcTotalResponseBytes', 'svcTotalPktsRecvd', 'svcTotalPktsSent', 'svcTotalSynsRecvd',
+    'svcTotalClients', 'svcTotalServers');
+
+  $oids = array_merge($oids_gauge, $oids_counter);
+
+  unset($snmpstring, $rrdupdate, $snmpdata, $snmpdata_cmd, $rrd_create);
+
+  $rrd_create = $config['rrd_rra'];
+
+  foreach ($oids_gauge as $oid)
+  {
+    $oid_ds = truncate(str_replace("svc", "", $oid), 19, '');
+    $rrd_create .= " DS:$oid_ds:GAUGE:600:U:100000000000";
+  }
+
+  foreach ($oids_counter as $oid)
+  {
+    $oid_ds = truncate(str_replace("svc", "", $oid), 19, '');
+    $rrd_create .= " DS:$oid_ds:COUNTER:600:U:100000000000";
+  }
+
+  $svc_array = snmpwalk_cache_oid($device, "serviceEntry", array(), "NS-ROOT-MIB");
+
+  $svc_db    = dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ?", array($device['device_id']));
+  foreach ($svc_db as $svc) { $svcs[$svc['svc_name']] = $svc; }
+  if ($debug) { print_r($svcs); }
+
+  foreach ($svc_array as $index => $svc)
+  {
+    // Use svcFullName when it exists.
+    if (isset($svc['svcServiceFullName']))
+    {
+      $svc['svcServiceName'] = $svc['svcServiceFullName'];
+    }
+
+    if (isset($svc['svcServiceName']))
+    {
+      $svc_exist[$svc['svcServiceName']] = 1;
+      $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceName']).".rrd";
+      $rrdupdate = "N";
+
+      foreach ($oids as $oid)
+      {
+        if (is_numeric($svc[$oid]))
+        {
+          $rrdupdate .= ":".$svc[$oid];
+        } else {
+          $rrdupdate .= ":U";
+        }
+      }
+
+      echo(str_pad($svc['svcServiceName'], 25) . " | " . str_pad($svc['svcServiceType'],15) . " | " .  str_pad($svc['svcState'],6) ." | ". str_pad($svc['svcIpAddress'],16) ." | ". str_pad($svc['svcPort'],5));
+      echo(" | " . str_pad($svc['svcRequestRate'],8) . " | " . str_pad($svc['svcRxBytesRate']."B/s", 8)." | ". str_pad($svc['svcTxBytesRate']."B/s", 8));
+
+      $db_update = array('svc_ip' => $svc['svcIpAddress'], 'svc_port' => $svc['svcPort'], 'svc_state' => $svc['svcState'], 'svc_type' => $svc['svcServiceType'],
+                         'svc_req_rate' => $svc['RequestRate'], 'svc_bps_in' => $svc['svcRxBytesRate'], 'svc_bps_out' => $svc['svcTxBytesRate']);
+
+     if (!is_array($svcs[$svc['svcServiceName']]))
+     {
+       $db_insert = array_merge(array('device_id' => $device['device_id'], 'svc_name' => $svc['svcServiceName']), $db_update);
+       $svc_id = dbInsert($db_insert, 'netscaler_services'); echo(" +");
+     } else {
+       $updated  = dbUpdate($db_update, 'netscaler_services', '`svc_id` = ?', array($svcs[$svc['svcServiceName']]['svc_id']));
+       echo(" U");
+     }
+
+     if (!file_exists($rrd_file)) { rrdtool_create($rrd_file, $rrd_create); }
+     rrdtool_update($rrd_file, $rrdupdate);
+
+     echo("\n");
+    }
+
+  }
+
+  if ($debug) { print_r($svc_exist); }
+
+  foreach ($svcs as $db_name => $db_id)
+  {
+    if (!$svc_exist[$db_name])
+    {
+      echo("-".$db_name);
+      dbDelete('netscaler_services', "`svc_id` =  ?", array($db_id));
+    }
+  }
+
+  echo("\n");
+
+  /// End Netscaler
 }
 
 ?>

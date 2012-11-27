@@ -15,6 +15,16 @@ function string_to_oid($string)
   return $oid;
 }
 
+function snmp_parser_quote($m){
+    return str_replace(array('.',' '),
+      array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE'), $m[1]);
+}
+
+function snmp_parser_unquote($str){
+    return str_replace(array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE', 'PLACEHOLDER-ESCAPED-QUOTE'),
+      array('.',' ','"'), $str);
+}
+
 function snmp_get_multi($device, $oids, $options = "-OQUs", $mib = NULL, $mibdir = NULL)
 {
   global $debug,$config,$runtime_stats,$mibs_loaded;
@@ -121,7 +131,35 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
   else { return false; }
 }
 
+function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = NULL)
+{
 
+  $data = snmp_walk($device, $oid, "-Oqs", $mib, $mibdir);
+  foreach(explode("\n", $data) as $text) {
+    $a = preg_replace_callback('!"([^"]*)"!', 'snmp_parser_quote', str_replace("\\\"", "PLACEHOLDER-ESCAPED-QUOTE",$text));
+    $oid = preg_split('![. ]!', $a);
+    foreach ($oid as $k => $v) $oid[$k] = snmp_parser_unquote($v);
+    $value = array_pop($oid);
+    $ret = array("oid" => $oid, "value" => $value);
+    if(!empty($value)) {
+      /// this seems retarded. need a way to just build this automatically.
+      switch ($oid_elements) {
+        case "2":
+          $array[$ret['oid'][1]][$ret['oid'][0]] = $value;
+          break;
+        case "3":
+          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][0]] = $value;
+          break;
+        case "4":
+          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][3]][$ret['oid'][0]] = $value;
+          break;
+      }
+    }
+  }
+
+  return $array;
+
+}
 
 
 function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)

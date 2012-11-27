@@ -10,6 +10,7 @@ $type_text['loadbalancer_vservers'] = "Serverfarms";
 
 // Citrix Netscaler
 $type_text['netscaler_vsvr'] = "VServers";
+$type_text['netscaler_services'] = "Services";
 
 print_optionbar_start();
 
