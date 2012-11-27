@@ -78,14 +78,14 @@ function poll_sensor($device, $class, $unit)
     // FIXME also warn when crossing WARN level!!
     if($sensor['sensor_ignore'] != "1")
      {
-     if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_value'] > $sensor['sensor_limit_low'] && $sensor_value <= $sensor['sensor_limit_low'])
+     if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_value'] >= $sensor['sensor_limit_low'] && $sensor_value < $sensor['sensor_limit_low'])
      {
       $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is under threshold: " . $sensor_value . "$unit (< " . $sensor['sensor_limit'] . "$unit)";
       notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
       print Console_Color::convert("[%rAlerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "%n\n");
       log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " under threshold: " . $sensor_value . " $unit (< " . $sensor['sensor_limit_low'] . " $unit)", $device, $class, $sensor['sensor_id']);
      }
-     else if ($sensor['sensor_limit'] != "" && $sensor['sensor_value'] < $sensor['sensor_limit'] && $sensor_value >= $sensor['sensor_limit'])
+     else if ($sensor['sensor_limit'] != "" && $sensor['sensor_value'] <= $sensor['sensor_limit'] && $sensor_value > $sensor['sensor_limit'])
      {
       $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is over threshold: " . $sensor_value . "$unit (> " . $sensor['sensor_limit'] . "$unit)";
       notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
