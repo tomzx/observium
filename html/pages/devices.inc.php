@@ -9,6 +9,7 @@ $sql_param = array();
 /// FIXME - new style of searching here
 
 if ($vars['hostname']) { $where .= " AND hostname LIKE ?"; $sql_param[] = "%".$vars['hostname']."%"; }
+if ($vars['sysname']) { $where .= " AND sysName LIKE ?"; $sql_param[] = "%".$vars['sysname']."%"; }
 if ($vars['os'])       { $where .= " AND os = ?";          $sql_param[] = $vars['os']; }
 if ($vars['version'])  { $where .= " AND version = ?";     $sql_param[] = $vars['version']; }
 if ($vars['hardware']) { $where .= " AND hardware = ?";    $sql_param[] = $vars['hardware']; }
@@ -33,8 +34,17 @@ if($vars['searchbar'] != "hide")
 <form method="post" action="">
   <table cellpadding="4" cellspacing="0" class="devicetable" width="100%">
     <tr>
-      <td width="290"><span style="font-weight: bold; font-size: 14px;"></span>
-        <input type="text" name="hostname" id="hostname" size="38" value="<?php echo($vars['hostname']); ?>" />
+      <td width="290">
+        <div class="input-prepend" style="margin-right: 3px; margin-bottom: 10px;">
+          <span class="add-on" style="width: 80px;">Hostname</span>
+          <input type="text" name="hostname" id="hostname" class="input" value="<?php echo($vars['hostname']); ?>" />
+        </div>
+
+        <div class="input-prepend" style="margin-right: 3px;  margin-bottom: 10px;">
+          <span class="add-on" style="width: 80px;">sysName</span>
+          <input type="text" name="sysname" id="sysname" class="input" value="<?php echo($vars['sysname']); ?>" />
+        </div>
+
       </td>
       <td width="200">
         <select name='os' id='os'>

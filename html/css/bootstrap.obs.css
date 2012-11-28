@@ -48,9 +48,46 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 label, input, button, select, textarea {
   font-size: 13px;
-  font-weight: normal;
+  font-weight: bold;
   line-height: 18px;
 }
+
+.input-append .add-on, .input-prepend .add-on {
+  display: inline-block;
+  width: auto;
+  height: 18px;
+  min-width: 16px;
+  padding: 4px 5px;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 18px;
+  text-align: center;
+  text-shadow: 0 1px 0 white;
+  background-color: #EEE;
+  border: 1px solid #CCC;
+}
+
+.input-append input, .input-prepend input, .input-append select, .input-prepend select, .input-append .uneditable-input, .input-prepend .uneditable-input, .input-append .dropdown-menu, .input-prepend .dropdown-menu {
+  font-weight: normal;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  display: inline-block;
+  height: 18px;
+  padding: 4px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555;
+}
+
+select {
+  display: inline-block;
+  height: 28px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555555;
+}
+
 
 .btn {
   padding: 4px 10px 4px;

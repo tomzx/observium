@@ -26,11 +26,14 @@ if (is_numeric($vars['page']))
 
 <form method="post" action="" class="form-inline">
   <span style="font-weight: bold;">Event log</span> &#187;
-  <label><strong>Search</strong>
-    <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
-  </label>
-  <label>
-    <strong>Type</strong>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Message</span>
+    <input type="text" name="message" id="message" class="input" value="<?php echo($vars['message']); ?>" />
+  </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Type</span>
     <select name="type" id="type">
       <option value="">All Types</option>
       <option value="system" <?php  if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
@@ -43,9 +46,10 @@ if (is_numeric($vars['page']))
         }
       ?>
     </select>
-  </label>
-  <label>
-    <strong>Device</strong>
+  </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Device</span>
     <select name="device" id="device">
       <option value="">All Devices</option>
       <?php
@@ -59,7 +63,8 @@ if (is_numeric($vars['page']))
         }
       ?>
     </select>
-  </label>
+  </div>
+
   <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
 </form>
 
