@@ -8,6 +8,7 @@ echo('<tr class="tablehead"><td></td>');
 $cols = array('device' => 'Device',
               'port' => 'Port',
               'traffic' => 'Traffic',
+              'traffic_perc' => 'Traffic %',
               'packets' => 'Packets',
               'speed' => 'Speed', );
 

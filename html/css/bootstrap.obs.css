@@ -1,15 +1,101 @@
-### This is because as default it doesn't seem to stick the prepends to the box properly. Maybe something else is broken.
+html {
+ background-color: #ffffff;
+}
+
+body {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  background: rgb(255,255,255); /* Old browsers */
+  color: #555;
+  font-size: 10pt;
+  line-height: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+
+form {
+  margin: 0;
+}
+
+.form-horizontal .control-group {
+  margin-bottom: 18px;
+}
+
 .input-prepend .add-on,
 .input-prepend .btn {
-  margin-right: -6px;
+  margin-right: -1px;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  padding: 4px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555;
+}
+
+label, input, button, select, textarea {
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+}
+
+.btn {
+  padding: 4px 10px 4px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.btn-large {
+  padding: 9px 14px;
+  font-size: 15px;
+  line-height: normal;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.btn-large [class^="icon-"] {
+  margin-top: 1px;
+}
+
+.btn-small {
+  padding: 5px 9px;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.btn-small [class^="icon-"] {
+  margin-top: -1px;
+}
+
+.btn-mini {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
 }
 
 
-.btn-small-thin {
-  padding: 3px 5px;
-  font-size: 11px;
-  line-height: 14px;
-  margin: 2px;
+.btn-group > .btn, .btn-group > .dropdown-menu {
+  font-size: 13px;
+}
+
+ul,
+ol {
+  padding: 0;
+  margin: 0;
 }
 
 .progress {
@@ -78,6 +164,14 @@ h3.bill > i {
     margin-top: 4px;
 }
 
+legend {
+  margin-bottom: 20px;
+  font-size: 19.5px;
+  line-height: 36px;
+  color: #555;
+  border-bottom: 1px solid #E5E5E5;
+}
+
 
 /* NAVBAR
  *************************************/
@@ -87,22 +181,13 @@ h3.bill > i {
     -webkit-border-radius: 4px;
     -mozt-border-radius: 4px;
     border-radius: 4px;
+    margin-bottom: 18px;
+    height: 30px;
 }
 
 .navbar-inner {
-    min-height: 30px;
-/*
-    background-color: #ddd;
-    background-image: -moz-linear-gradient(top, #fbfbfb, #dddddd);
-    background-image: -ms-linear-gradient(top, #fbfbfb, #dddddd);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbfbfb), to(#dddddd));
-    background-image: -webkit-linear-gradient(top, #fbfbfb, #dddddd);
-    background-image: -o-linear-gradient(top, #fbfbfb, #dddddd);
-    background-image: linear-gradient(top, #fbfbfb, #dddddd);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfbfb', endColorstr='#dddddd', GradientType=0);
-*/
-
+    min-height: 28px;
+    height: 30px;
     background-color: #eee;
     background-image: -moz-linear-gradient(top, #fdfdfd, #eeeeee);
     background-image: -ms-linear-gradient(top, #fdfdfd, #eeeeee);
@@ -112,31 +197,24 @@ h3.bill > i {
     background-image: linear-gradient(top, #fdfdfd, #eeeeee);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfdfd', endColorstr='#eeeeee', GradientType=0);
-
-    /* border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-
-    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    */
     -moz-box-shadow:inset 0px 0px 1px #edf9ff;
     -webkit-box-shadow:inset 0px 0px 1px #edf9ff;
     box-shadow:inset 0px 0px 1px #edf9ff;
+    border: none;
 }
 
 .navbar .brand {
+    padding: 8px 20px 12px;
     font-size: 1.1em;
     color: #555;
     font-weight: bold;
+    height: 15px;
+    line-height: 15px;
 }
 
 .navbar .nav > li > a {
     color: #888;
-    padding: 6px 10px 4px;
+    padding: 5px 10px 5px;
     text-shadow: none;
     font-weight: bold;
 }
@@ -186,6 +264,7 @@ h3.bill > i {
     overflow: hidden;
     padding: 0px 8px;
     margin-bottom: -1px;
+    border-bottom: none;
 }
 
 .nav-tabs li {
@@ -194,8 +273,12 @@ h3.bill > i {
     padding: .125em .125em 0;
     overflow: hidden;
     position: relative;
-    z-index: 1;
+    z-index: 3;
     border-bottom: 1px solid #FFF;
+}
+
+.nav-tabs > li {
+    margin-bottom: -1px;
 }
 
 .nav-tabs > li.first{
