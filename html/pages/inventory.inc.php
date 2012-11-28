@@ -1,13 +1,15 @@
 
 <?php print_optionbar_start('25'); ?>
 
-<form method="post" action="">
-  <label><strong>Descr</strong>
-    <input type="text" name="string" id="string" value="<?php echo($_POST['string']); ?>" />
-  </label>
-  <label>
-    <strong>Part No</strong>
-    <select name="part" id="part">
+<form method="post" action="" class="form-inline">
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Desc</span>
+    <input type="text" name="string" id="prependedInput" class="input-medium" value="<?php echo($_POST['string']); ?>" />
+  </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Part #</span>
+    <select name="part" id="part" class="span2">
       <option value="">All Parts</option>
       <?php
         foreach (dbFetchRows("SELECT `entPhysicalModelName` FROM `entPhysical` GROUP BY `entPhysicalModelName` ORDER BY `entPhysicalModelName`") as $data)
@@ -18,13 +20,18 @@
         }
       ?>
     </select>
+  </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Serial #</span>
+    <input type="text" name="serial" id="serial" class="input-medium" value="<?php echo($_POST['serial']); ?>" />
   </label>
-  <label><strong>Serial</strong>
-    <input type="text" name="serial" id="serial" value="<?php echo($_POST['serial']); ?>" />
-  </label>
-  <label>
-    <strong>Device</strong>
-    <select name="device" id="device">
+  </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Device</span>
+    <input type="text" class="input-medium" name="device_string" id="device_string" value="<?php if ($_POST['device_string']) { echo($_POST['device_string']); } ?>" />
+    <select name="device" id="device" class="span2">
       <option value="">All Devices</option>
       <?php
         foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $data)
@@ -37,9 +44,10 @@
         }
       ?>
     </select>
-  </label>
-  <input type="text" size=24 name="device_string" id="device_string" value="<?php if ($_POST['device_string']) { echo($_POST['device_string']); } ?>" />
-  <input style type=submit class=submit value=Search>
+  </div>
+
+  <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
+  </form>
 
 <?php
 
@@ -87,8 +95,17 @@ if (isset($_POST['device']) && is_numeric($_POST['device']))
   $param[] = $_POST['device'];
 }
 
-echo("<table cellspacing=0 cellpadding=2 width=100%>");
-echo("<tr><th>Hostname</th><th>Description</th><th>Name</th><th>Part No</th><th>Serial No</th></tr>");
+echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo("  <thead>\n");
+echo("    <tr>\n");
+echo("      <th>Device</th>\n");
+echo("      <th>Descr</th>\n");
+echo("      <th>Name</th>\n");
+echo("      <th>Part #</th>\n");
+echo("      <th>Serial #</th>\n");
+echo("    </tr>\n");
+echo("  </thead>\n");
+echo('<tbody>');
 
 foreach (dbFetchRows($sql, $param) as $entry)
 {

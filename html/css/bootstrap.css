@@ -1316,7 +1316,7 @@ select:focus:required:invalid:focus {
 
 .input-prepend .add-on,
 .input-prepend .btn {
-  margin-right: -1px;
+  margin-right: -6px;
 }
 
 .input-prepend .add-on:first-child,

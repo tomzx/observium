@@ -1,3 +1,10 @@
+### This is because as default it doesn't seem to stick the prepends to the box properly. Maybe something else is broken.
+.input-prepend .add-on,
+.input-prepend .btn {
+  margin-right: -6px;
+}
+
+
 .btn-small-thin {
   padding: 3px 5px;
   font-size: 11px;
