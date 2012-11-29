@@ -1,5 +1,9 @@
 <?php
 
+/// FIXME
+/// DO NOT DO A FUCKING DATABASE LOOKUP FOR EVERY FUCKING ARP ENTRY. ARE YOU RETARDED? -- adama 2012/11
+/// Yes :( -- adama 2007
+
 unset ($mac_table);
 
 echo("ARP Table : ");
