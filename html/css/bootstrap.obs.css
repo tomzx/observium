@@ -26,6 +26,11 @@ h2 {
   line-height: 36px;
 }
 
+h3 {
+  font-size: 18px;
+  line-height: 27px;
+}
+
 form {
   margin: 0;
 }
@@ -199,6 +204,10 @@ h3.bill {
 
 h3.bill > i {
     margin-top: 4px;
+}
+
+table {
+  background-color: #fff;
 }
 
 legend {
