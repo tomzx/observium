@@ -7,17 +7,17 @@ $sql .= " LEFT JOIN  `sensors-state` ON `sensors`.`sensor_id` = `sensors-state`.
 $sql .= " WHERE `sensors`.`sensor_class` = '".$class."'";
 $sql .= " ORDER BY `devices`.`hostname`, `sensors`.`sensor_descr`";
 
-echo('<table cellspacing="0" cellpadding="6" width="100%">');
-
-echo('<tr class=tablehead>
-        <th width="280">Device</th>
-        <th width="180">Sensor</th>
-        <th></th>
-        <th></th>
-        <th width="100">Current</th>
-        <th width="250">Range limit</th>
-        <th>Notes</th>
-      </tr>');
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('  <thead>');
+echo('    <tr>');
+echo('      <th width="250">Device</th>');
+echo('      <th>Sensor</th>');
+echo('      <th width="40"></th>');
+echo('      <th width="100"></th>');
+echo('      <th width="100">Current</th>');
+echo('      <th width="150">Thresholds</th>');
+echo('    </tr>');
+echo('  </thead>');
 
 foreach (dbFetchRows($sql, $param) as $sensor)
 {
@@ -61,40 +61,28 @@ foreach (dbFetchRows($sql, $param) as $sensor)
     echo('<tr class="health">
           <td class=list-bold>' . generate_device_link($sensor) . '</td>
           <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
-          <td width=100>'.overlib_link($link_graph, $sensor_minigraph, $overlib_content).'</td>
-          <td width=50>'.$alert.'</td>
-          <td style="text-align: center; font-weight: bold;">' . $sensor['sensor_value'] . $unit . '</td>
-          <td style="text-align: center">' . round($sensor['sensor_limit_low'],2) . $unit . ' - ' . round($sensor['sensor_limit'],2) . $unit . '</td>
-          <td>' . (isset($sensor['sensor_notes']) ? $sensor['sensor_notes'] : '') . '</td>
+          <td>'.$alert.'</td>
+          <td>'.overlib_link($link_graph, $sensor_minigraph, $overlib_content).'</td>
+          <td style="font-weight: bold;">' . $sensor['sensor_value'] . $unit . '</td>
+          <td>' . round($sensor['sensor_limit_low'],2) . $unit . ' - ' . round($sensor['sensor_limit'],2) . $unit . '</td>
         </tr>
      ');
 
-  if ($vars['view'] == "graphs")
-  {
-    echo("<tr></tr><tr class='health'><td colspan=7>");
+    if ($vars['view'] == "graphs")
+    {
+      echo("<tr></tr><tr class='health'><td colspan=7>");
 
-    $daily_graph   = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-    $daily_url     = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      $graph_array['height'] = "100";
+      $graph_array['width']  = "216";
+      $graph_array['to']     = $config['time']['now'];
+      $graph_array['id']     = $sensor['sensor_id'];
+      $graph_array['type']   = $graph_type;
 
-    $weekly_graph  = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-    $weekly_url    = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      include("includes/print-graphrow.inc.php");
 
-    $monthly_graph = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-    $monthly_url   = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      echo("</td></tr>");
+    } # endif graphs
 
-    $yearly_graph  = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['yearh']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-    $yearly_url    = "graph.php?id=" . $sensor['sensor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['yearh']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
-
-    echo("<a onmouseover=\"return overlib('<img src=\'$daily_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$daily_graph' border=0></a> ");
-    echo("<a onmouseover=\"return overlib('<img src=\'$weekly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$weekly_graph' border=0></a> ");
-    echo("<a onmouseover=\"return overlib('<img src=\'$monthly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$monthly_graph' border=0></a> ");
-    echo("<a onmouseover=\"return overlib('<img src=\'$yearly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$yearly_graph' border=0></a>");
-    echo("</td></tr>");
-  } # endif graphs
  }
 }
 

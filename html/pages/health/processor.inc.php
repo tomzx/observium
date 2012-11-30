@@ -5,12 +5,15 @@ $graph_type = "processor_usage";
 echo("<div style='margin-top: 5px; padding: 0px;'>");
 echo("  <table width=100% cellpadding=6 cellspacing=0>");
 
-echo("<tr class=tablehead>
-        <th width=280>Device</th>
-        <th>Processor</th>
-        <th width=100></th>
-        <th width=280>Usage</th>
-      </tr>");
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('  <thead>');
+echo('    <tr>');
+echo('      <th width="200">Device</th>');
+echo('      <th>Processor</th>');
+echo('      <th width="100"></th>');
+echo('      <th width="250">Usage</th>');
+echo('    </tr>');
+echo('  </thead>');
 
 $sql  = "SELECT *, `processors`.`processor_id` AS `processor_id`";
 $sql .= " FROM `processors`";
@@ -54,11 +57,11 @@ foreach (dbFetchRows($sql) as $proc)
     $perc = round($proc['processor_usage']);
     $background = get_percentage_colours($perc);
 
-    echo('<tr class="health">
-          <td class=list-bold>' . generate_device_link($proc) . '</td>
+    echo('<tr>
+          <td>' . generate_device_link($proc) . '</td>
           <td>'.overlib_link($link, $text_descr,$overlib_content).'</td>
-          <td width=100>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
-          <td width="200"><a href="'.$proc_url.'" '.$proc_popup.'>
+          <td>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
+          <td><a href="'.$proc_url.'" '.$proc_popup.'>
             '.print_percentage_bar (400, 20, $perc, $perc."%", "ffffff", $background['left'], (100 - $perc)."%" , "ffffff", $background['right']).'
             </a>
           </td>
@@ -68,32 +71,19 @@ foreach (dbFetchRows($sql) as $proc)
 
     if ($vars['view'] == "graphs")
     {
-      echo('    <tr></tr><tr class="health"><td colspan="5">');
+      echo("<tr></tr><tr><td colspan=5>");
 
-      $daily_graph   = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $daily_url     = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      $graph_array['height'] = "100";
+      $graph_array['width']  = "216";
+      $graph_array['to']     = $config['time']['now'];
+      $graph_array['id']     = $proc['processor_id'];
+      $graph_array['type']   = $graph_type;
 
-      $weekly_graph  = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $weekly_url    = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      include("includes/print-graphrow.inc.php");
 
-      $monthly_graph = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $monthly_url   = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      echo("</td></tr>");
+    } # endif graphs
 
-      $yearly_graph  = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['yearh']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $yearly_url    = "graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['yearh']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
-
-      echo("      <a onmouseover=\"return overlib('<img src=\'$daily_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src=\"$daily_graph\" border=\"0\"></a> ");
-      echo("      <a onmouseover=\"return overlib('<img src=\'$weekly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src=\"$weekly_graph\" border=\"0\"></a> ");
-      echo("      <a onmouseover=\"return overlib('<img src=\'$monthly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src=\"$monthly_graph\" border=\"0\"></a> ");
-      echo("      <a onmouseover=\"return overlib('<img src=\'$yearly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src=\"$yearly_graph\" border=\"0\"></a>");
-      echo("  </td>
-  </tr>");
-
-    } #end graphs if
   }
 }
 

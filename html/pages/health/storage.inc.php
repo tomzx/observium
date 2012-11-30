@@ -2,78 +2,66 @@
 
 $graph_type = "storage_usage";
 
-echo("<div style='padding: 5px;'>
-        <table width=100% cellspacing=0 cellpadding=6 class='sortable'>");
-
-echo("<tr class=tablehead>
-        <th width=280>Device</th>
-        <th>Storage</th>
-        <th width=100></th>
-        <th width=280>Usage</th>
-        <th width=50>Used</th>
-      </tr>");
-
 $sql  = "SELECT *, `storage`.`storage_id` as `storage_id`";
 $sql .= " FROM  `storage`";
 $sql .= " LEFT JOIN  `devices` ON  `storage`.device_id =  `devices`.device_id";
 $sql .= " LEFT JOIN  `storage-state` ON  `storage`.storage_id =  `storage-state`.storage_id";
 $sql .= " ORDER BY `hostname`, `storage_descr`";
 
-foreach (dbFetchRows($sql) as $drive)
+echo("<div style='margin-top: 5px; padding: 0px;'>");
+
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('  <thead>');
+echo('    <tr>');
+echo('      <th width="250">Device</th>');
+echo('      <th>Memory</th>');
+echo('      <th width="100"></th>');
+echo('      <th width="280">Usage</th>');
+echo('      <th width="50">Used</th>');
+echo('    </tr>');
+echo('  </thead>');
+
+foreach (dbFetchRows($sql) as $storage)
 {
-  if (device_permitted($drive['device_id']))
+  if (device_permitted($storage['device_id']))
   {
-    $skipdrive = 0;
 
-    if ($drive["os"] == "junos")
-    {
-      foreach ($config['ignore_junos_os_drives'] as $jdrive)
-      {
-        if (preg_match($jdrive, $drive["storage_descr"]))
-        {
-          $skipdrive = 1;
-        }
-      }
-      $drive["storage_descr"] = preg_replace("/.*mounted on: (.*)/", "\\1", $drive["storage_descr"]);
-    }
+    $graph_array           = array();
+    $graph_array['to']     = $config['time']['now'];
+    $graph_array['id']     = $storage['storage_id'];
+    $graph_array['type']   = $graph_type;
+    $graph_array['legend'] = "no";
 
-    if ($drive['os'] == "freebsd")
-    {
-      foreach ($config['ignore_bsd_os_drives'] as $jdrive)
-      {
-        if (preg_match($jdrive, $drive["storage_descr"]))
-        {
-          $skipdrive = 1;
-        }
-      }
-    }
+    $link_array = $graph_array;
+    $link_array['page'] = "graphs";
+    unset($link_array['height'], $link_array['width'], $link_array['legend']);
+    $link_graph = generate_url($link_array);
 
-    if ($skipdrive) { continue; }
+    $link = generate_url( array("page" => "device", "device" => $storage['device_id'], "tab" => "health", "metric" => 'storage'));
 
-    $perc  = round($drive['storage_perc'], 0);
-    $total = formatStorage($drive['storage_size']);
-    $free = formatStorage($drive['storage_free']);
-    $used = formatStorage($drive['storage_used']);
+    $overlib_content = generate_overlib_content($graph_array, $storage['hostname'] ." - " . $storage['storage_descr'], NULL);
 
-    $graph_array['type']        = $graph_type;
-    $graph_array['id']          = $drive['storage_id'];
-    $graph_array['from']        = $config['time']['day'];
-    $graph_array['to']          = $config['time']['now'];
-    $graph_array['height']      = "20";
-    $graph_array['width']       = "80";
-    $graph_array_zoom           = $graph_array;
-    $graph_array_zoom['height'] = "150";
-    $graph_array_zoom['width']  = "400";
-    $link = "graphs/id=" . $graph_array['id'] . "/type=" . $graph_array['type'] . "/from=" . $graph_array['from'] . "/to=" . $graph_array['to'] . "/";
-    $mini_graph = overlib_link($link, generate_graph_tag($graph_array), generate_graph_tag($graph_array_zoom), NULL);
+    $graph_array['width'] = 80; $graph_array['height'] = 20; $graph_array['bg'] = 'ffffff00'; # the 00 at the end makes the area transparent.
+    $graph_array['from'] = $config['time']['day'];
+    $mini_graph =  generate_graph_tag($graph_array);
 
-    $background = get_percentage_colours($perc);
+    $total = formatStorage($storage['storage_total']);
+    $used = formatStorage($storage['storage_used']);
+    $free = formatStorage($storage['storage_free']);
 
-    echo("<tr class='health'><td>" . generate_device_link($drive) . "</td><td class=tablehead>" . $drive['storage_descr'] . "</td>
-         <td>$mini_graph</td>
-         <td>
-          <a href='#' $store_popup>".print_percentage_bar (400, 20, $perc, "$used / $total", "ffffff", $background['left'], $free, "ffffff", $background['right'])."</a>
-          </td><td>$perc"."%</td></tr>");
+    $background = get_percentage_colours($storage['storage_perc']);
+
+    echo('<tr class="health">
+          <td class=list-bold>' . generate_device_link($storage) . '</td>
+          <td>'.overlib_link($link, $storage['storage_descr'],$overlib_content).'</td>
+          <td>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
+          <td><a href="'.$proc_url.'" '.$proc_popup.'>
+            '.print_percentage_bar (400, 20, $storage['storage_perc'], $used.' / '.$total, "ffffff", $background['left'], $free , "ffffff", $background['right']).'
+            </a>
+          </td>
+          <td>'.$storage['storage_perc'].'%</td>
+        </tr>
+     ');
 
     if ($vars['view'] == "graphs")
     {
@@ -82,17 +70,17 @@ foreach (dbFetchRows($sql) as $drive)
       $graph_array['height'] = "100";
       $graph_array['width']  = "216";
       $graph_array['to']     = $config['time']['now'];
-      $graph_array['id']     = $drive['storage_id'];
+      $graph_array['id']     = $storage['storage_id'];
       $graph_array['type']   = $graph_type;
 
       include("includes/print-graphrow.inc.php");
 
       echo("</td></tr>");
-
     } # endif graphs
   }
 }
 
-echo("</table></div>");
+echo("</table>");
+echo("</div>");
 
 ?>

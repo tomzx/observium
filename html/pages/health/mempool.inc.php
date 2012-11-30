@@ -5,13 +5,16 @@ $graph_type = "mempool_usage";
 echo("<div style='margin-top: 5px; padding: 0px;'>");
 echo("<table width=100% cellpadding=6 cellspacing=0>");
 
-echo("<tr class=tablehead>
-        <th width=280>Device</th>
-        <th>Memory</th>
-        <th width=100></th>
-        <th width=280>Usage</th>
-        <th width=50>Used</th>
-      </tr>");
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('  <thead>');
+echo('    <tr>');
+echo('      <th width="250">Device</th>');
+echo('      <th>Memory</th>');
+echo('      <th width=100></th>');
+echo('      <th width="280">Usage</th>');
+echo('      <th width="50">Used</th>');
+echo('    </tr>');
+echo('  </thead>');
 
 $sql  = "SELECT *, `mempools`.`mempool_id` AS `mempool_id`";
 $sql .= " FROM  `mempools`";
@@ -23,14 +26,25 @@ foreach (dbFetchRows($sql) as $mempool)
 {
   if (device_permitted($mempool['device_id']))
   {
-    $text_descr = $mempool['mempool_descr'];
 
-    $mempool_url = "device/device=".$mempool['device_id']."/tab=health/metric=mempool/";
-    $mini_url = "graph.php?id=".$mempool['mempool_id']."&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=80&amp;height=20&amp;bg=f4f4f4";
+    $graph_array           = array();
+    $graph_array['to']     = $config['time']['now'];
+    $graph_array['id']     = $mempool['mempool_id'];
+    $graph_array['type']   = $graph_type;
+    $graph_array['legend'] = "no";
 
-    $mempool_popup  = "onmouseover=\"return overlib('<div class=list-large>".$device['hostname']." - ".$text_descr;
-    $mempool_popup .= "</div><img src=\'graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";
-    $mempool_popup .= "', RIGHT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\"";
+    $link_array = $graph_array;
+    $link_array['page'] = "graphs";
+    unset($link_array['height'], $link_array['width'], $link_array['legend']);
+    $link_graph = generate_url($link_array);
+
+    $link = generate_url( array("page" => "device", "device" => $mempool['device_id'], "tab" => "health", "metric" => 'mempool'));
+
+    $overlib_content = generate_overlib_content($graph_array, $mempool['hostname'] ." - " . $mempool['mempool_descr'], NULL);
+
+    $graph_array['width'] = 80; $graph_array['height'] = 20; $graph_array['bg'] = 'ffffff00'; # the 00 at the end makes the area transparent.
+    $graph_array['from'] = $config['time']['day'];
+    $mini_graph =  generate_graph_tag($graph_array);
 
     $total = formatStorage($mempool['mempool_total']);
     $used = formatStorage($mempool['mempool_used']);
@@ -38,40 +52,30 @@ foreach (dbFetchRows($sql) as $mempool)
 
     $background = get_percentage_colours($mempool['mempool_perc']);
 
-    echo("<tr class='health'>
-           <td>".generate_device_link($mempool)."</td>
-           <td class=tablehead><a href='".$mempool_url."' $mempool_popup>" . $text_descr . "</a></td>
-           <td width=90><a href='".$mempool_url."'  $mempool_popup><img src='$mini_url'></a></td>
-           <td width=200><a href='".$mempool_url."' $mempool_popup>
-           ".print_percentage_bar (400, 20, $mempool['mempool_perc'], "$used / $total", "ffffff", $background['left'], $free , "ffffff", $background['right'])."
-            </a></td>
-            <td width=50>".$mempool['mempool_perc']."%</td>
-         </tr>");
+    echo('<tr class="health">
+          <td class=list-bold>' . generate_device_link($mempool) . '</td>
+          <td>'.overlib_link($link, $mempool['mempool_descr'],$overlib_content).'</td>
+          <td>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
+          <td><a href="'.$proc_url.'" '.$proc_popup.'>
+            '.print_percentage_bar (400, 20, $mempool['mempool_perc'], $used.' / '.$total, "ffffff", $background['left'], $free , "ffffff", $background['right']).'
+            </a>
+          </td>
+          <td>'.$mempool['mempool_perc'].'%</td>
+        </tr>
+     ');
 
     if ($vars['view'] == "graphs")
     {
       echo("<tr></tr><tr class='health'><td colspan=5>");
 
-      $daily_graph   = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $daily_url       = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      $graph_array['height'] = "100";
+      $graph_array['width']  = "216";
+      $graph_array['to']     = $config['time']['now'];
+      $graph_array['id']     = $mempool['mempool_id'];
+      $graph_array['type']   = $graph_type;
 
-      $weekly_graph  = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $weekly_url      = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
+      include("includes/print-graphrow.inc.php");
 
-      $monthly_graph = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $monthly_url     = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
-
-      $yearly_graph  = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['yearh']."&amp;to=".$config['time']['now']."&amp;width=211&amp;height=100";
-      $yearly_url  = "graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['yearh']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=150";
-
-      echo("<a onmouseover=\"return overlib('<img src=\'$daily_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$daily_graph' border=0></a> ");
-      echo("<a onmouseover=\"return overlib('<img src=\'$weekly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$weekly_graph' border=0></a> ");
-      echo("<a onmouseover=\"return overlib('<img src=\'$monthly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$monthly_graph' border=0></a> ");
-      echo("<a onmouseover=\"return overlib('<img src=\'$yearly_url\'>', LEFT);\" onmouseout=\"return nd();\">
-        <img src='$yearly_graph' border=0></a>");
       echo("</td></tr>");
     } # endif graphs
   }
