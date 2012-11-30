@@ -154,7 +154,11 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 	  classes: 'qtip-bootstrap',
 	},
         position: {
-		target: 'mouse'
+		target: 'mouse',
+		adjust: {
+			x: 2,
+                        y: 2
+		}
 	}
       });
     });
