@@ -1,7 +1,17 @@
 <?php
 
-echo('<table border="0" cellspacing="0" cellpadding="5" width="100%">');
-echo('<tr><th>Port</th><th>MAC address</th><th>IPv4 address</th><th>Remote device</th><th>Remote port</th></tr>');
+
+echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo("  <thead>\n");
+echo("    <tr>\n");
+echo("      <th>Port</th>\n");
+echo("      <th>MAC Address</th>\n");
+echo("      <th>IP Address</th>\n");
+echo("      <th>Remote Host</th>\n");
+echo("      <th>Remote Port</th>\n");
+echo("    </tr>\n");
+echo("  </thead>\n");
+echo("  <tbody>\n");
 
 $i = "1";
 
@@ -28,6 +38,7 @@ foreach (dbFetchRows("SELECT * FROM ipv4_mac AS M, ports AS I WHERE I.port_id = 
   $i++;
 }
 
-echo("</table>");
+echo("  </tbody>\n");
+echo("</table>\n");
 
 ?>

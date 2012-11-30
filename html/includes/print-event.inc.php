@@ -19,15 +19,17 @@ if (!isset($vars['device']) || empty($vars['device'])) {
   </td>");
 }
 
-if ($entry['type'] == "interface")
-{
-  $this_if = ifLabel(getifbyid($entry['reference']));
-  $entry['link'] = "<b>".generate_port_link($this_if, makeshortif(strtolower($this_if['label'])))."</b>";
-} else {
-  $entry['link'] = "System";
+if (!isset($vars['port']) || empty($vars['port'])) {
+  if ($entry['type'] == "interface")
+  {
+    $this_if = ifLabel(getifbyid($entry['reference']));
+    $entry['link'] = "<b>".generate_port_link($this_if, makeshortif(strtolower($this_if['label'])))."</b>";
+  } else {
+    $entry['link'] = "System";
+  }
+  echo("<td>".$entry['link']."</td>");
 }
 
-echo("<td>".$entry['link']."</td>");
 echo("<td>".htmlspecialchars($entry['message']) . "</td>
 </tr>");
 

@@ -92,7 +92,8 @@ function generate_overlib_content($graph_array, $text)
     foreach (array('day','week','month','year') as $period)
     {
       $graph_array['from']        = $config['time'][$period];
-      $overlib_content .= str_replace('"', "\'", generate_graph_tag($graph_array));
+      $overlib_content .= generate_graph_tag($graph_array);
+
     }
     $overlib_content .= "</div>";
 
@@ -161,8 +162,8 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
     $graphhead = $entry['text'];
     $contents .= '<div style="width: 708px">';
     $contents .= '<span style="margin-left: 5px; font-size: 12px; font-weight: bold;">'.$graphhead.'</span><br />';
-    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&amp;from=$start&amp;to=$end&amp;width=275&amp;height=100&amp;type=$graph&amp;legend=no" . '" style="margin: 2px;">';
-    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&amp;from=".$config['time']['week']."&amp;to=$end&amp;width=275&amp;height=100&amp;type=$graph&amp;legend=no" . '" style="margin: 2px;">';
+    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&amp;from=$start&amp;to=$end&amp;width=275&amp;height=100&amp;type=$graph&amp;legend=no&amp;draw_all=yes" . '" style="margin: 2px;">';
+    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&amp;from=".$config['time']['week']."&amp;to=$end&amp;width=275&amp;height=100&amp;type=$graph&amp;legend=no&amp;draw_all=yes" . '" style="margin: 2px;">';
     $contents .= '</div>';
   }
 
@@ -181,12 +182,12 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
 
 function overlib_link($url, $text, $contents, $class)
 {
-  global $config;
+  global $config, $link_iter;
 
-  $contents = str_replace("\"", "\'", $contents);
-  $output = '<a class="'.$class.'" href="'.$url.'"';
-  $output .= " onmouseover=\"return overlib('".$contents."'".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">";
-  $output .= $text."</a>";
+  $link_iter++;
+
+  $output  = '<a href="'.$url.'" class="tooltip-from-element '.$class.'" data-tooltip-id="tooltip-'.$link_iter.'">'.$text.'</a>';
+  $output .= '<div id="tooltip-'.$link_iter.'" style="display:none">'.$contents.'</div>';
 
   return $output;
 }
@@ -201,7 +202,7 @@ function generate_graph_popup($graph_array)
 
   $graph = generate_graph_tag($graph_array);
   $content = "<div class=list-large>".$graph_array['popup_title']."</div>";
-  $content .= "<div style=\'width: 850px\'>";
+  $content .= "<div style='width: 850px'>";
   $graph_array['legend']   = "yes";
   $graph_array['height']   = "100";
   $graph_array['width']    = "340";
@@ -416,11 +417,11 @@ function generate_port_link($port, $text = NULL, $type = NULL)
 
   $content = "<div class=list-large>".$port['hostname']." - " . fixifName($port['label']) . "</div>";
   if ($port['ifAlias']) { $content .= $port['ifAlias']."<br />"; }
-  $content .= "<div style=\'width: 850px\'>";
+  $content .= "<div style='width: 700px'>";
   $graph_array['type']     = $port['graph_type'];
   $graph_array['legend']   = "yes";
   $graph_array['height']   = "100";
-  $graph_array['width']    = "340";
+  $graph_array['width']    = "275";
   $graph_array['to']           = $config['time']['now'];
   $graph_array['from']     = $config['time']['day'];
   $graph_array['id']       = $port['port_id'];

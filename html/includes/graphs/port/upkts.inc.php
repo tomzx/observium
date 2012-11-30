@@ -14,6 +14,8 @@ $colour_area_out_max = "FFefaa";
 $graph_max = 1;
 $unit_text = "Packets";
 
+  $args['nototal'] = 1; $print_total = 0; $nototal = 1;
+
 include("includes/graphs/generic_duplex.inc.php");
 
 ?>

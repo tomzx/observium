@@ -121,12 +121,14 @@ if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title'
 <?php
 if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$config['page_refresh'].'" />' . "\n"); }
 ?>
+  <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
   <link href="<?php echo($config['stylesheet']);  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap-responsive.min.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap.obs.css");  ?>" rel="stylesheet" type="text/css" />
-  <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
   <link rel="stylesheet" href="css/mktree.css" type="text/css" />
+  <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
+
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
 ?>
@@ -136,10 +138,33 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/sorttable.js"></script>
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery-checkbox.js"></script>
-  <script type="text/javascript" src="js/qtip/jquery.qtip-1.0.0-rc3.min.js"></script>
-<?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
+  <script type="text/javascript" src="js/qtip/jquery.qtip.min.js"></script>
+  <!--[if lt IE 9]>
+    <script type="text/javascript" src="tipped/js/excanvas/excanvas.js"></script>
+  <![endif]-->
+
+  <script type="text/javascript">
+
+  jQuery(document).ready(function($) {
+    $(".tooltip-from-element").each(function(){
+      var selector = '#' + $(this).data('tooltip-id');
+      $(this).qtip({
+        content: $(selector),
+        style: {
+	  classes: 'qtip-bootstrap',
+	},
+        position: {
+		target: 'mouse'
+	}
+      });
+    });
+  });
+
+  </script>
+
+
+  <?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
   <!--[if IE]><script src="js/html5.js"></script><![endif]-->
-  <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="js/jqplot/excanvas.js"></script><![endif]-->
   <script language="javascript" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
   <link rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.min.css" />
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
@@ -230,6 +255,7 @@ if (!$vars['bare'] == "yes") {
 
 ?>
     <div class="clearer"></div>
+
     <div class="content-mat">
       <div id="content" style="min-height:650px; width:auto; display:block;">
         <div style="clear:both; height:6px; display:block;"></div>

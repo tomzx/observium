@@ -23,7 +23,7 @@ $colours_in='greens';
 $multiplier = "1";
 $colours_out = 'blues';
 
-$nototal = 1;
+  $args['nototal'] = 1; $print_total = 0; $nototal = 1;
 
 include("includes/graphs/generic_multi_seperated.inc.php");
 

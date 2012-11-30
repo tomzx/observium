@@ -1,12 +1,12 @@
 html {
- background-color: #ffffff;
+  background: #fff;
 }
 
 body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
   margin: 0px;
   padding: 0px;
-  background: rgb(255,255,255); /* Old browsers */
+  background: #fff; /* Old browsers */
   color: #555;
   font-size: 10pt;
   line-height: 20px;
@@ -206,9 +206,9 @@ h3.bill > i {
     margin-top: 4px;
 }
 
-table {
-  background-color: #fff;
-}
+#table {
+#  background-color: #fff;
+#}
 
 legend {
   margin-bottom: 20px;

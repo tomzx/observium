@@ -17,6 +17,11 @@ $menu_options['basic']   = 'Basic';
 $menu_options['details'] = 'Details';
 $menu_options['arp']     = 'ARP Table';
 
+if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `device_id` = '".$device['device_id']."'"))
+{
+  $menu_options['fdb'] = 'FDB Table';
+}
+
 if(dbFetchCell("SELECT * FROM links AS L, ports AS I WHERE I.device_id = '".$device['device_id']."' AND I.port_id = L.local_port_id"))
 {
   $menu_options['neighbours'] = 'Neighbours';
@@ -86,7 +91,7 @@ if ($vars['view'] == 'minigraphs')
     </div>");
   }
   echo("</div>");
-} elseif ($vars['view'] == "arp" || $vars['view'] == "adsl" || $vars['view'] == "neighbours") {
+} elseif ($vars['view'] == "arp" || $vars['view'] == "adsl" || $vars['view'] == "neighbours" || $vars['view'] == "fdb") {
   include("ports/".$vars['view'].".inc.php");
 } else {
   if ($vars['view'] == "details") { $port_details = 1; }

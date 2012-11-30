@@ -29,12 +29,11 @@ if (1)
 
   $units='';
   $units_descr='Packets/sec';
-  $total_units='B';
   $colours_in='purples';
   $multiplier = "1";
   $colours_out = 'oranges';
 
-  $nototal = 1;
+  $args['nototal'] = 1; $print_total = 0; $nototal = 1;
 
   include("includes/graphs/generic_multi_seperated.inc.php");
 }
@@ -54,8 +53,8 @@ elseif (is_file($config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename(
   $colour_area_out_max = "FFefaa";
 
   $unit_text = "Packets";
-
   $graph_max = 1;
+  $print_total = 0; $nototal = 1;
 
   include("includes/graphs/generic_duplex.inc.php");
 }
