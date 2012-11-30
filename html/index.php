@@ -138,7 +138,7 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/sorttable.js"></script>
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery-checkbox.js"></script>
-  <script type="text/javascript" src="js/qtip/jquery.qtip.min.js"></script>
+  <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
   <!--[if lt IE 9]>
     <script type="text/javascript" src="tipped/js/excanvas/excanvas.js"></script>
   <![endif]-->
