@@ -240,7 +240,6 @@ function popUp(URL)
 }
 // End -->
   </script>
-  <script type="text/javascript" src="js/overlib_mini.js"></script>
   <div id="container">
 
 <?php
