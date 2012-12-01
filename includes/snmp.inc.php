@@ -129,7 +129,7 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
   {
     return false;
   }
-  elseif ($data) { return $data; }
+  elseif (!empty($data)) { return $data; }
   else { return false; }
 }
 
