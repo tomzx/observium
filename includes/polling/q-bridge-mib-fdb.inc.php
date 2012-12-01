@@ -2,10 +2,18 @@
 
 echo("Q-BRIDGE-MIB FDB Tables\n");
 
-/// Build ifIndex > port_id cache table
+/// Build ifIndex > port cache table
 $port_ifIndex_table = array();
-foreach(dbFetchRows("SELECT `ifIndex`,`port_id` FROM `ports` WHERE `device_id` = ?", array($device['device_id'])) as $port)
-  {  $port_ifIndex_table[$port['ifIndex']] = $port['port_id']; }
+foreach(dbFetchRows("SELECT `ifIndex`,`port_id`,`ifDescr` FROM `ports` WHERE `device_id` = ?", array($device['device_id'])) as $cache_port)
+  {  $port_ifIndex_table[$cache_port['ifIndex']] = $cache_port; }
+
+
+/// Build dot1dBasePort > port cache table because people in the '80s were dicks
+$dot1dBasePort_table = array();
+foreach(snmpwalk_cache_oid($device, "dot1dBasePortIfIndex", $port_stats, "BRIDGE-MIB") AS $dot1dbaseport => $data)
+{
+  $dot1dBasePort_table[$dot1dbaseport] = $port_ifIndex_table[$data['dot1dBasePortIfIndex']];
+}
 
 /// Build table of existing vlan/mac table
 $fdbs_db = array();
@@ -28,7 +36,7 @@ foreach(explode("\n", $data) as $text) {
   }
 }
 
-echo(str_pad("Vlan", 8) . " | " . str_pad("MAC",12) . " | " .  str_pad("Port",12) ." | ". str_pad("Status",16) . "\n".
+echo(str_pad("Vlan", 8) . " | " . str_pad("MAC",12) . " | " .  "Port                  (dot1d|ifIndex)" ." | ". str_pad("Status",16) . "\n".
 str_pad("", 90, "-")."\n");
 
 /// Loop vlans
@@ -38,8 +46,9 @@ foreach($fdbs as $vlan => $macs)
   foreach($macs as $mac => $data)
   {
     $ifIndex = $data['dot1qTpFdbPort'];
-    $port_id = $port_ifIndex_table[$ifIndex];
-    echo(str_pad($vlan, 8) . " | " . str_pad($mac,12) . " | " .  str_pad($port_id,12) ." | ". str_pad($data['dot1qTpFdbPort'],16));
+    $port_id = $dot1dBasePort_table[$ifIndex]['port_id'];
+    $port_name = $dot1dBasePort_table[$ifIndex]['ifDescr'];
+    echo(str_pad($vlan, 8) . " | " . str_pad($mac,12) . " | " .  str_pad($port_name,18) . str_pad("(".$data['dot1qTpFdbPort']."|".$ifIndex.")",19," ",STR_PAD_LEFT) ." | ". str_pad($data['dot1qTpFdbStatus'],10));
 
     /// if entry already exists
     if(!is_array($fdbs_db[$vlan][$mac]))
@@ -69,7 +78,7 @@ foreach ($fdbs_db as $vlan => $fdb_macs)
 {
   foreach($fdb_macs as $mac => $data)
   {
-    echo(str_pad($vlan, 8) . " | " . str_pad($mac,12) . " | " .  str_pad($data['port_id'],12) ." | ". str_pad($data['fdb_status'],16));
+    echo(str_pad($vlan, 8) . " | " . str_pad($mac,12) . " | " .  str_pad($data['port_id'],25) ." | ". str_pad($data['fdb_status'],16));
     echo("-\n");
     dbDelete('vlans_fdb', '`device_id` = ? AND `vlan_id` = ? AND `mac_address` = ?', array($device['device_id'], $vlan, $mac));
   }

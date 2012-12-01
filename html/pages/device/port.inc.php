@@ -63,10 +63,16 @@ $link_array = array('page'    => 'device',
 
 $menu_options['graphs']   = 'Graphs';
 $menu_options['realtime'] = 'Real time';   // FIXME CONDITIONAL
-$menu_options['arp']      = 'ARP Table';
+$menu_options['arp']      = 'ARP Table';   // FIXME CONDITIONAL?
+
+if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id'])))
+{
+  $menu_options['fdb'] = 'FDB Table';
+}
+
 $menu_options['events']      = 'Eventlog';
 
-if (dbFetchCell("SELECT COUNT(*) FROM `ports_adsl` WHERE `port_id` = '".$port['port_id']."'") )
+if (dbFetchCell("SELECT COUNT(*) FROM `ports_adsl` WHERE `port_id` = ?", array($port['port_id'])) )
 {  $menu_options['adsl'] = 'ADSL'; }
 
 if (dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `pagpGroupIfIndex` = '".$port['ifIndex']."' and `device_id` = '".$device['device_id']."'") )
