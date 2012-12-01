@@ -47,8 +47,6 @@ ul ul ul { list-style: square outside; }
   -webkit-box-shadow: #CCC 0 0 2px;
   -moz-box-shadow: #CCC 0 0 2px;
   box-shadow: #CCC 0 0 2px;
-
-
 }
 
 .submit {
@@ -301,6 +299,12 @@ A:visited { color: #0000cc; }
 A:hover   { color: #990099; }
 A:active  { color: #000000; }
 
+/* Wtf? Redeclared styles*/
+a { text-decoration:none; color: #00f; }
+a:visited { text-decoration:none; color: #00f; }
+a:hover { text-decoration:underline; color: #00f; }
+a:active { color: #00f; }
+
 A.sectionhead         { text-decoration: none; color: #555; }
 A.sectionhead:link    { text-decoration: none; color: #555; }
 A.sectionhead:visited { text-decoration: none; color: #555; }
@@ -354,7 +358,6 @@ A.purple:visited, a.purple, .purple { color: #740074; }
 }
 
 .tablehead {
-  font-weight: bold;
   font-size: 13px;
   font-style: normal;
   font-weight: bold;
@@ -442,7 +445,7 @@ tr.list-device-ignored-up {
 }
 
 a.list-device-down, a.list-device-down, a.list-device-down:visited {
-   color: #cc0000;
+  color: #cc0000;
 }
 
 a.list-device-ignored-up {
@@ -578,11 +581,6 @@ form { margin: 0px; padding: 0px; }
 hr { border: 0px; height: 1px; background-color: #ccc; color: #ccc; }
 p { margin: 0px; padding: 0px; }
 
-a { text-decoration:none; color: #00f; }
-a:visited { text-decoration:none; color: #00f; }
-a:hover { text-decoration:underline; color: #00f; }
-a:active { color: #00f; }
-
 .vspace { margin-top: 4px; margin-bottom: 4px; }
 p.vspace { padding-top: 3px; padding-bottom: 3px; }
 .content-mat { padding: 0px; margin: auto; display:block; }
@@ -590,9 +588,9 @@ p.vspace { padding-top: 3px; padding-bottom: 3px; }
 
 .borderless-table tr td { border: none }
 
-#header { width: 100%; margin: 0px 0px 0px 0px; bbackground-color: #fff; }
-#header #page-title { color: #555; font: 18pt Arial; font-weight: bold; }
-#header #page-subtitle { color: #555; font: 12pt Arial; font-weight: bold; }
+#header { width: 100%; margin: 0px 0px 0px 0px; background-color: #fff; }
+#header #page-title { color: #555; font: 18pt Arial,sans-serif; font-weight: bold; }
+#header #page-subtitle { color: #555; font: 12pt Arial,sans-serif; font-weight: bold; }
 #header a { color: #eeeeee; }
 
 #main h1 { font-size: 12pt; margin: 0px; padding: 0px; }
@@ -712,7 +710,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 #top {
   height:17px;
   padding:2px 21px 0px 21px;
-  font:normal 11px arial;
+  font:normal 11px arial,sans-serif;
   color: white;
   }
 
@@ -738,7 +736,6 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 }
 
 .infobox-down {
-
 }
 
 .errorbox {
@@ -762,27 +759,27 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 /* For fancy tabs */
 
 .shadetabs {
- padding: 0px 5px;
- margin-left: 0;
- margin-top: 1px;
- margin-bottom: 0px;
- list-style-type: none;
- text-align: left; /*set to left, center, or right to align the menu as desired*/
+  padding: 0px 5px;
+  margin-left: 0;
+  margin-top: 1px;
+  margin-bottom: 0px;
+  list-style-type: none;
+  text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
 
 .shadetabs li {
- display: inline;
- margin: 0;
+  display: inline;
+  margin: 0;
 }
 
 .shadetabs li a {
- text-decoration: none;
- padding: 3px 6px;
- margin-right: 3px;
- border: 1px solid #aaa;
- font-weight: bold;
- font-size: 12px;
- color: #5e5e5e;
+  text-decoration: none;
+  padding: 3px 6px;
+  margin-right: 3px;
+  border: 1px solid #aaa;
+  font-weight: bold;
+  font-size: 12px;
+  color: #5e5e5e;
 
   /* Gradient background */
   background:#F4F4F4;
@@ -793,18 +790,14 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   -moz-border-radius: 0px 3px 3px 3px;
   -webkit-border-radius: 3px 3px 0px 0px;
   border-radius: 3px 3px 0px 0px;
-
 }
 
 .shadetabs li a img {
   margin-top: -3px;
 }
-
-
 .shadetabs li a:visited {
   color: #5e5e5e;
 }
-
 .shadetabs li a:hover {
   text-decoration: none;
   color: #029feb;
@@ -813,13 +806,9 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   background:#F4F4F4;
   background: -moz-linear-gradient(top, #FFF, #CCC);
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFF), to(#CCC));
-
-
 }
-
 .shadetabs li.selected {
 }
-
 .shadetabs li.selected a { /*selected main tab style */
   border-bottom-color: white;
   /* Gradient background */
@@ -831,7 +820,6 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   -moz-box-shadow: 0 -1px 2px #DDD;
   -webkit-box-shadow: 0 -1px 2px #DDD;
   box-shadow: 0 -1px 2px #DDD;
-
 }
 
 .shadetabs li.selected a:hover { /*hovered tab style */
@@ -891,7 +879,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 
   margin:3px 0px 5px 5px;
   border:none;
-#  background:#EEEEEE;
+  /*background:#EEEEEE;*/
 }
 
 #menium li:hover {
@@ -954,12 +942,12 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   display:block;
   outline:0;
   text-decoration:none;
-  #text-shadow: 1px 1px 1px #000;
+  /*text-shadow: 1px 1px 1px #000;*/
 }
 
 #menium li:hover a {
   color:#029feb;
-  #text-shadow: 1px 1px 1px #FFFFFF;
+  /*text-shadow: 1px 1px 1px #FFFFFF;*/
 }
 
 /* Drop Down */
@@ -980,10 +968,10 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 
   /* Gradient background */
   background:#eeeeee;
-#  background: -moz-linear-gradient(top, #FFF, #DDD);
-#  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FBFBFB), to(#DDD));
-#  background: -ms-linear-gradient(top, #FBFBFB, #DDD);
-#  background: -webkit-linear-gradient(top, #FBFBFB, #DDD);
+  /*background: -moz-linear-gradient(top, #FFF, #DDD);*/
+  /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FBFBFB), to(#DDD));*/
+  /*background: -ms-linear-gradient(top, #FBFBFB, #DDD);*/
+  /*background: -webkit-linear-gradient(top, #FBFBFB, #DDD);*/
 
   /* Rounded Corners */
   -moz-border-radius: 0px 4px 4px 4px;
@@ -1051,7 +1039,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   line-height:21px;
   font-size:12px;
   text-align:left;
-  #text-shadow: 1px 1px 1px #FFFFFF;
+  /*text-shadow: 1px 1px 1px #FFFFFF;*/
 }
 
 #menium h2 {
@@ -1111,7 +1099,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 #menium li .black_box {
   background-color:#333333;
   color: #eeeeee;
-  #text-shadow: 1px 1px 1px #000;
+  /*text-shadow: 1px 1px 1px #000;*/
   padding:4px 6px 4px 6px;
 
   /* Rounded Corners */
@@ -1134,7 +1122,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   font-size:12px;
   line-height:24px;
   position:relative;
-  #text-shadow: 1px 1px 1px #ffffff;
+  /*text-shadow: 1px 1px 1px #ffffff;*/
   padding:1px;
   margin:0;
   float:none;
@@ -1153,7 +1141,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 -----------------------------------------------------------------------------*/
 /* gumax-header */
 #gumax-header {
-  /* border: 1px solid #000; /*debuging*/
+  /*border: 1px solid #000;*/ /*debuging*/
   position: relative;
   z-index: 100;  /* make logo visible over content*/
   min-height: 100px;  /* height of header */
@@ -1165,7 +1153,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 /* Login
 -----------------------------------------------------------------------------*/
 #gumax-p-login {
-  /* border: 1px solid #000; /*debuging*/
+  /*border: 1px solid #000;*/ /*debuging*/
   font-size: 90%;
   margin: 0; padding: 7px 0 5px 0;
   text-align: right;
@@ -1198,7 +1186,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 #p-logo,
 #p-logo a,
 #p-logo a:hover {
-  /* border: 1px solid #000; /*debuging*/
+  /*border: 1px solid #000;*/ /*debuging*/
   width: 350px;
   height: 96px;
 }
@@ -1215,208 +1203,137 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   text-decoration: none;
 }
 
-
 /* Tooltip */
 
 .bubbleInfo {
-    position: relative;
+  position: relative;
 }
 
 .popup {
-    position: absolute;
-    display: none; /* keeps the popup hidden if no JS available */
+  position: absolute;
+  display: none; /* keeps the popup hidden if no JS available */
 }
 
 .div-normal {
-  
 }
 .div-alert {
   border: 2px solid; 
-  #border-radius: 10px;
+  /*border-radius: 10px;*/
   border-color: #cc0000;
 }
 .div-ignore {
-  
 }
 .div-ignore-alert {
-
 }
-
 .div-disabled {
-
 }
 
 .auto-hint {
   color:#AAAAAA;
 }
 
-
-
 .tabBox .tabs {
-    overflow: hidden;
-    padding: 0px 8px;
-    margin-bottom: -1px;
+  overflow: hidden;
+  padding: 0px 8px;
+  margin-bottom: -1px;
 }
 
 .tabBox .tabs li {
-    float: left;
-    list-style: none;
-    padding: .125em .125em 0;
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-    border-bottom: 1px solid #FFF;
+  float: left;
+  list-style: none;
+  padding: .125em .125em 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid #FFF;
 }
 
 .tabBox .tabs li.active,
 .tabBox .tabs li.selected {
-    z-index: 3;
+  z-index: 3;
 }
 
 .tabBox .tabs a {
-    float: left;
-    height: 1.7em;
-    line-height: 1.7em;
-    font-weight: bold;
-    -webkit-border-radius: 4px 4px 0 0;
-    -moz-border-radius: 4px 4px 0 0;
-    border-radius: 4px 4px 0 0;
-    background: #EEE;
-    border: 1px solid #CCC;
-    border-bottom: 0;
-    padding: 0 8px;
-    color: #666;
-    text-decoration: none;
-    behavior: url(/css/PIE.htc);
+  float: left;
+  height: 1.7em;
+  line-height: 1.7em;
+  font-weight: bold;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  background: #EEE;
+  border: 1px solid #CCC;
+  border-bottom: 0;
+  padding: 0 8px;
+  color: #666;
+  text-decoration: none;
+  behavior: url(/css/PIE.htc); /* IE only. But where this file?*/
 }
 
 .tabBox .tabs img {
   margin-top: -4px;
 }
 
-
 .tabBox .tabs .selected a {
-    background: #FFF;
-    -webkit-box-shadow: #CCC 0 0 .25em;
-    -moz-box-shadow: #CCC 0 0 .25em;
-    box-shadow: #CCC 0 0 .25em;
+  background: #FFF;
+  -webkit-box-shadow: #CCC 0 0 .25em;
+  -moz-box-shadow: #CCC 0 0 .25em;
+  box-shadow: #CCC 0 0 .25em;
 }
 
 .tabBox .tabs a:hover {
-    background: -webkit-gradient(linear, 0 0, 0 70%, from(#EEF), to(#FFF));
-    background: -webkit-linear-gradient(#EEF, #FFF 70%);
-    background: -moz-linear-gradient(#EEF, #FFF 70%);
-    background: -ms-linear-gradient(#EEF, #FFF 70%);
-    background: -o-linear-gradient(#EEF, #FFF 70%);
-    background: linear-gradient(#EEF, #FFF 70%);
-    -pie-background: linear-gradient(#EEF, #FFF 70%);
+  background: -webkit-gradient(linear, 0 0, 0 70%, from(#EEF), to(#FFF));
+  background: -webkit-linear-gradient(#EEF, #FFF 70%);
+  background: -moz-linear-gradient(#EEF, #FFF 70%);
+  background: -ms-linear-gradient(#EEF, #FFF 70%);
+  background: -o-linear-gradient(#EEF, #FFF 70%);
+  background: linear-gradient(#EEF, #FFF 70%);
+  -pie-background: linear-gradient(#EEF, #FFF 70%);
 }
 
 .tabBox .tabcontent {
-    margin-top -2px;
-    min-height: 600px;
-    clear: left;
-    position: relative;
-    z-index: 2;
-    padding: 10px;
-    border: 1px solid #CCC;
-    background: #FFF;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    -webkit-box-shadow: #CCC 0 0 .25em;
-    -moz-box-shadow: #CCC 0 0 .25em;
-    box-shadow: #CCC 0 0 .25em;
-    behavior: url(/css/PIE.htc);
+  margin-top: -2px;
+  min-height: 600px;
+  clear: left;
+  position: relative;
+  z-index: 2;
+  padding: 10px;
+  border: 1px solid #CCC;
+  background: #FFF;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: #CCC 0 0 .25em;
+  -moz-box-shadow: #CCC 0 0 .25em;
+  box-shadow: #CCC 0 0 .25em;
+  behavior: url(/css/PIE.htc); /* IE only. But where this file?*/
 }
 
 .devicetable {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
-tr.devicetable:nth-child(odd) {
-  background: #e5e5e5;
-}
-
-tr.devicetable:nth-child(even) {
-  background: #ffffff;
-}
-
-tr.iftype:nth-child(odd) {
-  background: #e5e5e5;
-}
-
-tr.iftype:nth-child(even) {
-  background: #ffffff;
-}
-
-tr.health:nth-child(odd) {
-  background: #ffffff;
-}
-
-tr.health:nth-child(even) {
-  background: #eeeeee;
-}
-
-tr.ports:nth-child(even) {
-  background: #ffffff;
-}
-tr.ports:nth-child(odd) {
-  background: #eeeeee;
-}
-
-tr.bgp:nth-child(even) {
-  background: #ffffff;
-}
-
-tr.locations:nth-child(even) {
-  background: #e5e5e5;
-}
-
-tr.locations:nth-child(odd) {
-  background: #ffffff;
-}
-
-tr.inventory:nth-child(even) {
-  background: #e5e5e5;
-}
-
-tr.inventory:nth-child(odd) {
-  background: #ffffff;
-}
-
-tr.list:nth-child(odd) {
-  background: #e5e5e5;
-}
-
-tr.list:nth-child(even) {
-  background: #ffffff;
-}
-
-tr.eventlog:nth-child(even) {
-  background: #e5e5e5;
-}
-
-tr.eventlog:nth-child(odd) {
-  background: #ffffff;
-}
-
-tr.syslog:nth-child(even) {
-  background: #e5e5e5;
-}
-
-tr.syslog:nth-child(odd) {
-  background: #ffffff;
-}
-
-tr.search:nth-child(even) {
-  background: #e5e5e5;
-}
-
-tr.search:nth-child(odd) {
-  background: #ffffff;
-}
-
+tr.devicetable:nth-child(odd)   { background: #e5e5e5; }
+tr.devicetable:nth-child(even)  { background: #ffffff; }
+tr.iftype:nth-child(odd)        { background: #e5e5e5; }
+tr.iftype:nth-child(even)       { background: #ffffff; }
+tr.health:nth-child(odd)        { background: #ffffff; }
+tr.health:nth-child(even)       { background: #eeeeee; }
+tr.ports:nth-child(even)        { background: #ffffff; }
+tr.ports:nth-child(odd)         { background: #eeeeee; }
+tr.bgp:nth-child(even)          { background: #ffffff; }
+tr.locations:nth-child(even)    { background: #e5e5e5; }
+tr.locations:nth-child(odd)     { background: #ffffff; }
+tr.inventory:nth-child(even)    { background: #e5e5e5; }
+tr.inventory:nth-child(odd)     { background: #ffffff; }
+tr.list:nth-child(odd)          { background: #e5e5e5; }
+tr.list:nth-child(even)         { background: #ffffff; }
+tr.eventlog:nth-child(even)     { background: #e5e5e5; }
+tr.eventlog:nth-child(odd)      { background: #ffffff; }
+tr.syslog:nth-child(even)       { background: #e5e5e5; }
+tr.syslog:nth-child(odd)        { background: #ffffff; }
+tr.search:nth-child(even)       { background: #e5e5e5; }
+tr.search:nth-child(odd)        { background: #ffffff; }
 
 .paddedcell {
   padding: 7px;
