@@ -15,6 +15,8 @@ function string_to_oid($string)
   return $oid;
 }
 
+/// Dirty attempt to parse snmp stuff. YUCK.
+
 function snmp_parser_quote($m){
     return str_replace(array('.',' '),
       array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE'), $m[1]);

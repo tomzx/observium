@@ -177,7 +177,7 @@ $config['uptime_warning']                  = "84600"; // Time in seconds to disp
 $config['rrdgraph_def_text']  = "-c BACK#EEEEEE00 -c SHADEA#EEEEEE00 -c SHADEB#EEEEEE00 -c FONT#000000 -c CANVAS#FFFFFF00 -c GRID#a5a5a5";
 $config['rrdgraph_def_text'] .= " -c MGRID#FF9999 -c FRAME#5e5e5e -c ARROW#5e5e5e -R normal";
 $config['rrdgraph_real_95th'] = FALSE; # Set to TRUE if you want to display the 95% based on the highest value. (aka real 95%)
-$config['overlib_defaults']   = ",FGCOLOR,'#ffffff', BGCOLOR, '#e5e5e5', BORDER, 5, CELLPAD, 4, CAPCOLOR, '#555555', TEXTCOLOR, '#3e3e3e'";
+$config['overlib_defaults']   = ",FGCOLOR,'#ffffff', BGCOLOR, '#e5e5e5', BORDER, 0, CELLPAD, 0, CAPCOLOR, '#555555', TEXTCOLOR, '#3e3e3e'";
 
 $list_colour_a = "#ffffff";
 $list_colour_b = "#eeeeee";
@@ -486,6 +486,7 @@ $config['poller_modules']['netscaler-vsvr']               = 1;
 $config['poller_modules']['aruba-controller']             = 1;
 $config['poller_modules']['entity-physical']              = 1;
 $config['poller_modules']['applications']                 = 1;
+$config['poller_modules']['q-bridge-mib-fdb']		  = 1;
 
 // List of discovery modules. Need to be in this array to be
 // considered for execution.

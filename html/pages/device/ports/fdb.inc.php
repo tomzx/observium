@@ -1,0 +1,60 @@
+<?php
+
+
+echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo("  <thead>\n");
+echo("    <tr>\n");
+echo("      <th>VLAN</th>\n");
+echo("      <th>MAC Address</th>\n");
+echo("      <th>Port</th>\n");
+echo("      <th>Remote Host</th>\n");
+echo("      <th>Remote Port</th>\n");
+echo("      <th>IP Addresses</th>\n");
+echo("    </tr>\n");
+echo("  </thead>\n");
+echo("  <tbody>\n");
+
+$i = "1";
+
+foreach (dbFetchRows("SELECT * FROM ports AS P, devices AS D WHERE P.device_id = D.device_id") as $port)
+{
+#  $macs[$port[]]
+}
+
+foreach (dbFetchRows("SELECT * FROM `vlans_fdb` AS V, ports AS P WHERE V.device_id = ? AND P.port_id = V.port_id", array($device['device_id'])) as $fdb)
+{
+  if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
+
+  $fdb_host = dbFetchRow("SELECT * FROM `ports` AS P, devices AS D WHERE P.ifPhysAddress = ? AND D.device_id = P.device_id", array($fdb['mac_address']));
+
+  if ($fdb_host) { $fdb_name = generate_device_link($fdb_host); } else { unset($fdb_name); }
+  if ($fdb_host) { $fdb_if = generate_port_link($fdb_host); } else { unset($fdb_if); }
+  if ($fdb_host['device_id'] == $device['device_id']) { $fdb_name = "Localhost"; }
+  if ($fdb_host['port_id'] == $fdb['port_id']) { $fdb_if = "Local Port"; }
+
+
+
+
+
+  echo("
+  <tr bgcolor=$bg_colour>
+    <td width=160>VLAN".$fdb['vlan_id']."</td>
+    <td width=160>".formatmac($fdb['mac_address'])."</td>
+    <td width=200><b>".generate_port_link(array_merge($fdb, $device))."</b></td>
+    <td width=280>$fdb_name</td>
+    <td>$fdb_if</td>
+    <td width=160>");
+  foreach(dbFetchRow("SELECT * FROM ipv4_mac AS M, ports AS I, devices AS D WHERE A.mac_address = ? AND I.port_id = M.port_id AND D.device_id = I.device_id", array($fdb['mac_address'])) as $ip)
+  {
+    echo("a");
+  }
+    echo("</td>
+
+  </tr>");
+  $i++;
+}
+
+echo("  </tbody>\n");
+echo("</table>\n");
+
+?>
