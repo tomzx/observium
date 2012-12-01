@@ -7,6 +7,7 @@ $port_ifIndex_table = array();
 foreach(dbFetchRows("SELECT `ifIndex`,`port_id`,`ifDescr` FROM `ports` WHERE `device_id` = ?", array($device['device_id'])) as $cache_port)
   {  $port_ifIndex_table[$cache_port['ifIndex']] = $cache_port; }
 
+print_r($port_ifIndex_table);
 
 /// Build dot1dBasePort > port cache table because people in the '80s were dicks
 $dot1dBasePort_table = array();
@@ -14,6 +15,8 @@ foreach(snmpwalk_cache_oid($device, "dot1dBasePortIfIndex", $port_stats, "BRIDGE
 {
   $dot1dBasePort_table[$dot1dbaseport] = $port_ifIndex_table[$data['dot1dBasePortIfIndex']];
 }
+
+print_r($dot1dBasePort_table);
 
 /// Build table of existing vlan/mac table
 $fdbs_db = array();
