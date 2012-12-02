@@ -240,17 +240,17 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
         {
           // Try SNMPv2c
           $snmpver = 'v2c';
-          $ret = addHost($host, $snmpver);
+          $ret = addHost($host, $snmpver, $port, $transport);
           if (!$ret)
           {
             //Try SNMPv3
             $snmpver = 'v3';
-            $ret = addHost($host, $snmpver);
+            $ret = addHost($host, $snmpver, $port, $transport);
             if (!$ret)
             {
               // Try SNMPv1
               $snmpver = 'v1';
-              return addHost($host, $snmpver);
+              return addHost($host, $snmpver, $port, $transport);
             } else {
               return $ret;
             }
@@ -271,7 +271,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
               $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
               if (empty($snmphost) or ($snmphost == $host || $hostshort = $host))
               {
-                $device_id = createHost ($host, NULL, $snmpver, $port, $transport, $v3);
+                $device_id = createHost($host, NULL, $snmpver, $port, $transport, $v3);
                 return $device_id;
               } else {
                 print_error("Given hostname does not match SNMP-read hostname ($snmphost)!");
@@ -293,7 +293,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
               $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
               if ($snmphost == "" || ($snmphost && ($snmphost == $host || $hostshort = $host)))
               {
-                $device_id = createHost ($host, $community, $snmpver, $port, $transport);
+                $device_id = createHost($host, $community, $snmpver, $port, $transport);
                 return $device_id;
               } else {
                 print_error("Given hostname does not match SNMP-read hostname ($snmphost)!");
