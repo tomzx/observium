@@ -15,6 +15,7 @@ if (!$os)
     elseif (strstr($sysDescr, "endian")) { $os = "endian"; }
     elseif (preg_match("/Cisco Small Business/", $sysDescr)) { $os = "ciscosmblinux"; }
     elseif (strpos($entPhysicalMfgName, "QNAP") !== FALSE) { $os = "qnap"; }
+    elseif (strpos($sysObjectId, ".1.3.6.1.4.1.3375.2.1.3.4.") !== FALSE) { $os = "f5"; }
     else
     {
       // Check for Synology DSM
