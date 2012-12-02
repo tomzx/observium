@@ -44,10 +44,11 @@ foreach($fdbs as $vlan => $macs)
   /// Loop macs
   foreach($macs as $mac => $data)
   {
-    $ifIndex = $data['dot1qTpFdbPort'];
-    $port_id = $dot1dBasePort_table[$ifIndex]['port_id'];
-    $port_name = $dot1dBasePort_table[$ifIndex]['ifDescr'];
-    echo(str_pad($vlan, 8) . " | " . str_pad($mac,12) . " | " .  str_pad($port_name."|".$port_id,18) . str_pad("(".$data['dot1qTpFdbPort']."|".$ifIndex.")",19," ",STR_PAD_LEFT) ." | ". str_pad($data['dot1qTpFdbStatus'],10));
+    $dot1qTpFdbPort = $data['dot1qTpFdbPort'];
+    $port_id = $dot1dBasePort_table[$dot1qTpFdbPort]['port_id'];
+    $ifIndex = $dot1dBasePort_table[$dot1qTpFdbPort]['ifIndex'];
+    $port_name = $dot1dBasePort_table[$dot1qTpFdbPort]['ifDescr'];
+    echo(str_pad($vlan, 8) . " | " . str_pad($mac,12) . " | " .  str_pad($port_name."|".$port_id,18) . str_pad("(".$dot1qTpFdbPort."|".$ifIndex.")",19," ",STR_PAD_LEFT) ." | ". str_pad($data['dot1qTpFdbStatus'],10));
 
     /// if entry already exists
     if(!is_array($fdbs_db[$vlan][$mac]))

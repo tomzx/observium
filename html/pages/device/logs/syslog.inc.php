@@ -43,7 +43,7 @@ if ($_POST['program'])
 $sql =  "SELECT *, DATE_FORMAT(timestamp, '%Y-%m-%d %T') AS date from syslog WHERE device_id = ? $where";
 $sql .= " ORDER BY timestamp DESC LIMIT 1000";
 
-echo('<table class="table table-bordered table-striped table-condensed" style="margin-top: 10px;">'."\n");
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">'."\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th>Date</th>\n");
