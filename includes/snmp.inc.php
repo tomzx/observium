@@ -5,6 +5,43 @@
 //
 // TRUE STORY. THAT SHIT IS WHACK. -- adama.
 
+
+/// Take -Oqs output and parse it into an array containing OID array and the value
+function parse_oid($string)
+{
+    $result = array();
+    while (true)
+    {
+        $matches = array();
+        $match_count = preg_match('/^(?:((?:[^\\\\\\. "]|(?:\\\\.))+)|(?:"((?:[^\\\\"]|(?:\\\\.))+)"))((?:[\\. ])|$)/', $string, $matches);
+        if (null !== $match_count && $match_count > 0)
+        {
+            // [1] = unquoted, [2] = quoted
+            $value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+
+            $result[] = stripslashes($value);
+
+            // Are we expecting any more parts?
+            if (strlen($matches[3]) > 0)
+            {
+                // I do this (vs keeping track of offset) to use ^ in regex
+                $string = substr($string, strlen($matches[0]));
+            }
+            else
+            {
+                $result['oid'] = $result;
+                $result['val'] = array_pop($result['oid']);
+                return $result;
+            }
+        }
+        else
+        {
+            // All or nothing
+            return null;
+        }
+    } // while
+}
+
 function string_to_oid($string)
 {
   $oid = strlen($string);
@@ -21,6 +58,8 @@ function snmp_parser_quote($m){
     return str_replace(array('.',' '),
       array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE'), $m[1]);
 }
+
+
 
 function snmp_parser_unquote($str){
     return str_replace(array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE', 'PLACEHOLDER-ESCAPED-QUOTE'),
@@ -138,11 +177,14 @@ function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = N
 
   $data = snmp_walk($device, $oid, "-Oqs", $mib, $mibdir);
   foreach(explode("\n", $data) as $text) {
-    $a = preg_replace_callback('!"([^"]*)"!', 'snmp_parser_quote', str_replace("\\\"", "PLACEHOLDER-ESCAPED-QUOTE",$text));
-    $oid = preg_split('![. ]!', $a);
-    foreach ($oid as $k => $v) $oid[$k] = snmp_parser_unquote($v);
-    $value = array_pop($oid);
-    $ret = array("oid" => $oid, "value" => $value);
+#    $a = preg_replace_callback('!"([^"]*)"!', 'snmp_parser_quote', str_replace("\\\"", "PLACEHOLDER-ESCAPED-QUOTE",$text));
+#    $oid = preg_split('![. ]!', $a);
+#    foreach ($oid as $k => $v) $oid[$k] = snmp_parser_unquote($v);
+#    $value = array_pop($oid);
+#    $ret = array("oid" => $oid, "value" => $value);
+
+     $ret = parse_oid($text);
+
     if(!empty($value)) {
       /// this seems retarded. need a way to just build this automatically.
       switch ($oid_elements) {

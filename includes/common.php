@@ -135,9 +135,28 @@ function get_port_by_index_cache($device_id, $ifIndex)
   return $port;
 }
 
+function get_port_id_by_ifDescr($device_id, $ifDescr)
+{
+  $port = dbFetchRow("SELECT `port_id` FROM `ports` WHERE `device_id` = ? AND `ifDescr` = ? LIMIT 1", array($device_id, $ifDescr));
+
+  if (is_array($port))
+  {
+    return $port['port_id'];
+  } else {
+    return FALSE;
+  }
+}
+
 function get_port_by_ifIndex($device_id, $ifIndex)
 {
-  return dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?", array($device_id, $ifIndex));
+  $port = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?", array($device_id, $ifIndex));
+
+  if (is_array($port))
+  {
+    return $port;
+  } else {
+    return FALSE;
+  }
 }
 
 function get_all_devices($device, $type = "")
