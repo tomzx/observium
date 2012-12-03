@@ -310,7 +310,7 @@ foreach ($ports as $port)
       file_put_contents($debug_file, $debug_temp, FILE_APPEND);
     }
 
-    // If we have a valid ifSpeed we should populate the stats for checking.
+    // If we have a valid ifSpeed we should populate the percentage stats for checking.
     if (is_numeric($this_port['ifSpeed']))
     {
       $port['stats']['ifInBits_perc'] = round($port['stats']['ifInBits_rate'] / $this_port['ifSpeed'] * 100);
@@ -341,6 +341,7 @@ foreach ($ports as $port)
       {
           log_event('Port reached saturation threshold: ' . formatRates($port['stats']['ifInBits_rate']) . '/' . formatRates($port['stats']['ifOutBits_rate']) . '('.$port['stats']['ifInBits_perc'].'/'.$port['stats']['ifOutBits_perc'].') >'.$config['alerts']['port_util_perc'].'% of ' . formatRates( $this_port['ifSpeed'])  , $device, 'interface', $port['port_id']);
           notify($device, 'Port saturation threshold reached on ' . $device['hostname'] , 'Port saturation threshold alarm: ' . $device['hostname'] . ' on ' . $port['ifDescr'] . "\nRates:" . formatRates($port['ifInBits_rate']) . '/' . formatRates($port['stats']['ifOutBits_rate']) . '('.$port['stats']['ifInBits_perc'].'/'.$port['stats']['ifOutBits_perc'].') >'.$config['alerts']['port_util_perc'].'% of ' . formatRates( $this_port['ifSpeed']));
+          notify($device, 'Port saturation on ' . $device['hostname'] . ' (' . $port['ifName'] . ')' , 'Port saturation threshold alarm: ' . $device['hostname'] . ' on ' . $port['ifDescr'] . "\nRates:" . formatRates($port['stats']['ifInBits_rate']) . '/' . formatRates($port['stats']['ifOutBits_rate']) . '('.$port['stats']['ifInBits_perc'].'/'.$port['stats']['ifOutBits_perc'].') >'.$config['alerts']['port_util_perc'].'% of ' . formatRates( $this_port['ifSpeed']));
           echo(" *EXCEEDED*");
       }
     }
