@@ -137,7 +137,6 @@ foreach ($port_stats as $ifIndex => $port)
 {
   if (is_port_valid($port, $device))
   {
-    echo("valid");
     if (!is_array($ports[$port['ifIndex']]))
     {
       $port_id = dbInsert(array('device_id' => $device['device_id'], 'ifIndex' => $ifIndex), 'ports');
@@ -298,6 +297,19 @@ foreach ($ports as $port)
     $port['stats']['ifInBits_rate'] = round($port['stats']['ifInOctets_rate'] * 8);
     $port['stats']['ifOutBits_rate'] = round($port['stats']['ifOutOctets_rate'] * 8);
 
+    if($this_port['ifSpeed'] > "0" && ($port['stats']['ifInBits_rate'] > $this_port['ifSpeed'] || $port['stats']['ifOutBits_rate'] > $this_port['ifSpeed']))
+    {
+      echo("Spike above ifSpeed detected!");
+      $debug_file = "/tmp/port_debug.txt";
+      $debug_temp  = "--------------------------------------------------------------------\n";
+      $debug_temp .= $device['hostname']." ".$port['ifDescr']." ".formatRates($this_port['ifSpeed'])."\n";
+      $debug_temp .= formatRates($port['stats']['ifOutBits_rate']*8)."|".formatRates($port['stats']['ifInBits_rate'])."\n";
+      $debug_temp .= $port['poll_time']."|".$port['ifOutOctets']."|".$port['ifInOctets']."\n";
+      $debug_temp .= $polled."|".$this_port['ifOutOctets']."|".$this_port['ifInOctets']."\n";
+      $debug_temp .= "\n";
+      file_put_contents($debug_file, $debug_temp, FILE_APPEND);
+    }
+
     // If we have a valid ifSpeed we should populate the stats for checking.
     if (is_numeric($this_port['ifSpeed']))
     {
@@ -324,11 +336,12 @@ foreach ($ports as $port)
       // Check for port saturation of $config['alerts']['port_util_perc'] or higher.  Alert if we see this.
       // Check both inbound and outbound rates
       $saturation_threshold = $this_port['ifSpeed'] * ( $config['alerts']['port_util_perc'] / 100 );
-      echo("IN: " . $port['stats']['ifInBits_rate'] . " OUT: " . $port['stats']['ifOutBits_rate'] . " THRESH: " . $saturation_threshold);
+      echo(" Threshold:" . formatRates($saturation_threshold));
       if (($port['stats']['ifInBits_rate'] >= $saturation_threshold ||  $port['stats']['ifOutBits_rate'] >= $saturation_threshold) && $saturation_threshold > 0)
       {
-          log_event('Port reached saturation threshold: ' . formatRates($port['stats']['ifInBits_rate']) . '/' . formatRates($port['stats']['ifOutBits_rate']) . ' - ifspeed: ' . formatRates( $this_port['stats']['ifSpeed'])  , $device, 'interface', $port['port_id']);
-          notify($device, 'Port saturation threshold reached on ' . $device['hostname'] , 'Port saturation threshold alarm: ' . $device['hostname'] . ' on ' . $port['ifDescr'] . "\nRates:" . formatRates($port['stats']['ifInBits_rate']) . '/' . formatRates($port['stats']['ifOutBits_rate']) . ' - ifspeed: ' . formatRates( $this_port['ifSpeed']));
+          log_event('Port reached saturation threshold: ' . formatRates($port['stats']['ifInBits_rate']) . '/' . formatRates($port['stats']['ifOutBits_rate']) . '('.$port['stats']['ifInBits_perc'].'/'.$port['stats']['ifOutBits_perc'].') >'.$config['alerts']['port_util_perc'].'% of ' . formatRates( $this_port['ifSpeed'])  , $device, 'interface', $port['port_id']);
+          notify($device, 'Port saturation threshold reached on ' . $device['hostname'] , 'Port saturation threshold alarm: ' . $device['hostname'] . ' on ' . $port['ifDescr'] . "\nRates:" . formatRates($port['ifInBits_rate']) . '/' . formatRates($port['stats']['ifOutBits_rate']) . '('.$port['stats']['ifInBits_perc'].'/'.$port['stats']['ifOutBits_perc'].') >'.$config['alerts']['port_util_perc'].'% of ' . formatRates( $this_port['ifSpeed']));
+          echo(" *EXCEEDED*");
       }
     }
 
