@@ -318,7 +318,8 @@ foreach ($ports as $port)
     $port['state']['ifErrors_rate'] = $port['stats']['ifOutErrors_rate'] + $port['stats']['ifInErrors_rate'];
 
     // Port utilisation % threshold alerting. // FIXME allow setting threshold per-port. probably 90% of ports we don't care about.
-    if ($config['alerts']['port_util_alert'])
+    // FIXME integrate this into some giant alerting thing. probably.
+    if ($port['ignore'] == 0 && $config['alerts']['port_util_alert'])
     {
       // Check for port saturation of $config['alerts']['port_util_perc'] or higher.  Alert if we see this.
       // Check both inbound and outbound rates
@@ -411,7 +412,7 @@ foreach ($ports as $port)
 
 
     // Send alerts for interface flaps.
-    if ($config['alerts']['port']['ifdown'] && ($port['ifOperStatus'] != $this_port['ifOperStatus']) && $port['ignore'] == 0)
+    if ($port['ignore'] == 0 && $config['alerts']['port']['ifdown'] && ($port['ifOperStatus'] != $this_port['ifOperStatus']))
     {
       if ($this_port['ifAlias'])
       {
