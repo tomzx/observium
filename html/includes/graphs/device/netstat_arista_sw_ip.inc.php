@@ -1,8 +1,10 @@
 <?php
 
-include("includes/graphs/common.inc.php");
-
-$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/arista-netstats-sw-ip.rrd";
+if (!isset($rrd_filename)) {
+  # We can be included from arista_netstats_sw_ip6, which just sets the filename.
+  $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/arista-netstats-sw-ip.rrd";
+  $ipv = "v4";
+}
 
 $stats = array(
                'InReceives' => array(),
@@ -21,7 +23,7 @@ foreach($stats as $stat => $array)
 {
   $i++;
   $rrd_list[$i]['filename'] = $rrd_filename;
-  $rrd_list[$i]['descr'] = $stat;
+  $rrd_list[$i]['descr'] = $stat . " " . $ipv;
   $rrd_list[$i]['ds'] = $stat;
   if (strpos($stat, "Out") !== FALSE)
   {

@@ -986,14 +986,14 @@ $config['graph_types']['device']['agent']['order'] = '0';
 $config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';
 
 $config['graph_types']['device']['netstat_arista_sw_ip'] = array(
- 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv4 packets");
+ 'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv4 Statistics");
 $config['graph_types']['device']['netstat_arista_sw_ip_frag'] = array(
- 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv4 packet fragments");
+ 'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv4 Fragmentation Statistics");
 
 $config['graph_types']['device']['netstat_arista_sw_ip6'] = array(
- 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv6 packets");
+ 'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv6 Statistics");
 $config['graph_types']['device']['netstat_arista_sw_ip6_frag'] = array(
- 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv6 packet fragments");
+ 'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv6 Fragmentation Statistics");
 
 
 $config['graph_types']['device']['cipsec_flow_bits']['section'] = 'firewall';
