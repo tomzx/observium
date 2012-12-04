@@ -15,7 +15,7 @@ $rrd_options .= " DEF:OutRequests=$rrd_filename:OutRequests:AVERAGE";
 $rrd_options .= " CDEF:OutRequests_n=OutRequests,-1,*";
 $rrd_options .= " DEF:OutDiscards=$rrd_filename:OutDiscards:AVERAGE";
 $rrd_options .= " CDEF:OutDiscards_n=OutDiscards,-1,*";
-$rrd_options .= " DEF:OutNoRoutes=$rrd_filename:InDiscards:AVERAGE";
+$rrd_options .= " DEF:OutNoRoutes=$rrd_filename:OutNoRoutes:AVERAGE";
 $rrd_options .= " CDEF:OutNoRoutes_n=OutNoRoutes,-1,*";
 
 $rrd_options .= " COMMENT:'Packets/sec       Current  Average  Maximum\\n'";
