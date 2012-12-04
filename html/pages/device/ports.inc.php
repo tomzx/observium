@@ -13,6 +13,8 @@ $link_array = array('page'    => 'device',
 
 print_optionbar_start();
 
+echo("<span style='font-weight: bold;'>Ports</span> &#187; ");
+
 $menu_options['basic']   = 'Basic';
 $menu_options['details'] = 'Details';
 $menu_options['arp']     = 'ARP Table';
