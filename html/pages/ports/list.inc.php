@@ -1,6 +1,8 @@
 <?php
 
-echo pagination($vars, count($ports), 10, 1);
+if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
+
+echo pagination($vars, count($ports));
 
 if($vars['pageno'])
 {
@@ -80,7 +82,7 @@ foreach ($ports as $port)
 
 echo('</td></tr></table>');
 
-echo pagination($vars, count($ports), 10);
+echo pagination($vars, count($ports));
 
 
 ?>

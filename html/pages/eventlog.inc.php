@@ -114,7 +114,7 @@ if ($_SESSION['userlevel'] >= '5')
 }
 $entries = dbFetchRows($query, $param);
 
-if(!$vars['pagesize']) { $vars['page_size'] = "100"; }
+if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 
 echo pagination($vars, count($entries));
 
