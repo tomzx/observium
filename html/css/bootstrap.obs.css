@@ -205,6 +205,11 @@ h3.bill > i {
     margin-top: 4px;
 }
 
+.object-name {
+  font-weight: bold;
+  font-size: 15px;
+}
+
 #table {
 #  background-color: #fff;
 #}

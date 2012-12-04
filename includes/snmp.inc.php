@@ -8,7 +8,7 @@
 
 /// Take -Oqs output and parse it into an array containing OID array and the value
 /// Hopefully this is the beginning of more intelligent OID parsing!
-/// Thanks to 
+/// Thanks to
 function parse_oid($string)
 {
     $result = array();
@@ -31,9 +31,9 @@ function parse_oid($string)
             }
             else
             {
-                $result['oid'] = $result;
-                $result['val'] = array_pop($result['oid']);
-                return $result;
+                $ret['value'] = array_pop($result);
+                $ret['oid']   = $result;
+                return $ret;
             }
         }
         else
@@ -176,73 +176,53 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
 
 function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = NULL)
 {
-
-  $data = snmp_walk($device, $oid, "-Oqs", $mib, $mibdir);
+  $data = snmp_walk($device, $oid, "-Oqs", $mib, $mibdir, FALSE);
   foreach(explode("\n", $data) as $text) {
-#    $a = preg_replace_callback('!"([^"]*)"!', 'snmp_parser_quote', str_replace("\\\"", "PLACEHOLDER-ESCAPED-QUOTE",$text));
-#    $oid = preg_split('![. ]!', $a);
-#    foreach ($oid as $k => $v) $oid[$k] = snmp_parser_unquote($v);
-#    $value = array_pop($oid);
-#    $ret = array("oid" => $oid, "value" => $value);
-
-     $ret = parse_oid($text);
-
-    if(!empty($value)) {
+    $ret = parse_oid($text);
+    if(!empty($ret['value'])) {
       /// this seems retarded. need a way to just build this automatically.
       switch ($oid_elements) {
+        case "1":
+          $array[$ret['oid'][0]] = $ret['value'];
+          break;
         case "2":
-          $array[$ret['oid'][1]][$ret['oid'][0]] = $value;
+          $array[$ret['oid'][1]][$ret['oid'][0]] = $ret['value'];
           break;
         case "3":
-          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][0]] = $value;
+          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][0]] = $ret['value'];
           break;
         case "4":
-          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][3]][$ret['oid'][0]] = $value;
+          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][3]][$ret['oid'][0]] = $ret['value'];
           break;
       }
     }
   }
-
   return $array;
-
 }
 
-
-function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
+function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, $strip_quotes = 1)
 {
   global $debug,$config,$runtime_stats;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
+  if (is_numeric($device['timeout']) && $device['timeout'] > 0)  {
      $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout']))
-  {
-     $timeout =  $config['snmp']['timeout'];
-  }
+  } elseif (isset($config['snmp']['timeout'])) {
+     $timeout =  $config['snmp']['timeout'];  }
 
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
+  if (is_numeric($device['retries']) && $device['retries'] > 0) {
     $retries = $device['retries'];
   } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
+    $retries =  $config['snmp']['retries'];  }
 
-  if ($device['snmpver'] == 'v1' || (isset($config['os'][$device['os']]['nobulk']) && $config['os'][$device['os']]['nobulk']))
-  {
+  if (!isset($device['transport']))  {
+    $device['transport'] = "udp";  }
+
+  if ($device['snmpver'] == 'v1' || (isset($config['os'][$device['os']]['nobulk']) && $config['os'][$device['os']]['nobulk']))  {
     $snmpcommand = $config['snmpwalk'];
-  }
-  else
-  {
-    $snmpcommand = $config['snmpbulkwalk'];
-  }
+  } else {
+    $snmpcommand = $config['snmpbulkwalk']; }
 
-  $cmd = $snmpcommand;
-
-  $cmd .= snmp_gen_auth ($device);
+  $cmd = $snmpcommand." ".snmp_gen_auth($device);
 
   if ($options) { $cmd .= " $options "; }
   if ($mib) { $cmd .= " -m $mib"; }
@@ -254,7 +234,7 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
 
   if (!$debug) { $cmd .= " 2>/dev/null"; }
   $data = trim(external_exec($cmd));
-  $data = str_replace("\"", "", $data);
+  if($strip_quotes) { $data = str_replace("\"", "", $data); }
 
   if (is_string($data) && (preg_match("/No Such (Object|Instance)/i", $data)))
   {

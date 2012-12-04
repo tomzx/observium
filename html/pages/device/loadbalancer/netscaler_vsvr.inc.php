@@ -14,7 +14,6 @@ $graph_types = array("bits"   => "Bits",
                      "reqs"   => "Requests",
                      "hitmiss" => "Hit/Miss");
 
-echo("<div style='margin: 5px;'>");
 echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? AND `vsvr_id` = ? ORDER BY `vsvr_name`", array($device['device_id'], $vars['vsvr'])) as $vsvr)
 {
@@ -22,11 +21,11 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   if ($vsvr['vsvr_state'] == "up") { $vsvr_class="green"; } else { $vsvr_class="red"; }
 
   echo("<tr>");
-  echo('<td width=320 class=list-large><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_name'] . '</a></td>');
-  echo("<td width=320 class=list-small>" . $vsvr['vsvr_ip'] . ":" . $vsvr['vsvr_port'] . "</a></td>");
-  echo("<td width=100 class=list-small><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span></td>");
-  echo("<td width=320 class=list-small>" . format_si($vsvr['vsvr_bps_in']*8) . "bps</a></td>");
-  echo("<td width=320 class=list-small>" . format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
+  echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_name'] . '</a></td>');
+  echo("<td width=320>" . $vsvr['vsvr_ip'] . ":" . $vsvr['vsvr_port'] . "</a></td>");
+  echo("<td width=100><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span></td>");
+  echo("<td width=320>" . format_si($vsvr['vsvr_bps_in']*8) . "bps</a></td>");
+  echo("<td width=320>" . format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
   echo("</tr>");
 
   $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE S.svc_name = SV.svc_name AND SV.vsvr_name = '".$vsvr['vsvr_name']."'");
@@ -44,13 +43,13 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
     echo("  </thead>");
     foreach ($svcs as $svc)
     {
-      if ($svc['svc_state'] == "up") { $svc_class="green"; unset($svc_row); } else { $svc_class="red"; $svc_row = "error"; }
+      if ($svc['svc_state'] == "up") { $svc_class="green"; $svc_row=""; } else { $svc_class="red"; $svc_row = "error"; }
       echo('<tr class="'.$svc_row.'">');
-      echo('<td width=320 class=list-large><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</a></td>');
-      echo("<td width=320 class=list-small>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
-      echo("<td width=100 class=list-small><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
-      echo("<td width=320 class=list-small>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
-      echo("<td width=320 class=list-small>" . format_si($svc['svc_bps_out']*8) . "bps</a></td>");
+      echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</a></td>');
+      echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
+      echo("<td width=100><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
+      echo("<td width=320>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
+      echo("<td width=320>" . format_si($svc['svc_bps_out']*8) . "bps</a></td>");
       echo("</td></tr>");
     }
     echo("</table>");
@@ -79,7 +78,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   }
 }
 
-echo("</table></div>");
+echo("</table>");
 
 } else {
 
@@ -140,11 +139,11 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
   if ($vsvr['vsvr_state'] == "up") { $vsvr_class="green"; } else { $vsvr_class="red"; }
 
   echo("<tr>");
-  echo('<td width=320 class=list-large><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_name'] . '</a></td>');
-  echo("<td width=320 class=list-small>" . $vsvr['vsvr_ip'] . ":" . $vsvr['vsvr_port'] . "</a></td>");
-  echo("<td width=100 class=list-small><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span></td>");
-  echo("<td width=320 class=list-small>" . format_si($vsvr['vsvr_bps_in']*8) . "bps</a></td>");
-  echo("<td width=320 class=list-small>" . format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
+  echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_name'] . '</a></td>');
+  echo("<td width=320>" . $vsvr['vsvr_ip'] . ":" . $vsvr['vsvr_port'] . "</a></td>");
+  echo("<td width=100><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span></td>");
+  echo("<td width=320>" . format_si($vsvr['vsvr_bps_in']*8) . "bps</a></td>");
+  echo("<td width=320>" . format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
   echo("</tr>");
   if ($vars['view'] == "services")
   {
@@ -165,11 +164,11 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
     {
       if ($svc['svc_state'] == "up") { $svc_class="green"; unset($svc_row); $svc_row = "error";} else { $svc_class="red"; $svc_row = "error"; }
       echo('<tr class="'.$svc_row.'">');
-      echo('<td width=320 class=list-large><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</a></td>');
-      echo("<td width=320 class=list-small>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
-      echo("<td width=100 class=list-small><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
-      echo("<td width=320 class=list-small>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
-      echo("<td width=320 class=list-small>" . format_si($svc['svc_bps_out']*8) . "bps</a></td>");
+      echo('<td width=320 class="object-name"><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</a></td>');
+      echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
+      echo("<td width=100><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
+      echo("<td width=320>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
+      echo("<td width=320>" . format_si($svc['svc_bps_out']*8) . "bps</a></td>");
       echo("</td></tr>");
     }
     echo("</table>");
