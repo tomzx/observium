@@ -479,6 +479,7 @@ $config['poller_modules']['cisco-remote-access-monitor']  = 1;
 $config['poller_modules']['cisco-cef']                    = 1;
 $config['poller_modules']['cisco-sla']                    = 1;
 $config['poller_modules']['cisco-mac-accounting']         = 1;
+$config['poller_modules']['arista-software-ip-forwarding']= 1;
 $config['poller_modules']['cipsec-tunnels']               = 1;
 $config['poller_modules']['cisco-ace-loadbalancer']       = 1;
 $config['poller_modules']['cisco-ace-serverfarms']        = 1;
