@@ -66,7 +66,7 @@ label, input, button, select, textarea {
   line-height: 20px;
   text-align: center;
   text-shadow: 0 1px 0 white;
-  background-color: #EEE;
+  background-color: #F0F0F0;
   border: 1px solid #CCC;
 }
 
@@ -223,7 +223,7 @@ legend {
 }
 
 .pagination ul > li > a, .pagination ul > li > span {
-  background-color: #E5E5E5;
+  background-color: #F0F0F0;
   border: 1px solid #CCC;
 }
 
