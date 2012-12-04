@@ -8,7 +8,7 @@ if ($device['status'] == '0')
   $table_tab_colour = "#cc0000";
 } else {
   $class = "";
-  $table_tab_colour = "#194B7F";
+  $table_tab_colour = "#194BBF";
 }
 if ($device['ignore'] == '1')
 {
@@ -36,8 +36,8 @@ $port_count   = dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `device_id` = ?"
 $sensor_count = dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `device_id` = ?", array($device['device_id']));
 
 echo('  <tr class="'.$class.'" onclick="location.href=\'device/device='.$device['device_id'].'/\'" style="cursor: pointer;">
-          <td width="1" style="background-color: '.$table_tab_colour.';"></td>
-          <td width="40"  align="center" valign="middle">' . $image . '</td>
+          <td style="width: 1px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+          <td style="padding-left: 8px" width="40"  align="center" valign="middle">' . $image . '</td>
           <td width="300" ><span style="font-size: 15px;">' . generate_device_link($device) . '</span>
           <br />' . $device['sysName'] . '</td>'
         );
