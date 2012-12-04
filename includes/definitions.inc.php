@@ -357,6 +357,17 @@ $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory Usage";
 
+$os = "juniperive";
+$config['os'][$os]['text']              = "Juniper IVE";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "junos";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Device Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_mempool";
+$config['os'][$os]['over'][2]['text']   = "Memory Usage";
+
 $os = "fortigate";
 $config['os'][$os]['text']              = "Fortinet Fortigate";
 $config['os'][$os]['type']              = "firewall";
@@ -953,7 +964,7 @@ foreach ($config['os'] as $this_os => $blah)
 
 // Graph Types
 
-$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer');
+$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance');
 
 $config['graph_types']['device']['wifi_clients']['section'] = 'wireless';
 $config['graph_types']['device']['wifi_clients']['order'] = '0';
@@ -962,6 +973,17 @@ $config['graph_types']['device']['wifi_clients']['descr'] = 'Wireless Clients';
 $config['graph_types']['device']['agent']['section'] = 'system';
 $config['graph_types']['device']['agent']['order'] = '0';
 $config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';
+
+$config['graph_types']['device']['netstat_arista_sw_ip'] = array(
+ 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv4 packets");
+$config['graph_types']['device']['netstat_arista_sw_ip_frag'] = array(
+ 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv4 packet fragments");
+
+$config['graph_types']['device']['netstat_arista_sw_ip6'] = array(
+ 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv6 packets");
+$config['graph_types']['device']['netstat_arista_sw_ip6_frag'] = array(
+ 'section' => 'arista', 'order' => '0', 'descr' => "Software forwarded IPv6 packet fragments");
+
 
 $config['graph_types']['device']['cipsec_flow_bits']['section'] = 'firewall';
 $config['graph_types']['device']['cipsec_flow_bits']['order'] = '0';
@@ -990,6 +1012,19 @@ $config['graph_types']['device']['screenos_sessions']['descr'] = 'Active Session
 $config['graph_types']['device']['panos_sessions']['section'] = 'firewall';
 $config['graph_types']['device']['panos_sessions']['order'] = '0';
 $config['graph_types']['device']['panos_sessions']['descr'] = 'Active Sessions';
+
+$config['graph_types']['device']['juniperive_users']['section'] = 'appliance';
+$config['graph_types']['device']['juniperive_users']['order'] = '0';
+$config['graph_types']['device']['juniperive_users']['descr'] = 'Concurrent Users';
+$config['graph_types']['device']['juniperive_meetings']['section'] = 'appliance';
+$config['graph_types']['device']['juniperive_meetings']['order'] = '0';
+$config['graph_types']['device']['juniperive_meetings']['descr'] = 'Meetings';
+$config['graph_types']['device']['juniperive_connections']['section'] = 'appliance';
+$config['graph_types']['device']['juniperive_connections']['order'] = '0';
+$config['graph_types']['device']['juniperive_connections']['descr'] = 'Connections';
+$config['graph_types']['device']['juniperive_storage']['section'] = 'appliance';
+$config['graph_types']['device']['juniperive_storage']['order'] = '0';
+$config['graph_types']['device']['juniperive_storage']['descr'] = 'Storage';
 
 $config['graph_types']['device']['bits']['section'] = 'netstats';
 $config['graph_types']['device']['bits']['order'] = '0';
