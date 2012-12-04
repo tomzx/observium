@@ -135,6 +135,11 @@ $config['os'][$os]['type']              = "server";
 $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "OpenIndiana";
 
+$os = "nexenta";
+$config['os'][$os]['type']		= "server";
+$config['os'][$os]['group']             = "unix";
+$config['os'][$os]['text']              = "NexentaOS";
+
 // Alcatel
 
 $os = "aos";
@@ -943,6 +948,12 @@ $config['os'][$os]['over'][0]['graph']	= "device_bits";
 $config['os'][$os]['over'][0]['text']	= "Device Traffic";
 $config['os'][$os]['over'][1]['graph']	= "device_processor";
 $config['os'][$os]['over'][1]['text']	= "CPU Usage";
+
+$os = "draytek";
+$config['os'][$os]['text']              = "Draytek";
+$config['os'][$os]['type']              = "firewall";
+$config['os'][$os]['icon']              = "draytek";
+
 
 foreach ($config['os'] as $this_os => $blah)
 {
