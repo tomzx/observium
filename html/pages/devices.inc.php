@@ -270,7 +270,6 @@ if(file_exists('pages/devices/'.$format.'.inc.php'))
   echo("      <th>Platform</th>\n");
   echo("      <th>Operating System</th>\n");
   echo("      <th>Uptime/Location</th>\n");
-  echo("      <th></th>\n");
   echo("    </tr>\n");
   echo("  </thead>\n");
   }
