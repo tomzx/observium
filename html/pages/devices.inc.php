@@ -256,18 +256,23 @@ if(file_exists('pages/devices/'.$format.'.inc.php'))
 
 } else {
 
-  echo('<table cellspacing="0" class="devicetable sortable" width="100%">');
-  if ($subformat = "detail")
+
+
+  echo("<table class=\"table table-hover table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+  if ($subformat == "detail")
   {
-    echo('<tr class="tablehead">
-    <th></th>
-    <th></th>
-    <th class="paddedcell">Device</th>
-    <th></th>
-    <th class="paddedcell">Platform</th>
-    <th class="paddedcell">Operating System</th>
-    <th class="paddedcell">Uptime/Location</th>
-  </tr>');
+  echo("  <thead>\n");
+  echo("    <tr>\n");
+  echo("      <th></th>\n");
+  echo("      <th></th>\n");
+  echo("      <th>Device</th>\n");
+  echo("      <th></th>\n");
+  echo("      <th>Platform</th>\n");
+  echo("      <th>Operating System</th>\n");
+  echo("      <th>Uptime/Location</th>\n");
+  echo("      <th></th>\n");
+  echo("    </tr>\n");
+  echo("  </thead>\n");
   }
 
   foreach ($devices as $device)
