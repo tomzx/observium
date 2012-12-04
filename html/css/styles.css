@@ -434,7 +434,7 @@ tr.list-device-ignored-up {
 }
 
 .device-head, a.list-device {
-  color: #000ccc;
+  color: #194b7f;
 }
 
 a.list-device-down, a.list-device-down, a.list-device-down:visited {
@@ -689,7 +689,7 @@ p.vspace { padding-top: 3px; padding-bottom: 3px; }
 }
 
 .interface-upup, a.interface-upup {
-  color: #0000cc;
+  color: #194b7f;
 }
 
 a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
@@ -1058,7 +1058,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 
 #menium li:hover div a {
   font-size:12px;
-  color:#015b86;
+  color:#194b7f;
 }
 
 #menium li:hover div a:hover {

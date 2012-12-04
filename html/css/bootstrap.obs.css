@@ -31,6 +31,11 @@ h3 {
   line-height: 27px;
 }
 
+
+a {
+  color: #194b7f;
+}
+
 form {
   margin: 0;
 }
