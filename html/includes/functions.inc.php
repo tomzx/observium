@@ -62,6 +62,107 @@ function generate_link($text, $vars, $new_vars = array())
   return '<a href="'.generate_url($vars, $new_vars).'">'.$text.'</a>';
 }
 
+   function pagination($vars, $total, $per_page = 10){
+
+        if(is_numeric($vars['pageno']))   { $page = $vars['pageno']; } else { $page = "1"; }
+        if(is_numeric($vars['pagesize'])) { $per_page = $vars['pagesize']; } else { $per_page = "10"; }
+
+        $adjacents = "5";
+
+        $page = ($page == 0 ? 1 : $page);
+        $start = ($page - 1) * $per_page;
+
+        $prev = $page - 1;
+        $next = $page + 1;
+        $lastpage = ceil($total/$per_page);
+        $lpm1 = $lastpage - 1;
+
+        $pagination = "";
+        if($lastpage > 1)
+        {
+            $pagination .= '<form action="">';
+            $pagination .= '<div class="pagination pagination-centered">';
+
+            $pagination .= '<ul><li><a href="#">Prev</a></li>';
+            if ($lastpage < 7 + ($adjacents * 2))
+            {
+                for ($counter = 1; $counter <= $lastpage; $counter++)
+                {
+                    if ($counter == $page)
+                        $pagination.= "<li class='active'><a>$counter</a></li>";
+                    else
+                        $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
+                }
+            }
+            elseif($lastpage > 5 + ($adjacents * 2))
+            {
+                if($page < 1 + ($adjacents * 2))
+                {
+                    for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
+                    {
+                        if ($counter == $page)
+                            $pagination.= "<li class='active'><a>$counter</a></li>";
+                        else
+                            $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
+                    }
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
+                }
+                elseif($lastpage - ($adjacents * 2) > $page && $page > ($adjacents * 2))
+                {
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '1'))."'>1</a></li>";
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '2'))."'>2</a></li>";
+                    for ($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++)
+                    {
+                        if ($counter == $page)
+                            $pagination.= "<li class='active'><a>$counter</a></li>";
+                        else
+                            $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
+                    }
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
+                }
+                else
+                {
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '1'))."'>1</a></li>";
+                    $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '2'))."'>2</a></li>";
+                    for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++)
+                    {
+                        if ($counter == $page)
+                            $pagination.= "<li class='active'><a>$counter</a></li>";
+                        else
+                            $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
+                    }
+                }
+            }
+            if ($page < $counter - 1){
+                $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $next))."'>Next</a></li>";
+                $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>Last</a></li>";
+            }else{
+                $pagination.= "<li class='active'><a>Next</a></li>";
+                $pagination.= "<li class='active'><a>Last</a></li>";
+            }
+            $pagination.= "</ul>";
+
+            $pagination.= '<div style="clear: none; float: right;" class="input-prepend">
+                           <span class="add-on"># per page</span>
+                           <select name="type" id="type" class="span1"
+                           onchange="window.open(this.options[this.selectedIndex].value,\'_top\')">';
+
+
+            foreach (array('10','20','50','100','500','1000') as $pagesize)
+            {
+              $pagination .= "<option value='".generate_url($vars, array('pagesize' => $pagesize))."'";
+              if ($pagesize == $vars['pagesize']) { $pagination .= (" selected"); }
+              $pagination .= ">".$pagesize."</option>";
+            }
+            $pagination .= '</select></div></div></form>';
+
+        }
+        return $pagination;
+    }
+
+
 function generate_url($vars, $new_vars = array())
 {
 

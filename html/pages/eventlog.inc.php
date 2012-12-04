@@ -114,8 +114,18 @@ if ($_SESSION['userlevel'] >= '5')
 }
 $entries = dbFetchRows($query, $param);
 
+if(!$vars['pagesize']) { $vars['page_size'] = "100"; }
+
+echo pagination($vars, count($entries));
+
+if($vars['pageno'])
+{
+  $entries = array_chunk($entries, $vars['pagesize']);
+  $entries = $entries[$vars['pageno']-1];
+}
+
 #echo('<table cellspacing="0" cellpadding="1" width="100%">');
-echo("<table class=\"table table-bordered table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th>Date</th>\n");

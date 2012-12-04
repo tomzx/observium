@@ -1,16 +1,25 @@
-
-<table cellpadding="3" cellspacing="0" class="devicetable sortable" width="100%">
-
 <?php
 
-echo('<tr class="tablehead"><td></td>');
+echo pagination($vars, count($ports), 10, 1);
+
+if($vars['pageno'])
+{
+  $ports = array_chunk($ports, 10);
+  $ports = $ports[$vars['pageno']-1];
+}
+
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('  <thead>');
+
+echo('<tr class="tablehead">');
 
 $cols = array('device' => 'Device',
               'port' => 'Port',
               'traffic' => 'Traffic',
               'traffic_perc' => 'Traffic %',
               'packets' => 'Packets',
-              'speed' => 'Speed', );
+              'speed' => 'Speed', 
+              'mac' => 'MAC Address');
 
 foreach ($cols as $sort => $col)
 {
@@ -22,10 +31,9 @@ foreach ($cols as $sort => $col)
   }
 }
 
-echo("      </tr>");
+echo("      </tr></thead>");
 
 $ports_disabled = 0; $ports_down = 0; $ports_up = 0; $ports_total = 0;
-
 foreach ($ports as $port)
 {
   if (port_permitted($port['port_id'], $port['device_id']))
@@ -53,7 +61,6 @@ foreach ($ports as $port)
 
     $port = ifLabel($port, $device);
     echo("<tr class='ports'>
-          <td width=5></td>
           <td width=200 class=list-bold>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
           <td width=250><span class=list-bold>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
                                         ".$port['ifAlias']."</td>
@@ -71,8 +78,9 @@ foreach ($ports as $port)
   }
 }
 
-echo('<tr><td colspan="7">');
-echo("<strong>Matched Ports: $ports_total ( <span class=green>Up $ports_up</span> | <span class=red>Down $ports_down</span> | Disabled $ports_disabled )</strong>");
 echo('</td></tr></table>');
+
+echo pagination($vars, count($ports), 10);
+
 
 ?>
