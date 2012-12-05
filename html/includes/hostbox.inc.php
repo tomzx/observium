@@ -11,7 +11,7 @@ if ($device['status'] == '0')
   /// This one looks too bright and out of place - adama
   #$table_tab_colour = "#194BBF";
   /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
-  $table_tab_colour = "#194B7F"
+  $table_tab_colour = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
 }
 if ($device['ignore'] == '1')
 {
