@@ -8,7 +8,7 @@
 
 /// Take -Oqs output and parse it into an array containing OID array and the value
 /// Hopefully this is the beginning of more intelligent OID parsing!
-/// Thanks to
+/// Thanks to David Farrell for the parser solution.
 function parse_oid($string)
 {
     $result = array();
