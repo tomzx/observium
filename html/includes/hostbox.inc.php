@@ -8,7 +8,10 @@ if ($device['status'] == '0')
   $table_tab_colour = "#cc0000";
 } else {
   $class = "";
-  $table_tab_colour = "#194BBF";
+  /// This one looks too bright and out of place - adama
+  #$table_tab_colour = "#194BBF";
+  /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
+  $table_tab_colour = "#194B7F"
 }
 if ($device['ignore'] == '1')
 {

@@ -214,6 +214,8 @@ h3.bill > i {
 #  background-color: #fff;
 #}
 
+
+
 legend {
   margin-bottom: 20px;
   font-size: 19.5px;
@@ -446,6 +448,16 @@ legend {
 .table thead {
     color: #555;
     background: #eee;
+}
+
+.table-rounded th,
+.table-rounded td {
+    border-left: none;
+}
+
+.table-rounded thead:first-child tr:first-child th:first-child,
+.table-rounded tbody:first-child tr:first-child td:first-child {
+    border-left: 1px solid #dddddd;
 }
 
 .table-compact {
