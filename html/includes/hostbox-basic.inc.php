@@ -33,7 +33,7 @@ echo('  <tr class="'.$class.'" bgcolor="' . $bg . '" onmouseover="this.style.bac
 
 echo('    <td>' . $device['hardware'] . ' ' . $device['features'] . '</td>');
 echo('    <td>' . $device['os_text'] . ' ' . $device['version'] . '</td>');
-echo('    <td>' . formatUptime($device['uptime'], 'short') . ' <br />');
+echo('    <td>' . deviceUptime($device, 'short') . ' <br />');
 
 if (get_dev_attrib($device,'override_sysLocation_bool')) {  $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }
 echo('    ' . truncate($device['location'],32, '') . '</td>');

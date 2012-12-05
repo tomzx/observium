@@ -12,6 +12,7 @@ if ($device['status'] == '0')
   #$table_tab_colour = "#194BBF";
   /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
   $table_tab_colour = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
+                                 // Your mum's a semicolon - adama
 }
 if ($device['ignore'] == '1')
 {
@@ -52,7 +53,7 @@ if ($sensor_count) { echo(' <img src="images/icons/sensors.png" align=absmiddle 
 echo('</td>');
 echo('    <td >' . $device['hardware'] . '<br />' . $device['features'] . '</td>');
 echo('    <td >' . $device['os_text'] . '<br />' . $device['version'] . '</td>');
-echo('    <td >' . formatUptime($device['uptime'], 'short') . ' <br />');
+echo('    <td >' . deviceUptime($device, 'short') . ' <br />');
 
 if (get_dev_attrib($device,'override_sysLocation_bool')) {  $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }
 echo('    ' . truncate($device['location'],32, '') . '</td>');

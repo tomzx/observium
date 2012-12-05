@@ -380,6 +380,20 @@ function cidr2netmask()
   return (long2ip(ip2long("255.255.255.255") << (32-$netmask)));
 }
 
+# If a device is up, return its uptime, otherwise return the
+# time since the last time we were able to discover it.  This
+# is not very accurate, but better than reporting what the
+# uptime was at some time before it went down.
+function deviceUptime($device, $format="long")
+{
+  if ($device['status'] == 0) {
+    $since = time() - strtotime( $device['last_discovered'] );
+    return "down for " . formatUptime( $since, $format );
+  } else {
+    return formatUptime($device['uptime'], $format);
+  }
+}
+
 function formatUptime($diff, $format="long")
 {
   $yearsDiff = floor($diff/31536000);

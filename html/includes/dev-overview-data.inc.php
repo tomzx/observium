@@ -75,7 +75,7 @@ if ($uptime)
 {
   echo('<tr>
         <td class="list-bold">Uptime</td>
-        <td>' . formatUptime($uptime) . '</td>
+        <td>' . deviceUptime($device) . '</td>
       </tr>');
 }
 
