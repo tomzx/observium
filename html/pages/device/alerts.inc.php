@@ -6,11 +6,11 @@ $glo_conditions = cache_conditions_global();
 #print_r($glo_conditions);
 #echo("</pre>");
 
-echo("<table class=\"table table-bordered table-striped\">
+echo("<table class=\"table table-condensed table-striped\">
   <thead>
     <tr>
-      <th style=\"width: 150px;\">Type</th>
-      <th style=\"width: 150px;\">Subtype</th>
+      <th>Type</th>
+      <th>Subtype</th>
       <th style=\"width: 150px;\">Metric</th>
       <th style=\"width: 100px;\">Operator</th>
       <th style=\"width: 100px;\">Value</th>

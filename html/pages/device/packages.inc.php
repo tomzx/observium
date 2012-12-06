@@ -1,6 +1,6 @@
 <?php
 
-echo("<table class=\"table table-bordered table-striped\">\n");
+echo("<table class=\"table table-condensed table-striped\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th style=\"width: 300px;\">Package name</th>\n");
