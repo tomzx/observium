@@ -70,6 +70,7 @@ function array_sort($array, $on, $order=SORT_ASC)
     return $new_array;
 }
 
+# FIXME horrible
 function mac_clean_to_readable($mac)
 {
   $r = substr($mac, 0, 2);
@@ -381,14 +382,14 @@ function cidr2netmask()
 }
 
 # If a device is up, return its uptime, otherwise return the
-# time since the last time we were able to discover it.  This
+# time since the last time we were able to poll it.  This
 # is not very accurate, but better than reporting what the
 # uptime was at some time before it went down.
 function deviceUptime($device, $format="long")
 {
   if ($device['status'] == 0) {
-    $since = time() - strtotime( $device['last_discovered'] );
-    return "down for " . formatUptime( $since, $format );
+    $since = time() - strtotime( $device['last_polled'] );
+    return "Down for " . formatUptime( $since, $format );
   } else {
     return formatUptime($device['uptime'], $format);
   }
