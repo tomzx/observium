@@ -287,8 +287,13 @@ function overlib_link($url, $text, $contents, $class)
 
   $link_iter++;
 
-  $output  = '<a href="'.$url.'" class="tooltip-from-element '.$class.'" data-tooltip-id="tooltip-'.$link_iter.'">'.$text.'</a>';
-  $output .= '<div id="tooltip-'.$link_iter.'" style="display:none">'.$contents.'</div>';
+#  $output  = '<a href="'.$url.'" class="tooltip-from-element '.$class.'" data-tooltip-id="tooltip-'.$link_iter.'">'.$text.'</a>';
+#  $output .= '<div id="tooltip-'.$link_iter.'" style="display:none">'.$contents.'</div>';
+
+  $output  = '<a href="'.$url.'" class="tooltip-from-data '.$class.'" data-tooltip="'.htmlspecialchars($contents).'">'.$text.'</a>';
+
+#  $output .= '<div id="tooltip-'.$link_iter.'" style="display:none">'.$contents.'</div>';
+
 
   return $output;
 }
@@ -303,7 +308,7 @@ function generate_graph_popup($graph_array)
 
   $graph = generate_graph_tag($graph_array);
   $content = "<div class=list-large>".$graph_array['popup_title']."</div>";
-  $content .= "<div style='width: 850px'>";
+  $content .= '<div style="width: 850px">';
   $graph_array['legend']   = "yes";
   $graph_array['height']   = "100";
   $graph_array['width']    = "340";
@@ -437,7 +442,7 @@ function generate_graph_tag($args)
     $urlargs[] = $key."=".$arg;
   }
 
-  return '<img src="graph.php?' . implode('&amp;',$urlargs).'" border="0" />';
+  return '<img src="graph.php?' . implode('&',$urlargs).'" border="0" />';
 }
 
 function generate_graph_js_state($args) {
@@ -518,7 +523,7 @@ function generate_port_link($port, $text = NULL, $type = NULL)
 
   $content = "<div class=list-large>".$port['hostname']." - " . fixifName($port['label']) . "</div>";
   if ($port['ifAlias']) { $content .= $port['ifAlias']."<br />"; }
-  $content .= "<div style='width: 700px'>";
+  $content .= '<div style="width: 700px">';
   $graph_array['type']     = $port['graph_type'];
   $graph_array['legend']   = "yes";
   $graph_array['height']   = "100";

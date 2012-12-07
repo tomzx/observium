@@ -15,7 +15,7 @@ if (count($drives))
   echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
   echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=storage/">');
   echo("<img align='absmiddle' src='images/icons/storage.png'> Storage</a></p>");
-  echo("<table width=100% cellspacing=0 cellpadding=5>");
+  echo('<table class="table table-condensed table-striped">');
 
   foreach ($drives as $drive)
   {

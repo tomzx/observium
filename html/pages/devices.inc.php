@@ -258,7 +258,7 @@ if(file_exists('pages/devices/'.$format.'.inc.php'))
 
 
 
-  echo("<table class=\"table table-hover table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+  echo('<table class="table table-hover table-striped" style="margin-top: 10px;">');
   if ($subformat == "detail")
   {
   echo("  <thead>\n");

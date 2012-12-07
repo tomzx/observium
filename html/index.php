@@ -162,6 +162,23 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 	}
       });
     });
+
+  $('.tooltip-from-data').qtip({
+	content: {
+		attr: 'data-tooltip'
+	},
+        style: {
+          classes: 'qtip-bootstrap',
+        },
+        position: {
+                target: 'mouse',
+                adjust: {
+                        x: 2,
+                        y: 2
+                }
+        }
+  })
+
   });
 
   </script>

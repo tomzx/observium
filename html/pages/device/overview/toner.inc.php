@@ -10,7 +10,7 @@ if (count($toners))
   echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
   echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=toner/">');
   echo("<img align='absmiddle' src='images/icons/toner.png'> Toner</a></p>");
-  echo("<table width=100% cellspacing=0 cellpadding=5>");
+  echo('<table class="table table-condensed table-striped">');
 
   foreach ($toners as $toner)
   {

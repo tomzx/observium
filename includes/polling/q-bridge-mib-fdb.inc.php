@@ -7,6 +7,8 @@ $port_ifIndex_table = array();
 foreach(dbFetchRows("SELECT `ifIndex`,`port_id`,`ifDescr` FROM `ports` WHERE `device_id` = ?", array($device['device_id'])) as $cache_port)
   {  $port_ifIndex_table[$cache_port['ifIndex']] = $cache_port; }
 
+
+
 /// Build dot1dBasePort > port cache table because people in the '80s were dicks
 $dot1dBasePort_table = array();
 foreach(snmpwalk_cache_oid($device, "dot1dBasePortIfIndex", $port_stats, "BRIDGE-MIB") AS $dot1dbaseport => $data)

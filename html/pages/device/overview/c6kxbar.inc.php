@@ -4,7 +4,7 @@ echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
 echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
 echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=mempool/">');
 echo("<img align='absmiddle' src='images/16/arrow_switch.png'> Catalyst 6k Crossbar</a></p>");
-echo("<table width=100% cellspacing=0 cellpadding=5>");
+echo('<table class="table table-condensed table-striped">');
 
 foreach ($entity_state['group']['c6kxbar'] as $index => $entry)
 {

@@ -25,15 +25,13 @@ echo("</div>");
 
 include("overview/ports.inc.php");
 
-#include("overview/current.inc.php");
-
 if ($services['total'])
 {
   echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
   echo("<p style='padding: 0px 5px 5px;' class=sectionhead><img align='absmiddle' src='images/16/cog.png'> Services</p><div style='height: 5px;'></div>");
 
   echo("
-<table class=tablehead cellpadding=2 cellspacing=0 width=100%>
+<table class='table table-condensed table-striped'>
 <tr bgcolor=$services_colour align=center><td></td>
 <td width=25%><img src='images/16/cog.png' align=absmiddle> $services[total]</td>
 <td width=25% class=green><img src='images/16/cog_go.png' align=absmiddle> $services[up]</td>
@@ -65,7 +63,7 @@ if ($config['enable_syslog'])
   {
     echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
     echo('<p style="padding: 0px 5px 5px;" class="sectionhead"><a class="sectionhead" href="device/device=' . $device['device_id'] . '/tab=logs/section=syslog/"><img align="absmiddle" src="images/16/printer.png" /> Recent Syslog</a></p>');
-    echo("<table cellspacing=0 cellpadding=2 width=100%>");
+    echo('<table class="table table-condensed table-striped">');
     foreach ($syslog as $entry) { include("includes/print-syslog.inc.php"); }
     echo("</table>");
     echo("</div>");
@@ -98,7 +96,7 @@ echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
 echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=logs/section=eventlog/">');
 echo("<img align='absmiddle' src='images/16/report.png'> Recent Events</a></p>");
 
-echo("<table cellspacing=0 cellpadding=2 width=100%>");
+echo('<table class="table table-condensed table-striped">');
 
 $eventlog = dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%d/%b/%y %T') as humandate FROM `eventlog` WHERE `host` = ? ORDER BY `datetime` DESC LIMIT 0,10", array($device['device_id']));
 foreach ($eventlog as $entry)

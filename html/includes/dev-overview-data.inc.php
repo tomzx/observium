@@ -15,8 +15,7 @@ if ($device['os'] == "ios") { formatCiscoHardware($device); }
 if ($device['features']) { $device['features'] = "(".$device['features'].")"; }
 $device['os_text'] = $config['os'][$device['os']]['text'];
 
-echo("<table width=100% cellspacing=0 cellpadding=5>");
-echo('<tr class="device-overview"><td width="100%"><table width="100%">');
+echo('<table class="table table-condensed table-striped">');
 
 if ($device['hardware'])
 {
@@ -79,7 +78,8 @@ if ($uptime)
       </tr>');
 }
 
-  echo("</table></tr></td></table>");
+  echo("</table>");
+
   echo("</div>");
 
 ?>

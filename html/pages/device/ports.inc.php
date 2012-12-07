@@ -97,7 +97,39 @@ if ($vars['view'] == 'minigraphs')
   include("ports/".$vars['view'].".inc.php");
 } else {
   if ($vars['view'] == "details") { $port_details = 1; }
-  echo("<div style='margin: 0px;'><table border=0 cellspacing=0 cellpadding=5 width=100%>");
+
+echo('<table class="table table-striped" style="margin-top: 10px;">');
+echo('  <thead>');
+
+echo('<tr class="tablehead">');
+
+$cols = array(
+              'port' => 'Port',
+              'graphs' => NULL,
+              'traffic' => 'Traffic',
+              'speed' => 'Speed',
+              'media' => 'Media',
+              'mac' => 'MAC Address',
+              'details' => NULL);
+
+foreach ($cols as $sort => $col)
+{
+  if ($col == NULL)
+  {
+    echo('<th></th>');
+  }
+  elseif ($vars['sort'] == $sort)
+  {
+    echo('<th>'.$col.' *</th>');
+  } else {
+    echo('<th><a href="'. generate_url($vars, array('sort' => $sort)).'">'.$col.'</a></th>');
+  }
+}
+
+echo("      </tr></thead>");
+
+echo('  </thead>');
+
   $i = "1";
 
   global $port_cache, $port_index_cache;

@@ -54,16 +54,16 @@ if ($port_details)
 
 echo("</span>");
 
-echo("</td><td width=100>");
+echo("</td><td width=147>");
 
 if ($port_details)
 {
   $port['graph_type'] = "port_bits";
-  echo(generate_port_link($port, "<img src='graph.php?type=port_bits&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no&amp;bg=".str_replace("#","", $row_colour)."'>"));
+  echo(generate_port_link($port, "<img src='graph.php?type=port_bits&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no'>"));
   $port['graph_type'] = "port_upkts";
-  echo(generate_port_link($port, "<img src='graph.php?type=port_upkts&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no&amp;bg=".str_replace("#","", $row_colour)."'>"));
+  echo(generate_port_link($port, "<img src='graph.php?type=port_upkts&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no'>"));
   $port['graph_type'] = "port_errors";
-  echo(generate_port_link($port, "<img src='graph.php?type=port_errors&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no&amp;bg=".str_replace("#","", $row_colour)."'>"));
+  echo(generate_port_link($port, "<img src='graph.php?type=port_errors&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no'>"));
 }
 
 echo("</td><td width=120>");

@@ -41,7 +41,7 @@ $sensor_count = dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `device_id` = 
 
 echo('  <tr class="'.$class.'" onclick="location.href=\'device/device='.$device['device_id'].'/\'" style="cursor: pointer;">
           <td style="width: 1px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
-          <td style="padding-left: 8px" width="40"  align="center" valign="middle">' . $image . '</td>
+          <td width="40"  style="padding: 10px; text-align: center; vertical-align: middle;">' . $image . '</td>
           <td width="300" ><span style="font-size: 15px;">' . generate_device_link($device) . '</span>
           <br />' . $device['sysName'] . '</td>'
         );

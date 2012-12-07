@@ -15,7 +15,7 @@ if (count($mempools))
   echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
   echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=mempool/">');
   echo("<img align='absmiddle' src='images/icons/memory.png'> Memory Pools</a></p>");
-  echo("<table width=100% cellspacing=0 cellpadding=5>");
+  echo('<table class="table table-condensed table-striped">');
 
   foreach ($mempools as $mempool)
   {
