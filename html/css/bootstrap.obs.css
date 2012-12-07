@@ -214,7 +214,10 @@ h3.bill > i {
 #  background-color: #fff;
 #}
 
-
+.table-condensed-more th,
+.table-condensed-more td {
+  padding: 1px 5px;
+}
 
 legend {
   margin-bottom: 20px;

@@ -116,7 +116,8 @@ $entries = dbFetchRows($query, $param);
 
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 
-echo pagination($vars, count($entries));
+$pagination = pagination($vars, count($entries));
+echo $pagination;
 
 if($vars['pageno'])
 {
@@ -144,5 +145,8 @@ foreach ($entries as $entry)
 }
 echo('</tbody>');
 echo("</table>");
+
+echo $pagination;
+unset($pagination);
 
 ?>

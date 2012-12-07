@@ -30,7 +30,7 @@
 
   <div class="input-prepend" style="margin-right: 3px;">
     <span class="add-on">Device</span>
-    <input type="text" class="input-medium" name="device_string" id="device_string" value="<?php if ($_POST['device_string']) { echo($_POST['device_string']); } ?>" />
+    <input type="text" class="input-medium add-on" name="device_string" id="device_string" value="<?php if ($_POST['device_string']) { echo($_POST['device_string']); } ?>" />
     <select name="device" id="device" class="span2">
       <option value="">All Devices</option>
       <?php

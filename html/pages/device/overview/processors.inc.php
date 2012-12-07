@@ -15,7 +15,7 @@ if (count($processors))
   echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
   echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=processor/">');
   echo("<img align='absmiddle' src='images/icons/processor.png'> Processors</a></p>");
-  echo('<table class="table table-condensed table-striped">');
+  echo('<table class="table table-condensed-more table-striped">');
 
   foreach ($processors as $proc)
   {

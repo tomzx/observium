@@ -3,18 +3,13 @@
 if(is_numeric($vars['vsvr']))
 {
 
-#print_optionbar_start();
-#echo("<span style='font-weight: bold;'>VServer</span> &#187; ");
-#echo('<a href="'.generate_url($vars, array('vsvr' => NULL)).'">All</a>');
-#print_optionbar_end();
-
 $graph_types = array("bits"   => "Bits",
                      "pkts"   => "Packets",
                      "conns"  => "Connections",
                      "reqs"   => "Requests",
                      "hitmiss" => "Hit/Miss");
 
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo("<table class='table table-striped table-condensed table-bordered' style=\"margin-top: 10px;\">\n");
 foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? AND `vsvr_id` = ? ORDER BY `vsvr_name`", array($device['device_id'], $vars['vsvr'])) as $vsvr)
 {
 
@@ -32,7 +27,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   if(count($svcs))
   {
     echo('<tr><td colspan="5">');
-    echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+    echo("<table class=\"table table-striped table-condensed table-bordered\" style=\"margin-top: 10px;\">\n");
     echo("  <thead>\n");
     echo("    <th>Service</th>");
     echo("    <th>Address</th>");
@@ -83,7 +78,6 @@ echo("</table>");
 } else {
 
 print_optionbar_start();
-
 echo("<span style='font-weight: bold;'>VServers</span> &#187; ");
 
 $menu_options = array('basic' => 'Basic',
@@ -121,7 +115,7 @@ foreach ($graph_types as $type => $descr)
 print_optionbar_end();
 
 echo("<div style='margin: 5px;'>");
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo("<table class=\"table table-striped table-condensed table-bordered\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th>VServer</th>\n");
