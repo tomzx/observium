@@ -7,6 +7,7 @@ $graphs['mysql']      = array('network_traffic', 'connections', 'command_counter
 $graphs['memcached']  = array('bits', 'commands', 'data', 'items');
 $graphs['powerdns']   = array('recursing', 'queries', 'querycache', 'latency');
 $graphs['ntpd']       = array('stats', 'freq', 'stratum', 'bits');
+$graphs['postgresql'] = array('xact', 'blks', 'tuples', 'tuples_query');
 $graphs['shoutcast']  = array('multi_stats', 'multi_bits');
 # FIXME ^ recursing should be replaced by something else probably.
 
