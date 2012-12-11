@@ -100,7 +100,6 @@ for ($x=1;$x<32;$x++) {
           <!-- <button class="btn btn-info" style="float: right;"><i class="icon-circle-arrow-left icon-white"></i> <strong>Back to bills</strong></button> //-->
           <button type="submit" class="btn btn-primary"><i class="icon-ok-sign icon-white"></i> <strong>Add Bill</strong></button>
         </div>
-      </form>
     </div>
     <div class="tab-pane fade in" id="ports">
 <?php
@@ -132,6 +131,7 @@ for ($x=1;$x<32;$x++) {
 ?>
   </div>
 </div>
+      </form>
 
 <?php
 
