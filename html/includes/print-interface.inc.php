@@ -274,7 +274,11 @@ if ($graph_type && is_file($graph_file))
 
   echo("<tr style='background-color: $row_colour; padding: 0px;'><td colspan=7>");
 
-  include("includes/print-interface-graphs.inc.php");
+  $graph_array['to']     = $config['time']['now'];
+  $graph_array['id']     = $port['port_id'];
+  $graph_array['type']   = $graph_type;
+
+  include("includes/print-graphrow.inc.php");
 
   echo("</td></tr>");
 }

@@ -7,7 +7,7 @@ if($_SESSION['widescreen'])
   if($_SESSION['big_graphs'])
   {
     if (!$graph_array['height']) { $graph_array['height'] = "110"; }
-    if (!$graph_array['width']) { $graph_array['width']  = "355"; }
+    if (!$graph_array['width']) { $graph_array['width']  = "353"; }
     $periods = array('sixhour', 'week', 'month', 'year');
   } else {
     if (!$graph_array['height']) { $graph_array['height'] = "110"; }
