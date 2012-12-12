@@ -3,9 +3,7 @@
 $graph_type = "mempool_usage";
 
 echo("<div style='margin-top: 5px; padding: 0px;'>");
-echo("<table width=100% cellpadding=6 cellspacing=0>");
-
-echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('<table class="table table-striped table-condensed">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="250">Device</th>');
@@ -15,7 +13,6 @@ echo('      <th width="280">Usage</th>');
 echo('      <th width="50">Used</th>');
 echo('    </tr>');
 echo('  </thead>');
-
 $sql  = "SELECT *, `mempools`.`mempool_id` AS `mempool_id`";
 $sql .= " FROM  `mempools`";
 $sql .= " JOIN `devices` ON  `mempools`.`device_id` =  `devices`.`device_id`";

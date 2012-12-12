@@ -3,7 +3,7 @@
 $graph_type = "mempool_usage";
 
 echo("<div style='margin-top: 5px; padding: 0px;'>");
-echo("<table width=100% cellpadding=6 cellspacing=0>");
+echo('<table class="table table-striped table-condensed">');
 
 $i = '1';
 

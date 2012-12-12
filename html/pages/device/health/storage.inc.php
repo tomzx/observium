@@ -2,7 +2,8 @@
 
 $graph_type = "storage_usage";
 
-echo("<table cellspacing=0 cellpadding=5 width=100%>");
+echo('<table class="table table-striped table-condensed">');
+
 
 echo("<tr class=tablehead>
         <th width=250>Drive</th>
