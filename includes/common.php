@@ -49,6 +49,42 @@ function formatUptime($diff, $format="long")
   return trim($uptime);
 }
 
+function formatCiscoHardware(&$device, $short = false)
+{
+  if ($device['os'] == "ios")
+  {
+    if ($device['hardware'])
+    {
+      if (preg_match("/^WS-C([A-Za-z0-9]+).*/", $device['hardware'], $matches))
+      {
+        if (!$short)
+        {
+           $device['hardware'] = "Cisco " . $matches[1] . " (" . $device['hardware'] . ")";
+        }
+        else
+        {
+           $device['hardware'] = "Cisco " . $matches[1];
+        }
+      }
+      elseif (preg_match("/^CISCO([0-9]+)$/", $device['hardware'], $matches))
+      {
+        $device['hardware'] = "Cisco " . $matches[1];
+      }
+    }
+    else
+    {
+      if (preg_match("/Cisco IOS Software, C([A-Za-z0-9]+) Software.*/", $device['sysDescr'], $matches))
+      {
+        $device['hardware'] = "Cisco " . $matches[1];
+      }
+      elseif (preg_match("/Cisco IOS Software, ([0-9]+) Software.*/", $device['sysDescr'], $matches))
+      {
+        $device['hardware'] = "Cisco " . $matches[1];
+      }
+    }
+  }
+}
+
 function format_number_short($number, $sf)
 {
   // This formats a number so that we only send back three digits plus an optional decimal point.
