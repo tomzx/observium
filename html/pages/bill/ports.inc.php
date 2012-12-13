@@ -11,22 +11,18 @@ foreach ($ports as $port) {
   $emptyCheck = true;
   $count++;
   $speed += $port['ifSpeed'];
-  //print_r($port);
 
-  $devicebtn = str_replace("list-device", "btn btn-small", generate_device_link($port));
-  //$devicebtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $devicebtn);
-  //$devicebtn = str_replace("<div>',;", "</div></div>',", $devicebtn);
+  /// FIXME - clean this up, it's horrible.
+
+  $devicebtn = str_replace("list-device", "btn btn-small", generate_device_link($port, ""));
   $devicebtn = str_replace("\">".$port['hostname'], "\" style=\"color: #000;\"><i class=\"icon-hdd\"></i> ".$port['hostname'], $devicebtn);
 
-  $portbtn = str_replace("interface-upup", "btn btn-small", generate_port_link($port));
-  $portbtn = str_replace("interface-updown", "btn btn-small btn-warning", $portbtn);
-  $portbtn = str_replace("interface-downdown", "btn btn-small btn-warning", $portbtn);
-  $portbtn = str_replace("interface-admindown", "btn btn-small btn-warning disabled", $portbtn);
-  //$portbtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $portbtn);
-  //$portbtn = str_replace("<div>',;", "</div></div>',", $portbtn);
-  $portbtn = str_replace("\">".strtolower($port['ifName']), "\" style=\"color: #000;\"><i class=\"icon-random\"></i> ".$port['ifName']."".$portalias, $portbtn);
+  if(empty($port['ifAlias'])) { $portalias = ""; } else { $portalias = " - ".$port['ifAlias'].""; }
 
-  $portalias = (empty($port['ifAlias']) ? "" : " - ".$port['ifAlias']."");
+  $portbtn = str_replace("interface-upup", "btn btn-small", generate_port_link($port, "<i class='icon-random'></i> ".$port['ifName'].$portalias));
+  $portbtn = str_replace("interface-updown", "btn btn-small btn-danger", $portbtn);
+  $portbtn = str_replace("interface-downdown", "btn btn-small btn-danger", $portbtn);
+  $portbtn = str_replace("interface-admindown", "btn btn-small btn-warning disabled", $portbtn);
 
   $res    .= "          <div class=\"btn-toolbar\">\n";
   $res    .= "            <div class=\"btn-group\">\n";
