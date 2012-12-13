@@ -94,7 +94,7 @@ function gbConvert($data) {
 function transferOverview($bill_id, $start, $end) {
   $tot       = array();
   $traf      = array();
-  $res       = "    <table class=\"table table-striped table-bordered\" style=\"margin-bottom: 0px;\">";
+  $res       = "    <table class=\"table table-striped table-bordered table-hover table-condensed table-rounded\" style=\"margin-bottom: 0px;\">";
   $res      .= "      <thead>";
   $res      .= "        <tr>";
   $res      .= "          <th>Period</th>";
@@ -148,41 +148,41 @@ elseif ($active['previous'] == "active") { $graph = $li; }
 <div class="row-fluid">
   <div class="span6 well">
     <h3 class="bill"><i class="icon-tag"></i> Bill summary</h3>
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 125px;">Billing period</th>
-        <td style="width: 5px; border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($fromtext." to ".$totext); ?></td>
+        <td style="width: 5px;">:</td>
+        <td><?php echo($fromtext." to ".$totext); ?></td>
       </tr>
       <tr>
         <th>Type</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="label label-inverse"><?php echo($type); ?></span></td>
+        <td>:</td>
+        <td><span class="label label-inverse"><?php echo($type); ?></span></td>
       </tr>
       <tr>
         <th>Allowed</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge badge-success"><?php echo($allowed); ?></span></td>
+        <td>:</td>
+        <td><span class="badge badge-success"><?php echo($allowed); ?></span></td>
       </tr>
       <tr>
         <th>Used</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge badge-warning"><?php echo($used); ?></span></td>
+        <td>:</td>
+        <td><span class="badge badge-warning"><?php echo($used); ?></span></td>
       </tr>
       <tr>
         <th>Average</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge"><?php echo($average); ?></span></td>
+        <td>:</td>
+        <td><span class="badge"><?php echo($average); ?></span></td>
       </tr>
       <tr>
         <th>Estimated</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><span class="badge badge-info"><?php echo($estimated); ?></span></td>
+        <td>:</td>
+        <td><span class="badge badge-info"><?php echo($estimated); ?></span></td>
       </tr>
       <tr>
         <th>Overusage</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($overuse); ?></td>
+        <td>:</td>
+        <td><?php echo($overuse); ?></td>
       </tr>
       <tr>
         <td colspan="3">
@@ -192,34 +192,34 @@ elseif ($active['previous'] == "active") { $graph = $li; }
   </div>
   <div class="span6 well">
     <h3 class="bill"><i class="icon-tags"></i> Optional information</h3>
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 175px;"><i class="icon-user"></i> Customer Reference</th>
-        <td style="width: 5px; border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($optional['cust']); ?></td>
+        <td style="width: 5px;">:</td>
+        <td><?php echo($optional['cust']); ?></td>
       </tr>
       <tr>
         <th><i class="icon-info-sign"></i> Billing Reference</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($optional['ref']); ?></td>
+        <td>:</td>
+        <td><?php echo($optional['ref']); ?></td>
       </tr>
       <tr>
         <th><i class="icon-comment"></i> Notes</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($optional['notes']); ?></td>
+        <td>:</td>
+        <td><?php echo($optional['notes']); ?></td>
       </tr>
     </table>
     <h3 class="bill"><i class="icon-tags"></i> Ports information</h3>
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 175px;"><i class="icon-random"></i> Number of ports</th>
-        <td style="width: 5px; border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo($ports_info['ports']); ?></td>
+        <td style="width: 5px;">:</td>
+        <td><?php echo($ports_info['ports']); ?></td>
       </tr>
       <tr>
         <th><i class="icon-random"></i> Total capacity</th>
-        <td style="border-left: none;">:</td>
-        <td style="border-left: none;"><?php echo(format_si($ports_info['capacity'])); ?>bps</td>
+        <td>:</td>
+        <td><?php echo(format_si($ports_info['capacity'])); ?>bps</td>
       </tr>
     </table>
   </div>

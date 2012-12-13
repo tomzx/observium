@@ -8,7 +8,7 @@ $links['cur']     = generate_url($vars, array('view' => ''));
 
 include_once('searchaction.inc.php');
 
-echo("<table class=\"table table-bordered table-striped\">
+echo("<table class=\"table table-bordered table-striped table-hover table-rounded\">
         <thead>
           <tr>
             <th>Billing name</th>

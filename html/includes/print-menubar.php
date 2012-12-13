@@ -570,8 +570,9 @@ if(is_file("includes/print-menubar-custom.inc.php"))
                 <h2>The Team</h2>
                 <p>
                   <img src="images/icons/flags/gb.png"> <strong>Adam Armstrong</strong> Project Founder<br />
+                  <img src="images/icons/flags/be.png"> <strong>Tom Laermans</strong> Developer/Committer<br />
                   <img src="images/icons/flags/be.png"> <strong>Geert Hauwaerts</strong> Developer<br />
-                  <img src="images/icons/flags/be.png"> <strong>Tom Laermans</strong> Developer<br />
+                  <img src="images/icons/flags/be.png"> <strong>Dennis de Houx</strong> Developer<br />
                 </p>
             </div>
             <div class="col_1">

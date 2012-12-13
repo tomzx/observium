@@ -14,15 +14,15 @@ foreach ($ports as $port) {
 
   /// FIXME - clean this up, it's horrible.
 
-  $devicebtn = str_replace("list-device", "btn btn-small", generate_device_link($port, ""));
+  $devicebtn = str_replace("list-device", "btn btn-mini", generate_device_link($port, ""));
   $devicebtn = str_replace("\">".$port['hostname'], "\" style=\"color: #000;\"><i class=\"icon-hdd\"></i> ".$port['hostname'], $devicebtn);
 
   if(empty($port['ifAlias'])) { $portalias = ""; } else { $portalias = " - ".$port['ifAlias'].""; }
 
-  $portbtn = str_replace("interface-upup", "btn btn-small", generate_port_link($port, "<i class='icon-random'></i> ".$port['ifName'].$portalias));
-  $portbtn = str_replace("interface-updown", "btn btn-small btn-danger", $portbtn);
-  $portbtn = str_replace("interface-downdown", "btn btn-small btn-danger", $portbtn);
-  $portbtn = str_replace("interface-admindown", "btn btn-small btn-warning disabled", $portbtn);
+  $portbtn = str_replace("interface-upup", "btn btn-mini", generate_port_link($port, "<i class='icon-random'></i> ".$port['ifName'].$portalias));
+  $portbtn = str_replace("interface-updown", "btn btn-mini btn-danger", $portbtn);
+  $portbtn = str_replace("interface-downdown", "btn btn-mini btn-danger", $portbtn);
+  $portbtn = str_replace("interface-admindown", "btn btn-mini btn-warning disabled", $portbtn);
 
   $res    .= "          <div class=\"btn-toolbar\">\n";
   $res    .= "            <div class=\"btn-group\">\n";

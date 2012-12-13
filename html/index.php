@@ -124,8 +124,8 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
   <link href="<?php echo($config['stylesheet']);  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo("css/bootstrap-responsive.min.css");  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo("css/bootstrap.obs.css");  ?>" rel="stylesheet" type="text/css" />
+  <link href="<?php echo("css/bootstrap-responsive.css");  ?>" rel="stylesheet" type="text/css" />
+  <link href="<?php echo("css/bootstrap-observium.css");  ?>" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="css/mktree.css" type="text/css" />
   <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
 

@@ -55,6 +55,11 @@ label, input, button, select, textarea {
   line-height: 18px;
 }
 
+.row-fluid .span6 {
+  width: 49.13617021276595%;
+  *width: 48.88297872340425%;
+}
+
 .input-append .add-on, .input-prepend .add-on {
   display: inline-block;
   width: auto;
@@ -441,6 +446,10 @@ legend {
     box-shadow: none;
 }
 
+.well-light {
+    background-color: #f5f5f5;
+}
+
 .table {
     color: #777;
 }
@@ -454,8 +463,10 @@ legend {
     border-left: none;
 }
 
-.table-rounded thead:first-child tr:first-child th:first-child,
-.table-rounded tbody:first-child tr:first-child td:first-child {
+/* .table-rounded thead:first-child tr:first-child th:first-child, */
+/* .table-rounded tbody:first-child tr:first-child td:first-child { */
+.table-rounded thead th:first-child,
+.table-rounded tbody td:first-child {
     border-left: 1px solid #dddddd;
 }
 

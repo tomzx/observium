@@ -43,7 +43,7 @@
   }
 
   echo("
-             <table class=\"table table-striped table-bordered\">
+             <table class=\"table table-striped table-bordered table-hover table-condensed table-rounded\">
                <thead>
                  <tr style=\"font-weight: bold; \">
                    <th width=\"250\">Period</th>
@@ -137,8 +137,8 @@
         $img['bw_day']  = showDetails($bill_id, "day", strtotime($datefrom), strtotime($dateto));
         $img['bw_hour'] = showDetails($bill_id, "hour", strtotime($datefrom), strtotime($dateto));
         echo("
-                <tr style=\"background: #fff;\">
-                  <td colspan=\"10\" style=\"text-align: center;\">
+                <tr>
+                  <td colspan=\"10\" style=\"text-align: center; background-color: #ffffff;\">
                     <!-- <b>Accuate Graph</b><br /> //-->
                     ".$img['bitrate']."<br />
                     <!-- <b>Bandwidth Graph per day</b><br /> //-->

@@ -1,5 +1,12 @@
 <h2 style="margin-bottom: 10px;">Simple Observium API - Error codes</h2>
-<table class="table table-striped table-bordered">
+<div class="alert alert-info">
+  <i class="icon-white icon-info-sign"></i> <strong>Information:</strong>
+  <p>
+    Here you can find out what the error number means when it returns a errorcode when
+    you call the simple api.
+  </p>
+</div>
+<table class="table table-striped table-bordered table-hover table-condensed table-rounded">
   <thead>
     <tr>
       <th>Code</th>
