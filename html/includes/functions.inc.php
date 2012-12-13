@@ -322,12 +322,13 @@ function overlib_link($url, $text, $contents, $class)
 
   $link_iter++;
 
-#  $output  = '<a href="'.$url.'" class="tooltip-from-element '.$class.'" data-tooltip-id="tooltip-'.$link_iter.'">'.$text.'</a>';
-#  $output .= '<div id="tooltip-'.$link_iter.'" style="display:none">'.$contents.'</div>';
-
-  $output  = '<a href="'.$url.'" class="tooltip-from-data '.$class.'" data-tooltip="'.htmlspecialchars($contents).'">'.$text.'</a>';
-
-#  $output .= '<div id="tooltip-'.$link_iter.'" style="display:none">'.$contents.'</div>';
+  /// Allow the Grinch to disable popups and destroy Christmas.
+  if($config['web_mouseover'])
+  {
+    $output  = '<a href="'.$url.'" class="tooltip-from-data '.$class.'" data-tooltip="'.htmlspecialchars($contents).'">'.$text.'</a>';
+  } else {
+    $output  = '<a href="'.$url.'" class="'.$class.'">'.$text.'</a>';
+  }
 
 
   return $output;
