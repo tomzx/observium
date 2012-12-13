@@ -227,6 +227,41 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
   if (!$start) { $start = $config['time']['day']; }
   if (!$end)   { $end   = $config['time']['now']; }
 
+/// THIS SHIT NEEDS TO BE A FUNCTION. REALLY.
+
+if ($device['status'] == '0')
+{
+  $row_class = "error";
+  $table_tab_colour = "#cc0000";
+} else {
+  $row_class = "";
+  /// This one looks too bright and out of place - adama
+  #$table_tab_colour = "#194BBF";
+  /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
+  $table_tab_colour = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
+                                 // Your mum's a semicolon - adama
+}
+if ($device['ignore'] == '1')
+{
+  $row_class = "warning";
+  $table_tab_colour = "#aaaaaa";
+  if ($device['status'] == '1')
+  {
+    $row_class = "";
+    $table_tab_colour = "#009900";
+  }
+}
+if ($device['disabled'] == '1')
+{
+  $row_class = "warning";
+  $table_tab_colour = "#aaaaaa";
+}
+
+/// END SHIT
+
+  if ($device['os'] == "ios") { formatCiscoHardware($device, true); }
+  $device['os_text'] = $config['os'][$device['os']]['text'];
+
   $class = devclass($device);
   if (!$text) { $text = $device['hostname']; }
 
@@ -245,17 +280,17 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
 
   $url = generate_device_url($device, $vars);
 
-  $contents = "<div class=list-large>".$device['hostname'];
-  if ($device['hardware']) { $contents .= " - ".$device['hardware']; }
-  $contents .= "</div>";
-
-  $contents .= "<div>";
-  if ($device['os']) { $contents .= mres($config['os'][$device['os']]['text']); }
-  if ($device['version']) { $contents .= " ".mres($device['version']); }
-  if ($device['features']) { $contents .= " (".mres($device['features']).")"; }
-  if ($device['hardware']) { $contents .= " - ".$device['hardware']; }
-  if (isset($device['location'])) { $contents .= "<br />" . htmlentities($device['location']); }
-  $contents .= "</div>";
+  $contents = '
+      <table class="table table-striped table-bordered table-rounded table-condensed">
+        <tr class="'.$row_class.'" style="font-size: 10pt;">
+          <td style="width: 10px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+          <td width="40" style="padding: 10px; text-align: center; vertical-align: middle;">'.getImage($device).'</td>
+          <td width="200"><a href="#" class="'.$class.'" style="font-size: 15px; font-weight: bold;">'.$device['hostname'].'</a><br />'. $device['sysName'].'</td>
+          <td>'.$device['hardware'].' <br /> '.$device['os_text'].' '.$device['version'].'</td>
+          <td>'.deviceUptime($device, 'short').'<br />'.truncate($device['location'],32, '').'
+          </td>
+          </table>
+';
 
   foreach ($graphs as $entry)
   {
@@ -263,8 +298,8 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
     $graphhead = $entry['text'];
     $contents .= '<div style="width: 708px">';
     $contents .= '<span style="margin-left: 5px; font-size: 12px; font-weight: bold;">'.$graphhead.'</span><br />';
-    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&amp;from=$start&amp;to=$end&amp;width=275&amp;height=100&amp;type=$graph&amp;legend=no&amp;draw_all=yes" . '" style="margin: 2px;">';
-    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&amp;from=".$config['time']['week']."&amp;to=$end&amp;width=275&amp;height=100&amp;type=$graph&amp;legend=no&amp;draw_all=yes" . '" style="margin: 2px;">';
+    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&from=".$start."&to=".$end."&width=275&height=100&type=".$graph."&legend=no&draw_all=yes" . '" style="margin: 2px;">';
+    $contents .= "<img src=\"graph.php?device=" . $device['device_id'] . "&from=".$config['time']['week']."&to=".$end."&width=275&height=100&type=".$graph."&legend=no&draw_all=yes" . '" style="margin: 2px;">';
     $contents .= '</div>';
   }
 

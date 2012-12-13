@@ -148,38 +148,6 @@ function interface_errors($rrd_file, $period = '-1d') // Returns the last in/out
   return $errors;
 }
 
-function getImage($device)
-{
-  global $config;
-
-  $device['os'] = strtolower($device['os']);
-
-  if ($device['icon'] && file_exists($config['html_dir'] . "/images/os/" . $device['icon'] . ".png"))
-  {
-    $image = '<img src="' . $config['base_url'] . '/images/os/' . $device['icon'] . '.png" />';
-  }
-  elseif ($config['os'][$device['os']]['icon'] && file_exists($config['html_dir'] . "/images/os/" . $config['os'][$device['os']]['icon'] . ".png"))
-  {
-    $image = '<img src="' . $config['base_url'] . '/images/os/' . $config['os'][$device['os']]['icon'] . '.png" />';
-  } else {
-    if (file_exists($config['html_dir'] . '/images/os/' . $device['os'] . '.png'))
-    {
-      $image = '<img src="' . $config['base_url'] . '/images/os/' . $device['os'] . '.png" />';
-    }
-    if ($device['os'] == "linux")
-    {
-      $features = strtolower(trim($device['features']));
-      list($distro) = explode(" ", $features);
-      if (file_exists($config['html_dir'] . "/images/os/$distro" . ".png"))
-      {
-        $image = '<img src="' . $config['base_url'] . '/images/os/' . $distro . '.png" />';
-      }
-    }
-  }
-
-  return $image;
-}
-
 function renamehost($id, $new, $source = 'console')
 {
   global $config;
@@ -379,53 +347,6 @@ function netmask2cidr($netmask)
 function cidr2netmask()
 {
   return (long2ip(ip2long("255.255.255.255") << (32-$netmask)));
-}
-
-# If a device is up, return its uptime, otherwise return the
-# time since the last time we were able to poll it.  This
-# is not very accurate, but better than reporting what the
-# uptime was at some time before it went down.
-function deviceUptime($device, $format="long")
-{
-  if ($device['status'] == 0) {
-    $since = time() - strtotime( $device['last_polled'] );
-    return "Down for " . formatUptime( $since, $format );
-  } else {
-    return formatUptime($device['uptime'], $format);
-  }
-}
-
-function formatUptime($diff, $format="long")
-{
-  $yearsDiff = floor($diff/31536000);
-  $diff -= $yearsDiff*31536000;
-  $daysDiff = floor($diff/86400);
-  $diff -= $daysDiff*86400;
-  $hrsDiff = floor($diff/60/60);
-  $diff -= $hrsDiff*60*60;
-  $minsDiff = floor($diff/60);
-  $diff -= $minsDiff*60;
-  $secsDiff = $diff;
-
-  $uptime = "";
-
-  if ($format == "short")
-  {
-    if ($yearsDiff > '0') { $uptime .= $yearsDiff . "y "; }
-    if ($daysDiff > '0') { $uptime .= $daysDiff . "d "; }
-    if ($hrsDiff > '0') { $uptime .= $hrsDiff . "h "; }
-    if ($minsDiff > '0') { $uptime .= $minsDiff . "m "; }
-    if ($secsDiff > '0') { $uptime .= $secsDiff . "s "; }
-  }
-  else
-  {
-    if ($yearsDiff > '0') { $uptime .= $yearsDiff . " years, "; }
-    if ($daysDiff > '0') { $uptime .= $daysDiff . " day" . ($daysDiff != 1 ? 's' : '') . ", "; }
-    if ($hrsDiff > '0') { $uptime .= $hrsDiff     . "h "; }
-    if ($minsDiff > '0') { $uptime .= $minsDiff   . "m "; }
-    if ($secsDiff > '0') { $uptime .= $secsDiff   . "s "; }
-  }
-  return trim($uptime);
 }
 
 function isSNMPable($device)
