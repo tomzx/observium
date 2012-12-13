@@ -3,12 +3,14 @@
   <div class="span6">
 <?php
 
+$Observium_version = $config['version'];
+
 echo("
       <div class='well well-small'>
         <h3>Versions</h3>
         <table class=\"table table-bordered table-striped table-condensed table-rounded\">
           <tbody>
-            <tr><td width=150><b>Observium</b></td><td>$Observium_version</td></tr>
+            <tr><td><b>Observium</b></td><td>$Observium_version</td></tr>
             <tr><td><b>Apache</b></td><td>$apache_version</td></tr>
             <tr><td><b>PHP</b></td><td>$php_version</td></tr>
             <tr><td><b>MySQL</b></td><td>$mysql_version</td></tr>
@@ -30,25 +32,25 @@ echo("
 
         <h3>The Team</h3>
         <div class="well well-light">
-        <p>
-          <img src="images/icons/flags/gb.png"> <strong>Adam Armstrong</strong> Project Founder<br />
-          <img src="images/icons/flags/be.png"> <strong>Geert Hauwaerts</strong> Developer/Committer<br />
-          <img src="images/icons/flags/be.png"> <strong>Tom Laermans</strong> Developer<br />
-          <img src="images/icons/flags/be.png"> <strong>Dennis de Houx</strong> Developer<br />
-        </p>
+        <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
+          <dt style="text-align: left;"><img src="images/icons/flags/gb.png"> Adam Armstrong</dt><dd>Project Founder</dd>
+          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Tom Laermans</dt><dd>Developer/Committer</dd>
+          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Geert Hauwaerts</dt><dd>Developer</dd>
+          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Dennis de Houx</dt><dd>Developer</dd>
+        </dl>
         </div>
 
         <h3>Acknowledgements</h3>
         <div class="well well-light">
-        <p>
-          <i class="icon-user"></i> <b>Stu Nicholls</b> Dropdown menu CSS code. <br />
-          <i class="icon-user"></i> <b>Mark James</b> Silk Iconset. <br />
-          <i class="icon-user"></i> <b>Erik Bosrup</b> Overlib Library. <br />
-          <i class="icon-user"></i> <b>Jonathan De Graeve</b> SNMP code improvements. <br />
-          <i class="icon-user"></i> <b>Xiaochi Jin</b> Logo design. <br />
-          <i class="icon-user"></i> <b>Bruno Pramont</b> Collectd code. <br />
-          <i class="icon-user"></i> <b>David Farrell</b> <DavidPFarrell@gmail.com> Help with parsing net-SNMP output in PHP.
-        </p>
+        <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
+          <dt style="text-align: left;"><i class="icon-user"></i> Stu Nicholls</dt><dd>Dropdown menu CSS code.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Mark James</dt><dd>Silk Iconset.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Erik Bosrup</dt><dd>Overlib Library.</dd>
+          <dt style="text-align: left; width: 180px;"><i class="icon-user"></i> Jonathan De Graeve</dt><dd>SNMP code improvements.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Xiaochi Jin</dt><dd>Logo design.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Bruno Pramont</dt><dd>Collectd code.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> David Farrell <DavidPFarrell@gmail.com></dt><dd>Help with parsing net-SNMP output in PHP.</dd>
+        </dl>
         </div>
       </div>
 
@@ -127,9 +129,9 @@ echo("
   </div>
   <div class="span6">
 
-      <div class="alert alert-info">
+      <div class="alert alert-info" style="text-align: center;">
         <h3>Observium is a Free software project. <br />Please donate to support continued development.</h3>
-        <div style="margin-top:10px; text-align: center;">
+        <div style="margin-top:10px;">
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
             <input type="hidden" name="cmd" value="_s-xclick">
             <input type="hidden" name="hosted_button_id" value="W2ZJ3JRZR72Z6">
@@ -142,7 +144,7 @@ echo("
     <div class="well">
       <h3>License</h3>
       <pre>
-        <?php include("../LICENSE"); ?>
+<?php include("../LICENSE"); ?>
       </pre>
     </div>
   </div>

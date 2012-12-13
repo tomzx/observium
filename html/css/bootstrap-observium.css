@@ -31,6 +31,9 @@ h3 {
   line-height: 27px;
 }
 
+img {
+  max-width: none;
+}
 
 a {
   color: #194b7f;
