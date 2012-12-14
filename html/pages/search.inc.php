@@ -2,7 +2,7 @@
 
 $pagetitle[] = "Search";
 
-$sections = array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP Table');
+$sections = array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP Tables', 'fdb' => 'MAC Tables');
 
 if (!isset($vars['search'])) { $vars['search'] = "ipv4"; }
 
@@ -30,12 +30,14 @@ unset ($sep);
 
 print_optionbar_end('', '');
 
+/// Little switch to provide some sanity checking.
 switch ($vars['search'])
 {
   case 'ipv4':
   case 'ipv6':
   case 'mac':
   case 'arp':
+  case 'fdb':
     include('pages/search/'.$vars['search'].'.inc.php');
     break;
   default:
