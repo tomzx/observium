@@ -58,13 +58,6 @@ if ($updated && $update_message)
 <table cellpadding="0" cellspacing="0">
   <tr>
     <td>
-      <h5>
-        <form id="delete_host" name="delete_host" method="post" action="delhost/">
-          <img src="images/16/server_delete.png" align="absmiddle">
-          <input type="hidden" name="id" value="<?php echo($device['device_id']); ?>">
-          <input type="submit" class="submit" name="Submit" value="Delete device">
-        </form>
-      </h5>
       <form id="edit" name="edit" method="post" action="">
         <input type=hidden name="editing" value="yes">
         <table width="500" border="0">
@@ -111,23 +104,24 @@ foreach ($config['device_types'] as $type)
             <td><input name="ignore" type="checkbox" id="disable" value="1" <?php if ($device['ignore']) { echo("checked=checked"); } ?> />&nbsp;</td>
           </tr>
         </table>
-        <input type="submit" name="Submit" value="Save" />
-        <label><br />
-        </label>
+        <btn class="btn btn-primary" name="update"><i class="icon-ok icon-white"></i> Save Changes</btn>
       </form>
     </td>
   </tr>
 </table>
 <br />
 
+        <form id="delete_host" name="delete_host" method="post" action="delhost/">
+          <input type="hidden" name="id" value="<?php echo($device['device_id']); ?>">
+          <btn class="btn btn-danger" name="delete"><i class="icon-remove icon-white"></i> Delete device</btn>
+        </form>
+
+
 <?php
 
-print_optionbar_start();
-
-list($sizeondisk, $numrrds) = foldersize($config['rrd_dir']."/".$device['hostname']);
-
-echo("Size on Disk: <b>" . formatStorage($sizeondisk) . "</b> in <b>" . $numrrds . " RRD files</b>.");
-
-print_optionbar_end();
+#print_optionbar_start();
+#list($sizeondisk, $numrrds) = foldersize($config['rrd_dir']."/".$device['hostname']);
+#echo("Size on Disk: <b>" . formatStorage($sizeondisk) . "</b> in <b>" . $numrrds . " RRD files</b>.");
+#print_optionbar_end();
 
 ?>

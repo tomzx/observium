@@ -58,13 +58,13 @@ foreach($fdbs as $vlan => $macs)
       dbInsert(array('device_id' => $device['device_id'], 'vlan_id' => $vlan, 'port_id' => $port_id, 'mac_address' => $mac, 'fdb_status' => $data['dot1qTpFdbStatus']), 'vlans_fdb');
       echo("+");
     } else {
-      unset($update_array);
+      unset($q_update);
       /// if port/status are different, build an update array and update the db
-      if($fdbs_db[$vlan][$mac]['port_id'] != $port_id)                    { $update_array['port_id'] = $port_id; }
-      if($fdbs_db[$vlan][$mac]['fdb_status'] != $data['dot1qTpFdbStatus']) { $update_array['fdb_status'] = $data['fdb_status']; }
-      if(is_array($update_array))
+      if($fdbs_db[$vlan][$mac]['port_id'] != $port_id)                    { $q_update['port_id'] = $port_id; }
+      if($fdbs_db[$vlan][$mac]['fdb_status'] != $data['dot1qTpFdbStatus']) { $q_update['fdb_status'] = $data['fdb_status']; }
+      if(is_array($q_update))
       {
-        dbUpdate($update_array, 'vlans_fdb', '`device_id` = ? AND `vlan_id` = ? AND `mac_address` = ?', array($device['device_id'], $vlan, $mac));
+        dbUpdate($q_update, 'vlans_fdb', '`device_id` = ? AND `vlan_id` = ? AND `mac_address` = ?', array($device['device_id'], $vlan, $mac));
         echo("U");
       } else {
       }

@@ -10,10 +10,8 @@ $pagetitle[] = "Syslog";
 
 <form method="post" action="" class="form-inline">
   <span style="font-weight: bold;">Syslog</span> &#187;
-  <label><strong>Search</strong>
+  <strong>Search</strong>
     <input type="text" name="string" id="string" value="<?php echo($_POST['string']); ?>" />
-  </label>
-  <label>
     <strong>Program</strong>
     <select name="program" id="program">
       <option value="">All Programs</option>
@@ -26,8 +24,6 @@ $pagetitle[] = "Syslog";
         }
       ?>
     </select>
-  </label>
-  <label>
     <strong>Device</strong>
     <select name="device" id="device">
       <option value="">All Devices</option>
@@ -42,7 +38,6 @@ $pagetitle[] = "Syslog";
         }
       ?>
     </select>
-  </label>
   <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
 </form>
 
