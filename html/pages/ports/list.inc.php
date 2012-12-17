@@ -1,14 +1,16 @@
 <?php
 
-if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 
+/// Pagination
+if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 echo pagination($vars, count($ports));
 
 if($vars['pageno'])
 {
-  $ports = array_chunk($ports, 10);
+  $ports = array_chunk($ports, $vars['pagesize']);
   $ports = $ports[$vars['pageno']-1];
 }
+/// End Pagination
 
 echo('<table class="table table-striped table-bordered table-rounded table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');

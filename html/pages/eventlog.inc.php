@@ -114,16 +114,15 @@ if ($_SESSION['userlevel'] >= '5')
 }
 $entries = dbFetchRows($query, $param);
 
+/// Pagination
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
+if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 
-$pagination = pagination($vars, count($entries));
-echo $pagination;
+echo pagination($vars, count($entries));
 
-if($vars['pageno'])
-{
-  $entries = array_chunk($entries, $vars['pagesize']);
-  $entries = $entries[$vars['pageno']-1];
-}
+$entries = array_chunk($entries, $vars['pagesize']);
+$entries = $entries[$vars['pageno']-1];
+/// End Pagination
 
 #echo('<table cellspacing="0" cellpadding="1" width="100%">');
 echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");

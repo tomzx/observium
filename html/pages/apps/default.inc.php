@@ -31,8 +31,8 @@ foreach ($app_devices as $app_device)
     $graph_array_zoom['type']   = "application_".$vars['app']."_".$graph_type;
     $graph_array_zoom['id']     = $app_device['app_id'];
 
-    $link = generate_url(array('device' => $app_device['device_id'], 'tab' => 'apps','app' => $vars['app'], 'page' => 'device'));
-
+    // $link = generate_url(array('device' => $app_device['device_id'], 'tab' => 'apps','app' => $vars['app'], 'page' => 'device'));
+    $link = generate_url(array('page' => 'graphs', 'id' => $graph_array['id'], 'type' => $graph_array['type'], 'from' => $graph_array['from'], 'to' => $graph_array['to']));
     echo(overlib_link($link, generate_graph_tag($graph_array), generate_graph_tag($graph_array_zoom),  NULL));
   }
 

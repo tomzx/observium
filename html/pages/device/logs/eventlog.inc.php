@@ -60,6 +60,16 @@ foreach ($vars as $var => $value)
 $sql = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` ".$where." ORDER BY `datetime` DESC LIMIT 0,250";
 $entries = dbFetchRows($sql, $param);
 
+/// Pagination
+if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
+if(!$vars['pageno']) { $vars['pageno'] = "1"; }
+
+echo pagination($vars, count($entries));
+
+$entries = array_chunk($entries, $vars['pagesize']);
+$entries = $entries[$vars['pageno']-1];
+/// End Pagination
+
 echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
@@ -74,5 +84,7 @@ echo("  </tbody>\n");
 echo("</table>\n");
 
 $pagetitle[] = "Events";
+
+echo pagination($vars, count($entries));
 
 ?>
