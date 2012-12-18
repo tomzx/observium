@@ -103,8 +103,11 @@ foreach ($config['device_types'] as $type)
             <td><div align="right">Ignore</div></td>
             <td><input name="ignore" type="checkbox" id="disable" value="1" <?php if ($device['ignore']) { echo("checked=checked"); } ?> />&nbsp;</td>
           </tr>
+          <tr>
+            <td colspan="2"><br /><br /></td>
+            <td><btn class="btn btn-primary" name="update"><i class="icon-ok icon-white"></i> Save Changes</btn></td>
+          </tr>
         </table>
-        <btn class="btn btn-primary" name="update"><i class="icon-ok icon-white"></i> Save Changes</btn>
       </form>
     </td>
   </tr>
