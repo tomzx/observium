@@ -55,70 +55,80 @@ if ($updated && $update_message)
 }
 
 ?>
-<table cellpadding="0" cellspacing="0">
-  <tr>
-    <td>
-      <form id="edit" name="edit" method="post" action="">
-        <input type=hidden name="editing" value="yes">
-        <table width="500" border="0">
-          <tr>
-            <td colspan="2" align="right">Description:</td>
-            <td colspan="3"><input name="descr" size="32" value="<?php echo($device['purpose']); ?>"></input></td>
-          </tr>
-         <tr>
-            <td colspan="2" align="right">
-              Type:
-            </td>
-            <td>
-              <select name="type">
+
+<div>
+
+ <form id="edit" name="edit" method="post" class="form-horizontal" action="<?php echo($url); ?>">
+
+  <fieldset>
+  <legend>Device Properties</legend>
+  <input type=hidden name="editing" value="yes">
+  <div class="control-group">
+    <label class="control-label" for="descr">Description</label>
+    <div class="controls">
+      <input name="descr" type=text size="32" value="<?php echo($device['purpose']); ?>"></input>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="type">Type</label>
+    <div class="controls">
+      <select name="type">
 <?php
 $unknown = 1;
-
 foreach ($config['device_types'] as $type)
 {
   echo('          <option value="'.$type['type'].'"');
-  if ($device['type'] == $type['type'])
-  {
-    echo(' selected="1"');
-    $unknown = 0;
-  }
+  if ($device['type'] == $type['type']) { echo(' selected="1"'); $unknown = 0; }
   echo(' >' . ucfirst($type['type']) . '</option>');
 }
-  if ($unknown)
-  {
-    echo('          <option value="other">Other</option>');
-  }
+if ($unknown) { echo('          <option value="other">Other</option>'); }
+
 ?>
               </select>
-            </td>
-          </tr>
-          <tr>
-            <td width="40"><div style="padding-right: 5px; text-align: right"><input onclick="edit.sysLocation.disabled=!edit.override_sysLocation.checked" type="checkbox" name="override_sysLocation"<?php if ($override_sysLocation_bool) { echo(' checked="1"'); } ?> /></div></td>
-            <td align="right">Override sysLocation:</td>
-            <td colspan="3"><input name="sysLocation" size="32"<?php if (!$override_sysLocation_bool) { echo(' disabled="1"'); } ?> value="<?php echo($override_sysLocation_string); ?>" /></td>
-          </tr>
-          <tr>
-            <td colspan="2"><div align="right">Disable</div></td>
-            <td><input name="disabled" type="checkbox" id="disabled" value="1" <?php if ($device["disabled"]) { echo("checked=checked"); } ?> /></td>
-            <td><div align="right">Ignore</div></td>
-            <td><input name="ignore" type="checkbox" id="disable" value="1" <?php if ($device['ignore']) { echo("checked=checked"); } ?> />&nbsp;</td>
-          </tr>
-          <tr>
-            <td colspan="2"><br /><br /></td>
-            <td><btn class="btn btn-primary" name="update"><i class="icon-ok icon-white"></i> Save Changes</btn></td>
-          </tr>
-        </table>
-      </form>
-    </td>
-  </tr>
-</table>
-<br />
+            </div>
+  </div>
 
-        <form id="delete_host" name="delete_host" method="post" action="delhost/">
-          <input type="hidden" name="id" value="<?php echo($device['device_id']); ?>">
-          <btn class="btn btn-danger" name="delete"><i class="icon-remove icon-white"></i> Delete device</btn>
-        </form>
+  <div class="control-group">
+    <label class="control-label" for="sysLocation">Override sysLocation</label>
 
+    <div class="controls">
+      <input onclick="edit.sysLocation.disabled=!edit.override_sysLocation.checked" type="checkbox"
+            name="override_sysLocation"<?php if ($override_sysLocation_bool) { echo(' checked="1"'); } ?> />
+      <span class="help-inline">Use custom location below.</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="sysLocation">Custom location</label>
+    <div class="controls">
+      <input type=text name="sysLocation" size="32" <?php if (!$override_sysLocation_bool) { echo(' disabled="1"'); } ?>
+              value="<?php echo($override_sysLocation_string); ?>" />
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="disabled">Disable</label>
+    <div class="controls">
+      <input name="disabled" type="checkbox" id="disabled" value="1" <?php if ($device["disabled"]) { echo("checked=checked"); } ?> />
+      <span class="help-inline">Disables polling and discovery.</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="sysLocation">Ignore alerts</label>
+    <div class="controls">
+      <input name="ignore" type="checkbox" id="disable" value="1" <?php if ($device['ignore']) { echo("checked=checked"); } ?> />&nbsp;
+      <span class="help-inline">Ignore alerts.</span>
+    </div>
+  </fieldset>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+
+</form>
+</div>
 
 <?php
 
