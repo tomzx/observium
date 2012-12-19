@@ -58,121 +58,124 @@ if ($updated && $update_message)
   print_error($update_message);
 }
 
-echo("<br /><table cellpadding=0 cellspacing=0><tr><td>
+?>
 
-<form id='edit' name='edit' method='post' action=''>
-  <input type=hidden name='editing' value='yes'>
-  <table width='500' border='0'>
-    <tr>
-      <td><div align=right>SNMP Version</div></td>
-      <td>
-        <select name='snmpver'>
-          <option value='v1'>v1</option>
-          <option value='v2c' " . ($device['snmpver'] == 'v2c' ? 'selected' : '') . ">v2c</option>
-          <option value='v3' " . ($device['snmpver'] == 'v3' ? 'selected' : '') . ">v3</option>
+<form id="edit" name="edit" method="post" class="form-horizontal" action="">
+  <input type=hidden name="editing" value="yes">
+
+  <fieldset>
+    <legend>SNMP Properties</legend>
+    <div class="control-group">
+      <label class="control-label" for="snmpver">SNMP Version</label>
+      <div class="controls">
+        <select name="snmpver">
+          <option value="v1"  <?php echo($device['snmpver'] == 'v1' ? 'selected' : ''); ?> >v1</option>
+          <option value="v2c" <?php echo($device['snmpver'] == 'v2c' ? 'selected' : ''); ?> >v2c</option>
+          <option value="v3"  <?php echo($device['snmpver'] == 'v3' ? 'selected' : ''); ?> >v3</option>
         </select>
-      </td>
-    </tr>
-  <div id='snmpv12'>
+      </div>
+    </div>
+  </fieldset>
+
   <!-- To be able to hide it -->
-    <tr>
-      <td colspan='2'><strong>SNMPv1/v2c Configuration</strong></td>
-    </tr>
-    <tr>
-      <td width='150'><div align='right'>SNMP Community</div></td>
-      <td><input name='community' size='32' value='" . $device['community'] . "' />
-      </td>
-    </tr>
+  <div id="snmpv12">
+    <fieldset>
+      <legend>SNMPv1/v2c Configuration</legend>
+      <div class="control-group">
+        <label class="control-label" for="community">SNMP Community</label>
+        <div class="controls">
+          <input type=text name="community" size="32" value="<?php echo $device['community']; ?>"/>
+        </div>
+      </div>
+    </fieldset>
   </div>
+
+  <!-- To be able to hide it -->
   <div id='snmpv3'>
-  <!-- To be able to hide it -->
-    <tr>
-      <td colspan='2'><strong>SNMPv3 Configuration</strong></td>
-    </tr>
-    <tr>
-      <td width='150'><div align='right'>Auth Level</div></td>
-      <td>
-        <select name='authlevel'>
-          <option value='NoAuthNoPriv'>NoAuthNoPriv</option>
-          <option value='AuthNoPriv' " . ($device['authlevel'] == "authNoPriv" ? 'selected' : '') . ">AuthNoPriv</option>
-          <option value='AuthPriv' " . ($device['authlevel'] == "authPriv" ? 'selected' : '') . ">AuthPriv</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td width='150'><div align='right'>Auth User Name</div></td>
-      <td><input type='text' name='authname' size='32' value='" . $device['authname']  . "'></td>
-    </tr>
-    <tr>
-      <td width='150'><div align='right'>Auth Password</div></td>
-      <td><input type='text' name='authpass' size='32' value='" . $device['authpass']  . "'></td>
-    </tr>
-    <tr>
-      <td width='150'><div align='right'>Auth Algorithm</strong></td>
-      <td>
-        <select name='authalgo'>
-          <option value='MD5'>MD5</option>
-          <option value='SHA' " . ($device['authalgo'] === "SHA" ? 'selected' : '') . ">SHA</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td width='150'><div align='right'>Crypto Password</div></td>
-      <td><input type='text' name='cryptopass' size='32' value='" . $device['cryptopass']  . "'></td>
-    </tr>
-    <tr>
-      <td width='150'><div align='right'>Crypto Algorithm</div></td>
-      <td>
-        <select name='cryptoalgo'>
-          <option value='AES'>AES</option>
-          <option value='DES' " . ($device['cryptoalgo'] === "DES" ? 'selected' : '') . ">DES</option>
-        </select>
-      </td>
-    </tr>
-  </div>
-    <tr>
-      <td colspan='2'><strong>SNMP Connectivity</strong></td>
-    </tr>
-    <tr>
-      <td><div align='right'>SNMP Transport</div></td>
-      <td>
-        <select name='transport'>");
+    <fieldset>
+      <legend>SNMPv3 Configuration</legend>
+      <div class="control-group">
+        <label class="control-label" for="snmpver">Auth Level</label>
+        <div class="controls">
+          <select name="authlevel">
+            <option value="NoAuthNoPriv" <?php echo($device['authlevel'] == 'NoAuthNoPriv' ? 'selected' : ''); ?> >NoAuthNoPriv</option>
+            <option value="AuthNoPriv"   <?php echo($device['authlevel'] == 'authNoPriv' ? 'selected' : ''); ?> >authNoPriv</option>
+            <option value="AuthPriv"     <?php echo($device['authlevel'] == 'authPriv' ? 'selected' : ''); ?> >authPriv</option>
+          </select>
+        </div>
+      </div>
 
+      <div class="control-group">
+        <label class="control-label" for="community">Auth User Name</label>
+        <div class="controls">
+          <input type=text name="authname" size="32" value="<?php echo $device['authname']; ?>"/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="community">Auth Password</label>
+        <div class="controls">
+          <input type=text name="authpass" size="32" value="<?php echo $device['authpass']; ?>"/>
+        </div>
+      </div>
+
+
+      <div class="control-group">
+        <label class="control-label" for="snmpver">Auth Algorithym</label>
+        <div class="controls">
+          <select name="authalgo">
+            <option value='MD5'>MD5</option>
+            <option value='SHA' " . ($device['authalgo'] === "SHA" ? 'selected' : '') . ">SHA</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+    <fieldset>
+      <legend>SNMP Connectivity</legend>
+
+      <div class="control-group">
+        <label class="control-label" for="transport">SNMP Transport</label>
+        <div class="controls">
+          <select name="transport">
+<?php
 foreach ($config['snmp']['transports'] as $transport)
 {
   echo("<option value='".$transport."'");
   if ($transport == $device['transport']) { echo(" selected='selected'"); }
   echo(">".$transport."</option>");
 }
-
-echo("  </select>
-      </td>
-    </tr>
-    <tr>
-      <td><div align='right'>SNMP Port</div></td>
-      <td><input name='port' size='32' value='" . $device['port'] . "' />
-      </td>
-    </tr>
-    <tr>
-      <td><div align='right'>SNMP Timeout</div></td>
-      <td><input name='timeout' size='32' value='" . ($device['timeout'] ? $device['timeout'] : '') . "' />&nbsp;
-      <em>(milli)seconds</em>
-      </td>
-    </tr>
-    <tr>
-      <td><div align='right'>SNMP Retries</div></td>
-      <td colspan='3'><input name='retries' size='32' value='" . ($device['timeout'] ? $device['retries'] : '') . "' />
-      </td>
-    </tr>");
-
-echo('
-  </table>
-  <input type="submit" name="Submit" value="Save" />
-  <label><br />
-  </label>
-</form>
-
-</td>
-<td width="50"></td><td></td></tr></table>');
-
 ?>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="port">SNMP Port</label>
+        <div class="controls">
+          <input type=text name="port" size="32" value="<?php echo $device['port']; ?>"/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="timeout">SNMP Timeout</label>
+        <div class="controls">
+          <input type=text name="timeout" size="32" value="<?php echo $device['timeout']; ?>"/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="retries">SNMP Retries</label>
+        <div class="controls">
+          <input type=text name="retries" size="32" value="<?php echo $device['retries']; ?>"/>
+        </div>
+      </div>
+    </fieldset>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+
+
+</form>

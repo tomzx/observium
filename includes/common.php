@@ -142,7 +142,12 @@ function print_error($text)
   {
     print Console_Color::convert("%r".$text."%n\n", false);
   } else {
-    echo('<div class="errorbox"><img src="/images/16/exclamation.png" align="absmiddle"> '.$text.'</div>');
+  echo('
+    <div class="alert alert-error">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <img src="/images/16/exclamation.png" align="absmiddle">
+      '.$text.'
+    </div>');
   }
 }
 
@@ -152,7 +157,11 @@ function print_message($text)
   {
     print Console_Color::convert("%g".$text."%n\n", false);
   } else {
-    echo('<div class="messagebox"><img src="/images/16/tick.png" align="absmiddle"> '.$text.'</div>');
+  echo('
+    <div class="alert alert-info">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      '.$text.'
+    </div>');
   }
 }
 
@@ -403,7 +412,9 @@ function ifclass($ifOperStatus, $ifAdminStatus)
   $ifclass = "interface-upup";
   if ($ifAdminStatus == "down") { $ifclass = "interface-admindown"; }
   if ($ifAdminStatus == "up" && $ifOperStatus== "down") { $ifclass = "interface-updown"; }
+  if ($ifAdminStatus == "up" && $ifOperStatus== "lowerLayerDown") { $ifclass = "interface-lldown"; }
   if ($ifAdminStatus == "up" && $ifOperStatus== "up") { $ifclass = "interface-upup"; }
+
   return $ifclass;
 }
 

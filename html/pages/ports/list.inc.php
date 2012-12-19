@@ -16,25 +16,30 @@ echo('<table class="table table-striped table-bordered table-rounded table-conde
 echo('  <thead>');
 
 echo('<tr class="tablehead">');
-echo("      <th style='width: 5px'></th>\n");
+echo("      <th style='width: 1px'></th>\n");
 echo("      <th style='width: 1px'></th>\n");
 
-$cols = array('device' => 'Device',
-              'port' => 'Port',
-              'traffic' => 'Traffic',
-              'traffic_perc' => 'Traffic %',
-              'packets' => 'Packets',
-              'speed' => 'Speed',
-              'mac' => 'MAC Address');
+$cols = array(array('head' => 'Device', 'sort' => 'device', 'width' => '200'),
+              array('head' => 'Port', 'sort' => 'port', 'width' => '200'),
+              array('head' => 'Traffic', 'sort' => 'traffic', 'width' => '200'),
+              array('head' => 'Traffic %', 'sort' => 'traffic_perc', 'width' => '200'),
+              array('head' => 'Packets', 'sort' => 'packets', 'width' => '200'),
+              array('head' => 'Speed', 'sort' => 'speed', 'width' => '200'),
+              array('head' => 'MAC Address', 'sort' => 'mac', 'width' => '200')
+              );
 
-foreach ($cols as $sort => $col)
+foreach ($cols as $col)
 {
-  if ($vars['sort'] == $sort)
+  echo('<th');
+  if (is_numeric($col['width'])) { echo(' width="'.$col['width'].'"'); }
+  echo('>');
+  if ($vars['sort'] == $col['sort'])
   {
-    echo('<th>'.$col.' *</th>');
+    echo($col['head'].' *');
   } else {
-    echo('<th><a href="'. generate_url($vars, array('sort' => $sort)).'">'.$col.'</a></th>');
+    echo('<a href="'. generate_url($vars, array('sort' => $col['sort'])).'">'.$col['head'].'</a>');
   }
+  echo("</th>");
 }
 
 echo("      </tr></thead>");
@@ -69,20 +74,20 @@ foreach ($ports as $port)
 
     $port = ifLabel($port, $device);
     echo("<tr class='ports'>
-          <td style='background-color: ".$table_tab_colour."; margin: 0px; padding: 0px'></td>
-          <td width=1></td>
-          <td width=200 class=list-bold>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
-          <td width=250><span class=list-bold>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
+          <td style='background-color: ".$table_tab_colour.";'></td>
+          <td></td>
+          <td class=list-bold>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
+          <td><span class=list-bold>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
                                         ".$port['ifAlias']."</td>
-          <td width=80><span class=green>&darr; ".$port['bps_in']."<br />
+          <td><span class=green>&darr; ".$port['bps_in']."<br />
                         <span class=blue>&uarr; ".$port['bps_out']."<br />
 
-          <td width=80><span class=green>".$port['ifInOctets_perc']."%<br />
+          <td><span class=green>".$port['ifInOctets_perc']."%<br />
                         <span class=blue>".$port['ifOutOctets_perc']."%<br />
 
-          <td width=80><span class=purple>&darr; ".$port['pps_in']."<br />
+          <td><span class=purple>&darr; ".$port['pps_in']."<br />
                         <span class=orange>&uarr; ".$port['pps_out']."<br />
-          <td width=80 >$speed<br />".$port['ifMtu']."</td>
+          <td>$speed<br />".$port['ifMtu']."</td>
           <td >$type<br />".$mac."</td>
         </tr>\n");
   }

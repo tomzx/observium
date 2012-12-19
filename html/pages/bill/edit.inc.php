@@ -118,7 +118,7 @@ for ($x=1;$x<32;$x++) {
           </div>
         </fieldset>
         <div class="form-actions">
-          <button type="submit" class="btn btn-success" name="Submit" value="Save" /><i class="icon-ok icon-white"></i> <strong>Save Properties</strong></button>
+          <button type="submit" class="btn btn-primary" name="Submit" value="Save" /><i class="icon-ok icon-white"></i> <strong>Save Properties</strong></button>
         </div>
       </form>
     </div>

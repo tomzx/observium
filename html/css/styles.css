@@ -684,6 +684,11 @@ p.vspace { padding-top: 3px; padding-bottom: 3px; }
   color: #555;
 }
 
+.interface-lldown, a.interface-lldown{
+  color: #ff6600;
+}
+
+
 .interface-updown, a.interface-updown, a.interface-updown:visited {
   color: #cc0000;
 }
