@@ -56,8 +56,6 @@ if ($updated && $update_message)
 
 ?>
 
-<div>
-
  <form id="edit" name="edit" method="post" class="form-horizontal" action="<?php echo($url); ?>">
 
   <fieldset>
@@ -121,7 +119,6 @@ if ($unknown) { echo('          <option value="other">Other</option>'); }
       <span class="help-inline">Ignore alerts.</span>
     </div>
   </fieldset>
-  </div>
 
   <div class="form-actions">
     <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
