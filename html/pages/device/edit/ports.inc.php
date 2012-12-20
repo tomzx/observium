@@ -1,7 +1,5 @@
 <?php
 
-echo('<div style="padding: 10px;">');
-
 if ($_POST['ignoreport'])
 {
   if ($_SESSION['userlevel'] == '10')
@@ -17,32 +15,38 @@ if ($updated && $update_message)
   print_error($update_message);
 }
 
-echo("<div style='float: left; width: 100%'>
-<form id='ignoreport' name='ignoreport' method='post' action=''>
-  <input type=hidden name='ignoreport' value='yes'>
-  <input type=hidden name=device value='".$device['device_id']."'>");
-
-echo("<table cellpadding=3 cellspacing=0 width=100%>
-  <tr align=center>
-                 <th width=100>Index</th>
-                 <th width=100>Name</th>
-                 <th width=50>Admin</th>
-                 <th width=100>Oper</th>
-                 <th width=100>Disable</th>
-                 <th width=100>Ignore</th>
-                 <th>Description</th>
-</tr>
-<tr align=center>
-    <td><input type='submit' value='Save' title='Save current port disable/ignore settings'/><input type='submit' value='Reset' id='form-reset' title='Reset form to previously-saved settings'/></td>
-    <td></td>
-    <td></td>
-    <td><input type='submit' value='Alerted' id='alerted-toggle' title='Toggle alerting on all currently-alerted ports'/><input type='submit' value='Down' id='down-select' title='Disable alerting on all currently-down ports'/></td>
-    <td><input type='submit' value='Toggle' id='disable-toggle' title='Toggle polling for all ports'/><input type='submit' value='Select' id='disable-select' title='Disable polling on all ports'/></td>
-    <td><input type='submit' value='Toggle' id='ignore-toggle' title='Toggle alerting for all ports'/><input type='submit' value='Select' id='ignore-select' title='Disable alerting on all ports'/></td>
-    <td></td>
-</tr>
-");
 ?>
+
+<form id='ignoreport' name='ignoreport' method='post' action='' class='form form-inline'>
+  <input type=hidden name='ignoreport' value='yes'>
+  <input type=hidden name=device value='<?php echo $device['device_id']; ?>'>
+
+<table class='table table-striped table-bordered table-condensed table-rounded'>
+  <thead>
+    <tr align=center>
+      <th width=100>ifIndex</th>
+      <th width=100>ifAlias</th>
+      <th width=100>ifType</th>
+      <th width=50>Admin</th>
+      <th width=110>Oper</th>
+      <th width=110>Disable</th>
+      <th width=110>Ignore</th>
+      <th>Description</th>
+    </tr>
+    <tr align=center>
+      <th><button class='btn btn-mini btn-primary' type='submit' value='Save' title='Save current port disable/ignore settings'> Save </button></td>
+      <th><button class='btn btn-mini btn-danger' type='submit' value='Reset' id='form-reset' title='Reset form to previously-saved settings'> Reset </button></th>
+      <th></th>
+      <th></th>
+      <th><button class='btn btn-mini' type='submit' value='Alerted' id='alerted-toggle' title='Toggle alerting on all currently-alerted ports'>Alerted</button>
+          <button class='btn btn-mini' type='submit' value='Down' id='down-select' title='Disable alerting on all currently-down ports'>Down</button></th>
+      <th><button class='btn btn-mini' type='submit' value='Toggle' id='disable-toggle' title='Toggle polling for all ports'>Toggle</button>
+          <button class='btn btn-mini' type='submit' value='Select' id='disable-select' title='Disable polling on all ports'>Select</button></th>
+      <th><button class='btn btn-mini' type='submit' value='Toggle' id='ignore-toggle' title='Toggle alerting for all ports'>Toggle</button>
+          <button class='btn btn-mini' type='submit' value='Select' id='ignore-select' title='Disable alerting on all ports'>Select</button></th>
+      <th></th>
+    </tr>
+  </thead>
 
 <script>
 $(document).ready(function() {
@@ -103,17 +107,14 @@ $(document).ready(function() {
 
 <?php
 
-$row=1;
-
 foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIndex` ", array($device['device_id'])) as $port)
 {
   $port = ifLabel($port);
 
-  if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-
-  echo("<tr bgcolor=$row_colour>");
+  echo("<tr>");
   echo("<td align=center>". $port['ifIndex']."</td>");
   echo("<td align=left>".$port['label'] . "</td>");
+  echo("<td align=left>".fixiftype($port['ifType']) . "</td>");
   echo("<td align=right>". $port['ifAdminStatus']."</td>");
 
   # Mark interfaces which are OperDown (but not AdminDown) yet not ignored or disabled, or up yet ignored or disabled
@@ -142,6 +143,5 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIn
 
 echo('</table>');
 echo('</form>');
-echo('</div>');
 
 ?>
