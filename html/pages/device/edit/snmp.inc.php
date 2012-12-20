@@ -62,7 +62,6 @@ if ($updated && $update_message)
 
 <form id="edit" name="edit" method="post" class="form-horizontal" action="">
   <input type=hidden name="editing" value="yes">
-
   <fieldset>
     <legend>SNMP Properties</legend>
     <div class="control-group">

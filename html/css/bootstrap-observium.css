@@ -99,6 +99,9 @@ select {
   color: #555555;
 }
 
+legend + .control-group {
+  margin-top: 0;
+}
 
 .btn {
   margin-top: -1px;

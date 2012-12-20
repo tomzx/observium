@@ -58,7 +58,6 @@ if ($_POST['device'])
 }
 
 # Show list of apps with checkboxes
-echo('<div style="padding: 10px;">');
 
 $apps_enabled = dbFetchRows("SELECT * from `applications` WHERE `device_id` = ? ORDER BY app_type", array($device['device_id']));
 if (count($apps_enabled))
@@ -68,24 +67,24 @@ if (count($apps_enabled))
     $app_enabled[] = $application['app_type'];
   }
 }
+?>
 
-echo("<div style='float: left; width: 100%'>
-<form id='appedit' name='appedit' method='post' action=''>
-  <input type=hidden name=device value='".$device['device_id']."'>
-  <table cellpadding=3 cellspacing=0 width=100%>
+<form id='appedit' name='appedit' method='post' action='' class='form-inline'>
+  <input type=hidden name=device value='<?php echo $device['device_id'];?>'>
+<table class='table table-striped table-bordered table-condensed table-rounded'>
+  <thead>
     <tr align=center>
       <th width=100>Enable</th>
-      <th align=left>Application</th>
+      <th>Application</th>
     </tr>
-");
+  </thead>
+  <tbody>
 
-$row = 1;
+<?php
 
 foreach ($applications as $app)
 {
-  if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-
-  echo("    <tr bgcolor=$row_colour>");
+  echo("    <tr>");
   echo("      <td align=center>");
   echo("        <input type=checkbox" . (in_array($app,$app_enabled) ? ' checked="1"' : '') . " name='app_". $app ."'>");
   echo("      </td>");
@@ -95,11 +94,12 @@ foreach ($applications as $app)
 
   $row++;
 }
-
-echo('<tr><td></td><td><input type="submit" value="Save"></td></tr>');
-echo('</table>');
-echo('</form>');
-echo("</div>");
-
-
 ?>
+
+</table>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+
+</form>

@@ -1,7 +1,5 @@
 <?php
 
-echo('<div style="padding: 10px;">');
-
 $sensors = dbFetchRows("SELECT * FROM `sensors`,`sensors-state` WHERE `device_id` = ? AND `sensors-state`.`sensor_id` = `sensors`.`sensor_id` ORDER BY `sensor_type`,`sensor_class`,`sensor_index` ", array($device['device_id']));
 
 if ($_POST['update-sensors'])
@@ -39,25 +37,26 @@ if ($did_update)
 {
   $sensors = dbFetchRows("SELECT * FROM `sensors`,`sensors-state` WHERE `device_id` = ? AND `sensors-state`.`sensor_id` = `sensors`.`sensor_id` ORDER BY `sensor_type`,`sensor_class`,`sensor_index` ", array($device['device_id']));
 }
-
-echo("<div style='float: left; width: 100%'>
-<form id='update-sensors' name='update-sensors' method='post' action=''>");
-
-echo('<table class="table table-bordered table-striped table-condensed" style="margin-top: 10px;">');
-echo('  <thead>');
-echo('    <tr>');
-echo('      <th width="60">Index</th>');
-echo('      <th width="100">Type</th>');
-echo('      <th width="100">Class</th>');
-echo('      <th>Descr</th>');
-echo('      <th width="60">Current</th>');
-echo('      <th width="60">Min</th>');
-echo('      <th width="60">Max</th>');
-echo('      <th width="50">Ignore</th>');
-echo('    </tr>');
-echo('  </thead>');
-echo('  <tbody>');
 ?>
+
+<form id='update-sensors' name='update-sensors' method='post' action=''>
+<fieldset>
+  <legend>Sensor Properties</legend>
+
+<table class="table table-bordered table-striped table-condensed">
+  <thead>
+    <tr>
+      <th width="60">Index</th>
+      <th width="100">Type</th>
+      <th width="100">Class</th>
+      <th>Descr</th>
+      <th width="60">Current</th>
+      <th width="60">Min</th>
+      <th width="60">Max</th>
+      <th width="50">Ignore</th>
+    </tr>
+  </thead>
+  <tbody>
 
 <?php
 $row=1;
@@ -75,11 +74,13 @@ foreach ($sensors as $sensor)
   echo("<td><input type=checkbox name='sensor_ignore-".$sensor['sensor_id']."'".($sensor['sensor_ignore'] ? 'checked' : '')."></td>");
   echo('</tr>');
 }
-
-echo('</tbody>');
-echo('</table>');
-echo('<input class="btn" type="submit" name="update-sensors" value="Update Values" />');
-echo('</form>');
-
-
 ?>
+
+</tbody>
+</table>
+</fieldset>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+</form>

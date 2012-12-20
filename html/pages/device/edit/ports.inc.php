@@ -18,6 +18,9 @@ if ($updated && $update_message)
 ?>
 
 <form id='ignoreport' name='ignoreport' method='post' action='' class='form form-inline'>
+<fieldset>
+  <legend>Port Properties</legend>
+
   <input type=hidden name='ignoreport' value='yes'>
   <input type=hidden name=device value='<?php echo $device['device_id']; ?>'>
 
@@ -34,8 +37,8 @@ if ($updated && $update_message)
       <th>Description</th>
     </tr>
     <tr align=center>
-      <th><button class='btn btn-mini btn-primary' type='submit' value='Save' title='Save current port disable/ignore settings'> Save </button></td>
-      <th><button class='btn btn-mini btn-danger' type='submit' value='Reset' id='form-reset' title='Reset form to previously-saved settings'> Reset </button></th>
+      <th><button class='btn btn-mini btn-primary' type='submit' value='Save' title='Save current port disable/ignore settings'><i class="icon-ok icon-white"></i> Save</button></td>
+      <th><button class='btn btn-mini btn-danger' type='submit' value='Reset' id='form-reset' title='Reset form to previously-saved settings'><i class="icon-remove icon-white"></i> Reset</button></th>
       <th></th>
       <th></th>
       <th><button class='btn btn-mini' type='submit' value='Alerted' id='alerted-toggle' title='Toggle alerting on all currently-alerted ports'>Alerted</button>
@@ -140,8 +143,10 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIn
 
   $row++;
 }
-
-echo('</table>');
-echo('</form>');
-
 ?>
+</table>
+</fieldset>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+</form>

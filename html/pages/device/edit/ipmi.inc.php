@@ -30,45 +30,36 @@ if ($updated && $update_message)
 
 ?>
 
-<h3>IPMI settings</h3>
+<form id="edit" name="edit" method="post" action="" class="form-horizontal">
+  <fieldset>
+  <legend>IPMI Settings</legend>
+  <input type=hidden name="editing" value="yes">
 
-<table cellpadding="0" cellspacing="0">
-  <tr>
-    <td>
-      <form id="edit" name="edit" method="post" action="">
-        <input type="hidden" name="editing" value="yes">
-        <table width="500" border="0">
-          <tr>
-            <td width="150"><div align="right">IPMI/BMC Hostname</div></td>
-            <td colspan="3"><input name="ipmi_hostname" size="32" value="<?php echo(get_dev_attrib($device,'ipmi_hostname')); ?>" /></td>
-          </tr>
-          <tr>
-            <td><div align="right">IPMI/BMC Username</div></td>
-            <td colspan="3"><input name="ipmi_username" size="32" value="<?php echo(get_dev_attrib($device,'ipmi_username')); ?>" /></td>
-            </td>
-          </tr>
-          <tr>
-            <td><div align="right">IPMI/BMC Password</div></td>
-            <td colspan="3"><input name="ipmi_password" type="password" size="32" value="<?php echo(get_dev_attrib($device,'ipmi_password')); ?>" /></td>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td colspan="3">
-              <br />
-              <input type="submit" name="Submit" value="Save" />
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4">
-              To disable IPMI polling, please clear the setting fields and click <b>Save</b>.
-            </td>
-          </tr>
-        </table>
-        <br />
-      </form>
-    </td>
-    <td width="50"></td>
-    <td></td>
-  </tr>
-</table>
+  <div class="control-group">
+    <label class="control-label" for="ipmi_hostname">IPMI/BMC Hostname</label>
+    <div class="controls">
+      <input name="ipmi_hostname" type=text size="32" value="<?php echo(get_dev_attrib($device,'ipmi_hostname')); ?>"></input>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="ipmi_username">IPMI/BMC Username</label>
+    <div class="controls">
+      <input name="ipmi_username" type=text size="32" value="<?php echo(get_dev_attrib($device,'ipmi_username')); ?>"></input>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="ipmi_password">IPMI/BMC Password</label>
+    <div class="controls">
+      <input name="ipmi_password" type=text size="32" value="<?php echo(get_dev_attrib($device,'ipmi_password')); ?>"></input>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+    <span class="help-inline">To disable IPMI polling, please clear the setting fields and click <strong>Save Changes</strong>.</span>
+  </div>
+
+  </fieldset>
+</form>

@@ -27,23 +27,32 @@ if($_POST['toggle_discovery'] && isset($config['discovery_modules'][$_POST['togg
   }
   $attribs = get_dev_attribs($device['device_id']);
 }
+?>
 
-echo('
 <div class="row-fluid">
     <div class="row-fluid">
-      <div class="span6">');
+      <div class="span6">
 
-$i=0;
+<fieldset>
+  <legend>Poller Modules</legend>
+</fieldset>
 
-echo('<h3>Poller Modules</h3>');
+<table class="table table-bordered table-striped table-condensed table-rounded">
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th width="80">Global</th>
+      <th width="80">Device</th>
+      <th width="80"></th>
+    </tr>
+  </thead>
+  <tbody>
 
-echo('<table width="100%" cellpadding=5>');
-echo('<tr><th>Module</th><th>Global</th><th>Device</th></tr>');
+<?
 foreach ($config['poller_modules'] as $module => $module_status)
 {
-  if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
 
-  echo('<tr bgcolor="'.$bg_colour.'"><td><b>'.$module.'</b></td><td>');
+  echo('<tr><td><b>'.$module.'</b></td><td>');
 
   echo(($module_status ? '<span class=green>enabled</span>' : '<span class=red>disabled</span>' ));
 
@@ -51,31 +60,47 @@ foreach ($config['poller_modules'] as $module => $module_status)
 
   if (isset($attribs['poll_'.$module]))
   {
-    if ($attribs['poll_'.$module]) {echo("<span class=green>enabled</span>");} else { echo('<span class=red>disabled</span>'); }
+    if ($attribs['poll_'.$module]) { echo("<span class=green>enabled</span>"); $toggle = "Disable"; $btn_class = "btn-danger"; 
+    } else { echo('<span class=red>disabled</span>'); $toggle = "Enable"; $btn_class = "btn-success";}
   } else {
-    echo(($module_status ? '<span class=green>enabled</span>' : '<span class=red>disabled</span>' ));
+    if ($module_status) { echo("<span class=green>enabled</span>"); $toggle = "Disable"; $btn_class = "btn-danger";
+    } else { echo('<span class=red>disabled</span>'); $toggle = "Enable"; $btn_class = "btn-success";}
   }
 
   echo('</td><td>');
 
-    echo('<form id="toggle_poller" name="toggle_poller" method="post" action="">
+  echo('<form id="toggle_poller" name="toggle_poller" method="post" action="">
   <input type=hidden name="toggle_poller" value="'.$module.'">
-  <input type="submit" name="Submit" value="Toggle" />
+  <button type="submit" class="btn btn-mini '.$btn_class.'" name="Submit" value="Toggle">'.$toggle.'</button>
   </label>
 </form>');
 
   echo('</td></tr>');
   $i++;
 }
-echo('</table>
+?>
 
-</div>
-      <div class="span6">');
+</table>
 
-$i=0;
-echo('<h3>Discovery Modules</h3>');
-echo('<table width="100%" cellpadding=5>');
-echo('<tr><th>Module</th><th>Global</th><th>Device</th></tr>');
+      </div>
+      <div class="span6">
+
+<fieldset>
+  <legend>Discovery Modules</legend>
+</fieldset>
+
+<table class="table table-bordered table-striped table-condensed table-rounded">
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th width="80">Global</th>
+      <th width="80">Device</th>
+      <th width="80"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+<?php
 foreach ($config['discovery_modules'] as $module => $module_status)
 {
   if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
@@ -87,16 +112,18 @@ foreach ($config['discovery_modules'] as $module => $module_status)
 
   if (isset($attribs['discover_'.$module]))
   {
-    if ($attribs['discover_'.$module]) {echo("<span class=green>enabled</span>");} else { echo('<span class=red>disabled</span>'); }
+    if ($attribs['discover_'.$module]) { echo("<span class=green>enabled</span>"); $toggle = "Disable"; $btn_class = "btn-danger";
+    } else { echo('<span class=red>disabled</span>'); $toggle = "Enable"; $btn_class = "btn-success";}
   } else {
-    echo(($module_status ? '<span class=green>enabled</span>' : '<span class=red>disabled</span>' ));
+    if ($module_status) { echo("<span class=green>enabled</span>"); $toggle = "Disable"; $btn_class = "btn-danger";
+    } else { echo('<span class=red>disabled</span>'); $toggle = "Enable"; $btn_class = "btn-success";}
   }
 
   echo('</td><td>');
 
-    echo('<form id="toggle_discovery" name="toggle_discovery" method="post" action="">
+  echo('<form id="toggle_discovery" name="toggle_discovery" method="post" action="">
   <input type=hidden name="toggle_discovery" value="'.$module.'">
-  <input type="submit" name="Submit" value="Toggle" />
+  <button type="submit" class="btn btn-mini '.$btn_class.'" name="Submit" value="Toggle">'.$toggle.'</button>
   </label>
 </form>');
 
