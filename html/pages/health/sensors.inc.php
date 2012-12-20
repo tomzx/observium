@@ -7,7 +7,13 @@ $sql .= " LEFT JOIN  `sensors-state` ON `sensors`.`sensor_id` = `sensors-state`.
 $sql .= " WHERE `sensors`.`sensor_class` = '".$class."'";
 $sql .= " ORDER BY `devices`.`hostname`, `sensors`.`sensor_descr`";
 
-echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+if ($vars['view'] == "graphs")
+{
+  $stripe_class = "table-striped-two";
+} else {
+  $stripe_class = "table-striped";
+}
+echo('<table class="table '.$stripe_class.' table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="250">Device</th>');
@@ -58,7 +64,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
 
     $sensor['sensor_descr'] = truncate($sensor['sensor_descr'], 48, '');
 
-    echo('<tr class="health">
+    echo('<tr>
           <td class=list-bold>' . generate_device_link($sensor) . '</td>
           <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
           <td>'.$alert.'</td>
@@ -70,7 +76,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
 
     if ($vars['view'] == "graphs")
     {
-      echo("<tr></tr><tr class='health'><td colspan=7>");
+      echo("<tr><td colspan=7>");
 
       $graph_array['height'] = "100";
       $graph_array['width']  = "216";
