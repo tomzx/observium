@@ -43,46 +43,62 @@ function rewrite_entity_descr ($descr)
   return $descr;
 }
 
-function ifNameDescr($interface, $device = NULL)
+function ifNameDescr($port, $device = NULL)
 {
-  return ifLabel($interface, $device);
+  return ifLabel($port, $device);
 }
 
-function ifLabel($interface, $device = NULL)
+function ifLabel($port, $device = NULL)
+{
+  return humanize_port($port, $device);
+}
+
+function humanize_port($port, $device = NULL)
 {
   global $config;
 
-  if (!$device) { $device = device_by_id_cache($interface['device_id']); }
+  /// Process port data to make it pretty for printing. EVOLUTION, BITCHES.
+  /// Lots of hacky shit will end up here with if(os);
+
+  if (!$device) { $device = device_by_id_cache($port['device_id']); }
+
+  $port['human_speed'] = humanspeed($port['ifSpeed']);
+  $port['human_type']  = fixiftype($port['ifType']);
+  $port['html_class']  = ifclass($port['ifOperStatus'], $port['ifAdminStatus']);
+  $port['human_mac']   = formatMac($port['ifPhysAddress']);
+
   $os = strtolower($device['os']);
 
   if (isset($config['os'][$os]['ifname']))
   {
-    $interface['label'] = $interface['ifName'];
+    $port['label'] = $port['ifName'];
 
-    if ($interface['ifName'] == "")
+    if ($port['ifName'] == "")
     {
-      $interface['label'] = $interface['ifDescr'];
+      $port['label'] = $port['ifDescr'];
     } else {
-      $interface['label'] = $interface['ifName'];
+      $port['label'] = $port['ifName'];
     }
 
   } elseif (isset($config['os'][$os]['ifalias']))
   {
-    $interface['label'] = $interface['ifAlias'];
+    $port['label'] = $port['ifAlias'];
   } else {
-    $interface['label'] = $interface['ifDescr'];
+    $port['label'] = $port['ifDescr'];
     if (isset($config['os'][$os]['ifindex']))
     {
-      $interface['label'] = $interface['label'] . " " . $interface['ifIndex'];
+      $port['label'] = $port['label'] . " " . $port['ifIndex'];
     }
   }
 
   if ($device['os'] == "speedtouch")
   {
-    list($interface['label']) = explode("thomson", $interface['label']);
+    list($port['label']) = explode("thomson", $port['label']);
   }
 
-  return $interface;
+  $port['humanized'] = TRUE; /// Set this so we can check it later.
+
+  return $port;
 }
 
 $rewrite_entSensorType = array (

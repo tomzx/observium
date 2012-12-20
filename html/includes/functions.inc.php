@@ -220,12 +220,9 @@ function generate_device_url($device, $vars=array())
   return generate_url(array('page' => 'device', 'device' => $device['device_id']), $vars);
 }
 
-function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end=0)
+function generate_device_link_header($device, $vars=array())
 {
   global $config;
-
-  if (!$start) { $start = $config['time']['day']; }
-  if (!$end)   { $end   = $config['time']['now']; }
 
 /// THIS SHIT NEEDS TO BE A FUNCTION. REALLY.
 
@@ -262,8 +259,31 @@ if ($device['disabled'] == '1')
   if ($device['os'] == "ios") { formatCiscoHardware($device, true); }
   $device['os_text'] = $config['os'][$device['os']]['text'];
 
-  $class = devclass($device);
-  if (!$text) { $text = $device['hostname']; }
+  $contents = '
+      <table class="table table-striped table-bordered table-rounded table-condensed">
+        <tr class="'.$row_class.'" style="font-size: 10pt;">
+          <td style="width: 10px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+          <td width="40" style="padding: 10px; text-align: center; vertical-align: middle;">'.getImage($device).'</td>
+          <td width="200"><a href="#" class="'.$class.'" style="font-size: 15px; font-weight: bold;">'.$device['hostname'].'</a><br />'. $device['sysName'].'</td>
+          <td>'.$device['hardware'].' <br /> '.$device['os_text'].' '.$device['version'].'</td>
+          <td>'.deviceUptime($device, 'short').'<br />'.truncate($device['location'],32, '').'
+          </tr>
+        </table>
+';
+
+  return $contents;
+
+}
+
+function generate_device_link_contents($device, $vars=array(), $start=0, $end=0)
+{
+
+  global $config;
+
+  if (!$start) { $start = $config['time']['day']; }
+  if (!$end)   { $end   = $config['time']['now']; }
+
+  $contents = generate_device_link_header($device, $vars=array());
 
   if (isset($config['os'][$device['os']]['over']))
   {
@@ -278,20 +298,6 @@ if ($device['disabled'] == '1')
     $graphs = $config['os']['default']['over'];
   }
 
-  $url = generate_device_url($device, $vars);
-
-  $contents = '
-      <table class="table table-striped table-bordered table-rounded table-condensed">
-        <tr class="'.$row_class.'" style="font-size: 10pt;">
-          <td style="width: 10px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
-          <td width="40" style="padding: 10px; text-align: center; vertical-align: middle;">'.getImage($device).'</td>
-          <td width="200"><a href="#" class="'.$class.'" style="font-size: 15px; font-weight: bold;">'.$device['hostname'].'</a><br />'. $device['sysName'].'</td>
-          <td>'.$device['hardware'].' <br /> '.$device['os_text'].' '.$device['version'].'</td>
-          <td>'.deviceUptime($device, 'short').'<br />'.truncate($device['location'],32, '').'
-          </td>
-          </table>
-';
-
   foreach ($graphs as $entry)
   {
     $graph     = $entry['graph'];
@@ -303,7 +309,21 @@ if ($device['disabled'] == '1')
     $contents .= '</div>';
   }
 
+  return $contents;
+
+}
+
+function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end=0)
+{
+  global $config;
+
+  $class = devclass($device);
+  if (!$text) { $text = $device['hostname']; }
+
+  $contents = generate_device_link_contents($device, $vars, $start, $end);
+
   $text = htmlentities($text);
+  $url = generate_device_url($device, $vars);
   $link = overlib_link($url, $text, $contents, $class);
 
   if (device_permitted($device['device_id']))
@@ -312,7 +332,6 @@ if ($device['disabled'] == '1')
   } else {
     return $device['hostname'];
   }
-
   return $link;
 }
 
@@ -544,6 +563,33 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
   return($link);
 }
 
+function generate_port_link_header($port)
+{
+  global $config;
+
+  if(!isset($port['humanized'])) { $port = humanize_port($port); }
+
+  /// THIS SHIT NEEDS TO BE A FUNCTION. REALLY.
+  if ($port['ifAdminStatus'] == "down") { $ports_disabled++; $table_tab_colour = "#aaaaaa";
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down") { $ports_down++; $table_tab_colour = "#cc0000"; $row_class = "error";
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $ports_down++; $table_tab_colour = "#ff6600"; $row_class = "warning";
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up") { $ports_up++; $table_tab_colour = "#194B7F"; }
+  /// END SHIT
+
+  $contents = '
+      <table class="table table-striped table-bordered table-rounded table-condensed">
+        <tr class="'.$row_class.'" style="font-size: 10pt;">
+          <td style="width: 10px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+          <td style="width: 10px;"></td>
+          <td width="250"><a href="#" class="'.$port['html_class'].'" style="font-size: 15px; font-weight: bold;">'.fixIfName($port['label']).'</a><br />'.htmlentities($port['ifAlias']).'</td>
+          <td width="100">'.$port['human_speed'].'<br />'.$port['ifMtu'].'</td>
+          <td>'.$port['human_type'].'<br />'.$port['human_mac'].'</td>
+        </tr>
+          </table>';
+
+  return $contents;
+}
+
 function generate_port_link($port, $text = NULL, $type = NULL)
 {
   global $config;
@@ -555,9 +601,12 @@ function generate_port_link($port, $text = NULL, $type = NULL)
 
   $class = ifclass($port['ifOperStatus'], $port['ifAdminStatus']);
 
-  if (!isset($port['hostname'])) { $port = array_merge($port, device_by_id_cache($port['device_id'])); }
+  if (!isset($port['os'])) { $port = array_merge($port, device_by_id_cache($port['device_id'])); }
 
-  $content = "<div class=list-large>".$port['hostname']." - " . fixifName($port['label']) . "</div>";
+  $content = generate_device_link_header($port);
+  $content .= generate_port_link_header($port);
+
+  $content .= "<div class=list-large>".$port['hostname']." - " . fixifName($port['label']) . "</div>";
   if ($port['ifAlias']) { $content .= $port['ifAlias']."<br />"; }
   $content .= '<div style="width: 700px">';
   $graph_array['type']     = $port['graph_type'];

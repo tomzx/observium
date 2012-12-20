@@ -56,10 +56,7 @@ foreach ($ports as $port)
     } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up") { $ports_up++; $table_tab_colour = "#194B7F"; }
     $ports_total++;
 
-    $speed = humanspeed($port['ifSpeed']);
-    $type  = fixiftype($port['ifType']);
-    $ifclass = ifclass($port['ifOperStatus'], $port['ifAdminStatus']);
-    $mac = formatMac($port['ifPhysAddress']);
+    $port = humanize_port($port);
 
     if ($port['in_errors'] > 0 || $port['out_errors'] > 0)
     {
@@ -72,7 +69,6 @@ foreach ($ports as $port)
     $port['pps_in'] = format_si($port['ifInUcastPkts_rate'])."pps";
     $port['pps_out'] = format_si($port['ifOutUcastPkts_rate'])."pps";
 
-    $port = ifLabel($port, $device);
     echo("<tr class='ports'>
           <td style='background-color: ".$table_tab_colour.";'></td>
           <td></td>
@@ -87,8 +83,8 @@ foreach ($ports as $port)
 
           <td><span class=purple>&darr; ".$port['pps_in']."<br />
                         <span class=orange>&uarr; ".$port['pps_out']."<br />
-          <td>$speed<br />".$port['ifMtu']."</td>
-          <td >$type<br />".$mac."</td>
+          <td>".$port['human_speed']."<br />".$port['ifMtu']."</td>
+          <td >".$port['human_type']."<br />".$port['human_mac']."</td>
         </tr>\n");
   }
 }
