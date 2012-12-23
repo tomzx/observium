@@ -149,81 +149,124 @@ function translate_ifAdminStatus ($ifAdminStatus)
   return $ifAdminStatus;
 }
 
-$rewrite_junose_hardware = array(
-  'juniErx1400' => 'ERX-1400',
-  'juniErx700' => 'ERX-700',
-  'juniErx1440' => 'ERX-1440',
-  'juniErx705' => 'ERX-705',
-  'juniErx310' => 'ERX-310',
-  'juniE320' => 'E320',
-  'juniE120' => 'E120',
-  'juniSsx1400' => 'SSX-1400',
-  'juniSsx700' => 'SSX-700',
-  'juniSsx1440' => 'SSX-1440',
-);
-
 $rewrite_junos_hardware = array(
-  'jnxProductNameM40' => 'M40',
-  'jnxProductNameM20' => 'M20',
-  'jnxProductNameM160' => 'M160',
-  'jnxProductNameM10' => 'M10',
-  'jnxProductNameM5' => 'M5',
-  'jnxProductNameT640' => 'T640',
-  'jnxProductNameT320' => 'T320',
-  'jnxProductNameM40e' => 'M40e',
-  'jnxProductNameM320' => 'M320',
-  'jnxProductNameM7i' => 'M7i',
-  'jnxProductNameM10i' => 'M10i',
-  'jnxProductNameJ2300' => 'J2300',
-  'jnxProductNameJ4300' => 'J4300',
-  'jnxProductNameJ6300' => 'J6300',
-  'jnxProductNameIRM' => 'IRM',
-  'jnxProductNameTX' => 'TX',
-  'jnxProductNameM120' => 'M120',
-  'jnxProductNameJ4350' => 'J4350',
-  'jnxProductNameJ6350' => 'J6350',
-  'jnxProductNameMX960' => 'MX960',
-  'jnxProductNameJ4320' => 'J4320',
-  'jnxProductNameJ2320' => 'J2320',
-  'jnxProductNameJ2350' => 'J2350',
-  'jnxProductNameMX480' => 'MX480',
-  'jnxProductNameSRX5800' => 'SRX5800',
-  'jnxProductNameT1600' => 'T1600',
-  'jnxProductNameSRX5600' => 'SRX5600',
-  'jnxProductNameMX240' => 'MX240',
-  'jnxProductNameEX3200' => 'EX3200',
-  'jnxProductNameEX3300' => 'EX3300',
-  'jnxProductNameEX4200' => 'EX4200',
-  'jnxProductNameEX8208' => 'EX8208',
-  'jnxProductNameEX8216' => 'EX8216',
-  'jnxProductNameSRX3600' => 'SRX3600',
-  'jnxProductNameSRX3400' => 'SRX3400',
-  'jnxProductNameSRX210' => 'SRX210',
-  'jnxProductNameTXP' => 'TXP',
-  'jnxProductNameJCS' => 'JCS',
-  'jnxProductNameSRX240' => 'SRX240',
-  'jnxProductNameSRX650' => 'SRX650',
-  'jnxProductNameSRX100' => 'SRX100',
-  'jnxProductNameESR1000V' => 'ESR1000V',
-  'jnxProductNameEX2200' => 'EX2200',
-  'jnxProductNameEX4500' => 'EX4500',
-  'jnxProductNameFXSeries' => 'FX Series',
-  'jnxProductNameIBM4274M02J02M' => 'IBM4274M02J02M', # ?
-  'jnxProductNameIBM4274M06J06M' => 'IBM4274M06J06M', # ?
-  'jnxProductNameIBM4274M11J11M' => 'IBM4274M11J11M', # ?
-  'jnxProductNameSRX1400' => 'SRX1400',
-  'jnxProductNameIBM4274S58J58S' => 'IBM4274S58J58S', # ?
-  'jnxProductNameIBM4274S56J56S' => 'IBM4274S56J56S', # ?
-  'jnxProductNameIBM4274S36J36S' => 'IBM4274S36J36S', # ?
-  'jnxProductNameIBM4274S34J34S' => 'IBM4274S34J34S', # ?
-  'jnxProductNameIBM427348EJ48E' => 'IBM427348EJ48E', # ?
-  'jnxProductNameIBM4274E08J08E' => 'IBM4274E08J08E', # ?
-  'jnxProductNameIBM4274E16J16E' => 'IBM4274E16J16E', # ?
-  'jnxProductNameMX80' => 'MX80',
+  '.1.3.6.1.4.1.4874.1.1.1.6.2' => 'E120',
+  '.1.3.6.1.4.1.4874.1.1.1.6.1' => 'E320',
+  '.1.3.6.1.4.1.4874.1.1.1.1.1' => 'ERX1400',
+  '.1.3.6.1.4.1.4874.1.1.1.1.3' => 'ERX1440',
+  '.1.3.6.1.4.1.4874.1.1.1.1.5' => 'ERX310',
+  '.1.3.6.1.4.1.4874.1.1.1.1.2' => 'ERX700',
+  '.1.3.6.1.4.1.4874.1.1.1.1.4' => 'ERX705',
+  '.1.3.6.1.4.1.2636.1.1.1.2.43' => 'EX2200',
+  '.1.3.6.1.4.1.2636.1.1.1.2.30' => 'EX3200',
+  '.1.3.6.1.4.1.2636.1.1.1.2.76' => 'EX3300',
+  '.1.3.6.1.4.1.2636.1.1.1.2.31' => 'EX4200',
+  '.1.3.6.1.4.1.2636.1.1.1.2.44' => 'EX4500',
+  '.1.3.6.1.4.1.2636.1.1.1.2.74' => 'EX6210',
+  '.1.3.6.1.4.1.2636.1.1.1.2.32' => 'EX8208',
+  '.1.3.6.1.4.1.2636.1.1.1.2.33' => 'EX8216',
+  '.1.3.6.1.4.1.2636.1.1.1.2.16' => 'IRM',
+  '.1.3.6.1.4.1.2636.1.1.1.2.13' => 'J2300',
+  '.1.3.6.1.4.1.2636.1.1.1.2.23' => 'J2320',
+  '.1.3.6.1.4.1.2636.1.1.1.2.24' => 'J2350',
+  '.1.3.6.1.4.1.2636.1.1.1.2.14' => 'J4300',
+  '.1.3.6.1.4.1.2636.1.1.1.2.22' => 'J4320',
+  '.1.3.6.1.4.1.2636.1.1.1.2.19' => 'J4350',
+  '.1.3.6.1.4.1.2636.1.1.1.2.15' => 'J6300',
+  '.1.3.6.1.4.1.2636.1.1.1.2.20' => 'J6350',
+  '.1.3.6.1.4.1.2636.1.1.1.2.38' => 'JCS1200',
+  '.1.3.6.1.4.1.2636.10' => 'BX7000',
+  '.1.3.6.1.4.1.12532.252.2.1' => 'SA-2000',
+  '.1.3.6.1.4.1.12532.252.6.1' => 'SA-6000',
+  '.1.3.6.1.4.1.4874.1.1.1.5.1' => 'UMC Sys Mgmt',
+  '.1.3.6.1.4.1.2636.3.41.1.1.5.4' => 'WXC1800',
+  '.1.3.6.1.4.1.2636.3.41.1.1.5.1' => 'WXC250',
+  '.1.3.6.1.4.1.2636.3.41.1.1.5.5' => 'WXC2600',
+  '.1.3.6.1.4.1.2636.3.41.1.1.5.6' => 'WXC3400',
+  '.1.3.6.1.4.1.2636.3.41.1.1.5.2' => 'WXC500',
+  '.1.3.6.1.4.1.2636.3.41.1.1.5.3' => 'WXC590',
+  '.1.3.6.1.4.1.2636.3.41.1.1.5.7' => 'WXC7800',
+  '.1.3.6.1.4.1.2636.1.1.1.2.4' => 'M10',
+  '.1.3.6.1.4.1.2636.1.1.1.2.11' => 'M10i',
+  '.1.3.6.1.4.1.2636.1.1.1.2.18' => 'M120',
+  '.1.3.6.1.4.1.2636.1.1.1.2.3' => 'M160',
+  '.1.3.6.1.4.1.2636.1.1.1.2.2' => 'M20',
+  '.1.3.6.1.4.1.2636.1.1.1.2.9' => 'M320',
+  '.1.3.6.1.4.1.2636.1.1.1.2.1' => 'M40',
+  '.1.3.6.1.4.1.2636.1.1.1.2.8' => 'M40e',
+  '.1.3.6.1.4.1.2636.1.1.1.2.5' => 'M5',
+  '.1.3.6.1.4.1.2636.1.1.1.2.10' => 'M7i',
+  '.1.3.6.1.4.1.2636.1.1.1.2.68' => 'MAG6610',
+  '.1.3.6.1.4.1.2636.1.1.1.2.67' => 'MAG6611',
+  '.1.3.6.1.4.1.2636.1.1.1.2.66' => 'MAG8600',
+  '.1.3.6.1.4.1.2636.1.1.1.2.89' => 'MX10',
+  '.1.3.6.1.4.1.2636.1.1.1.2.29' => 'MX240',
+  '.1.3.6.1.4.1.2636.1.1.1.2.88' => 'MX40',
+  '.1.3.6.1.4.1.2636.1.1.1.2.25' => 'MX480',
+  '.1.3.6.1.4.1.2636.1.1.1.2.90' => 'MX5',
+  '.1.3.6.1.4.1.2636.1.1.1.2.57' => 'MX80',
+  '.1.3.6.1.4.1.2636.1.1.1.2.21' => 'MX960',
+  '.1.3.6.1.4.1.3224.1.1' => 'Netscreen',
+  '.1.3.6.1.4.1.3224.1.3' => 'Netscreen 10',
+  '.1.3.6.1.4.1.3224.1.4' => 'Netscreen 100',
+  '.1.3.6.1.4.1.3224.1.5' => 'Netscreen 1000',
+  '.1.3.6.1.4.1.3224.1.9' => 'Netscreen 204',
+  '.1.3.6.1.4.1.3224.1.10' => 'Netscreen 208',
+  '.1.3.6.1.4.1.3224.1.8' => 'Netscreen 25',
+  '.1.3.6.1.4.1.3224.1.2' => 'Netscreen 5',
+  '.1.3.6.1.4.1.3224.1.7' => 'Netscreen 50',
+  '.1.3.6.1.4.1.3224.1.6' => 'Netscreen 500',
+  '.1.3.6.1.4.1.3224.1.13' => 'Netscreen 5000',
+  '.1.3.6.1.4.1.3224.1.14' => 'Netscreen 5GT',
+  '.1.3.6.1.4.1.3224.1.17' => 'Netscreen 5GT-ADSL-A',
+  '.1.3.6.1.4.1.3224.1.23' => 'Netscreen 5GT-ADSL-A-WLAN',
+  '.1.3.6.1.4.1.3224.1.19' => 'Netscreen 5GT-ADSL-B',
+  '.1.3.6.1.4.1.3224.1.25' => 'Netscreen 5GT-ADSL-B-WLAN',
+  '.1.3.6.1.4.1.3224.1.21' => 'Netscreen 5GT-WLAN',
+  '.1.3.6.1.4.1.3224.1.12' => 'Netscreen 5XP',
+  '.1.3.6.1.4.1.3224.1.11' => 'Netscreen 5XT',
+  '.1.3.6.1.4.1.3224.1.15' => 'Netscreen Client',
+  '.1.3.6.1.4.1.3224.1.28' => 'Netscreen ISG1000',
+  '.1.3.6.1.4.1.3224.1.16' => 'Netscreen ISG2000',
+  '.1.3.6.1.4.1.3224.1.52' => 'Netscreen SSG140',
+  '.1.3.6.1.4.1.3224.1.53' => 'Netscreen SSG140',
+  '.1.3.6.1.4.1.3224.1.35' => 'Netscreen SSG20',
+  '.1.3.6.1.4.1.3224.1.36' => 'Netscreen SSG20-WLAN',
+  '.1.3.6.1.4.1.3224.1.54' => 'Netscreen SSG320',
+  '.1.3.6.1.4.1.3224.1.55' => 'Netscreen SSG350',
+  '.1.3.6.1.4.1.3224.1.29' => 'Netscreen SSG5',
+  '.1.3.6.1.4.1.3224.1.30' => 'Netscreen SSG5-ISDN',
+  '.1.3.6.1.4.1.3224.1.33' => 'Netscreen SSG5-ISDN-WLAN',
+  '.1.3.6.1.4.1.3224.1.31' => 'Netscreen SSG5-v92',
+  '.1.3.6.1.4.1.3224.1.34' => 'Netscreen SSG5-v92-WLAN',
+  '.1.3.6.1.4.1.3224.1.32' => 'Netscreen SSG5-WLAN',
+  '.1.3.6.1.4.1.3224.1.50' => 'Netscreen SSG520',
+  '.1.3.6.1.4.1.3224.1.18' => 'Netscreen SSG550',
+  '.1.3.6.1.4.1.3224.1.51' => 'Netscreen SSG550',
+  '.1.3.6.1.4.1.2636.1.1.1.2.84' => 'QFX3000',
+  '.1.3.6.1.4.1.2636.1.1.1.2.85' => 'QFX5000',
+  '.1.3.6.1.4.1.2636.1.1.1.2.82' => 'QFX Switch',
+  '.1.3.6.1.4.1.2636.1.1.1.2.41' => 'SRX100',
+  '.1.3.6.1.4.1.2636.1.1.1.2.64' => 'SRX110',
+  '.1.3.6.1.4.1.2636.1.1.1.2.49' => 'SRX1400',
+  '.1.3.6.1.4.1.2636.1.1.1.2.36' => 'SRX210',
+  '.1.3.6.1.4.1.2636.1.1.1.2.58' => 'SRX220',
+  '.1.3.6.1.4.1.2636.1.1.1.2.39' => 'SRX240',
+  '.1.3.6.1.4.1.2636.1.1.1.2.35' => 'SRX3400',
+  '.1.3.6.1.4.1.2636.1.1.1.2.34' => 'SRX3600',
+  '.1.3.6.1.4.1.2636.1.1.1.2.86' => 'SRX550',
+  '.1.3.6.1.4.1.2636.1.1.1.2.28' => 'SRX5600',
+  '.1.3.6.1.4.1.2636.1.1.1.2.26' => 'SRX5800',
+  '.1.3.6.1.4.1.2636.1.1.1.2.40' => 'SRX650',
+  '.1.3.6.1.4.1.2636.1.1.1.2.27' => 'T1600',
+  '.1.3.6.1.4.1.2636.1.1.1.2.7' => 'T320',
+  '.1.3.6.1.4.1.2636.1.1.1.2.6' => 'T640',
+  '.1.3.6.1.4.1.2636.1.1.1.2.17' => 'TX',
+  '.1.3.6.1.4.1.2636.1.1.1.2.37' => 'TXPlus',
 );
 
 $rewrite_cisco_hardware = array(
-'.1.3.6.1.4.1.9.1.275' => 'C2948G-L3',
+  '.1.3.6.1.4.1.9.1.275' => 'C2948G-L3',
 );
 
 $rewrite_ftos_hardware = array (
@@ -1333,10 +1376,9 @@ function rewrite_ironware_hardware ($hardware)
 
 function rewrite_junose_hardware ($hardware)
 {
-  global $rewrite_junose_hardware;
+  global $rewrite_junos_hardware;
 
-  $hardware = array_str_replace($rewrite_junose_hardware, $hardware);
-
+  $hardware = $rewrite_junos_hardware[$hardware];
   return ($hardware);
 }
 
@@ -1344,8 +1386,7 @@ function rewrite_junos_hardware ($hardware)
 {
   global $rewrite_junos_hardware;
 
-  $hardware = array_str_replace($rewrite_junos_hardware, $hardware);
-
+  $hardware = $rewrite_junos_hardware[$hardware];
   return ($hardware);
 }
 

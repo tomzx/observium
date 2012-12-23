@@ -3,6 +3,9 @@
 $version = preg_replace("/(.+)\ version\ (.+)\ \(SN:\ (.+)\,\ (.+)\)/", "\\1||\\2||\\3||\\4", $poll_device['sysDescr']);
 list($hardware,$version,$serial,$features) = explode("||", $version);
 
+$hardware = snmp_get($device, "sysObjectID.0", "-Ovqsn");
+$hardware = rewrite_junos_hardware($hardware);
+
 $sessrrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/screenos_sessions.rrd";
 $sess_cmd  = $config['snmpget'] . " -M ".$config['mibdir'] . " -O qv " . snmp_gen_auth($device) . " " . $device['hostname'];
 $sess_cmd .= " .1.3.6.1.4.1.3224.16.3.2.0 .1.3.6.1.4.1.3224.16.3.3.0 .1.3.6.1.4.1.3224.16.3.4.0";
