@@ -25,6 +25,8 @@ echo('      <th width="150">Thresholds</th>');
 echo('    </tr>');
 echo('  </thead>');
 
+echo('  <tbody>');
+
 foreach (dbFetchRows($sql, $param) as $sensor)
 {
 
@@ -92,6 +94,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
  }
 }
 
+echo("</tbody>");
 echo("</table>");
 
 ?>
