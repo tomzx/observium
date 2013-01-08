@@ -9,6 +9,7 @@ $graph_types = array("bits"   => "Bits",
                      "reqs"   => "Requests",
                      "hitmiss" => "Hit/Miss");
 
+
 echo("<table class='table table-striped table-condensed table-bordered' style=\"margin-top: 10px;\">\n");
 foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? AND `vsvr_id` = ? ORDER BY `vsvr_name`", array($device['device_id'], $vars['vsvr'])) as $vsvr)
 {
@@ -76,6 +77,21 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
 echo("</table>");
 
 } else {
+
+if(!$vars['graph']) 
+{ $graph_type = "device_netscalervsvr_bits"; } else {
+  $graph_type = "device_netscalervsvr_".$vars['graph'];  }
+
+$graph_array['height'] = "100";
+$graph_array['width']  = "213";
+$graph_array['to']     = $config['time']['now'];
+$graph_array['device'] = $device['device_id'];
+$graph_array['nototal'] = "yes";
+$graph_array['legend'] = "no";
+$graph_array['type']   = $graph_type;
+echo('<h5>Aggregate</h5>');
+include("includes/print-graphrow.inc.php");
+unset($graph_array);
 
 print_optionbar_start();
 echo("<span style='font-weight: bold;'>VServers</span> &#187; ");

@@ -81,12 +81,32 @@ echo("</table>");
 
 } else {
 
+// No service was specified so we show aggregate and a list of services in table
+
+if(!$vars['graph'])
+{ $graph_type = "device_netscalersvc_bits"; } else {
+  $graph_type = "device_netscalersvc_".$vars['graph'];  }
+
+$graph_array['height'] = "100";
+$graph_array['width']  = "213";
+$graph_array['to']     = $config['time']['now'];
+$graph_array['device'] = $device['device_id'];
+$graph_array['nototal'] = "yes";
+$graph_array['legend'] = "no";
+$graph_array['type']   = $graph_type;
+echo('<h5>Aggregate</h5>');
+include("includes/print-graphrow.inc.php");
+unset($graph_array);
+
+
+
+
 print_optionbar_start();
 
 echo("<span style='font-weight: bold;'>Services</span> &#187; ");
 
 $menu_options = array('basic' => 'Basic',
-                      );
+                     );
 
 if (!$vars['view']) { $vars['view'] = "basic"; }
 

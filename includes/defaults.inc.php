@@ -206,6 +206,7 @@ $warn_colour_b = "#ffcccc";
 $config['graph_colours']['mixed']   = array('CC0000','008C00','4096EE','73880A','D01F3C','36393D','FF0084');
 $config['graph_colours']['oranges'] = array('E43C00','E74B00','EB5B00','EF6A00','F37900','F78800','FB9700','FFA700');
 $config['graph_colours']['greens']  = array('B6D14B','91B13C','6D912D','48721E','24520F','003300');
+$config['graph_colours']['reds']    = array("220000","440000","660000","880000","AA0000","CC0000"); // Red
 $config['graph_colours']['pinks']   = array('D0558F','B34773','943A57','792C38','5C1F1E','401F10');
 $config['graph_colours']['blues']   = array('A0A0E5','8080BD','606096','40406F','202048','000033');
 $config['graph_colours']['purples'] = array('CC7CCC','AF63AF','934A93','773177','5B185B','3F003F');

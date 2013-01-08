@@ -1184,6 +1184,17 @@ $config['graph_types']['device']['netscaler_tcp_pkts']['section'] = 'load balanc
 $config['graph_types']['device']['netscaler_tcp_pkts']['order'] = '0';
 $config['graph_types']['device']['netscaler_tcp_pkts']['descr'] = 'TCP Packets';
 
+$config['graph_types']['device']['netscalersvc_bits']['descr'] = 'Aggregate Service Traffic';
+$config['graph_types']['device']['netscalersvc_pkts']['descr'] = 'Aggregate Service Packets';
+$config['graph_types']['device']['netscalersvc_conns']['descr'] = 'Aggregate Service Connections';
+$config['graph_types']['device']['netscalersvc_reqs']['descr'] = 'Aggregate Service Requests';
+
+$config['graph_types']['device']['netscalervsvr_bits']['descr']    = 'Aggregate vServer Traffic';
+$config['graph_types']['device']['netscalervsvr_pkts']['descr']    = 'Aggregate vServer Packets';
+$config['graph_types']['device']['netscalervsvr_conns']['descr']   = 'Aggregate vServer Connections';
+$config['graph_types']['device']['netscalervsvr_reqs']['descr']    = 'Aggregate vServer Requests';
+$config['graph_types']['device']['netscalervsvr_hitmiss']['descr'] = 'Aggregate vServer Hits/Misses';
+
 $config['graph_descr']['device_smokeping_in_all'] = "This is an aggregate graph of the incoming smokeping tests to this host. The line corresponds to the average RTT. The shaded area around each line denotes the standard deviation.";
 $config['graph_descr']['device_processor']        = "This is an aggregate graph of all processors in the system.";
 
