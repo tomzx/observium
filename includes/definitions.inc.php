@@ -1160,34 +1160,34 @@ $config['graph_types']['device']['uptime']['section'] = 'system';
 $config['graph_types']['device']['uptime']['order'] = '0';
 $config['graph_types']['device']['uptime']['descr'] = 'System Uptime';
 
-$config['graph_types']['device']['ksm_pages']['section'] = 'system';
-$config['graph_types']['device']['ksm_pages']['order'] = '0';
-$config['graph_types']['device']['ksm_pages']['descr'] = 'KSM Shared Pages';
+$config['graph_types']['device']['ksm_pages']['section']           = 'system';
+$config['graph_types']['device']['ksm_pages']['order']             = '0';
+$config['graph_types']['device']['ksm_pages']['descr']             = 'KSM Shared Pages';
 
-$config['graph_types']['device']['vpdn_sessions_l2tp']['section'] = 'vpdn';
-$config['graph_types']['device']['vpdn_sessions_l2tp']['order'] = '0';
-$config['graph_types']['device']['vpdn_sessions_l2tp']['descr'] = 'VPDN L2TP Sessions';
+$config['graph_types']['device']['vpdn_sessions_l2tp']['section']  = 'vpdn';
+$config['graph_types']['device']['vpdn_sessions_l2tp']['order']    = '0';
+$config['graph_types']['device']['vpdn_sessions_l2tp']['descr']    = 'VPDN L2TP Sessions';
 
-$config['graph_types']['device']['vpdn_tunnels_l2tp']['section'] = 'vpdn';
-$config['graph_types']['device']['vpdn_tunnels_l2tp']['order'] = '0';
-$config['graph_types']['device']['vpdn_tunnels_l2tp']['descr'] = 'VPDN L2TP Tunnels';
+$config['graph_types']['device']['vpdn_tunnels_l2tp']['section']   = 'vpdn';
+$config['graph_types']['device']['vpdn_tunnels_l2tp']['order']     = '0';
+$config['graph_types']['device']['vpdn_tunnels_l2tp']['descr']     = 'VPDN L2TP Tunnels';
 
-$config['graph_types']['device']['netscaler_tcp_conn']['section'] = 'load balancer';
-$config['graph_types']['device']['netscaler_tcp_conn']['order'] = '0';
-$config['graph_types']['device']['netscaler_tcp_conn']['descr'] = 'TCP Connections';
+$config['graph_types']['device']['netscaler_tcp_conn']['section']  = 'load balancer';
+$config['graph_types']['device']['netscaler_tcp_conn']['order']    = '0';
+$config['graph_types']['device']['netscaler_tcp_conn']['descr']    = 'TCP Connections';
 
-$config['graph_types']['device']['netscaler_tcp_bits']['section'] = 'load balancer';
-$config['graph_types']['device']['netscaler_tcp_bits']['order'] = '0';
-$config['graph_types']['device']['netscaler_tcp_bits']['descr'] = 'TCP Traffic';
+$config['graph_types']['device']['netscaler_tcp_bits']['section']  = 'load balancer';
+$config['graph_types']['device']['netscaler_tcp_bits']['order']    = '0';
+$config['graph_types']['device']['netscaler_tcp_bits']['descr']    = 'TCP Traffic';
 
-$config['graph_types']['device']['netscaler_tcp_pkts']['section'] = 'load balancer';
-$config['graph_types']['device']['netscaler_tcp_pkts']['order'] = '0';
-$config['graph_types']['device']['netscaler_tcp_pkts']['descr'] = 'TCP Packets';
+$config['graph_types']['device']['netscaler_tcp_pkts']['section']  = 'load balancer';
+$config['graph_types']['device']['netscaler_tcp_pkts']['order']    = '0';
+$config['graph_types']['device']['netscaler_tcp_pkts']['descr']    = 'TCP Packets';
 
-$config['graph_types']['device']['netscalersvc_bits']['descr'] = 'Aggregate Service Traffic';
-$config['graph_types']['device']['netscalersvc_pkts']['descr'] = 'Aggregate Service Packets';
-$config['graph_types']['device']['netscalersvc_conns']['descr'] = 'Aggregate Service Connections';
-$config['graph_types']['device']['netscalersvc_reqs']['descr'] = 'Aggregate Service Requests';
+$config['graph_types']['device']['netscalersvc_bits']['descr']     = 'Aggregate Service Traffic';
+$config['graph_types']['device']['netscalersvc_pkts']['descr']     = 'Aggregate Service Packets';
+$config['graph_types']['device']['netscalersvc_conns']['descr']    = 'Aggregate Service Connections';
+$config['graph_types']['device']['netscalersvc_reqs']['descr']     = 'Aggregate Service Requests';
 
 $config['graph_types']['device']['netscalervsvr_bits']['descr']    = 'Aggregate vServer Traffic';
 $config['graph_types']['device']['netscalervsvr_pkts']['descr']    = 'Aggregate vServer Packets';
