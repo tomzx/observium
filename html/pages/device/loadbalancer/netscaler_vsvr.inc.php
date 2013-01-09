@@ -24,7 +24,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   echo("<td width=320>" . format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
   echo("</tr>");
 
-  $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE S.svc_name = SV.svc_name AND SV.vsvr_name = '".$vsvr['vsvr_name']."'");
+  $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name']));
   if(count($svcs))
   {
     echo('<tr><td colspan="5">');
@@ -146,7 +146,8 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
 {
   if (is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
 
-  $vsvr['num_services'] = dbFetchCell("SELECT COUNT(*) FROM `netscaler_services_vservers` AS SV WHERE SV.vsvr_name = '".$vsvr['vsvr_name']."'");
+  $vsvr['num_services'] = dbFetchCell ("SELECT COUNT(*) FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name']));
+
   if ($vsvr['vsvr_state'] == "up") { $vsvr_class="green"; } else { $vsvr_class="red"; }
 
   if($vsvr['vsvr_port'] != "0") {
@@ -164,7 +165,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
   echo("</tr>");
   if ($vars['view'] == "services")
   {
-   $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE S.svc_name = SV.svc_name AND SV.vsvr_name = '".$vsvr['vsvr_name']."'");
+   $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name']));
    if(count($svcs))
    {
     echo('<tr><td colspan="5">');
