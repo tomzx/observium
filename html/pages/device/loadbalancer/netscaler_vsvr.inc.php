@@ -78,7 +78,7 @@ echo("</table>");
 
 } else {
 
-if(!$vars['graph']) 
+if(!$vars['graph'])
 { $graph_type = "device_netscalervsvr_bits"; } else {
   $graph_type = "device_netscalervsvr_".$vars['graph'];  }
 
@@ -135,10 +135,10 @@ echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 1
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th>vServer</th>\n");
-echo("      <th width=200>Addresses</th>\n");
+echo("      <th width=250>Addresses</th>\n");
 echo("      <th width=200>Type</th>\n");
-echo("      <th width=120>Status</th>\n");
-echo("      <th width=120>Traffic</th>\n");
+echo("      <th width=130>Status</th>\n");
+echo("      <th width=130>Traffic</th>\n");
 echo("    </tr>");
 echo("  </thead>");
 $i = "0";
@@ -152,7 +152,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
 
   if($vsvr['vsvr_port'] != "0") {
     if($vsvr['vsvr_ip']   != "0.0.0.0") { $vsvr['addrs'][] = $vsvr['vsvr_ip'].":".$vsvr['vsvr_port']; }
-    if($vsvr['vsvr_ipv6'] != "0:0:0:0:0:0:0:0") { $vsvr['addrs'][] = $vsvr['vsvr_ipv6'].":".$vsvr['vsvr_port']; }
+    if($vsvr['vsvr_ipv6'] != "0:0:0:0:0:0:0:0") { $vsvr['addrs'][] = "[".Net_IPv6::compress($vsvr['vsvr_ipv6'])."]:".$vsvr['vsvr_port']; }
   }
 
   echo("<tr>");
