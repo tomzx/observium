@@ -62,79 +62,119 @@ $pagetitle[] = "Add host";
 
 ?>
 
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" class="form-horizontal">
+
   <p>Devices will be checked for Ping and SNMP reachability before being probed. Only devices with recognised OSes will be added.</p>
 
-  <div style="padding: 10px; background: #f0f0f0;">
-    <table cellpadding=2px>
-      <tr>
-        <td><strong>Hostname</strong></td>
-        <td><input type="text" name="hostname" size="32"></td>
-      </tr>
-      <tr>
-        <td><strong>SNMP Version</strong></td>
-        <td>
-          <select name="snmpver">
-            <option value="v1">v1</option>
-            <option value="v2c" selected>v2c</option>
-            <option value="v3">v3</option>
-          </select>
-          &nbsp;<strong>Port</strong> <input type="text" name="port" size="16">
-        </td>
-      </tr>
-      <tr>
-        <td colspan=2><strong>SNMPv1/2c Configuration</strong></td>
-      </tr>
-      <tr>
-        <td><strong>Community</strong></td>
-        <td><input type="text" name="community" size="32"></td>
-      </tr>
-      <tr>
-        <td colspan=2><strong>SNMPv3 Configuration</strong></td>
-      </tr>
-      <tr>
-        <td><strong>Auth Level</strong></td>
-        <td>
-          <select name="authlevel">
-            <option value="noAuthNoPriv" selected>NoAuthNoPriv</option>
-            <option value="authNoPriv">AuthNoPriv</option>
-            <option value="authPriv">AuthPriv</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Auth User Name</strong></td>
-        <td><input type="text" name="authname" size="32"></td>
-      </tr>
-      <tr>
-        <td><strong>Auth Password</strong></td>
-        <td><input type="text" name="authpass" size="32"></td>
-      </tr>
-      <tr>
-        <td><strong>Auth Algorithm</strong></td>
-        <td>
-          <select name="authalgo">
-            <option value="MD5" selected>MD5</option>
-            <option value="SHA">SHA</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Crypto Password</strong></td>
-        <td><input type="text" name="cryptopass" size="32"></td>
-      </tr>
-      <tr>
-        <td><strong>Crypto Algorithm</strong></td>
-        <td>
-          <select name="cryptoalgo">
-            <option value="AES" selected>AES</option>
-            <option value="DES">DES</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td></td><td><input type="submit" class="submit" name="Submit" value="Add Host"></td>
-      </tr>
-    </table>
+  <fieldset>
+    <legend>Device Properties</legend>
+    <div class="control-group">
+      <label class="control-label" for="snmpver">Hostname</label>
+      <div class="controls">
+         <input type=text name="hostname" size="32" value="<?php echo($vars['hostname']); ?>"/>
+      </div>
+    </div>
+
+
+  <input type=hidden name="editing" value="yes">
+  <fieldset>
+    <legend>SNMP Properties</legend>
+    <div class="control-group">
+      <label class="control-label" for="snmpver">SNMP Version</label>
+      <div class="controls">
+        <select name="snmpver">
+          <option value="v1"  <?php echo($vars['snmpver'] == 'v1' ? 'selected' : ''); ?> >v1</option>
+          <option value="v2c" <?php echo($vars['snmpver'] == 'v2c' ? 'selected' : ''); ?> >v2c</option>
+          <option value="v3"  <?php echo($vars['snmpver'] == 'v3' ? 'selected' : ''); ?> >v3</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="control-group">
+       <label class="control-label" for="port">SNMP Port</label>
+       <div class="controls">
+         <input type=text name="port" size="32" value="161"/>
+       </div>
+     </div>
+  </fieldset>
+
+  <!-- To be able to hide it -->
+  <div id="snmpv12">
+    <fieldset>
+      <legend>SNMPv1/v2c Configuration</legend>
+      <div class="control-group">
+        <label class="control-label" for="community">SNMP Community</label>
+        <div class="controls">
+          <input type=text name="community" size="32" value="<?php echo $vars['community']; ?>"/>
+        </div>
+      </div>
+    </fieldset>
   </div>
+
+  <!-- To be able to hide it -->
+  <div id='snmpv3'>
+    <fieldset>
+      <legend>SNMPv3 Configuration</legend>
+      <div class="control-group">
+        <label class="control-label" for="authlevel">Auth Level</label>
+        <div class="controls">
+          <select name="authlevel">
+            <option value="NoAuthNoPriv" <?php echo($vars['authlevel'] == 'NoAuthNoPriv' ? 'selected' : ''); ?> >NoAuthNoPriv</option>
+            <option value="AuthNoPriv"   <?php echo($vars['authlevel'] == 'authNoPriv' ? 'selected' : ''); ?> >authNoPriv</option>
+            <option value="AuthPriv"     <?php echo($vars['authlevel'] == 'authPriv' ? 'selected' : ''); ?> >authPriv</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="authname">Auth User Name</label>
+        <div class="controls">
+          <input type=text name="authname" size="32" value="<?php echo $vars['authname']; ?>"/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="authpass">Auth Password</label>
+        <div class="controls">
+          <input type=text name="authpass" size="32" value=""/>
+        </div>
+      </div>
+
+
+      <div class="control-group">
+        <label class="control-label" for="authalgo">Auth Algorithm</label>
+        <div class="controls">
+          <select name="authalgo">
+            <option value='MD5'>MD5</option>
+            <option value='SHA' " . ($vars['authalgo'] === "SHA" ? 'selected' : '') . ">SHA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="cryptopass">Crypto Password</label>
+        <div class="controls">
+          <input type=text name="cryptopass" size="32" value=""/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="cryptoalgo">Crypto Algorithm</label>
+        <div class="controls">
+          <select name="cryptoalgo">
+            <option value='AES'>AES</option>
+            <option value='DES' " . ($vars['authalgo'] === "DES" ? 'selected' : '') . ">DES</option>
+          </select>
+        </div>
+      </div>
+
+    </fieldset>
+  </div>
+
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-success" name="submit" value="save"><i class="icon-plus icon-white"></i> Add Device</button>
+  </div>
+
+
 </form>

@@ -94,7 +94,7 @@ if ($updated && $update_message)
     <fieldset>
       <legend>SNMPv3 Configuration</legend>
       <div class="control-group">
-        <label class="control-label" for="snmpver">Auth Level</label>
+        <label class="control-label" for="authlevel">Auth Level</label>
         <div class="controls">
           <select name="authlevel">
             <option value="NoAuthNoPriv" <?php echo($device['authlevel'] == 'NoAuthNoPriv' ? 'selected' : ''); ?> >NoAuthNoPriv</option>
@@ -105,14 +105,14 @@ if ($updated && $update_message)
       </div>
 
       <div class="control-group">
-        <label class="control-label" for="community">Auth User Name</label>
+        <label class="control-label" for="authname">Auth User Name</label>
         <div class="controls">
           <input type=text name="authname" size="32" value="<?php echo $device['authname']; ?>"/>
         </div>
       </div>
 
       <div class="control-group">
-        <label class="control-label" for="community">Auth Password</label>
+        <label class="control-label" for="authpass">Auth Password</label>
         <div class="controls">
           <input type=text name="authpass" size="32" value="<?php echo $device['authpass']; ?>"/>
         </div>
@@ -120,7 +120,7 @@ if ($updated && $update_message)
 
 
       <div class="control-group">
-        <label class="control-label" for="snmpver">Auth Algorithym</label>
+        <label class="control-label" for="authalgo">Auth Algorithm</label>
         <div class="controls">
           <select name="authalgo">
             <option value='MD5'>MD5</option>
@@ -128,8 +128,32 @@ if ($updated && $update_message)
           </select>
         </div>
       </div>
+
+      <div class="control-group">
+        <label class="control-label" for="cryptopass">Crypto Password</label>
+        <div class="controls">
+          <input type=text name="cryptopass" size="32" value="<?php echo $device['cryptopass']; ?>"/>
+        </div>
+      </div>
+
+
+      <div class="control-group">
+        <label class="control-label" for="cryptoalgo">Crypto Algorithm</label>
+        <div class="controls">
+          <select name="authalgo">
+            <option value='AES'>AES</option>
+            <option value='DES' " . ($device['cryptoalgo'] === "DES" ? 'selected' : '') . ">AES</option>
+          </select>
+        </div>
+      </div>
+
+
+
     </fieldset>
   </div>
+
+
+
 
     <fieldset>
       <legend>SNMP Connectivity</legend>

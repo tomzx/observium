@@ -130,8 +130,8 @@ foreach ($graph_types as $type => $descr)
 
 print_optionbar_end();
 
-echo("<div style='margin: 5px;'>");
-echo("<table class=\"table table-striped table-condensed table-bordered\" style=\"margin-top: 10px;\">\n");
+
+echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th>VServer</th>\n");
@@ -210,7 +210,7 @@ echo("</tr>");
   $i++;
 }
 
-echo("</table></div>");
+echo("</table>");
 
 }
 
