@@ -141,8 +141,8 @@ if ($device['os'] == "netscaler")
       echo(str_pad($vsvr['vsvrName'], 25) . " | " . str_pad($vsvr['vsvrType'],5) . " | " .  str_pad($vsvr['vsvrState'],6) ." | ". str_pad($vsvr['vsvrIpAddress'],16) ." | ". str_pad($vsvr['vsvrPort'],5));
       echo(" | " . str_pad($vsvr['vsvrRequestRate'],8) . " | " . str_pad($vsvr['vsvrRxBytesRate']."B/s", 8)." | ". str_pad($vsvr['vsvrTxBytesRate']."B/s", 8));
 
-      $db_update = array('vsvr_ip' => $vsvr['vsvrIpAddress'], 'vsvr_port' => $vsvr['vsvrPort'], 'vsvr_state' => $vsvr['vsvrState'], 'vsvr_type' => $vsvr['vsvrType'],
-                         'vsvr_req_rate' => $vsvr['RequestRate'], 'vsvr_bps_in' => $vsvr['vsvrRxBytesRate'], 'vsvr_bps_out' => $vsvr['vsvrTxBytesRate']);
+      $db_update = array('vsvr_ip' => $vsvr['vsvrIpAddress'], 'vsvr_ipv6' => $vsvr['vsvrIp6Address'], 'vsvr_port' => $vsvr['vsvrPort'], 'vsvr_state' => $vsvr['vsvrState'], 'vsvr_type' => $vsvr['vsvrType'],
+                         'vsvr_entitytype' => $vsvr['vsvrEntityType'], 'vsvr_req_rate' => $vsvr['RequestRate'], 'vsvr_bps_in' => $vsvr['vsvrRxBytesRate'], 'vsvr_bps_out' => $vsvr['vsvrTxBytesRate']);
 
      if (!is_array($vsvrs[$vsvr['vsvrName']]))
      {

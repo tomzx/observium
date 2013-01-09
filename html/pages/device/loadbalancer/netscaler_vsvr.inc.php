@@ -134,11 +134,11 @@ print_optionbar_end();
 echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
-echo("      <th>VServer</th>\n");
-echo("      <th>Address</th>\n");
-echo("      <th>Status</th>\n");
-echo("      <th>Input</th>\n");
-echo("      <th>Output</th>\n");
+echo("      <th>vServer</th>\n");
+echo("      <th width=200>Addresses</th>\n");
+echo("      <th width=200>Type</th>\n");
+echo("      <th width=120>Status</th>\n");
+echo("      <th width=120>Traffic</th>\n");
 echo("    </tr>");
 echo("  </thead>");
 $i = "0";
@@ -146,14 +146,21 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
 {
   if (is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
 
+  $vsvr['num_services'] = dbFetchCell("SELECT COUNT(*) FROM `netscaler_services_vservers` AS SV WHERE SV.vsvr_name = '".$vsvr['vsvr_name']."'");
   if ($vsvr['vsvr_state'] == "up") { $vsvr_class="green"; } else { $vsvr_class="red"; }
 
+  if($vsvr['vsvr_port'] != "0") {
+    if($vsvr['vsvr_ip']   != "0.0.0.0") { $vsvr['addrs'][] = $vsvr['vsvr_ip'].":".$vsvr['vsvr_port']; }
+    if($vsvr['vsvr_ipv6'] != "0:0:0:0:0:0:0:0") { $vsvr['addrs'][] = $vsvr['vsvr_ipv6'].":".$vsvr['vsvr_port']; }
+  }
+
   echo("<tr>");
-  echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_name'] . '</a></td>');
-  echo("<td width=320>" . $vsvr['vsvr_ip'] . ":" . $vsvr['vsvr_port'] . "</a></td>");
-  echo("<td width=100><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span></td>");
-  echo("<td width=320>" . format_si($vsvr['vsvr_bps_in']*8) . "bps</a></td>");
-  echo("<td width=320>" . format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
+  echo('<td class=object-name><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_name'] . '</a></td>');
+  echo("<td>" . implode($vsvr['addrs'], "<br />") . "</td>");
+  echo('<td>'.$vsvr['vsvr_type'].'<br />'.$vsvr['vsvr_entitytype'].'</td>');
+  echo("<td><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span><br />".$vsvr['num_services']." service(s)</td>");
+  echo("<td><img src='images/16/arrow_left.png' align=absmiddle> " . format_si($vsvr['vsvr_bps_in']*8) . "bps <br />");
+  echo("<img src='images/16/arrow_out.png' align=absmiddle> ".format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
   echo("</tr>");
   if ($vars['view'] == "services")
   {
