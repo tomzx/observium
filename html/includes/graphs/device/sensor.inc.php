@@ -2,11 +2,18 @@
 
 include("includes/graphs/common.inc.php");
 
-if ($_GET['width'] > "300") { $descr_len = "40"; } else { $descr_len = "22"; }
+$data_len = 20;
+
+if($width > "500")
+{
+  $descr_len=24;
+} else {
+  $descr_len = round($width / 6) - $data_len - 0;
+}
 
 $rrd_options .= " -l 0 -E ";
 $iter = "1";
-$rrd_options .= " COMMENT:'".str_pad($unit_long,$descr_len)."    Cur     Min    Max\\n'";
+$rrd_options .= " COMMENT:'".str_pad($unit_long,$descr_len)."     Cur     Min    Max\\n'";
 
 foreach (dbFetchRows("SELECT * FROM `sensors` WHERE `sensor_class` = ? AND `device_id` = ? ORDER BY `sensor_index`", array($class, $device['device_id'])) as $sensor)
 {
