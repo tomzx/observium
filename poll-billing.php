@@ -63,7 +63,9 @@ function poll_bill($bill)
 {
 
   $ports = dbFetchRows("SELECT * FROM `bill_ports` as P, `ports` as I, `devices` as D WHERE P.bill_id=? AND I.port_id = P.port_id AND D.device_id = I.device_id", array($bill['bill_id']));
-  print_r($ports);
+  if (isset($options['d'])) {
+    print_r($ports);
+  }
   foreach ($ports as $port)
   {
     echo("\nPolling ".$port['ifDescr']." on ".$port['hostname']."\n");
@@ -83,6 +85,16 @@ function poll_bill($bill)
       $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
       $data = $data[$port['ifIndex']];
       $data = array('in' => $data['ifHCInOctets'], 'out' => $data['ifHCOutOctets']);
+      // Fallback on 32-bit counters if 64-bit fails
+      if (empty($data['in']) && empty($data['out'])) {
+        $oids = "IF-MIB::ifInOctets.".$port['ifIndex']." IF-MIB::ifOutOctets.".$port['ifIndex'];
+        $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
+        $data = $data[$port['ifIndex']];
+        $data = array('in' => $data['ifInOctets'], 'out' => $data['ifOutOctets']);
+      }
+      if (isset($options['d'])) {
+        print_r($data);
+      }
     }
 
     if (is_numeric($data['in']) && is_numeric($data['out']))
@@ -144,7 +156,7 @@ function poll_bill($bill)
   echo("Bill processing...\n");
   $now = time();
   if(is_numeric($bill['bill_polled'])) { $period = $now - $bill['bill_polled']; }
-  echo("time: ".$now."|".$bill['bill_polled']." period:".$period."\n");
+  echo("time: ".$now."|".$bill['bill_polled']." period:".$period."\n\n\n");
 
   if ($period <= '0')
   {
