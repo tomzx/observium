@@ -57,30 +57,36 @@ function getDates($dayofmonth, $months=0)
   return($return);
 }
 
-function getValue($host, $port, $id, $inout)
+function getValues($port)
 {
   global $config;
 
-  $oid  = "IF-MIB::ifHC" . $inout . "Octets." . $id;
-  $device = dbFetchRow("SELECT * from `devices` WHERE `hostname` = '".mres($host)."' LIMIT 1");
-  $value = snmp_get($device, $oid, "-O qv");
-
-  if (!is_numeric($value))
-  {
-    $oid  = "IF-MIB::if" . $inout . "Octets." . $id;
-    $value = snmp_get($device, $oid, "-Oqv");
+  if($device['snmpver'] == "1") {
+    $oids = "IF-MIB::ifInOctets.".$port['ifIndex']." IF-MIB::ifOutOctets.".$port['ifIndex'];
+  } else {
+    $oids = "IF-MIB::ifHCInOctets.".$port['ifIndex']." IF-MIB::ifHCOutOctets.".$port['ifIndex'];
   }
 
-  return $value;
+  $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
+  $data = $data[$port['ifIndex']];
+
+  if (is_numeric($data['ifHCInOctets']) && is_numeric($data['ifHCOutOctets']))
+  {
+    return array('in' => $data['ifHCInOctets'], 'out' => $data['ifHCOutOctets']);
+  }
+  elseif (is_numeric($data['ifInOctets']) && is_numeric($data['ifOutOctets']))
+  {
+    return array('in' => $data['ifInOctets'], 'out' => $data['ifOutOctets']);
+  } else {
+    return FALSE;
+  }
 }
 
 function getLastPortCounter($port_id,$inout)
 {
-  $rows = dbFetchCell("SELECT count(counter) from `port_" . mres($inout) . "_measurements` WHERE `port_id`='" . mres($port_id)."'");
-
-  if ($rows > 0)
+  $row = dbFetchRow("SELECT counter,delta FROM `bill_port_".mres($inout)."_data` WHERE `port_id`='".mres($port_id)."' ORDER BY timestamp DESC LIMIT 0,1");
+  if(is_numeric($row['delta']))
   {
-    $row = dbFetchRow("SELECT counter,delta FROM `port_".mres($inout)."_measurements` WHERE `port_id`='".mres($port_id)."' ORDER BY timestamp DESC");
     $return[counter] = $row['counter'];
     $return[delta] = $row['delta'];
     $return[state] = "ok";
@@ -92,11 +98,12 @@ function getLastPortCounter($port_id,$inout)
 
 function getLastMeasurement($bill_id)
 {
-  $rows = dbFetchCell("SELECT count(delta) from bill_data WHERE bill_id='".mres($bill_id)."'");
+  $row = dbFetchRow("SELECT timestamp,delta,in_delta,out_delta FROM bill_data WHERE bill_id='".mres($bill_id)."' ORDER BY timestamp DESC LIMIT 0,1");
 
-  if ($rows > 0)
+  print_r($row);
+
+  if(is_numeric($row['delta']))
   {
-    $row = dbFetchRow("SELECT timestamp,delta,in_delta,out_delta FROM bill_data WHERE bill_id='".mres($bill_id)."' ORDER BY timestamp DESC");
     $return[delta]     = $row['delta'];
     $return[delta_in]  = $row['delta_in'];
     $return[delta_out] = $row['delta_out'];

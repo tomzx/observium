@@ -66,7 +66,7 @@ if ($device['adsl_count'] > "0")
   $port_stats = snmpwalk_cache_oid($device, ".1.3.6.1.2.1.10.94.1.1.7.1.7", $port_stats, "ADSL-LINE-MIB");
 }
 
-// FIXME This probably needs re-enabled. We need to clear these things when they get unset, too.
+/// FIXME This probably needs re-enabled. We need to clear these things when they get unset, too.
 #foreach ($etherlike_oids as $oid) { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "EtherLike-MIB"); }
 #foreach ($cisco_oids as $oid)     { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "OLD-CISCO-INTERFACES-MIB"); }
 #foreach ($pagp_oids as $oid)      { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "CISCO-PAGP-MIB"); }
@@ -79,7 +79,7 @@ if ($device['os_group'] == "cisco")
   $data_oids[] = "portName";
 
   // Grab data to put ports into vlans or make them trunks
-  // FIXME we probably shouldn't be doing this from the VTP MIB, right?
+  /// FIXME we probably shouldn't be doing this from the VTP MIB, right?
   $port_stats = snmpwalk_cache_oid($device, "vmVlan", $port_stats, "CISCO-VLAN-MEMBERSHIP-MIB");
   $port_stats = snmpwalk_cache_oid($device, "vlanTrunkPortEncapsulationOperType", $port_stats, "CISCO-VTP-MIB");
   $port_stats = snmpwalk_cache_oid($device, "vlanTrunkPortNativeVlan", $port_stats, "CISCO-VTP-MIB");
@@ -104,7 +104,7 @@ if ($device['os_group'] == "cisco")
       {
         if ($binary[$i])
         {
-          $ifindex = $i; // FIXME $vlan_ifindex_map[$i]
+          $ifindex = $i; /// FIXME $vlan_ifindex_map[$i]
           $q_bridge_mib[$ifindex][] = $vlan_id;
         }
       }
@@ -120,7 +120,7 @@ if ($debug) { print_r($port_stats); }
 
 // Build array of ports in the database
 
-// FIXME -- this stuff is a little messy, looping the array to make an array just seems wrong. :>
+/// FIXME -- this stuff is a little messy, looping the array to make an array just seems wrong. :>
 //       -- i can make it a function, so that you don't know what it's doing.
 //       -- $ports = adamasMagicFunction($ports_db); ?
 
@@ -231,7 +231,7 @@ foreach ($ports as $port)
     {
       $this_port['ifVlan'] = $this_port['dot1qPvid'];
     }
-    // FIXME use $q_bridge_mib[$this_port['ifIndex']] to see if it is a trunk (>1 array count)
+    /// FIXME use $q_bridge_mib[$this_port['ifIndex']] to see if it is a trunk (>1 array count)
 
     echo("VLAN == ".$this_port['ifVlan']);
 
@@ -329,8 +329,8 @@ foreach ($ports as $port)
     $port['state']['ifUcastPkts_rate'] = $port['stats']['ifOutUcastPkts_rate'] + $port['stats']['ifInUcastPkts_rate'];
     $port['state']['ifErrors_rate'] = $port['stats']['ifOutErrors_rate'] + $port['stats']['ifInErrors_rate'];
 
-    // Port utilisation % threshold alerting. // FIXME allow setting threshold per-port. probably 90% of ports we don't care about.
-    // FIXME integrate this into some giant alerting thing. probably.
+    // Port utilisation % threshold alerting. /// FIXME allow setting threshold per-port. probably 90% of ports we don't care about.
+    /// FIXME integrate this into some giant alerting thing. probably.
     if ($port['ignore'] == 0 && $config['alerts']['port_util_alert'])
     {
       // Check for port saturation of $config['alerts']['port_util_perc'] or higher.  Alert if we see this.
@@ -398,8 +398,8 @@ foreach ($ports as $port)
     // Do PoE MIBs
     if ($config['enable_ports_poe']) { include("port-poe.inc.php"); }
 
-    // Do Alcatel Detailed Stats
-    if ($device['os'] == "aos") { include("port-alcatel.inc.php"); }
+#    // Do Alcatel Detailed Stats
+#    if ($device['os'] == "aos") { include("port-alcatel.inc.php"); }
 
     // Update Database
     if (count($port['update']))

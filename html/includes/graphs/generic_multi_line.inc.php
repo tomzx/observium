@@ -2,12 +2,19 @@
 
 include("includes/graphs/common.inc.php");
 
+/// FIXME - Make this take into account which columns we're showing (for things with long descrs the descr is more important than some of tha data)
+
+
+
+
 if($width > "500")
 {
   $descr_len=25;
+} elseif($width > "300") {
+  $descr_len = round(($width - 15) / 7) - 26;
 } else {
-  $descr_len=13;
-  $descr_len += round(($width - 270) / 8);
+  $num_format = "";
+  $descr_len = round(($width - 15) / 6) - 26;
 }
 
 if ($nototal) { $descrlen += "2"; $unitlen += "2";}
@@ -59,8 +66,11 @@ foreach ($rrd_list as $rrd)
     if (!empty($rrd['areacolour'])) { $rrd_optionsb .= " AREA:".$id."#" . $rrd['areacolour']; }
   }
 
-  $rrd_optionsb .= " GPRINT:".$id.":LAST:%5.2lf%s GPRINT:".$id."min:MIN:%5.2lf%s";
-  $rrd_optionsb .= " GPRINT:".$id."max:MAX:%5.2lf%s GPRINT:".$id.":AVERAGE:'%5.2lf%s\\n'";
+  $rrd_optionsb .= " GPRINT:".$id.":LAST:%5.2lf%s";
+  $rrd_optionsb .= " GPRINT:".$id."min:MIN:%5.2lf%s";
+  $rrd_optionsb .= " GPRINT:".$id."max:MAX:%5.2lf%s";
+  $rrd_optionsb .= " GPRINT:".$id.":AVERAGE:%5.2lf%s";
+  $rrd_optionsb .= " COMMENT:'\\n'";
 
   $i++; $iter++;
 

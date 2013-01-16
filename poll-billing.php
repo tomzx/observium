@@ -22,117 +22,146 @@ include("config.php");
 include("includes/definitions.inc.php");
 include("includes/functions.php");
 
-$iter = "0";
+$options = getopt("d");
 
-rrdtool_pipe_open($rrd_process, $rrd_pipes);
+if (isset($options['d']))
+{
+  echo("DEBUG!\n");
+  $debug = TRUE;
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  ini_set('log_errors', 1);
+#  ini_set('error_reporting', E_ALL ^ E_NOTICE);
+} else {
+  $debug = FALSE;
+#  ini_set('display_errors', 0);
+  ini_set('display_startup_errors', 0);
+  ini_set('log_errors', 0);
+#  ini_set('error_reporting', 0);
+}
+
+
+$iter = "0";
 
 echo("Starting Polling Session ... \n\n");
 
-foreach (dbFetchRows("SELECT * FROM `bills`") as $bill_data)
+foreach (dbFetchRows("SELECT * FROM `bills`") as $bill)
 {
-  echo("Bill : ".$bill_data['bill_name']."\n");
-
+  echo("Bill : ".$bill['bill_name']."\n");
   # replace old bill_gb with bill_quota (we're now storing bytes, not gigabytes)
-
-  if ($bill_data['bill_type'] == "quota" && !is_numeric($bill_data['bill_quota']))
+  if ($bill['bill_type'] == "quota" && !is_numeric($bill['bill_quota']))
   {
-    $bill_data['bill_quota'] = $bill_data['bill_gb'] * $config['billing']['base'] * $config['billing']['base'];
-    dbUpdate(array('bill_quota' => $bill_data['bill_quota']), 'bills', '`bill_id` = ?', array($bill_data['bill_id']));
-    echo("Quota -> ".$bill_data['bill_quota']);
+    $bill['bill_quota'] = $bill['bill_gb'] * $config['billing']['base'] * $config['billing']['base'];
+    dbUpdate(array('bill_quota' => $bill['bill_quota']), 'bills', '`bill_id` = ?', array($bill['bill_id']));
+    echo("Quota -> ".$bill['bill_quota']);
   }
-
-  CollectData($bill_data['bill_id']);
+  poll_bill($bill);
   $iter++;
 }
 
-function CollectData($bill_id)
+function poll_bill($bill)
 {
 
-  $port_list = dbFetchRows("SELECT * FROM `bill_ports` as P, `ports` as I, `devices` as D WHERE P.bill_id=? AND I.port_id = P.port_id AND D.device_id = I.device_id", array($bill_id));
-  print_r($port_list);
-  foreach ($port_list as $port_data)
+  $ports = dbFetchRows("SELECT * FROM `bill_ports` as P, `ports` as I, `devices` as D WHERE P.bill_id=? AND I.port_id = P.port_id AND D.device_id = I.device_id", array($bill['bill_id']));
+  print_r($ports);
+  foreach ($ports as $port)
   {
-    $port_id = $port_data['port_id'];
-    $host    = $port_data['hostname'];
-    $port    = $port_data['port'];
+    echo("\nPolling ".$port['ifDescr']." on ".$port['hostname']."\n");
+    $now = time();
+    if(is_numeric($port['bill_port_polled'])) { $period = $now - $port['bill_port_polled']; }
+    echo("time: ".$now."|".$port['bill_port_polled']." period:".$period."\n");
 
-    echo("\nPolling ".$port_data['ifDescr']." on ".$port_data['hostname']."\n");
-
-    $port_data['in_measurement'] = getValue($port_data['hostname'], $port_data['port'], $port_data['ifIndex'], "In");
-    $port_data['out_measurement'] = getValue($port_data['hostname'], $port_data['port'], $port_data['ifIndex'], "Out");
-
-    $now = dbFetchCell("SELECT NOW()");
-
-    $last_data = getLastPortCounter($port_id,in);
-    if ($last_data['state'] == "ok")
-    {
-      $port_data['last_in_measurement'] = $last_data[counter];
-      $port_data['last_in_delta'] = $last_data[delta];
-      if ($port_data['in_measurement'] > $port_data['last_in_measurement'])
-      {
-        $port_data['in_delta'] = $port_data['in_measurement'] - $port_data['last_in_measurement'];
-      } else {
-        $port_data['in_delta'] = $port_data['last_in_delta'];
-      }
+    if($port['snmpver'] == "1") {
+      // SNMPv1 - Use non 64-bit counters
+      $oids = "IF-MIB::ifInOctets.".$port['ifIndex']." IF-MIB::ifOutOctets.".$port['ifIndex'];
+      $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
+      $data = $data[$port['ifIndex']];
+      $data = array('in' => $data['ifInOctets'], 'out' => $data['ifOutOctets']);
     } else {
-      $port_data['in_delta'] = '0';
+      // Not SNMPv1 - Use 64-bit counters
+      $oids = "IF-MIB::ifHCInOctets.".$port['ifIndex']." IF-MIB::ifHCOutOctets.".$port['ifIndex'];
+      $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
+      $data = $data[$port['ifIndex']];
+      $data = array('in' => $data['ifHCInOctets'], 'out' => $data['ifHCOutOctets']);
     }
-    dbInsert(array('port_id' => $port_id, 'timestamp' => $now, 'counter' => $port_data['in_measurement'], 'delta' => $port_data['in_delta']), 'port_in_measurements');
 
-    $last_data = getLastPortCounter($port_id,out);
-    if ($last_data[state] == "ok")
+    if (is_numeric($data['in']) && is_numeric($data['out']))
     {
-      $port_data['last_out_measurement'] = $last_data[counter];
-      $port_data['last_out_delta'] = $last_data[delta];
-      if ($port_data['out_measurement'] > $port_data['last_out_measurement'])
+      echo($period ."|".$port['bill_port_counter_in']."|".$port['bill_port_counter_out']."|".$data['in']."|".$port['bill_port_counter_in']."\n");
+      // The port returned counters
+      if(is_numeric($period) && is_numeric($port['bill_port_counter_in']) && is_numeric($port['bill_port_counter_out']) && $data['in'] >= $port['bill_port_counter_in'] && $data['out'] >= $port['bill_port_counter_out'])
       {
-        $port_data['out_delta'] = $port_data['out_measurement'] - $port_data['last_out_measurement'];
+        // Counters are higher or equal to before, seems legit.
+        $in_delta  = $data['in']  - $port['bill_port_counter_in'];
+        $out_delta = $data['out'] - $port['bill_port_counter_out'];
+        echo("Counters valid, delta generated.\n");
+      } elseif (is_numeric($period) && is_numeric($port['bill_port_counter_in']) && is_numeric($port['bill_port_counter_out'])) {
+        // Counters are lower, we must have wrapped. We'll take the measurement as the amount for this period.
+        $in_delta  = $data['in'];
+        $out_delta = $data['out'];
+        echo("Counters wrapped, delta fudged.\n");
       } else {
-        $port_data['out_delta'] = $port_data['last_out_delta'];
+        // First update. delta is zero, only insert counters.
+        echo("No existing counters.\n");
+        $in_delta  = 0;
+        $out_delta = 0;
       }
+
+      if($in_delta == $data['in'] || $in_delta == $data['in'])
+      {
+        // Deltas are equal to counters. Clearly fail.
+        echo("Deltas equal counters. Resetting.");
+        $in_delta  = 0;
+        $out_delta = 0;
+      }
+
+      $update = array('bill_port_polled' => $now, 'bill_port_period' => $period,
+                      'bill_port_counter_in' => $data['in'], 'bill_port_counter_out' => $data['out'],
+                      'bill_port_delta_in' => $in_delta, 'bill_port_delta_out' => $out_delta,
+                      );
+      dbUpdate($update, 'bill_ports', '`bill_id` = ? AND `port_id` = ?', array($port['bill_id'], $port['port_id']));
+
+      echo("data:  in(N:".$data['in']."|P:".$port['bill_port_counter_in'].") delta:".$in_delta."\n");
+      echo("      out(N:".$data['out']."|P:".$port['bill_port_counter_out'].") delta:".$out_delta."\n");
+
     } else {
-      $port_data['out_delta'] = '0';
+      // No counters were returned
+      // We don't need to update the database.
+      echo("No data.\n");
     }
-    dbInsert(array('port_id' => $port_id, 'timestamp' => $now, 'counter' => $port_data['out_measurement'], 'delta' => $port_data['out_delta']), 'port_out_measurements');
 
-    $delta = $delta + $port_data['in_delta'] + $port_data['out_delta'];
-    $in_delta = $in_delta + $port_data['in_delta'];
-    $out_delta = $out_delta + $port_data['out_delta'];
+    dbInsert(array('port_id' => $port['port_id'], 'timestamp' => $now, 'counter' => $data['in'], 'delta' => $in_delta), 'bill_port_in_data');
+    dbInsert(array('port_id' => $port['port_id'], 'timestamp' => $now, 'counter' => $data['out'], 'delta' => $out_delta), 'bill_port_out_data');
+
+    $bill_delta     += $in_delta + $out_delta;
+    $bill_in_delta  += $in_delta;
+    $bill_out_delta += $out_delta;
+
+    echo("deltas: i:".$bill_in_delta." o:".$bill_out_delta." t:".$bill_delta."\n");
 
   }
-  $last_data = getLastMeasurement($bill_id);
 
-  if ($last_data[state] == "ok")
+  echo("Bill processing...\n");
+  $now = time();
+  if(is_numeric($bill['bill_polled'])) { $period = $now - $bill['bill_polled']; }
+  echo("time: ".$now."|".$bill['bill_polled']." period:".$period."\n");
+
+  if ($period <= '0')
   {
-    $prev_delta     = $last_data[delta];
-    $prev_in_delta  = $last_data[in_delta];
-    $prev_out_delta = $last_data[out_delta];
-    $prev_timestamp = $last_data[timestamp];
-    $period = dbFetchCell("SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP()) - UNIX_TIMESTAMP('".mres($prev_timestamp)."')");
-  } else {
-    $prev_delta = '0';
-    $period   = '0';
-    $prev_in_delta =  '0';
-    $prev_out_delta =  '0';
+    $bill_delta = '0';
+    $bill_in_delta = '0';
+    $bill_out_delta = '0';
   }
 
-  if ($delta < '0')
-  {
-    $delta = $prev_delta;
-    $in_delta = $prev_in_delta;
-    $out_delta = $prev_out_delta;
+  dbUpdate(array('bill_polled' => $now), 'bills', '`bill_id` = ?', array($port['bill_id']));
 
-  }
-
-  if ($period < "0") {
-    logfile("BILLING: negative period! id:$bill_id period:$period delta:$delta in_delta:$in_delta out_delta:$out_delta");
+  if ($period < "0" || !is_numeric($period)) {
+    logfile("BILLING: negative period! id:".$bill['bill_id']." period:$period delta:$bill_delta in_delta:$bill_in_delta out_delta:$bill_out_delta");
   } else {
-    dbInsert(array('bill_id' => $bill_id, 'timestamp' => $now, 'period' => $period, 'delta' => $delta, 'in_delta' => $in_delta, 'out_delta' => $out_delta), 'bill_data');
+    dbInsert(array('bill_id' => $bill['bill_id'], 'timestamp' => array("NOW()"), 'period' => $period, 'delta' => $bill_delta, 'in_delta' => $bill_in_delta, 'out_delta' => $bill_out_delta), 'bill_data');
   }
 }
 
-if ($argv[1]) { CollectData($argv[1]); }
-
-rrdtool_pipe_close($rrd_process, $rrd_pipes);
+if ($argv[1]) { poll_bill($argv[1]); }
 
 ?>
