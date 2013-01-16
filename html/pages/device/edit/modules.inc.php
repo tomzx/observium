@@ -48,7 +48,7 @@ if($_POST['toggle_discovery'] && isset($config['discovery_modules'][$_POST['togg
   </thead>
   <tbody>
 
-<?
+<?php
 foreach ($config['poller_modules'] as $module => $module_status)
 {
 
