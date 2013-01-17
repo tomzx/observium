@@ -2,32 +2,38 @@
 
 include("includes/graphs/common.inc.php");
 
-/// FIXME - Make this take into account which columns we're showing (for things with long descrs the descr is more important than some of tha data)
 
+// Here we scale the number of numerical columns shown to make sure we keep the text.
 
-
-
-if($width > "500")
-{
-  $descr_len=25;
+if($width > "400") {
+  $data_len  = "31";
+  $data_show = array('lst', 'avg', 'min', 'max');
 } elseif($width > "300") {
-  $descr_len = round(($width - 15) / 7) - 26;
+  $data_len  = "22";
+  $data_show = array('lst', 'avg', 'max');
+} else {
+  $data_len = "14";
+  $data_show = array('lst', 'avg');
+}
+
+// Here we scale the length of the description to make sure we keep the numbers
+
+if($width > "800")
+{
+  $descr_len = "82";
+} elseif($width > "300") {
+  $descr_len = round(($width + 16) / 7) - $data_len;
 } else {
   $num_format = "";
-  $descr_len = round(($width - 15) / 6) - 26;
+  $descr_len = round(($width + 16) / 6) - $data_len;
 }
 
-if ($nototal) { $descrlen += "2"; $unitlen += "2";}
-
-if($width > "500")
-{
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
-  if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
-  $rrd_options .= " COMMENT:'\l'";
-} else {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
-
-}
+$rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+2),0,$descr_len+2)."'";
+if(in_array("lst", $data_show)) { $rrd_options .= " COMMENT:' Last '"; }
+if(in_array("avg", $data_show)) { $rrd_options .= " COMMENT:' Avg  '"; }
+if(in_array("min", $data_show)) { $rrd_options .= " COMMENT:' Min  '"; }
+if(in_array("max", $data_show)) { $rrd_options .= " COMMENT:' Max  '"; }
+$rrd_options .= " COMMENT:'\\l'";
 
 $i = 0;
 $iter = 0;
@@ -66,11 +72,15 @@ foreach ($rrd_list as $rrd)
     if (!empty($rrd['areacolour'])) { $rrd_optionsb .= " AREA:".$id."#" . $rrd['areacolour']; }
   }
 
-  $rrd_optionsb .= " GPRINT:".$id.":LAST:%5.2lf%s";
-  $rrd_optionsb .= " GPRINT:".$id."min:MIN:%5.2lf%s";
-  $rrd_optionsb .= " GPRINT:".$id."max:MAX:%5.2lf%s";
-  $rrd_optionsb .= " GPRINT:".$id.":AVERAGE:%5.2lf%s";
-  $rrd_optionsb .= " COMMENT:'\\n'";
+#  if(in_array("lst", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":LAST:%5.1lf%s"; }
+#  if(in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":AVERAGE:%5.1lf%s"; }
+#  if(in_array("min", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."min:MIN:%5.1lf%s"; }
+
+  if(in_array("lst", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%6.1lf%s"; }
+  if(in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%6.1lf%s"; }
+  if(in_array("min", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%6.1lf%s"; }
+  if(in_array("max", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%6.1lf%s"; }
+  $rrd_optionsb .= " COMMENT:'\\l'";
 
   $i++; $iter++;
 
