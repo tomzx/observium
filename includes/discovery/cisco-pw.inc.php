@@ -20,14 +20,18 @@ if ($config['enable_pseudowires'] && $device['os_group'] == "cisco")
   $pws = snmpwalk_cache_oid($device, "cpwVcType", $pws, "CISCO-IETF-PW-MPLS-MIB");
   $pws = snmpwalk_cache_oid($device, "cpwVcPsnType", $pws, "CISCO-IETF-PW-MPLS-MIB");
   $pws = snmpwalk_cache_oid($device, "cpwVcDescr", $pws, "CISCO-IETF-PW-MPLS-MIB");
+  $pws = snmpwalk_cache_oid($device, "cpwVcPeerAddrType", $pws, "CISCO-IETF-PW-MPLS-MIB");
+  $pws = snmpwalk_cache_oid($device, "cpwVcPeerAddr", $pws, "CISCO-IETF-PW-MPLS-MIB");
 
   // For MPLS pseudowires
   $pws = snmpwalk_cache_oid($device, "cpwVcMplsPeerLdpID", $pws, "CISCO-IETF-PW-MPLS-MIB");
 
   foreach ($pws as $pw_id => $pw)
   {
-        list($cpw_remote_id) = explode(":", $pw['cpwVcMplsPeerLdpID']);
-        $cpw_remote_device = @mysql_result(mysql_query("SELECT device_id FROM ipv4_addresses AS A, ports AS I WHERE A.ipv4_address = '".$cpw_remote_id."' AND A.port_id = I.port_id"),0);
+        if($pw['cpwVcPeerAddrType'] == "ipv4") { $peer_addr = hexStringToIPv4( $pw['cpwVcPeerAddr']); }
+        #if(!empty($pw['cpwVcMplsPeerLdpID'])    { list($peer_addr) = explode(":", $pw['cpwVcMplsPeerLdpID']); }
+
+        $cpw_remote_device = @mysql_result(mysql_query("SELECT device_id FROM ipv4_addresses AS A, ports AS I WHERE A.ipv4_address = '".$peer_addr."' AND A.port_id = I.port_id"),0);
         $if_id = @mysql_result(mysql_query("SELECT `port_id` FROM `ports` WHERE `ifDescr` = '".$pw['cpwVcName']."' AND `device_id` = '".$device['device_id']."'"),0);
 
         if (!empty($device['pws_db'][$pw['cpwVcID']]))
@@ -37,7 +41,7 @@ if ($config['enable_pseudowires'] && $device['os_group'] == "cisco")
         }
         else
         {
-          $pseudowire_id = dbInsert(array('device_id' => $device['device_id'], 'port_id' => $if_id, 'peer_device_id' => $cpw_remote_device, 'peer_ldp_id' => $cpw_remote_id,
+          $pseudowire_id = dbInsert(array('device_id' => $device['device_id'], 'port_id' => $if_id, 'peer_addr' => $peer_addr, 'peer_device_id' => $cpw_remote_device, 'peer_ldp_id' => $cpw_remote_id,
                                           'cpwVcID' => $pw['cpwVcID'], 'cpwOid' => $pw_id, 'pw_type' => $pw['cpwVcType'], 'pw_descr' => $pw['cpwVcDescr'], 'pw_psntype' => $pw['cpwVcPsnType']), 'pseudowires');
           echo("+");
         }

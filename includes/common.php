@@ -2,6 +2,17 @@
 
 // Common Functions
 
+// Fix this shit, it's pretty uglytarded.
+function hexStringToIPv4($string)
+{
+  $string = str_replace('"', '', $string);
+  $string = trim($string);
+  list($a,$b,$c,$d) = explode(" ", $string);
+  $ip = hexdec($a).".".hexdec($b).".".hexdec($c).".".hexdec($d);
+
+  return $ip;
+}
+
 # If a device is up, return its uptime, otherwise return the
 # time since the last time we were able to poll it.  This
 # is not very accurate, but better than reporting what the

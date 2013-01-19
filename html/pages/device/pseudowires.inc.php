@@ -34,6 +34,8 @@ foreach (dbFetchRows("SELECT * FROM pseudowires AS P, ports AS I WHERE P.port_id
     $i++;
   }
 
+  if($peer_device_id) { $peer_device = get_device_by_id_cache($peer_device_id); }
+
   $pw_b = dbFetchRow("SELECT * from `devices` AS D, `ports` AS I, `pseudowires` AS P WHERE D.device_id = ? AND D.device_id = I.device_id
                       AND P.cpwVcID = ? AND P.port_id = I.port_id", array($pw_a['peer_device_id'], $pw_a['cpwVcID']));
 
@@ -47,7 +49,7 @@ foreach (dbFetchRows("SELECT * FROM pseudowires AS P, ports AS I WHERE P.port_id
     if ($bg == "ffffff") { $bg = "e5e5e5"; } else { $bg="ffffff"; }
     echo("<tr style=\"background-color: #$bg;\"><td rowspan=2 style='font-size:18px; padding:4px;'>".$pw_a['cpwVcID']."</td><td>".generate_port_link($pw_a)."</td>
                                                                                           <td rowspan=2> <img src='images/16/arrow_right.png'> </td>
-                                                                                          <td>".generate_device_link($pw_b)."</td><td>".generate_port_link($pw_b)."</td></tr>");
+                                                                                          <td>".generate_device_link($peer_device)."</td><td>".generate_port_link($pw_b)."</td></tr>");
     echo("<tr style=\"background-color: #$bg;\"><td colspan=2>".$pw_a['ifAlias']."</td><td>".$pw_b['ifAlias']."</td></tr>");
 
     if ($vars['view'] == "minigraphs")

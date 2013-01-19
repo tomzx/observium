@@ -31,7 +31,6 @@ if ($bill_data['bill_type'] == "cdr") {
   <ul class="nav-tabs tabs" id="editBillTab">
     <li class="active first"><a href="#properties" data-toggle="tab">Bill properties</a></li>
     <li><a href="#ports" data-toggle="tab">Billed ports</a></li>
-    <li><a href="#addport" data-toggle="tab">Add port</a></li>
   </ul>
   <div class="tabcontent tab-content" id="editBillTabContent" style="min-height: 50px; padding-bottom: 18px;">
     <div class="tab-pane fade active in" id="properties">
@@ -126,7 +125,7 @@ for ($x=1;$x<32;$x++) {
   <div class="tab-pane fade in" id="ports">
     <form class="form-horizontal">
       <fieldset>
-        <!-- <legend>Billed Ports</legend> //-->
+        <legend>Currently Billed Ports</legend>
         <div class="control-group">
 <?php
 
@@ -138,13 +137,13 @@ if (is_array($ports))
   foreach ($ports as $port)
   {
     $emptyCheck = true;
-    $devicebtn = str_replace("list-device", "btn", generate_device_link($port));
+    $devicebtn = str_replace("list-device", "btn btn-mini", generate_device_link($port));
     $devicebtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $devicebtn);
     $devicebtn = str_replace("<div>',;", "</div></div>',", $devicebtn);
-    $portbtn = str_replace("interface-upup", "btn", generate_port_link($port));
-    $portbtn = str_replace("interface-updown", "btn btn-warning", $portbtn);
-    $portbtn = str_replace("interface-downdown", "btn btn-warning", $portbtn);
-    $portbtn = str_replace("interface-admindown", "btn btn-warning disabled", $portbtn);
+    $portbtn = str_replace("interface-upup", "btn btn-mini", generate_port_link($port));
+    $portbtn = str_replace("interface-updown", "btn btn-mini btn-warning", $portbtn);
+    $portbtn = str_replace("interface-downdown", "btn btn-mini btn-warning", $portbtn);
+    $portbtn = str_replace("interface-admindown", "btn btn-mini btn-warning disabled", $portbtn);
     $portbtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $portbtn);
     $portbtn = str_replace("<div>',;", "</div></div>',", $portbtn);
     $portalias = (empty($port['ifAlias']) ? "" : " - ".$port['ifAlias']."");
@@ -160,7 +159,7 @@ if (is_array($ports))
     echo("            <div class=\"btn-group\">\n");
 //    echo("              <a class=\"btn btn-danger\" href=\"javascript:;\" onclick=\"document.delete".$port['port_id'].".submit();\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></a>\n");
 //    echo("              <a class=\"btn btn-danger\" href=\"".$delete."\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></a>\n");
-    echo("              <button type=\"submit\" class=\"btn btn-danger\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></button>\n");
+    echo("              <button type=\"submit\" class=\"btn btn-mini btn-danger\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></button>\n");
     echo("            </div>\n");
     echo("            <div class=\"btn-group\">\n");
     //echo("            <div class=\"btn-group\" style=\"width: 600px;\">\n");
@@ -185,14 +184,11 @@ if (is_array($ports))
         </div>
       </fieldset>
     </form>
-  </div>
-
-  <div class="tab-pane fade in" id="addport">
     <form action="<?php echo($url); ?>" method="post" class="form-horizontal">
       <input type="hidden" name="action" value="add_bill_port" />
       <input type="hidden" name="bill_id" value="<?php echo $bill_id; ?>" />
       <fieldset>
-        <!-- <legend>Add Port</legend> //-->
+        <legend>Add New Port</legend>
         <div class="control-group">
           <label class="control-label" for="device"><strong>Device</strong></label>
           <div class="controls">
