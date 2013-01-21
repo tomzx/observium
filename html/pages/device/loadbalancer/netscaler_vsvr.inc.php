@@ -41,7 +41,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
     {
       if ($svc['svc_state'] == "up") { $svc_class="green"; $svc_row=""; } else { $svc_class="red"; $svc_row = "error"; }
       echo('<tr class="'.$svc_row.'">');
-      echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</a></td>');
+      echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('type' => 'netscaler_services', 'vsvr' => NULL, 'svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</a></td>');
       echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
       echo("<td width=100><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
       echo("<td width=320>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
