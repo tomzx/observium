@@ -115,6 +115,7 @@ if ($device['os'] == "netscaler")
   foreach ($vsvr_array as $index => $vsvr)
   {
     // Use vsvrFullName when it exists.
+    /// FIXME : vsvrFullName is cosmetic only, use vsvrName for indexing
     if (isset($vsvr['vsvrFullName']))
     {
       #$rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrFullName']).".rrd";
@@ -265,7 +266,8 @@ if ($device['os'] == "netscaler")
 
   foreach ($svc_array as $index => $svc)
   {
-    // Use svcFullName when it exists.
+    // Use svcServiceFullName when it exists.
+    /// This is cosmetic only, retain svcServiceName for indexing !
     if (isset($svc['svcServiceFullName']))
     {
       $svc['svcServiceName'] = $svc['svcServiceFullName'];
