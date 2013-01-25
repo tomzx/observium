@@ -27,6 +27,8 @@ if($_SESSION['widescreen'])
   }
 }
 
+if($graph_array['shrink']) { $graph_array['width'] = $graph_array['width'] - $graph_array['shrink']; }
+
 $graph_array['to']     = $config['time']['now'];
 
 foreach ($periods as $period)

@@ -65,8 +65,10 @@ $menu_options['graphs']   = 'Graphs';
 $menu_options['realtime'] = 'Real time';   // FIXME CONDITIONAL
 $menu_options['arp']      = 'ARP Table';   // FIXME CONDITIONAL?
 
-if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id'])))
-{
+if (dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `measured_class` = 'port' AND `measured_entity` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'") )
+{  $menu_options['sensors'] = 'Sensors'; }
+
+if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id']))){
   $menu_options['fdb'] = 'FDB Table';
 }
 
@@ -80,6 +82,8 @@ if (dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `pagpGroupIfIndex` = '".$por
 
 if (dbFetchCell("SELECT COUNT(*) FROM `ports_vlans` WHERE `port_id` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'") )
 {  $menu_options['vlans'] = 'VLANs'; }
+
+
 
 $sep = "";
 foreach ($menu_options as $option => $text)

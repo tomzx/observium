@@ -30,7 +30,8 @@ if ($device['os'] == "junos" || $device['os_group'] == "junose")
       $entry['highw'] = $entry['jnxDomCurrentModuleTemperatureHighWarningThreshold'];
       $entry['port']  = get_port_by_index_cache($device['device_id'], $index);
       if(is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
-      discover_sensor($valid['sensor'], 'temperature', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], '1', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current']);
+      discover_sensor($valid['sensor'], 'temperature', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], '1', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
+
     }
   }
 }

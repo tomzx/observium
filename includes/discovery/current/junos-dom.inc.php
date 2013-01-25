@@ -23,7 +23,9 @@ if ($device['os'] == "junos" || $device['os_group'] == "junose")
       $entry['loww']  = $entry['jnxDomCurrentTxLaserBiasCurrentLowWarningThreshold']/1000000;
       $entry['high']      = $entry['jnxDomCurrentTxLaserBiasCurrentHighAlarmThreshold']/1000000;
       $entry['highw'] = $entry['jnxDomCurrentTxLaserBiasCurrentHighWarningThreshold']/1000000;
-      discover_sensor($valid['sensor'], 'current', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], '1000000', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current']);
+      $entry['port']  = get_port_by_index_cache($device['device_id'], $index);
+      if(is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
+      discover_sensor($valid['sensor'], 'current', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], '1000000', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
     }
   }
 }

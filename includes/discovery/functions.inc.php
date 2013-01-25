@@ -130,11 +130,11 @@ function discover_device($device, $options = NULL)
 }
 
 // Discover sensors
-function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, $divisor = '1', $multiplier = '1', $low_limit = NULL, $low_warn_limit = NULL, $warn_limit = NULL, $high_limit = NULL, $current = NULL, $poller_type = 'snmp', $entPhysicalIndex = NULL, $entPhysicalIndex_measured = NULL, $measured_type = NULL, $measured_entity = NULL)
+function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, $divisor = '1', $multiplier = '1', $low_limit = NULL, $low_warn_limit = NULL, $warn_limit = NULL, $high_limit = NULL, $current = NULL, $poller_type = 'snmp', $entPhysicalIndex = NULL, $entPhysicalIndex_measured = NULL, $measured_class = NULL, $measured_entity = NULL)
 {
   global $config, $debug;
 
-  if ($debug) { echo("Discover sensor: $class, $device, $oid, $index, $type, $descr,  $divisor , $multiplier, $low_limit, $low_warn_limit, $warn_limit, $high_limit, $current, $poller_type, $entPhysicalIndex, $entPhysicalIndex_measured\n"); }
+  if ($debug) { echo("Discover sensor: $class, $device, $oid, $index, $type, $descr,  $divisor , $multiplier, $low_limit, $low_warn_limit, $warn_limit, $high_limit, $current, $poller_type, $entPhysicalIndex, $entPhysicalIndex_measured, $measured_class, $measured_entity \n"); }
 
   if (empty($low_warn_limit) || empty($warn_limit))
   {
@@ -161,7 +161,7 @@ function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, 
 
     $insert = array('poller_type' => $poller_type, 'sensor_class' => $class, 'device_id' => $device['device_id'], 'sensor_oid' => $oid, 'sensor_index' => $index, 'sensor_type' => $type, 'sensor_descr' => $descr,
                     'sensor_divisor' => $divisor, 'sensor_multiplier' => $multiplier, 'sensor_limit' => $high_limit, 'sensor_limit_warn' => $warn_limit, 'sensor_limit_low' => $low_limit,
-                    'sensor_limit_low_warn' => $low_warn_limit, 'entPhysicalIndex' => $entPhysicalIndex, 'entPhysicalIndex_measured' => $entPhysicalIndex_measured, 'measured_type' => $measured_type, 'measured_entity' => $measured_entity );
+                    'sensor_limit_low_warn' => $low_warn_limit, 'entPhysicalIndex' => $entPhysicalIndex, 'entPhysicalIndex_measured' => $entPhysicalIndex_measured, 'measured_class' => $measured_class, 'measured_entity' => $measured_entity );
 
     $inserted = dbInsert($insert, 'sensors');
 
