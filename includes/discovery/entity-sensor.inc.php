@@ -1,5 +1,8 @@
 <?php
 
+if($device['os'] != "junos")
+{
+
 echo(" ENTITY-SENSOR: ");
 
 echo("Caching OIDs:");
@@ -90,4 +93,5 @@ if (is_array($oids))
 
 echo("\n");
 
+}
 ?>

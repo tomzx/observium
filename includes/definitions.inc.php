@@ -335,6 +335,7 @@ $config['os'][$os]['over'][1]['graph']  = "device_processor";
 $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory Usage";
+$config['os'][$os]['discovery_blacklist'] = array('entity-sensor', 'entity-physical');
 
 $os = "junose";
 $config['os'][$os]['text']              = "Juniper JunOSe";

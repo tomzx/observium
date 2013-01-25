@@ -97,6 +97,14 @@ function logfile($string)
   fclose($fd);
 }
 
+function error($message)
+{
+  global $config, $debug;
+
+  if($debug) { echo($message); }
+
+}
+
 function getHostOS($device)
 {
   global $config, $debug;

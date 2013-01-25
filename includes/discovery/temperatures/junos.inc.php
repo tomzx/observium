@@ -1,5 +1,7 @@
 <?php
 
+/// FIXME - rewrite this so it uses SNMPWALK to get descr and temperature.
+
 if ($device['os'] == "junos" || $device['os_group'] == "junos")
 {
   echo("JunOS ");

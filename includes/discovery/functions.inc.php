@@ -24,11 +24,11 @@ function discover_new_device($hostname)
     } else {
       $dst_host = $hostname;
     }
-    
+
     $ip = gethostbyname($dst_host);
 
     if ($debug) { echo("resolving $dst_host to $ip\n"); }
-    
+
     if (match_network($config['nets'], $ip))
     {
       if ($debug) { echo("found $ip inside configured nets, adding!\n"); }
@@ -88,13 +88,22 @@ function discover_device($device, $options = NULL)
   } else {
     foreach ($config['discovery_modules'] as $module => $module_status)
     {
-      if ($attribs['discover_'.$module] || ( $module_status && !isset($attribs['discover_'.$module])))
+      if(in_array($device['os_group'], $config['os']['discovery_blacklist']))
       {
-        include('includes/discovery/'.$module.'.inc.php');
-      } elseif (isset($attribs['discover_'.$module]) && $attribs['discover_'.$module] == "0") {
-        echo("Module [ $module ] disabled on host.\n");
+        // Module is blacklisted for this OS.
+        debug("Module $module is in the blacklist for ".$device['os_group']."\n");
+      } elseif(in_array($device['os'], $config['os']['discovery_blacklist'])) {
+        // Module is blacklisted for this OS.
+        debug("Module $module is in the blacklist for ".$device['os']."\n");
       } else {
-        echo("Module [ $module ] disabled globally.\n");
+        if ($attribs['discover_'.$module] || ( $module_status && !isset($attribs['discover_'.$module])))
+        {
+          include('includes/discovery/'.$module.'.inc.php');
+        } elseif (isset($attribs['discover_'.$module]) && $attribs['discover_'.$module] == "0") {
+          echo("Module [ $module ] disabled on host.\n");
+        } else {
+          echo("Module [ $module ] disabled globally.\n");
+        }
       }
     }
   }
@@ -121,7 +130,7 @@ function discover_device($device, $options = NULL)
 }
 
 // Discover sensors
-function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, $divisor = '1', $multiplier = '1', $low_limit = NULL, $low_warn_limit = NULL, $warn_limit = NULL, $high_limit = NULL, $current = NULL, $poller_type = 'snmp', $entPhysicalIndex = NULL, $entPhysicalIndex_measured = NULL)
+function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, $divisor = '1', $multiplier = '1', $low_limit = NULL, $low_warn_limit = NULL, $warn_limit = NULL, $high_limit = NULL, $current = NULL, $poller_type = 'snmp', $entPhysicalIndex = NULL, $entPhysicalIndex_measured = NULL, $measured_type = NULL, $measured_entity = NULL)
 {
   global $config, $debug;
 
@@ -152,7 +161,7 @@ function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, 
 
     $insert = array('poller_type' => $poller_type, 'sensor_class' => $class, 'device_id' => $device['device_id'], 'sensor_oid' => $oid, 'sensor_index' => $index, 'sensor_type' => $type, 'sensor_descr' => $descr,
                     'sensor_divisor' => $divisor, 'sensor_multiplier' => $multiplier, 'sensor_limit' => $high_limit, 'sensor_limit_warn' => $warn_limit, 'sensor_limit_low' => $low_limit,
-                    'sensor_limit_low_warn' => $low_warn_limit, 'entPhysicalIndex' => $entPhysicalIndex, 'entPhysicalIndex_measured' => $entPhysicalIndex_measured );
+                    'sensor_limit_low_warn' => $low_warn_limit, 'entPhysicalIndex' => $entPhysicalIndex, 'entPhysicalIndex_measured' => $entPhysicalIndex_measured, 'measured_type' => $measured_type, 'measured_entity' => $measured_entity );
 
     $inserted = dbInsert($insert, 'sensors');
 
@@ -230,14 +239,15 @@ function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, 
       log_event("Sensor Warn Low Limit Updated: ".mres($class)." ".mres($type)." ". mres($index)." ".mres($descr)." (".$low_warn_limit.")", $device, 'sensor', $sensor_id);
     }
 
-    if ($oid == $sensor_entry['sensor_oid'] && $descr == $sensor_entry['sensor_descr'] && $multiplier == $sensor_entry['sensor_multiplier'] && $divisor == $sensor_entry['sensor_divisor'] && $entPhysicalIndex_measured == $sensor_entry['entPhysicalIndex_measured'] && $entPhysicalIndex == $sensor_entry['entPhysicalIndex'])
+    if ($oid == $sensor_entry['sensor_oid'] && $descr == $sensor_entry['sensor_descr'] && $multiplier == $sensor_entry['sensor_multiplier'] && $divisor == $sensor_entry['sensor_divisor'] && $entPhysicalIndex_measured == $sensor_entry['entPhysicalIndex_measured'] && $entPhysicalIndex == $sensor_entry['entPhysicalIndex'] && 'measured_class' == $measured_class && 'measured_entity' == $measured_entity)
     {
       echo(".");
     }
     else
     {
       $update = array('sensor_oid' => $oid, 'sensor_descr' => $descr, 'sensor_multiplier' => $multiplier, 'sensor_divisor' => $divisor,
-                      'entPhysicalIndex' => $entPhysicalIndex, 'entPhysicalIndex_measured' => $entPhysicalIndex_measured);
+                      'entPhysicalIndex' => $entPhysicalIndex, 'entPhysicalIndex_measured' => $entPhysicalIndex_measured,
+                      'measured_class' => $measured_class, 'measured_entity' => $measured_entity);
       $updated = dbUpdate($update, 'sensors', '`sensor_id` = ?', array($sensor_entry['sensor_id']));
        echo("U");
       log_event("Sensor Updated: ".mres($class)." ".mres($type)." ". mres($index)." ".mres($descr), $device, 'sensor', $sensor_id);
