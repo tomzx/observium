@@ -50,6 +50,7 @@ echo("
           <dt style="text-align: left;"><i class="icon-user"></i> Xiaochi Jin</dt><dd>Logo design.</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Bruno Pramont</dt><dd>Collectd code.</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> David Farrell <DavidPFarrell@gmail.com></dt><dd>Help with parsing net-SNMP output in PHP.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Job Snijders</dt><dd>Python-based multi-instance poller wrapper script.</dd>
         </dl>
         </div>
       </div>
