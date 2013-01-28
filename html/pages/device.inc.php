@@ -137,9 +137,9 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
         {
           if ($file != "." && $file != "..")
           {
-            if (eregi(".rrd", $file))
+            if (strstr($file, ".rrd"))
             {
-              if (eregi("~", $file))
+              if (strstr($file, "~"))
               {
                 list($target,$slave) = explode("~", str_replace(".rrd", "", $file));
                 $target = str_replace("_", ".", $target);

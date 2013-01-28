@@ -1,8 +1,10 @@
 <?php
 
+print_r($_POST);
+
 $sensors = dbFetchRows("SELECT * FROM `sensors`,`sensors-state` WHERE `device_id` = ? AND `sensors-state`.`sensor_id` = `sensors`.`sensor_id` ORDER BY `sensor_type`,`sensor_class`,`sensor_index` ", array($device['device_id']));
 
-if ($_POST['update-sensors'])
+if ($_POST['submit'] == "update-sensors")
 {
   if ($_SESSION['userlevel'] == '10')
   {
@@ -81,6 +83,6 @@ foreach ($sensors as $sensor)
 </fieldset>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="update-sensors"><i class="icon-ok icon-white"></i> Save Changes</button>
   </div>
 </form>
