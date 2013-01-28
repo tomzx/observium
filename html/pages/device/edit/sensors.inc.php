@@ -1,7 +1,5 @@
 <?php
 
-print_r($_POST);
-
 $sensors = dbFetchRows("SELECT * FROM `sensors`,`sensors-state` WHERE `device_id` = ? AND `sensors-state`.`sensor_id` = `sensors`.`sensor_id` ORDER BY `sensor_type`,`sensor_class`,`sensor_index` ", array($device['device_id']));
 
 if ($_POST['submit'] == "update-sensors")
