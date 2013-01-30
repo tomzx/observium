@@ -198,38 +198,10 @@ if ($config['show_locations'])
           <div class="col_2">
             <ul>
 <?php
-    $firstloop=1;
     foreach (getlocations() as $location)
     {
-      $sublocation=substr( $location, 0, strpos( $location, ' ', 1)  );
-      if (!$sublocation)
-      {
-       $sublocation=$location;
-      }
-
-       if ((!$firstloop) && (strcmp($sublocation, $previous_sublocation))) 
-       //this is not the first iteration, and this sublocation is different from our previous one
-       //close the previous ul/li
-              {
-                    echo('</ul></li>');
-              }
-
-       if (strcmp($sublocation, $previous_sublocation))  
-       //this sublocation is different from our previous one. Start new li/ul.
-       {
-                echo('<li><a href=""><img src="images/16/building.png" border="0" align="absmiddle" /> ' . $sublocation . ' </a>');
-                echo('<ul id=dagb>');
-
-       }
-
       echo('            <li><a href="devices/location=' . urlencode($location) . '/"><img src="images/16/building.png" border="0" align="absmiddle" /> ' . $location . ' </a></li>');
-
-      $firstloop=0;
-      $previous_sublocation=$sublocation; //prepare for next loop
-
-                   
     }
-    echo('</ul></li>'); //close the final ul/li
 ?>
             </ul>
           </div>
