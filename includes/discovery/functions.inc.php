@@ -239,7 +239,7 @@ function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, 
       log_event("Sensor Warn Low Limit Updated: ".mres($class)." ".mres($type)." ". mres($index)." ".mres($descr)." (".$low_warn_limit.")", $device, 'sensor', $sensor_id);
     }
 
-    if ($oid == $sensor_entry['sensor_oid'] && $descr == $sensor_entry['sensor_descr'] && $multiplier == $sensor_entry['sensor_multiplier'] && $divisor == $sensor_entry['sensor_divisor'] && $entPhysicalIndex_measured == $sensor_entry['entPhysicalIndex_measured'] && $entPhysicalIndex == $sensor_entry['entPhysicalIndex'] && 'measured_class' == $measured_class && 'measured_entity' == $measured_entity)
+    if ($oid == $sensor_entry['sensor_oid'] && $descr == $sensor_entry['sensor_descr'] && $multiplier == $sensor_entry['sensor_multiplier'] && $divisor == $sensor_entry['sensor_divisor'] && $entPhysicalIndex_measured == $sensor_entry['entPhysicalIndex_measured'] && $entPhysicalIndex == $sensor_entry['entPhysicalIndex'] && 'measured_class' == $sensor_entry['measured_class'] && $sensor_entry['measured_entity'] == $measured_entity)
     {
       echo(".");
     }
