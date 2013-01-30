@@ -2,7 +2,7 @@
 
 function generate_front_box ($background, $content)
 {
-echo("<div style='text-align: center; margin: 2px; border: solid 2px #D0D0D0; float: left; margin-right: 2px; padding: 3px; width: 117px; height: 85px; background: $background;'>
+echo("<div style='text-align: center; margin: 2px; border: solid 2px #D0D0D0; float: left; margin-right: 2px; padding: 3px; width: 117px; height: 85px; background: $background; line-height:130%;'>
       $content
       </div>");
 }
