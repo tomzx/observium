@@ -1,7 +1,12 @@
 <?php
 
 /* Observium Network Management and Monitoring System
- * Copyright (C) 2006-2011, Observium Developers - http://www.observium.org
+ * Copyright (C) 2006-2013, Observium Developers - http://www.observium.org
+ *
+ * @package    observium
+ * @subpackage poller
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 

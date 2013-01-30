@@ -4,8 +4,10 @@
  * Observium Network Management and Monitoring System
  * Copyright (C) 2006-2012, Adam Armstrong - http://www.observium.org
  *
- * @package alerting
- * @author Adam Armstrong <adama@memetic.org>
+ * @package    observium
+ * @subpackage alerter
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
