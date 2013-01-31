@@ -56,8 +56,7 @@ if ($vars['view'] == "macaccounting_pkts") { echo("</span>"); }
 print_optionbar_end();
 
 echo('<table border="0" cellspacing="0" cellpadding="5" width="100%">');
-echo('<tr style="height: 30px"><td width=1></td><th></th><th>Peer address</th><th>Type</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
-
+echo('<tr style="height: 30px"><th></th><th>Peer address</th><th>Type</th><th>AFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
 $i = "1";
 
 $sql  = "SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id";
