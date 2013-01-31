@@ -148,7 +148,7 @@ else
     $where .= " AND (B.bgpPeerState != 'established')";
   }
 
-  $peer_query = "select * from bgpPeers AS B, devices AS D WHERE B.device_id = D.device_id ".$where." ORDER BY D.hostname, B.bgpPeerRemoteAs, B.bgpPeerIdentifier";
+  $peer_query = "select * from `bgpPeers` AS B, `devices` AS D, `bgpPeers-state` AS S WHERE B.device_id = D.device_id AND B.bgpPeer_id = S.bgpPeer_id ".$where." ORDER BY D.hostname, B.bgpPeerRemoteAs, B.bgpPeerIdentifier";
   foreach (dbFetchRows($peer_query) as $peer)
   {
     unset ($alert, $bg_image);
