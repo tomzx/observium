@@ -25,7 +25,7 @@ if ($device['os'] == "mgeups")
     discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
   }
 
-  $oids = trim(snmp_walk($device, "mgeinputVoltage", "-OsqnU", "MG-SNMP-UPS-MIB"));
+  $oids = trim(snmp_walk($device, "mginputVoltage", "-OsqnU", "MG-SNMP-UPS-MIB"));
   if ($debug) { echo($oids."\n"); }
   $numPhase = count(explode("\n",$oids));
   for($i = 1; $i <= $numPhase;$i++)

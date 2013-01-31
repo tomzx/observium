@@ -4,7 +4,7 @@
 if ($device['os'] == "mgeups")
 {
   echo("MGE ");
-  $oids = trim(snmp_walk($device, "1.3.6.1.4.1.705.1.7.1", "-OsqnU"));
+  $oids = trim(snmp_walk($device, "mgoutputFrequency", "-OsqnU", "MG-SNMP-UPS-MIB"));
   if ($debug) { echo($oids."\n"); }
   $numPhase = count(explode("\n",$oids));
   for($i = 1; $i <= $numPhase;$i++)
@@ -23,7 +23,8 @@ if ($device['os'] == "mgeups")
     $index      = $i;
     discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
   }
-  $oids = trim(snmp_walk($device, "1.3.6.1.4.1.705.1.6.1", "-OsqnU"));
+
+  $oids = trim(snmp_walk($device, "mginputFrequency", "-OsqnU", "MG-SNMP-UPS-MIB"));
   if ($debug) { echo($oids."\n"); }
   $numPhase = count(explode("\n",$oids));
   for($i = 1; $i <= $numPhase;$i++)
