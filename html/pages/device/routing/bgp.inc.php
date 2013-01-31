@@ -56,7 +56,7 @@ if ($vars['view'] == "macaccounting_pkts") { echo("</span>"); }
 print_optionbar_end();
 
 echo('<table border="0" cellspacing="0" cellpadding="5" width="100%">');
-echo('<tr style="height: 30px"><th></th><th>Peer address</th><th>Type</th><th>AFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
+echo('<tr style="height: 30px"><th>Peer address</th><th>Type</th><th>AFI.SAFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
 $i = "1";
 
 $sql  = "SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id";
@@ -139,8 +139,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
                                         ($peer['disabled'] ? ' bordercolor="#cccccc"' : '') . ">
   ");
 
-  echo("   <td width=20><span class=list-large>".$i."</span></td>
-           <td>" . $peeraddresslink . "<br />".$peername."</td>
+  echo("   <td>" . $peeraddresslink . "<br />".$peername."</td>
              <td>$peer_type</td>
            <td style='font-size: 10px; font-weight: bold; line-height: 10px;'>" . (isset($peer['afi']) ? $peer['afi'] : '') . "</td>
            <td><strong>AS" . $peer['bgpPeerRemoteAs'] . "</strong><br />" . $peer['astext'] . "</td>
