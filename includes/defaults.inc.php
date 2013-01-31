@@ -205,6 +205,35 @@ $config['graph_colours']['purples'] = array('CC7CCC','AF63AF','934A93','773177',
 $config['graph_colours']['default'] = $config['graph_colours']['blues'];
 $config['graph_colours']['juniperive']   = array('F7C729','52A6EF');
 
+// Front page settings
+
+// General settings
+$config['frontpage']['map']['show']                = false;        // Enable/Disable the map view
+$config['frontpage']['map']['region']              = "world";      // See https://developers.google.com/chart/interactive/docs/gallery/geochart for region settings
+$config['frontpage']['overall_traffic']            = true;         // Enable/Disable the overall traffic view (transit, peering, transit+peering)
+$config['frontpage']['eventlog']['show']           = true;         // Enable/Disable the eventlog view
+$config['frontpage']['eventlog']['items']          = 15;           // Only show the last XX items of the eventlog view
+$config['frontpage']['syslog']['show']             = true;         // Enable/Disable the syslog view
+$config['frontpage']['syslog']['items']            = 25;           // Only show the last XX items of the syslog view
+
+$config['frontpage']['device_status']['show']      = true;         // Enable/Disable the status view
+// Show the status messages you want
+$config['frontpage']['device_status']['devices']   = true;         // Show the down devices
+$config['frontpage']['device_status']['ports']     = true;         // Show the down ports
+$config['frontpage']['device_status']['errors']    = false;        // STILL NEED TO DO THIS
+$config['frontpage']['device_status']['services']  = true;         // Show the down services
+$config['frontpage']['device_status']['bgp']       = true;         // Show the bgp status
+$config['frontpage']['device_status']['uptime']    = true;         // Show the uptime status
+
+// Custom traffic graphs
+$config['frontpage']['custom_traffic']['show']     = false;        // Enable/Disable the custom traffic view
+$config['frontpage']['custom_traffic']['ids']      = "";           // COMMA SEPERATED PORT ID FOR EXAMPLE: "1,2,3,4,5"
+$config['frontpage']['custom_traffic']['title']    = "";           // Your own title for the custom traffic graphs
+
+// Frontpage order you can use: map, device_status, overall_traffic, custom_traffic, syslog, eventlog
+$config['frontpage']['order']           = array('map', 'device_status', 'overall_traffic', 'custom_traffic', 'syslog', 'eventlog');
+
+
 // Device page options
 
 $config['show_overview_tab'] = TRUE;
