@@ -9,7 +9,7 @@
  * @subpackage web
  * @author     Dennis de Houx <info@all-in-one.be>
  * @copyright  (C) 2006 - 2012 Adam Armstrong
- * @version    1.7.1
+ * @version    1.8.2
  *
  */
 
@@ -35,6 +35,9 @@
 	    case "eventlog":
 		show_eventlog($config);
 		break;
+	    case "minigraphs":
+		show_minigraphs($config);
+		break;
 	}
     }
 
@@ -43,7 +46,7 @@
 ?>
 <div class="row-fluid">
     <div class="span12 well">
-	<h3 class="bill">Globe Overview</h2>
+	<h3 class="bill">Globe Overview</h3>
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 	    google.load('visualization', '1', {'packages': ['geochart']});
@@ -159,18 +162,42 @@
 		$config['frontpage']['custom_traffic']['title'] = (empty($config['frontpage']['custom_traffic']['title']) ? "Custom Traffic" : $config['frontpage']['custom_traffic']['title']);
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span6 well\">");
-		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." Today</h2>");
+		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." Today</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
 		echo("    </div>");
 		echo("    <div class=\"span6 well\">");
-		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Week</h2>");
+		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Week</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
 		echo("    </div>");
 		echo("</div>");
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span12 well\">");
-		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Month</h2>");
+		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Month</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/>");
+		echo("    </div>");
+		echo("</div>");
+	    }
+	}
+    }
+
+
+    function show_minigraphs($config) {
+	// Show Custom MiniGraphs
+	if ($config['frontpage']['minigraphs']['show']) {
+	    if ($_SESSION['userlevel'] >= '5') {
+		$minigraphs = explode(";", $config['frontpage']['minigraphs']['ids']);
+		$legend = (($config['frontpage']['minigraphs']['legend'] == false) ? "no" : "yes");
+		echo("<div class=\"row-fluid\">");
+		echo("    <div class=\"span12 well\">");
+		echo("        <h3 class=\"bill\">Mini Graphs Overview</h3>");
+		foreach($minigraphs as $graph) {
+		    list($device, $type, $header) = explode(",", $graph, 3);
+		    if (strpos($type, "device") === false) {
+			echo("        <strong>".$header."</strong><br><a href=\"graphs/type=".$type."/id=".$device."/from=".$config['time']['day']."/to=".$config['time']['now']."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
+		    } else {
+			echo("        <strong>".$header."</strong><br><a href=\"graphs/type=".$type."/device=".$device."/from=".$config['time']['day']."/to=".$config['time']['now']."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
+		    }
+		}
 		echo("    </div>");
 		echo("</div>");
 	    }
@@ -183,7 +210,7 @@
 	if ($config['frontpage']['device_status']['show']) {
 	    echo("<div class=\"row-fluid\">");
 	    echo("    <div class=\"span12 well\">");
-	    echo("        <h3 class=\"bill\">Device status</h2>");
+	    echo("        <h3 class=\"bill\">Device status</h3>");
 	    echo("        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">");
 	    echo("            <thead>");
 	    echo("                <tr>");
@@ -335,14 +362,12 @@
 	if ($config['frontpage']['syslog']['show']) {
 	    echo("<div class=\"row-fluid\">");
 	    echo("    <div class=\"span12 well\">");
-	    echo("        <h3 class=\"bill\">Recent Syslog Messages</h2>");
+	    echo("        <h3 class=\"bill\">Recent Syslog Messages</h3>");
 	    echo("        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">");
 	    echo("            <thead>");
 	    echo("                <tr>");
-	    //echo("                    <td></td>");
 	    echo("                    <th>Date</th>");
 	    echo("                    <th>Device</th>");
-	    echo("                    <th>Type</th>");
 	    echo("                    <th>Message</th>");
 	    echo("                </tr>");
 	    echo("            </thead>");
@@ -366,11 +391,10 @@
 	if ($config['frontpage']['eventlog']['show']) {
 	    echo("<div class=\"row-fluid\">");
 	    echo("    <div class=\"span12 well\">");
-	    echo("        <h3 class=\"bill\">Recent Eventlog Entries</h2>");
+	    echo("        <h3 class=\"bill\">Recent Eventlog Entries</h3>");
 	    echo("        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">");
 	    echo("            <thead>");
 	    echo("                <tr>");
-	    //echo("                    <td></td>");
 	    echo("                    <th>Date</th>");
 	    echo("                    <th>Device</th>");
 	    echo("                    <th>Type</th>");

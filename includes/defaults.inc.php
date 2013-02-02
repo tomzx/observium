@@ -231,8 +231,13 @@ $config['frontpage']['custom_traffic']['show']     = false;        // Enable/Dis
 $config['frontpage']['custom_traffic']['ids']      = "";           // COMMA SEPERATED PORT ID FOR EXAMPLE: "1,2,3,4,5"
 $config['frontpage']['custom_traffic']['title']    = "";           // Your own title for the custom traffic graphs
 
-// Frontpage order you can use: map, device_status, overall_traffic, custom_traffic, syslog, eventlog
-$config['frontpage']['order']           = array('map', 'device_status', 'overall_traffic', 'custom_traffic', 'syslog', 'eventlog');
+// Custom mini graphs
+$config['frontpage']['minigraphs']['show']         = false;        // Enable/Disable the custom mini graph view
+$config['frontpage']['minigraphs']['ids']          = "";           // Comma and semicolon seperated array list, first the device id or graph id followed by the image type and the text header you want (example: "2,device_processor,CPU Usage;10,diskio_bits,IOPS")
+$config['frontpage']['minigraphs']['legend']       = false;        // Enable/Disable the legend on custom mini graph view
+
+// Frontpage order you can use: map, device_status, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
+$config['frontpage']['order']           = array('map', 'device_status', 'overall_traffic', 'custom_traffic', 'minigraphs', 'syslog', 'eventlog');
 
 
 // Device page options
