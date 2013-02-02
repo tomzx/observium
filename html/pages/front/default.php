@@ -83,6 +83,7 @@
 		]);
 		var options = {
 		    region: '<?php echo $config['frontpage']['map']['region']; ?>',
+		    resolution: '<?php echo $config['frontpage']['map']['resolution']; ?>',
 		    displayMode: 'markers',
 		    keepAspectRatio: 0,
 		    width: 1175,
@@ -133,17 +134,17 @@
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span6 well\">");
 		echo("        <h3 class=\"bill\">Overall Transit Traffic Today</h2>");
-		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
+		echo("        <a href=\"iftype/type=transit/\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("    <div class=\"span6 well\">");
 		echo("        <h3 class=\"bill\">Overall Peering Traffic Today</h2>");
-		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
+		echo("        <a href=\"iftype/type=peering/\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("</div>");
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span12 well\">");
 		echo("        <h3 class=\"bill\">Overall Transit &amp; Peering Traffic This Month</h2>");
-		echo("        <img src=\"graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/>");
+		echo("        <a href=\"iftype/type=peering,transit/\"><img src=\"graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
 		echo("    </div>");
 		echo("</div>");
 	    }
