@@ -210,6 +210,7 @@ $config['graph_colours']['juniperive']   = array('F7C729','52A6EF');
 // General settings
 $config['frontpage']['map']['show']                = true;        // Enable/Disable the map view
 $config['frontpage']['map']['region']              = "world";      // See https://developers.google.com/chart/interactive/docs/gallery/geochart for region settings
+$config['frontpage']['map']['resolution']          = "countries";  // some region types such as US States (US-NY) require this to be changed to "provinces"
 $config['frontpage']['overall_traffic']            = true;         // Enable/Disable the overall traffic view (transit, peering, transit+peering)
 $config['frontpage']['eventlog']['show']           = true;         // Enable/Disable the eventlog view
 $config['frontpage']['eventlog']['items']          = 15;           // Only show the last XX items of the eventlog view
