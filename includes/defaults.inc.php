@@ -237,7 +237,7 @@ $config['frontpage']['minigraphs']['ids']          = "";           // Comma and 
 $config['frontpage']['minigraphs']['legend']       = false;        // Enable/Disable the legend on custom mini graph view
 
 // Frontpage order you can use: map, device_status, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
-$config['frontpage']['order']           = array('map', 'device_status', 'overall_traffic', 'custom_traffic', 'minigraphs', 'syslog', 'eventlog');
+$config['frontpage']['order']           = array('map', 'device_status', 'eventlog');
 
 
 // Device page options
