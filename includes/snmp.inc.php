@@ -5,11 +5,20 @@
 //
 // TRUE STORY. THAT SHIT IS WHACK. -- adama.
 
+// Crappy function to get workaround 32bit counter wrapping in HOST-RESOURCES-MIB
+function snmp_dewrap32bit($value)
+{
+ if( preg_match('/^-/',$value) ){
+ return (abs($value) + 2147483647);
+ } else {
+ return $value;
+ }
+}
 
-/// Take -Oqs output and parse it into an array containing OID array and the value
-/// Hopefully this is the beginning of more intelligent OID parsing!
-/// Thanks to David Farrell <DavidPFarrell@gmail.com> for the parser solution.
-/// This function is free for use by all with attribution to David.
+// Take -Oqs output and parse it into an array containing OID array and the value
+// Hopefully this is the beginning of more intelligent OID parsing!
+// Thanks to David Farrell <DavidPFarrell@gmail.com> for the parser solution.
+// This function is free for use by all with attribution to David.
 function parse_oid($string)
 {
     $result = array();
@@ -55,7 +64,7 @@ function string_to_oid($string)
   return $oid;
 }
 
-/// Dirty attempt to parse snmp stuff. YUCK.
+// Dirty attempt to parse snmp stuff. YUCK.
 
 function snmp_parser_quote($m){
     return str_replace(array('.',' '),
@@ -181,7 +190,7 @@ function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = N
   foreach(explode("\n", $data) as $text) {
     $ret = parse_oid($text);
     if(!empty($ret['value'])) {
-      /// this seems retarded. need a way to just build this automatically.
+      // this seems retarded. need a way to just build this automatically.
       switch ($oid_elements) {
         case "1":
           $array[$ret['oid'][0]] = $ret['value'];
