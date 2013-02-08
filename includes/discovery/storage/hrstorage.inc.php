@@ -9,8 +9,8 @@ if (is_array($hrstorage_array))
   {
     $fstype = $storage['hrStorageType'];
     $descr = $storage['hrStorageDescr'];
-    $size = snmp_dewrap32bit($entry['hrStorageSize']) * $storage['hrStorageAllocationUnits'];
-    $used = snmp_dewrap32bit($entry['hrStorageUsed']) * $storage['hrStorageAllocationUnits'];
+    $size = snmp_dewrap32bit($storage['hrStorageSize']) * $storage['hrStorageAllocationUnits'];
+    $used = snmp_dewrap32bit($storage['hrStorageUsed']) * $storage['hrStorageAllocationUnits'];
     $units = $storage['hrStorageAllocationUnits'];
     $percent = round($used / $size * 100);
 
