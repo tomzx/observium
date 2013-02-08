@@ -9,11 +9,11 @@ if (is_array($hrstorage_array))
   {
     $fstype = $storage['hrStorageType'];
     $descr = $storage['hrStorageDescr'];
-    $size = $storage['hrStorageSize'] * $storage['hrStorageAllocationUnits'];
-    $used = $storage['hrStorageUsed'] * $storage['hrStorageAllocationUnits'];
+    $size = snmp_dewrap32bit($entry['hrStorageSize']) * $storage['hrStorageAllocationUnits'];
+    $used = snmp_dewrap32bit($entry['hrStorageUsed']) * $storage['hrStorageAllocationUnits'];
     $units = $storage['hrStorageAllocationUnits'];
     $percent = round($used / $size * 100);
-    
+
     switch($fstype)
     {
       case 'hrStorageVirtualMemory':
@@ -48,12 +48,7 @@ if (is_array($hrstorage_array))
       discover_storage($valid_storage, $device, $index, $fstype, "hrstorage", $descr, $size , $units, $used, $free, $percent);
     }
 
-    #$old_storage_rrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("hrStorage-" . $index . ".rrd");
-    #$storage_rrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("storage-hrstorage-" . $index . ".rrd");
-    #if (is_file($old_storage_rrd)) { rename($old_storage_rrd,$storage_rrd); }
-
     unset($deny, $fstype, $descr, $size, $used, $units, $storage_rrd, $old_storage_rrd, $hrstorage_array);
-
   }
 }
 
