@@ -53,6 +53,19 @@ if ($_SESSION['userlevel'] < '7')
     $sep = " | ";
   }
 
+  echo('<div style="float: right;">');
+  if ($vars['section'] == "delete")
+  {
+    echo("<span class='pagemenu-selected'>");
+    #echo('<img src="images/icons/'.$type.'.png" class="optionicon" />');
+  } else {
+    #echo('<img src="images/icons/greyscale/'.$type.'.png" class="optionicon" />');
+  }
+  echo(generate_link("Delete",$link_array,array('section'=>'delete')));
+  if ($vars['section'] == "delete") { echo("</span>"); }
+  $sep = " | ";
+  echo('</div>');
+
   print_optionbar_end();
 
   if (is_file("pages/device/edit/".mres($vars['section']).".inc.php"))
