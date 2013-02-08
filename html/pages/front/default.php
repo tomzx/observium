@@ -237,7 +237,7 @@
 		    echo("                    <td><span class=\"label label-important\">Device Down</span></td>");
 		    echo("                    <td>-</td>");
 		    echo("                    <td>".$device['location']."</td>");
-		    echo("                    <td>-</td>");
+		    echo("                    <td>".deviceUptime($device, 'short')."</td>");
 		    echo("                </tr>");
 		}
 	    }
