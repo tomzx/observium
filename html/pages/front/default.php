@@ -9,7 +9,7 @@
  * @subpackage web
  * @author     Dennis de Houx <info@all-in-one.be>
  * @copyright  (C) 2006 - 2012 Adam Armstrong
- * @version    1.8.2
+ * @version    1.8.3
  *
  */
 
@@ -55,11 +55,19 @@
 		var data = new google.visualization.DataTable();
 		data.addColumn('string', 'Site');
 		data.addColumn('number', 'Status');
+		data.addColumn('number', 'Devices');
 		data.addColumn({type: 'string', role: 'tooltip'});
 		data.addRows([
 		<?php
 		    $locations_up = array();
 		    $locations_down = array();
+		    $deviceArray = array();
+		    foreach (dbFetchRows("SELECT * FROM devices") as $device) {
+			if (get_dev_attrib($device, 'override_sysLocation_boll') {
+			    $device['location'] = get_dev_attrib($device, 'override_sysLocation_string');
+			}
+			$devicesArray() = array("device_id" => $device['device_id'], "hostname" => $device['hostname'], "location" => $device['location'], "status" => $device['status'], "ignore" => $device['ignore'], "disabled" => $device['disabled']);
+		    }
 		    foreach (getlocations() as $location) {
 			$location = addslashes($location);
 			$devices = array();
@@ -67,20 +75,22 @@
 			$devices_up = array();
 			$count = 0;
 			$down  = 0;
-			// FIXME - doesn't handle sysLocation override.
-			foreach (dbFetchRows("SELECT * FROM devices WHERE location = ?", array($location)) as $device) {
-			    $devices[] = $device['hostname'];
-			    $devices_up[] = $device;
-			    $count++;
-			    if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname']." DOWN"; }
+			foreach ($devicesArray as $device) {
+			    if ($device['location'] == $location) {
+				$devices[] = $device['hostname'];
+				$devices_up[] = $device;
+				$count++;
+				if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname']." DOWN"; }
+			    }
 			}
 			$devices_down = array_merge(array(count($devices_up). " Devices OK"), $devices_down);
 			if ($down > 0) {
-			    $locations_down[]   = "['".$location."', 100, '".implode(", ", $devices_down)."']";
+			    $locations_down[]   = "['".$location."', 100, ".($count / 10).", '".implode(", ", $devices_down)."']";
 			} else {
-			    $locations_up[] = "['".$location."', 0, '".implode(", ", $devices_down)."']";
+			    $locations_up[] = "['".$location."', 0, ".($count / 10).", '".implode(", ", $devices_down)."']";
 			}
 		    }
+		    unset($devicesArray);
 		    echo(implode(",\n", array_merge($locations_up, $locations_down)));
 		?>
 		]);
@@ -93,9 +103,9 @@
 		    height: 500,
 		    backgroundColor: '#eeeeee',
 		    magnifyingGlass: {enable: true, zoomFactor: 8},
-		    colorAxis: {minValue: 0, maxValue: 100, colors: ['green', 'red']},
-		    markerOpacity: 0.90,
-		    sizeAxis: {minValue: 10,  maxValue: 10}
+		    colorAxis: {values: [0, 100], colors: ['green', 'red']},
+		    markerOpacity: 0.55
+		    /* sizeAxis: {minValue: 10,  maxValue: 10} */
 		};
 		var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
@@ -136,17 +146,17 @@
 		}
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span6 well\">");
-		echo("        <h3 class=\"bill\">Overall Transit Traffic Today</h2>");
+		echo("        <h3 class=\"bill\">Overall Transit Traffic Today</h3>");
 		echo("        <a href=\"iftype/type=transit/\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("    <div class=\"span6 well\">");
-		echo("        <h3 class=\"bill\">Overall Peering Traffic Today</h2>");
+		echo("        <h3 class=\"bill\">Overall Peering Traffic Today</h3>");
 		echo("        <a href=\"iftype/type=peering/\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("</div>");
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span12 well\">");
-		echo("        <h3 class=\"bill\">Overall Transit &amp; Peering Traffic This Month</h2>");
+		echo("        <h3 class=\"bill\">Overall Transit &amp; Peering Traffic This Month</h3>");
 		echo("        <a href=\"iftype/type=peering,transit/\"><img src=\"graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
 		echo("    </div>");
 		echo("</div>");
