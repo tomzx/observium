@@ -20,6 +20,8 @@ include("config.php");
 include("includes/definitions.inc.php");
 include("includes/functions.php");
 
+$debug=1;
+
 if (!empty($argv[1]))
 {
   $host      = strtolower($argv[1]);
@@ -29,7 +31,7 @@ if (!empty($argv[1]))
   $port = 161;
   $transport = 'udp';
 
-  if ($snmpver === "v3")
+  if ($snmpver == "v3")
   {
     $seclevel = $community;
 
@@ -43,7 +45,7 @@ if (!empty($argv[1]))
       'cryptoalgo' => "AES"
     );
 
-    if ($seclevel === "nanp" or $seclevel === "any" or $seclevel === "noAuthNoPriv")
+    if ($seclevel == "nanp" or $seclevel == "any" or $seclevel == "noAuthNoPriv")
     {
       $v3['authlevel'] = "noAuthNoPriv";
       $v3args = array_slice($argv, 4);
@@ -67,13 +69,13 @@ if (!empty($argv[1]))
 
       }
 
-      if ($seclevel === "nanp")
+      if ($seclevel == "nanp")
         { array_push($config['snmp']['v3'], $v3); }
 
       $device_id = addHost($host, $snmpver, $port, $transport);
 
     }
-    elseif ($seclevel === "anp" or $seclevel === "authNoPriv")
+    elseif ($seclevel == "anp" or $seclevel == "authNoPriv")
     {
 
       $v3['authlevel'] = "authNoPriv";
@@ -102,7 +104,7 @@ if (!empty($argv[1]))
       $device_id = addHost($host, $snmpver, $port, $transport);
 
     }
-    elseif ($seclevel === "ap" or $seclevel === "authPriv")
+    elseif ($seclevel == "ap" or $seclevel == "authPriv")
     {
       $v3['authlevel'] = "authPriv";
       $v3args = array_slice($argv, 4);
