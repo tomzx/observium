@@ -7,7 +7,7 @@
 
 if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
 {
-  echo("FTOS C-Series ");
+  echo("FTOS S-Series ");
 
   $oids = snmpwalk_cache_oid($device, "chStackUnitTemp", array(), "F10-S-SERIES-CHASSIS-MIB", $config['mib_dir'].":".$config['mib_dir']."/ftos" );
   $oids = snmpwalk_cache_oid($device, "chStackUnitSysType", $oids, "F10-S-SERIES-CHASSIS-MIB", $config['mib_dir'].":".$config['mib_dir']."/ftos" );
@@ -16,7 +16,7 @@ if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
   {
     foreach ($oids as $index => $entry)
     {
-      $descr = "Unit ".$index . " " . $entry['chStackUnitSysType'];
+      $descr = "Unit " . strval($index - 1) . " " . $entry['chStackUnitSysType'];
       $oid = ".1.3.6.1.4.1.6027.3.10.1.2.2.1.14.".$index;
       $current = $entry['chStackUnitTemp'];
       discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, 'ftos-sseries', $descr, '1', '1', NULL, NULL, NULL, NULL, $current);
