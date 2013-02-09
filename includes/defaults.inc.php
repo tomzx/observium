@@ -396,6 +396,9 @@ $config['auth_ldap_suffix'] = ",ou=People,dc=example,dc=com";
 $config['auth_ldap_group']  = "cn=observium,ou=groups,dc=example,dc=com";
 
 $config['auth_ldap_groupbase'] = "ou=group,dc=example,dc=com";
+$config['auth_ldap_groupmembertype'] = "nodn"; # Avialable types: 'nodn' (default, used $username),
+                                               # 'fulldn' ($config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'])
+$config['auth_ldap_groupmemberattr'] = "memberUid"; # Use your unique attribute for username, example "uniqueMember".
 $config['auth_ldap_groups']['admin']['level'] = 10;
 $config['auth_ldap_groups']['pfy']['level'] = 7;
 $config['auth_ldap_groups']['support']['level'] = 1;

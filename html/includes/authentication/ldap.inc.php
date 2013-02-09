@@ -7,9 +7,13 @@ if ($config['auth_ldap_starttls'] && ($config['auth_ldap_starttls'] == 'optional
   $tls = ldap_start_tls($ds);
   if ($config['auth_ldap_starttls'] == 'require' && $tls == FALSE)
   {
-   echo("<h2>Fatal error: LDAP TLS required but not successfully negotiated:" . ldap_error($ds) . "</h2>");
-   exit;
+    echo("<h2>Fatal error: LDAP TLS required but not successfully negotiated:" . ldap_error($ds) . "</h2>");
+    exit;
   }
+}
+if ($config['auth_ldap_version'])
+{
+  ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $config['auth_ldap_version']);
 }
 
 function authenticate($username,$password)
@@ -18,10 +22,6 @@ function authenticate($username,$password)
 
   if ($username && $ds)
   {
-    if ($config['auth_ldap_version'])
-    {
-      ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $config['auth_ldap_version']);
-    }
     if (ldap_bind($ds, $config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'], $password))
     {
       if (!$config['auth_ldap_group'])
@@ -30,7 +30,8 @@ function authenticate($username,$password)
       }
       else
       {
-        if (ldap_compare($ds,$config['auth_ldap_group'],'memberUid',$username))
+        $userdn = ($config['auth_ldap_groupmembertype'] == 'fulldn' ? $config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'] : $username);
+        if (ldap_compare($ds,$config['auth_ldap_group'],$config['auth_ldap_groupmemberattr'],$userdn))
         {
           return 1;
         }
@@ -92,7 +93,8 @@ function get_userlevel($username)
   $userlevel = 0;
 
   # Find all defined groups $username is in
-  $filter = "(&(|(cn=" . join(")(cn=", array_keys($config['auth_ldap_groups'])) . "))(memberUid=" . $username . "))";
+  $userdn = ($config['auth_ldap_groupmembertype'] == 'fulldn' ? $config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'] : $username);
+  $filter = "(&(|(cn=" . join(")(cn=", array_keys($config['auth_ldap_groups'])) . "))(" . $config['auth_ldap_groupmemberattr'] . "=" . $userdn . "))";
   $search = ldap_search($ds, $config['auth_ldap_groupbase'], $filter);
   $entries = ldap_get_entries($ds, $search);
 
