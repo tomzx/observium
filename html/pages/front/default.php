@@ -61,9 +61,9 @@
 		<?php
 		    $locations_up = array();
 		    $locations_down = array();
-		    $deviceArray = array();
+		    $devicesArray = array();
 		    foreach (dbFetchRows("SELECT * FROM devices") as $device) {
-			if (get_dev_attrib($device, 'override_sysLocation_boll')) {
+			if (get_dev_attrib($device, 'override_sysLocation_bool')) {
 			    $device['location'] = get_dev_attrib($device, 'override_sysLocation_string');
 			}
 			$devicesArray[] = array("device_id" => $device['device_id'], "hostname" => $device['hostname'], "location" => $device['location'], "status" => $device['status'], "ignore" => $device['ignore'], "disabled" => $device['disabled']);
