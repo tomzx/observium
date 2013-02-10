@@ -18,6 +18,8 @@ chdir(dirname($argv[0]));
 # Disable annoying messages... well... all messages actually :)
 error_reporting(0);
 
+$debug=1;
+
 include_once("includes/defaults.inc.php");
 include_once("config.php");
 include("includes/definitions.inc.php");
@@ -155,7 +157,13 @@ if (!$device) {
     mysql_select_db($config['db_name']);
 
     $device = dbFetchRow("SELECT * FROM `devices` WHERE `hostname` = ?",array($hostname));
-    $port   = dbFetchRow("SELECT * FROM `ports` WHERE `ifName` = ? OR `ifDescr` = ? AND device_id = ?", array($ifname, $ifname, $device['device_id']));
+
+    $sql  = "SELECT *, `ports`.`port_id` as `port_id`";
+    $sql .= " FROM  `ports`";
+    $sql .= " LEFT JOIN  `ports-state` ON  `ports`.port_id =  `ports-state`.port_id";
+    $sql .= " WHERE ports.`ifName` = ? OR ports.`ifDescr` = ? AND ports.device_id = ?";
+
+    $port = dbFetchRow($sql, array($ifname, $ifname, $device['device_id']));
 
     mysql_close();
 
@@ -170,6 +178,38 @@ if (!$device) {
     echo date("m-d-y H:i:s ");
     echo "PORT\t\t\t" . $hostname . "\t". $ifname . "\n";
   }
+
+///
+# LISTPORTS Function
+///
+  function list_ports(&$irc, &$data)
+  {
+    global $config;
+
+    unset ($message);
+
+    $hostname = $data->messageex[1];
+
+    mysql_connect($config['db_host'],$config['db_user'],$config['db_pass']);
+    mysql_select_db($config['db_name']);
+
+    $device = dbFetchRow("SELECT * FROM `devices` WHERE `hostname` = ?",array($hostname));
+    $ports   = dbFetchRows("SELECT * FROM `ports` WHERE device_id = ?", array($device['device_id']));
+
+    mysql_close();
+
+    foreach ($ports as $port)
+    {
+      $message .= $sep . $port['ifDescr'];
+      $sep = ", ";
+    }
+    $irc->message(SMARTIRC_TYPE_CHANNEL, $data->channel, $message);
+
+    echo date("m-d-y H:i:s ");
+    echo "LISTPORTS\t\t\t" . $hostname . "\n";
+
+}
+
 
 ///
 # LISTDEVICES Function
@@ -247,14 +287,15 @@ $bot = &new observiumbot();
 $irc = &new Net_SmartIRC();
 $irc->setUseSockets(TRUE);
 
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.listdevices', $bot, 'list_devices');
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.device', $bot, 'device_info');
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.port', $bot, 'port_info');
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.down', $bot, 'down_info');
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.version', $bot, 'version_info');
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.status', $bot, 'status_info');
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.log', $bot, 'log_info');
-$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '.help', $bot, 'help_info');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!listdevices', $bot, 'list_devices');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!listports', $bot, 'list_ports');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!device', $bot, 'device_info');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!port', $bot, 'port_info');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!down', $bot, 'down_info');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!version', $bot, 'version_info');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!status', $bot, 'status_info');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!log', $bot, 'log_info');
+$irc->registerActionhandler(SMARTIRC_TYPE_CHANNEL, '!help', $bot, 'help_info');
 
 $irc->connect($config['irc_host'], $config['irc_port']);
 $irc->login($config['irc_nick'], 'Observium Bot', 0, $config['irc_nick']);
