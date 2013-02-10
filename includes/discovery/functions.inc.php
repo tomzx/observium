@@ -1,22 +1,48 @@
 <?php
 
 /* Observium Network Management and Monitoring System
- * Copyright (C) 2006-2013, Observium Developers - http://www.observium.org
+ * Copyright (C) 2006-2013, Adam Armstrong - http://www.observium.org
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * See COPYING for more details.
  */
+
+function discover_new_device_ip($host)
+{
+  global $config;
+
+  if (match_network($config['autodiscovery']['ip_nets'], $host))
+  {
+    if (isPingable($host)) {
+      echo("Pingable ");
+      foreach ($config['snmp']['community'] as $community)
+      {
+        $device = deviceArray($host, $community, "v2c", "161", "udp", NULL);
+        print_message("Trying community $community ...");
+        if (isSNMPable($device))
+        {
+          echo("SNMPable ");
+          $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
+          if (dbFetchCell("SELECT COUNT(device_id) FROM devices WHERE sysName = ?", array($snmphost)) == '0')
+          {
+            $device_id = createHost($snmphost, $community, "v2c", "161", "udp");
+            $device = device_by_id_cache($device_id, 1);
+            array_push($GLOBALS['devices'], $device);
+            return $device_id;
+          } else {
+            echo("Already have host with sysName $snmphost\n");
+          }
+        }
+      }
+    }
+  }
+}
+
 
 function discover_new_device($hostname)
 {
   global $config, $debug;
-
   if ($config['autodiscovery']['xdp'])
   {
+    echo("Discovering new host $hostname\n");
     if (!empty($config['mydomain']) && isDomainResolves($hostname . "." . $config['mydomain']) )
     {
       if ($debug) { echo("appending " . $config['mydomain'] . "!\n"); }
@@ -29,16 +55,14 @@ function discover_new_device($hostname)
 
     if ($debug) { echo("resolving $dst_host to $ip\n"); }
 
-    if (match_network($config['nets'], $ip))
+    if (match_network($config['autodiscovery']['ip_nets'], $ip))
     {
       if ($debug) { echo("found $ip inside configured nets, adding!\n"); }
       $remote_device_id = addHost ($dst_host);
       if ($remote_device_id)
       {
         $remote_device = device_by_id_cache($remote_device_id, 1);
-        echo("+[".$remote_device['hostname']."(".$remote_device['device_id'].")]");
-        discover_device($remote_device);
-        $remote_device = device_by_id_cache($remote_device_id, 1);
+        array_push($GLOBALS['devices'], $remote_device);
         return $remote_device_id;
       }
     }
@@ -81,9 +105,11 @@ function discover_device($device, $options = NULL)
   // If we've specified a module, use that, else walk the modules array
   if ($options['m'])
   {
-    if (is_file("includes/discovery/".$options['m'].".inc.php"))
-    {
-      include("includes/discovery/".$options['m'].".inc.php");
+    foreach(explode(",", $options['m']) as $module) {
+      if (is_file("includes/discovery/".$module.".inc.php"))
+      {
+        include("includes/discovery/".$module.".inc.php");
+      }
     }
   } else {
     foreach ($config['discovery_modules'] as $module => $module_status)

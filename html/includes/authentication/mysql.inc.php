@@ -71,12 +71,12 @@ function auth_usermanagement()
   return 1;
 }
 
-function adduser($username, $password, $level, $email = "", $realname = "", $can_modify_passwd='1')
+function adduser($username, $password, $level, $email = "", $realname = "", $can_modify_passwd='1', $description = "")
 {
   if (!user_exists($username))
   {
     $encrypted = crypt($password,'$1$' . generateSalt(8).'$');
-    return dbInsert(array('username' => $username, 'password' => $encrypted, 'level' => $level, 'email' => $email, 'realname' => $realname, 'can_modify_passwd' => $can_modify_passwd), 'users');
+    return dbInsert(array('username' => $username, 'password' => $encrypted, 'level' => $level, 'email' => $email, 'realname' => $realname, 'can_modify_passwd' => $can_modify_passwd, 'descr' => $description), 'users');
   } else {
     return FALSE;
   }

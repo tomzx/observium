@@ -327,51 +327,7 @@ $row = 1;
 list($format, $subformat) = explode("_", $vars['format']);
 $ports = dbFetchRows($sql, $param);
 
-switch ($vars['sort'])
-{
-  case 'traffic':
-    $ports = array_sort($ports, 'ifOctets_rate', SORT_DESC);
-    break;
-  case 'traffic_in':
-    $ports = array_sort($ports, 'ifInOctets_rate', SORT_DESC);
-    break;
-  case 'traffic_out':
-    $ports = array_sort($ports, 'ifOutOctets_rate', SORT_DESC);
-    break;
-  case 'traffic_perc_in':
-    $ports = array_sort($ports, 'ifInOctets_perc', SORT_DESC);
-    break;
-  case 'traffic_perc_out':
-    $ports = array_sort($ports, 'ifOutOctets_perc', SORT_DESC);
-    break;
-  case 'packets':
-    $ports = array_sort($ports, 'ifUcastPkts_rate', SORT_DESC);
-    break;
-  case 'packets_in':
-    $ports = array_sort($ports, 'ifInUcastOctets_rate', SORT_DESC);
-    break;
-  case 'packets_out':
-    $ports = array_sort($ports, 'ifOutUcastOctets_rate', SORT_DESC);
-    break;
-  case 'errors':
-    $ports = array_sort($ports, 'ifErrors_rate', SORT_DESC);
-    break;
-  case 'speed':
-    $ports = array_sort($ports, 'ifSpeed', SORT_DESC);
-    break;
-  case 'port':
-    $ports = array_sort($ports, 'ifDescr', SORT_ASC);
-    break;
-  case 'media':
-    $ports = array_sort($ports, 'ifType', SORT_ASC);
-    break;
-  case 'descr':
-    $ports = array_sort($ports, 'ifAlias', SORT_ASC);
-    break;
-  case 'device':
-  default:
-    $ports = array_sort($ports, 'hostname', SORT_ASC);
-}
+include("includes/port-sort.inc.php");
 
 if(file_exists('pages/ports/'.$format.'.inc.php'))
 {

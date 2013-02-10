@@ -184,6 +184,8 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
   else { return false; }
 }
 
+
+
 function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = NULL)
 {
   $data = snmp_walk($device, $oid, "-Oqs", $mib, $mibdir, FALSE);
@@ -390,6 +392,24 @@ function snmp_cache_ifIndex($device)
 
   return $array;
 }
+
+function snmpwalk_values($device, $oid, $array, $mib = NULL, $mibdir = NULL)
+{
+  $data = snmp_walk($device, $oid, "-OQUs", $mib, $mibdir);
+  foreach (explode("\n", $data) as $entry)
+  {
+    list($oid,$value) = explode("=", $entry);
+    $oid = trim($oid); $value = trim($value);
+    list($oid, $index) = explode(".", $oid, 2);
+    if (!strstr($value, "at this OID") && isset($oid) && isset($index))
+    {
+      $array[] = $value;
+    }
+  }
+
+  return $array;
+}
+
 
 function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {

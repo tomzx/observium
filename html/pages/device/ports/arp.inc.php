@@ -1,6 +1,5 @@
 <?php
 
-
 echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");

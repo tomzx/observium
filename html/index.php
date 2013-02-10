@@ -183,6 +183,8 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 
   </script>
 
+  <link href="css/bootstrap-switch.css" rel="stylesheet">
+  <script src="js/jquery.switch.js"></script>
 
   <?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
   <!--[if IE]><script src="js/html5.js"></script><![endif]-->

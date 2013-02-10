@@ -60,6 +60,13 @@ function formatUptime($diff, $format="long")
   return trim($uptime);
 }
 
+function humanspeed($speed)
+{
+  $speed = formatRates($speed);
+  if ($speed == "") { $speed = "-"; }
+  return $speed;
+}
+
 function formatCiscoHardware(&$device, $short = false)
 {
   if ($device['os'] == "ios")

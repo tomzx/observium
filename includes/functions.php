@@ -414,14 +414,23 @@ function createHost($host, $community = NULL, $snmpver, $port = 161, $transport 
 
   $device = array_merge($device, $v3);
 
-  $device['os'] = getHostOS($device);
+  $device['os']          = getHostOS($device);
+  $device['sysName']     = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
+  $device['location']    = snmp_get($device, "sysLocation.0", "-Oqv", "SNMPv2-MIB");
+  $device['sysContact']  = snmp_get($device, "sysContact.0", "-Oqv", "SNMPv2-MIB");
 
   if ($device['os'])
   {
     $device_id = dbInsert($device, 'devices');
-
     if ($device_id)
     {
+      echo("Discovering ".$device['hostname']." (".$device_id.")");
+      $device['device_id'] = $device_id;
+      // Discover things we need when linking this to other hosts.
+      discover_device($device, $options = array('m' => 'ports'));
+      discover_device($device, $options = array('m' => 'ipv4-addresses'));
+      discover_device($device, $options = array('m' => 'ipv6-addresses'));
+      array_push($GLOBAL['devices'], $device_id);
       return($device_id);
     }
     else

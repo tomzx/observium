@@ -1,51 +1,38 @@
+<h2>Observium User Managment: Authlog</h2>
 <?php
 
-if ($_SESSION['userlevel'] == '10')
-{
+include("usermenu.inc.php");
 
-  echo("<h2>Authentication Log</h2>");
+if ($_SESSION['userlevel'] == '10') {
+  echo("
+<table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">
+  <thead>
+    <tr>
+      <th style=\"width: 200px;\">Date</th>
+      <th style=\"width: 200px;\">User</th>
+      <th style=\"width: 200px;\">From</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>");
 
-  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded">');
-
-  echo("  <thead>");
-  echo("    <tr>");
-  echo("      <th>Date / Time</th>");
-  echo("      <th>User</th>");
-  echo("      <th>IP Address</th>");
-  echo("      <th>Event</th>");
-  echo("      <th>Details</th>");
-  echo("    </tr>");
-  echo("  </thead>");
-
-  /// FIXME - pagination
-
-  foreach (dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `authlog` ORDER BY `datetime` DESC LIMIT 0,250") as $entry)
-  {
-    if ($bg == $list_colour_a) { $bg = $list_colour_b; } else { $bg=$list_colour_a; }
-
-    echo("<tr style=\"background-color: $bg\">
-     <td class=syslog width=160>
-       " . $entry['datetime'] . "
-     </td>
-     <td class=list-bold width=125>
-       ".$entry['user']."
-     </td>
-     <td class=syslog width=250>
-       ".$entry['address']."
-     </td>
-     <td class=syslog width=150>
-       ".$entry['result']."
-     </td>
-     <td></td>
-   ");
+  foreach (dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `authlog` ORDER BY `datetime` DESC LIMIT 0,250") as $entry) {
+    $class = "";
+    if (strstr(strtolower($entry['result']), 'fail', true))	  { $class = " class=\"error\""; }
+    echo("
+    <tr".$class.">
+      <td>".$entry['datetime']."</td>
+      <td>".$entry['user']."</td>
+      <td>".$entry['address']."</td>
+      <td>".$entry['result']."</td>
+    </tr>");
   }
 
   $pagetitle[] = "Authlog";
 
-  echo("</table>");
-}
-else
-{
+  echo("  </tbody>\n");
+  echo("</table>\n");
+} else {
   include("includes/error-no-perm.inc.php");
 }
 

@@ -98,7 +98,13 @@ include("includes/sql-schema/update.php");
 
 $discovered_devices = 0;
 
+$devices = array();
 foreach (dbFetch("SELECT * FROM `devices` WHERE status = 1 AND disabled = 0 $where ORDER BY device_id DESC") as $device)
+{
+  array_push($devices, $device);
+}
+
+while($device = array_pop($devices))
 {
   discover_device($device, $options);
 }
@@ -115,7 +121,7 @@ $string = $argv[0] . " $doing " .  date("F j, Y, G:i") . " - $discovered_devices
 if ($debug) echo("$string\n");
 
 if($options['h'] != "new" && $config['version_check']) {
-  include("includes/versioncheck.inc.php");
+#  include("includes/versioncheck.inc.php");
 }
 
 if (!isset($options['q']))

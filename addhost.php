@@ -19,6 +19,7 @@ include("includes/defaults.inc.php");
 include("config.php");
 include("includes/definitions.inc.php");
 include("includes/functions.php");
+include("includes/discovery/functions.inc.php");
 
 $debug=1;
 

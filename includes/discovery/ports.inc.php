@@ -4,6 +4,7 @@
 
 $port_stats = array();
 $port_stats = snmpwalk_cache_oid($device, "ifDescr", $port_stats, "IF-MIB");
+$port_stats = snmpwalk_cache_oid($device, "ifAlias", $port_stats, "IF-MIB");
 $port_stats = snmpwalk_cache_oid($device, "ifName", $port_stats, "IF-MIB");
 $port_stats = snmpwalk_cache_oid($device, "ifType", $port_stats, "IF-MIB");
 
@@ -31,7 +32,7 @@ foreach ($port_stats as $ifIndex => $port)
   {
     if (!is_array($ports_db[$ifIndex]))
     {
-      $port_id = dbInsert(array('device_id' => $device['device_id'], 'ifIndex' => $ifIndex), 'ports');
+      $port_id = dbInsert(array('device_id' => $device['device_id'], 'ifIndex' => $ifIndex, 'ifAlias' => $port['ifAlias'], 'ifDescr' => $port['ifDescr'], 'ifName' => $port['ifName'], 'ifType' => $port['ifType']), 'ports');
       $ports_db[$ifIndex] = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?", array($device['device_id'], $ifIndex));
       echo("Adding: ".$port['ifName']."(".$ifIndex.")(".$ports_db[$port['ifIndex']]['port_id'].")");
     } elseif ($ports_db[$ifIndex]['deleted'] == "1") {

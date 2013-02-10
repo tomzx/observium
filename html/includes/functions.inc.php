@@ -684,13 +684,6 @@ function humanmedia($media)
   return $media;
 }
 
-function humanspeed($speed)
-{
-  $speed = formatRates($speed);
-  if ($speed == "") { $speed = "-"; }
-  return $speed;
-}
-
 function devclass($device)
 {
   if (isset($device['status']) && $device['status'] == '0') { $class = "list-device-down"; } else { $class = "list-device"; }

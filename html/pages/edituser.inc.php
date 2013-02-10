@@ -1,5 +1,7 @@
+<h2>Observium User Management</h2>
 <?php
 
+include("usermenu.inc.php");
 include("includes/javascript-interfacepicker.inc.php");
 
 echo("<div style='margin: 10px;'>");

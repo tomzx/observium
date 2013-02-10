@@ -133,7 +133,8 @@ $config['snmp']['v3'][0]['cryptoalgo'] = "AES";          # AES | DES
 $config['autodiscovery']['xdp']            = TRUE; // Autodiscover hosts via discovery protocols
 $config['autodiscovery']['ospf']           = TRUE; // Autodiscover hosts via OSPF
 $config['autodiscovery']['bgp']            = TRUE; // Autodiscover hosts via BGP
-$config['autodiscovery']['snmpscan']       = TRUE; // autodiscover hosts via SNMP scanning
+$config['autodiscovery']['snmpscan']       = TRUE; // Autodiscover hosts via SNMP scanning
+$config['autodiscovery']['ip_nets']	   = array("127.0.0.0/8", "192.168.0.0/16", "10.0.0.0/8", "172.0.0.0/8");  // Networks to permit autodiscovery
 
 $config['discover_services']               = FALSE; // Autodiscover services via SNMP on devices of type "server"
 
