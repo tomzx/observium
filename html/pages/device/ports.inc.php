@@ -27,6 +27,7 @@ if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `device_id` = ?", array($
 if(dbFetchCell("SELECT * FROM links AS L, ports AS I WHERE I.device_id = ? AND I.port_id = L.local_port_id", array($device['device_id'])))
 {
   $menu_options['neighbours'] = 'Neighbours';
+  $menu_options['map']        = 'Map';
 }
 if(dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `ifType` = 'adsl' AND `device_id` = ?", array($device['device_id'])))
 {
@@ -48,8 +49,8 @@ unset($sep);
 echo(' | Graphs: ');
 
 $graph_types = array("bits" => "Bits",
-                     "upkts" => "Unicast Packets",
-                     "nupkts" => "Non-Unicast Packets",
+                     "upkts" => "Ucast Packets",
+                     "nupkts" => "NUcast Packets",
                      "errors" => "Errors",
                      "etherlike" => "Etherlike");
 
@@ -93,7 +94,7 @@ if ($vars['view'] == 'minigraphs')
     </div>");
   }
   echo("</div>");
-} elseif ($vars['view'] == "arp" || $vars['view'] == "adsl" || $vars['view'] == "neighbours" || $vars['view'] == "fdb") {
+} elseif ($vars['view'] == "arp" || $vars['view'] == "adsl" || $vars['view'] == "neighbours" || $vars['view'] == "fdb" || $vars['view'] == "map") {
   include("ports/".$vars['view'].".inc.php");
 } else {
   if ($vars['view'] == "details") { $port_details = 1; }
@@ -134,7 +135,14 @@ echo('  </thead>');
 
   global $port_cache, $port_index_cache;
 
-  $ports = dbFetchRows("SELECT * FROM `ports` AS P, `ports-state` AS S WHERE S.port_id = P.port_id AND P.`device_id` = ? AND P.`deleted` = '0' ORDER BY `ifIndex` ASC", array($device['device_id']));
+  $sql  = "SELECT *, `ports`.`port_id` as `port_id`";
+  $sql .= " FROM  `ports`";
+  $sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
+  $sql .= " WHERE `device_id` = ? ORDER BY `ifIndex` ASC";
+  $ports = dbFetchRows($sql, array($device['device_id']));
+
+  // Sort ports, sharing code with global ports page.
+  include("includes/port-sort.inc.php");
 
   // As we've dragged the whole database, lets pre-populate our caches :)
   // FIXME - we should probably split the fetching of link/stack/etc into functions and cache them here too to cut down on single row queries.
