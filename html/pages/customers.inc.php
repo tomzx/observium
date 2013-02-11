@@ -1,8 +1,9 @@
 <?php
 
-echo("<table border=0 cellspacing=0 cellpadding=2 class=devicetable width=100%>");
-
-echo("
+  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="margin-top: 10px;">');
+  if ($subformat == "detail")
+  {
+  echo("  <thead>
       <tr bgcolor='$list_colour_a'>
         <th width='7'></th>
         <th width='250'><span style='font-weight: bold;' class=interface>Customer</span></th>
@@ -12,7 +13,9 @@ echo("
         <th width='100'>Circuit</th>
         <th>Notes</th>
       </tr>
-     ");
+  </thead>\n");
+  }
+
 
 $i = 1;
 
@@ -59,7 +62,7 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GRO
 
   if ($config['int_customers_graphs']) {
   
-    echo("<tr bgcolor='$bg_colour'><td></td><td colspan=6>");
+    echo("<tr bgcolor='$bg_colour'><td colspan=7>");
 
     $graph_array['type']   = "customer_bits";
     $graph_array['height'] = "100";
