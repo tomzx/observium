@@ -537,6 +537,7 @@ $config['discovery_modules']['sensors']                   = 1;
 $config['discovery_modules']['storage']                   = 1;
 $config['discovery_modules']['hr-device']                 = 1;
 $config['discovery_modules']['discovery-protocols']       = 1;
+$config['discovery_modules']['ospf-autodiscovery']        = 1;
 $config['discovery_modules']['arp-table']                 = 1;
 $config['discovery_modules']['junose-atm-vp']             = 1;
 $config['discovery_modules']['bgp-peers']                 = 1;
