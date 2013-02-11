@@ -226,10 +226,10 @@ h3.bill > i {
   padding: 3px 5px 1px 5px;
 }
 
-.table-striped-two tbody tr:nth-child(4n) td,
-.table-striped-two tbody tr:nth-child(4n) th,
-.table-striped-two tbody tr:nth-child(4n-1) td,
-.table-striped-two tbody tr:nth-child(4n-1) th {
+.table-striped-two tbody tr:nth-child(4n-2) td,
+.table-striped-two tbody tr:nth-child(4n-2) th,
+.table-striped-two tbody tr:nth-child(4n-3) td,
+.table-striped-two tbody tr:nth-child(4n-3) th {
   background-color: #f9f9f9;
 }
 

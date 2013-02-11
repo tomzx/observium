@@ -1,11 +1,8 @@
 <?php
 
-  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="margin-top: 10px;">');
-  if ($subformat == "detail")
-  {
+  echo('<table class="table table-hover table-striped-two table-bordered table-condensed table-rounded" style="margin-top: 10px;">');
   echo("  <thead>
-      <tr bgcolor='$list_colour_a'>
-        <th width='7'></th>
+      <tr>
         <th width='250'><span style='font-weight: bold;' class=interface>Customer</span></th>
         <th width='150'>Device</th>
         <th width='100'>Interface</th>
@@ -14,20 +11,12 @@
         <th>Notes</th>
       </tr>
   </thead>\n");
-  }
-
-
-$i = 1;
 
 $pagetitle[] = "Customers";
 
 foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GROUP BY `port_descr_descr` ORDER BY `port_descr_descr`") as $customer)
 {
-  $i++;
-
   $customer_name = $customer['port_descr_descr'];
-
-  if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
 
   foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' AND `port_descr_descr` = ?", array($customer['port_descr_descr'])) as $port)
   {
@@ -47,7 +36,6 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GRO
 
     echo("
            <tr bgcolor='$bg_colour'>
-             <td width='7'></td>
              <td width='250'><span style='font-weight: bold;' class=interface>".$customer_name."</span></td>
              <td width='150'>" . generate_device_link($device) . "</td>
              <td width='100'>" . generate_port_link($port, makeshortif($port['ifDescr'])) . "</td>
@@ -62,11 +50,9 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GRO
 
   if ($config['int_customers_graphs']) {
   
-    echo("<tr bgcolor='$bg_colour'><td colspan=7>");
+    echo("<tr><td colspan=7>");
 
     $graph_array['type']   = "customer_bits";
-    $graph_array['height'] = "100";
-    $graph_array['width']  = "220";
     $graph_array['to']     = $config['time']['now'];
     $graph_array['id']     = $customer['port_descr_descr'];
 
