@@ -9,7 +9,7 @@
  * @subpackage web
  * @author     Dennis de Houx <info@all-in-one.be>
  * @copyright  (C) 2006 - 2012 Adam Armstrong
- * @version    1.8.3
+ * @version    1.8.4
  *
  */
 
@@ -144,22 +144,26 @@
 		    $ports['core'] .= $seperator . $interface['port_id'];
 		    $seperator = ",";
 		}
+		$links['transit']	= generate_url(array("page" => "iftype", "type" => "transit"));
+		$links['peering']	= generate_url(array("page" => "iftype", "type" => "peering"));
+		$links['peer_trans']	= generate_url(array("page" => "iftype", "type" => "peering,transit"));
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span6 well\">");
 		echo("        <h3 class=\"bill\">Overall Transit Traffic Today</h3>");
-		echo("        <a href=\"iftype/type=transit/\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
+		echo("        <a href=\"".$links['transit']."\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("    <div class=\"span6 well\">");
 		echo("        <h3 class=\"bill\">Overall Peering Traffic Today</h3>");
-		echo("        <a href=\"iftype/type=peering/\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
+		echo("        <a href=\"".$links['peering']."\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("</div>");
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span12 well\">");
 		echo("        <h3 class=\"bill\">Overall Transit &amp; Peering Traffic This Month</h3>");
-		echo("        <a href=\"iftype/type=peering,transit/\"><img src=\"graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
+		echo("        <a href=\"".$links['peer_trans']."\"><img src=\"graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
 		echo("    </div>");
 		echo("</div>");
+		unset($links);
 	    }
 	}
     }
@@ -203,11 +207,14 @@
 		foreach($minigraphs as $graph) {
 		    list($device, $type, $header) = explode(",", $graph, 3);
 		    if (strpos($type, "device") === false) {
-			echo("        <strong>".$header."</strong><br><a href=\"graphs/type=".$type."/id=".$device."/from=".$config['time']['day']."/to=".$config['time']['now']."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
+			$links = generate_url(array("page" => "graphs", "type" => $type, "id" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
+			echo("        <strong>".$header."</strong><br><a href=\"".links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
 		    } else {
-			echo("        <strong>".$header."</strong><br><a href=\"graphs/type=".$type."/device=".$device."/from=".$config['time']['day']."/to=".$config['time']['now']."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
+			$links = generate_url(array("page" => "graphs", "type" => $type, "device" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
+			echo("        <strong>".$header."</strong><br><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
 		    }
 		}
+		unset($links);
 		echo("    </div>");
 		echo("</div>");
 	    }
