@@ -566,7 +566,7 @@ $config['api']['module']['inventory']		= 0;	// Enable or disable the inventory m
 $config['api']['module']['billing']		= 0;	// Enable or disable the billing module for the API
 $config['api']['module']['packages']		= 0;	// Enable or disable the packages module for the API
 $config['api']['module']['encryption']		= 0;	// Enable encryption of data (be aware that this can be very slow and cpu intensive!!!)
-$config['api']['encryption']['key']		= "I_Need_To_Chance_This_Key";	// Set a random encryption/decryption key
+$config['api']['encryption']['key']		= "I_Need_To_Change_This_Key";	// Set a random encryption/decryption key
 
 
 ?>
