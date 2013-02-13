@@ -7,13 +7,7 @@ include("includes/geshi/geshi.php");
 if ($_SESSION['userlevel'] >= "7")
 {
 
-  if (!is_array($config['rancid_configs'])) { $config['rancid_configs'] = array($config['rancid_configs']); }
-
-  foreach ($config['rancid_configs'] as $configs)
-  {
-    if ($configs[strlen($configs)-1] != '/') { $configs .= '/'; }
-    if (is_file($configs . $device['hostname'])) { $file = $configs . $device['hostname']; }
-  }
+  // Already defined $config_file in device.inc.php
 
   echo('<div style="clear: both;">');
 
@@ -62,7 +56,6 @@ if ($_SESSION['userlevel'] >= "7")
       fclose($diff);
       fclose($errors);
     }
-
   } else {
     $fh = fopen($file, 'r') or die("Can't open file");
     $text = fread($fh, filesize($file));
@@ -83,8 +76,12 @@ if ($_SESSION['userlevel'] >= "7")
   $geshi = new GeSHi($text, $language);
   $geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS);
   $geshi->set_overall_style('color: black;');
-  #$geshi->set_line_style('color: #999999');
+  ##$geshi->set_line_style('color: #999999');
   echo($geshi->parse_code());
+  #echo("<pre class=\"prettyprint linenums\">");
+  #echo($text);
+  #echo("</pre>");
+  #echo("<script type=\"text/javascript\">window.prettyPrint && prettyPrint();</script>");
 }
 
 $pagetitle[] = "Config";

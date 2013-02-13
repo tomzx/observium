@@ -325,10 +325,10 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     if ($_SESSION['userlevel'] >= "7")
     {
       if (!is_array($config['rancid_configs'])) { $config['rancid_configs'] = array($config['rancid_configs']); }
-      foreach ($config['rancid_configs'] as $configs)
+      foreach ($config['rancid_configs'] as $configfile)
       {
-        if ($configs[strlen($configs)-1] != '/') { $configs .= '/'; }
-        if (is_file($configs . $device['hostname'])) { $device_config_file = $configs . $device['hostname']; }
+        if ($configfile[strlen($configfile)-1] != '/') { $configfile .= '/' . $device['hostname']; } else { $configfile = $configfile . $device['hostname']; }
+        if (is_file($configfile)) { $file = $configfile; } else { echo($configfile); }
       }
     }
 

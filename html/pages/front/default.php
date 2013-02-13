@@ -84,10 +84,11 @@
 			    }
 			}
 			$devices_down = array_merge(array(count($devices_up). " Devices OK"), $devices_down);
+			$count = (($count < 100) ? $count : "100");
 			if ($down > 0) {
-			    $locations_down[]   = "['".$location."', 100, ".($count / 10).", '".implode(", ", $devices_down)."']";
+			    $locations_down[]   = "['".$location."', 100, ".$count.", '".implode(", ", $devices_down)."']";
 			} else {
-			    $locations_up[] = "['".$location."', 0, ".($count / 10).", '".implode(", ", $devices_down)."']";
+			    $locations_up[] = "['".$location."', 0, ".$count.", '".implode(", ", $devices_down)."']";
 			}
 		    }
 		    unset($devicesArray);
@@ -104,8 +105,8 @@
 		    backgroundColor: '#eeeeee',
 		    magnifyingGlass: {enable: true, zoomFactor: 8},
 		    colorAxis: {values: [0, 100], colors: ['green', 'red']},
-		    markerOpacity: 0.55
-		    /* sizeAxis: {minValue: 10,  maxValue: 10} */
+		    markerOpacity: 0.50,
+		    sizeAxis: {minValue: 1,  maxValue: 20, minSize: 10, maxSize: 30}
 		};
 		var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
 		chart.draw(data, options);

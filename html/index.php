@@ -126,6 +126,7 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link href="<?php echo("css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap-responsive.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap-observium.css");  ?>" rel="stylesheet" type="text/css" />
+  <link href="<?php echo("css/google-code-prettify.css");  ?>" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="css/mktree.css" type="text/css" />
   <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
 
@@ -139,6 +140,7 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery-checkbox.js"></script>
   <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
+  <script type="text/javascript" src="js/google-code-prettify.js"></script>
   <!--[if lt IE 9]>
     <script type="text/javascript" src="tipped/js/excanvas/excanvas.js"></script>
   <![endif]-->
