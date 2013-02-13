@@ -45,7 +45,7 @@
 	if ($config['frontpage']['map']['show']) {
 ?>
 <div class="row-fluid">
-    <div class="span12" style="margin: 0px 15px; margin-bottom: 20px;">
+    <div class="span12 well" style="background-color: #cceef0;">
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 	    google.load('visualization', '1', {'packages': ['geochart']});
@@ -101,10 +101,12 @@
 		    keepAspectRatio: 0,
 		    width: 1175,
 		    height: 500,
-                    is3D: true,
-                    legend: 'none',
+		    is3D: true,
+		    legend: 'none',
+		    //datalessRegionColor: '#93CA76',
                     datalessRegionColor: '#93CA76',
-		    backgroundColor: {fill: '#cceef0', stroke: '#e5e5e5', strokeWidth: '5'},
+		    backgroundColor: {fill: '#cceef0'},
+		    //backgroundColor: {fill: '#cceef0', stroke: '#e5e5e5', strokeWidth: '5'},
 		    magnifyingGlass: {enable: true, zoomFactor: 8},
 		    colorAxis: {values: [0, 100], colors: ['green', 'red']},
 		    markerOpacity: 0.50,
