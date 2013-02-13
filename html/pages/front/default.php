@@ -45,8 +45,7 @@
 	if ($config['frontpage']['map']['show']) {
 ?>
 <div class="row-fluid">
-    <div class="span12 well">
-	<h3 class="bill">Globe Overview</h3>
+    <div class="span12" style="margin: 0px 15px; margin-bottom: 20px;">
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 	    google.load('visualization', '1', {'packages': ['geochart']});
@@ -102,7 +101,9 @@
 		    keepAspectRatio: 0,
 		    width: 1175,
 		    height: 500,
-		    backgroundColor: '#eeeeee',
+                    is3D: true,
+                    datalessRegionColor: '#93CA76',
+		    backgroundColor: {fill: '#cceef0', stroke: '#e5e5e5', strokeWidth: '5'},
 		    magnifyingGlass: {enable: true, zoomFactor: 8},
 		    colorAxis: {values: [0, 100], colors: ['green', 'red']},
 		    markerOpacity: 0.50,
@@ -209,10 +210,10 @@
 		    list($device, $type, $header) = explode(",", $graph, 3);
 		    if (strpos($type, "device") === false) {
 			$links = generate_url(array("page" => "graphs", "type" => $type, "id" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
-			echo("        <strong>".$header."</strong><br><a href=\"".links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
+			echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
 		    } else {
 			$links = generate_url(array("page" => "graphs", "type" => $type, "device" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
-			echo("        <strong>".$header."</strong><br><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a>");
+			echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
 		    }
 		}
 		unset($links);
