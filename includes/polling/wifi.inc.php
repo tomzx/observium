@@ -1,6 +1,6 @@
 <?php
 
-if ($device['type'] == 'network' || $device['type'] == 'firewall')
+if ($device['type'] == 'network' || $device['type'] == 'firewall' || $device['type'] == 'wireless')
 {
   echo("Wireless: ");
 
@@ -26,7 +26,7 @@ if ($device['type'] == 'network' || $device['type'] == 'firewall')
     echo(($wificlients1 +0) . " clients on dot11Radio0, " . ($wificlients2 +0) . " clients on dot11Radio1\n");
   }
 
-  #MikroTik RouterOS
+  # MikroTik RouterOS
   if ($device['os'] == 'routeros')
   {
     # Check inventory for wireless card in device. Valid types be here:
@@ -44,6 +44,16 @@ if ($device['type'] == 'network' || $device['type'] == 'firewall')
       }
       unset($wirelesscards);
     }
+  }
+
+  # Senao/Engenius
+  if ($device['os'] == 'engenius')
+  {
+    echo("Checking Engenius Wireless clients... ");
+
+    $wificlients1 = count(explode("\n",snmp_walk($device, "entCLInfoIndex", "-OUqnv", "SENAO-ENTERPRISE-INDOOR-AP-CB-MIB")));
+
+    echo(($wificlients1 +0) . " clients\n");
   }
 
   if ($device['os'] == 'symbol' AND (stristr($device['hardware'],"AP")))
