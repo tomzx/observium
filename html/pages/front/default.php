@@ -102,6 +102,7 @@
 		    width: 1175,
 		    height: 500,
                     is3D: true,
+                    legend: 'none',
                     datalessRegionColor: '#93CA76',
 		    backgroundColor: {fill: '#cceef0', stroke: '#e5e5e5', strokeWidth: '5'},
 		    magnifyingGlass: {enable: true, zoomFactor: 8},
