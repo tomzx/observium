@@ -328,7 +328,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
       foreach ($config['rancid_configs'] as $configfile)
       {
         if ($configfile[strlen($configfile)-1] != '/') { $configfile .= '/' . $device['hostname']; } else { $configfile = $configfile . $device['hostname']; }
-        if (is_file($configfile)) { $file = $configfile; } else { echo($configfile); }
+        if (is_file($configfile)) { $device_config_file = $configfile; }
       }
     }
 

@@ -26,7 +26,8 @@ if ($_SESSION['userlevel'] >= "7")
   if (function_exists('svn_log')) {
 
     $sep     = " | ";
-    $svnlogs = svn_log($file, SVN_REVISION_HEAD, NULL, 8);
+    $svnlogs = svn_log($device_config_file, SVN_REVISION_HEAD, NULL, 8);
+    print_r($svnlogs);
     $revlist = array();
 
     foreach ($svnlogs as $svnlog) {
@@ -47,7 +48,7 @@ if ($_SESSION['userlevel'] >= "7")
   print_optionbar_end();
 
   if (function_exists('svn_log') && in_array($vars['rev'], $revlist)) {
-    list($diff, $errors) = svn_diff($file, $vars['rev']-1, $file, $vars['rev']);
+    list($diff, $errors) = svn_diff($device_config_file, $vars['rev']-1, $device_config_file, $vars['rev']);
     if (!$diff) {
       $text = "No Difference";
     } else {
@@ -57,8 +58,8 @@ if ($_SESSION['userlevel'] >= "7")
       fclose($errors);
     }
   } else {
-    $fh = fopen($file, 'r') or die("Can't open file");
-    $text = fread($fh, filesize($file));
+    $fh = fopen($device_config_file, 'r') or die("Can't open file");
+    $text = fread($fh, filesize($device_config_file));
     fclose($fh);
   }
 
