@@ -1309,6 +1309,7 @@ $rewrite_ios_features = array(
     'hp procurve switch software loopback interface' => 'Loopback Interface',
     'control plane interface' => 'Control Plane',
     'loop' => 'Loop',
+    '802.1q encapsulation tag' => 'Vlan',
   );
 
   $rewrite_hrDevice = array (
