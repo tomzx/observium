@@ -53,7 +53,7 @@ if ($bill_data['bill_type'] == "cdr") {
           <div class="control-group">
             <label class="control-label" for="bill_type"><strong>Billing Type</strong></label>
             <div class="controls">
-              <input type="radio" style="margin-bottom: 8px;" name="bill_type" value="cdr" onchange="javascript: billType();" <?php if ($bill_data['bill_type'] == "cdr") { echo('checked '); } ?>/> CDR / 95th perecntile
+              <input type="radio" style="margin-bottom: 8px;" name="bill_type" value="cdr" onchange="javascript: billType();" <?php if ($bill_data['bill_type'] == "cdr") { echo('checked '); } ?>/> CDR / 95th percentile
               <input type="radio" style="margin-bottom: 8px;" name="bill_type" value="quota" onchange="javascript: billType();" <?php if ($bill_data['bill_type'] == "quota") { echo('checked '); } ?>/> Quota
             <!--
               <div class="btn-group" data-toggle="buttons-radio" style="margin-bottom: 5px;">
