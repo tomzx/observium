@@ -27,7 +27,6 @@ if ($_SESSION['userlevel'] >= "7")
 
     $sep     = " | ";
     $svnlogs = svn_log($device_config_file, SVN_REVISION_HEAD, NULL, 8);
-    print_r($svnlogs);
     $revlist = array();
 
     foreach ($svnlogs as $svnlog) {
