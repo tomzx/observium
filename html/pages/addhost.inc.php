@@ -119,9 +119,9 @@ $pagetitle[] = "Add host";
         <label class="control-label" for="authlevel">Auth Level</label>
         <div class="controls">
           <select name="authlevel">
-            <option value="NoAuthNoPriv" <?php echo($vars['authlevel'] == 'NoAuthNoPriv' ? 'selected' : ''); ?> >NoAuthNoPriv</option>
-            <option value="AuthNoPriv"   <?php echo($vars['authlevel'] == 'authNoPriv' ? 'selected' : ''); ?> >authNoPriv</option>
-            <option value="AuthPriv"     <?php echo($vars['authlevel'] == 'authPriv' ? 'selected' : ''); ?> >authPriv</option>
+            <option value="noAuthNoPriv" <?php echo($vars['authlevel'] == 'noAuthNoPriv' ? 'selected' : ''); ?> >noAuthNoPriv</option>
+            <option value="authNoPriv"   <?php echo($vars['authlevel'] == 'authNoPriv' ? 'selected' : ''); ?> >authNoPriv</option>
+            <option value="authPriv"     <?php echo($vars['authlevel'] == 'authPriv' ? 'selected' : ''); ?> >authPriv</option>
           </select>
         </div>
       </div>
