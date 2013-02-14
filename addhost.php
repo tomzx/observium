@@ -21,8 +21,6 @@ include("includes/definitions.inc.php");
 include("includes/functions.php");
 include("includes/discovery/functions.inc.php");
 
-$debug=1;
-
 if (!empty($argv[1]))
 {
   $host      = strtolower($argv[1]);
