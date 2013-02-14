@@ -15,9 +15,9 @@ if ($stat == "pkts")
   $prefix = "P";
   if ($sort == "in")
   {
-    $sort = "cipMacHCSwitchedPkts_input_rate";
+    $sort = "pkts_input_rate";
   } elseif ($sort == "out") {
-    $sort = "cipMacHCSwitchedPkts_output_rate";
+    $sort = "pkts_output_rate";
   } else {
     $sort = "bps";
   }
@@ -26,16 +26,16 @@ if ($stat == "pkts")
   $colours='greens';
   if ($sort == "in")
   {
-     $sort = "cipMacHCSwitchedBytes_input_rate";
+     $sort = "bytes_input_rate";
   } elseif ($sort == "out") {
-     $sort = "cipMacHCSwitchedBytes_output_rate";
+     $sort = "bytes_output_rate";
   } else {
     $sort = "bps";
   }
 }
 
-$accs = dbFetchRows("SELECT *, (M.cipMacHCSwitchedBytes_input_rate + M.cipMacHCSwitchedBytes_output_rate) AS bps,
-        (M.cipMacHCSwitchedPkts_input_rate + M.cipMacHCSwitchedPkts_output_rate) AS pps
+$accs = dbFetchRows("SELECT *, (M.bytes_input_rate + M.bytes_output_rate) AS bps,
+        (M.pkts_input_rate + M.pkts_output_rate) AS pps
         FROM `mac_accounting` AS M, `ports` AS I, `devices` AS D WHERE M.port_id = ?
         AND I.port_id = M.port_id AND D.device_id = I.device_id ORDER BY $sort DESC LIMIT 0," . $topn, array($port));
 

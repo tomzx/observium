@@ -45,7 +45,7 @@
 	if ($config['frontpage']['map']['show']) {
 ?>
 <div class="row-fluid">
-    <div class="span12 well" style="background-color: #cceef0;">
+    <div class="span12 well" style="background-color: #cceef0; padding: 0px 0px 0px 0px;">
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 	    google.load('visualization', '1', {'packages': ['geochart']});
@@ -99,7 +99,7 @@
 		    resolution: '<?php echo $config['frontpage']['map']['resolution']; ?>',
 		    displayMode: 'markers',
 		    keepAspectRatio: 0,
-		    width: 1175,
+		    width: 1198,
 		    height: 500,
 		    is3D: true,
 		    legend: 'none',

@@ -20,18 +20,23 @@ $port_adsl = dbFetchRow("SELECT * FROM `ports_adsl` WHERE `port_id` = ?", array(
 
 if ($port['ifInErrors_delta'] > 0 || $port['ifOutErrors_delta'] > 0)
 {
-  $error_img = generate_port_link($port, "<img src='images/16/chart_curve_error.png' alt='Interface Errors' border=0>", "port_errors");
-} else { $error_img = ""; }
+  $port['tags'] .= generate_port_link($port, '<span class="label label-important">Errors</span>', 'port_errors');
+}
+
+if($port['deleted'] == '1')
+{
+  $port['tags'] .= '<a href="'.generate_url(array('page' => 'deleted-ports')).'"><span class="label label-important">Deleted</span></a>';
+}
 
 if (dbFetchCell("SELECT COUNT(*) FROM `mac_accounting` WHERE `port_id` = ?", array($port['port_id'])))
 {
-  $mac = "<a href='" . generate_port_url($port, array('view' => 'macaccounting')) . "'><img src='/images/16/chart_curve.png' align='absmiddle'></a>";
-} else { $mac = ""; }
+  $port['tags'] .= '<a href="' . generate_port_url($port, array('view' => 'macaccounting')) . '"><span class="label label-info">MAC</span></a>';
+}
 
 echo("<tr style=\"background-color: $row_colour;\" valign=top onmouseover=\"this.style.backgroundColor='$list_highlight';\" onmouseout=\"this.style.backgroundColor='$row_colour';\" onclick=\"location.href='" . generate_port_url($port) . "/'\" style='cursor: pointer;'>
          <td valign=top width=350>");
 echo("        <span class=list-large>
-              " . generate_port_link($port, $port['ifIndex'] . ". ".$port['label']) . " $error_img $mac
+              " . generate_port_link($port, $port['ifIndex'] . ". ".$port['label']) . " ".$port['tags']."
            </span><br /><span class=interface-desc>".$port['ifAlias']."</span>");
 
 if ($port['ifAlias']) { echo("<br />"); }

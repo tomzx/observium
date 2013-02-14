@@ -111,7 +111,7 @@ if ($vars['subview'] == "top10")
   else
   {
 
-  $query = "SELECT *, (M.cipMacHCSwitchedBytes_input_rate + M.cipMacHCSwitchedBytes_output_rate) as bps FROM `mac_accounting` AS M,
+  $query = "SELECT *, (M.bytes_input_rate + M.bytes_output_rate) as bps FROM `mac_accounting` AS M,
                        `ports` AS I, `devices` AS D WHERE M.port_id = ? AND I.port_id = M.port_id AND I.device_id = D.device_id ORDER BY bps DESC";
   $param = array($port['port_id']);
 
@@ -169,8 +169,8 @@ if ($vars['subview'] == "top10")
           <td class=list-large width=200>".mac_clean_to_readable($acc['mac'])."</td>
           <td class=list-large width=200>".$addy['ipv4_address']."</td>
           <td class=list-large width=500>".$name." ".$arp_name . "</td>
-          <td class=list-large width=100>".formatRates($acc['cipMacHCSwitchedBytes_input_rate'] / 8)."</td>
-          <td class=list-large width=100>".formatRates($acc['cipMacHCSwitchedBytes_output_rate'] / 8)."</td>
+          <td class=list-large width=100>".formatRates($acc['bytes_input_rate'] / 8)."</td>
+          <td class=list-large width=100>".formatRates($acc['bytes_output_rate'] / 8)."</td>
         </tr>
       </table>
     ");
