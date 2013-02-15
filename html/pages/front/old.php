@@ -125,23 +125,17 @@ if ($config['enable_syslog'])
     <h3>Recent Eventlog Entries</h3>
   ");
 
-  if ($_SESSION['userlevel'] == '10')
-  {
-    $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` ORDER BY `datetime` DESC LIMIT 0,15";
-  } else {
-    $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` AS E, devices_perms AS P WHERE E.host =
-    P.device_id AND P.user_id = " . $_SESSION['user_id'] . " ORDER BY `datetime` DESC LIMIT 0,15";
-  }
+	if ($_SESSION['userlevel'] == '10') {
+		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` ORDER BY `datetime` DESC LIMIT " . $config['frontpage']['eventlog']['items'];
+	} else {
+		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` AS E, devices_perms AS P WHERE E.host = ";
+		$query .= "P.device_id AND P.user_id = ? ORDER BY `datetime` DESC LIMIT " . $config['frontpage']['eventlog']['items'];
+		$param[] = $_SESSION['user_id'];
+	}
+	$data = dbFetchRows($query, $param);
 
-  $data = mysql_query($query);
-
-  echo('<table cellspacing="0" cellpadding="1" width="100%">');
-
-  while ($entry = mysql_fetch_assoc($data)) {
-    include("includes/print-event.inc.php");
-  }
-
-  echo("</table>");
+  print_events($data);
+  
   echo("</div>"); // Close Syslog Div
 }
 

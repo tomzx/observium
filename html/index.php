@@ -17,6 +17,7 @@ include("../config.php");
 include_once("../includes/definitions.inc.php");
 include("../includes/functions.php");
 include("includes/functions.inc.php");
+include("includes/functions-print.inc.php");
 
 $runtime_start = utime();
 

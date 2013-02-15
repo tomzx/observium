@@ -70,18 +70,7 @@ $entries = array_chunk($entries, $vars['pagesize']);
 $entries = $entries[$vars['pageno']-1];
 /// End Pagination
 
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
-echo("  <thead>\n");
-echo("    <tr>\n");
-echo("      <th>Date</th>\n");
-echo("      <th>Type</th>\n");
-echo("      <th>Message</th>\n");
-echo("    </tr>\n");
-echo("  </thead>\n");
-echo("  <tbody>\n");
-foreach ($entries as $entry) { include("includes/print-event.inc.php"); }
-echo("  </tbody>\n");
-echo("</table>\n");
+print_events($entries);
 
 $pagetitle[] = "Events";
 

@@ -411,33 +411,22 @@
     function show_eventlog($config) {
 	// Show eventlog
 	if ($config['frontpage']['eventlog']['show']) {
-	    echo("<div class=\"row-fluid\">");
-	    echo("    <div class=\"span12 well\">");
-	    echo("        <h3 class=\"bill\">Recent Eventlog Entries</h3>");
-	    echo("        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">");
-	    echo("            <thead>");
-	    echo("                <tr>");
-	    echo("                    <th>Date</th>");
-	    echo("                    <th>Device</th>");
-	    echo("                    <th>Type</th>");
-	    echo("                    <th>Message</th>");
-	    echo("                </tr>");
-	    echo("            </thead>");
-	    echo("            <tbody>");
 	    if ($_SESSION['userlevel'] == '10') {
-		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` ORDER BY `datetime` DESC LIMIT ".$config['frontpage']['eventlog']['items'];
+		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` ORDER BY `datetime` DESC LIMIT " . $config['frontpage']['eventlog']['items'];
 	    } else {
-		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` AS E, devices_perms AS P WHERE E.host =
-		P.device_id AND P.user_id = " . $_SESSION['user_id'] . " ORDER BY `datetime` DESC LIMIT ".$config['frontpage']['eventlog']['items'];
+		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` AS E, devices_perms AS P WHERE E.host = ";
+		$query .= "P.device_id AND P.user_id = ? ORDER BY `datetime` DESC LIMIT " . $config['frontpage']['eventlog']['items'];
+		$param[] = $_SESSION['user_id'];
 	    }
-	    $data = mysql_query($query);
-	    while ($entry = mysql_fetch_assoc($data)) {
-		include("includes/print-event.inc.php");
-	    }
-	    echo("            </tbody>");
-	    echo("        </table>");
-	    echo("    </div>");
-	    echo("</div>");
+	    $data = dbFetchRows($query, $param);
+	    $show_event = "<div class=\"row-fluid\">";
+	    $show_event .= "    <div class=\"span12 well\">";
+	    $show_event .= "        <h3 class=\"bill\">Recent Eventlog Entries</h3>";
+	    echo $show_event;
+	    print_events($data);
+	    $show_event = "    </div>";
+	    $show_event .= "</div>";
+	    echo $show_event;
 	}
     }
 

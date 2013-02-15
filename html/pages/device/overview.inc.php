@@ -91,22 +91,20 @@ include("overview/sensors/current.inc.php");
 include("overview/sensors/power.inc.php");
 include("overview/sensors/frequencies.inc.php");
 
-echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
-echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=logs/section=eventlog/">');
-echo("<img align='absmiddle' src='images/16/report.png'> Recent Events</a></p>");
+// Start events
+$show_event = "<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>";
+$show_event .= "<p style='padding: 0px 5px 5px;' class=sectionhead>";
+$show_event .= '<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=logs/section=eventlog/">';
+$show_event .= "<img align='absmiddle' src='images/16/report.png'> Recent Events</a></p>";
+echo $show_event;
 
-echo('<table class="table table-condensed table-striped">');
+$query = "SELECT *,DATE_FORMAT(datetime, '%d/%b/%y %T') as humandate FROM `eventlog` WHERE `host` = ? ORDER BY `datetime` DESC LIMIT 0,10";
+$param[] = $device['device_id'];
+$eventlog = dbFetchRows($query, $param);
+print_events_short($eventlog);
 
-$eventlog = dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%d/%b/%y %T') as humandate FROM `eventlog` WHERE `host` = ? ORDER BY `datetime` DESC LIMIT 0,10", array($device['device_id']));
-foreach ($eventlog as $entry)
-{
-  include("includes/print-event-short.inc.php");
-}
-
-echo("</table>");
 echo("</div>");
+// End events
 
 echo("</td></tr></table>");
-
 ?>
