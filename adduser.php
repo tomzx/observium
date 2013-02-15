@@ -40,6 +40,10 @@ if (auth_usermanagement())
       {
         echo("User ".$argv[1]." added successfully\n");
       }
+      else
+      {
+        echo("User ".$argv[1]." creation failed!\n");
+      }
     }
     else
     {
