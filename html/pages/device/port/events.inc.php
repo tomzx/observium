@@ -1,8 +1,11 @@
 <?php
 
-$entries = dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` WHERE `host` = ? AND `type` = 'interface' AND `reference` = '".$port['port_id']."' ORDER BY `datetime` DESC LIMIT 0,250", array($device['device_id']));
+/// Pagination
+$vars['pagination'] = TRUE;
+if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
+if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 
-print_events($entries);
+print_events($vars);
 
 $pagetitle[] = "Events";
 

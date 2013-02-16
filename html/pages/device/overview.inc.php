@@ -98,10 +98,7 @@ $show_event .= '<a class="sectionhead" href="device/device='.$device['device_id'
 $show_event .= "<img align='absmiddle' src='images/16/report.png'> Recent Events</a></p>";
 echo $show_event;
 
-$query = "SELECT *,DATE_FORMAT(datetime, '%d/%b/%y %T') as humandate FROM `eventlog` WHERE `host` = ? ORDER BY `datetime` DESC LIMIT 0,10";
-$param[] = $device['device_id'];
-$eventlog = dbFetchRows($query, $param);
-print_events_short($eventlog);
+print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' => TRUE));
 
 echo("</div>");
 // End events

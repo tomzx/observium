@@ -411,19 +411,13 @@
     function show_eventlog($config) {
 	// Show eventlog
 	if ($config['frontpage']['eventlog']['show']) {
-	    if ($_SESSION['userlevel'] == '10') {
-		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` ORDER BY `datetime` DESC LIMIT " . $config['frontpage']['eventlog']['items'];
-	    } else {
-		$query = "SELECT *,DATE_FORMAT(datetime, '%D %b %T') as humandate  FROM `eventlog` AS E, devices_perms AS P WHERE E.host = ";
-		$query .= "P.device_id AND P.user_id = ? ORDER BY `datetime` DESC LIMIT " . $config['frontpage']['eventlog']['items'];
-		$param[] = $_SESSION['user_id'];
-	    }
-	    $data = dbFetchRows($query, $param);
 	    $show_event = "<div class=\"row-fluid\">";
 	    $show_event .= "    <div class=\"span12 well\">";
 	    $show_event .= "        <h3 class=\"bill\">Recent Eventlog Entries</h3>";
 	    echo $show_event;
-	    print_events($data);
+
+	    print_events(array('pagesize' => $config['frontpage']['eventlog']['items']));
+
 	    $show_event = "    </div>";
 	    $show_event .= "</div>";
 	    echo $show_event;

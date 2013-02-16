@@ -8,20 +8,9 @@ if ($vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10')
   print_message("Event log truncated");
 }
 
-// Mike: for this need default option in config.
-$numresults = 250;
-
 $pagetitle[] = "Eventlog";
 
 print_optionbar_start();
-
-if (is_numeric($vars['page']))
-{
-  $start = $vars['page'] * $numresults;
-} else
-{
-  $start = 0;
-}
 
 ?>
 
@@ -37,13 +26,14 @@ if (is_numeric($vars['page']))
     <span class="add-on">Type</span>
     <select name="type" id="type">
       <option value="">All Types</option>
-      <option value="system" <?php  if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
+      <option value="system" <?php if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
       <?php
-        foreach (dbFetchRows("SELECT `type` FROM `eventlog` GROUP BY `type` ORDER BY `type`") as $data)
+        $where = ($vars['device']) ? "WHERE `host` = " . $vars['device'] : '';
+        foreach (dbFetchRows("SELECT `type` FROM `eventlog` " . $where . " GROUP BY `type` ORDER BY `type`") as $data)
         {
-          echo("<option value='".$data['type']."'");
+          echo("<option value='" . $data['type'] . "'");
           if ($data['type'] == $vars['type']) { echo(" selected"); }
-          echo(">".$data['type']."</option>");
+          echo(">" . $data['type'] . "</option>");
         }
       ?>
     </select>
@@ -56,16 +46,15 @@ if (is_numeric($vars['page']))
       <?php
         foreach (get_all_devices() as $hostname)
         {
-          echo("<option value='".getidbyname($hostname)."'");
-
-          if (getidbyname($hostname) == $_POST['device']) { echo("selected"); }
-
-          echo(">".$hostname."</option>");
+          $data['device'] = getidbyname($hostname);
+          echo("<option value='" . $data['device'] . "'");
+          if ($data['device'] == $vars['device']) { echo("selected"); }
+          echo(">" . $hostname . "</option>");
         }
       ?>
     </select>
   </div>
-
+  <input type="hidden" name="pageno" value="1">
   <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
 </form>
 
@@ -73,61 +62,13 @@ if (is_numeric($vars['page']))
 
 print_optionbar_end();
 
-$param = array();
-$where = " WHERE 1 ";
-
-foreach ($vars as $var => $value)
-{
-  if ($value != "")
-  {
-    switch ($var)
-    {
-      case 'device':
-        $where .= " AND `host` = ?";
-        $param[] = $value;
-        break;
-      case 'type':
-        $where .= " AND `$var` = ?";
-        $param[] = $value;
-        break;
-      case 'message':
-        foreach(explode(",", $value) as $val)
-        {
-          $param[] = "%".$val."%";
-          $cond[] = "`$var` LIKE ?";
-        }
-        $where .= "AND (";
-        $where .= implode(" OR ", $cond);
-        $where .= ")";
-        break;
-    }
-  }
-}
-
-#$sql = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` ".$where." ORDER BY `datetime` DESC LIMIT 0,250";
-
-if ($_SESSION['userlevel'] >= '5')
-{
-  $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` AS E ".$where." ORDER BY `datetime` DESC LIMIT $start,$numresults";
-} else {
-  $query = "SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `eventlog` AS E, devices_perms AS P ".$where." AND E.host = P.device_id AND P.user_id = ? ORDER BY `datetime` DESC LIMIT $start,$numresults";
-  $param[] = $_SESSION['user_id'];
-}
-$entries = dbFetchRows($query, $param);
-
-/// Pagination
+// Pagination
+$vars['pagination'] = TRUE;
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 
-echo pagination($vars, count($entries));
-
-$entries = array_chunk($entries, $vars['pagesize']);
-$entries = $entries[$vars['pageno']-1];
-/// End Pagination
-
-print_events($entries);
-
-echo $pagination;
-unset($pagination);
+// Print events
+print_events($vars);
+unset($vars['pagination']);
 
 ?>
