@@ -10,10 +10,10 @@
  * print_events(array('pagesize' => 10, 'pageno' => 3, 'pagination' => TRUE)) - display 10 events from page 3 with pagination header
  * print_events(array('pagesize' => 10, 'host' = 4)) - display last 10 events for device_id 4
  * print_events(array('short' => TRUE)) - show small block with last events
- * 
+ *
  * @param array $vars
  * @return none
- * 
+ *
  * @author Mike Stupalov <mike@stupalov.ru>
  */
 function print_events($vars = array('pagesize' => 10))
@@ -73,7 +73,7 @@ function print_events($vars = array('pagesize' => 10))
   $entries = dbFetchRows($query, $param);
   // Query events count
   if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
-  
+
   $list = array('host' => FALSE, 'port' => FALSE);
   if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'eventlog') { $list['host'] = TRUE; }
   if ($short || !isset($vars['port']) || empty($vars['port'])) { $list['port'] = TRUE; }
@@ -84,8 +84,8 @@ function print_events($vars = array('pagesize' => 10))
     $string .= "  <thead>\n";
     $string .= "    <tr>\n";
     $string .= "      <th>Date</th>\n";
-    if ($list['host']) { $string .= "      <th>Host</th>\n"; }
-    if ($list['port']) { $string .= "      <th>Type</th>\n"; }
+    if ($list['host']) { $string .= "      <th>Device</th>\n"; }
+    if ($list['port']) { $string .= "      <th>Entity</th>\n"; }
     $string .= "      <th>Message</th>\n";
     $string .= "    </tr>\n";
     $string .= "  </thead>\n";
