@@ -14,6 +14,31 @@
 
 include("../includes/alerts.inc.php");
 
+/**
+ * Format date string.
+ *
+ * This function convert date/time string to format from
+ * config option $config['timestamp_format'].
+ * If date/time not detected in string, function return original string.
+ * Example conversions to format 'd-m-Y H:i':
+ * '2012-04-18 14:25:01' -> '18-04-2012 14:25'
+ * 'Star wars' -> 'Star wars'
+ * 
+ * @param string $str
+ * @return string
+ * 
+ * @author Mike Stupalov <mike@stupalov.ru>
+ */
+function format_timestamp($str)
+{
+  global $config;
+  if (($timestamp = strtotime($str)) === false) {
+    return $str;
+  } else {
+    return date($config['timestamp_format'], $timestamp);
+  }
+}
+
 function data_uri($file, $mime)
 {
   $contents = file_get_contents($file);
