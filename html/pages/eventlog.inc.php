@@ -69,6 +69,5 @@ if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 
 // Print events
 print_events($vars);
-unset($vars['pagination']);
 
 ?>

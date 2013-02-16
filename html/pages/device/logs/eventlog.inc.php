@@ -19,6 +19,7 @@
       ?>
     </select>
   </label>
+  <input type="hidden" name="pageno" value="1">
   <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
 </form>
 
