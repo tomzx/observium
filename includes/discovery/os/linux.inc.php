@@ -2,7 +2,14 @@
 
 if (!$os)
 {
-  if (preg_match("/^Linux/", $sysDescr)) { $os = "linux"; }
+
+  // First check the sysObjectID, then the sysDescr
+  if (strstr($sysObjectId, "1.3.6.1.4.1.8072.3.2.10"))
+  {
+    $os = "linux";
+  } elseif (preg_match("/^Linux/", $sysDescr)) {
+    $os = "linux";
+  }
 
   // Specific Linux-derivatives
 
