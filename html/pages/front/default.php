@@ -153,17 +153,17 @@
 		$links['peering']	= generate_url(array("page" => "iftype", "type" => "peering"));
 		$links['peer_trans']	= generate_url(array("page" => "iftype", "type" => "peering,transit"));
 		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span6 well\">");
+		echo("    <div class=\"span6 \">");
 		echo("        <h3 class=\"bill\">Overall Transit Traffic Today</h3>");
 		echo("        <a href=\"".$links['transit']."\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
-		echo("    <div class=\"span6 well\">");
+		echo("    <div class=\"span6 \">");
 		echo("        <h3 class=\"bill\">Overall Peering Traffic Today</h3>");
 		echo("        <a href=\"".$links['peering']."\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("</div>");
 		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span12 well\">");
+		echo("    <div class=\"span12 \">");
 		echo("        <h3 class=\"bill\">Overall Transit &amp; Peering Traffic This Month</h3>");
 		echo("        <a href=\"".$links['peer_trans']."\"><img src=\"graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
 		echo("    </div>");
@@ -180,17 +180,17 @@
 	    if ($_SESSION['userlevel'] >= '5') {
 		$config['frontpage']['custom_traffic']['title'] = (empty($config['frontpage']['custom_traffic']['title']) ? "Custom Traffic" : $config['frontpage']['custom_traffic']['title']);
 		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span6 well\">");
+		echo("    <div class=\"span6 \">");
 		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." Today</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
 		echo("    </div>");
-		echo("    <div class=\"span6 well\">");
+		echo("    <div class=\"span6 \">");
 		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Week</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
 		echo("    </div>");
 		echo("</div>");
 		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span12 well\">");
+		echo("    <div class=\"span12 \">");
 		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Month</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/>");
 		echo("    </div>");
@@ -207,7 +207,7 @@
 		$minigraphs = explode(";", $config['frontpage']['minigraphs']['ids']);
 		$legend = (($config['frontpage']['minigraphs']['legend'] == false) ? "no" : "yes");
 		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span12 well\">");
+		echo("    <div class=\"span12 \">");
 		echo("        <h3 class=\"bill\">Mini Graphs Overview</h3>");
 		foreach($minigraphs as $graph) {
 		    list($device, $type, $header) = explode(",", $graph, 3);
@@ -231,15 +231,15 @@
 	// Show Status
 	if ($config['frontpage']['device_status']['show']) {
 	    echo("<div class=\"row-fluid\">");
-	    echo("    <div class=\"span12 well\">");
-	    echo("        <h3 class=\"bill\">Device status</h3>");
+	    echo("    <div class=\"span12\">");
+	    echo("        <h3 class=\"bill\">Device Alerts</h3>");
 	    echo("        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">");
 	    echo("            <thead>");
 	    echo("                <tr>");
 	    echo("                    <th>Device</th>");
 	    echo("                    <th>Type</th>");
 	    echo("                    <th>Status</th>");
-	    echo("                    <th>Port</th>");
+	    echo("                    <th>Entity</th>");
 	    echo("                    <th>Location</th>");
 	    echo("                    <th>Time Since</th>");
 	    echo("                </tr>");
@@ -383,7 +383,7 @@
 	// Show Syslog
 	if ($config['frontpage']['syslog']['show']) {
 	    echo("<div class=\"row-fluid\">");
-	    echo("    <div class=\"span12 well\">");
+	    echo("    <div class=\"span12 \">");
 	    echo("        <h3 class=\"bill\">Recent Syslog Messages</h3>");
 	    echo("        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">");
 	    echo("            <thead>");
@@ -412,7 +412,7 @@
 	// Show eventlog
 	if ($config['frontpage']['eventlog']['show']) {
 	    $show_event = "<div class=\"row-fluid\">";
-	    $show_event .= "    <div class=\"span12 well\">";
+	    $show_event .= "    <div class=\"span12 \">";
 	    $show_event .= "        <h3 class=\"bill\">Recent Eventlog Entries</h3>";
 	    echo $show_event;
 
