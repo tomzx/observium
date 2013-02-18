@@ -39,7 +39,7 @@ $disable_notify = get_dev_attrib($device,'disable_notify');
           <legend>Alert Settings</legend>
 
   <div class="control-group">
-    <label class="control-label" for="override_sysContact">Override sysLocation</label>
+    <label class="control-label" for="override_sysContact">Override sysContact</label>
     <div class="controls">
       <input onclick="edit.sysContact.disabled=!edit.override_sysContact.checked" type="checkbox"
             name="override_sysContact" <?php if ($override_sysContact_bool) { echo(' checked="1"'); } ?> />
@@ -55,9 +55,10 @@ $disable_notify = get_dev_attrib($device,'disable_notify');
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="override_sysContact">Disable alerting</label>
+    <label class="control-label" for="override_sysContact">Disable alerts</label>
     <div class="controls">
       <input type="checkbox" name="disable_notify"<?php if ($disable_notify) { echo(' checked="1"'); } ?> />
+      <span class="help-inline">Don't sending alert mails (<i>but write to eventlog</i>)</span>
     </div>
   </div>
   <div class="form-actions">

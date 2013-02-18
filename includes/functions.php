@@ -575,7 +575,7 @@ function notify($device,$title,$message)
 {
   global $config;
 
-  if ($config['alerts']['email']['enable'])
+  if ($config['alerts']['email']['enable'] && !$device['ignore'])
   {
     if (!get_dev_attrib($device,'disable_notify'))
     {

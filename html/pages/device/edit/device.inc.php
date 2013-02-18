@@ -112,11 +112,12 @@ if ($unknown) { echo('          <option value="other">Other</option>'); }
       <span class="help-inline">Disables polling and discovery.</span>
     </div>
   </div>
+  <?php // FIXME (Mike): $device['ignore'] and get_dev_attrib($device,'disable_notify') it is same/redundant options? ?>
   <div class="control-group">
-    <label class="control-label" for="sysLocation">Ignore alerts</label>
+    <label class="control-label" for="sysLocation">Device ignore</label>
     <div class="controls">
-      <input name="ignore" type="checkbox" id="disable" value="1" <?php if ($device['ignore']) { echo("checked=checked"); } ?> />&nbsp;
-      <span class="help-inline">Ignore alerts.</span>
+      <input name="ignore" type="checkbox" id="disable" value="1" <?php if ($device['ignore']) { echo("checked=checked"); } ?> />
+      <span class="help-inline">Device ignore.</span>
     </div>
   </fieldset>
 
