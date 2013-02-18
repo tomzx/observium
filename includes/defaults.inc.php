@@ -71,7 +71,7 @@ if (isset($_SERVER["SERVER_NAME"]) && isset($_SERVER["SERVER_PORT"]))
 {
   if (strpos($_SERVER["SERVER_NAME"] , ":"))
   {
-    # Literal IPv6
+    // Literal IPv6
     $config['base_url']  = "http://[" . $_SERVER["SERVER_NAME"] ."]" . ($_SERVER["SERVER_PORT"] != 80 ? ":".$_SERVER["SERVER_PORT"] : '') ."/";
   }
   else
@@ -91,42 +91,42 @@ $config['front_page']       = "pages/front/default.php";
 $config['page_title_prefix'] = "Observium :: Network Observation and Monitoring";
 $config['timestamp_format'] = 'd-m-Y H:i:s';
 $config['page_gen']         = 1;
-$config['web_header']       = "header.inc.php";  # in html/includes
+$config['web_header']       = "header.inc.php";  // in html/includes
 $config['login_message']    = "Unauthorised access or use shall render the user liable to criminal and/or civil prosecution.";
 $config['web_mouseover']    = TRUE;      // Enable or disable mouseover popups.
 
 $config['old_graphs']             = 1;   // RRDfiles from before the great rra reform. This is default for a while.
 
-$config['int_customers']           = 1;  # Enable Customer Port Parsing
-$config['int_customers_graphs' ]   = 1;  # Enable Customer Port List Graphs
-$config['int_transit']             = 1;  # Enable Transit Types
-$config['int_peering']             = 1;  # Enable Peering Types
-$config['int_core']                = 1;  # Enable Core Port Types
-$config['int_l2tp']                = 0;  # Enable L2TP Port Types
+$config['int_customers']           = 1;  // Enable Customer Port Parsing
+$config['int_customers_graphs' ]   = 1;  // Enable Customer Port List Graphs
+$config['int_transit']             = 1;  // Enable Transit Types
+$config['int_peering']             = 1;  // Enable Peering Types
+$config['int_core']                = 1;  // Enable Core Port Types
+$config['int_l2tp']                = 0;  // Enable L2TP Port Types
 
-$config['show_locations']          = 1;  # Enable Locations on menu
-$config['show_locations_dropdown'] = 1;  # Enable Locations dropdown on menu
-$config['show_services']           = 0;  # Enable Services on menu
+$config['show_locations']          = 1;  // Enable Locations on menu
+$config['show_locations_dropdown'] = 1;  // Enable Locations dropdown on menu
+$config['show_services']           = 0;  // Enable Services on menu
 $config['ports_page_default']      = "details"; // eg "details" or "basic"
 
 // SNMP Settings - Timeouts/Retries disabled as default
-#$config['snmp']['timeout'] = 1;            # timeout in seconds
-#$config['snmp']['retries'] = 5;            # how many times to retry the query
+#$config['snmp']['timeout'] = 1;            // timeout in seconds
+#$config['snmp']['retries'] = 5;            // how many times to retry the query
 $config['snmp']['transports'] = array('udp', 'udp6', 'tcp', 'tcp6');
 
-$config['snmp']['version'] = "v2c";         # Default version to use
+$config['snmp']['version'] = "v2c";         // Default version to use
 
-# SNMPv1/2c default settings
-$config['snmp']['community'][0] = "public"; # Communities to try during adding hosts and discovery
+// SNMPv1/2c default settings
+$config['snmp']['community'][0] = "public"; // Communities to try during adding hosts and discovery
 
-# SNMPv3 default settings
-# The array can be expanded to give another set of parameters
-$config['snmp']['v3'][0]['authlevel'] = "noAuthNoPriv";  # noAuthNoPriv | authNoPriv | authPriv
-$config['snmp']['v3'][0]['authname'] = "observium";      # User Name (required even for noAuthNoPriv)
-$config['snmp']['v3'][0]['authpass'] = "";               # Auth Passphrase
-$config['snmp']['v3'][0]['authalgo'] = "MD5";            # MD5 | SHA
-$config['snmp']['v3'][0]['cryptopass'] = "";             # Privacy (Encryption) Passphrase
-$config['snmp']['v3'][0]['cryptoalgo'] = "AES";          # AES | DES
+// SNMPv3 default settings
+// The array can be expanded to give another set of parameters
+$config['snmp']['v3'][0]['authlevel'] = "noAuthNoPriv";  // noAuthNoPriv | authNoPriv | authPriv
+$config['snmp']['v3'][0]['authname'] = "observium";      // User Name (required even for noAuthNoPriv)
+$config['snmp']['v3'][0]['authpass'] = "";               // Auth Passphrase
+$config['snmp']['v3'][0]['authalgo'] = "MD5";            // MD5 | SHA
+$config['snmp']['v3'][0]['cryptopass'] = "";             // Privacy (Encryption) Passphrase
+$config['snmp']['v3'][0]['cryptoalgo'] = "AES";          // AES | DES
 
 // Autodiscovery Settings
 
@@ -170,7 +170,7 @@ $config['uptime_warning']                  = "84600"; // Time in seconds to disp
 
 $config['rrdgraph_def_text']  = "-c BACK#EEEEEE00 -c SHADEA#EEEEEE00 -c SHADEB#EEEEEE00 -c FONT#000000 -c CANVAS#FFFFFF00 -c GRID#a5a5a5";
 $config['rrdgraph_def_text'] .= " -c MGRID#FF9999 -c FRAME#5e5e5e -c ARROW#5e5e5e -R normal";
-$config['rrdgraph_real_95th'] = FALSE; # Set to TRUE if you want to display the 95% based on the highest value. (aka real 95%)
+$config['rrdgraph_real_95th'] = FALSE; // Set to TRUE if you want to display the 95% based on the highest value. (aka real 95%)
 $config['overlib_defaults']   = ",FGCOLOR,'#ffffff', BGCOLOR, '#e5e5e5', BORDER, 0, CELLPAD, 0, CAPCOLOR, '#555555', TEXTCOLOR, '#3e3e3e'";
 
 $list_colour_a = "#ffffff";
@@ -209,15 +209,20 @@ $config['graph_colours']['juniperive']   = array('F7C729','52A6EF');
 // Front page settings
 
 // General settings
-$config['frontpage']['map']['show']                = true;        // Enable/Disable the map view
-$config['frontpage']['map']['region']              = "world";      // See https://developers.google.com/chart/interactive/docs/gallery/geochart for region settings
-$config['frontpage']['map']['resolution']          = "countries";  // some region types such as US States (US-NY) require this to be changed to "provinces"
 $config['frontpage']['overall_traffic']            = true;         // Enable/Disable the overall traffic view (transit, peering, transit+peering)
 $config['frontpage']['eventlog']['show']           = true;         // Enable/Disable the eventlog view
 $config['frontpage']['eventlog']['items']          = 15;           // Only show the last XX items of the eventlog view
 $config['frontpage']['syslog']['show']             = true;         // Enable/Disable the syslog view
 $config['frontpage']['syslog']['items']            = 25;           // Only show the last XX items of the syslog view
 
+// Map overview settings
+$config['frontpage']['map']['show']                = true;         // Enable/Disable the map view
+$config['frontpage']['map']['region']              = "world";      // See https://developers.google.com/chart/interactive/docs/gallery/geochart for region settings
+$config['frontpage']['map']['resolution']          = "countries";  // Some region types such as US States (US-NY) require this to be changed to "provinces"
+$config['frontpage']['map']['dotsize']             = 10;           // Set the dotsize you want
+$config['frontpage']['map']['realworld']           = false;        // Enable/Disable the realworld view (blue/green), if disabled default map view
+
+// Device status settings
 $config['frontpage']['device_status']['show']      = true;         // Enable/Disable the status view
 // Show the status messages you want
 $config['frontpage']['device_status']['devices']   = true;         // Show the down devices
@@ -250,49 +255,49 @@ $config['show_overview_tab'] = TRUE;
 $config['overview_show_sysDescr'] = TRUE;
 
 // Enable version checker & stats
-$config['version_check']                = 1; # Enable checking of version in discovery
-                                             # and submittal of basic stats used
-                                             # to prioritise development effort :)
+$config['version_check']                = 1; // Enable checking of version in discovery
+                                             // and submittal of basic stats used
+                                             // to prioritise development effort :)
 
 // Poller/Discovery Modules
 
-$config['enable_bgp']                   = 1; # Enable BGP session collection and display
-$config['enable_rip']                   = 1; # Enable RIP session collection and display
-$config['enable_ospf']                  = 1; # Enable OSPF session collection and display
-$config['enable_isis']                  = 1; # Enable ISIS session collection and display
-$config['enable_eigrp']                 = 1; # Enable EIGRP session collection and display
-$config['enable_syslog']                = 0; # Enable Syslog
-$config['enable_inventory']             = 1; # Enable Inventory
-$config['enable_pseudowires']           = 1; # Enable Pseudowires
-$config['enable_vrfs']                  = 1; # Enable VRFs
-$config['enable_printers']              = 0; # Enable Printer support
-$config['enable_sla']                   = 0; # Enable Cisco SLA collection and display
+$config['enable_bgp']                   = 1; // Enable BGP session collection and display
+$config['enable_rip']                   = 1; // Enable RIP session collection and display
+$config['enable_ospf']                  = 1; // Enable OSPF session collection and display
+$config['enable_isis']                  = 1; // Enable ISIS session collection and display
+$config['enable_eigrp']                 = 1; // Enable EIGRP session collection and display
+$config['enable_syslog']                = 0; // Enable Syslog
+$config['enable_inventory']             = 1; // Enable Inventory
+$config['enable_pseudowires']           = 1; // Enable Pseudowires
+$config['enable_vrfs']                  = 1; // Enable VRFs
+$config['enable_printers']              = 0; // Enable Printer support
+$config['enable_sla']                   = 0; // Enable Cisco SLA collection and display
 
 // Ports extension modules
 
-$config['port_descr_parser']            = "includes/port-descr-parser.inc.php"; # Parse port descriptions into fields
-$config['enable_ports_Xbcmc']           = 1; # Enable ifXEntry broadcast/multicast
-$config['enable_ports_etherlike']       = 0; # Enable Polling EtherLike-MIB (doubles interface processing time)
-$config['enable_ports_junoseatmvp']     = 0; # Enable JunOSe ATM VC Discovery/Poller
-$config['enable_ports_adsl']            = 1; # Enable ADSL-LINE-MIB
-$config['enable_ports_poe']             = 0; # Enable PoE stats collection
+$config['port_descr_parser']            = "includes/port-descr-parser.inc.php"; // Parse port descriptions into fields
+$config['enable_ports_Xbcmc']           = 1; // Enable ifXEntry broadcast/multicast
+$config['enable_ports_etherlike']       = 0; // Enable Polling EtherLike-MIB (doubles interface processing time)
+$config['enable_ports_junoseatmvp']     = 0; // Enable JunOSe ATM VC Discovery/Poller
+$config['enable_ports_adsl']            = 1; // Enable ADSL-LINE-MIB
+$config['enable_ports_poe']             = 0; // Enable PoE stats collection
 
 // Billing System Configuration
 
-$config['enable_billing']               = 0; # Enable Billing
-$config['billing']['customer_autoadd']  = 0; # Enable Auto-add bill per customer
-$config['billing']['circuit_autoadd']   = 0; # Enable Auto-add bill per circuit_id
-$config['billing']['bill_autoadd']      = 0; # Enable Auto-add bill per bill_id
-$config['billing']['base']              = 1000; # Set the base to divider bytes to kB, MB, GB ,... (1000|1024)
+$config['enable_billing']               = 0; // Enable Billing
+$config['billing']['customer_autoadd']  = 0; // Enable Auto-add bill per customer
+$config['billing']['circuit_autoadd']   = 0; // Enable Auto-add bill per circuit_id
+$config['billing']['bill_autoadd']      = 0; // Enable Auto-add bill per bill_id
+$config['billing']['base']              = 1000; // Set the base to divider bytes to kB, MB, GB ,... (1000|1024)
 
 // External Integration
 
 #$config['rancid_configs'][]             = '/var/lib/rancid/network/configs/';
-$config['rancid_ignorecomments']        = 0; # Ignore lines starting with #
+$config['rancid_ignorecomments']        = 0; // Ignore lines starting with #
 #$config['collectd_dir']                 = '/var/lib/collectd/rrd';
 #$config['smokeping']['dir']             = "/var/lib/smokeping/";
 
-# NFSen RRD dir.
+// NFSen RRD dir.
 $config['nfsen_enable'] = 0;
 #$config['nfsen_split_char']   = "_";
 #$config['nfsen_rrds']   = "/var/nfsen/profiles-stat/live/";
@@ -303,7 +308,7 @@ $config['nfsen_enable'] = 0;
 #config['location_map']['Under the Sink'] = "Under The Sink, The Office, London, UK";
 
 // Ignores & Allows
-# Has to be lowercase
+// Has to be lowercase
 
 $config['bad_if'][] = "voip-null";
 $config['bad_if'][] = "virtual-";
@@ -352,9 +357,9 @@ $config['bad_if_regexp'][] = "/^sl[0-9]/";
 
 $config['processor_filter'][] = "An electronic chip that makes the computer work.";
 
-$config['ignore_mount_removable']  = 1; # Ignore removable disk storage
-$config['ignore_mount_network']    = 1; # Ignore network mounted storage
-$config['ignore_mount_optical']    = 1; # Ignore mounted optical discs
+$config['ignore_mount_removable']  = 1; // Ignore removable disk storage
+$config['ignore_mount_network']    = 1; // Ignore network mounted storage
+$config['ignore_mount_optical']    = 1; // Ignore mounted optical discs
 
 // Per-device interface graph filters
 
@@ -369,7 +374,7 @@ $config['device_traffic_iftype'][] = '/ppp/';
 $config['device_traffic_descr'][]  = '/loopback/';
 $config['device_traffic_descr'][]  = '/vlan/';
 $config['device_traffic_descr'][]  = '/tunnel/';
-#$config['device_traffic_descr'][]  = '/:\d+/';   ## this breaks on xos (ifName = 1:1)
+#$config['device_traffic_descr'][]  = '/:\d+/';   #// this breaks on xos (ifName = 1:1)
 $config['device_traffic_descr'][]  = '/bond/';
 $config['device_traffic_descr'][]  = '/null/';
 $config['device_traffic_descr'][]  = '/dummy/';
@@ -383,13 +388,13 @@ $config['irc_chan'][] = "#observium";
 
 // Authentication
 
-$config['allow_unauth_graphs']      = 0;       # Allow graphs to be viewed by anyone
-$config['allow_unauth_graphs_cidr'] = array(); # Allow graphs to be viewed without authorisation from certain IP ranges
-$config['auth_mechanism']           = "mysql"; # Available mechanisms: mysql (default), ldap, http-auth
+$config['allow_unauth_graphs']      = 0;       // Allow graphs to be viewed by anyone
+$config['allow_unauth_graphs_cidr'] = array(); // Allow graphs to be viewed without authorisation from certain IP ranges
+$config['auth_mechanism']           = "mysql"; // Available mechanisms: mysql (default), ldap, http-auth
 
 // LDAP Authentication
 
-$config['auth_ldap_version'] = 3; # v2 or v3
+$config['auth_ldap_version'] = 3; // v2 or v3
 $config['auth_ldap_server'] = "ldap.yourserver.com";
 $config['auth_ldap_port']   = 389;
 $config['auth_ldap_prefix'] = "uid=";
@@ -397,9 +402,9 @@ $config['auth_ldap_suffix'] = ",ou=People,dc=example,dc=com";
 $config['auth_ldap_group']  = "cn=observium,ou=groups,dc=example,dc=com";
 
 $config['auth_ldap_groupbase'] = "ou=group,dc=example,dc=com";
-$config['auth_ldap_groupmembertype'] = "nodn"; # Avialable types: 'nodn' (default, used $username),
-                                               # 'fulldn' ($config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'])
-$config['auth_ldap_groupmemberattr'] = "memberUid"; # Use your unique attribute for username, example "uniqueMember".
+$config['auth_ldap_groupmembertype'] = "nodn"; // Avialable types: 'nodn' (default, used $username),
+                                               // 'fulldn' ($config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'])
+$config['auth_ldap_groupmemberattr'] = "memberUid"; // Use your unique attribute for username, example "uniqueMember".
 $config['auth_ldap_groups']['admin']['level'] = 10;
 $config['auth_ldap_groups']['pfy']['level'] = 7;
 $config['auth_ldap_groups']['support']['level'] = 1;
@@ -439,8 +444,8 @@ $config['ignore_mount_regexp'][] = "/^\/dev\/md0/";
 $config['ignore_mount_regexp'][] = "/^\/var\/dhcpd\/dev,/";
 $config['ignore_mount_regexp'][] = "/UMA/";
 
-$config['ignore_mount_removable'] = 1; # Ignore removable disk storage
-$config['ignore_mount_network']   = 1; # Ignore network mounted storage
+$config['ignore_mount_removable'] = 1; // Ignore removable disk storage
+$config['ignore_mount_network']   = 1; // Ignore network mounted storage
 
 // Syslog Settings
 
@@ -453,8 +458,8 @@ $config['syslog_filter'][] = "diskio.c";  // Ignore some crappy stuff from SNMP 
 
 // Virtualization
 
-$config['enable_libvirt'] = 0; # Enable Libvirt VM support
-$config['libvirt_protocols']    = array("qemu+ssh","xen+ssh"); # Mechanisms used, add or remove if not using this on any of your machines.
+$config['enable_libvirt'] = 0; // Enable Libvirt VM support
+$config['libvirt_protocols']    = array("qemu+ssh","xen+ssh"); // Mechanisms used, add or remove if not using this on any of your machines.
 
 // Hardcoded ASN descriptions
 $config['astext'][65332] = "Cymru FullBogon Feed";

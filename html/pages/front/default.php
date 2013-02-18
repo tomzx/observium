@@ -9,7 +9,7 @@
  * @subpackage web
  * @author     Dennis de Houx <info@all-in-one.be>
  * @copyright  (C) 2006 - 2012 Adam Armstrong
- * @version    1.8.4
+ * @version    1.9.0
  *
  */
 
@@ -45,7 +45,7 @@
 	if ($config['frontpage']['map']['show']) {
 ?>
 <div class="row-fluid">
-    <div class="span12 well" style="background-color: #cceef0; padding: 0px 0px 0px 0px;">
+    <div class="span12" style="padding: 0px 0px 0px 0px;">
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 	    google.load('visualization', '1', {'packages': ['geochart']});
@@ -103,14 +103,14 @@
 		    height: 500,
 		    is3D: true,
 		    legend: 'none',
-		    //datalessRegionColor: '#93CA76',
-                    datalessRegionColor: '#93CA76',
-		    backgroundColor: {fill: '#cceef0'},
-		    //backgroundColor: {fill: '#cceef0', stroke: '#e5e5e5', strokeWidth: '5'},
-		    magnifyingGlass: {enable: true, zoomFactor: 8},
+                    enableRegionInteractivity: true,
+		    <?php if ($config['frontpage']['map']['realworld']) { echo "\t\t    datalessRegionColor: '#93CA76',"; } else {
+                                                                          echo "\t\t    datalessRegionColor: '#d5d5d5',"; } ?>
+                    <?php if ($config['frontpage']['map']['realworld']) { echo "\t\t    backgroundColor: {fill: '#cceef0'},"; } ?>
+		    magnifyingGlass: {enable: true, zoomFactor: 5},
 		    colorAxis: {values: [0, 1, 2], colors: ['darkgreen', 'orange', 'red']},
 		    markerOpacity: 0.75,
-		    sizeAxis: {minValue: 1,  maxValue: 20, minSize: 10, maxSize: 30}
+                    sizeAxis: {minValue: 1,  maxValue: 2, minSize: <?php echo $config['frontpage']['map']['dotsize']; ?>, maxSize: <?php echo $config['frontpage']['map']['dotsize']; ?>}
 		};
 		var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
