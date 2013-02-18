@@ -108,8 +108,8 @@
 		    backgroundColor: {fill: '#cceef0'},
 		    //backgroundColor: {fill: '#cceef0', stroke: '#e5e5e5', strokeWidth: '5'},
 		    magnifyingGlass: {enable: true, zoomFactor: 8},
-		    colorAxis: {values: [0, 100], colors: ['green', 'red']},
-		    markerOpacity: 0.50,
+		    colorAxis: {values: [0, 1, 2], colors: ['darkgreen', 'orange', 'red']},
+		    markerOpacity: 0.75,
 		    sizeAxis: {minValue: 1,  maxValue: 20, minSize: 10, maxSize: 30}
 		};
 		var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
