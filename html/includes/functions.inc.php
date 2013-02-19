@@ -59,7 +59,10 @@ function syslog_prioritys()
   $prioritys['5'] = array('name' => 'notifications', 'color' => '#555599');
   $prioritys['6'] = array('name' => 'informational', 'color' => '#00FF00');
   $prioritys['7'] = array('name' => 'debugging',     'color' => '#0000FF');
-  //$prioritys['10'] = array('name' => 'other',     'color' => '#D2D8F9');
+  for ($i = 8; $i < 16; $i++)
+  {
+    $prioritys[$i] = array('name' => 'other',        'color' => '#D2D8F9');
+  }
   
   return $prioritys;
 }
