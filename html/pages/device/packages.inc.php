@@ -16,7 +16,7 @@ $i=0;
 foreach (dbFetchRows("SELECT * FROM `packages` WHERE `device_id` = ? ORDER BY `name`", array($device['device_id'])) as $entry)
 {
   echo("    <tr>\n");
-  echo("      <td><a href=\"". generate_url($vars, array('name' => $entry['name']))."\">".$entry['name']."</a></td>\n");
+  echo("      <td><a href=\"". generate_url(array('page' => 'packages', 'name' => $entry['name']))."\">".$entry['name']."</a></td>\n");
   if ($build != '') { $dbuild = '-'.$entry['build']; } else { $dbuild = ''; }
   echo("      <td>".$entry['version'].$dbuild."</td>\n");
   echo("      <td>".$entry['arch']."</td>\n");

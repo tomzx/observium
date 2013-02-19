@@ -14,7 +14,7 @@ foreach ($vars as $var => $value)
   }
 }
 
-echo("<table class=\"table table-bordered table-striped\" style=\"margin-top: 10px;\">\n");
+echo("<table class=\"table table-condensed table-bordered table-striped\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th style=\"width: 300px;\">Package</th>\n");
@@ -22,6 +22,12 @@ echo("      <th>Version</th>\n");
 echo("    </tr>\n");
 echo("  </thead>\n");
 echo("  <tbody>\n");
+
+// Build array of packages - faster than SQL
+foreach (dbFetchRows("SELECT * FROM `packages`", $param) as $entry)
+{
+
+}
 
 foreach (dbFetchRows("SELECT * FROM `packages` WHERE 1 $where GROUP BY `name`", $param) as $entry)
 {
@@ -62,7 +68,7 @@ foreach (dbFetchRows("SELECT * FROM `packages` WHERE 1 $where GROUP BY `name`", 
       //echo("<span style='margin:5px;'>".overlib_link("", $version, $content,  NULL)."</span>");
       echo($middot."<a href=\"javascript:;\" rel=\"tooltip\" title=\"".$content."\">".$version.$dbuild."</a>");
     } else {
-      echo("$version $content");
+      echo("$version $content <br />");
     }
   }
 
@@ -72,7 +78,8 @@ foreach (dbFetchRows("SELECT * FROM `packages` WHERE 1 $where GROUP BY `name`", 
 
 echo("  </tbody>\n");
 echo("</table>\n");
-echo("<script src=\"".$config['base_url']."js/bootstrap-tooltip.js\"></script>\n");
-echo("<script src=\"".$config['base_url']."js/billing.js\"></script>\n");
+
+echo('<script src="'.$config['base_url'].'js/bootstrap-tooltip.js\"></script>');
+echo('<script src="'.$config['base_url'].'js/billing.js\"></script>');
 
 ?>

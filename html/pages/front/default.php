@@ -9,7 +9,7 @@
  * @subpackage web
  * @author     Dennis de Houx <info@all-in-one.be>
  * @copyright  (C) 2006 - 2012 Adam Armstrong
- * @version    1.9.0
+ * @version    1.9.2
  *
  */
 
@@ -48,7 +48,7 @@
     <div class="span12" style="padding: 0px 0px 0px 0px;">
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
-	    google.load('visualization', '1', {'packages': ['geochart']});
+	    google.load('visualization', '1.1', {'packages': ['geochart']});
 	    google.setOnLoadCallback(drawRegionsMap);
 	    function drawRegionsMap() {
 		var data = new google.visualization.DataTable();
@@ -114,6 +114,18 @@
 		};
 		var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
+		google.visualization.events.addListener(chart, 'ready', onReady);
+		function onReady() {
+		    google.visualization.events.addListener(chart, 'select', gotoLocation);
+		}
+		function gotoLocation() {
+		    var selection = chart.getSelection();
+		    var item = selection[0];
+		    var url = '<?php echo generate_url(array("page" => "devices")); ?>';
+		    var location = data.getValue(item.row, 0);
+		    url = url+'location='+location+'/';
+		    window.location = url;
+		}
 	    };
 	</script>
 	<div id="chart_div"></div>
@@ -213,7 +225,7 @@
 		    list($device, $type, $header) = explode(",", $graph, 3);
 		    if (strpos($type, "device") === false) {
 			$links = generate_url(array("page" => "graphs", "type" => $type, "id" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
-			echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
+			echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
 		    } else {
 			$links = generate_url(array("page" => "graphs", "type" => $type, "device" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
 			echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
@@ -322,7 +334,7 @@
 		    echo("                    <td>".generate_device_link($service, $service['hostname'])."</td>");
 		    echo("                    <td><span class=\"badge\">Service</span></td>");
 		    echo("                    <td><span class=\"label label-important\">Service Down</span></td>");
-		    echo("                    <td>-</td>");
+		    echo("                    <td>".$service['service_type']."</td>");
 		    echo("                    <td>".$service['location']."</td>");
 		    echo("                    <td>-</td>");
 		    echo("                </tr>");
