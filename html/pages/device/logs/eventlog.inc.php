@@ -1,11 +1,12 @@
-<hr />
-
+  <hr />
   <form method="post" action="" class="form-inline">
-  <label><strong>Search</strong>
-    <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
-  </label>
-  <label>
-    <strong>Type</strong>
+    <div class="input-prepend" style="margin-right: 3px;">
+      <span class="add-on">Message</span>
+      <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
+    </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Type</span>
     <select name="type" id="type">
       <option value="">All Types</option>
       <option value="system" <?php  if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
@@ -18,7 +19,7 @@
         }
       ?>
     </select>
-  </label>
+  </div>
   <input type="hidden" name="pageno" value="1">
   <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
 </form>

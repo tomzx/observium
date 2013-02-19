@@ -8,7 +8,7 @@
  * print_events() - display last 10 events from all devices
  * print_events(array('pagesize' => 99)) - display last 99 events from all device
  * print_events(array('pagesize' => 10, 'pageno' => 3, 'pagination' => TRUE)) - display 10 events from page 3 with pagination header
- * print_events(array('pagesize' => 10, 'host' = 4)) - display last 10 events for device_id 4
+ * print_events(array('pagesize' => 10, 'device' = 4)) - display last 10 events for device_id 4
  * print_events(array('short' => TRUE)) - show small block with last events
  *
  * @param array $vars
@@ -74,8 +74,8 @@ function print_events($vars = array('pagesize' => 10))
   // Query events count
   if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
 
-  $list = array('host' => FALSE, 'port' => FALSE);
-  if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'eventlog') { $list['host'] = TRUE; }
+  $list = array('device' => FALSE, 'port' => FALSE);
+  if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'eventlog') { $list['device'] = TRUE; }
   if ($short || !isset($vars['port']) || empty($vars['port'])) { $list['port'] = TRUE; }
 
   $string = "<table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">\n";
@@ -84,7 +84,7 @@ function print_events($vars = array('pagesize' => 10))
     $string .= "  <thead>\n";
     $string .= "    <tr>\n";
     $string .= "      <th>Date</th>\n";
-    if ($list['host']) { $string .= "      <th>Device</th>\n"; }
+    if ($list['device']) { $string .= "      <th>Device</th>\n"; }
     if ($list['port']) { $string .= "      <th>Entity</th>\n"; }
     $string .= "      <th>Message</th>\n";
     $string .= "    </tr>\n";
@@ -105,7 +105,7 @@ function print_events($vars = array('pagesize' => 10))
       $string .= "<td width=\"160\">";
     }
     $string .= format_timestamp($entry['datetime']) . "</td>";
-    if ($list['host'])
+    if ($list['device'])
     {
       $dev = device_by_id_cache($entry['host']);
       $string .= "<td class=\"list-bold\" width=150>" . generate_device_link($dev, shorthost($dev['hostname'])) . "</td>";
