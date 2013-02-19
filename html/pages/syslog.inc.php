@@ -2,7 +2,7 @@
 
 if ($_vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10') { dbFetchCell("TRUNCATE TABLE `syslog`"); }
 
-print_optionbar_start('25');
+print_optionbar_start();
 
 $pagetitle[] = "Syslog";
 
@@ -10,34 +10,62 @@ $pagetitle[] = "Syslog";
 
 <form method="post" action="" class="form-inline">
   <span style="font-weight: bold;">Syslog</span> &#187;
-  <strong>Search</strong>
-    <input type="text" name="string" id="string" value="<?php echo($_POST['string']); ?>" />
-    <strong>Program</strong>
-    <select name="program" id="program">
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Message</span>
+    <input type="text" name="message" id="message" class="input" value="<?php echo($vars['message']); ?>" />
+  </div>
+
+    <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Priority</span>
+    <select name="priority" id="priority" style="width: 140px;">
+      <?php
+      $prioritys = syslog_prioritys();
+      $string = "      <option value=\"\">All Prioritys</option>";
+      for($i = 0; $i <= 7; $i++)
+      {
+        $string .= '<option value="' . $i . '"';
+        $string .= ($vars['priority'] === "$i") ? ' selected>' : '>';
+        $string .= "(" . $i . ") " . $prioritys[$i]['name'] . "</option>\n";
+      }
+      echo $string;
+      ?>
+    </select>
+  </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Program</span>
+    <select name="program" id="program" style="width: 140px;">
       <option value="">All Programs</option>
       <?php
-        foreach (dbFetchRows("SELECT DISTINCT `program` FROM `syslog` ORDER BY `program`") as $data)
+        $where = ($vars['device']) ? "WHERE `device_id` = " . $vars['device'] : '';
+        foreach (dbFetchRows("SELECT `program` FROM `syslog` " . $where . " GROUP BY `program` ORDER BY `program`") as $data)
         {
-          echo("<option value='".$data['program']."'");
-          if ($data['program'] == $_POST['program']) { echo("selected"); }
-          echo(">".$data['program']."</option>");
+          $data['program'] = ($data['program'] === "") ? "[[EMPTY]]" : $data['program'];
+          echo("<option value='" . $data['program'] . "'");
+          if ($data['program'] === $vars['program']) { echo(" selected"); }
+          echo(">" . $data['program'] . "</option>");
         }
       ?>
     </select>
-    <strong>Device</strong>
-    <select name="device" id="device">
+  </div>
+  
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Device</span>
+    <select name="device" id="device" style="width: 140px;">
       <option value="">All Devices</option>
       <?php
-        foreach (get_all_devices() as $hostname)
+        $devices = dbFetchRows("SELECT S.`device_id` AS `device`, hostname FROM `syslog` AS S JOIN `devices` AS D ON S.device_id = D.device_id GROUP BY `hostname` ORDER BY `hostname`");
+        foreach ($devices as $data)
         {
-          echo("<option value='".getidbyname($hostname)."'");
-
-          if (getidbyname($hostname) == $_POST['device']) { echo("selected"); }
-
-          echo(">".$hostname."</option>");
+          echo("<option value='" . $data['device'] . "'");
+          if ($data['device'] == $vars['device']) { echo("selected"); }
+          echo(">" . $data['hostname'] . "</option>");
         }
       ?>
     </select>
+  </div>
+  <input type="hidden" name="pageno" value="1">
   <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
 </form>
 
@@ -45,51 +73,12 @@ $pagetitle[] = "Syslog";
 
 print_optionbar_end();
 
-if ($_POST['string'])
-{
-  $where = " AND S.msg LIKE ?";
-  $array[] = "%".$_POST['string']."%";
-}
+// Pagination
+$vars['pagination'] = TRUE;
+if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
+if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 
-if ($_POST['program'])
-{
-  $where .= " AND S.program = ?";
-  $array[] = $_POST['program'];
-}
-
-if (is_numeric($_POST['device']))
-{
-  $where .= " AND S.device_id = ?";
-  $array[] = $_POST['device'];
-}
-
-if ($_SESSION['userlevel'] >= '5')
-{
-  $sql = "SELECT *, DATE_FORMAT(timestamp, '%Y-%m-%d %T') AS date from syslog AS S";
-  if (count($array))
-  {
-    $sql .= " WHERE 1 ".$where;
-  }
-  $sql .= " ORDER BY timestamp DESC LIMIT 1000";
-} else {
-  $sql  = "SELECT *, DATE_FORMAT(timestamp, '%Y-%m-%d %T') AS date from syslog AS S, devices_perms AS P";
-  $sql .= "WHERE S.device_id = P.device_id AND P.user_id = ?";
-  if (count($array))
-  {
-    $sql .= " WHERE 1 ".$where;
-  }
-  $sql .= " ORDER BY timestamp DESC LIMIT 1000";
-
-  $array = array_merge(array($_SESSION['user_id']), $array);
-}
-
-echo("<table cellspacing=0 cellpadding=2 width=100%>");
-foreach (dbFetchRows($sql, $array) as $entry)
-{
-  $entry = array_merge($entry, device_by_id_cache($entry['device_id']));
-
-  include("includes/print-syslog.inc.php");
-}
-echo("</table>");
+// Print syslog
+print_syslogs($vars);
 
 ?>

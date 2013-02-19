@@ -172,21 +172,11 @@ if ($config['enable_syslog'])
     <h3>Recent Syslog Messages</h3>
   ");
 
-  $sql = "SELECT *, DATE_FORMAT(timestamp, '%D %b %T') AS date from syslog ORDER BY timestamp DESC LIMIT 20";
-  $query = mysql_query($sql);
-  echo("<table cellspacing=0 cellpadding=2 width=100%>");
-  while ($entry = mysql_fetch_assoc($query))
-  {
-    $entry = array_merge($entry, device_by_id_cache($entry['device_id']));
-
-    include("includes/print-syslog.inc.php");
-  }
-  echo("</table>");
+  print_syslogs(array('pagesize' => $config['frontpage']['syslog']['items']));
 
   echo("</div>"); // Close Syslog Div
 
 } else {
-
   // Open eventlog Div
   echo("<div style='margin: 4px; clear: both; padding: 5px;'>
     <h3>Recent Eventlog Entries</h3>

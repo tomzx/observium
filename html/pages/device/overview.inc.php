@@ -55,17 +55,16 @@ if ($services['total'])
   echo("</div>");
 }
 
-// FIXME - split this into overview/syslog.inc.php?
 if ($config['enable_syslog'])
 {
-  $syslog =  dbFetchRows("SELECT *, DATE_FORMAT(timestamp, '%Y-%m-%d %T') AS date from syslog WHERE device_id = ? ORDER BY timestamp DESC LIMIT 20", array($device['device_id']));
-  if (count($syslog))
+  $syslog =  dbFetchCell("SELECT COUNT(*) from syslog WHERE device_id = ?", array($device['device_id']));
+  if ($syslog)
   {
-    echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-    echo('<p style="padding: 0px 5px 5px;" class="sectionhead"><a class="sectionhead" href="device/device=' . $device['device_id'] . '/tab=logs/section=syslog/"><img align="absmiddle" src="images/16/printer.png" /> Recent Syslog</a></p>');
-    echo('<table class="table table-condensed table-striped">');
-    foreach ($syslog as $entry) { include("includes/print-syslog.inc.php"); }
-    echo("</table>");
+    $show_syslog = "<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>";
+    $show_syslog .= '<p style="padding: 0px 5px 5px;" class="sectionhead"><a class="sectionhead" href="device/device=';
+    $show_syslog .= $device['device_id'] . '/tab=logs/section=syslog/"><img align="absmiddle" src="images/16/report_key.png" /> Recent Syslog</a></p>';
+    echo $show_syslog;
+    print_syslogs(array('device' => $device['device_id'], 'short' => TRUE));
     echo("</div>");
   }
 }

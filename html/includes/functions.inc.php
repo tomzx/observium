@@ -39,6 +39,31 @@ function format_timestamp($str)
   }
 }
 
+/**
+ * Return array with syslog prioritys.
+ *
+ * This function return array with syslog priority names and colors.
+ * 
+ * @param none
+ * @return array
+ * 
+ * @author Mike Stupalov <mike@stupalov.ru>
+ */
+function syslog_prioritys()
+{
+  $prioritys['0'] = array('name' => 'emergencies',   'color' => '#FF0000');
+  $prioritys['1'] = array('name' => 'alerts',        'color' => '#EE2222');
+  $prioritys['2'] = array('name' => 'critical',      'color' => '#DD3333');
+  $prioritys['3'] = array('name' => 'errors',        'color' => '#BB4444');
+  $prioritys['4'] = array('name' => 'warnings',      'color' => '#AA5555');
+  $prioritys['5'] = array('name' => 'notifications', 'color' => '#555599');
+  $prioritys['6'] = array('name' => 'informational', 'color' => '#00FF00');
+  $prioritys['7'] = array('name' => 'debugging',     'color' => '#0000FF');
+  //$prioritys['10'] = array('name' => 'other',     'color' => '#D2D8F9');
+  
+  return $prioritys;
+}
+
 function data_uri($file, $mime)
 {
   $contents = file_get_contents($file);

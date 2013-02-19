@@ -22,9 +22,9 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
           echo('<li><a href="'.generate_url(array('page'=>'overview')).'"><img src="images/16/map.png" border="0" align="absmiddle" /> Network Map</a></li>');
         } ?>
         <li><a href="<?php echo(generate_url(array('page'=>'eventlog'))); ?>"><img src="images/16/report.png" border="0" align="absmiddle" /> Eventlog</a></li>
-  <?php if (isset($config['enable_syslog']) && $config['enable_syslog']) {
-      echo('<li><a href="'.generate_url(array('page'=>'syslog')).'"><img src="images/16/page.png" border="0" align="absmiddle" /> Syslog</a></li>');
-  } ?>
+        <?php if (isset($config['enable_syslog']) && $config['enable_syslog']) {
+          echo('<li><a href="'.generate_url(array('page'=>'syslog')).'"><img src="images/16/report_key.png" border="0" align="absmiddle" /> Syslog</a></li>');
+        } ?>
 <!--        <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><img src="images/16/exclamation.png" border="0" align="absmiddle" /> Alerts</a></li> -->
         <li><a href="<?php echo(generate_url(array('page'=>'inventory'))); ?>"><img src="images/16/bricks.png" border="0" align="absmiddle" /> Inventory</a></li>
         </ul>
@@ -110,7 +110,8 @@ $(document).ready(function() {
       legend: { show:true, location: 'e' }
     }
   );
-});
+}
+);
 </script>
       </div>
 

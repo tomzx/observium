@@ -1,9 +1,9 @@
-  <hr />
-  <form method="post" action="" class="form-inline">
-    <div class="input-prepend" style="margin-right: 3px;">
-      <span class="add-on">Message</span>
-      <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
-    </div>
+<hr />
+<form method="post" action="" class="form-inline">
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Message</span>
+    <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
+  </div>
 
   <div class="input-prepend" style="margin-right: 3px;">
     <span class="add-on">Type</span>

@@ -382,28 +382,16 @@
     function show_syslog($config) {
 	// Show Syslog
 	if ($config['frontpage']['syslog']['show']) {
-	    echo("<div class=\"row-fluid\">");
-	    echo("    <div class=\"span12 \">");
-	    echo("        <h3 class=\"bill\">Recent Syslog Messages</h3>");
-	    echo("        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">");
-	    echo("            <thead>");
-	    echo("                <tr>");
-	    echo("                    <th>Date</th>");
-	    echo("                    <th>Device</th>");
-	    echo("                    <th>Message</th>");
-	    echo("                </tr>");
-	    echo("            </thead>");
-	    echo("            <tbody>");
-	    $sql = "SELECT *, DATE_FORMAT(timestamp, '%D %b %T') AS date from syslog ORDER BY timestamp DESC LIMIT ".$config['frontpage']['eventlog']['items'];
-	    $query = mysql_query($sql);
-	    while ($entry = mysql_fetch_assoc($query)) {
-		$entry = array_merge($entry, device_by_id_cache($entry['device_id']));
-		include("includes/print-syslog.inc.php");
-	    }
-	    echo("            </tbody>");
-	    echo("        </table>");
-	    echo("    </div>");
-	    echo("</div>");
+	    $show_syslog = "<div class=\"row-fluid\">";
+	    $show_syslog .= "    <div class=\"span12 \">";
+	    $show_syslog .= "        <h3 class=\"bill\">Recent Syslog Messages</h3>";
+	    echo $show_syslog;
+	    
+	    print_syslogs(array('pagesize' => $config['frontpage']['syslog']['items']));
+	    
+	    $show_syslog = "    </div>";
+	    $show_syslog .= "</div>";
+	    echo $show_syslog;
 	}
     }
 
