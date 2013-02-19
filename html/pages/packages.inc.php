@@ -79,7 +79,7 @@ foreach (dbFetchRows("SELECT * FROM `packages` WHERE 1 $where GROUP BY `name`", 
 echo("  </tbody>\n");
 echo("</table>\n");
 
-echo('<script src="'.$config['base_url'].'js/bootstrap-tooltip.js\"></script>');
-echo('<script src="'.$config['base_url'].'js/billing.js\"></script>');
+echo('<script src="'.$config['base_url'].'js/bootstrap-tooltip.js"></script>');
+echo('<script src="'.$config['base_url'].'js/billing.js"></script>');
 
 ?>
