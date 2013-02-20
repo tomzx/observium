@@ -77,15 +77,14 @@
 			foreach ($devicesArray as $device) {
 			    if ($device['location'] == $location) {
 				$devices[] = $device['hostname'];
-				$devices_up[] = $device;
 				$count++;
-				if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname']." DOWN"; }
+				if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname']; 
+                                } elseif ($device['status'] == "1") { $devices_up[] = $device; }
 			    }
 			}
-			$devices_down = array_merge(array(count($devices_up). " Devices OK"), $devices_down);
 			$count = (($count < 100) ? $count : "100");
 			if ($down > 0) {
-			    $locations_down[]   = "['".$location."', 100, ".$count.", '".implode(", ", $devices_down)."']";
+			    $locations_down[]   = "['".$location."', ".$down.", ".$count*$down.", '".count($devices_up). " Devices OK, " . count($devices_down). " Devices DOWN: (". implode(", ", $devices_down).")']";
 			} else {
 			    $locations_up[] = "['".$location."', 0, ".$count.", '".implode(", ", $devices_down)."']";
 			}
@@ -108,9 +107,9 @@
                                                                           echo "\t\t    datalessRegionColor: '#d5d5d5',"; } ?>
                     <?php if ($config['frontpage']['map']['realworld']) { echo "\t\t    backgroundColor: {fill: '#cceef0'},"; } ?>
 		    magnifyingGlass: {enable: true, zoomFactor: 5},
-		    colorAxis: {values: [0, 1, 2], colors: ['darkgreen', 'orange', 'red']},
+		    colorAxis: {values: [0, 1, 2, 3], colors: ['darkgreen', 'orange', 'orangered', 'red']},
 		    markerOpacity: 0.75,
-                    sizeAxis: {minValue: 1,  maxValue: 2, minSize: <?php echo $config['frontpage']['map']['dotsize']; ?>, maxSize: <?php echo $config['frontpage']['map']['dotsize']; ?>}
+                    sizeAxis: {minValue: 1,  maxValue: 10, minSize: 10, maxSize: 40}
 		};
 		var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
