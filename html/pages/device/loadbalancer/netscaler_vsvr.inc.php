@@ -24,7 +24,8 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   echo("<td width=320>" . format_si($vsvr['vsvr_bps_out']*8) . "bps</a></td>");
   echo("</tr>");
 
-  $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name']));
+  $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.device_id = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name'], $device['device_id']));
+
   if(count($svcs))
   {
     echo('<tr><td colspan="5">');
