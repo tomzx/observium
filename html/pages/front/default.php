@@ -79,14 +79,14 @@
 				$devices[] = $device['hostname'];
 				$count++;
 				if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname']; 
-                                } elseif ($device['status'] == "1") { $devices_up[] = $device; }
+                                } elseif ($device['status'] == "1") { $devices_up[] = $device['hostname']; }
 			    }
 			}
 			$count = (($count < 100) ? $count : "100");
 			if ($down > 0) {
 			    $locations_down[]   = "['".$location."', ".$down.", ".$count*$down.", '".count($devices_up). " Devices OK, " . count($devices_down). " Devices DOWN: (". implode(", ", $devices_down).")']";
 			} else {
-			    $locations_up[] = "['".$location."', 0, ".$count.", '".implode(", ", $devices_down)."']";
+			    $locations_up[] = "['".$location."', 0, ".$count.", '".count($devices_up). " Devices UP: (". implode(", ", $devices_up).")']";
 			}
 		    }
 		    unset($devicesArray);
