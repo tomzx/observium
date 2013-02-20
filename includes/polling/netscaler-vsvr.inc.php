@@ -84,14 +84,11 @@ if ($device['os'] == "netscaler")
   echo("Netscaler VServers\n");
 
   $oids_gauge   = array('vsvrCurClntConnections','vsvrCurSrvrConnections');
-
   $oids_counter = array('vsvrSurgeCount','vsvrTotalRequests','vsvrTotalRequestBytes','vsvrTotalResponses','vsvrTotalResponseBytes','vsvrTotalPktsRecvd',
                         'vsvrTotalPktsSent','vsvrTotalSynsRecvd','vsvrTotMiss','vsvrTotHits','vsvrTotSpillOvers','vsvrTotalClients');
 
   $oids = array_merge($oids_gauge, $oids_counter);
-
   unset($snmpstring, $rrdupdate, $snmpdata, $snmpdata_cmd, $rrd_create);
-
   $rrd_create = $config['rrd_rra'];
 
   foreach ($oids_gauge as $oid)
@@ -114,15 +111,17 @@ if ($device['os'] == "netscaler")
 
   foreach ($vsvr_array as $index => $vsvr)
   {
-    // Use vsvrFullName when it exists.
-    /// FIXME : vsvrFullName is cosmetic only, use vsvrName for indexing
+    // Rename rrds to match vsvrName as that's how things are indexed.
     if (isset($vsvr['vsvrFullName']))
     {
-      #$rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrFullName']).".rrd";
-      #$rrd_file_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrName']).".rrd";
-      #if(is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
-      $vsvr['vsvrName'] = $vsvr['vsvrFullName'];
+      $vsvr['label'] = $vsvr['vsvrFullName'];
+      $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrName']).".rrd";
+      $rrd_file_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrFullName']).".rrd";
+      if(is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
+    } else {
+      $vsvr['label'] = $vsvr['vsvrName'];
     }
+
     if (isset($vsvr['vsvrName']))
     {
       $vsvr_exist[$vsvr['vsvrName']] = 1;
@@ -142,7 +141,7 @@ if ($device['os'] == "netscaler")
       echo(str_pad($vsvr['vsvrName'], 25) . " | " . str_pad($vsvr['vsvrType'],5) . " | " .  str_pad($vsvr['vsvrState'],6) ." | ". str_pad($vsvr['vsvrIpAddress'],16) ." | ". str_pad($vsvr['vsvrPort'],5));
       echo(" | " . str_pad($vsvr['vsvrRequestRate'],8) . " | " . str_pad($vsvr['vsvrRxBytesRate']."B/s", 8)." | ". str_pad($vsvr['vsvrTxBytesRate']."B/s", 8));
 
-      $db_update = array('vsvr_ip' => $vsvr['vsvrIpAddress'], 'vsvr_ipv6' => $vsvr['vsvrIp6Address'], 'vsvr_port' => $vsvr['vsvrPort'], 'vsvr_state' => $vsvr['vsvrState'], 'vsvr_type' => $vsvr['vsvrType'],
+      $db_update = array('vsvr_label' => $vsvr['label'], 'vsvr_fullname' => $vsvr['vsvrFullName'], 'vsvr_ip' => $vsvr['vsvrIpAddress'], 'vsvr_ipv6' => $vsvr['vsvrIp6Address'], 'vsvr_port' => $vsvr['vsvrPort'], 'vsvr_state' => $vsvr['vsvrState'], 'vsvr_type' => $vsvr['vsvrType'],
                          'vsvr_entitytype' => $vsvr['vsvrEntityType'], 'vsvr_req_rate' => $vsvr['RequestRate'], 'vsvr_bps_in' => $vsvr['vsvrRxBytesRate'], 'vsvr_bps_out' => $vsvr['vsvrTxBytesRate']);
 
      if (!is_array($vsvrs[$vsvr['vsvrName']]))
@@ -270,8 +269,14 @@ if ($device['os'] == "netscaler")
     /// This is cosmetic only, retain svcServiceName for indexing !
     if (isset($svc['svcServiceFullName']))
     {
-      $svc['svcServiceName'] = $svc['svcServiceFullName'];
+      $svc['label'] = $svc['svcServiceFullName'];
+      $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceName']).".rrd";
+      $rrd_file_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceFullName']).".rrd";
+      if(is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
+    } else {
+      $svc['label'] = $svc['svcServiceName'];
     }
+
 
     if (isset($svc['svcServiceName']))
     {
@@ -292,7 +297,7 @@ if ($device['os'] == "netscaler")
       echo(str_pad($svc['svcServiceName'], 25) . " | " . str_pad($svc['svcServiceType'],15) . " | " .  str_pad($svc['svcState'],6) ." | ". str_pad($svc['svcIpAddress'],16) ." | ". str_pad($svc['svcPort'],5));
       echo(" | " . str_pad($svc['svcRequestRate'],8) . " | " . str_pad($svc['svcRxBytesRate']."B/s", 8)." | ". str_pad($svc['svcTxBytesRate']."B/s", 8));
 
-      $db_update = array('svc_ip' => $svc['svcIpAddress'], 'svc_port' => $svc['svcPort'], 'svc_state' => $svc['svcState'], 'svc_type' => $svc['svcServiceType'],
+      $db_update = array('svc_label' => $svc['label'], 'svc_fullname' => $svc['svcServiceFullName'], 'svc_ip' => $svc['svcIpAddress'], 'svc_port' => $svc['svcPort'], 'svc_state' => $svc['svcState'], 'svc_type' => $svc['svcServiceType'],
                          'svc_req_rate' => $svc['RequestRate'], 'svc_bps_in' => $svc['svcRxBytesRate'], 'svc_bps_out' => $svc['svcTxBytesRate']);
 
      if (!is_array($svcs[$svc['svcServiceName']]))
