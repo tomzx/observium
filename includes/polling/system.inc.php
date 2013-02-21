@@ -23,9 +23,20 @@
 
   if (empty($uptime))
   {
+    // First calculate sysUpTime (fix for some devices like Cisco ASA)
+    // SNMPv2-MIB::sysUpTime.0 = Timeticks: (2542831) 7:03:48.31
+    $poll_device['sysUpTime'] = str_replace("(", "", $poll_device['sysUpTime']);
+    $poll_device['sysUpTime'] = str_replace(")", "", $poll_device['sysUpTime']);
+    list($days, $hours, $mins, $secs) = explode(":", $poll_device['sysUpTime']);
+    list($secs, $microsecs) = explode(".", $secs);
+    $hours = $hours + ($days * 24);
+    $mins = $mins + ($hours * 60);
+    $secs = $secs + ($mins * 60);
+    $sysUpTime = $secs;
+
     // Use snmpEngineTime if possible (sysUpTime 68 year rollover issue)
     $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
-    if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0)
+    if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $sysUpTime)
     {
       echo("Using snmpEngineTime (".$snmpEngineTime.")\n");
       $uptime = $snmpEngineTime;
@@ -39,7 +50,7 @@
     {
       echo("Using hrSystemUptime (".$hrSystemUptime.")\n");
       $agent_uptime = $uptime; // Move uptime into agent_uptime
-      #HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (63050465) 7 days, 7:08:24.65
+      //HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (63050465) 7 days, 7:08:24.65
       $hrSystemUptime = str_replace("(", "", $hrSystemUptime);
       $hrSystemUptime = str_replace(")", "", $hrSystemUptime);
       list($days,$hours, $mins, $secs) = explode(":", $hrSystemUptime);
@@ -49,16 +60,8 @@
       $secs = $secs + ($mins * 60);
       $uptime = $secs;
     } else {
-      echo("Using SNMP Agent Uptime (".$poll_device['sysUpTime'].")\n");
-      #SNMPv2-MIB::sysUpTime.0 = Timeticks: (2542831) 7:03:48.31
-      $poll_device['sysUpTime'] = str_replace("(", "", $poll_device['sysUpTime']);
-      $poll_device['sysUpTime'] = str_replace(")", "", $poll_device['sysUpTime']);
-      list($days, $hours, $mins, $secs) = explode(":", $poll_device['sysUpTime']);
-      list($secs, $microsecs) = explode(".", $secs);
-      $hours = $hours + ($days * 24);
-      $mins = $mins + ($hours * 60);
-      $secs = $secs + ($mins * 60);
-      $uptime = $secs;
+      echo("Using SNMP Agent Uptime (".$sysUpTime.")\n");
+      $uptime = $sysUpTime;
     }
   }
 
