@@ -16,7 +16,8 @@ if ($device['os_group'] == "unix")
 
   if (!$agent)
   {
-    echo("Connection to UNIX agent failed on port ".$agent_port.".");
+    echo("Connection to UNIX agent on ".$device['hostname'].":".$agent_port." failed. ERROR: ".$errno." ".$errstr."\n");
+    logfile("Connection to UNIX agent on ".$device['hostname'].":".$agent_port." failed. ERROR: ".$errno." ".$errstr);
   } else {
     $agent_raw = stream_get_contents($agent);
   }
