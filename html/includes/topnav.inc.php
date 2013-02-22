@@ -61,26 +61,26 @@ else
   $services['disabled']   = dbFetchCell("SELECT COUNT(service_id) FROM services AS S, devices AS D, devices_perms AS P WHERE P.user_id = ? AND P.device_id = D.device_id AND S.device_id = D.device_id AND service_disabled = '1'", array($_SESSION['user_id']));
 }
 
-if ($devices['down'])  { $devices['bgcolour'] = "#ffcccc"; } else { $devices['bgcolour'] = "transparent"; }
-if ($ports['down'])    { $ports['bgcolour'] = "#ffcccc"; } else { $ports['bgcolour'] = "#e5e5e5"; }
-if ($services['down']) { $services['bgcolour'] = "#ffcccc"; } else { $services['bgcolour'] = "transparent"; }
+if ($devices['down'])  { $devices['class'] = "error"; } else { $devices['class'] = ""; }
+if ($ports['down'])    { $ports['class'] = "error"; } else { $ports['class'] = ""; }
+if ($services['down']) { $services['class'] = "error"; } else { $services['class'] = ""; }
 
 ?>
 
-<table cellpadding="0" cellspacing="0" border="0" width=500>
-  <tr style="background-color: <?php echo($devices[bgcolour]); ?>">
+<table class="table table-bordered table-condensed table-rounded" width=500 style="margin-bottom: 0;">
+  <tr class="<?php echo($devices['class']); ?>">
     <td width="5"></td>
     <td><strong><a href="<?php echo(generate_url(array('page' => 'devices'))); ?>">Devices</a></strong></td>
     <td><?php echo($devices['count']) ?></td>
     <td> ( </td>
-    <td style="text-align: right"> <a class=green href="<?php echo(generate_url(array('page' => 'devices', 'status' => '1'))); ?>"><span class="green"><?php echo($devices['up']) ?> up</a></td>
+    <td style="text-align: right"> <a class="green" href="<?php echo(generate_url(array('page' => 'devices', 'status' => '1'))); ?>"><?php echo($devices['up']) ?> up</a></td>
     <td style="text-align: right"> <a class="red" href="<?php echo(generate_url(array('page' => 'devices', 'status' => '0'))); ?>"><?php echo($devices['down']) ?> down</a></td>
     <td style="text-align: right"> <a class="black" href="<?php echo(generate_url(array('page' => 'devices', 'ignore' => '1'))); ?>"><?php echo($devices['ignored']) ?> ignored</a> </td>
     <td style="text-align: right"> <a class="grey" href="<?php echo(generate_url(array('page' => 'devices', 'disabled' => '1'))); ?>"><?php echo($devices['disabled']) ?> disabled</a></td>
     <td> ) </td>
     <td width="5"></td>
   </tr>
-  <tr style="background-color: <?php echo($ports['bgcolour']) ?>">
+  <tr class="<?php echo($ports['class']) ?>">
       <td width="5"></td>
       <td><strong><a href="/ports/">Ports</a></strong></td>
     <td><?php echo($ports['count']) ?></td>
@@ -92,7 +92,7 @@ if ($services['down']) { $services['bgcolour'] = "#ffcccc"; } else { $services['
     <td> ) </td>
     <td width="5"></td>
   </tr>
-<?php if ($config['show_services']) { ?>
+<?php if ($config['show_services'] && FALSE) { ?>
   <tr style="background-color: <?php echo($services['bgcolour']) ?>">
     <td width="5"></td>
     <td><strong>Services</strong></td>
