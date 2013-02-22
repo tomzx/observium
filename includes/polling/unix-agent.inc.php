@@ -12,12 +12,14 @@ if ($device['os_group'] == "unix")
   $agent_port = '6556';
 
   $agent_start = utime();
-  $agent = @fsockopen($device['hostname'], $agent_port, $errno, $errstr, 10);
+  $agent_socket = "tcp://".$device['hostname'].":".$agent_port;
+#  $agent = @stream_socket_client($device['hostname'], $agent_port, $errno, $errstr, 10);
+  $agent = @stream_socket_client($agent_socket, $errno, $errstr, 10);
 
   if (!$agent)
   {
-    echo("Connection to UNIX agent on ".$device['hostname'].":".$agent_port." failed. ERROR: ".$errno." ".$errstr."\n");
-    logfile("Connection to UNIX agent on ".$device['hostname'].":".$agent_port." failed. ERROR: ".$errno." ".$errstr);
+    echo("Connection to UNIX agent on ".$agent_socket." failed. ERROR: ".$errno." ".$errstr."\n");
+    logfile("Connection to UNIX agent on ".$agent_socket." failed. ERROR: ".$errno." ".$errstr);
   } else {
     $agent_raw = stream_get_contents($agent);
   }
