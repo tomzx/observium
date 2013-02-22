@@ -8,7 +8,7 @@
  * @package    observium
  * @subpackage webinterface
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -43,6 +43,8 @@ if (strpos($_SERVER['PATH_INFO'], "debug"))
   ini_set('error_reporting', 0);
 }
 
+// Parse GET variables into $vars for backwards compatibility
+// Can probably remove this soon
 foreach ($_GET as $key=>$get_var)
 {
   if (strstr($key, "opt"))
@@ -53,6 +55,7 @@ foreach ($_GET as $key=>$get_var)
   }
 }
 
+// Parse URI into $vars
 $segments = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 
 foreach ($segments as $pos => $segment)
@@ -90,7 +93,7 @@ if (strstr($_SERVER['REQUEST_URI'], 'widescreen=no'))  { unset($_SESSION['widesc
 if (strstr($_SERVER['REQUEST_URI'], 'big_graphs=yes')) { $_SESSION['big_graphs'] = 1; }
 if (strstr($_SERVER['REQUEST_URI'], 'big_graphs=no'))  { unset($_SESSION['big_graphs']); }
 
-# Load the settings for Multi-Tenancy.
+// Load the settings for Multi-Tenancy.
 if (isset($config['branding']) && is_array($config['branding']))
 {
   if ($config['branding'][$_SERVER['SERVER_NAME']])
@@ -107,12 +110,12 @@ if (isset($config['branding']) && is_array($config['branding']))
   }
 }
 
-# page_title_prefix is displayed, unless page_title is set
+// page_title_prefix is displayed, unless page_title is set
 if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title']; }
 
 ?>
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <title><?php echo($config['page_title_prefix'] . ($config['page_title_prefix'] != '' && $config['page_title_suffix'] != '' ? ' - ' : '') . $config['page_title_suffix']); ?></title>
   <base href="<?php echo($config['base_url']); ?>" />
@@ -363,13 +366,13 @@ $('INPUT.auto-hint, TEXTAREA.auto-hint').focus(function() {
 <?php
 if (is_array($pagetitle))
 {
-  # if prefix is set, put it in front
+  // if prefix is set, put it in front
   if ($config['page_title_prefix']) { array_unshift($pagetitle,$config['page_title_prefix']); }
 
-  # if suffix is set, put it in the back
+  // if suffix is set, put it in the back
   if ($config['page_title_suffix']) { $pagetitle[] = $config['page_title_suffix']; }
 
-  # create and set the title
+  // create and set the title
   $title = join(" - ",$pagetitle);
   echo("<script type=\"text/javascript\">\ndocument.title = '$title';\n</script>");
 }
