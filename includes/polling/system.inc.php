@@ -23,32 +23,9 @@
 
   if (empty($uptime))
   {
-    // First calculate sysUpTime (fix for some devices like Cisco ASA)
-    // SNMPv2-MIB::sysUpTime.0 = Timeticks: (2542831) 7:03:48.31
-    $poll_device['sysUpTime'] = str_replace("(", "", $poll_device['sysUpTime']);
-    $poll_device['sysUpTime'] = str_replace(")", "", $poll_device['sysUpTime']);
-    list($days, $hours, $mins, $secs) = explode(":", $poll_device['sysUpTime']);
-    list($secs, $microsecs) = explode(".", $secs);
-    $hours = $hours + ($days * 24);
-    $mins = $mins + ($hours * 60);
-    $secs = $secs + ($mins * 60);
-    $sysUpTime = $secs;
-
-    // Use snmpEngineTime if possible (sysUpTime 68 year rollover issue)
-    $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
-    if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $sysUpTime)
-    {
-      echo("Using snmpEngineTime (".$snmpEngineTime.")\n");
-      $uptime = $snmpEngineTime;
-    }
-  }
-
-  if (empty($uptime))
-  {
     $hrSystemUptime = snmp_get($device, "hrSystemUptime.0", "-Oqv", "HOST-RESOURCES-MIB");
     if (!empty($hrSystemUptime) && !strpos($hrSystemUptime, "No") && ($device['os'] != "windows"))
     {
-      echo("Using hrSystemUptime (".$hrSystemUptime.")\n");
       $agent_uptime = $uptime; // Move uptime into agent_uptime
       //HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (63050465) 7 days, 7:08:24.65
       $hrSystemUptime = str_replace("(", "", $hrSystemUptime);
@@ -59,10 +36,27 @@
       $mins = $mins + ($hours * 60);
       $secs = $secs + ($mins * 60);
       $uptime = $secs;
+      echo("Using hrSystemUptime (".$uptime.")\n");
     } else {
-      echo("Using SNMP Agent Uptime (".$sysUpTime.")\n");
-      $uptime = $sysUpTime;
+      // SNMPv2-MIB::sysUpTime.0 = Timeticks: (2542831) 7:03:48.31
+      $poll_device['sysUpTime'] = str_replace("(", "", $poll_device['sysUpTime']);
+      $poll_device['sysUpTime'] = str_replace(")", "", $poll_device['sysUpTime']);
+      list($days, $hours, $mins, $secs) = explode(":", $poll_device['sysUpTime']);
+      list($secs, $microsecs) = explode(".", $secs);
+      $hours = $hours + ($days * 24);
+      $mins = $mins + ($hours * 60);
+      $secs = $secs + ($mins * 60);
+      $uptime = $secs;
+      echo("Using sysUpTime (".$uptime.")\n");
     }
+  }
+
+  // Last check snmpEngineTime and fix if needed uptime (sysUpTime 68 year rollover issue)
+  $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
+  if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $uptime)
+  {
+    echo("Fix UpTime with snmpEngineTime (".$snmpEngineTime.")\n");
+    $uptime = $snmpEngineTime;
   }
 
   if (is_numeric($uptime))
