@@ -39,7 +39,7 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ?", array($devic
     }
   }
 
-  $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
+  $rrd_filename = get_port_rrdfilename($device, $port);
   if ($ignore != 1 && is_file($rrd_filename))
   {
     $port = ifLabel($port);   // Fix Labels! ARGH. This needs to be in the bloody database!

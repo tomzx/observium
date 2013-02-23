@@ -10,10 +10,11 @@ $i = 1;
 foreach (explode(",", $_GET['id']) as $ifid)
 {
   $int = dbFetchRow("SELECT `ifIndex`, `hostname` FROM `ports` AS I, devices as D WHERE I.port_id = ? AND I.device_id = D.device_id", array($ifid));
-  if (is_file($config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd"))
+  $rrdfile = get_port_rrdfilename($int, $int);
+  if (is_file($rrdfile))
   {
-    $rrd_options .= " DEF:inoctets" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:INOCTETS:AVERAGE";
-    $rrd_options .= " DEF:outoctets" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:OUTOCTETS:AVERAGE";
+    $rrd_options .= " DEF:inoctets" . $i . "=" . $rrdfile . ":INOCTETS:AVERAGE";
+    $rrd_options .= " DEF:outoctets" . $i . "=" . $rrdfile . ":OUTOCTETS:AVERAGE";
     $in_thing .= $seperator . "inoctets" . $i . ",UN,0," . "inoctets" . $i . ",IF";
     $out_thing .= $seperator . "outoctets" . $i . ",UN,0," . "outoctets" . $i . ",IF";
     $pluses .= $plus;
@@ -27,10 +28,11 @@ unset($seperator); unset($plus);
 foreach (explode(",", $_GET['idb']) as $ifid)
 {
   $int = dbFetchRow("SELECT `ifIndex`, `hostname` FROM `ports` AS I, devices as D WHERE I.port_id = ? AND I.device_id = D.device_id", array($ifid));
-  if (is_file($config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd"))
+  $rrdfile = get_port_rrdfilename($int, $int);
+  if (is_file($rrdfile))
   {
-    $rrd_options .= " DEF:inoctetsb" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:INOCTETS:AVERAGE";
-    $rrd_options .= " DEF:outoctetsb" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:OUTOCTETS:AVERAGE";
+    $rrd_options .= " DEF:inoctetsb" . $i . "=" . $rrdfile . ":INOCTETS:AVERAGE";
+    $rrd_options .= " DEF:outoctetsb" . $i . "=" . $rrdfile . ":OUTOCTETS:AVERAGE";
     $in_thingb .= $seperator . "inoctetsb" . $i . ",UN,0," . "inoctetsb" . $i . ",IF";
     $out_thingb .= $seperator . "outoctetsb" . $i . ",UN,0," . "outoctetsb" . $i . ",IF";
     $plusesb .= $plus;

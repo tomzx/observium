@@ -268,9 +268,9 @@ echo("</td></tr>");
 
 if ($graph_type == "etherlike")
 {
-  $graph_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/port-". safename($port['ifIndex']) . "-dot3.rrd";
+  $graph_file = get_port_rrdfilename($device, $port, "dot3");
 } else {
-  $graph_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/port-". safename($port['ifIndex']) . ".rrd";
+  $graph_file = get_port_rrdfilename($device, $port);
 }
 
 if ($graph_type && is_file($graph_file))

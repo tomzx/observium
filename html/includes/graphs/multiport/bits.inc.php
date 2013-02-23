@@ -11,9 +11,10 @@ foreach (explode(",", $vars['id']) as $ifid)
   }
 
   $int = dbFetchRow("SELECT `ifIndex`, `hostname` FROM `ports` AS I, devices as D WHERE I.port_id = ? AND I.device_id = D.device_id", array($ifid));
-  if (is_file($config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . safename($int['ifIndex'] . ".rrd")))
+  $rrdfile = get_port_rrdfilename($int, $int);
+  if (is_file($rrdfile))
   {
-    $rrd_filenames[$i] = $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . safename($int['ifIndex'] . ".rrd");
+    $rrd_filenames[$i] = $rrdfile;
     $i++;
   }
 }

@@ -1,6 +1,7 @@
 <?php
 
-if (file_exists($config['rrd_dir'] . "/" . $device['hostname'] . "/port-". $port['ifIndex'] . "-adsl.rrd"))
+$rrdfile = get_port_rrdfilename($device, $port, "adsl");
+if (file_exists($rrdfile))
 {
   $iid = $id;
   echo("<div class=graphhead>ADSL Line Speed</div>");

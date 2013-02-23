@@ -57,7 +57,8 @@ if ($if_list)
 
     echo('<br />');
 
-    if (file_exists($config['rrd_dir'] . "/" . $port['hostname'] . "/port-" . $port['ifIndex'] . ".rrd"))
+    $rrdfile = get_port_rrdfilename($port, $port);
+    if (file_exists($rrdfile))
     {
       $graph_type = "port_bits";
 

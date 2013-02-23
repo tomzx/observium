@@ -18,7 +18,7 @@ if ($port_stats[$port['ifIndex']] && $port['ifType'] == "ethernetCsmacd"
 
     $this_port = &$port_stats[$port['ifIndex']];
 
-    $rrdfile = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("port-".$port['ifIndex']."-poe.rrd");
+    $rrdfile = get_port_rrdfilename($device, $port, "poe");
 
     if (!file_exists($rrdfile))
     {

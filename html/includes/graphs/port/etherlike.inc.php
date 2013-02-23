@@ -8,7 +8,7 @@ $oids = array('dot3StatsAlignmentErrors', 'dot3StatsFCSErrors', 'dot3StatsSingle
               'dot3StatsSymbolErrors');
 
 $i = 0;
-$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("port-" . $port['ifIndex'] . "-dot3.rrd");
+$rrd_filename = get_port_rrdfilename($device, $port, "dot3");
 
 if (is_file($rrd_filename))
 {

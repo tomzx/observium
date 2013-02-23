@@ -6,9 +6,11 @@ $i = 0;
 
 foreach ($ports as $port)
 {
-  if (is_file($config['rrd_dir'] . "/" . $port['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd")))
+  // $device and $port are retrieved from the same query
+  $rrdfile = get_port_rrdfilename($port, $port);
+  if (is_file($rrdfile))
   {
-    $rrd_list[$i]['filename'] = $config['rrd_dir'] . "/" . $port['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
+    $rrd_list[$i]['filename'] = $rrdfile;
     $rrd_list[$i]['descr'] = $port['ifDescr'];
     $i++;
   }

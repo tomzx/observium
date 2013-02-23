@@ -4,9 +4,9 @@
 $i=0;
 foreach (dbFetchRows("SELECT * FROM `ports` AS I, `devices` AS D WHERE `port_descr_type` = 'cust' AND `port_descr_descr` = ? AND D.device_id = I.device_id", array($vars['id'])) as $port)
 {
-  if (is_file($config['rrd_dir'] . "/" . $port['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd")))
+  $rrd_filename = get_port_rrdfilename($port, $port);
+  if (is_file($rrd_filename))
   {
-    $rrd_filename = $config['rrd_dir'] . "/" . $port['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
     $rrd_list[$i]['filename']  = $rrd_filename;
     $rrd_list[$i]['descr']     = $port['hostname'] ."-". $port['ifDescr'];
     $rrd_list[$i]['descr_in']  = shorthost($port['hostname']);
@@ -14,8 +14,6 @@ foreach (dbFetchRows("SELECT * FROM `ports` AS I, `devices` AS D WHERE `port_des
     $i++;
   }
 }
-
-#echo($config['rrd_dir'] . "/" . $port['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd"));
 
 $units ='bps';
 $total_units ='B';

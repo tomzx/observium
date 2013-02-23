@@ -15,7 +15,7 @@ if (is_numeric($vars['id']) && ($auth || port_permitted($vars['id'])))
 
   $graph_title = shorthost($device['hostname']) . " ::" . strtolower(makeshortif($port['ifDescr']))."";
   $auth   = TRUE;
-  $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
+  $rrd_filename = get_port_rrdfilename($device, $port);
 }
 
 ?>

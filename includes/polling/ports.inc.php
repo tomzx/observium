@@ -168,6 +168,8 @@ foreach ($ports as $port)
 
     if ($device['os'] == "vmware" && preg_match("/Device ([a-z0-9]+) at .*/", $this_port['ifDescr'], $matches)) { $this_port['ifDescr'] = $matches[1]; }
 
+    if($device['os'] == 'zxr10') { $this_port['ifAlias'] = preg_replace("/^" . str_replace("/", "\\/", $this_port['ifName']) . "\s*/", '', $this_port['ifDescr']); }
+
     $polled_period = $polled - $port['poll_time'];
 
     $port['update'] = array();
@@ -346,7 +348,7 @@ foreach ($ports as $port)
     }
 
     // Update RRDs
-    $rrdfile = $host_rrd . "/port-" . safename($port['ifIndex'] . ".rrd");
+    $rrdfile = get_port_rrdfilename($device, $port);
     if (!is_file($rrdfile))
     {
       rrdtool_create($rrdfile," --step 300 \

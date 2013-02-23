@@ -1,5 +1,4 @@
 <?php
-
 // Common Functions
 
 // Fix this shit, it's pretty uglytarded.
@@ -200,7 +199,8 @@ function delete_port($int_id)
   dbDelete('links', "`remote_port_id` =  ?", array($int_id));
   dbDelete('bill_ports', "`port_id` =  ?", array($int_id));
 
-  unlink(trim($config['rrd_dir'])."/".trim($interface['hostname'])."/port-".$interface['ifIndex'].".rrd");
+  $rrdfile = get_port_rrdfilename($interface, $interface);
+  unlink($rrdfile);
 }
 
 function sgn($int)
@@ -723,6 +723,35 @@ function add_service($device, $service, $descr)
                   'service_changed' => array('UNIX_TIMESTAMP(NOW())'), 'service_desc' => $descr, 'service_param' => "", 'service_ignore' => "0");
 
   echo dbInsert($insert, 'services');
+}
+
+function get_port_rrdfilename($device, $interface, $suffix = "")
+{
+  global $config;
+
+  if($device['hostname'] == "")
+  {
+    die(" Error: hostname for device is empty\n");
+  }
+
+  $device_identifier = strtolower($config['os'][$device['os']]['port_rrd_identifier']);
+
+  // default to ifIndex
+  $this_port_identifier = $interface['ifIndex'];
+
+  if($device_identifier == "ifname" && $interface['ifName'] != "")
+  {
+    $this_port_identifier = strtolower(str_replace("/", "-", $interface['ifName']));
+  }
+
+  if($suffix == "")
+  {
+    return sprintf("%s/%s/port-%s.rrd", trim($config['rrd_dir']), trim($device['hostname']), $this_port_identifier);
+  }
+  else
+  {
+    return sprintf("%s/%s/port-%s-%s.rrd", trim($config['rrd_dir']), trim($device['hostname']), $this_port_identifier, $suffix);
+  }
 }
 
 ?>

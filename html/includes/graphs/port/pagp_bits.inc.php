@@ -5,9 +5,10 @@
 $i=0;
 foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? AND `pagpGroupIfIndex` = ?", array($port['device_id'], $port['ifIndex'])) as $int)
 {
-  if (is_file($config['rrd_dir'] . "/" . $hostname . "/port-" . safename($int['ifIndex'] . ".rrd")))
+  $rrdfile = get_port_rrdfilename($device, $int);
+  if (is_file($rrdfile))
   {
-    $rrd_list[$i]['filename'] = $config['rrd_dir'] . "/" . $hostname . "/port-" . safename($int['ifIndex'] . ".rrd");
+    $rrd_list[$i]['filename'] = $rrdfile;
     $rrd_list[$i]['descr'] = $int['ifDescr'];
     $i++;
   }

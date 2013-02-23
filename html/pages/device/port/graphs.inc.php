@@ -1,6 +1,7 @@
 <?php
+$rrdfile = get_port_rrdfilename($device, $port);
 
-if (file_exists($config['rrd_dir'] . "/" . $device['hostname'] . "/port-". $port['ifIndex'] . ".rrd"))
+if (file_exists($rrdfile))
 {
   $iid = $id;
   echo("<div class=graphhead>Interface Traffic</div>");
@@ -23,7 +24,7 @@ if (file_exists($config['rrd_dir'] . "/" . $device['hostname'] . "/port-". $port
 
   include("includes/print-interface-graphs.inc.php");
 
-  if (is_file($config['rrd_dir'] . "/" . $device['hostname'] . "/port-" . $port['ifIndex'] . "-dot3.rrd"))
+  if (is_file(get_port_rrdfilename($device, $port, "dot3")))
   {
     echo("<div class=graphhead>Ethernet Errors</div>");
     $graph_type = "port_etherlike";

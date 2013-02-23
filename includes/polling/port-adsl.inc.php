@@ -45,7 +45,7 @@ if (isset($port_stats[$port['ifIndex']]['adslLineCoding']))
 
   $this_port = &$port_stats[$port['ifIndex']];
 
-  $rrdfile = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("port-".$port['ifIndex']."-adsl.rrd");
+  $rrdfile = get_port_rrdfilename($device, $port, "adsl");
 
   $rrd_create  = " --step 300";
   $rrd_create .= " DS:AtucCurrSnrMgn:GAUGE:600:0:635";

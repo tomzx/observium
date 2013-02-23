@@ -28,7 +28,7 @@ $ignore = 0;
     }
   }
 
-  $rrd_filename = $config['rrd_dir'] . "/" . $port['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
+  $rrd_filename = get_port_rrdfilename($port, $port);
   if (!$ignore && $i < 1100 && is_file($rrd_filename))
   {
     $rrd_filenames[] = $rrd_filename;

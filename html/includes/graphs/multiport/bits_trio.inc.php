@@ -11,11 +11,12 @@ $i = 1;
 foreach (explode(",", $_GET['id']) as $ifid)
 {
   $int = dbFetchRow("SELECT `ifIndex`, `hostname` FROM `ports` AS I, devices as D WHERE I.port_id = ? AND I.device_id = D.device_id", array($ifid));
-  if (is_file($config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd"))
+  $rrdfile = get_port_rrdfilename($int, $int);
+  if (is_file($rrdfile))
   {
     if (strstr($inverse, "a")) { $in = "OUT"; $out = "IN"; } else { $in = "IN"; $out = "OUT"; }
-    $rrd_options .= " DEF:inoctets" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:".$in."OCTETS:AVERAGE";
-    $rrd_options .= " DEF:outoctets" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:".$out."OCTETS:AVERAGE";
+    $rrd_options .= " DEF:inoctets" . $i . "=" . $rrdfile . ":".$in."OCTETS:AVERAGE";
+    $rrd_options .= " DEF:outoctets" . $i . "=" . $rrdfile . ":".$out."OCTETS:AVERAGE";
     $in_thing .= $seperator . "inoctets" . $i . ",UN,0," . "inoctets" . $i . ",IF";
     $out_thing .= $seperator . "outoctets" . $i . ",UN,0," . "outoctets" . $i . ",IF";
     $pluses .= $plus;
@@ -30,11 +31,12 @@ unset($seperator); unset($plus);
 foreach (explode(",", $_GET['idb']) as $ifid)
 {
   $int = dbFetchRow("SELECT `ifIndex`, `hostname` FROM `ports` AS I, devices as D WHERE I.port_id = ? AND I.device_id = D.device_id", array($ifid));
-  if (is_file($config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd"))
+  $rrdfile = get_port_rrdfilename($int, $int);
+  if (is_file($rrdfile))
   {
     if (strstr($inverse, "b")) { $in = "OUT"; $out = "IN"; } else { $in = "IN"; $out = "OUT"; }
-    $rrd_options .= " DEF:inoctetsb" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:".$in."OCTETS:AVERAGE";
-    $rrd_options .= " DEF:outoctetsb" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:".$out."OCTETS:AVERAGE";
+    $rrd_options .= " DEF:inoctetsb" . $i . "=" . $rrdfile . ":".$in."OCTETS:AVERAGE";
+    $rrd_options .= " DEF:outoctetsb" . $i . "=" . $rrdfile . ":".$out."OCTETS:AVERAGE";
     $in_thingb .= $seperator . "inoctetsb" . $i . ",UN,0," . "inoctetsb" . $i . ",IF";
     $out_thingb .= $seperator . "outoctetsb" . $i . ",UN,0," . "outoctetsb" . $i . ",IF";
     $plusesb .= $plus;
@@ -49,11 +51,12 @@ unset($seperator); unset($plus);
 foreach (explode(",", $_GET['idc']) as $ifid)
 {
   $int = dbFetchRow("SELECT `ifIndex`, `hostname` FROM `ports` AS I, devices as D WHERE I.port_id = ? AND I.device_id = D.device_id", array($ifid));
-  if (is_file($config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd"))
+  $rrdfile = get_port_rrdfilename($int, $int);
+  if (is_file($rrdfile))
   {
     if (strstr($inverse, "c")) { $in = "OUT"; $out = "IN"; } else { $in = "IN"; $out = "OUT"; }
-    $rrd_options .= " DEF:inoctetsc" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:".$in."OCTETS:AVERAGE";
-    $rrd_options .= " DEF:outoctetsc" . $i . "=" . $config['rrd_dir'] . "/" . $int['hostname'] . "/port-" . $int['ifIndex'] . ".rrd:".$out."OCTETS:AVERAGE";
+    $rrd_options .= " DEF:inoctetsc" . $i . "=" . $rrdfile . ":".$in."OCTETS:AVERAGE";
+    $rrd_options .= " DEF:outoctetsc" . $i . "=" . $rrdfile . ":".$out."OCTETS:AVERAGE";
     $in_thingc .= $seperator . "inoctetsc" . $i . ",UN,0," . "inoctetsc" . $i . ",IF";
     $out_thingc .= $seperator . "outoctetsc" . $i . ",UN,0," . "outoctetsc" . $i . ",IF";
     $plusesc .= $plus;

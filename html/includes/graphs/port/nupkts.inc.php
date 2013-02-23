@@ -3,7 +3,7 @@
 // FIXME uhh..
 if (1)
 {
-#  $rrd_list[1]['filename'] = $config['rrd_dir'] . "/" . $device['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
+#  $rrd_list[1]['filename'] = get_port_rrdfilename($device, $port);
 #  $rrd_list[1]['descr'] = $int['ifDescr'];
 #  $rrd_list[1]['ds_in'] = "INNUCASTPKTS";
 #  $rrd_list[1]['ds_out'] = "OUTNUCASTPKTS";
@@ -11,7 +11,7 @@ if (1)
 #  $rrd_list[1]['colour_area_in'] = "BB77BB";
 #  $rrd_list[1]['colour_area_out'] = "FFDD88";
 
-  $rrd_list[2]['filename'] = $config['rrd_dir'] . "/" . $device['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
+  $rrd_list[2]['filename'] = get_port_rrdfilename($device, $port);
   $rrd_list[2]['descr'] = $int['ifDescr'];
   $rrd_list[2]['ds_in'] = "INBROADCASTPKTS";
   $rrd_list[2]['ds_out'] = "OUTBROADCASTPKTS";
@@ -19,7 +19,7 @@ if (1)
   $rrd_list[2]['colour_area_in'] = "aa37BB";
   $rrd_list[2]['colour_area_out'] = "ee9D88";
 
-  $rrd_list[4]['filename'] = $config['rrd_dir'] . "/" . $device['hostname'] . "/port-" . safename($port['ifIndex'] . ".rrd");
+  $rrd_list[4]['filename'] = get_port_rrdfilename($device, $port);
   $rrd_list[4]['descr'] = $int['ifDescr'];
   $rrd_list[4]['ds_in'] = "INMULTICASTPKTS";
   $rrd_list[4]['ds_out'] = "OUTMULTICASTPKTS";
