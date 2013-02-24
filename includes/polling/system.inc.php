@@ -19,10 +19,9 @@
   $poll_device['sysObjectID'] = snmp_get($device, "sysObjectID.0", "-Oqvn", "SNMPv2-MIB");
   $poll_device['sysName'] = strtolower($poll_device['sysName']);
 
-  if (!empty($agent_data['uptime'])) { list($uptime) = explode(" ", $agent_data['uptime']); $uptime = round($uptime); echo("Using UNIX Agent Uptime ($uptime)\n");}
-
-  if (empty($uptime))
-  {
+  if (is_numeric($agent_data['uptime'])) {
+    list($uptime) = explode(" ", $agent_data['uptime']); $uptime = round($uptime); echo("Using UNIX Agent Uptime ($uptime)\n");
+  } else  {
     $hrSystemUptime = snmp_get($device, "hrSystemUptime.0", "-Oqv", "HOST-RESOURCES-MIB");
     if (!empty($hrSystemUptime) && !strpos($hrSystemUptime, "No") && ($device['os'] != "windows"))
     {
@@ -49,14 +48,14 @@
       $uptime = $secs;
       echo("Using sysUpTime (".$uptime.")\n");
     }
-  }
 
-  // Last check snmpEngineTime and fix if needed uptime (sysUpTime 68 year rollover issue)
-  $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
-  if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $uptime)
-  {
-    echo("Fix UpTime with snmpEngineTime (".$snmpEngineTime.")\n");
-    $uptime = $snmpEngineTime;
+    // Last check snmpEngineTime and fix if needed uptime (sysUpTime 68 year rollover issue)
+    $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
+    if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $uptime)
+    {
+      echo("Fix UpTime with snmpEngineTime (".$snmpEngineTime.")\n");
+      $uptime = $snmpEngineTime;
+    }
   }
 
   if (is_numeric($uptime))
