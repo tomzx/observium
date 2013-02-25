@@ -20,13 +20,15 @@
   $poll_device['sysName'] = strtolower($poll_device['sysName']);
 
   if (is_numeric($agent_data['uptime'])) {
-    list($uptime) = explode(" ", $agent_data['uptime']); $uptime = round($uptime); echo("Using UNIX Agent Uptime ($uptime)\n");
+    list($uptime) = explode(" ", $agent_data['uptime']);
+    $uptime = round($uptime);
+    $uptime_msg = "Using UNIX Agent Uptime";
   } else  {
     $hrSystemUptime = snmp_get($device, "hrSystemUptime.0", "-Oqv", "HOST-RESOURCES-MIB");
     if (!empty($hrSystemUptime) && !strpos($hrSystemUptime, "No") && ($device['os'] != "windows"))
     {
       $agent_uptime = $uptime; // Move uptime into agent_uptime
-      //HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (63050465) 7 days, 7:08:24.65
+      // HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (63050465) 7 days, 7:08:24.65
       $hrSystemUptime = str_replace("(", "", $hrSystemUptime);
       $hrSystemUptime = str_replace(")", "", $hrSystemUptime);
       list($days,$hours, $mins, $secs) = explode(":", $hrSystemUptime);
@@ -35,7 +37,7 @@
       $mins = $mins + ($hours * 60);
       $secs = $secs + ($mins * 60);
       $uptime = $secs;
-      echo("Using hrSystemUptime (".$uptime.")\n");
+      $uptime_msg = "Using SNMP Agent hrSystemUptime";
     } else {
       // SNMPv2-MIB::sysUpTime.0 = Timeticks: (2542831) 7:03:48.31
       $poll_device['sysUpTime'] = str_replace("(", "", $poll_device['sysUpTime']);
@@ -46,17 +48,19 @@
       $mins = $mins + ($hours * 60);
       $secs = $secs + ($mins * 60);
       $uptime = $secs;
-      echo("Using sysUpTime (".$uptime.")\n");
+      $uptime_msg = "Using SNMP Agent sysUpTime";
     }
 
     // Last check snmpEngineTime and fix if needed uptime (sysUpTime 68 year rollover issue)
+    // SNMP-FRAMEWORK-MIB::snmpEngineTime.0 = INTEGER: 72393514 seconds
     $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
     if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $uptime)
     {
-      echo("Fix UpTime with snmpEngineTime (".$snmpEngineTime.")\n");
       $uptime = $snmpEngineTime;
+      $uptime_msg = "Using SNMP Agent snmpEngineTime";
     }
   }
+  echo($uptime_msg." (".$uptime." seconds)\n");
 
   if (is_numeric($uptime))
   {
