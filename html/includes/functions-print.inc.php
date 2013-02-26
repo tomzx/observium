@@ -1,6 +1,19 @@
 <?php
 
 /**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage web
+ * @author     Mike Stupalov <mike@stupalov.ru>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ * @version    1.0.3
+ *
+ */
+
+/**
  * Display events.
  *
  * Display pages with device/port/system events on some formats.
@@ -286,6 +299,207 @@ function print_syslogs($vars)
 
   // Print events
   echo $string;
+}
+
+/**
+ * Display status events.
+ *
+ * Display pages with events about device troubles.
+ * Examples:
+ * print_status(array('devices' => TRUE)) - display for devices down
+ *
+ * Another statuses:
+ * devices, uptime, ports, errors, services, bgp
+ *
+ * @param array $status
+ * @return none
+ *
+ * @author Mike Stupalov <mike@stupalov.ru>
+ */
+function print_status($status)
+{
+  // Mike: I know that there are duplicated variables, but later will remove global
+  global $config;
+
+  $string = "        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">";
+  $string .= "            <thead>";
+  $string .= "                <tr>";
+  $string .= "                    <th>Device</th>";
+  $string .= "                    <th>Type</th>";
+  $string .= "                    <th>Status</th>";
+  $string .= "                    <th>Entity</th>";
+  $string .= "                    <th>Location</th>";
+  $string .= "                    <th>Time Since / Information</th>";
+  $string .= "                </tr>";
+  $string .= "            </thead>";
+  $string .= "            <tbody>";
+
+  $param = array();
+  if ($_SESSION['userlevel'] >= '7')
+  {
+    $query_perms = ' ';
+    $query_user = '';
+  } else {
+    $query_perms = ', devices_perms AS P ';
+    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
+    $param[] = $_SESSION['user_id'];
+  }
+  $query_device = " AND D.ignore = '0' AND D.disabled = '0'"; // Don't show ignored and disabled devices
+
+  $empty_line = "<tr><td colspan=6></td></tr>"; // FIXME here :)
+  
+  // Show Device Status
+  if ($status['devices'])
+  {
+    $query = "SELECT * FROM `devices` AS D" . $query_perms;
+    $query .= "WHERE D.status = '0'" . $query_device . $query_user;
+    $query .= "ORDER BY D.hostname ASC";
+    $entries = dbFetchRows($query, $param);
+    foreach ($entries as $device)
+    {
+      $string .= "                <tr>";
+      $string .= "                    <td nowrap>".generate_device_link($device, $device['hostname'])."</td>";
+      $string .= "                    <td><span class=\"badge badge-inverse\">Device</span></td>";
+      $string .= "                    <td><span class=\"label label-important\">Device Down</span></td>";
+      $string .= "                    <td>-</td>";
+      $string .= "                    <td nowrap>".substr($device['location'], 0, 30)."</td>";
+      $string .= "                    <td nowrap>".deviceUptime($device, 'short')."</td>";
+      $string .= "                </tr>";
+    }
+    if (!empty($entries)) { $string .= $empty_line; }
+  }
+
+  // Uptime
+  if ($status['uptime'])
+  {
+    if (filter_var($config['uptime_warning'], FILTER_VALIDATE_FLOAT) !== FALSE && $config['uptime_warning'] > 0)
+    {
+      $query = "SELECT * FROM `devices` AS D" . $query_perms;
+      $query .= "WHERE D.status = '1' AND D.uptime > 0 AND D.uptime < '" . $config['uptime_warning'] . "'" . $query_device . $query_user;
+      $query .= "ORDER BY D.hostname ASC";
+      $entries = dbFetchRows($query, $param);
+      foreach ($entries as $device)
+      {
+        $string .= "                <tr>";
+        $string .= "                    <td nowrap>".generate_device_link($device, $device['hostname'])."</td>";
+        $string .= "                    <td><span class=\"badge badge-inverse\">Device</span></td>";
+        $string .= "                    <td><span class=\"label label-success\">Device Rebooted</span></td>";
+        $string .= "                    <td>-</td>";
+        $string .= "                    <td nowrap>".substr($device['location'], 0, 30)."</td>";
+        $string .= "                    <td nowrap>Uptime ".formatUptime($device['uptime'], 'short')."</td>";
+        $string .= "                </tr>";
+      }
+      if (!empty($entries)) { $string .= $empty_line; }
+    }
+  }
+
+  // Ports Down
+  if ($status['ports'])
+  {
+    $query = "SELECT * FROM `ports` AS I, `devices` AS D" . $query_perms;
+    $query .= "WHERE I.device_id = D.device_id AND I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = '0' AND I.deleted = '0'" . $query_device . $query_user;
+    $query .= "ORDER BY D.hostname ASC, I.ifDescr * 1 ASC";
+    $entries = dbFetchRows($query, $param);
+    foreach ($entries as $port)
+    {
+      $port = ifNameDescr($port);
+      $string .= "                <tr>";
+      $string .= "                    <td nowrap>".generate_device_link($port, $port['hostname'])."</td>";
+      $string .= "                    <td><span class=\"badge badge-info\">Port</span></td>";
+      $string .= "                    <td><span class=\"label label-important\">Port Down</span></td>";
+      $string .= "                    <td nowrap>".generate_port_link($port, $port['label'])."</td>";
+      $string .= "                    <td nowrap>".substr($port['location'], 0, 30)."</td>";
+      $string .= "                    <td nowrap>Down for ".formatUptime($config['time']['now'] - strtotime($port['ifLastChange']), 'short')."</td>"; // This is like deviceUptime()
+      $string .= "                </tr>";
+    }
+    if (!empty($entries)) { $string .= $empty_line; }
+  }
+
+  // Ports Errors (only deltas)
+  if ($status['errors'])
+  {
+    $query = "SELECT * FROM `ports` AS I, `ports-state` AS E, `devices` AS D" . $query_perms;
+    $query .= "WHERE I.device_id = D.device_id AND I.ifOperStatus = 'up' AND I.ignore = '0' AND I.deleted = '0' AND I.port_id = E.port_id AND (E.ifInErrors_delta > 0 OR E.ifOutErrors_delta > 0)" . $query_device . $query_user;
+    $query .= "ORDER BY D.hostname ASC, I.ifDescr * 1 ASC";
+    $entries = dbFetchRows($query, $param);
+    foreach ($entries as $port)
+    {
+      $port = ifNameDescr($port);
+      $string .= "                <tr>";
+      $string .= "                    <td nowrap>".generate_device_link($port, $port['hostname'])."</td>";
+      $string .= "                    <td><span class=\"badge badge-info\">Port</span></td>";
+      $string .= "                    <td><span class=\"label label-important\">Port Errors</span></td>";
+      $string .= "                    <td nowrap>".generate_port_link($port, $port['label'])."</td>";
+      $string .= "                    <td nowrap>".substr($port['location'], 0, 30)."</td>";
+      $string .= "                    <td>Errors ";
+      if($port['ifInErrors_delta']) { $string .= "In: ".$port['ifInErrors_delta']; }
+      if($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $string .= ", "; }
+      if($port['ifOutErrors_delta']) { $string .= "Out: ".$port['ifOutErrors_delta']; }
+      $string .= "</td>";
+      $string .= "                </tr>";
+    }
+    if (!empty($entries)) { $string .= $empty_line; }
+  }
+
+  // Services
+  if ($status['services'])
+  {
+    $query = "SELECT * FROM `services` AS S, `devices` AS D" . $query_perms;
+    $query .= "WHERE S.device_id = D.device_id AND S.service_status = 'down' AND S.service_ignore = '0'" . $query_device . $query_user;
+    $query .= "ORDER BY D.hostname ASC";
+    $entries = dbFetchRows($query, $param);
+    foreach ($entries as $service)
+    {
+      $string .= "                <tr>";
+      $string .= "                    <td nowrap>".generate_device_link($service, $service['hostname'])."</td>";
+      $string .= "                    <td><span class=\"badge\">Service</span></td>";
+      $string .= "                    <td><span class=\"label label-important\">Service Down</span></td>";
+      $string .= "                    <td>".$service['service_type']."</td>";
+      $string .= "                    <td nowrap>".substr($service['location'], 0, 30)."</td>";
+      $string .= "                    <td nowrap>Down for ".formatUptime($config['time']['now'] - strtotime($service['service_changed']), 'short')."</td>"; // This is like deviceUptime()
+      $string .= "                </tr>";
+    }
+    if (!empty($entries)) { $string .= $empty_line; }
+  }
+
+  // BGP
+  if ($status['bgp'])
+  {
+    if (isset($config['enable_bgp']) && $config['enable_bgp'])
+    {
+      // Description for BGP states
+      $bgpstates = "IDLE - Router is searching routing table to see whether a route exists to reach the neighbor. &#xA;";
+      $bgpstates .= "CONNECT - Router found a route to the neighbor and has completed the three-way TCP handshake. &#xA;";
+      $bgpstates .= "OPEN SENT - Open message sent, with parameters for the BGP session. &#xA;";
+      $bgpstates .= "OPEN CONFIRM - Router received agreement on the parameters for establishing session. &#xA;";
+      $bgpstates .= "ACTIVE - Router didn't receive agreement on parameters of establishment. &#xA;";
+      //$bgpstates .= "ESTABLISHED - Peering is established; routing begins.";
+
+      $query = "SELECT * FROM `devices` AS D, bgpPeers AS B" . $query_perms;
+      $query .= "WHERE bgpPeerAdminStatus = 'start' AND bgpPeerState != 'established' AND B.device_id = D.device_id" . $query_device . $query_user;
+      $query .= "ORDER BY D.hostname ASC";
+      $entries = dbFetchRows($query, $param);
+      foreach ($entries as $peer)
+      {
+        $string .= "                <tr>";
+        $string .= "                    <td nowrap>".generate_device_link($peer, $peer['hostname'])."</td>";
+        $string .= "                    <td><span class=\"badge badge-warning\">BGP</span></td>";
+        $string .= "                    <td><span class=\"label label-important\" title=\"".$bgpstates."\">BGP ".strtoupper($peer['bgpPeerState'])."</span></td>";
+        $string .= "                    <td nowrap>".$peer['bgpPeerIdentifier']."</td>";
+        $string .= "                    <td nowrap>".substr($peer['location'], 0, 30)."</td>";
+        $string .= "                    <td nowrap><strong>AS".$peer['bgpPeerRemoteAs']." :</strong> ". substr($peer['astext'], 0, 15)."</td>";
+        $string .= "                </tr>";
+      }
+      if (!empty($entries)) { $string .= $empty_line; }
+    }
+  }
+
+  $string .= "            </tbody>";
+  $string .= "        </table>";
+  
+  // Final print all statuses
+  echo($string);
+
 }
 
 ?>
