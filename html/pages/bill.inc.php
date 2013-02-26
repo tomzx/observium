@@ -1,5 +1,20 @@
 <?php
 
+if(!is_file("includes/jpgraph/src/jpgraph.php"))
+{
+  ?>
+
+<div class="alert alert-error">
+  <h4>No Jpgraph installed</h4>
+  <i>Jpgraph has been removed from the Observium repositories and must now be installed separately</i> <br />
+  * Please download from <a href="http://jpgraph.net/download/">http://jpgraph.net/download/</a> and unpack to html/includes/jpgraph.<br />
+  * Remove the theme definition from the bottom of html/includes/jpgraph/src/jpg-config.inc.php
+</div>
+
+  <?php
+}
+
+
 $bill_id    = mres($vars['bill_id']);
 $isAdmin    = (($_SESSION['userlevel'] == "10") ? true : false);
 $isUser     = bill_permitted($bill_id);
