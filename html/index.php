@@ -139,7 +139,7 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <!--[if lte IE 7]><script src="css/test/lte-ie7.js"></script><![endif]-->
   <link rel="stylesheet" href="css/sweetie.css" />
   <link rel="stylesheet" href="css/fugue.css" />
-  <link rel="stylesheet" href="css/famfamfam.css" />
+  <!-- <link rel="stylesheet" href="css/famfamfam.css" /> -->
 
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }

@@ -344,29 +344,6 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
   echo('      </ul></li>');
 
 }
-
-echo('            <li class="divider-vertical" style="margin:0;"></li>');
-
-
-if ($config['api']['enabled'])
-{
-?>
-
-    <li><a href="<?php echo(generate_url(array('page'=>'simpleapi'))); ?>" class="drop"><img src="images/16/page_white_code.png" border="0" align="absmiddle" /> Simple API</a>
-      <div class="dropdown_1column">
-        <div class="col_1">
-          <ul>
-            <li><a href="<?php echo(generate_url(array('page'=>'simpleapi'))); ?>"><img src="images/16/page_white_code.png" border="0" align="absmiddle" /> API Manual</a></li>
-            <li><a href="<?php echo(generate_url(array('page'=>'simpleapi','api'=>'errorcodes'))); ?>"><img src="images/16/page_white_error.png" border="0" align="absmiddle" /> Error Codes</a></li>
-          </ul>
-        </div>
-      </div>
-    </li>
-        <li class="divider"></li>
-
-
-<?php
-} # if ($api)
 ?>
 
 
@@ -411,11 +388,41 @@ if($_SESSION['big_graphs'] === 1)
   echo('<li><a href="' . $toggle_url_biggraphs . 'big_graphs=yes" title="Switch to larger graphs"><i class="fugue-layout-4" style="font-size: 16px; color: #555;"></i> Large Graphs</a></li>');
 }
 
+if ($config['api']['enabled'])
+{
+  echo('<li class="divider"></li>');
+  echo('<li class="dropdown-submenu">');
+  echo('  <a tabindex="-1" href="'.generate_url(array('page'=>'simpleapi')).'"><i class="fugue-application-block"></i> Simple API</a>');
+  echo('  <ul class="dropdown-menu">');
+  echo('    <li><a href="'.generate_url(array('page'=>'simpleapi')).'"><i class="fugue-application-block"></i> API Manual</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'simpleapi','api'=>'errorcodes')).'"><i class="fugue-application--exclamation"></i> Error Codes</a></li>');
+  echo('  </ul>');
+  echo('</li>');
+}
 
+if ($_SESSION['userlevel'] >= 10)
+{
+  echo('<li class="divider"></li>');
+  echo('<li class="dropdown-submenu">');
+  echo('  <a tabindex="-1" href="'.generate_url(array('page'=>'adduser')).'"><i class="fugue-users"></i> Users</a>');
+  echo('  <ul class="dropdown-menu">');
+  echo('    <li><a href="'.generate_url(array('page'=>'adduser')).'"><i class="fugue-user--plus"></i> Add User</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="fugue-user--pencil"></i> Edit User</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="fugue-user--minus"></i> Remove User</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'authlog')).'"><i class="fugue-user-detective"></i> Authentication Log</a></li>');
+  echo('  </ul>');
+  echo('</li>');
+}
 ?>
-
+                <li class="divider"></li>
+                <li><a href="<?php echo generate_url(array('page'=>'settings')); ?>" title="Global Settings"><i class="fugue-wrench"></i> Global Settings</a></li>
+                <li><a href="<?php echo generate_url(array('page'=>'preferences')); ?>" title="My Settings "><i class="fugue-wrench-screwdriver"></i> My Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="fugue-information-shield"></i> About Observium</a></li>
               </ul>
             </li>
+            <li class="divider-vertical" style="margin:0;"></li>
+            <li><a href="<?php echo generate_url(array('page'=>'logout')); ?>" title="Logout"><i class="fugue-door-open-out"></i> Logout</a></li>
           </ul>
         </div><!-- /.nav-collapse -->
       </div>
