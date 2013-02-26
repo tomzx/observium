@@ -367,7 +367,7 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="fugue-gear"></i> <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="http://www.observium.org/wiki/Documentation" title="Help"><i class="fugue-information"></i> Help</a></li>
+                <li><a href="http://www.observium.org/wiki/Documentation" title="Help"><i class="fugue-question"></i> Help</a></li>
                 <li class="divider"></li>
 
 <?php
@@ -423,7 +423,7 @@ if ($_SESSION['userlevel'] >= 10)
                 <li class="divider"></li>
                 <li><a href="<?php echo generate_url(array('page'=>'logout')); ?>" title="Logout"><i class="fugue-door-open-out"></i> Logout</a></li>
                 <li class="divider"></li>
-                <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="fugue-information-shield"></i> About Observium</a></li>
+                <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="fugue-information"></i> About Observium</a></li>
               </ul>
             </li>
             <li class="divider-vertical" style="margin:0;"></li>

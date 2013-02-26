@@ -114,7 +114,7 @@ if (isset($config['branding']) && is_array($config['branding']))
 if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title']; }
 
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
 <head>
   <title><?php echo($config['page_title_prefix'] . ($config['page_title_prefix'] != '' && $config['page_title_suffix'] != '' ? ' - ' : '') . $config['page_title_suffix']); ?></title>
@@ -138,8 +138,7 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link rel="stylesheet" href="css/test/style.css" />
   <!--[if lte IE 7]><script src="css/test/lte-ie7.js"></script><![endif]-->
   <link rel="stylesheet" href="css/sweetie.css" />
-  <link rel="stylesheet" href="css/fugue.css" />
-  <!-- <link rel="stylesheet" href="css/famfamfam.css" /> -->
+  <link rel="stylesheet" href="css/sprites.css" />
 
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
