@@ -6,7 +6,7 @@
 $Observium_version = $config['version'];
 
 echo("
-      <div class='well well-small'>
+      <div class=''>
         <h3>Versions</h3>
         <table class=\"table table-bordered table-striped table-condensed table-rounded\">
           <tbody>
@@ -37,25 +37,29 @@ echo("
           <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Tom Laermans</dt><dd>Developer/Committer</dd>
           <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Geert Hauwaerts</dt><dd>Developer</dd>
           <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Dennis de Houx</dt><dd>Developer</dd>
+          <dt style="text-align: left;"><img src="images/icons/flags/ru.png"> Mike Stupalov</dt><dd>Developer</dd>
         </dl>
         </div>
 
         <h3>Acknowledgements</h3>
         <div class="well well-light">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
+          <dt style="text-align: left;"><i class="icon-user"></i> Twitter</dt><dd>Bootstrap CSS Framework</dd>
+          <dt style="text-align: left;  width:200px;"><i class="icon-user"></i> Yusuke Kamiyamane (p@yusukekamiyamane.com)</dt><dd>Fugue Iconset</dd>
+
           <dt style="text-align: left;"><i class="icon-user"></i> Stu Nicholls</dt><dd>Dropdown menu CSS code.</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Mark James</dt><dd>Silk Iconset.</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Erik Bosrup</dt><dd>Overlib Library.</dd>
-          <dt style="text-align: left; width: 180px;"><i class="icon-user"></i> Jonathan De Graeve</dt><dd>SNMP code improvements.</dd>
+          <dt style="text-align: left; width:200px;"><i class="icon-user"></i> Jonathan De Graeve</dt><dd>SNMP code improvements.</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Xiaochi Jin</dt><dd>Logo design.</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Bruno Pramont</dt><dd>Collectd code.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> David Farrell <DavidPFarrell@gmail.com></dt><dd>Help with parsing net-SNMP output in PHP.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Job Snijders</dt><dd>Python-based multi-instance poller wrapper script.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> David Farrell (DavidPFarrell@gmail.com)</dt><dd>Help with parsing net-SNMP output in PHP.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Job Snijders</dt><dd>Python-based multi-instance poller wrapper.</dd>
         </dl>
         </div>
       </div>
 
-      <div class="well">
+      <div class="">
         <h3>Statistics</h3>
 
 <?php
@@ -142,7 +146,7 @@ echo("
         </div>
       </div>
 
-    <div class="well">
+    <div class="">
       <h3>License</h3>
       <pre>
 <?php include("../LICENSE"); ?>
