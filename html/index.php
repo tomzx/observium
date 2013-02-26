@@ -114,7 +114,7 @@ if (isset($config['branding']) && is_array($config['branding']))
 if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title']; }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <title><?php echo($config['page_title_prefix'] . ($config['page_title_prefix'] != '' && $config['page_title_suffix'] != '' ? ' - ' : '') . $config['page_title_suffix']); ?></title>
@@ -210,10 +210,11 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 
   <?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
   <!--[if IE]><script src="js/html5.js"></script><![endif]-->
-  <script language="javascript" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
+  <!--  <script language="javascript" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
   <link rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.min.css" />
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+  -->
   <script type="text/javascript">
 
 
