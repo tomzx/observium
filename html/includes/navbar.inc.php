@@ -367,6 +367,9 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="fugue-gear"></i> <b class="caret"></b></a>
               <ul class="dropdown-menu">
+                <li><a href="http://www.observium.org/wiki/Documentation" title="Help"><i class="fugue-information"></i> Help</a></li>
+                <li class="divider"></li>
+
 <?php
 $toggle_url_wide = preg_replace('/(\?|\&)widescreen=(yes|no)/', '', $_SERVER['REQUEST_URI']);
 if (strstr($toggle_url_wide,'?')) { $toggle_url_wide .= '&amp;'; } else { $toggle_url_wide .= '?'; }
@@ -418,11 +421,12 @@ if ($_SESSION['userlevel'] >= 10)
                 <li><a href="<?php echo generate_url(array('page'=>'settings')); ?>" title="Global Settings"><i class="fugue-wrench"></i> Global Settings</a></li>
                 <li><a href="<?php echo generate_url(array('page'=>'preferences')); ?>" title="My Settings "><i class="fugue-wrench-screwdriver"></i> My Settings</a></li>
                 <li class="divider"></li>
+                <li><a href="<?php echo generate_url(array('page'=>'logout')); ?>" title="Logout"><i class="fugue-door-open-out"></i> Logout</a></li>
+                <li class="divider"></li>
                 <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="fugue-information-shield"></i> About Observium</a></li>
               </ul>
             </li>
             <li class="divider-vertical" style="margin:0;"></li>
-            <li><a href="<?php echo generate_url(array('page'=>'logout')); ?>" title="Logout"><i class="fugue-door-open-out"></i> Logout</a></li>
           </ul>
         </div><!-- /.nav-collapse -->
       </div>

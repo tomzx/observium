@@ -15,7 +15,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
 
   $user_list = get_userlist();
 
-  echo('<form method="post" action="">
+  echo('<form method="post" action="" class="form form-inline">
           <span style="font-weight: bold;">Edit User</span> &#187;
           <input type="hidden" value="edituser" name="page">
           <select name="user_id" onchange="location.href=\'/edituser/user_id=\' + this.options[this.selectedIndex].value + \'/\';">');
