@@ -49,6 +49,8 @@ print_optionbar_end();
 
 $graph_enable = $graph_enable[$vars['group']];
 
+echo('<table class="table table-condensed table-striped table-hover">');
+
 #foreach ($config['graph_types']['device'] as $graph => $entry)
 foreach ($graph_enable as $graph => $entry)
 {
@@ -61,6 +63,8 @@ foreach ($graph_enable as $graph => $entry)
     include("includes/print-device-graph.php");
   }
 }
+
+echo('</table>');
 
 $pagetitle[] = "Graphs";
 

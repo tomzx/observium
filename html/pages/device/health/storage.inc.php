@@ -2,15 +2,15 @@
 
 $graph_type = "storage_usage";
 
-echo('<table class="table table-striped table-condensed">');
+echo('<table class="table table-striped-two table-condensed">');
 
 
-echo("<tr class=tablehead>
+echo("<thead><tr>
         <th width=250>Drive</th>
         <th width=420>Usage</th>
         <th width=50>Free</th>
         <th></th>
-      </tr>");
+      </tr></thead>");
 
 $row = 1;
 
@@ -21,7 +21,6 @@ $sql .= " WHERE `device_id` = ?";
 
 foreach (dbFetchRows($sql, array($device['device_id'])) as $drive)
 {
-  if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
 
   $total = $drive['storage_size'];
   $used  = $drive['storage_used'];
@@ -39,14 +38,14 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $drive)
 
   $background = get_percentage_colours($percent);
 
-  echo("<tr bgcolor='$row_colour'><th><a href='$fs_url' $fs_popup>" . $drive['storage_descr'] . "</a></td><td>
+  echo("<tr><th><a href='$fs_url' $fs_popup>" . $drive['storage_descr'] . "</a></td><td>
           <a href='$fs_url' $fs_popup>".print_percentage_bar (400, 20, $perc, "$used / $total", "ffffff", $background['left'], $perc . "%", "ffffff", $background['right'])."</a>
           </td><td>" . $free . "</td><td></td></tr>");
 
   $graph_array['id'] = $drive['storage_id'];
   $graph_array['type'] = $graph_type;
 
-  echo("<tr bgcolor='$row_colour'><td colspan=6>");
+  echo("<tr><td colspan=6>");
 
   include("includes/print-graphrow.inc.php");
 

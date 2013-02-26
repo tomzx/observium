@@ -72,6 +72,8 @@ if (is_file("pages/device/health/".mres($vars['metric']).".inc.php"))
    include("pages/device/health/".mres($vars['metric']).".inc.php");
 } else {
 
+  echo('<table class="table table-condensed table-striped table-hover">');
+
   foreach ($datas as $type)
   {
     if ($type != "overview")
@@ -83,6 +85,7 @@ if (is_file("pages/device/health/".mres($vars['metric']).".inc.php"))
       include("includes/print-device-graph.php");
     }
   }
+  echo('</table>');
 }
 
 $pagetitle[] = "Health";

@@ -3,7 +3,8 @@
 $graph_type = "processor_usage";
 
 echo("<div style='margin-top: 5px; padding: 0px;'>");
-echo('<table class="table table-striped table-condensed">');
+
+echo('<table class="table table-striped-two table-condensed">');
 
 $i = '1';
 
@@ -30,7 +31,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $proc)
 
   $background = get_percentage_colours($percent);
 
-  echo("<tr bgcolor=$row_colour>
+  echo("<tr>
          <td class=tablehead><a href='".$proc_url."' $proc_popup>" . $text_descr . "</a></td>
          <td width=90><a href='".$proc_url."'  $proc_popup><img src='$mini_url'></a></td>
          <td width=200><a href='".$proc_url."' $proc_popup>
@@ -38,7 +39,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $proc)
           </a></td>
        </tr>");
 
-  echo("<tr bgcolor='$row_colour'><td colspan=5>");
+  echo("<tr><td colspan=5>");
 
   $graph_array['id'] = $proc['processor_id'];
   $graph_array['type'] = $graph_type;

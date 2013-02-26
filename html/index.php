@@ -317,6 +317,13 @@ if ($devel || $vars['devel'])
 
 if ($_SESSION['authenticated'])
 {
+
+  // Do various queries which we use in multiple places
+  include("includes/cache-data.inc.php");
+
+  // Include navbar
+  if(!$vars['bare'] == "yes") {  include("includes/navbar.inc.php"); }
+
   // Authenticated. Print a page.
   if (isset($vars['page']) && !strstr("..", $vars['page']) &&  is_file("pages/" . $vars['page'] . ".inc.php"))
   {

@@ -1,19 +1,11 @@
 <?php
 
-echo('<table class="table table-striped table-condensed">');
-
-#echo("<tr class=tablehead>
-#        <th width=250>Drive</th>
-#        <th width=420>Usage</th>
-#        <th width=50>Free</th>
-#        <th></th>
-#      </tr>");
+echo('<table class="table table-striped-three table-condensed">');
 
 $row = 1;
 
 foreach (dbFetchRows("SELECT * FROM `ucd_diskio` WHERE device_id = ? ORDER BY diskio_descr", array($device['device_id'])) as $drive)
 {
-  if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
 
   $fs_url   = "device/device=".$device['device_id']."/tab=health/metric=diskio/";
 
@@ -32,7 +24,7 @@ foreach (dbFetchRows("SELECT * FROM `ucd_diskio` WHERE device_id = ? ORDER BY di
 
   foreach ($types as $graph_type)
   {
-    echo('<tr bgcolor="'.$row_colour.'"><td colspan=5>');
+    echo('<tr><td colspan=5>');
 
     $graph_array           = array();
     $graph_array['id']     = $drive['diskio_id'];
