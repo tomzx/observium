@@ -95,6 +95,7 @@ if ($packages)
 
 
 <?php
+
 foreach ($config['device_types'] as $devtype)
 {
   if (in_array($devtype['type'],array_keys($cache['device_types'])))

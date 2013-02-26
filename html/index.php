@@ -135,7 +135,6 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link rel="stylesheet" href="css/mktree.css" type="text/css" />
   <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/test/style.css" />
   <!--[if lte IE 7]><script src="css/test/lte-ie7.js"></script><![endif]-->
   <link rel="stylesheet" href="css/sweetie.css" />
   <link rel="stylesheet" href="css/sprites.css" />
