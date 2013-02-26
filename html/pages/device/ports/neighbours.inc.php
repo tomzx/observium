@@ -1,14 +1,14 @@
 <?php
 
-echo('<table border="0" cellspacing="0" cellpadding="5" width="100%">');
+echo('<table class="table table-striped table-condensed">');
 
 $i = "1";
 
-echo('<tr><th>Local Port</th>
+echo('<thead><th>Local Port</th>
           <th>Remote Port</th>
           <th>Remote Device</th>
           <th>Protocol</th>
-      </tr>');
+      </thead>');
 
 foreach (dbFetchRows("SELECT * FROM links AS L, ports AS I WHERE I.device_id = ? AND I.port_id = L.local_port_id", array($device['device_id'])) as $neighbour)
 {

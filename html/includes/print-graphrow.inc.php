@@ -22,7 +22,7 @@ if($_SESSION['widescreen'])
     $periods = array('day', 'week', 'month');
   } else {
     if (!$graph_array['height']) { $graph_array['height'] = "100"; }
-    if (!$graph_array['width']) { $graph_array['width']  = "215"; }
+    if (!$graph_array['width']) { $graph_array['width']  = "212"; }
     $periods = array('day', 'week', 'month', 'year');
   }
 }

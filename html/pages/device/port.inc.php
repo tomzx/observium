@@ -163,10 +163,6 @@ if ($_SESSION['userlevel'] == '10' && $config['enable_billing'])
 
 print_optionbar_end();
 
-echo("<div style='margin: 5px;'>");
-
 include("pages/device/port/".mres($vars['view']).".inc.php");
-
-echo("</div>");
 
 ?>

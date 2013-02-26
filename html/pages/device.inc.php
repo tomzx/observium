@@ -48,14 +48,14 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
       echo('
   <li class="' . $select['overview'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'overview')).'">
-      <img src="images/16/server_lightning.png" align="absmiddle" border="0"> Overview
+      <i class="fugue-server"></i> Overview
     </a>
   </li>');
     }
 
     echo('<li class="' . $select['graphs'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'graphs')).'">
-      <img src="images/16/server_chart.png" align="absmiddle" border="0"> Graphs
+      <i class="fugue-chart-up"></i> Graphs
     </a>
   </li>');
 
@@ -69,7 +69,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['health'] . '">
       <a href="'.generate_device_url($device, array('tab' => 'health')).'">
-        <img src="images/icons/sensors.png" align="absmiddle" border="0" /> Health
+        <i class="fugue-system-monitor"></i> Health
       </a>
     </li>');
     }
@@ -78,7 +78,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['apps'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'apps')).'">
-      <img src="images/icons/apps.png" align="absmiddle" border="0" /> Apps
+      <i class="fugue-application-icon-large"></i> Apps
     </a>
   </li>');
     }
@@ -87,7 +87,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['collectd'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'collectd')).'">
-      <img src="images/16/chart_line.png" align="absmiddle" border="0" /> CollectD
+      <i class="fugue-chart-up"></i> CollectD
     </a>
   </li>');
     }
@@ -96,7 +96,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['munin'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'munin')). '">
-      <img src="images/16/chart_line.png" align="absmiddle" border="0" /> Munin
+      <ii class="fugue-chart-up"></i> Munin
     </a>
   </li>');
     }
@@ -105,7 +105,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['ports'] . $select['port'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'ports')). '">
-      <img src="images/16/connect.png" align="absmiddle" border="0" /> Ports
+      <i class="fugue-network-ethernet"></i> Ports
     </a>
   </li>');
     }
@@ -114,7 +114,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['slas'] . $select['sla'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'slas')). '">
-      <img src="images/16/chart_line.png" align="absmiddle" border="0" /> SLAs
+      <i class="fugue-chart-up"></i> SLAs
     </a>
   </li>');
     }
@@ -123,7 +123,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['accesspoints'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'accesspoints')). '">
-      <img src="images/icons/wireless.png" align="absmiddle" border="0" /> Access Points
+      <i class="fugue-wi-fi-zone"> Access Points
     </a>
   </li>');
     }
@@ -161,7 +161,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['latency'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'latency')).'">
-      <img src="images/16/arrow_undo.png" align="absmiddle" border="0" /> Ping
+      <i class="fugue-paper-plane"></i> Ping
     </a>
   </li>');
     }
@@ -170,7 +170,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['vlans'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'vlans')).'">
-      <img src="images/16/vlans.png" align="absmiddle" border="0" /> VLANs
+      <i class="sweetie-arrow-branch-bgr"></i> VLANs
     </a>
   </li>');
     }
@@ -179,7 +179,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['vm'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'vm')).'">
-      <img src="images/16/server_cog.png" align="absmiddle" border="0" /> Virtual Machines
+      <i class="fugue-network-cloud"></i> Virtual Machines
     </a>
   </li>');
     }
@@ -205,7 +205,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['loadbalancer'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'loadbalancer')).'">
-      <img src="images/icons/loadbalancer.png" align="absmiddle" border="0" /> Load Balancer
+      <i class="fugue-arrow-split"></i> Load Balancer
     </a>
   </li>');
     }
@@ -234,7 +234,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['routing'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'routing')).'">
-      <img src="images/16/arrow_branch.png" align="absmiddle" border="0" /> Routing
+      <i class="fugue-arrow-branch-000-left"></i> Routing
     </a>
   </li>');
     }
@@ -244,7 +244,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['pseudowires'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'pseudowires')).'">
-      <img src="images/16/arrow_switch.png" align="absmiddle" border="0" /> Pseudowires
+      <i class="fugue-layer-shape-curve" > Pseudowires
     </a>
   </li>');
     }
@@ -255,7 +255,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 #      $discovery_links = TRUE;
 #      echo('<li class="' . $select['map'] . '">
 #    <a href="'.generate_device_url($device, array('tab' => 'map')).'">
-#      <img src="images/16/chart_organisation.png" align="absmiddle" border="0" /> Map
+#      <i class="fugue-map"></i> Map
 #    </a>
 #  </li>');
 #    }
@@ -264,7 +264,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['packages'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'packages')).'">
-      <img src="images/16/package.png" align="absmiddle" border="0" /> Pkgs
+      <i class="fugue-box-zipper"></i> Pkgs
     </a>
   </li>');
     }
@@ -273,7 +273,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['entphysical'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'entphysical')).'">
-      <img src="images/16/bricks.png" align="absmiddle" border="0" /> Inventory
+      <i class="menu-icon fugue-wooden-box"></i> Inventory
     </a>
   </li>');
     }
@@ -281,7 +281,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['hrdevice'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'hrdevice')).'">
-      <img src="images/16/bricks.png" align="absmiddle" border="0" /> Inventory
+      <i class="menu-icon fugue-wooden-box"></i> Inventory
     </a>
   </li>');
     }
@@ -290,7 +290,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['services'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'services')).'">
-      <img src="images/icons/services.png" align="absmiddle" border="0" /> Services
+      <i class="fugue-target"></i> Services
     </a>
   </li>');
     }
@@ -299,7 +299,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['toner'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'toner')).'">
-      <img src="images/icons/toner.png" align="absmiddle" border="0" /> Toner
+      <i class="fugue-contrast"></i> Toner
     </a>
   </li>');
     }
@@ -308,7 +308,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['logs'] . '">
       <a href="'.generate_device_url($device, array('tab' => 'logs')).'">
-        <img src="images/16/report_magnify.png" align="absmiddle" border="0" /> Logs
+        <i class="sweetie-clipboard-audit"></i> Logs
       </a>
     </li>');
     }
@@ -317,7 +317,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['alerts'] . '">
       <a href="'.generate_device_url($device, array('tab' => 'alerts')).'">
-        <img src="images/16/bell.png" align="absmiddle" border="0" /> Alerts
+        <i class="fugue-bell"></i> Alerts
       </a>
     </li>');
     }
@@ -336,7 +336,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['showconfig'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'showconfig')).'/">
-      <img src="images/16/page_white_text.png" align="absmiddle" border="0" /> Config
+      <i class="fugue-application-terminal"></i> Config
     </a>
   </li>');
     }
@@ -359,7 +359,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['nfsen'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'nfsen')).'">
-      <img src="images/16/rainbow.png" align="absmiddle" border="0" /> Netflow
+      <i class="fugue-funnel"></i> Netflow
     </a>
   </li>');
     }
@@ -368,7 +368,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['edit'] . '" style="float: right;">
     <a href="'.generate_device_url($device, array('tab' => 'edit')).'">
-      <img src="images/16/wrench.png" align="absmiddle" border="0" />
+      <i class="fugue-gear"></i>
     </a>
   </li>');
     }
