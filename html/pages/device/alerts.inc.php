@@ -78,7 +78,7 @@ foreach ($glo_conditions as $type => $subtypes)
           echo("<tr><td></td><td colspan=\"9\"><strong>");
           foreach ($entities as $entity)
           {
-           echo('<button class="btn btn-small-thin" type="button">'.generate_entity_link($type, $entity).'</button>');
+           echo('<button class="btn btn-small-thin" type="button" style="margin: 2px;">'.generate_entity_link($type, $entity).'</button>');
           }
           echo("</strong></td></tr>\n");
         }

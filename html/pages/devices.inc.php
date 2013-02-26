@@ -25,14 +25,16 @@ if ($vars['location']) { $location_filter = $vars['location']; }
 
 $pagetitle[] = "Devices";
 
-print_optionbar_start();
+echo('<div class="well well-shaded" style="padding: 10px;">');
+
 
 if($vars['searchbar'] != "hide")
 {
 
 ?>
-<form method="post" action="">
-  <table cellpadding="4" cellspacing="0" class="devicetable" width="100%">
+
+<form method="post" action="" style="margin-bottom: 0;">
+  <table width="100%">
     <tr>
       <td width="290">
         <div class="input-prepend" style="margin-right: 3px; margin-bottom: 10px;">
@@ -156,7 +158,7 @@ foreach (dbFetch('SELECT `type` FROM `devices` AS D WHERE 1 GROUP BY `type` ORDE
   </table>
 </form>
 
-<hr />
+<hr style="margin: 0px 0px 10px 0px;">
 
 <?php
 
@@ -238,11 +240,10 @@ foreach ($menu_options as $option => $text)
 
 ?>
 
+  </div>
 </div>
 
 <?php
-
-print_optionbar_end();
 
 $query = "SELECT * FROM `devices` WHERE 1 ".$where." ORDER BY hostname";
 
@@ -250,47 +251,55 @@ list($format, $subformat) = explode("_", $vars['format']);
 
 $devices = dbFetchRows($query, $sql_param);
 
-if(file_exists('pages/devices/'.$format.'.inc.php'))
-{
-  include('pages/devices/'.$format.'.inc.php');
+if(count($devices)) {
 
-} else {
-
-
-
-  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="margin-top: 10px;">');
-  if ($subformat == "detail")
+  if(file_exists('pages/devices/'.$format.'.inc.php'))
   {
-  echo("  <thead>\n");
-  echo("    <tr>\n");
-  echo("      <th></th>\n");
-  echo("      <th></th>\n");
-  echo("      <th>Device</th>\n");
-  echo("      <th></th>\n");
-  echo("      <th>Platform</th>\n");
-  echo("      <th>Operating System</th>\n");
-  echo("      <th>Uptime/Location</th>\n");
-  echo("    </tr>\n");
-  echo("  </thead>\n");
-  }
-
-  foreach ($devices as $device)
-  {
-    if (device_permitted($device['device_id']))
+    include('pages/devices/'.$format.'.inc.php');
+  } else {
+    echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="margin-top: 10px;">');
+    if ($subformat == "detail")
     {
-      if (!$location_filter || ((get_dev_attrib($device,'override_sysLocation_bool') && get_dev_attrib($device,'override_sysLocation_string') == $location_filter)
-        || $device['location'] == $location_filter))
+    echo("  <thead>\n");
+    echo("    <tr>\n");
+    echo("      <th></th>\n");
+    echo("      <th></th>\n");
+    echo("      <th>Device</th>\n");
+    echo("      <th></th>\n");
+    echo("      <th>Platform</th>\n");
+    echo("      <th>Operating System</th>\n");
+    echo("      <th>Uptime/Location</th>\n");
+    echo("    </tr>\n");
+    echo("  </thead>\n");
+    }
+
+    foreach ($devices as $device)
+    {
+      if (device_permitted($device['device_id']))
       {
-        if ($subformat == "detail")
+        if (!$location_filter || ((get_dev_attrib($device,'override_sysLocation_bool') && get_dev_attrib($device,'override_sysLocation_string') == $location_filter)
+          || $device['location'] == $location_filter))
         {
-          include("includes/hostbox.inc.php");
-        } else {
-          include("includes/hostbox-basic.inc.php");
+          if ($subformat == "detail")
+          {
+            include("includes/hostbox.inc.php");
+          } else {
+            include("includes/hostbox-basic.inc.php");
+          }
         }
       }
     }
+    echo("</table>");
   }
-  echo("</table>");
+} else {
+
+?>
+<div class="alert alert-error">
+  <h4>No devices found</h4>
+  Please try adjusting your search parameters.
+</div>
+
+<?php
 }
 
 ?>

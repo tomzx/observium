@@ -927,6 +927,7 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
+
 }
 
 #menium li.menium-nodrop:hover {
@@ -937,19 +938,20 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   padding-bottom: 2px;
 }
 
-#menium li a {
+#menium li a, #menium li:hover div a {
   font-weight: bold;
   font-size:13px;
-  color: #5e5e5e;
+  color: #505050;
   display:block;
   outline:0;
   text-decoration:none;
-  /*text-shadow: 1px 1px 1px #000;*/
+  text-shadow: 0px 1px 1px #ccc;
+
 }
 
-#menium li:hover a {
-  color:#029feb;
-  /*text-shadow: 1px 1px 1px #FFFFFF;*/
+#menium li:hover a, #menium li:hover div a:hover {
+  color:#214078;
+  text-shadow: 0px 1px 1px #aac;
 }
 
 /* Drop Down */
@@ -1067,11 +1069,9 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 
 #menium li:hover div a {
   font-size:12px;
-  color:#194b7f;
 }
 
 #menium li:hover div a:hover {
-  color:#029feb;
 }
 
 .strong {

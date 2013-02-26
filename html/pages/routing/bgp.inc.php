@@ -233,8 +233,6 @@ else
 
     if ($peer['graph'])
     {
-        $graph_array['height'] = "100";
-        $graph_array['width']  = "218";
         $graph_array['to']     = $config['time']['now'];
         echo('<tr></tr><tr class="bgp"' . ($bg_image ? ' background="'.$bg_image.'"' : '') . '"><td colspan="9">');
 

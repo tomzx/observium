@@ -128,17 +128,24 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
   <link href="<?php echo($config['stylesheet']);  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
+
   <link href="<?php echo("css/bootstrap-responsive.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap-observium.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/google-code-prettify.css");  ?>" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="css/mktree.css" type="text/css" />
   <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
 
+  <link rel="stylesheet" href="css/test/style.css" />
+  <!--[if lte IE 7]><script src="css/test/lte-ie7.js"></script><![endif]-->
+  <link rel="stylesheet" href="css/sweetie.css" />
+  <link rel="stylesheet" href="css/fugue.css" />
+  <link rel="stylesheet" href="css/famfamfam.css" />
+
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
 ?>
 </head>
-<body>
+
   <script type="text/javascript" src="js/mktree.js"></script>
   <script type="text/javascript" src="js/sorttable.js"></script>
   <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -148,6 +155,14 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <!--[if lt IE 9]>
     <script type="text/javascript" src="tipped/js/excanvas/excanvas.js"></script>
   <![endif]-->
+
+  <!--
+  <link href="css/select2.css" rel="stylesheet"/>
+  <script src="js/select2.min.js"></script>
+  <script>
+      $(document).ready(function() { $(".select2").select2(); });
+  </script>
+  -->
 
   <script type="text/javascript">
 
@@ -192,6 +207,9 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <link href="css/bootstrap-switch.css" rel="stylesheet">
   <script src="js/jquery.switch.js"></script>
 
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
+
   <?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
   <!--[if IE]><script src="js/html5.js"></script><![endif]-->
   <script language="javascript" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
@@ -199,6 +217,9 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
   <script type="text/javascript">
+
+
+
     <!--
 
     $(function () {
@@ -265,29 +286,25 @@ function popUp(URL)
 {
   day = new Date();
   id = day.getTime();
-  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=550,height=600');");
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,	menubar=0,resizable=1,width=550,height=600');");
 }
 // End -->
   </script>
-  <div id="container">
+
+<body style="padding-top: 60px;">
+
+<div class="container">
 
 <?php
 
 if (!$vars['bare'] == "yes") {
 
-  include("includes/".$config['web_header']);
+  if ($_SESSION['authenticated']) { include("includes/navbar.inc.php"); } else { echo('<hr color="#444444" />'); }
 
-  if ($_SESSION['authenticated']) { include("includes/print-menubar.php"); } else { echo('<hr color="#444444" />'); }
+#  include("includes/footer.inc.php");
+
 
 }
-
-?>
-    <div class="clearer"></div>
-
-    <div class="content-mat">
-      <div id="content" style="min-height:650px; width:auto; display:block;">
-        <div style="clear:both; height:6px; display:block;"></div>
-<?php
 
 // To help debug the new URLs :)
 if ($devel || $vars['devel'])
@@ -319,10 +336,8 @@ if ($_SESSION['authenticated'])
 
   exit;
 }
+
 ?>
-        </div>
-      <div class="clearer"></div>
-  </div>
 <?php
 $runtime_end = utime(); $runtime = $runtime_end - $runtime_start;
 $gentime = substr($runtime, 0, 5);
@@ -345,12 +360,14 @@ if ($config['page_gen'])
     if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
 
     echo('<br />Cached data in memory is '.formatStorage($cachesize).'. Page memory usage is '.formatStorage($fullsize).', peaked at '. formatStorage(memory_get_peak_usage()) .'.');
-
     echo('<br />Generated in ' . $gentime . ' seconds.');
 }
 ?>
       </div>
     </div>
+
+
+
     <script class="content_tooltips" type="text/javascript">
 $(document).ready(function() { $('#content a[title]').qtip({ content: { text: false }, style: 'light' }); });
 

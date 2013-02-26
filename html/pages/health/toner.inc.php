@@ -44,8 +44,7 @@ foreach (dbFetchRows("SELECT * FROM `toner` AS S, `devices` AS D WHERE S.device_
     {
       echo("<tr></tr><tr class='health'><td colspan=5>");
 
-      $graph_array['height'] = "100";
-      $graph_array['width']  = "216";
+      unset($graph_array['height'], $graph_array['width'], $graph_array['legend']);
       $graph_array['to']     = $config['time']['now'];
       $graph_array['id']     = $toner['toner_id'];
       $graph_array['type']   = $graph_type;

@@ -10,11 +10,14 @@ if ($vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10')
 
 $pagetitle[] = "Eventlog";
 
-print_optionbar_start();
-
 ?>
 
-<form method="post" action="" class="form-inline">
+<div class="row">
+<div class="span12">
+
+<div class="well well-shaded">
+
+<form method="post" action="" class="form form-inline">
   <span style="font-weight: bold;">Event log</span> &#187;
 
   <div class="input-prepend" style="margin-right: 3px;">
@@ -55,12 +58,12 @@ print_optionbar_start();
     </select>
   </div>
   <input type="hidden" name="pageno" value="1">
-  <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
+  <button type="submit" class="btn pull-right"><i class="icon-search"></i> Search</button>
 </form>
 
-<?php
+</div>
 
-print_optionbar_end();
+<?php
 
 // Pagination
 $vars['pagination'] = TRUE;
@@ -71,3 +74,7 @@ if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 print_events($vars);
 
 ?>
+
+  </div> <!-- span12 -->
+
+</div> <!-- row -->

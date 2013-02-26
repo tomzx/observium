@@ -51,6 +51,9 @@ if ($_SESSION['authenticated'])
 {
   echo(" (<a href='logout/'>Logout</a>)");
 }
+
+
+
 ?>
 
   </div>

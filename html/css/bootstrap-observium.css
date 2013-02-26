@@ -40,7 +40,7 @@ a {
 }
 
 form {
-  margin: 0;
+  margin: 0 0 10px;
 }
 
 .form-horizontal .control-group {
@@ -54,7 +54,7 @@ form {
 
 label, input, button, select, textarea {
   font-size: 13px;
-  font-weight: bold;
+  #font-weight: bold;
   line-height: 18px;
 }
 
@@ -271,187 +271,10 @@ legend {
   background-color: transparent;
 }
 
-
-
-/* NAVBAR
- *************************************/
-
-.navbar {
-    border: 1px solid #CCC;
-    -webkit-border-radius: 4px;
-    -mozt-border-radius: 4px;
-    border-radius: 4px;
-    margin-bottom: 18px;
-    height: 30px;
-}
-
-.navbar-inner {
-    min-height: 28px;
-    height: 30px;
-    background-color: #eee;
-    background-image: -moz-linear-gradient(top, #fdfdfd, #eeeeee);
-    background-image: -ms-linear-gradient(top, #fdfdfd, #eeeeee);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdfdfd), to(#eeeeee));
-    background-image: -webkit-linear-gradient(top, #fdfdfd, #eeeeee);
-    background-image: -o-linear-gradient(top, #fdfdfd, #eeeeee);
-    background-image: linear-gradient(top, #fdfdfd, #eeeeee);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfdfd', endColorstr='#eeeeee', GradientType=0);
-    -moz-box-shadow:inset 0px 0px 1px #edf9ff;
-    -webkit-box-shadow:inset 0px 0px 1px #edf9ff;
-    box-shadow:inset 0px 0px 1px #edf9ff;
-    border: none;
-}
-
-.navbar .brand {
-    padding: 8px 20px 12px;
-    font-size: 1.1em;
-    color: #555;
-    font-weight: bold;
-    height: 15px;
-    line-height: 15px;
-}
-
-.navbar .nav > li > a {
-    color: #888;
-    padding: 5px 10px 5px;
-    text-shadow: none;
-    font-weight: bold;
-}
-.navbar .nav > li > a:hover {
-    color: #039feb;
-    background: #e0e0e0;
-    background-image: -moz-linear-gradient(top, #e0e0e0, #fdfdfd);
-    background-image: -ms-linear-gradient(top, #e0e0e0, #fdfdfd);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#e0e0e0), to(#fdfdfd));
-    background-image: -webkit-linear-gradient(top, #e0e0e0, #fdfdfd);
-    background-image: -o-linear-gradient(top, #e0e0e0, #fdfdfd);
-    background-image: linear-gradient(top, #e0e0e0, #fdfdfd);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#fdfdfd', GradientType=0);
-    filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-}
-.navbar .nav > li {
-    border-right: 1px solid #ddd;
-}
-.navbar .nav > li.first {
-    border-left: 1px solid #ddd;
-}
-.navbar .nav > li.spacer {
-    width: 50px;
-    border: none;
-}
-
-.navbar .nav .active > a,
-.navbar .nav .active > a:hover {
-    /* color: #029feb; */
-    color: #555;
-    /* letter-spacing: 1px; */
-    font-weight: bold;
-    background: #e0e0e0;
-    background-image: -moz-linear-gradient(top, #fdfdfd, #e0e0e0);
-    background-image: -ms-linear-gradient(top, #fdfdfd, #e0e0e0);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdfdfd), to(#e0e0e0));
-    background-image: -webkit-linear-gradient(top, #fdfdfd, #e0e0e0);
-    background-image: -o-linear-gradient(top, #fdfdfd, #e0e0e0);
-    background-image: linear-gradient(top, #fdfdfd, #e0e0e0);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfdfd', endColorstr='#e0e0e0', GradientType=0);
-    filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-}
-
-.nav-tabs {
-    overflow: hidden;
-    padding: 0px 8px;
-    margin-bottom: -1px;
-    border-bottom: none;
-}
-
-.nav-tabs li {
-    float: left;
-    list-style: none;
-    padding: .125em .125em 0;
-    overflow: hidden;
-    position: relative;
-    z-index: 3;
-    border-bottom: 1px solid #FFF;
-}
-
-.nav-tabs > li {
-    margin-bottom: -1px;
-}
-
-.nav-tabs > li.first{
-}
-
-.nav-tabs > li > a {
-    color: #555;
-    text-transform: capitalize;
-    -webkit-border-radius: 5px 5px 0 0;
-    -moz-border-radius: 5px 5px 0 0;
-    border-radius: 5px 5px 0 0;
-    border-color: #ccc;
-    background: #eee;
-    padding: 5px 10px 2px 10px;
-    line-height 1.7em;
-}
-
-.nav-tabs > li > a:hover {
-}
-
-.nav-tabs > .active {
-    z-index: 3;
-}
-
-.nav-tabs .active a {
-    background: #FFF;
-    -webkit-box-shadow: #CCC 0 0 .25em;
-    -moz-box-shadow: #CCC 0 0 .25em;
-    box-shadow: #CCC 0 0 .25em;
-}
-
-.nav-tabs li a:hover {
-    background: -webkit-gradient(linear, 0 0, 0 70%, from(#EEF), to(#FFF));
-    background: -webkit-linear-gradient(#EEF, #FFF 70%);
-    background: -moz-linear-gradient(#EEF, #FFF 70%);
-    background: -ms-linear-gradient(#EEF, #FFF 70%);
-    background: -o-linear-gradient(#EEF, #FFF 70%);
-    background: linear-gradient(#EEF, #FFF 70%);
-    -pie-background: linear-gradient(#EEF, #FFF 70%);
-}
-
-
-.nav-tabs > .li > a {
-    float: left;
-    height: 1.7em;
-    line-height: 1.7em;
-    font-weight: bold;
-    -webkit-border-radius: 4px 4px 0 0;
-    -moz-border-radius: 4px 4px 0 0;
-    border-radius: 4px 4px 0 0;
-    background: #EEE;
-    border: 1px solid #666;
-    border-bottom: 0;
-    padding: 0 8px;
-    color: #666;
-    text-decoration: none;
-    behavior: url(/css/PIE.htc);
-}
-
-.nav-tabs > .li > img {
-  margin-top: -4px;
-}
-
-.tab-content .form-actions {
-    margin: 0px -10px -18px -10px;
-}
-
 .well {
-    padding: 10px 10px 0px 10px;
-    margin-bottom: 20px;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    /* border: 1px solid rgba(0, 0, 0, 0.05); */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -473,18 +296,35 @@ legend {
     color: #777;
 }
 .table thead {
-    color: #555;
-    background: #eee;
+#    color: #555;
+#    background: #eee;
+    background: -webkit-linear-gradient(top, rgb(255, 255, 255), rgb(242, 242, 242));
 }
+
+.well-shaded {
+  background-color: #fafafa;
+  background-image: -moz-linear-gradient(top, #ffffff, #f0f0f0);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f0f0f0));
+  background-image: -webkit-linear-gradient(top, #ffffff, #f0f0f0);
+  background-image: -o-linear-gradient(top, #ffffff, #f0f0f0);
+  background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff0f0f0', GradientType=0);
+}
+
+#.table tbody tr.error > td {
+#    background: -webkit-linear-gradient(top, rgb(255,255,255), rgb(242, 222, 222), rgb(255, 255, 255));
+#}
 
 .table-rounded th,
 .table-rounded td {
     border-left: none;
 }
 
-/* .table-rounded thead:first-child tr:first-child th:first-child, */
-/* .table-rounded tbody:first-child tr:first-child td:first-child { */
+/* .table-rounded thead:first-child tr:first-child th:first-child,
+.table-rounded tbody:first-child tr:first-child td:first-child { */
 .table-rounded thead th:first-child,
+.table-rounded tbody th:first-child,
 .table-rounded tbody td:first-child {
     border-left: 1px solid #dddddd;
 }
@@ -508,3 +348,89 @@ legend {
 .tab-content > .form-actions {
     margin: 0px -10px -18px -10px;
 }
+
+
+.navbar .nav > li > a {
+  padding: 10px 10px 10px;
+}
+
+.navbar .divider-vertical {
+  margin: 0;
+}
+
+.navbar-inner {
+  background-color: #fafafa;
+  background-image: -moz-linear-gradient(top, #ffffff, #f0f0f0);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f0f0f0));
+  background-image: -webkit-linear-gradient(top, #ffffff, #f0f0f0);
+  background-image: -o-linear-gradient(top, #ffffff, #f0f0f0);
+  background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff0f0f0', GradientType=0);
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle
+{
+  background-color: #fafafa;
+  background-image: -moz-linear-gradient(top, #ffffff, #e0e0e0);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(119,179,179)), to(#e0e0e0));
+  background-image: -webkit-linear-gradient(top, rgb(0, 136, 204), rgb(0,119,179));
+  background-image: -o-linear-gradient(top, #ffffff, #f0f0f0);
+  background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff0f0f0', GradientType=0);
+  color: white;
+  text-shadow: none;
+}
+
+.navbar .nav li.dropdown.open b.caret
+{
+  color: white;
+}
+
+.navbar .brand
+{
+    max-height: 40px;
+    overflow: visible;
+    padding-top: 5px;
+    padding-bottom: 0;
+    padding-right: 10px;
+}
+
+
+#suggestions{ display:none; }
+
+/* SEARCHRESULTS */
+#searchresults { border-width:1px; border-color:#919191; border-style:solid; width:320px; background-color:#a0a0a0; font-size:10px; line-height:14px; }
+#searchresults a { display:block; background-color:#e4e4e4; clear:left; height:56px; text-decoration:none; }
+#searchresults a:hover { background-color:#b7b7b7; color:#ffffff; }
+#searchresults a img { float:left; padding:5px 10px; }
+#searchresults a span.searchheading { display:block; font-weight:bold; padding-top:5px; color:#191919; }
+#searchresults a:hover span.searchheading { color:#ffffff; }
+#searchresults a span { color:#555555; }
+#searchresults a:hover span { color:#f1f1f1; }
+#searchresults span.category { font-size:11px; margin:5px; display:block; color:#ffffff; }
+#searchresults span.seperator { float:right; padding-right:15px; margin-right:5px;
+      background-image:url(../images/shortcuts_arrow.gif); background-repeat:no-repeat; background-position:right; }
+#searchresults span.seperator a { background-color:transparent; display:block; margin:5px; height:auto; color:#ffffff; }
+
+.dl-search {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.dl-search dt {
+  float: left;
+  width: 48px;
+  clear: left;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dl-search dd {
+  margin-left: 65px;
+}
+

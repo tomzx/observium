@@ -6,7 +6,7 @@ $pagetitle[] = "Ports";
 
 if(!isset($vars['format'])) { $vars['format'] = "list_basic"; }
 
-print_optionbar_start();
+echo('<div class="well well-shaded" style="padding: 10px;">');
 
 if($vars['searchbar'] != "hide")
 {
@@ -233,9 +233,9 @@ echo('<div style="float: right;">');
     echo('<a href="'. generate_url($vars, array('bare' => 'yes')).'">Header</a>');
   }
 
-echo('</div>');
+echo('</div>
+  </div>');
 
-print_optionbar_end();
 
 $param = array();
 

@@ -13,10 +13,10 @@
  *
  */
 
-    echo ("<div class='row-fluid' style='margin-top: 10px;'></div>");
-
     foreach ($config['frontpage']['order'] as $item=>$value) {
 	switch ($value) {
+            case "status_summary":
+                include("includes/status-summary.inc.php");
 	    case "map":
 		show_map($config);
 		break;
@@ -41,7 +41,8 @@
 	}
     }
 
-    function show_map($config) {
+function show_map($config)
+{
 	if ($config['frontpage']['map']['show']) {
 ?>
 <div class="row-fluid">
