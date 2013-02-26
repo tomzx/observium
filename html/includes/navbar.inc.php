@@ -195,7 +195,7 @@ $menu_sensors = $used_sensors;
               <ul class="dropdown-menu">
 
 <?php
-$items = array('mempools' => array('text' => "Memory", 'icon' => 'fugue-memory'),
+$items = array('mempool' => array('text' => "Memory", 'icon' => 'fugue-memory'),
                'processor' => array('text' => "Processors", 'icon' => 'fugue-processor'),
                'storage' => array('text' => "Storage", 'icon' => 'fugue-drive'));
 
@@ -361,6 +361,7 @@ if ($config['api']['enabled'])
         </div>
       </div>
     </li>
+        <li class="divider"></li>
 
 
 <?php
@@ -369,42 +370,21 @@ if ($config['api']['enabled'])
 
 
           <li class="dropdown">
-            <form id="searchform" class="navbar-search" action="" style="margin-left: 10px; margin-top: 5px; margin-bottom: -5px;">
+            <form id="searchform" class="navbar-search" action="" style="margin-left: 10px; margin-right: 10px;  margin-top: 5px; margin-bottom: -5px;">
               <input onkeyup="lookup(this.value);" type="text" value="" class="span2 dropdown-toggle" placeholder="Search" />
             </form>
             <div id="suggestions" class="dropdown-menu"></div>
           </li>
+          <li class="divider-vertical"></li>
+        </ul>
 
-          </ul>
+
+
+
+
 
           <ul class="nav pull-right">
 
-<?php
-
-/**
-$toggle_url_biggraphs = preg_replace('/(\?|\&)big_graphs=(yes|no)/', '', $_SERVER['REQUEST_URI']);
-if (strstr($toggle_url_biggraphs,'?')) { $toggle_url_biggraphs .= '&amp;'; } else { $toggle_url_biggraphs .= '?'; }
-
-if($_SESSION['big_graphs'] === 1)
-{
-  echo('<li><a href="' . $toggle_url_biggraps . 'big_graphs=no" title="Switch to normal graphs"><i class="menu-icon icon-th" style="font-size: 16px; color: #555;"></i></a></li>');
-} else {
-  echo('<li><a href="' . $toggle_url_biggraphs . 'big_graphs=yes" title="Switch to larger graphs"><i class="menu-icon icon-th-large" style="font-size: 16px; color: #555;"></i></a></li>');
-}
-
-$toggle_url_wide = preg_replace('/(\?|\&)widescreen=(yes|no)/', '', $_SERVER['REQUEST_URI']);
-if (strstr($toggle_url_wide,'?')) { $toggle_url_wide .= '&amp;'; } else { $toggle_url_wide .= '?'; }
-
-if($_SESSION['widescreen'] === 1)
-{
-  echo('<li><a href="' . $toggle_url_wide . 'widescreen=no" title="Switch to normal screen width layout"><i class="menu-icon icon-th" style="font-size: 16px; color: #555;"></i></a></li>');
-} else {
-  echo('<li><a href="' . $toggle_url_wide . 'widescreen=yes" title="Switch to wide screen layout"><i class="menu-icon icon-th-large" style="font-size: 16px; color: #555;"></i></a></li>');
-}
-
-**/
-
-?>
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="fugue-gear"></i> <b class="caret"></b></a>
