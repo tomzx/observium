@@ -100,7 +100,7 @@ $sql = mysql_query("SELECT * FROM `ports` AS I, `devices` AS D, devices_perms AS
 
 // These things need to become more generic, and more manageable across different frontpages... rewrite inc :>
 
-if ($config['warn']['ifdown'])
+if ($config['frontpage']['device_status']['ports'])
 {
   while ($interface = mysql_fetch_assoc($sql))
   {

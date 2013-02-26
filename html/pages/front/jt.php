@@ -38,7 +38,7 @@ while ($device = mysql_fetch_assoc($sql)) {
    }
 }
 
-if ($config['warn']['ifdown']) {
+if ($config['frontpage']['device_status']['ports']) {
 
 $sql = mysql_query("SELECT * FROM `ports` AS I, `devices` AS D WHERE I.device_id = D.device_id AND ifOperStatus = 'down' AND ifAdminStatus = 'up' AND D.ignore = '0' AND I.ignore = '0'");
 while ($interface = mysql_fetch_assoc($sql)) {

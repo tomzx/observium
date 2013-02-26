@@ -488,9 +488,6 @@ $config['sla_type_labels']['ethernetPing'] = 'Ethernet ping';
 $config['sla_type_labels']['ethernetJitter'] = 'Ethernet jitter';
 $config['sla_type_labels']['lspPingPseudowire'] = 'LSP Pseudowire ping';
 
-// Warnings on front page
-$config['warn']['ifdown'] = TRUE;    // Show down interfaces
-
 // List of poller modules. Need to be in the array to be
 // considered for execution.
 
