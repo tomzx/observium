@@ -48,6 +48,8 @@ if ($device['os_group'] == "unix")
       if ($section == "apache") { $sa = "app"; $sb = "apache"; }
       if ($section == "mysql")  { $sa = "app"; $sb = "mysql"; }
       if ($section == "nginx")  { $sa = "app"; $sb = "nginx"; }
+      if ($section == "postfix_qshape")  { $sa = "app"; $sb = "postfix_qshape"; }
+      if ($section == "postfix_mailgraph")  { $sa = "app"; $sb = "postfix_mailgraph"; }
 #      if ($section == "drbd")   { $sa = "app"; $sb = "drbd"; }
 
       if (!empty($sa) && !empty($sb))
@@ -91,7 +93,7 @@ if ($device['os_group'] == "unix")
           if ($debug) { echo("Including: applications/$key.inc.php"); }
 
           echo($key);
-          include("applications/$key.inc.php");
+          include("includes/polling/applications/$key.inc.php");
         }
       }
     }
