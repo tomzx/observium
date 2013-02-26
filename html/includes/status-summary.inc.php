@@ -110,6 +110,10 @@ if ($services['down']) { $services['class'] = "error"; } else { $services['class
 </table>
 </div>
 
+<?php
+
+/**
+
 <div class="span4">
   <table class="table table-bordered table-condensed-more table-rounded table-striped">
   <thead>
@@ -137,3 +141,7 @@ if ($services['down']) { $services['class'] = "error"; } else { $services['class
   </table>
 </div>
 </div>
+
+**/
+
+?>
