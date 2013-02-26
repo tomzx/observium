@@ -99,7 +99,9 @@ if ($vars['view'] == 'minigraphs')
 } else {
   if ($vars['view'] == "details") { $port_details = 1; }
 
-echo('<table class="table table-striped" style="margin-top: 10px;">');
+if($vars['view'] = "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
+
+echo('<table class="table '.$table_class.'" style="margin-top: 10px;">');
 echo('  <thead>');
 
 echo('<tr class="tablehead">');
