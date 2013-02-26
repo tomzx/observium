@@ -280,7 +280,7 @@ function generate_device_link_header($device, $vars=array())
 {
   global $config;
 
-/// THIS SHIT NEEDS TO BE A FUNCTION. REALLY.
+/// FIXMEFIXME FIXME FIXME THIS SHIT NEEDS TO BE A FUNCTION. REALLY.
 
 if ($device['status'] == '0')
 {
@@ -623,19 +623,13 @@ function generate_port_link_header($port)
 {
   global $config;
 
+  // Push through processing function to set attributes
   if(!isset($port['humanized'])) { $port = humanize_port($port); }
-
-  /// THIS SHIT NEEDS TO BE A FUNCTION. REALLY.
-  if ($port['ifAdminStatus'] == "down") { $ports_disabled++; $table_tab_colour = "#aaaaaa";
-  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down") { $ports_down++; $table_tab_colour = "#cc0000"; $row_class = "error";
-  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $ports_down++; $table_tab_colour = "#ff6600"; $row_class = "warning";
-  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up") { $ports_up++; $table_tab_colour = "#194B7F"; }
-  /// END SHIT
 
   $contents = '
       <table class="table table-striped table-bordered table-rounded table-condensed">
-        <tr class="'.$row_class.'" style="font-size: 10pt;">
-          <td style="width: 10px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+        <tr class="'.$port['row_class'].'" style="font-size: 10pt;">
+          <td style="width: 10px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
           <td style="width: 10px;"></td>
           <td width="250"><a href="#" class="'.$port['html_class'].'" style="font-size: 15px; font-weight: bold;">'.fixIfName($port['label']).'</a><br />'.htmlentities($port['ifAlias']).'</td>
           <td width="100">'.$port['human_speed'].'<br />'.$port['ifMtu'].'</td>

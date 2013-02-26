@@ -33,8 +33,11 @@ if (dbFetchCell("SELECT COUNT(*) FROM `mac_accounting` WHERE `port_id` = ?", arr
   $port['tags'] .= '<a href="' . generate_port_url($port, array('view' => 'macaccounting')) . '"><span class="label label-info">MAC</span></a>';
 }
 
-echo("<tr style=\"background-color: $row_colour;\" valign=top onmouseover=\"this.style.backgroundColor='$list_highlight';\" onmouseout=\"this.style.backgroundColor='$row_colour';\" onclick=\"location.href='" . generate_port_url($port) . "/'\" style='cursor: pointer;'>
-         <td valign=top width=350>");
+
+echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" . generate_port_url($port) . "/\'" style="cursor: pointer;">
+         <td style="width: 1px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
+         <td valign="top" width="350">');
+
 echo("        <span class=list-large>
               " . generate_port_link($port, $port['ifIndex'] . ". ".$port['label']) . " ".$port['tags']."
            </span><br /><span class=interface-desc>".$port['ifAlias']."</span>");
@@ -84,6 +87,8 @@ if ($port['ifOperStatus'] == "up")
         <img src='images/icons/arrow_pps_in.png' align=absmiddle> ".format_bi($port['ifInUcastPkts_rate'])."pps</span><br />
         <img src='images/icons/arrow_pps_out.png' align=absmiddle> ".format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
 }
+
+
 
 echo("</td><td width=75>");
 if ($port['ifSpeed']) { echo("<span class=box-desc>".humanspeed($port['ifSpeed'])."</span>"); }

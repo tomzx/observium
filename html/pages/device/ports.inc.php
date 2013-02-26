@@ -99,14 +99,15 @@ if ($vars['view'] == 'minigraphs')
 } else {
   if ($vars['view'] == "details") { $port_details = 1; }
 
-if($vars['view'] = "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
+if($vars['view'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
 
-echo('<table class="table '.$table_class.'" style="margin-top: 10px;">');
+echo('<table class="table table-hover table-condensed '.$table_class.'">');
 echo('  <thead>');
 
-echo('<tr class="tablehead">');
+echo('<tr>');
 
 $cols = array(
+              'state' => NULL,
               'port' => 'Port',
               'graphs' => NULL,
               'traffic' => 'Traffic',
@@ -129,7 +130,7 @@ foreach ($cols as $sort => $col)
   }
 }
 
-echo("      </tr></thead>");
+echo("      </tr>");
 
 echo('  </thead>');
 
@@ -157,7 +158,6 @@ echo('  </thead>');
   foreach ($ports as $port)
   {
     include("includes/print-interface.inc.php");
-
     $i++;
   }
   echo("</table></div>");
