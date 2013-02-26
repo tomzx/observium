@@ -107,8 +107,8 @@ if (!$_SESSION['authenticated']) { echo("unauthenticated"); exit; }
 
                      echo('<dl style="min-height: 32px;" class="dl-horizontal dl-search">
                              <dt><img src="images/'.$icon.'.png"></img></dt>
-                             <dd>a<h5>'.highlight_search($name).'</h5>
-                                 <small>'.highlight_search($description).'</small></dd>
+                             <dd><h5>'.highlight_search($name).'</h5>
+                                 <small>'.$result['hostname'].'<br/>'.highlight_search($description).'</small></dd>
                             </dl>');
                    }
 
