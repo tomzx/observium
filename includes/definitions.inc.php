@@ -1253,7 +1253,7 @@ if (isset($config['enable_printers']) && $config['enable_printers'])
   $i++;
   $config['device_types'][$i]['text'] = 'Printers';
   $config['device_types'][$i]['type'] = 'printer';
-  $config['device_types'][$i]['icon'] = 'printer.png';
+  $config['device_types'][$i]['icon'] = 'fugue-printer-color';
 }
 
 // fixme - remove this old variable from use
