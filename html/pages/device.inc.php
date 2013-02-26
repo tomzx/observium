@@ -244,7 +244,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['pseudowires'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'pseudowires')).'">
-      <i class="fugue-layer-shape-curve" > Pseudowires
+      <i class="fugue-layer-shape-curve"></i> Pseudowires
     </a>
   </li>');
     }
