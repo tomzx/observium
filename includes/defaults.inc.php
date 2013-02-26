@@ -242,8 +242,8 @@ $config['frontpage']['minigraphs']['show']         = false;        // Enable/Dis
 $config['frontpage']['minigraphs']['ids']          = "";           // Comma and semicolon seperated array list, first the device id or graph id followed by the image type and the text header you want (example: "2,device_processor,CPU Usage;10,diskio_bits,IOPS")
 $config['frontpage']['minigraphs']['legend']       = false;        // Enable/Disable the legend on custom mini graph view
 
-// Frontpage order you can use: map, device_status, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
-$config['frontpage']['order']           = array('map', 'device_status', 'eventlog');
+// Frontpage order you can use: status_summary, map, device_status, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
+$config['frontpage']['order']           = array('status_summary', 'map', 'device_status', 'eventlog');
 
 
 // Device page options

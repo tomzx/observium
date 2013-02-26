@@ -1211,42 +1211,42 @@ $config['graph_descr']['device_processor']        = "This is an aggregate graph 
 $i = 0;
 $config['device_types'][$i]['text'] = 'Servers';
 $config['device_types'][$i]['type'] = 'server';
-$config['device_types'][$i]['icon'] = 'server.png';
+$config['device_types'][$i]['icon'] = 'fugue-server';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Network';
 $config['device_types'][$i]['type'] = 'network';
-$config['device_types'][$i]['icon'] = 'network.png';
+$config['device_types'][$i]['icon'] = 'fugue-network-hub';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Wireless';
 $config['device_types'][$i]['type'] = 'wireless';
-$config['device_types'][$i]['icon'] = 'wireless.png';
+$config['device_types'][$i]['icon'] = 'fugue-wi-fi-zone';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Firewalls';
 $config['device_types'][$i]['type'] = 'firewall';
-$config['device_types'][$i]['icon'] = 'firewall.png';
+$config['device_types'][$i]['icon'] = 'fugue-wall-brick';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Power';
 $config['device_types'][$i]['type'] = 'power';
-$config['device_types'][$i]['icon'] = 'power.png';
+$config['device_types'][$i]['icon'] = 'fugue-plug';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Environment';
 $config['device_types'][$i]['type'] = 'environment';
-$config['device_types'][$i]['icon'] = 'environment.png';
+$config['device_types'][$i]['icon'] = 'fugue-water';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Load Balancers';
 $config['device_types'][$i]['type'] = 'loadbalancer';
-$config['device_types'][$i]['icon'] = 'loadbalancer.png';
+$config['device_types'][$i]['icon'] = 'fugue-arrow-split';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Storage';
 $config['device_types'][$i]['type'] = 'storage';
-$config['device_types'][$i]['icon'] = 'storage.png';
+$config['device_types'][$i]['icon'] = 'fugue-database';
 
 if (isset($config['enable_printers']) && $config['enable_printers'])
 {
@@ -1256,6 +1256,8 @@ if (isset($config['enable_printers']) && $config['enable_printers'])
   $config['device_types'][$i]['icon'] = 'printer.png';
 }
 
+// fixme - remove this old variable from use
+
 $config['sensor_classes'] = array('current' => 'A',
                            'frequency' => 'Hz',
                            'humidity' => '%',
@@ -1264,6 +1266,19 @@ $config['sensor_classes'] = array('current' => 'A',
                            'voltage' => 'V',
                            'temperature' => 'C',
                            'dbm' => 'dBm');
+
+
+// fixme - different icons for power/volt/current
+
+$config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'fugue-lightning');
+$config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'fugue-lightning');
+$config['sensor_types']['humidity']    = array( 'symbol' => '%',   'text' => 'Percent', 'icon' => 'fugue-water');
+$config['sensor_types']['fanspeed']    = array( 'symbol' => 'RPM', 'text' => 'RPM',     'icon' => 'fugue-weather-wind');
+$config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Watts',   'icon' => 'fugue-lightning');
+$config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'fugue-lightning');
+$config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'fugue-thermometer-high');
+$config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'sweetie-arrow-incident-red');
+
 
 
 //////////////////////////////
