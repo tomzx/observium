@@ -9,10 +9,164 @@
  * @subpackage web
  * @author     Mike Stupalov <mike@stupalov.ru>
  * @copyright  (C) 2006 - 2013 Adam Armstrong
- * @version    1.0.3
+ * @version    1.0.4
  *
  */
 
+/**
+ * Display IPv4/IPv6 addresses.
+ *
+ * Display pages with IP addresses from device Interfaces.
+ *
+ * @param array $vars
+ * @return none
+ *
+ * @author Mike Stupalov <mike@stupalov.ru>
+ */
+function print_addresses($vars)
+{
+  // Short events? (no pagination, small out)
+  // FIXME. Mike: in this funcrtion short output not used
+  $short = (isset($vars['short']) && $vars['short']) ? TRUE : FALSE;
+  // With pagination? (display page numbers in header)
+  $pagination = (isset($vars['pagination']) && $vars['pagination']) ? TRUE : FALSE;
+  $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
+  $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
+  $start = $pagesize * $pageno - $pagesize;
+
+  $address_search = FALSE;
+  switch($vars['search'])
+  {
+    case '6':
+    case 'ipv6':
+    case 'v6':
+      $address_type = 'ipv6';
+      break;
+    default:
+      $address_type = 'ipv4';
+  }
+  
+  $param = array();
+  $where = " WHERE 1 ";
+  foreach ($vars as $var => $value)
+  {
+    if ($value != "")
+    {
+      switch ($var)
+      {
+        case 'device':
+          $where .= " AND I.device_id = ?";
+          $param[] = $value;
+          break;
+        case 'interface':
+          $where .= " AND I.ifDescr LIKE ?";
+          $param[] = $value;
+          break;
+        case 'address':
+          $address_search = TRUE;
+          list($addr, $mask) = explode("/", $value);
+          if (!$mask) {
+            $mask = ($address_type === 'ipv4') ? "32" : "128";
+          }
+          break;
+      }
+    }
+  }
+  if ($_SESSION['userlevel'] >= '7')
+  {
+    $query_perms = ' ';
+    $query_user = '';
+  } else {
+    $query_perms = ', devices_perms AS P ';
+    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
+    $param[] = $_SESSION['user_id'];
+  }
+  $query_device = " AND D.ignore = '0' AND D.disabled = '0'"; // Don't show ignored and disabled devices
+
+  $query = "FROM `".$address_type."_addresses` AS A, `ports` AS I, `devices` AS D, `".$address_type."_networks` AS N" . $query_perms;
+  $query .= $where . " AND I.port_id = A.port_id AND I.device_id = D.device_id AND N.".$address_type."_network_id = A.".$address_type."_network_id " . $query_device . $query_user;
+  $query_count = "SELECT COUNT(*) " . $query;
+  $query =  "SELECT * " . $query;
+  $query .= " ORDER BY A.".$address_type."_address";
+  if ($address_search) {
+    $pagination = FALSE;
+  } else {
+    $query .= " LIMIT $start,$pagesize";
+  }
+
+  // Query addresses
+  $entries = dbFetchRows($query, $param);
+  // Query address count
+  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
+
+  $list = array('device' => FALSE);
+  if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'search') { $list['device'] = TRUE; }
+
+  $string = "<table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">\n";
+  if (!$short)
+  {
+    $string .= "  <thead>\n";
+    $string .= "    <tr>\n";
+    if ($list['device']) { $string .= "      <th>Device</th>\n"; }
+    $string .= "      <th>Interface</th>\n";
+    $string .= "      <th>Address</th>\n";
+    $string .= "      <th>Description</th>\n";
+    $string .= "    </tr>\n";
+    $string .= "  </thead>\n";
+  }
+  $string .= '<tbody>';
+
+  foreach ($entries as $entry)
+  {
+    $address_show = TRUE;
+    if ($address_search)
+    {
+      if ($address_type === 'ipv4')
+      {
+        $address_show = Net_IPv4::ipInNetwork($entry[$address_type.'_address'], $addr . "/" . $mask);
+      } else {
+        $address_show = Net_IPv6::isInNetmask($entry[$address_type.'_address'], $addr, $mask);
+      }
+    }
+
+    if ($address_show)
+    {
+      $speed = humanspeed($entry['ifSpeed']);
+      
+      list($prefix, $length) = explode("/", $entry[$address_type.'_network']);
+     
+      if (port_permitted($entry['port_id']))
+      {
+        $entry = ifLabel ($entry, $entry);
+        if ($entry['ifInErrors_delta'] > 0 || $entry['ifOutErrors_delta'] > 0)
+        {
+          $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
+        }
+  
+        $string .= "<tr>";
+        if ($list['device'])
+        {
+          $string .= "<td class=\"list-bold\" nowrap>" . generate_device_link($entry) . "</td>";
+        }
+        $string .= "<td class=\"list-bold\">" . generate_port_link($entry) . " " . $port_error . "</td>";
+        if ($address_type === 'ipv6') { $entry[$address_type.'_address'] = Net_IPv6::compress($entry[$address_type.'_address']); }
+        $string .= "<td>" . $entry[$address_type.'_address'] . '/' . $length . "</td>";
+        $string .= "<td>" . $entry['ifAlias'] . "</td>";
+        $string .= "</tr>\n";
+      }
+    }
+  }
+
+  $string .= '</tbody>';
+  $string .= "</table>";
+
+  // Print pagination header
+  if ($pagination && !$short) { echo pagination($vars, $count); }
+
+  // Print addresses
+  echo $string;
+}
+ 
 /**
  * Display events.
  *
