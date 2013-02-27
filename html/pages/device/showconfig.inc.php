@@ -1,7 +1,5 @@
 <?php
 
-include("includes/geshi/geshi.php");
-
 // FIXME svn stuff still using optc etc, won't work, needs updating!
 
 if ($_SESSION['userlevel'] >= "7")
@@ -72,16 +70,10 @@ if ($_SESSION['userlevel'] >= "7")
     $text = join("\n",$lines);
   }
 
-  $language = "ios";
-  $geshi = new GeSHi($text, $language);
-  $geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS);
-  $geshi->set_overall_style('color: black;');
-  ##$geshi->set_line_style('color: #999999');
-  echo($geshi->parse_code());
-  #echo("<pre class=\"prettyprint linenums\">");
-  #echo($text);
-  #echo("</pre>");
-  #echo("<script type=\"text/javascript\">window.prettyPrint && prettyPrint();</script>");
+  echo("<pre class=\"prettyprint linenums\">");
+  echo($text);
+  echo("</pre>");
+  echo("<script type=\"text/javascript\">window.prettyPrint && prettyPrint();</script>");
 }
 
 $pagetitle[] = "Config";
