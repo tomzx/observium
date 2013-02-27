@@ -10,15 +10,15 @@ $graph_array_zoom['width']  = "400";
 $graph_array['legend']      = "no";
 
 echo('<h2>'.nicecase($vars['app']).'</h2>');
-echo('<table cellpadding=5 cellspacing=0 class=devicetable width=100%>');
+echo('<table style="table table-striped-two table-hover"');
 $app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WHERE D.device_id = A.device_id AND A.app_type = ? ORDER BY hostname", array($vars['app']));
 
 foreach ($app_devices as $app_device)
 {
-  echo('<tr class="list-device">');
-  echo('<td class="device-head" width=300px>'.generate_device_link($app_device, $app_device['hostname'], array('tab'=>'apps','app'=>$vars['app'])).'</td>');
-  echo('<td class="device-head" width=100px>'.$app_device['app_instance'].'</td>');
-  echo('<td class="device-head" width=100px>'.$app_device['app_status'].'</td>');
+  echo('<tr>');
+  echo('<th width=300px>'.generate_device_link($app_device, $app_device['hostname'], array('tab'=>'apps','app'=>$vars['app'])).'</td>');
+  echo('<td width=100px>'.$app_device['app_instance'].'</td>');
+  echo('<td width=100px>'.$app_device['app_status'].'</td>');
   echo('<td></td>');
   echo('</tr>');
   echo('<tr class="list-device">');

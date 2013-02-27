@@ -96,7 +96,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['munin'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'munin')). '">
-      <ii class="fugue-chart-up"></i> Munin
+      <i class="fugue-chart-up"></i> Munin
     </a>
   </li>');
     }

@@ -38,7 +38,6 @@ echo('<table style="margin: 0px 7px 7px 7px;" cellspacing="0" class="devicetable
 
 echo("<div class=\"navbar\">
         <div class=\"navbar-inner\">
-          <a class=\"brand\">Bill:</a>
           <ul class=\"nav\">");
 if ($isUser && !$isAdd) {
   echo("
@@ -59,7 +58,7 @@ if ($isAdmin && !$isAdd) {
 echo("
           </ul>
           <ul class=\"nav pull-right\">
-            <li class=\"first\"><a href=\"".$links['bills']."\"><i class=\"icon-chevron-left\"></i> <strong>Back to bills</strong></a></li>
+            <li class=\"first\"><a href=\"".$links['bills']."\"><i class=\"icon-chevron-left\"></i> <strong>Back</strong></a></li>
           </ul>
         </div>
       </div>");
