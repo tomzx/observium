@@ -153,7 +153,7 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <![endif]-->
 
   <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
-  <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
+  <link rel="stylesheet" href="css/jquery.qtip.min.css" type="text/css" />
   <script type="text/javascript">
   jQuery(document).ready(function($) {
     $(".tooltip-from-element").each(function(){
