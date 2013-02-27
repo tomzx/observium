@@ -12,30 +12,30 @@ $language_data = array (
     1 => array(
         'no', 'shutdown'
      ),
-#    2 => array(
-#        'router', 'interface', 'service', 'config-register', 'upgrade', 'version', 'hostname', 'boot-start-marker', 'boot', 'boot-end-marker', 'enable', 'aaa', 'clock', 'ip',
-#        'logging', 'access-list', 'route-map', 'snmp-server', 'mpls', 'speed', 'media-type', 'negotiation', 'timestamps', 'prefix-list', 'network', 'mask', 'unsuppress-map',
-#        'neighbor', 'remote-as', 'ebgp-multihop', 'update-source', 'description', 'peer-group', 'policy-map', 'class-map', 'class', 'match', 'access-group', 'bandwidth', 'username',
-#        'password', 'send-community', 'next-hop-self', 'route-reflector-client', 'ldp', 'discovery', 'advertise-labels', 'label', 'protocol', 'login', 'debug', 'log', 'duplex', 'router-id',
-#        'authentication', 'mode', 'maximum-paths', 'address-family', 'set', 'local-preference', 'community', 'trap-source', 'location', 'host', 'tacacs-server', 'session-id',
-#        'flow-export', 'destination', 'source', 'in', 'out', 'permit', 'deny', 'control-plane', 'line', 'con' ,'aux', 'vty', 'access-class', 'ntp', 'server', 'end', 'source-interface',
-#        'key', 'chain', 'key-string', 'redundancy', 'match-any', 'queue-limit', 'encapsulation', 'pvc', 'vbr-nrt', 'address', 'bundle-enable', 'atm', 'sonet', 'clns', 'route-cache',
-#        'default-information', 'redistribute', 'log-adjacency-changes', 'metric', 'spf-interval', 'prc-interval', 'lsp-refresh-interval', 'max-lsp-lifetime', 'set-overload-bit',
-#        'on-startup', 'wait-for-bgp', 'system', 'flash', 'timezone', 'subnet-zero', 'cef', 'flow-cache', 'timeout', 'active', 'domain', 'lookup', 'dhcp', 'use', 'vrf', 'hello', 'interval',
-#        'priority', 'ilmi-keepalive', 'buffered', 'debugging', 'fpd', 'secret', 'accounting', 'exec', 'group', 'local', 'recurring', 'source-route', 'call', 'rsvp-sync', 'scripting',
-#        'mtu', 'passive-interface', 'area' , 'distribute-list', 'metric-style', 'is-type', 'originate', 'activate', 'both', 'auto-summary', 'synchronization', 'aggregate-address', 'le', 'ge',
-#        'bgp-community', 'route', 'exit-address-family', 'standard', 'file', 'verify', 'domain-name', 'domain-lookup', 'route-target', 'export', 'import', 'map', 'rd', 'mfib', 'vtp', 'mls',
-#        'hardware-switching', 'replication-mode', 'ingress', 'flow', 'error', 'action', 'slb', 'purge', 'share-global', 'routing', 'traffic-eng', 'tunnels', 'propagate-ttl', 'switchport', 'vlan',
-#        'portfast', 'counters', 'max', 'age', 'ethernet', 'evc', 'uni', 'count', 'oam', 'lmi', 'gmt', 'netflow', 'pseudowire-class', 'spanning-tree', 'name', 'circuit-type'
-#    ),
-#    3 => array(
-#        'isis', 'ospf', 'eigrp', 'rip', 'igrp', 'bgp', 'ipv4', 'unicast', 'multicast', 'ipv6', 'connected', 'static', 'subnets', 'tcl'
-#    ),
-#    4 => array(
-#        'point-to-point', 'aal5snap', 'rj45', 'auto', 'full', 'half', 'precedence', 'percent', 'datetime', 'msec', 'locatime', 'summer-time', 'md5', 'wait-for-bgp', 'wide',
-#        'level-1', 'level-2', 'log-neighbor-changes', 'directed-request', 'password-encryption', 'common', 'origin-as', 'bgp-nexthop', 'random-detect', 'localtime', 'sso', 'stm-1',
-#        'dot1q', 'isl', 'new-model', 'always', 'summary-only', 'freeze', 'global', 'forwarded', 'access', 'trunk', 'edge', 'transparent'
-#    ),
+    2 => array(
+        'router', 'interface', 'service', 'config-register', 'upgrade', 'version', 'hostname', 'boot-start-marker', 'boot', 'boot-end-marker', 'enable', 'aaa', 'clock', 'ip',
+        'logging', 'access-list', 'route-map', 'snmp-server', 'mpls', 'speed', 'media-type', 'negotiation', 'timestamps', 'prefix-list', 'network', 'mask', 'unsuppress-map',
+        'neighbor', 'remote-as', 'ebgp-multihop', 'update-source', 'description', 'peer-group', 'policy-map', 'class-map', 'class', 'match', 'access-group', 'bandwidth', 'username',
+        'password', 'send-community', 'next-hop-self', 'route-reflector-client', 'ldp', 'discovery', 'advertise-labels', 'label', 'protocol', 'login', 'debug', 'log', 'duplex', 'router-id',
+        'authentication', 'mode', 'maximum-paths', 'address-family', 'set', 'local-preference', 'community', 'trap-source', 'location', 'host', 'tacacs-server', 'session-id',
+        'flow-export', 'destination', 'source', 'in', 'out', 'permit', 'deny', 'control-plane', 'line', 'con' ,'aux', 'vty', 'access-class', 'ntp', 'server', 'end', 'source-interface',
+        'key', 'chain', 'key-string', 'redundancy', 'match-any', 'queue-limit', 'encapsulation', 'pvc', 'vbr-nrt', 'address', 'bundle-enable', 'atm', 'sonet', 'clns', 'route-cache',
+        'default-information', 'redistribute', 'log-adjacency-changes', 'metric', 'spf-interval', 'prc-interval', 'lsp-refresh-interval', 'max-lsp-lifetime', 'set-overload-bit',
+        'on-startup', 'wait-for-bgp', 'system', 'flash', 'timezone', 'subnet-zero', 'cef', 'flow-cache', 'timeout', 'active', 'domain', 'lookup', 'dhcp', 'use', 'vrf', 'hello', 'interval',
+        'priority', 'ilmi-keepalive', 'buffered', 'debugging', 'fpd', 'secret', 'accounting', 'exec', 'group', 'local', 'recurring', 'source-route', 'call', 'rsvp-sync', 'scripting',
+        'mtu', 'passive-interface', 'area' , 'distribute-list', 'metric-style', 'is-type', 'originate', 'activate', 'both', 'auto-summary', 'synchronization', 'aggregate-address', 'le', 'ge',
+        'bgp-community', 'route', 'exit-address-family', 'standard', 'file', 'verify', 'domain-name', 'domain-lookup', 'route-target', 'export', 'import', 'map', 'rd', 'mfib', 'vtp', 'mls',
+        'hardware-switching', 'replication-mode', 'ingress', 'flow', 'error', 'action', 'slb', 'purge', 'share-global', 'routing', 'traffic-eng', 'tunnels', 'propagate-ttl', 'switchport', 'vlan',
+        'portfast', 'counters', 'max', 'age', 'ethernet', 'evc', 'uni', 'count', 'oam', 'lmi', 'gmt', 'netflow', 'pseudowire-class', 'spanning-tree', 'name', 'circuit-type'
+    ),
+    3 => array(
+        'isis', 'ospf', 'eigrp', 'rip', 'igrp', 'bgp', 'ipv4', 'unicast', 'multicast', 'ipv6', 'connected', 'static', 'subnets', 'tcl'
+    ),
+    4 => array(
+        'point-to-point', 'aal5snap', 'rj45', 'auto', 'full', 'half', 'precedence', 'percent', 'datetime', 'msec', 'locatime', 'summer-time', 'md5', 'wait-for-bgp', 'wide',
+        'level-1', 'level-2', 'log-neighbor-changes', 'directed-request', 'password-encryption', 'common', 'origin-as', 'bgp-nexthop', 'random-detect', 'localtime', 'sso', 'stm-1',
+        'dot1q', 'isl', 'new-model', 'always', 'summary-only', 'freeze', 'global', 'forwarded', 'access', 'trunk', 'edge', 'transparent'
+    ),
 ),
 
 'REGEXPS' => array (

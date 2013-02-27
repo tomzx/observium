@@ -99,7 +99,7 @@ foreach ($config['device_types'] as $devtype)
 {
   if (in_array($devtype['type'],array_keys($cache['device_types'])))
   {
-    echo('        <li><a href="devices/type=' . $devtype['type'] . '/"><i class="'.$devtype['icon'].'"></i> ' . $devtype['text'] . '&nbsp;<small class="pull-right">('.$cache['device_types'][$devtype['type']].')</small></a></li>');
+    echo('        <li style="width:200px;"><a href="devices/type=' . $devtype['type'] . '/"><i class="'.$devtype['icon'].'"></i> ' . $devtype['text'] . '&nbsp;<span class="pull-right">('.$cache['device_types'][$devtype['type']].')</span></a></li>');
   }
 }
 ?>
