@@ -108,6 +108,7 @@ echo('<tr>');
 
 $cols = array(
               'state' => NULL,
+              'BLANK' => NULL,
               'port' => 'Port',
               'graphs' => NULL,
               'traffic' => 'Traffic',

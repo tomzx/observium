@@ -36,10 +36,11 @@ if (dbFetchCell("SELECT COUNT(*) FROM `mac_accounting` WHERE `port_id` = ?", arr
 
 echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" . generate_port_url($port) . "/\'" style="cursor: pointer;">
          <td style="width: 1px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
+         <td style="width: 1px;"></td>
          <td valign="top" width="350">');
 
 echo("        <span class=list-large>
-              " . generate_port_link($port, $port['ifIndex'] . ". ".$port['label']) . " ".$port['tags']."
+              " . generate_port_link($port, $port['ifIndex_FIXME'] . ". ".$port['label']) . " ".$port['tags']."
            </span><br /><span class=interface-desc>".$port['ifAlias']."</span>");
 
 if ($port['ifAlias']) { echo("<br />"); }

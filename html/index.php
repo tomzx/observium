@@ -128,12 +128,11 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
   <link href="<?php echo($config['stylesheet']);  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
-
   <link href="<?php echo("css/bootstrap-responsive.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/bootstrap-observium.css");  ?>" rel="stylesheet" type="text/css" />
   <link href="<?php echo("css/google-code-prettify.css");  ?>" rel="stylesheet" type="text/css" />
+
   <link rel="stylesheet" href="css/mktree.css" type="text/css" />
-  <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
 
   <!--[if lte IE 7]><script src="css/test/lte-ie7.js"></script><![endif]-->
   <link rel="stylesheet" href="css/sweetie.css" />
@@ -148,22 +147,14 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/sorttable.js"></script>
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery-checkbox.js"></script>
-  <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
   <script type="text/javascript" src="js/google-code-prettify.js"></script>
   <!--[if lt IE 9]>
     <script type="text/javascript" src="tipped/js/excanvas/excanvas.js"></script>
   <![endif]-->
 
-  <!--
-  <link href="css/select2.css" rel="stylesheet"/>
-  <script src="js/select2.min.js"></script>
-  <script>
-      $(document).ready(function() { $(".select2").select2(); });
-  </script>
-  -->
-
+  <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
+  <link rel="stylesheet" href="css/jquery.qtip.css" type="text/css" />
   <script type="text/javascript">
-
   jQuery(document).ready(function($) {
     $(".tooltip-from-element").each(function(){
       var selector = '#' + $(this).data('tooltip-id');
@@ -290,20 +281,11 @@ function popUp(URL)
 // End -->
   </script>
 
-<body style="padding-top: 60px;">
+<body>
 
 <div class="container">
 
 <?php
-
-if (!$vars['bare'] == "yes") {
-
-  if ($_SESSION['authenticated']) { include("includes/navbar.inc.php"); } else { echo('<hr color="#444444" />'); }
-
-#  include("includes/footer.inc.php");
-
-
-}
 
 // To help debug the new URLs :)
 if ($devel || $vars['devel'])
@@ -371,20 +353,6 @@ if ($config['page_gen'])
 ?>
       </div>
     </div>
-
-
-
-    <script class="content_tooltips" type="text/javascript">
-$(document).ready(function() { $('#content a[title]').qtip({ content: { text: false }, style: 'light' }); });
-
-$('INPUT.auto-hint, TEXTAREA.auto-hint').focus(function() {
-    if ($(this).val() == $(this).attr('title')) {
-        $(this).val('');
-        $(this).removeClass('auto-hint');
-    }
-});
-
-    </script>
 
 <?php
 if (is_array($pagetitle))

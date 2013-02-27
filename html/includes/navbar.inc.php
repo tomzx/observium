@@ -18,7 +18,7 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
 #}
 
 ?>
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -26,13 +26,13 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="brand" href="<?php generate_url(); ?>"><img src="images/observium-mini-logo.png" /></a>
+        <a class="brand" href="<?php generate_url(''); ?>">&nbsp;</a>
         <div class="nav-collapse">
           <ul class="nav">
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
               <a href="<?php echo(generate_url(array('page'=>'overview'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
-                <i class="fugue-globe-model"></i> Overview <b class="caret"></b></a>
+                <i class="fugue-globe-model"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                 <li><a href="<?php echo(generate_url(array('page'=>'overview'))); ?>"><i class="fugue-globe-model"></i> Overview</a></li>
                 <li class="divider"></li>
@@ -59,7 +59,6 @@ if ($packages)
 
 ?>
 
-          <li class="divider"></li>
           <li><a href="<?php echo(generate_url(array('page'=>'search','search'=>'ipv4'))); ?>"><i class="menu-icon fugue-magnifier-zoom-actual"></i> Search</a></li>
 
                 </ul>
@@ -346,25 +345,16 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
 
 }
 ?>
-
+</ul>
+          <ul class="nav pull-right">
 
           <li class="dropdown">
             <form id="searchform" class="navbar-search" action="" style="margin-left: 10px; margin-right: 10px;  margin-top: 5px; margin-bottom: -5px;">
               <input onkeyup="lookup(this.value);" type="text" value="" class="span2 dropdown-toggle" placeholder="Search" />
             </form>
-            <div id="suggestions" class="dropdown-menu"></div>
+            <div id="suggestions" class="typeahead dropdown-menu"></div>
           </li>
-          <li class="divider-vertical"></li>
-        </ul>
 
-
-
-
-
-
-          <ul class="nav pull-right">
-
-            <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="fugue-gear"></i> <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -427,7 +417,6 @@ if ($_SESSION['userlevel'] >= 10)
                 <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="fugue-information"></i> About Observium</a></li>
               </ul>
             </li>
-            <li class="divider-vertical" style="margin:0;"></li>
           </ul>
         </div><!-- /.nav-collapse -->
       </div>

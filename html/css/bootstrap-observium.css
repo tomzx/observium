@@ -10,7 +10,17 @@ body {
   color: #555;
   font-size: 10pt;
   line-height: 20px;
+  padding-top: 50px;
 }
+
+@media (min-width: 768px) and (max-width: 979px) {
+  body { padding-top: 50px; }
+}
+
+@media (max-width: 767px) {
+  body { padding-top:0px; }
+}
+
 
 h1,
 h2,
@@ -379,53 +389,15 @@ legend {
   padding: 10px 10px 10px;
 }
 
-.navbar .divider-vertical {
-  margin: 0;
-}
-
-.navbar-inner {
-  background-color: #fafafa;
-  background-image: -moz-linear-gradient(top, #ffffff, #f0f0f0);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f0f0f0));
-  background-image: -webkit-linear-gradient(top, #ffffff, #f0f0f0);
-  background-image: -o-linear-gradient(top, #ffffff, #f0f0f0);
-  background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff0f0f0', GradientType=0);
-}
-
-.navbar .nav > li:hover,
-.navbar .nav > li:hover a:hover,
-.navbar .nav li.dropdown.open > .dropdown-toggle,
-.navbar .nav li.dropdown.active > .dropdown-toggle,
-.navbar .nav li.dropdown.open.active > .dropdown-toggle
-{
-  background-color: #fafafa;
-  background-image: -moz-linear-gradient(top, #ffffff, #e0e0e0);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088CC), to(#0077B3));
-  background-image: -webkit-linear-gradient(top, #0088CC, #0077B3);
-  background-image: -o-linear-gradient(top, #0088CC, #0077B3);
-  background-image: linear-gradient(to bottom, #0088CC, #0077B3);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088CC', endColorstr='#ff0077B3', GradientType=0);
-  color: white;
-  text-shadow: none;
-}
-
-.navbar .nav li.dropdown.open b.caret
-{
-  color: white;
-}
-
 .navbar .brand
 {
-    max-height: 40px;
-    overflow: visible;
-    padding-top: 5px;
-    padding-bottom: 0;
-    padding-right: 10px;
+  background:url(../images/observium-mini-logo.png) no-repeat;
+  display: inline-block;
+  width: 149px;
+  height: 30px;
+  padding: 0;
+  margin: 5px; 10px 0 0;
 }
-
 
 #suggestions{ display:none; }
 
@@ -461,3 +433,36 @@ legend {
   margin-left: 65px;
 }
 
+.subnav {
+    width: 100%;
+}
+@media (max-width: 768px) {
+    .subnav {
+        position: static;
+        top: auto;
+        z-index: auto;
+        width: auto;
+        height: auto;
+    }
+    .subnav .nav > li {
+        float: none;
+    }
+}
+@media (min-width: 980px) {
+  .subnav-fixed {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 1020;
+  }
+ .subnav-fixed .nav {
+    width: 938px;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 1210px) {
+  .subnav-fixed .nav {
+    width: 1168px;
+  }
+}
