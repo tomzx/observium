@@ -330,7 +330,7 @@ if ($_SESSION['authenticated'])
 $runtime_end = utime(); $runtime = $runtime_end - $runtime_start;
 $gentime = substr($runtime, 0, 5);
 
-echo('<br /> <br /> <br /> <br />  <div id="footer">' . (isset($config['footer']) ? $config['footer'] : ''));
+echo('<div id="footer">' . (isset($config['footer']) ? $config['footer'] : ''));
 echo('<br />Powered by <a href="http://www.observium.org" target="_blank">Observium ' . $config['version']);
 
 echo('</a>. Copyright &copy; 2006-'. date("Y"). ' by Adam Armstrong. All rights reserved.');

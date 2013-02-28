@@ -4,21 +4,18 @@
 
 if ($_SESSION['userlevel'] >= "7")
 {
-
   // Already defined $config_file in device.inc.php
 
-  echo('<div style="clear: both;">');
+  print_optionbar_start();
 
-  print_optionbar_start('', '');
-
-  echo("<span style='font-weight: bold;'>Config</span> &#187; ");
+  $show_menu = "<strong>Config</strong> &#187; ";
 
   if (!$vars['rev']) {
-    echo('<span class="pagemenu-selected">');
-    echo(generate_link('Latest',array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig')));
-    echo("</span>");
+    $show_menu .= '<span class="pagemenu-selected">';
+    $show_menu .= generate_link('Latest',array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig'));
+    $show_menu .= "</span>";
   } else {
-    echo(generate_link('Latest',array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig')));
+    $show_menu .= generate_link('Latest',array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig'));
   }
 
   if (function_exists('svn_log')) {
@@ -27,18 +24,18 @@ if ($_SESSION['userlevel'] >= "7")
     $revlist = array();
 
     foreach ($svnlogs as $svnlog) {
-      echo($sep);
+      $show_menu .= $sep;
       $revlist[] = $svnlog["rev"];
 
-      if ($vars['rev'] == $svnlog["rev"]) { echo('<span class="pagemenu-selected">'); }
-      $linktext = "r" . $svnlog["rev"] ." <small>". date("d M H:i", strtotime($svnlog["date"])) . "</small>";
-      echo(generate_link($linktext,array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig','rev'=>$svnlog["rev"])));
+      if ($vars['rev'] == $svnlog["rev"]) { $show_menu .= '<span class="pagemenu-selected">'; }
+      $linktext = "r" . $svnlog["rev"] ." <small>". format_timestamp($svnlog["date"]) . "</small>";
+      $show_menu .= generate_link($linktext,array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig','rev'=>$svnlog["rev"]));
 
-      if ($vars['rev'] == $svnlog["rev"]) { echo("</span>");  }
-
-      $sep = " | ";
+      if ($vars['rev'] == $svnlog["rev"]) { $show_menu .= "</span>";  }
     }
   }
+
+  echo($show_menu);
 
   print_optionbar_end();
 
@@ -68,10 +65,10 @@ if ($_SESSION['userlevel'] >= "7")
     $text = join("\n",$lines);
   }
 
-  echo("<pre class=\"prettyprint linenums\">");
+  $text = "<pre class=\"prettyprint linenums\" style=\"overflow: auto;\">\n".$text;
+  $text .= "</pre>\n";
+  $text .= "<script type=\"text/javascript\">window.prettyPrint && prettyPrint();</script>";
   echo($text);
-  echo("</pre>");
-  echo("<script type=\"text/javascript\">window.prettyPrint && prettyPrint();</script>");
 }
 
 $pagetitle[] = "Config";
