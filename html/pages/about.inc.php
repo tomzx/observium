@@ -5,6 +5,12 @@
 
 $Observium_version = $config['version'];
 
+$apache_version = str_replace("Apache/", "", $_SERVER['SERVER_SOFTWARE']);
+$php_version = phpversion();
+$mysql_version = dbFetchCell("SELECT version()");
+#$netsnmp_version = shell_exec($config['snmpget'] . " --version 2>&1");
+$rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdtool'] . " --version |head -n1")),1,1));
+
 echo("
       <div class=''>
         <h3>Versions</h3>
