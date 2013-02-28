@@ -6,10 +6,10 @@
  *   This file is part of Observium.
  *
  * @package    observium
- * @subpackage web
+ * @subpackage functions-print
  * @author     Mike Stupalov <mike@stupalov.ru>
  * @copyright  (C) 2006 - 2013 Adam Armstrong
- * @version    1.0.4
+ * @version    1.0.5
  *
  */
 
@@ -22,6 +22,7 @@
  * @return none
  *
  * @author Mike Stupalov <mike@stupalov.ru>
+ * 
  */
 function print_addresses($vars)
 {
@@ -114,7 +115,7 @@ function print_addresses($vars)
     $string .= "    </tr>\n";
     $string .= "  </thead>\n";
   }
-  $string .= '<tbody>';
+  $string .= "  <tbody>\n";
 
   foreach ($entries as $entry)
   {
@@ -143,21 +144,21 @@ function print_addresses($vars)
           $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
         }
   
-        $string .= "<tr>";
+        $string .= "  <tr>\n";
         if ($list['device'])
         {
-          $string .= "<td class=\"list-bold\" nowrap>" . generate_device_link($entry) . "</td>";
+          $string .= "    <td class=\"list-bold\" nowrap>" . generate_device_link($entry) . "</td>\n";
         }
-        $string .= "<td class=\"list-bold\">" . generate_port_link($entry) . " " . $port_error . "</td>";
+        $string .= "    <td class=\"list-bold\">" . generate_port_link($entry) . " " . $port_error . "</td>\n";
         if ($address_type === 'ipv6') { $entry[$address_type.'_address'] = Net_IPv6::compress($entry[$address_type.'_address']); }
-        $string .= "<td>" . $entry[$address_type.'_address'] . '/' . $length . "</td>";
-        $string .= "<td>" . $entry['ifAlias'] . "</td>";
-        $string .= "</tr>\n";
+        $string .= "    <td>" . $entry[$address_type.'_address'] . '/' . $length . "</td>\n";
+        $string .= "    <td>" . $entry['ifAlias'] . "</td>\n";
+        $string .= "  </tr>\n";
       }
     }
   }
 
-  $string .= '</tbody>';
+  $string .= "  </tbody>\n";
   $string .= "</table>";
 
   // Print pagination header
@@ -181,7 +182,8 @@ function print_addresses($vars)
  * @param array $vars
  * @return none
  *
- * @author Mike Stupalov <mike@stupalov.ru>
+ * @author Dennis de Houx <dennis@aio.be>, Mike Stupalov <mike@stupalov.ru>
+ * 
  */
 function print_events($vars)
 {
@@ -202,15 +204,15 @@ function print_events($vars)
       switch ($var)
       {
         case 'device':
-          $where .= " AND `host` = ?";
+          $where .= " AND E.host = ?";
           $param[] = $value;
           break;
         case 'port':
-          $where .= " AND `reference` = ?";
+          $where .= " AND E.reference = ?";
           $param[] = $value;
           break;
         case 'type':
-          $where .= " AND `$var` = ?";
+          $where .= " AND E.type = ?";
           $param[] = $value;
           break;
         case 'message':
@@ -229,13 +231,21 @@ function print_events($vars)
 
   if ($_SESSION['userlevel'] >= '7')
   {
-    $query = "SELECT * FROM `eventlog` AS E " . $where . " ORDER BY `datetime` DESC LIMIT $start,$pagesize";
-    $query_count = "SELECT COUNT(*) FROM `eventlog`" . $where;
+    $query_perms = ' ';
+    $query_user = '';
   } else {
-    $query = "SELECT * FROM `eventlog` AS E, devices_perms AS P " . $where . " AND E.host = P.device_id AND P.user_id = ? ORDER BY `datetime` DESC LIMIT $start,$pagesize";
-    $query_count = "SELECT COUNT(*) FROM `eventlog` AS E, devices_perms AS P " . $where . " AND E.host = P.device_id AND P.user_id = ?";
+    $query_perms = ', devices_perms AS P ';
+    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
     $param[] = $_SESSION['user_id'];
   }
+  $query_device = " AND D.ignore = '0' AND D.disabled = '0' "; // Don't show ignored and disabled devices
+
+  $query = "FROM `eventlog` AS E, `devices` AS D".$query_perms;
+  $query .= $where . " AND E.host = D.device_id ".$query_device.$query_user;
+  $query_count = "SELECT COUNT(*) ".$query;
+  // FIXME Mike: bad table columns (`host` and `type`), they intersect with table `devices`
+  $query = "SELECT STRAIGHT_JOIN E.host, E.datetime, E.message, E.type, E.reference ".$query." ORDER BY `datetime` DESC LIMIT $start,$pagesize";
+
   // Query events
   $entries = dbFetchRows($query, $param);
   // Query events count
@@ -257,25 +267,25 @@ function print_events($vars)
     $string .= "    </tr>\n";
     $string .= "  </thead>\n";
   }
-  $string .= '<tbody>';
+  $string .= "  <tbody>\n";
 
   foreach ($entries as $entry)
   {
     $icon = geteventicon($entry['message']);
     if ($icon) { $icon = '<img src="images/16/' . $icon . '" />'; }
-
-    $string .= "<tr>";
+  
+    $string .= "  <tr>\n";
     if ($short)
     {
-      $string .= "<td width=\"160\" class=\"syslog\">";
+      $string .= "    <td width=\"160\" class=\"syslog\">";
     } else {
-      $string .= "<td width=\"160\">";
+      $string .= "    <td width=\"160\">";
     }
-    $string .= format_timestamp($entry['datetime']) . "</td>";
+    $string .= format_timestamp($entry['datetime']) . "</td>\n";
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['host']);
-      $string .= "<td class=\"list-bold\" width=150>" . generate_device_link($dev, shorthost($dev['hostname'])) . "</td>";
+      $string .= "    <td class=\"list-bold\" width=150>" . generate_device_link($dev, shorthost($dev['hostname'])) . "</td>\n";
     }
     if ($list['port'])
     {
@@ -286,18 +296,19 @@ function print_events($vars)
       } else {
         $entry['link'] = "System";
       }
-      if (!$short) { $string .= "<td>" . $entry['link'] . "</td>"; }
+      if (!$short) { $string .= "    <td>" . $entry['link'] . "</td>\n"; }
     }
     if ($short)
     {
-      $string .= "<td class=\"syslog\">" . $entry['link'] . " ";
+      $string .= "    <td class=\"syslog\">" . $entry['link'] . " ";
     } else {
-      $string .= "<td>";
+      $string .= "    <td>";
     }
-    $string .= htmlspecialchars($entry['message']) . "</td>\n</tr>";
+    $string .= htmlspecialchars($entry['message']) . "</td>\n";
+    $string .= "  </tr>\n";
   }
 
-  $string .= '</tbody>';
+  $string .= "  </tbody>\n";
   $string .= "</table>";
 
   // Print pagination header
@@ -316,7 +327,6 @@ function print_events($vars)
  * @param array $vars
  * @return none
  * 
- * @author Mike Stupalov <mike@stupalov.ru>
  */
 function print_events_short($var)
 {
@@ -338,7 +348,8 @@ function print_events_short($var)
  * @param array $vars
  * @return none
  *
- * @author Mike Stupalov <mike@stupalov.ru>
+ * @author Dennis de Houx <dennis@aio.be>, Mike Stupalov <mike@stupalov.ru>
+ *
  */
 function print_syslogs($vars)
 {
@@ -361,7 +372,7 @@ function print_syslogs($vars)
       switch ($var)
       {
         case 'device':
-          $where .= " AND `device_id` = ?";
+          $where .= " AND D.device_id = ?";
           $param[] = $value;
           break;
         case 'priority':
@@ -386,13 +397,20 @@ function print_syslogs($vars)
 
   if ($_SESSION['userlevel'] >= '7')
   {
-    $query = "SELECT * FROM `syslog` " . $where . " ORDER BY `timestamp` DESC LIMIT $start,$pagesize";
-    $query_count = "SELECT COUNT(*) FROM `syslog` " . $where;
+    $query_perms = ' ';
+    $query_user = '';
   } else {
-    $query = "SELECT * FROM `syslog` AS E, devices_perms AS P " . $where . " AND E.device_id = P.device_id AND P.user_id = ? ORDER BY `timestamp` DESC LIMIT $start,$pagesize";
-    $query_count = "SELECT COUNT(*) FROM `syslog` AS E, devices_perms AS P " . $where . " AND E.device_id = P.device_id AND P.user_id = ?";
+    $query_perms = ', devices_perms AS P ';
+    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
     $param[] = $_SESSION['user_id'];
   }
+  $query_device = " AND D.ignore = '0' AND D.disabled = '0' "; // Don't show ignored and disabled devices
+
+  $query = "FROM `syslog` AS S, `devices` AS D".$query_perms;
+  $query .= $where . " AND S.device_id = D.device_id ".$query_user.$query_device;
+  $query_count = "SELECT COUNT(*) ".$query;
+  $query = "SELECT STRAIGHT_JOIN * ".$query." ORDER BY `timestamp` DESC LIMIT $start,$pagesize";
+  
   // Query syslog messages
   $entries = dbFetchRows($query, $param);
   // Query syslog count
@@ -414,45 +432,46 @@ function print_syslogs($vars)
     $string .= "    </tr>\n";
     $string .= "  </thead>\n";
   }
-  $string .= '<tbody>';
+  $string .= "  <tbody>\n";
 
   foreach ($entries as $entry)
   {
-    $string .= "<tr>";
+    $string .= "  <tr>";
     if ($short)
     {
-      $string .= "<td width=\"160\" class=\"syslog\">";
+      $string .= "    <td width=\"160\" class=\"syslog\">";
     } else {
-      $string .= "<td width=\"160\">";
+      $string .= "    <td width=\"160\">";
     }
-    $string .= format_timestamp($entry['timestamp']) . "</td>";
+    $string .= format_timestamp($entry['timestamp']) . "</td>\n";
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['device_id']);
-      $string .= "<td class=\"list-bold\" width=150>" . generate_device_link($dev, shorthost($dev['hostname'])) . "</td>";
+      $string .= "    <td class=\"list-bold\" width=150>" . generate_device_link($dev, shorthost($dev['hostname'])) . "</td>\n";
     }
     if ($list['priority'])
     {
-      if (!$short) { $string .= "<td style=\"color: " . $prioritys[$entry['priority']]['color'] . ";\">(" . $entry['priority'] . ")&nbsp;" . $prioritys[$entry['priority']]['name'] . "</td>"; }
+      if (!$short) { $string .= "    <td style=\"color: " . $prioritys[$entry['priority']]['color'] . ";\">(" . $entry['priority'] . ")&nbsp;" . $prioritys[$entry['priority']]['name'] . "</td>\n"; }
     }
     if ($short)
     {
-      $string .= "<td class=\"syslog\">";
+      $string .= "    <td class=\"syslog\">";
     } else {
-      $string .= "<td>";
+      $string .= "    <td>";
     }
     $entry['program'] = ($entry['program'] === '') ? "[[EMPTY]]" : $entry['program'];
-    $string .= "<strong>" . $entry['program'] . " :</strong> " . htmlspecialchars($entry['msg']) . "</td>\n</tr>";
+    $string .= "<strong>" . $entry['program'] . " :</strong> " . htmlspecialchars($entry['msg']) . "</td>\n";
+    $string .= "  </tr>\n";
   }
 
-  $string .= '</tbody>';
-  $string .= "</table>";
+  $string .= "  </tbody>\n";
+  $string .= "</table>\n";
 
   // Print pagination header
   if ($pagination && !$short) { echo pagination($vars, $count); }
 
   // Print events
-  echo $string;
+  echo($string);
 }
 
 /**
@@ -467,26 +486,27 @@ function print_syslogs($vars)
  *
  * @param array $status
  * @return none
+ * 
+ * @author Dennis de Houx <dennis@aio.be>, Mike Stupalov <mike@stupalov.ru>
  *
- * @author Mike Stupalov <mike@stupalov.ru>
  */
 function print_status($status)
 {
   // Mike: I know that there are duplicated variables, but later will remove global
   global $config;
-
-  $string = "        <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">";
-  $string .= "            <thead>";
-  $string .= "                <tr>";
-  $string .= "                    <th>Device</th>";
-  $string .= "                    <th>Type</th>";
-  $string .= "                    <th>Status</th>";
-  $string .= "                    <th>Entity</th>";
-  $string .= "                    <th>Location</th>";
-  $string .= "                    <th>Time Since / Information</th>";
-  $string .= "                </tr>";
-  $string .= "            </thead>";
-  $string .= "            <tbody>";
+  
+  $string  = "<table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">\n";
+  $string .= "  <thead>\n";
+  $string .= "  <tr>\n";
+  $string .= "    <th>Device</th>\n";
+  $string .= "    <th>Type</th>\n";
+  $string .= "    <th>Status</th>\n";
+  $string .= "    <th>Entity</th>\n";
+  $string .= "    <th>Location</th>\n";
+  $string .= "    <th>Time Since / Information</th>\n";
+  $string .= "  </tr>\n";
+  $string .= "  </thead>\n";
+  $string .= "  <tbody>\n";
 
   $param = array();
   if ($_SESSION['userlevel'] >= '7')
@@ -500,7 +520,7 @@ function print_status($status)
   }
   $query_device = " AND D.ignore = '0' AND D.disabled = '0'"; // Don't show ignored and disabled devices
 
-  $empty_line = "<tr><td colspan=6></td></tr>"; // FIXME here :)
+  $empty_line = "<tr><td colspan=6></td></tr>\n"; // FIXME here :)
   
   // Show Device Status
   if ($status['devices'])
@@ -511,14 +531,14 @@ function print_status($status)
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $device)
     {
-      $string .= "                <tr>";
-      $string .= "                    <td nowrap>".generate_device_link($device, $device['hostname'])."</td>";
-      $string .= "                    <td><span class=\"badge badge-inverse\">Device</span></td>";
-      $string .= "                    <td><span class=\"label label-important\">Device Down</span></td>";
-      $string .= "                    <td>-</td>";
-      $string .= "                    <td nowrap>".substr($device['location'], 0, 30)."</td>";
-      $string .= "                    <td nowrap>".deviceUptime($device, 'short')."</td>";
-      $string .= "                </tr>";
+      $string .= "  <tr>\n";
+      $string .= "    <td nowrap>".generate_device_link($device, $device['hostname'])."</td>\n";
+      $string .= "    <td><span class=\"badge badge-inverse\">Device</span></td>\n";
+      $string .= "    <td><span class=\"label label-important\">Device Down</span></td>\n";
+      $string .= "    <td>-</td>\n";
+      $string .= "    <td nowrap>".substr($device['location'], 0, 30)."</td>\n";
+      $string .= "    <td nowrap>".deviceUptime($device, 'short')."</td>\n";
+      $string .= "  </tr>\n";
     }
     if (!empty($entries)) { $string .= $empty_line; }
   }
@@ -534,14 +554,14 @@ function print_status($status)
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $device)
       {
-        $string .= "                <tr>";
-        $string .= "                    <td nowrap>".generate_device_link($device, $device['hostname'])."</td>";
-        $string .= "                    <td><span class=\"badge badge-inverse\">Device</span></td>";
-        $string .= "                    <td><span class=\"label label-success\">Device Rebooted</span></td>";
-        $string .= "                    <td>-</td>";
-        $string .= "                    <td nowrap>".substr($device['location'], 0, 30)."</td>";
-        $string .= "                    <td nowrap>Uptime ".formatUptime($device['uptime'], 'short')."</td>";
-        $string .= "                </tr>";
+        $string .= "  <tr>\n";
+        $string .= "    <td nowrap>".generate_device_link($device, $device['hostname'])."</td>\n";
+        $string .= "    <td><span class=\"badge badge-inverse\">Device</span></td>\n";
+        $string .= "    <td><span class=\"label label-success\">Device Rebooted</span></td>\n";
+        $string .= "    <td>-</td>\n";
+        $string .= "    <td nowrap>".substr($device['location'], 0, 30)."</td>\n";
+        $string .= "    <td nowrap>Uptime ".formatUptime($device['uptime'], 'short')."</td>\n";
+        $string .= "  </tr>\n";
       }
       if (!empty($entries)) { $string .= $empty_line; }
     }
@@ -550,6 +570,15 @@ function print_status($status)
   // Ports Down
   if ($status['ports'])
   {
+    // FIXME Mike: This will be deleted in future
+    // because $config['warn']['ifdown'] - deprecated.
+    if (isset($config['warn']['ifdown']) && !$config['warn']['ifdown'])
+    {
+      $string .= "<tr><td colspan=6><h4>Please note that config option \$config['warn']['ifdown'] is now obsolete.</h4>";
+      $string .= "<h4>Use options: \$config['frontpage']['device_status']['ports'] and \$config['frontpage']['device_status']['ports']</h4>";
+      $string .= "For cancel this message, delete \$config['warn']['ifdown'] from configuration file.</td></tr>\n";
+    }
+  
     $query = "SELECT * FROM `ports` AS I, `devices` AS D" . $query_perms;
     $query .= "WHERE I.device_id = D.device_id AND I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = '0' AND I.deleted = '0'" . $query_device . $query_user;
     $query .= "ORDER BY D.hostname ASC, I.ifDescr * 1 ASC";
@@ -557,14 +586,14 @@ function print_status($status)
     foreach ($entries as $port)
     {
       $port = ifNameDescr($port);
-      $string .= "                <tr>";
-      $string .= "                    <td nowrap>".generate_device_link($port, $port['hostname'])."</td>";
-      $string .= "                    <td><span class=\"badge badge-info\">Port</span></td>";
-      $string .= "                    <td><span class=\"label label-important\">Port Down</span></td>";
-      $string .= "                    <td nowrap>".generate_port_link($port, $port['label'])."</td>";
-      $string .= "                    <td nowrap>".substr($port['location'], 0, 30)."</td>";
-      $string .= "                    <td nowrap>Down for ".formatUptime($config['time']['now'] - strtotime($port['ifLastChange']), 'short')."</td>"; // This is like deviceUptime()
-      $string .= "                </tr>";
+      $string .= "  <tr>\n";
+      $string .= "    <td nowrap>".generate_device_link($port, $port['hostname'])."</td>\n";
+      $string .= "    <td><span class=\"badge badge-info\">Port</span></td>\n";
+      $string .= "    <td><span class=\"label label-important\">Port Down</span></td>\n";
+      $string .= "    <td nowrap>".generate_port_link($port, $port['label'])."</td>\n";
+      $string .= "    <td nowrap>".substr($port['location'], 0, 30)."</td>\n";
+      $string .= "    <td nowrap>Down for ".formatUptime($config['time']['now'] - strtotime($port['ifLastChange']), 'short')."</td>\n"; // This is like deviceUptime()
+      $string .= "  </tr>\n";
     }
     if (!empty($entries)) { $string .= $empty_line; }
   }
@@ -579,18 +608,18 @@ function print_status($status)
     foreach ($entries as $port)
     {
       $port = ifNameDescr($port);
-      $string .= "                <tr>";
-      $string .= "                    <td nowrap>".generate_device_link($port, $port['hostname'])."</td>";
-      $string .= "                    <td><span class=\"badge badge-info\">Port</span></td>";
-      $string .= "                    <td><span class=\"label label-important\">Port Errors</span></td>";
-      $string .= "                    <td nowrap>".generate_port_link($port, $port['label'])."</td>";
-      $string .= "                    <td nowrap>".substr($port['location'], 0, 30)."</td>";
-      $string .= "                    <td>Errors ";
+      $string .= "  <tr>\n";
+      $string .= "    <td nowrap>".generate_device_link($port, $port['hostname'])."</td>\n";
+      $string .= "    <td><span class=\"badge badge-info\">Port</span></td>\n";
+      $string .= "    <td><span class=\"label label-important\">Port Errors</span></td>\n";
+      $string .= "    <td nowrap>".generate_port_link($port, $port['label'], 'port_errors')."</td>\n";
+      $string .= "    <td nowrap>".substr($port['location'], 0, 30)."</td>\n";
+      $string .= "    <td>Errors ";
       if($port['ifInErrors_delta']) { $string .= "In: ".$port['ifInErrors_delta']; }
       if($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $string .= ", "; }
       if($port['ifOutErrors_delta']) { $string .= "Out: ".$port['ifOutErrors_delta']; }
-      $string .= "</td>";
-      $string .= "                </tr>";
+      $string .= "</td>\n";
+      $string .= "  </tr>\n";
     }
     if (!empty($entries)) { $string .= $empty_line; }
   }
@@ -604,14 +633,14 @@ function print_status($status)
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $service)
     {
-      $string .= "                <tr>";
-      $string .= "                    <td nowrap>".generate_device_link($service, $service['hostname'])."</td>";
-      $string .= "                    <td><span class=\"badge\">Service</span></td>";
-      $string .= "                    <td><span class=\"label label-important\">Service Down</span></td>";
-      $string .= "                    <td>".$service['service_type']."</td>";
-      $string .= "                    <td nowrap>".substr($service['location'], 0, 30)."</td>";
-      $string .= "                    <td nowrap>Down for ".formatUptime($config['time']['now'] - strtotime($service['service_changed']), 'short')."</td>"; // This is like deviceUptime()
-      $string .= "                </tr>";
+      $string .= "  <tr>\n";
+      $string .= "    <td nowrap>".generate_device_link($service, $service['hostname'])."</td>\n";
+      $string .= "    <td><span class=\"badge\">Service</span></td>\n";
+      $string .= "    <td><span class=\"label label-important\">Service Down</span></td>\n";
+      $string .= "    <td>".$service['service_type']."</td>\n";
+      $string .= "    <td nowrap>".substr($service['location'], 0, 30)."</td>\n";
+      $string .= "    <td nowrap>Down for ".formatUptime($config['time']['now'] - strtotime($service['service_changed']), 'short')."</td>\n"; // This is like deviceUptime()
+      $string .= "  </tr>\n";
     }
     if (!empty($entries)) { $string .= $empty_line; }
   }
@@ -635,25 +664,24 @@ function print_status($status)
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $peer)
       {
-        $string .= "                <tr>";
-        $string .= "                    <td nowrap>".generate_device_link($peer, $peer['hostname'])."</td>";
-        $string .= "                    <td><span class=\"badge badge-warning\">BGP</span></td>";
-        $string .= "                    <td><span class=\"label label-important\" title=\"".$bgpstates."\">BGP ".strtoupper($peer['bgpPeerState'])."</span></td>";
-        $string .= "                    <td nowrap>".$peer['bgpPeerIdentifier']."</td>";
-        $string .= "                    <td nowrap>".substr($peer['location'], 0, 30)."</td>";
-        $string .= "                    <td nowrap><strong>AS".$peer['bgpPeerRemoteAs']." :</strong> ". substr($peer['astext'], 0, 15)."</td>";
-        $string .= "                </tr>";
+        $string .= "  <tr>\n";
+        $string .= "    <td nowrap>".generate_device_link($peer, $peer['hostname'])."</td>\n";
+        $string .= "    <td><span class=\"badge badge-warning\">BGP</span></td>\n";
+        $string .= "    <td><span class=\"label label-important\" title=\"".$bgpstates."\">BGP ".strtoupper($peer['bgpPeerState'])."</span></td>\n";
+        $string .= "    <td nowrap>".$peer['bgpPeerIdentifier']."</td>\n";
+        $string .= "    <td nowrap>".substr($peer['location'], 0, 30)."</td>\n";
+        $string .= "    <td nowrap><strong>AS".$peer['bgpPeerRemoteAs']." :</strong> ". substr($peer['astext'], 0, 15)."</td>\n";
+        $string .= "  </tr>\n";
       }
       if (!empty($entries)) { $string .= $empty_line; }
     }
   }
 
-  $string .= "            </tbody>";
-  $string .= "        </table>";
+  $string .= "  </tbody>";
+  $string .= "</table>";
   
   // Final print all statuses
   echo($string);
-
 }
 
 ?>
