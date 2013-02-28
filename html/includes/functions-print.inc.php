@@ -520,7 +520,7 @@ function print_status($status)
   }
   $query_device = " AND D.ignore = '0' AND D.disabled = '0'"; // Don't show ignored and disabled devices
 
-  $empty_line = "<tr><td colspan=6></td></tr>\n"; // FIXME here :)
+  $empty_line = "\n"; // FIXME here :)
   
   // Show Device Status
   if ($status['devices'])
