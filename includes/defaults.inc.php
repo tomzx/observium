@@ -397,7 +397,7 @@ $config['auth_mechanism']           = "mysql"; // Available mechanisms: mysql (d
 $config['auth_ldap_version'] = 3;                    // LDAP client version (2 or 3)
 $config['auth_ldap_server'] = "ldap.yourserver.com"; // LDAP server name
 $config['auth_ldap_port']   = 389;                   // LDAP server port
-$config['auth_ldap_starttls'] = 'optional'           // Using STARTTLS ('optional' or 'require')
+$config['auth_ldap_starttls'] = 'optional';          // Using STARTTLS ('optional' or 'require')
 $config['auth_ldap_prefix'] = "uid=";
 $config['auth_ldap_suffix'] = ",ou=People,dc=example,dc=com";
 $config['auth_ldap_group']  = "cn=observium,ou=groups,dc=example,dc=com";
