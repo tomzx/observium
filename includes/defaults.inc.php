@@ -227,7 +227,7 @@ $config['frontpage']['device_status']['show']      = true;         // Enable/Dis
 // Show the status messages you want
 $config['frontpage']['device_status']['devices']   = true;         // Show the down devices
 $config['frontpage']['device_status']['ports']     = true;         // Show the down ports
-$config['frontpage']['device_status']['errors']    = false;        // STILL NEED TO DO THIS
+$config['frontpage']['device_status']['errors']    = false;        // Show the ports with interface errors
 $config['frontpage']['device_status']['services']  = true;         // Show the down services
 $config['frontpage']['device_status']['bgp']       = true;         // Show the bgp status
 $config['frontpage']['device_status']['uptime']    = true;         // Show the uptime status
@@ -394,17 +394,18 @@ $config['auth_mechanism']           = "mysql"; // Available mechanisms: mysql (d
 
 // LDAP Authentication
 
-$config['auth_ldap_version'] = 3; // v2 or v3
-$config['auth_ldap_server'] = "ldap.yourserver.com";
-$config['auth_ldap_port']   = 389;
+$config['auth_ldap_version'] = 3;                    // LDAP client version (2 or 3)
+$config['auth_ldap_server'] = "ldap.yourserver.com"; // LDAP server name
+$config['auth_ldap_port']   = 389;                   // LDAP server port
+$config['auth_ldap_starttls'] = 'optional'           // Using STARTTLS ('optional' or 'require')
 $config['auth_ldap_prefix'] = "uid=";
 $config['auth_ldap_suffix'] = ",ou=People,dc=example,dc=com";
 $config['auth_ldap_group']  = "cn=observium,ou=groups,dc=example,dc=com";
 
 $config['auth_ldap_groupbase'] = "ou=group,dc=example,dc=com";
-$config['auth_ldap_groupmembertype'] = "nodn"; // Avialable types: 'nodn' (default, used $username),
-                                               // 'fulldn' ($config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'])
-$config['auth_ldap_groupmemberattr'] = "memberUid"; // Use your unique attribute for username, example "uniqueMember".
+$config['auth_ldap_groupmembertype'] = "nodn";       // Avialable membertypes: 'nodn' (default, used $username);
+                                                     // 'fulldn' ($config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'])
+$config['auth_ldap_groupmemberattr'] = "memberUid";  // Use your unique attribute for username, example "uniqueMember".
 $config['auth_ldap_groups']['admin']['level'] = 10;
 $config['auth_ldap_groups']['pfy']['level'] = 7;
 $config['auth_ldap_groups']['support']['level'] = 1;
