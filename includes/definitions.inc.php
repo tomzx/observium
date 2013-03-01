@@ -121,7 +121,6 @@ $config['os'][$os]['type']              = "server";
 $os = "adva";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['text']              = "Adva Optical";
-
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 
@@ -161,7 +160,7 @@ $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['icon']              = "alcatellucent";
 
-// Cisco OSes
+// Cisco
 
 $os = "ios";
 $config['os'][$os]['group']             = "cisco";
@@ -287,6 +286,19 @@ $config['os'][$os]['over'][1]['graph']  = "device_processor";
 $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory Usage";
+
+$os = "wlc";
+$config['os'][$os]['text']              = "Cisco WLC";
+$config['os'][$os]['type']              = "wireless";
+$config['os'][$os]['ifname']            = 1;
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Device Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_mempool";
+$config['os'][$os]['over'][2]['text']   = "Memory Usage";
+$config['os'][$os]['icon']              = "cisco";
+
 
 // Cisco Small Business (Linksys)
 
@@ -573,6 +585,7 @@ $config['os'][$os]['type']              = "network";
 
 $os = "tranzeo";
 $config['os'][$os]['text']              = "Tranzeo";
+$config['os'][$os]['type']              = "wireless";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 
