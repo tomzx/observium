@@ -71,7 +71,8 @@ function poll_sensor($device, $class, $unit)
     if (!is_file($rrd_file))
     {
       rrdtool_create($rrd_file,"--step 300 \
-      DS:sensor:GAUGE:600:-20000:20000 ".$config['rrd_rra']);
+      DS:sensor:GAUGE:600:-20000:U ".$config['rrd_rra']);
+      //DS:sensor:GAUGE:600:-20000:20000 ".$config['rrd_rra']);
     }
 
     echo("$sensor_value $unit ");

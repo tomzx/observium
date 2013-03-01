@@ -45,11 +45,19 @@ if (count($sensors))
 
     $sensor['sensor_descr'] = truncate($sensor['sensor_descr'], 48, '');
 
-    echo("<tr class=device-overview>
+    if (strtolower($sensor_type) == "frequency") {
+      echo("<tr class=device-overview>
+           <td class=tablehead style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
+           <td width=80 align=right class=tablehead>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
+           <td width=80 align=right class=tablehead>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . format_si($sensor['sensor_value']) . $sensor_unit . "</span>", $overlib_content)."</td>
+          </tr>");
+    } else {
+      echo("<tr class=device-overview>
            <td class=tablehead style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
            <td width=80 align=right class=tablehead>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
            <td width=80 align=right class=tablehead>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . $sensor['sensor_value'] . $sensor_unit . "</span>", $overlib_content)."</td>
           </tr>");
+    }
   }
 
   echo("</table>");
