@@ -2,12 +2,12 @@
 
 // FIXME - this could do with some performance improvements, i think. possible rearranging some tables and setting flags at poller time (nothing changes outside of then anyways)
 
-$service_alerts = dbFetchCell("SELECT COUNT(service_id) FROM services WHERE service_status = '0'");
-$if_alerts      = dbFetchCell("SELECT COUNT(port_id) FROM `ports` WHERE `ifOperStatus` = 'down' AND `ifAdminStatus` = 'up' AND `ignore` = '0'");
+$service_alerts = dbFetchCell("SELECT COUNT(*) FROM services WHERE service_status = '0'");
+$interface_alerts = dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `ifOperStatus` = 'down' AND `ifAdminStatus` = 'up' AND `ignore` = '0'");
 
 if (isset($config['enable_bgp']) && $config['enable_bgp'])
 {
-  $bgp_alerts = dbFetchCell("SELECT COUNT(bgpPeer_id) FROM bgpPeers AS B where (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established'");
+  $bgp_alerts = dbFetchCell("SELECT COUNT(*) FROM bgpPeers AS B where (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established'");
 }
 
 
@@ -50,7 +50,7 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
 
 <?php
 
-$packages = dbFetchCell("SELECT COUNT(pkg_id) from `packages`");
+$packages = dbFetchCell("SELECT COUNT(*) from `packages`");
 
 if ($packages)
 {
@@ -68,7 +68,7 @@ if ($packages)
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
               <a href="<?php echo(generate_url(array('page'=>'devices'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="fugue-servers"></i> Devices <b class="caret"></b></a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu" style="width:200px;">
 
                 <li><a href="<?php echo(generate_url(array('page'=>'devices'))); ?>"><i class="fugue-servers"></i> All Devices</a></li>
                 <li class="divider"></li>
@@ -99,7 +99,7 @@ foreach ($config['device_types'] as $devtype)
 {
   if (in_array($devtype['type'],array_keys($cache['device_types'])))
   {
-    echo('        <li style="width:200px;"><a href="devices/type=' . $devtype['type'] . '/"><i class="'.$devtype['icon'].'"></i> ' . $devtype['text'] . '&nbsp;<span class="pull-right">('.$cache['device_types'][$devtype['type']].')</span></a></li>');
+    echo('        <li><a href="devices/type=' . $devtype['type'] . '/"><i class="'.$devtype['icon'].'"></i> ' . $devtype['text'] . '&nbsp;<span class="right">('.$cache['device_types'][$devtype['type']].')</span></a></li>');
   }
 }
 ?>
@@ -154,7 +154,7 @@ if ($ifbreak) { echo('<li class="divider"></li>'); }
 
 if (isset($interface_alerts))
 {
-  echo('<li><a href="ports/alerted=yes/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> Alerts ('.$interface_alerts.')</a></li>');
+  echo('<li><a href="ports/alerted=yes/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> Alerts&nbsp;<span class="right">('.$interface_alerts.')</span></a></li>');
 }
 
 $deleted_ports = 0;
@@ -170,7 +170,7 @@ foreach (dbFetchRows("SELECT * FROM `ports` AS P, `devices` as D WHERE P.`delete
 <li><a href="ports/state=down/"><i class="fugue-network-status-busy"></i> Down</a></li>
 <li><a href="ports/state=admindown/"><i class="fugue-network-status-offline"></i> Disabled</a></li>
 <?php
-if ($deleted_ports) { echo('<li><a href="deleted-ports/"><i class="sweetie-badge-square-minus"></i> Deleted ('.$deleted_ports.')</a></li>'); }
+if ($deleted_ports) { echo('<li><a href="deleted-ports/"><i class="sweetie-badge-square-minus"></i> Deleted&nbsp;<span class="right">('.$deleted_ports.')</span></a></li>'); }
 ?>
 
               </ul>

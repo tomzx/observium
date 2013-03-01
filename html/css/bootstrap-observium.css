@@ -197,7 +197,10 @@ hr {
 }
 
 .right {
-    float: right;
+  /* firefox have bug with float:right */
+  /*float: right;*/
+  position: absolute;
+  right: 10px;
 }
 
 .left {
