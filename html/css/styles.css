@@ -54,7 +54,7 @@ ul li ul li:hover ul li {
 }
 
 .submit {
-  background-image: url('/images/submitbg.png');
+  /*background-image: url('/images/submitbg.png');*/
   background-position: 0 100%;
   border-color: #B2B2B2 #525252 #525252 #B2B2B2;
 }
@@ -63,7 +63,8 @@ ul li ul li:hover ul li {
 }
 
 input,select {
-  background: #FFFFFF url('/images/textbg.png') repeat-x scroll 0 0;
+  /*background: #FFFFFF url('/images/textbg.png') repeat-x scroll 0 0;*/
+  background: #FFFFFF repeat-x scroll 0 0;
   font-size: 1em;
   border: 1px solid #B2B2B2;
   border-color: #B2B2B2 #d2d2d2 #d2d2d2 #B2B2B2;

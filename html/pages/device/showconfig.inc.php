@@ -2,36 +2,36 @@
 
 // FIXME svn stuff still using optc etc, won't work, needs updating!
 
-if ($_SESSION['userlevel'] >= "7")
+if ($_SESSION['userlevel'] >= '7')
 {
   // Already defined $config_file in device.inc.php
 
   print_optionbar_start();
 
-  $show_menu = "<strong>Config</strong> &#187; ";
+  $show_menu = '<strong>Config</strong> &#187; ';
 
   if (!$vars['rev']) {
     $show_menu .= '<span class="pagemenu-selected">';
     $show_menu .= generate_link('Latest',array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig'));
-    $show_menu .= "</span>";
+    $show_menu .= '</span>';
   } else {
     $show_menu .= generate_link('Latest',array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig'));
   }
 
   if (function_exists('svn_log')) {
-    $sep     = " | ";
+    $sep     = ' | ';
     $svnlogs = svn_log($device_config_file, SVN_REVISION_HEAD, NULL, 8);
     $revlist = array();
 
     foreach ($svnlogs as $svnlog) {
       $show_menu .= $sep;
-      $revlist[] = $svnlog["rev"];
+      $revlist[] = $svnlog['rev'];
 
-      if ($vars['rev'] == $svnlog["rev"]) { $show_menu .= '<span class="pagemenu-selected">'; }
-      $linktext = "r" . $svnlog["rev"] ." <small>". format_timestamp($svnlog["date"]) . "</small>";
-      $show_menu .= generate_link($linktext,array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig','rev'=>$svnlog["rev"]));
+      if ($vars['rev'] == $svnlog['rev']) { $show_menu .= '<span class="pagemenu-selected">'; }
+      $linktext = 'r' . $svnlog['rev'] . ' <small>' . format_timestamp($svnlog['date']) . '</small>';
+      $show_menu .= generate_link($linktext,array('page'=>'device','device'=>$device['device_id'],'tab'=>'showconfig','rev'=>$svnlog['rev']));
 
-      if ($vars['rev'] == $svnlog["rev"]) { $show_menu .= "</span>";  }
+      if ($vars['rev'] == $svnlog['rev']) { $show_menu .= '</span>' . PHP_EOL; }
     }
   }
 
@@ -42,9 +42,9 @@ if ($_SESSION['userlevel'] >= "7")
   if (function_exists('svn_log') && in_array($vars['rev'], $revlist)) {
     list($diff, $errors) = svn_diff($device_config_file, $vars['rev']-1, $device_config_file, $vars['rev']);
     if (!$diff) {
-      $text = "No Difference";
+      $text = 'No Difference';
     } else {
-      $text = "";
+      $text = '';
       while (!feof($diff)) { $text .= fread($diff, 8192); }
       fclose($diff);
       fclose($errors);
@@ -65,12 +65,12 @@ if ($_SESSION['userlevel'] >= "7")
     $text = join("\n",$lines);
   }
 
-  $text = "<pre class=\"prettyprint linenums\" style=\"overflow: auto;\">\n".$text;
-  $text .= "</pre>\n";
-  $text .= "<script type=\"text/javascript\">window.prettyPrint && prettyPrint();</script>";
+  $text = '<pre class="prettyprint linenums">' . PHP_EOL . $text;
+  $text .= '</pre>' . PHP_EOL;
+  $text .= '<script type="text/javascript">window.prettyPrint && prettyPrint();</script>' . PHP_EOL;
   echo($text);
 }
 
-$pagetitle[] = "Config";
+$pagetitle[] = 'Config';
 
 ?>

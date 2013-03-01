@@ -8,7 +8,7 @@
  * @package    observium
  * @subpackage functions
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -382,10 +382,8 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
   $url = generate_device_url($device, $vars);
   $link = overlib_link($url, $text, $contents, $class);
 
-  if (device_permitted($device['device_id']))
+  if (!device_permitted($device['device_id']))
   {
-    return $link;
-  } else {
     return $device['hostname'];
   }
   return $link;
@@ -404,7 +402,6 @@ function overlib_link($url, $text, $contents, $class)
   } else {
     $output  = '<a href="'.$url.'" class="'.$class.'">'.$text.'</a>';
   }
-
 
   return $output;
 }
@@ -703,13 +700,13 @@ function print_optionbar_start ($height = 0, $width = 0, $marginbottom = 5)
 #    margin-bottom: ".$marginbottom."px; " . ($width ? 'max-width: ' . $width . (strstr($width,'%') ? '' : 'px') . '; ' : '') . "
 #    padding: 7px 14px 8px 14px'>");
 
-   echo('<div class="well well-shaded">');
+   echo(PHP_EOL . '<div class="well well-shaded">' . PHP_EOL);
 
 }
 
 function print_optionbar_end()
 {
-  echo('  </div>');
+  echo(PHP_EOL . '  </div>' . PHP_EOL);
 }
 
 function geteventicon($message)
