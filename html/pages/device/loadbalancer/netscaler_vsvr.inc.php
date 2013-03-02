@@ -111,26 +111,22 @@ echo('<h5>Aggregate</h5>');
 include("includes/print-graphrow.inc.php");
 unset($graph_array);
 
-print_optionbar_start();
-echo("<span style='font-weight: bold;'>VServers</span> &#187; ");
-
 $menu_options = array('basic' => 'Basic',
                       'services' => 'Services',
                       );
 
 if (!$vars['view']) { $vars['view'] = "basic"; }
 
-$sep = "";
+$navbar['brand'] = "VServers";
+$navbar['class'] = "navbar-narrow";
+
 foreach ($menu_options as $option => $text)
 {
-  if ($vars['view'] == $option) { echo("<span class='pagemenu-selected'>"); }
-  echo('<a href="'.generate_url($vars, array('view' => $option, 'graph' => NULL)).'">'.$text.'</a>');
-  if ($vars['view'] == $option) { echo("</span>"); }
-  echo(" | ");
+  if ($vars['view'] == $option) { $navbar['options'][$option]['class'] = "active"; }
+  $navbar['options'][$option]['text'] = $text;
+  $navbar['options'][$option]['url'] = generate_url($vars, array('view'=>$option, 'graph' => NULL));
 }
 
-unset($sep);
-echo(' Graphs: ');
 $graph_types = array("bits"   => "Bits",
                      "pkts"   => "Packets",
                      "conns"  => "Connections",
@@ -139,26 +135,24 @@ $graph_types = array("bits"   => "Bits",
 
 foreach ($graph_types as $type => $descr)
 {
-  echo("$type_sep");
-  if ($vars['graph'] == $type) { echo("<span class='pagemenu-selected'>"); }
-  echo('<a href="'.generate_url($vars, array('view' => 'graphs', 'graph' => $type)).'">'.$descr.'</a>');
-  if ($vars['graph'] == $type) { echo("</span>"); }
-  $type_sep = " | ";
+  if ($vars['graph'] == $type) { $navbar['options_right'][$type]['class'] = "active"; }
+  $navbar['options_right'][$type]['text'] = $descr;
+  $navbar['options_right'][$type]['url'] = generate_url($vars,array('view' => 'graphs', 'graph'=>$type));
 }
 
-print_optionbar_end();
+print_navbar($navbar); unset($navbar);
 
 
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
-echo("  <thead>\n");
-echo("    <tr>\n");
-echo("      <th>vServer</th>\n");
-echo("      <th width=250>Addresses</th>\n");
-echo("      <th width=200>Type</th>\n");
-echo("      <th width=130>Status</th>\n");
-echo("      <th width=130>Traffic</th>\n");
-echo("    </tr>");
-echo("  </thead>");
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('  <thead>');
+echo('    <tr>');
+echo('      <th>vServer</th>');
+echo('      <th width=250>Addresses</th>');
+echo('      <th width=200>Type</th>');
+echo('      <th width=130>Status</th>');
+echo('      <th width=130>Traffic</th>');
+echo('    </tr>');
+echo('  </thead>');
 $i = "0";
 foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? ORDER BY `vsvr_label`", array($device['device_id'])) as $vsvr)
 {

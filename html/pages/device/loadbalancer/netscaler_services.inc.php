@@ -103,26 +103,21 @@ unset($graph_array);
 
 
 
-print_optionbar_start();
-
-echo("<span style='font-weight: bold;'>Services</span> &#187; ");
-
 $menu_options = array('basic' => 'Basic',
                      );
 
 if (!$vars['view']) { $vars['view'] = "basic"; }
 
-$sep = "";
+$navbar['brand'] = "Services";
+$navbar['class'] = "navbar-narrow";
+
 foreach ($menu_options as $option => $text)
 {
-  if ($vars['view'] == $option) { echo("<span class='pagemenu-selected'>"); }
-  echo('<a href="'.generate_url($vars, array('view' => 'basic', 'graph' => NULL)).'">'.$text.'</a>');
-  if ($vars['view'] == $option) { echo("</span>"); }
-  echo(" | ");
+  if ($vars['view'] == $option) { $navbar['options'][$option]['class'] = "active"; }
+  $navbar['options'][$option]['text'] = $text;
+  $navbar['options'][$option]['url'] = generate_url($vars, array('view'=>$option, 'graph' => NULL));
 }
 
-unset($sep);
-echo(' Graphs: ');
 $graph_types = array("bits"   => "Bits",
                      "pkts"   => "Packets",
                      "conns"  => "Connections",
@@ -130,14 +125,12 @@ $graph_types = array("bits"   => "Bits",
 
 foreach ($graph_types as $type => $descr)
 {
-  echo("$type_sep");
-  if ($vars['graph'] == $type) { echo("<span class='pagemenu-selected'>"); }
-  echo('<a href="'.generate_url($vars, array('view' => 'graphs', 'graph' => $type)).'">'.$descr.'</a>');
-  if ($vars['graph'] == $type) { echo("</span>"); }
-  $type_sep = " | ";
+  if ($vars['graph'] == $type) { $navbar['options_right'][$type]['class'] = "active"; }
+  $navbar['options_right'][$type]['text'] = $descr;
+  $navbar['options_right'][$type]['url'] = generate_url($vars,array('view' => 'graphs', 'graph'=>$type));
 }
 
-print_optionbar_end();
+print_navbar($navbar); unset($navbar);
 
 echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");

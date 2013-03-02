@@ -12,31 +12,21 @@ $type_text['loadbalancer_vservers'] = "Serverfarms";
 $type_text['netscaler_vsvr'] = "VServers";
 $type_text['netscaler_services'] = "Services";
 
-print_optionbar_start();
-
 $pagetitle[] = "Load Balancer";
 
-echo("<span style='font-weight: bold;'>Load Balancer</span> &#187; ");
+$navbar['brand'] = "Load Balancer";
+$navbar['class'] = "navbar-narrow";
 
-unset($sep);
 foreach ($loadbalancer_tabs as $type)
 {
-
   if (!$vars['type']) { $vars['type'] = $type; }
-
-  echo($sep);
-
-  if ($vars['type'] == $type)
-  {
-    echo('<span class="pagemenu-selected">');
-  }
-
-  echo(generate_link($type_text[$type] ." (".$device_loadbalancer_count[$type].")",$link_array,array('type'=>$type)));
-  if ($vars['type'] == $type) { echo("</span>"); }
-  $sep = " | ";
+  if ($vars['type'] == $type) { $navbar['options'][$type]['class'] = "active"; }
+  $navbar['options'][$type]['text'] = $type_text[$type]." (".$device_loadbalancer_count[$type].")";
+  $navbar['options'][$type]['url'] = generate_url($link_array,array('type'=>$type));
 }
 
-print_optionbar_end();
+print_navbar($navbar); unset($navbar);
+
 
 if (is_file("pages/device/loadbalancer/".mres($vars['type']).".inc.php"))
 {
