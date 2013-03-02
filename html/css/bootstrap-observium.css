@@ -22,7 +22,6 @@ body {
   body { padding-top:0px; }
 }
 
-
 h1,
 h2,
 h3,
@@ -70,8 +69,11 @@ label, input, button, select, textarea {
 }
 
 .row-fluid .span6 {
-  width: 49.13617021276595%;
-  *width: 48.88297872340425%;
+  width: 49.75%;
+}
+
+.row-fluid [class*="span"] {
+  margin-left: 0.5%;
 }
 
 .input-append .add-on, .input-prepend .add-on {

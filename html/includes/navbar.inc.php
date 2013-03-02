@@ -363,24 +363,19 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
                 <li class="divider"></li>
 
 <?php
-$toggle_url_wide = preg_replace('/(\?|\&)widescreen=(yes|no)/', '', $_SERVER['REQUEST_URI']);
-if (strstr($toggle_url_wide,'?')) { $toggle_url_wide .= '&amp;'; } else { $toggle_url_wide .= '?'; }
 
-if($_SESSION['widescreen'] === 1)
+if($_SESSION['widescreen'] == 1)
 {
-  echo('<li><a href="' . $toggle_url_wide . 'widescreen=no" title="Switch to normal screen width layout"><i class="fugue-arrow-in" style="font-size: 16px; color: #555;"></i> Normal Width</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('widescreen' => 'no')).'" title="Switch to normal screen width layout"><i class="fugue-arrow-in" style="font-size: 16px; color: #555;"></i> Normal Width</a></li>');
 } else {
-  echo('<li><a href="' . $toggle_url_wide . 'widescreen=yes" title="Switch to wide screen layout"><i class="fugue-arrow-move" style="font-size: 16px; color: #555;"></i> Widescreen</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('widescreen' => 'yes')).'" title="Switch to wide screen layout"><i class="fugue-arrow-move" style="font-size: 16px; color: #555;"></i> Widescreen</a></li>');
 }
 
-$toggle_url_biggraphs = preg_replace('/(\?|\&)big_graphs=(yes|no)/', '', $_SERVER['REQUEST_URI']);
-if (strstr($toggle_url_biggraphs,'?')) { $toggle_url_biggraphs .= '&amp;'; } else { $toggle_url_biggraphs .= '?'; }
-
-if($_SESSION['big_graphs'] === 1)
+if($_SESSION['big_graphs'] == 1)
 {
-  echo('<li><a href="' . $toggle_url_biggraps . 'big_graphs=no" title="Switch to normal graphs"><i class="fugue-layout-6" style="font-size: 16px; color: #555;"></i> Normal Graphs</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('big_graphs' => 'no')).'" title="Switch to normal graphs"><i class="fugue-layout-6" style="font-size: 16px; color: #555;"></i> Normal Graphs</a></li>');
 } else {
-  echo('<li><a href="' . $toggle_url_biggraphs . 'big_graphs=yes" title="Switch to larger graphs"><i class="fugue-layout-4" style="font-size: 16px; color: #555;"></i> Large Graphs</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('big_graphs' => 'yes')).'" title="Switch to larger graphs"><i class="fugue-layout-4" style="font-size: 16px; color: #555;"></i> Large Graphs</a></li>');
 }
 
 if ($config['api']['enabled'])
@@ -424,6 +419,19 @@ if ($_SESSION['userlevel'] >= 10)
     </div><!-- /navbar-inner -->
   </div>
 
+<?
+if($_SESSION['widescreen'] == 1)
+{
+  echo('
+  <div class="alert">
+     <button type="button" class="close" data-dismiss="alert">&times;</button>
+     <p><i class="fugue-arrow-move"></i> <strong>Widescreen Mode</strong></p>
+     <p>Please note that widescreen mode is currently not working, but will return once it has been ported to Bootstrap properly.</p>
+     <p><a class="btn btn" href="'.generate_url($vars, array('widescreen' => 'no')).'"><i class="fugue-arrow-in"></i> Return to normal</a></p>
+  </div>');
+
+}
+?>
 
 <script>
 

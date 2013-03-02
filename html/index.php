@@ -61,11 +61,12 @@ $segments = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 foreach ($segments as $pos => $segment)
 {
   $segment = urldecode($segment);
-  if ($pos == "0")
+  if ($pos == "0" && !strpos($segment, '='))
   {
     $vars['page'] = $segment;
   } else {
     list($name, $value) = explode("=", $segment);
+
     if ($value == "" || !isset($value))
     {
       $vars[$name] = yes;
@@ -87,11 +88,11 @@ foreach ($_POST as $name => $value)
 
 include("includes/authenticate.inc.php");
 
-if (strstr($_SERVER['REQUEST_URI'], 'widescreen=yes')) { $_SESSION['widescreen'] = 1; }
-if (strstr($_SERVER['REQUEST_URI'], 'widescreen=no'))  { unset($_SESSION['widescreen']); }
+if ($vars['widescreen'] == "yes") { $_SESSION['widescreen'] = 1; unset($vars['widescreen']); }
+if ($vars['widescreen'] == "no")  { unset($_SESSION['widescreen']); unset($vars['widescreen']); }
 
-if (strstr($_SERVER['REQUEST_URI'], 'big_graphs=yes')) { $_SESSION['big_graphs'] = 1; }
-if (strstr($_SERVER['REQUEST_URI'], 'big_graphs=no'))  { unset($_SESSION['big_graphs']); }
+if ($vars['big_graphs'] == "yes") { $_SESSION['big_graphs'] = 1; unset($vars['big_graphs']); }
+if ($vars['big_graphs'] == "no")  { unset($_SESSION['big_graphs']); unset($vars['big_graphs']); }
 
 // Load the settings for Multi-Tenancy.
 if (isset($config['branding']) && is_array($config['branding']))
