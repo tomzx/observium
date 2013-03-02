@@ -32,7 +32,7 @@ include_once("includes/authenticate.inc.php");
 
 if (!$_SESSION['authenticated']) { echo("unauthenticated"); exit; }
 
-exec("pgrep php", $output, $return);
+exec("ps aux | grep -i 'poller.php' | grep -v grep", $output, $return);
 if ($return == 0) {
 
 echo('
