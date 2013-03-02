@@ -260,7 +260,7 @@ function print_addresses($vars)
  * @param array $vars
  * @return none
  *
- * @author Mike Stupalov <mike@stupalov.ru>
+ * @author Dennis de Houx <info@all-in-one.be>, Mike Stupalov <mike@stupalov.ru>
  */
 function print_events($vars)
 {
@@ -431,7 +431,7 @@ function print_events_short($var)
  * @param array $vars
  * @return none
  *
- * @author Mike Stupalov <mike@stupalov.ru>
+ * @author Dennis de Houx <info@all-in-one.be>, Mike Stupalov <mike@stupalov.ru>
  */
 function print_syslogs($vars)
 {
@@ -574,7 +574,7 @@ function print_syslogs($vars)
  * @param array $status
  * @return none
  *
- * @author Mike Stupalov <mike@stupalov.ru>
+ * @author Dennis de Houx <info@all-in-one.be>, Mike Stupalov <mike@stupalov.ru>
  */
 function print_status($status)
 {
