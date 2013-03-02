@@ -11,7 +11,7 @@
  *
  */
 
-if ($_GET['debug'])
+if (isset($_GET['debug']) && $_GET['debug'])
 {
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 0);
@@ -32,15 +32,11 @@ include_once("includes/authenticate.inc.php");
 
 if (!$_SESSION['authenticated']) { echo("unauthenticated"); exit; }
 
-exec("ps aux | grep -i 'poller.php' | grep -v grep", $output, $return);
-if ($return == 0) {
-
-echo('
-<img style="margin-top: -2px;" src="images/loading.gif" /> Poller running');
-
+exec("ps aux | grep -i 'poller.php' | grep -v grep", $output);
+if (empty($output)) {
+  echo "Poller idle";
 } else {
-    echo "Poller idle";
+  echo('<img style="margin-top: -2px;" src="images/loading.gif" /> Poller running');
 }
-
 
 ?>
