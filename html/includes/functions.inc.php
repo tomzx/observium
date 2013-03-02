@@ -40,7 +40,7 @@ function format_timestamp($str)
 }
 
 /**
- * Return array with syslog prioritiess.
+ * Return array with syslog priorities.
  *
  * This function return array with syslog priority names and colors.
  *
@@ -49,21 +49,21 @@ function format_timestamp($str)
  *
  * @author Mike Stupalov <mike@stupalov.ru>
  */
-function syslog_prioritys()
+function syslog_priorities()
 {
-  $prioritys['0'] = array('name' => 'emergencies',   'color' => '#FF0000');
-  $prioritys['1'] = array('name' => 'alerts',        'color' => '#EE2222');
-  $prioritys['2'] = array('name' => 'critical',      'color' => '#DD3333');
-  $prioritys['3'] = array('name' => 'errors',        'color' => '#BB4444');
-  $prioritys['4'] = array('name' => 'warnings',      'color' => '#AA5555');
-  $prioritys['5'] = array('name' => 'notifications', 'color' => '#555599');
-  $prioritys['6'] = array('name' => 'informational', 'color' => '#00FF00');
-  $prioritys['7'] = array('name' => 'debugging',     'color' => '#0000FF');
+  $priorities['0'] = array('name' => 'emergencies',   'color' => '#FF0000');
+  $priorities['1'] = array('name' => 'alerts',        'color' => '#EE2222');
+  $priorities['2'] = array('name' => 'critical',      'color' => '#DD3333');
+  $priorities['3'] = array('name' => 'errors',        'color' => '#BB4444');
+  $priorities['4'] = array('name' => 'warnings',      'color' => '#AA5555');
+  $priorities['5'] = array('name' => 'notifications', 'color' => '#555599');
+  $priorities['6'] = array('name' => 'informational', 'color' => '#00FF00');
+  $priorities['7'] = array('name' => 'debugging',     'color' => '#0000FF');
   for ($i = 8; $i < 16; $i++)
   {
-    $prioritys[$i] = array('name' => 'other',        'color' => '#D2D8F9');
+    $priorities[$i] = array('name' => 'other',        'color' => '#D2D8F9');
   }
-  return $prioritys;
+  return $priorities;
 }
 
 /**

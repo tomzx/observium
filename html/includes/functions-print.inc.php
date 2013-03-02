@@ -101,9 +101,6 @@ function print_navbar($navbar)
 
 function print_addresses($vars)
 {
-  // Short events? (no pagination, small out)
-  // FIXME. Mike: in this function short output not used
-  $short = (isset($vars['short']) && $vars['short']) ? TRUE : FALSE;
   // With pagination? (display page numbers in header)
   $pagination = (isset($vars['pagination']) && $vars['pagination']) ? TRUE : FALSE;
   $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
@@ -148,20 +145,26 @@ function print_addresses($vars)
       }
     }
   }
-  if ($_SESSION['userlevel'] >= '7')
+
+  if ($_SESSION['userlevel'] >= 7)
   {
-    $query_perms = ' ';
+    $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = ', devices_perms AS P ';
-    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
+    $query_user = ' AND P.user_id = ? ';
     $param[] = $_SESSION['user_id'];
   }
+
   $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
 
-  $query = 'FROM `'.$address_type.'_addresses` AS A, `ports` AS I, `devices` AS D, `'.$address_type.'_networks` AS N' . $query_perms;
-  $query .= $where . ' AND I.port_id = A.port_id AND I.device_id = D.device_id AND N.'.$address_type.'_network_id = A.'.$address_type.'_network_id ' . $query_device . $query_user;
-  $query_count = 'SELECT COUNT(*) ' . $query;
+  $query = 'FROM `'.$address_type.'_addresses` AS A ';
+  $query .= 'LEFT JOIN `ports`   AS I ON I.port_id   = A.port_id ';
+  $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
+  $query .= 'LEFT JOIN `'.$address_type.'_networks` AS N ON N.'.$address_type.'_network_id = A.'.$address_type.'_network_id ';
+  $query .= $query_perms;
+  $query .= $where . $query_device . $query_user;
+  $query_count = 'SELECT COUNT('.$address_type.'_address_id) ' . $query;
   $query =  'SELECT * ' . $query;
   $query .= ' ORDER BY A.'.$address_type.'_address';
   if ($address_search) {
@@ -173,7 +176,7 @@ function print_addresses($vars)
   // Query addresses
   $entries = dbFetchRows($query, $param);
   // Query address count
-  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
+  if ($pagination) { $count = dbFetchCell($query_count, $param); }
 
   $list = array('device' => FALSE);
   if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'search') { $list['device'] = TRUE; }
@@ -237,7 +240,7 @@ function print_addresses($vars)
   $string .= '</table>';
 
   // Print pagination header
-  if ($pagination && !$short) { echo pagination($vars, $count); }
+  if ($pagination) { echo pagination($vars, $count); }
 
   // Print addresses
   echo $string;
@@ -303,23 +306,27 @@ function print_events($vars)
     }
   }
 
-  if ($_SESSION['userlevel'] >= '7')
+  if ($_SESSION['userlevel'] >= 7)
   {
-    $query_perms = ' ';
+    $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = ', devices_perms AS P ';
-    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
+    $query_user = ' AND P.user_id = ? ';
     $param[] = $_SESSION['user_id'];
   }
+
   $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
 
-  $query = 'FROM `eventlog` AS E, `devices` AS D'.$query_perms;
-  $query .= $where . ' AND E.host = D.device_id '.$query_device.$query_user;
-  $query_count = 'SELECT COUNT(*) '.$query;
+  $query = 'FROM `eventlog` AS E ';
+  $query .= 'LEFT JOIN `devices` AS D ON E.host = D.device_id ';
+  $query .= $query_perms;
+  $query .= $where . $query_device . $query_user;
+  $query_count = 'SELECT COUNT(event_id) '.$query;
   // FIXME Mike: bad table columns (`host` and `type`), they intersect with table `devices`
   $query = 'SELECT STRAIGHT_JOIN E.host, E.datetime, E.message, E.type, E.reference '.$query;
-  $query .= " ORDER BY `datetime` DESC LIMIT $start,$pagesize";
+  $query .= ' ORDER BY `datetime` DESC ';
+  $query .= "LIMIT $start,$pagesize";
 
   // Query events
   $entries = dbFetchRows($query, $param);
@@ -436,7 +443,7 @@ function print_syslogs($vars)
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
 
-  $prioritys = syslog_prioritys();
+  $priorities = syslog_priorities();
   
   $param = array();
   $where = ' WHERE 1 ';
@@ -470,22 +477,26 @@ function print_syslogs($vars)
     }
   }
 
-  if ($_SESSION['userlevel'] >= '7')
+  if ($_SESSION['userlevel'] >= 7)
   {
-    $query_perms = ' ';
+    $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = ', devices_perms AS P ';
-    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
+    $query_user = ' AND P.user_id = ? ';
     $param[] = $_SESSION['user_id'];
   }
+  
   $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
 
-  $query = 'FROM `syslog` AS S, `devices` AS D'.$query_perms;
-  $query .= $where . ' AND S.device_id = D.device_id '.$query_user.$query_device;
-  $query_count = 'SELECT COUNT(*) '.$query;
-  $query = 'SELECT STRAIGHT_JOIN * '.$query;
-  $query .= " ORDER BY `timestamp` DESC LIMIT $start,$pagesize";
+  $query = 'FROM `syslog` AS S ';
+  $query .= 'LEFT JOIN `devices` AS D ON S.device_id = D.device_id ';
+  $query .= $query_perms;
+  $query .= $where . $query_user . $query_device;
+  $query_count = 'SELECT COUNT(seq) ' . $query;
+  $query = 'SELECT STRAIGHT_JOIN * ' . $query;
+  $query .= ' ORDER BY `timestamp` DESC ';
+  $query .= "LIMIT $start,$pagesize";
   
   // Query syslog messages
   $entries = dbFetchRows($query, $param);
@@ -527,7 +538,7 @@ function print_syslogs($vars)
     }
     if ($list['priority'])
     {
-      if (!$short) { $string .= '    <td style="color: ' . $prioritys[$entry['priority']]['color'] . ';">(' . $entry['priority'] . ')&nbsp;' . $prioritys[$entry['priority']]['name'] . '</td>' . PHP_EOL; }
+      if (!$short) { $string .= '    <td style="color: ' . $priorities[$entry['priority']]['color'] . ';">(' . $entry['priority'] . ')&nbsp;' . $priorities[$entry['priority']]['name'] . '</td>' . PHP_EOL; }
     }
     if ($short)
     {
@@ -584,21 +595,23 @@ function print_status($status)
   $string .= '  <tbody>' . PHP_EOL;
 
   $param = array();
-  if ($_SESSION['userlevel'] >= '7')
+  if ($_SESSION['userlevel'] >= 7)
   {
-    $query_perms = ' ';
+    $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = ', devices_perms AS P ';
-    $query_user = ' AND D.device_id = P.device_id AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
+    $query_user = ' AND P.user_id = ? ';
     $param[] = $_SESSION['user_id'];
   }
+
   $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
 
   // Show Device Status
   if ($status['devices'])
   {
-    $query = 'SELECT * FROM `devices` AS D' . $query_perms;
+    $query = 'SELECT * FROM `devices` AS D ';
+    $query .= $query_perms;
     $query .= 'WHERE D.status = 0' . $query_device . $query_user;
     $query .= 'ORDER BY D.hostname ASC';
     $entries = dbFetchRows($query, $param);
@@ -620,7 +633,8 @@ function print_status($status)
   {
     if (filter_var($config['uptime_warning'], FILTER_VALIDATE_FLOAT) !== FALSE && $config['uptime_warning'] > 0)
     {
-      $query = 'SELECT * FROM `devices` AS D' . $query_perms;
+      $query = 'SELECT * FROM `devices` AS D ';
+      $query .= $query_perms;
       $query .= 'WHERE D.status = 1 AND D.uptime > 0 AND D.uptime < ' . $config['uptime_warning'] . $query_device . $query_user;
       $query .= 'ORDER BY D.hostname ASC';
       $entries = dbFetchRows($query, $param);
@@ -645,13 +659,19 @@ function print_status($status)
     // because $config['warn']['ifdown'] - deprecated.
     if (isset($config['warn']['ifdown']) && !$config['warn']['ifdown'])
     {
-      $string .= "<tr><td colspan=6><h4>Please note that config option \$config['warn']['ifdown'] is now obsolete.</h4>";
-      $string .= "<h4>Use options: \$config['frontpage']['device_status']['ports'] and \$config['frontpage']['device_status']['ports']</h4>";
-      $string .= "For cancel this message, delete \$config['warn']['ifdown'] from configuration file.</td></tr>\n";
+  echo('
+  <div class="alert">
+     <button type="button" class="close" data-dismiss="alert">&times;</button>
+     <p><i class="fugue-bell"></i> <strong>Config option obsolete</strong></p>
+     <p>Please note that config option <strong>$config[\'warn\'][\'ifdown\']</strong> is now obsolete.<br />Use options: <strong>$config[\'frontpage\'][\'device_status\'][\'ports\']</strong> and <strong>$config[\'frontpage\'][\'device_status\'][\'errors\']</strong></p>
+     <p>For cancel this message, delete $config[\'warn\'][\'ifdown\'] from configuration file.</p>
+  </div>');
     }
   
-    $query = 'SELECT * FROM `ports` AS I, `devices` AS D' . $query_perms;
-    $query .= "WHERE I.device_id = D.device_id AND I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0" . $query_device . $query_user;
+    $query = 'SELECT * FROM `ports` AS I ';
+    $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
+    $query .= $query_perms;
+    $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0" . $query_device . $query_user;
     $query .= 'ORDER BY D.hostname ASC, I.ifDescr * 1 ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
@@ -671,8 +691,11 @@ function print_status($status)
   // Ports Errors (only deltas)
   if ($status['errors'])
   {
-    $query = 'SELECT * FROM `ports` AS I, `ports-state` AS E, `devices` AS D' . $query_perms;
-    $query .= "WHERE I.device_id = D.device_id AND I.ifOperStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 AND I.port_id = E.port_id AND (E.ifInErrors_delta > 0 OR E.ifOutErrors_delta > 0)" . $query_device . $query_user;
+    $query = 'SELECT * FROM `ports` AS I ';
+    $query .= 'LEFT JOIN `ports-state` AS E ON I.port_id = E.port_id ';
+    $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
+    $query .= $query_perms;
+    $query .= "WHERE I.ifOperStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 AND (E.ifInErrors_delta > 0 OR E.ifOutErrors_delta > 0)" . $query_device . $query_user;
     $query .= 'ORDER BY D.hostname ASC, I.ifDescr * 1 ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
@@ -696,8 +719,10 @@ function print_status($status)
   // Services
   if ($status['services'])
   {
-    $query = 'SELECT * FROM `services` AS S, `devices` AS D' . $query_perms;
-    $query .= "WHERE S.device_id = D.device_id AND S.service_status = 'down' AND S.service_ignore = 0" . $query_device . $query_user;
+    $query = 'SELECT * FROM `services` AS S ';
+    $query .= 'LEFT JOIN `devices` AS D ON S.device_id = D.device_id ';
+    $query .= $query_perms;
+    $query .= "WHERE S.service_status = 'down' AND S.service_ignore = 0" . $query_device . $query_user;
     $query .= 'ORDER BY D.hostname ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $service)
@@ -726,8 +751,10 @@ function print_status($status)
       $bgpstates .= 'ACTIVE - Router did not receive agreement on parameters of establishment. &#xA;';
       //$bgpstates .= 'ESTABLISHED - Peering is established; routing begins.';
 
-      $query = 'SELECT * FROM `devices` AS D, bgpPeers AS B' . $query_perms;
-      $query .= "WHERE bgpPeerAdminStatus = 'start' AND bgpPeerState != 'established' AND B.device_id = D.device_id" . $query_device . $query_user;
+      $query = 'SELECT * FROM `devices` AS D ';
+      $query .= 'LEFT JOIN bgpPeers AS B ON B.device_id = D.device_id ';
+      $query .= $query_perms;
+      $query .= "WHERE bgpPeerAdminStatus = 'start' AND bgpPeerState != 'established' " . $query_device . $query_user;
       $query .= 'ORDER BY D.hostname ASC';
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $peer)
@@ -738,7 +765,7 @@ function print_status($status)
         $string .= '    <td><span class="label label-important" title="' . $bgpstates . '">BGP ' . strtoupper($peer['bgpPeerState']) . '</span></td>' . PHP_EOL;
         $string .= '    <td nowrap>' . $peer['bgpPeerIdentifier'] . '</td>' . PHP_EOL;
         $string .= '    <td nowrap>' . substr($peer['location'], 0, 30) . '</td>' . PHP_EOL;
-        $string .= '    <td nowrap><strong>AS' . $peer['bgpPeerRemoteAs'] . ' :</strong> ' . substr($peer['astext'], 0, 15) . '</td>' . PHP_EOL;
+        $string .= '    <td><strong>AS' . $peer['bgpPeerRemoteAs'] . ' :</strong> ' . $peer['astext'] . '</td>' . PHP_EOL;
         $string .= '  </tr>' . PHP_EOL;
       }
     }

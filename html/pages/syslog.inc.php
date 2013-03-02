@@ -4,7 +4,7 @@ if ($_vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10') { dbFetchCe
 
 print_optionbar_start();
 
-$pagetitle[] = "Syslog";
+$pagetitle[] = 'Syslog';
 
 ?>
 
@@ -20,13 +20,13 @@ $pagetitle[] = "Syslog";
     <span class="add-on">Priority</span>
     <select name="priority" id="priority" style="width: 140px;">
       <?php
-      $prioritys = syslog_prioritys();
-      $string = "      <option value=\"\">All Prioritys</option>";
+      $priorities = syslog_priorities();
+      $string = '      <option value="">All Priorities</option>';
       for($i = 0; $i <= 7; $i++)
       {
         $string .= '<option value="' . $i . '"';
         $string .= ($vars['priority'] === "$i") ? ' selected>' : '>';
-        $string .= "(" . $i . ") " . $prioritys[$i]['name'] . "</option>\n";
+        $string .= '(' . $i . ') ' . $priorities[$i]['name'] . '</option>' . PHP_EOL;
       }
       echo $string;
       ?>
@@ -38,13 +38,13 @@ $pagetitle[] = "Syslog";
     <select name="program" id="program" style="width: 140px;">
       <option value="">All Programs</option>
       <?php
-        $where = ($vars['device']) ? "WHERE `device_id` = " . $vars['device'] : '';
-        foreach (dbFetchRows("SELECT `program` FROM `syslog` " . $where . " GROUP BY `program` ORDER BY `program`") as $data)
+        $where = ($vars['device']) ? 'WHERE `device_id` = ' . $vars['device'] : '';
+        foreach (dbFetchRows('SELECT `program` FROM `syslog` ' . $where . ' GROUP BY `program` ORDER BY `program`') as $data)
         {
-          $data['program'] = ($data['program'] === "") ? "[[EMPTY]]" : $data['program'];
-          echo("<option value='" . $data['program'] . "'");
-          if ($data['program'] === $vars['program']) { echo(" selected"); }
-          echo(">" . $data['program'] . "</option>");
+          $data['program'] = ($data['program'] === '') ? '[[EMPTY]]' : $data['program'];
+          echo('<option value="' . $data['program'] . '"');
+          if ($data['program'] === $vars['program']) { echo(' selected'); }
+          echo('>' . $data['program'] . '</option>');
         }
       ?>
     </select>
@@ -55,12 +55,12 @@ $pagetitle[] = "Syslog";
     <select name="device" id="device" style="width: 140px;">
       <option value="">All Devices</option>
       <?php
-        $devices = dbFetchRows("SELECT S.`device_id` AS `device`, hostname FROM `syslog` AS S JOIN `devices` AS D ON S.device_id = D.device_id GROUP BY `hostname` ORDER BY `hostname`");
+        $devices = dbFetchRows('SELECT S.`device_id` AS `device`, hostname FROM `syslog` AS S JOIN `devices` AS D ON S.device_id = D.device_id GROUP BY `hostname` ORDER BY `hostname`');
         foreach ($devices as $data)
         {
-          echo("<option value='" . $data['device'] . "'");
-          if ($data['device'] == $vars['device']) { echo("selected"); }
-          echo(">" . $data['hostname'] . "</option>");
+          echo('<option value="' . $data['device'] . '"');
+          if ($data['device'] == $vars['device']) { echo('selected'); }
+          echo('>' . $data['hostname'] . '</option>');
         }
       ?>
     </select>
@@ -75,8 +75,8 @@ print_optionbar_end();
 
 // Pagination
 $vars['pagination'] = TRUE;
-if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
-if(!$vars['pageno']) { $vars['pageno'] = "1"; }
+if(!$vars['pagesize']) { $vars['pagesize'] = 100; }
+if(!$vars['pageno']) { $vars['pageno'] = 1; }
 
 // Print syslog
 print_syslogs($vars);
