@@ -211,9 +211,9 @@ function print_addresses($vars)
     if ($address_show)
     {
       $speed = humanspeed($entry['ifSpeed']);
-      
+
       list($prefix, $length) = explode('/', $entry[$address_type.'_network']);
-     
+
       if (port_permitted($entry['port_id']))
       {
         $entry = ifLabel ($entry, $entry);
@@ -221,7 +221,7 @@ function print_addresses($vars)
         {
           $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
         }
-  
+
         $string .= '  <tr>' . PHP_EOL;
         if ($list['device'])
         {
@@ -355,7 +355,7 @@ function print_events($vars)
   {
     $icon = geteventicon($entry['message']);
     if ($icon) { $icon = '<img src="images/16/' . $icon . '" />'; }
-  
+
     $string .= '  <tr>' . PHP_EOL;
     if ($short)
     {
@@ -405,10 +405,10 @@ function print_events($vars)
  *
  * This is use function:
  * print_events(array('short' => TRUE))
- * 
+ *
  * @param array $vars
  * @return none
- * 
+ *
  * @author Mike Stupalov <mike@stupalov.ru>
  */
 function print_events_short($var)
@@ -444,7 +444,7 @@ function print_syslogs($vars)
   $start = $pagesize * $pageno - $pagesize;
 
   $priorities = syslog_priorities();
-  
+
   $param = array();
   $where = ' WHERE 1 ';
   foreach ($vars as $var => $value)
@@ -486,7 +486,7 @@ function print_syslogs($vars)
     $query_user = ' AND P.user_id = ? ';
     $param[] = $_SESSION['user_id'];
   }
-  
+
   $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
 
   $query = 'FROM `syslog` AS S ';
@@ -497,7 +497,7 @@ function print_syslogs($vars)
   $query = 'SELECT STRAIGHT_JOIN * ' . $query;
   $query .= ' ORDER BY `timestamp` DESC ';
   $query .= "LIMIT $start,$pagesize";
-  
+
   // Query syslog messages
   $entries = dbFetchRows($query, $param);
   // Query syslog count
@@ -580,7 +580,7 @@ function print_status($status)
 {
   // Mike: I know that there are duplicated variables, but later will remove global
   global $config;
-  
+
   $string  = '<table class="table table-bordered table-striped table-hover table-condensed table-rounded">' . PHP_EOL;
   $string .= '  <thead>' . PHP_EOL;
   $string .= '  <tr>' . PHP_EOL;
@@ -667,7 +667,7 @@ function print_status($status)
      <p>For cancel this message, delete $config[\'warn\'][\'ifdown\'] from configuration file.</p>
   </div>');
     }
-  
+
     $query = 'SELECT * FROM `ports` AS I ';
     $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
     $query .= $query_perms;
