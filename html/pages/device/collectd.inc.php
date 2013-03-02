@@ -46,25 +46,24 @@ function dhtml_response_list(&$items, $method) {
         print("</response>");
 }
 
-print_optionbar_start();
-
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab' => 'collectd');
 
-    $plugins = collectd_list_plugins($device['hostname']);
-    unset($sep);
-    foreach ($plugins as &$plugin) {
-       if (!$vars['plugin']) { $vars['plugin'] = $plugin; }
-       echo($sep);
-       if ($vars['plugin'] == $plugin) { echo("<span class='pagemenu-selected'>"); }
-       echo(generate_link(htmlspecialchars($plugin),$link_array,array('plugin'=>$plugin)));
-       if ($vars['plugin'] == $plugin) { echo("</span>"); }
-       $sep = ' | ';
-    }
-    unset ($sep);
+$plugins = collectd_list_plugins($device['hostname']);
 
-print_optionbar_end();
+#$navbar['brand'] = "CollectD";
+$navbar['class'] = "navbar-narrow";
+
+foreach ($plugins as &$plugin)
+{
+  if (!$vars['plugin']) { $vars['plugin'] = $plugin; }
+  if ($vars['plugin'] == $plugin) { $navbar['options'][$plugin]['class'] = "active"; }
+  $navbar['options'][$plugin]['url'] = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'collectd', 'plugin' => $plugin));
+  $navbar['options'][$plugin]['text'] = htmlspecialchars(ucwords($plugin));
+}
+
+print_navbar($navbar);
 
    $i=0;
 
