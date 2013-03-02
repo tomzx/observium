@@ -1,30 +1,13 @@
 <?php
 global $config;
 
-print_optionbar_start();
-
-echo("<span style='font-weight: bold;'>".nicecase($app['app_type'])."</span> &#187; ");
 
 $app_sections = array('system' => "System",
                       'queries' => "Queries",
                       'innodb' => "InnoDB");
 
-unset($sep);
-foreach ($app_sections as $app_section => $app_section_text)
-{
-  echo($sep);
 
-  if (!$vars['app_section']) { $vars['app_section'] = $app_section; }
-
-  if ($vars['app_section'] == $app_section)
-  {
-    echo("<span class='pagemenu-selected'>");
-  }
-  echo(generate_link($app_section_text,$vars,array('app_section'=>$app_section)));
-  if ($vars['app_section'] == $app_section) { echo("</span>"); }
-  $sep = " | ";
-}
-print_optionbar_end();
+include("app_navbar.inc.php");
 
 $graphs['system'] = array(
                 'mysql_connections' => 'Connections',

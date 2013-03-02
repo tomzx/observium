@@ -21,13 +21,13 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#main-nav">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="brand" href="<?php generate_url(''); ?>">&nbsp;</a>
-        <div class="nav-collapse">
+        <a class="brand brand-observium" href="<?php generate_url(''); ?>">&nbsp;</a>
+        <div class="nav-collapse" id="main-nav">
           <ul class="nav">
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
@@ -45,6 +45,7 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
         <?php if (isset($config['enable_syslog']) && $config['enable_syslog']) {
           echo('<li><a href="'.generate_url(array('page'=>'syslog')).'"><i class="menu-icon sweetie-clipboard-eye"></i> Syslog</a></li>');
         } ?>
+        <li><a href="<?php echo(generate_url(array('page'=>'pollerlog'))); ?>"><i class="menu-icon sweetie-clipboard-report-bar"></i> Polling Information</a></li>
         <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon fugue-bell"></i> Alerts</a></li>
         <li><a href="<?php echo(generate_url(array('page'=>'inventory'))); ?>"><i class="menu-icon fugue-wooden-box"></i> Inventory</a></li>
 

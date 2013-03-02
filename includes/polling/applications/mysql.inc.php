@@ -186,13 +186,13 @@ if (!empty($agent_data['app']['mysql']))
       DS:CUe:DERIVE:600:0:125000000000 \
       DS:CUMi:DERIVE:600:0:125000000000 ".$config['rrd_rra']);
   }
-  
+
   rrdtool_update($mysql_rrd, "N:" . implode(':', $values));
-  
+
   // Process state statistics
-  
+
   $mysql_status_rrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-mysql-".$app['app_id']."-status.rrd";
-  
+
   $mapping_status = array(
     'State_closing_tables'       => 'd2',
     'State_copying_to_tmp_table' => 'd3',
@@ -211,20 +211,20 @@ if (!empty($agent_data['app']['mysql']))
     'State_none'                 => 'dg',
     'State_other'                => 'dh'
   );
-  
+
   $values = array(); $rrd_create = "";
   foreach ($mapping_status as $desc => $id)
   {
     $values[] = (isset($map[$id]) ? $map[$id] : -1);
     $rrd_create .= " DS:".$id.":GAUGE:600:0:125000000000";
   }
-  
+
   if (!is_file($mysql_status_rrd))
   {
     rrdtool_create ($mysql_status_rrd, "--step 300 ".$rrd_create." ".$config['rrd_rra']);
   }
-  
+
   rrdtool_update($mysql_status_rrd, "N:" . implode(':', $values));
 }
-  
+
 ?>

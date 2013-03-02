@@ -127,16 +127,15 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
 ?>
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
   <link href="<?php echo($config['stylesheet']);  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo("css/bootstrap.css");  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo("css/bootstrap-responsive.css");  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo("css/bootstrap-observium.css");  ?>" rel="stylesheet" type="text/css" />
-  <link href="<?php echo("css/google-code-prettify.css");  ?>" rel="stylesheet" type="text/css" />
-
-  <link rel="stylesheet" href="css/mktree.css" type="text/css" />
-
-  <!--[if lte IE 7]><script src="css/test/lte-ie7.js"></script><![endif]-->
-  <link rel="stylesheet" href="css/sweetie.css" />
-  <link rel="stylesheet" href="css/sprites.css" />
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap-observium.css" rel="stylesheet" type="text/css" />
+  <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap-switch.css"  rel="stylesheet" type="text/css" />
+  <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/mktree.css" rel="stylesheet" type="text/css" />
+  <link href="css/sweetie.css" rel="stylesheet" type="text/css" />
+  <link href="css/sprites.css" rel="stylesheet" type="text/css" />
 
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
@@ -148,12 +147,8 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery-checkbox.js"></script>
   <script type="text/javascript" src="js/google-code-prettify.js"></script>
-  <!--[if lt IE 9]>
-    <script type="text/javascript" src="tipped/js/excanvas/excanvas.js"></script>
-  <![endif]-->
 
   <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
-  <link rel="stylesheet" href="css/jquery.qtip.min.css" type="text/css" />
   <script type="text/javascript">
   jQuery(document).ready(function($) {
     $(".tooltip-from-element").each(function(){
@@ -193,9 +188,7 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 
   </script>
 
-  <link href="css/bootstrap-switch.css" rel="stylesheet">
   <script src="js/jquery.switch.js"></script>
-
   <script src="js/bootstrap.min.js"></script>
   <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
 
@@ -281,7 +274,7 @@ function popUp(URL)
 // End -->
   </script>
 
-<body>
+<body style="padding-top: 50px;">
 
 <div class="container">
 
@@ -327,32 +320,84 @@ if ($_SESSION['authenticated'])
 
 ?>
 <?php
+
 $runtime_end = utime(); $runtime = $runtime_end - $runtime_start;
 $gentime = substr($runtime, 0, 5);
+$fullsize = memory_get_usage();
+unset($cache);
+$cachesize = $fullsize - memory_get_usage();
+if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
 
-echo('<div id="footer">' . (isset($config['footer']) ? $config['footer'] : ''));
-echo('<br />Powered by <a href="http://www.observium.org" target="_blank">Observium ' . $config['version']);
-
-echo('</a>. Copyright &copy; 2006-'. date("Y"). ' by Adam Armstrong. All rights reserved.');
-
-if ($config['page_gen'])
-{
-    echo('<br />MySQL: Cell    '.($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,3).'s'.
-                      ' Row    '.($db_stats['fetchrow']+0). '/'.round($db_stats['fetchrow_sec']+0,3).'s'.
-                      ' Rows   '.($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,3).'s'.
-                      ' Column '.($db_stats['fetchcol']+0). '/'.round($db_stats['fetchcol_sec']+0,3).'s');
-
-    $fullsize = memory_get_usage();
-    unset($cache);
-    $cachesize = $fullsize - memory_get_usage();
-    if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
-
-    echo('<br />Cached data in memory is '.formatStorage($cachesize).'. Page memory usage is '.formatStorage($fullsize).', peaked at '. formatStorage(memory_get_peak_usage()) .'.');
-    echo('<br />Generated in ' . $gentime . ' seconds.');
-}
 ?>
+</div>
+
+<div class="navbar navbar-fixed-bottom">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <div class="nav-collapse">
+        <ul class="nav">
+          <li class="divider-vertical" style="margin:0;"></li>
+
+          <li><a>Observium <?php echo $config['version']; ?></a></li>
+          <li class="divider-vertical" style="margin:0;"></li>
+        </ul>
+
+        <ul class="nav pull-right">
+          <li><a id="poller_status"></a></li>
+
+          <li class="divider-vertical" style="margin:0;"></li>
+          <li class="dropdown">
+            <a href="<?php echo(generate_url(array('page'=>'overview'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
+              <img src="images/16/time.png" class="optionicon"> Perf <b class="caret"></b></a>
+            <div class="dropdown-menu" style="padding: 10px;">
+              <table class="table table-bordered table-condensed-more table-rounded table-striped">
+                <tr>
+                  <th>Time</th><td><?php echo($gentime); ?>s</td>
+                </tr>
+              </table>
+              <table class="table table-bordered table-condensed-more table-rounded table-striped">
+                <tr>
+                  <th colspan=2>MySQL</th>
+                </tr>
+                <tr>
+                  <th>Cell</th><td><?php echo(($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,3).'s'); ?></td>
+                </tr>
+                <tr>
+                  <th>Row</th><td><?php echo(($db_stats['fetchrow']+0).'/'.round($db_stats['fetchrow_sec']+0,3).'s'); ?></td>
+                </tr>
+                <tr>
+                  <th>Rows</th><td><?php echo(($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,3).'s'); ?></td>
+                </tr>
+                <tr>
+                  <th>Column</th><td><?php echo(($db_stats['fetchcol']+0).'/'.round($db_stats['fetchcol_sec']+0,3).'s'); ?></td>
+                </tr>
+              </table>
+              <table class="table table-bordered table-condensed-more table-rounded table-striped">
+                <tr>
+                  <th colspan=2>Memory</th>
+                </tr>
+                <tr>
+                  <th>Cached</th><td><?php echo formatStorage($cachesize); ?></td>
+                </tr>
+                <tr>
+                  <th>Page</th><td><?php echo formatStorage($fullsize); ?></td>
+                </tr>
+                <tr>
+                  <th>Peak</th><td><?php echo formatStorage(memory_get_peak_usage()); ?></td>
+                </tr>
+              </table>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
+</div>
 
 <?php
 if (is_array($pagetitle))
@@ -371,3 +416,19 @@ if (is_array($pagetitle))
 
   </body>
 </html>
+
+<script type="text/javascript">
+
+  $(document).ready(function()
+  {
+    $('#poller_status').load('ajax_poller_status.php');
+  });
+
+  var auto_refresh = setInterval(
+    function ()
+    {
+      $('#poller_status').load('ajax_poller_status.php');
+    }, 10000); // refresh every 10000 milliseconds
+
+</script>
+

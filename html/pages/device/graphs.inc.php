@@ -7,51 +7,33 @@ $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab' => 'graphs');
 
-$bg="#ffffff";
-
-echo('<div style="clear: both;">');
-
-print_optionbar_start();
-
-echo("<span style='font-weight: bold;'>Graphs</span> &#187; ");
-
-$sep = "";
-
 foreach (dbFetchRows("SELECT * FROM device_graphs WHERE device_id = ? ORDER BY graph", array($device['device_id'])) as $graph)
 {
   $section = $config['graph_types']['device'][$graph['graph']]['section'];
   $graph_enable[$section][$graph['graph']] = $graph['graph'];
 }
 
-#foreach ($config['graph_sections'] as $section)
+$navbar['brand'] = "Graphs";
+$navbar['class'] = "navbar-narrow";
+
 foreach ($graph_enable as $section => $nothing)
 {
   if (isset($graph_enable) && is_array($graph_enable[$section]))
   {
     $type = strtolower($section);
     if (!$vars['group']) { $vars['group'] = $type; }
-    echo($sep);
-    if ($vars['group'] == $type)
-    {
-      echo('<span class="pagemenu-selected">');
-    }
-    echo(generate_link(ucwords($type),$link_array,array('group'=>$type)));
-    if ($vars['group'] == $type)
-    {
-      echo("</span>");
-    }
-    $sep = " | ";
+    if ($vars['group'] == $type) { $navbar['options'][$section]['class'] = "active"; }
+    $navbar['options'][$section]['url'] = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'graphs', 'group' => $type));
+    $navbar['options'][$section]['text'] = ucwords($type);
   }
 }
 
-unset ($sep);
-print_optionbar_end();
+print_navbar($navbar);
 
 $graph_enable = $graph_enable[$vars['group']];
 
 echo('<table class="table table-condensed table-striped table-hover">');
 
-#foreach ($config['graph_types']['device'] as $graph => $entry)
 foreach ($graph_enable as $graph => $entry)
 {
   $graph_array = array();

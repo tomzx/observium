@@ -28,108 +28,82 @@ if ($port['ifAdminStatus'] == "up" && $port['ifOperStatus'] == "up") { $status =
 
 $i = 1;
 $inf = fixifName($ifname);
-
-$bg="#ffffff";
-
 $show_all = 1;
 
-echo("<div class=ifcell style='margin: 0px;'><table width=100% cellpadding=10 cellspacing=0>");
-
+echo("<table width=100% cellpadding=10 cellspacing=0>");
 include("includes/print-interface.inc.php");
+echo("</table>");
 
-echo("</table></div>");
+if ( strpos(strtolower($ifname), "vlan") !== false ) {  $broke = yes; }
+if ( strpos(strtolower($ifname), "loopback") !== false ) {  $broke = yes; }
 
-$pos = strpos(strtolower($ifname), "vlan");
-if ($pos !== false )
-{
-  $broke = yes;
-}
-
-$pos = strpos(strtolower($ifname), "loopback");
-
-if ($pos !== false )
-{
-  $broke = yes;
-}
-
-echo("<div style='clear: both;'>");
-
-print_optionbar_start();
+// Start Navbar
 
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab' => 'port',
                     'port'    => $port['port_id']);
 
-$menu_options['graphs']   = 'Graphs';
+$navbars['main']['options']['graphs']['text']   = 'Graphs';
 
-if (dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `measured_class` = 'port' AND `measured_entity` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'") )
-{  $menu_options['sensors'] = 'Sensors'; }
+if (dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `measured_class` = 'port' AND `measured_entity` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'"))
+{  $navbars['main']['options']['sensors']['text'] = 'Sensors'; }
 
-$menu_options['realtime'] = 'Real time';   // FIXME CONDITIONAL
-$menu_options['arp']      = 'ARP Table';   // FIXME CONDITIONAL?
+$navbars['main']['options']['realtime']['text'] = 'Real time';   // FIXME CONDITIONAL
+$navbars['main']['options']['arp']['text']      = 'ARP Table';   // FIXME CONDITIONAL?
 
-if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id']))){
-  $menu_options['fdb'] = 'FDB Table';
+if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id'])) ){
+  $navbars['main']['options']['fdb']['text'] = 'FDB Table';
 }
 
-$menu_options['events']      = 'Eventlog';
+$navbars['main']['options']['events']['text']      = 'Eventlog';
 
 if (dbFetchCell("SELECT COUNT(*) FROM `ports_adsl` WHERE `port_id` = ?", array($port['port_id'])) )
-{  $menu_options['adsl'] = 'ADSL'; }
+{  $navbars['main']['options']['adsl']['text'] = 'ADSL'; }
 
 if (dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `pagpGroupIfIndex` = '".$port['ifIndex']."' and `device_id` = '".$device['device_id']."'") )
-{  $menu_options['pagp'] = 'PAgP'; }
+{  $navbars['main']['options']['pagp']['text'] = 'PAgP'; }
 
-if (dbFetchCell("SELECT COUNT(*) FROM `ports_vlans` WHERE `port_id` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'") )
-{  $menu_options['vlans'] = 'VLANs'; }
+if (dbFetchCell("SELECT COUNT(*) FROM `ports_vlans` WHERE `port_id` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'"))
+{  $navbars['main']['options']['vlans']['text'] = 'VLANs'; }
 
 
-
-$sep = "";
-foreach ($menu_options as $option => $text)
-{
-  echo($sep);
-  if ($vars['view'] == $option) { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link($text,$link_array,array('view'=>$option)));
-  if ($vars['view'] == $option) { echo("</span>"); }
-  $sep = " | ";
-}
-unset($sep);
 
 if (dbFetchCell("SELECT count(*) FROM mac_accounting WHERE port_id = '".$port['port_id']."'") > "0" )
 {
 
-  echo(generate_link($descr,$link_array,array('view'=>'macaccounting','graph'=>$type)));
+  $navbars['main']['options']['macacc']['text'] = 'MAC Accounting';
 
-  echo(" | Mac Accounting : ");
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "bits" && $vars['subview'] == "graphs") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("Bits",$link_array,array('view' => 'macaccounting', 'subview' => 'graphs', 'graph'=>'bits')));
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "bits" && $vars['subview'] == "graphs") { echo("</span>"); }
+  echo(generate_link($descr,$link_array,array('view'=>'macacc','graph'=>$type)));
+  $graphs = array('bits', 'packets');
+  $option = 'macacc';
 
-  echo("(");
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "bits" && $vars['subview'] == "minigraphs") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("Mini",$link_array,array('view' => 'macaccounting', 'subview' => 'minigraphs', 'graph'=>'bits')));
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "bits" && $vars['subview'] == "minigraphs") { echo("</span>"); }
-  echo('|');
 
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "bits" && $vars['subview'] == "top10") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("Top10",$link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>'bits')));
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "bits" && $vars['subview'] == "top10") { echo("</span>"); }
-  echo(") | ");
+  $navbars['macacc']['class'] = "navbar-narrow";
+  $navbars['macacc']['brand'] = $navbars['main']['options'][$option]['text'];
 
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "pkts" && $vars['subview'] == "graphs") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("Packets",$link_array,array('view' => 'macaccounting', 'subview' => 'graphs', 'graph'=>'pkts')));
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "pkts" && $vars['subview'] == "graphs") { echo("</span>"); }
-  echo("(");
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "pkts" && $vars['subview'] == "minigraphs") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("Mini",$link_array,array('view' => 'macaccounting', 'subview' => 'minigraphs', 'graph'=>'pkts')));
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "pkts" && $vars['subview'] == "minigraphs") { echo("</span>"); }
-  echo('|');
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "pkts" && $vars['subview'] == "top10") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("Top10",$link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>'pkts')));
-  if ($vars['view'] == "macaccounting" && $vars['graph'] == "pkts" && $vars['subview'] == "top10") { echo("</span>"); }
-  echo(")");
+  foreach($graphs as $type)
+  {
+    if($vars['view'] == $option && $vars['graph'] == $type) { $navbars['main']['options'][$option]['suboptions'][$type]['class'] = "active"; }
+    $navbars['main']['options'][$option]['suboptions'][$type]['text'] = ucfirst($type);
+    $navbars['main']['options'][$option]['suboptions'][$type]['url']  = generate_url($vars,array('view' => 'macacc', 'subview' => 'graphs', 'graph'=>$type));
+
+    $navbars['macacc']['options'][$type]['text'] = ucfirst($type);
+    $navbars['macacc']['options'][$type]['url']  = generate_url($link_array,array('graph'=>$type));
+    if($vars['graph'] == $type) { $navbars['macacc']['options'][$type]['class'] = "active"; }
+  }
+
+  $subviews = array('graphs', 'mini-graphs', 'top10');
+  foreach($subviews as $type)
+  {
+    if($vars['view'] == $option && $vars['subview'] == $type) { $navbars['main']['options_right'][$option]['suboptions'][$type]['class'] = "active"; }
+    $navbars['main']['options'][$option]['suboptions'][$type]['text'] = ucfirst($type);
+    $navbars['main']['options'][$option]['suboptions'][$type]['url']  = generate_url($vars,array('subview'=>$type));
+
+    $navbars['macacc']['options_right'][$type]['text'] = ucfirst($type);
+    $navbars['macacc']['options_right'][$type]['url']  = generate_url($link_array,array('subview'=>$type));
+    if($vars['graph'] == $type) { $navbars['macacc']['options'][$type]['class'] = "active"; }
+  }
 }
 
 if (dbFetchCell("SELECT COUNT(*) FROM juniAtmVp WHERE port_id = '".$port['port_id']."'") > "0" )
@@ -138,30 +112,40 @@ if (dbFetchCell("SELECT COUNT(*) FROM juniAtmVp WHERE port_id = '".$port['port_i
   // FIXME ATM VPs
   // FIXME URLs BROKEN
 
-  echo(" | ATM VPs : ");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "bits") { echo("<span class='pagemenu-selected'>"); }
-  echo("<a href='/device/device=" . $device['device_id'] . "/tab=port/port=".$port['port_id']."/junose-atm-vp/bits/'>Bits</a>");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "bits") { echo("</span>"); }
-  echo(" | ");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "packets") { echo("<span class='pagemenu-selected'>"); }
-  echo("<a href='device/device=" . $device['device_id'] . "/tab=port/port=".$port['port_id']."/junose-atm-vp/packets/'>Packets</a>");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "bits") { echo("</span>"); }
-  echo(" | ");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "cells") { echo("<span class='pagemenu-selected'>"); }
-  echo("<a href='device/device=" . $device['device_id'] . "/tab=port/port=".$port['port_id']."/junose-atm-vp/cells/'>Cells</a>");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "bits") { echo("</span>"); }
-  echo(" | ");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "errors") { echo("<span class='pagemenu-selected'>"); }
-  echo("<a href='device/device=" . $device['device_id'] . "/tab=port/port=".$port['port_id']."/junose-atm-vp/errors/'>Errors</a>");
-  if ($vars['view'] == "junose-atm-vp" && $vars['graph'] == "bits") { echo("</span>"); }
+  $navbars['main']['options']['atm-vp']['text'] = 'ATM VPs';
+
+  $graphs = array('bits', 'packets', 'cells', 'errors');
+  foreach($graphs as $type)
+  {
+    if($vars['view'] == "atm-vp" && $vars['graph'] == $type) { $navbars['main']['options']['atm-vp']['suboptions'][$type]['class'] = "active"; }
+    $navbars['main']['options']['atm-vp']['suboptions'][$type]['text'] = ucfirst($type);
+    $navbars['main']['options']['atm-vp']['suboptions'][$type]['url']  = generate_url($link_array,array('view'=>'atm-vc','graph'=>$type));
+
+  }
 }
 
 if ($_SESSION['userlevel'] == '10' && $config['enable_billing'])
 {
-  echo("<span style='float: right;'><a href='bills/view=add/port=".$port['port_id']."/'><img src='images/16/money.png' border='0' align='absmiddle'> Create Bill</a></span>");
+  $navbars['main']['options_right']['bills'] = array('text' => 'Create Bill', 'icon' => 'fugue-money-coin', 'url' => generate_url(array('page' => 'bills', 'view' => 'add', 'port' => $port['port_id'])));
 }
 
-print_optionbar_end();
+
+foreach ($navbars['main']['options'] as $option => $array)
+{
+  if ($vars['view'] == $option) { $navbars['main']['options'][$option]['class'] .= " active"; }
+  $navbars['main']['options'][$option]['url'] = generate_url($link_array,array('view'=>$option));
+}
+
+$navbars['main']['class'] = "navbar-narrow";
+$navbars['main']['brand'] = "Port";
+
+foreach($navbars as $type => $navbar)
+{
+  if($type == $vars['view'] || $type == 'main')
+    print_navbar($navbar);
+}
+
+unset($navbars);
 
 include("pages/device/port/".mres($vars['view']).".inc.php");
 

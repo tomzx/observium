@@ -32,59 +32,50 @@ if (!$vars['view']) { $vars['view'] = "detail"; }
 $link_array = array('page'    => 'health');
 
 $pagetitle[] = "Health";
+?>
 
-print_optionbar_start('', '');
+<div class="navbar navbar-narrow">
+  <div class="navbar-inner">
+    <a class="brand">Health</a>
+    <ul class="nav">
 
-echo('<span style="font-weight: bold;">Health</span> &#187; ');
-
+<?php
 $sep = "";
 foreach ($datas as $texttype)
 {
   $metric = strtolower($texttype);
-  echo($sep);
   if ($vars['metric'] == $metric)
   {
-    echo("<span class='pagemenu-selected'>");
-  }
+    $class = "active";
+  } else { unset($class); }
 
+  echo('<li class="'.$class.'">');
   echo(generate_link($type_text[$metric],$link_array,array('metric'=> $metric, 'view' => $vars['view'])));
+  echo('</li>');
 
-  if ($vars['metric'] == $metric) { echo("</span>"); }
-
-  $sep = ' | ';
 }
-
-unset ($sep);
-
-echo('<div style="float: right;">');
-
+echo('</ul><ul class="nav pull-right">');
 if ($vars['view'] == "graphs")
 {
-  echo('<span class="pagemenu-selected">');
-}
-echo(generate_link("Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "graphs")));
-if ($vars['view'] == "graphs")
-{
-  echo('</span>');
-}
+    $class = "active";
+  } else { unset($class); }
 
-echo(' | ');
+  echo('<li class="pull-right '.$class.'">');
+  echo(generate_link("Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "graphs")));
+  echo('</li>');
+
 
 if ($vars['view'] != "graphs")
 {
-  echo('<span class="pagemenu-selected">');
-}
+    $class = "active";
+  } else { unset($class); }
 
-echo(generate_link("No Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "detail")));
+  echo('<li class="pull-right '.$class.'">');
+  echo(generate_link("No Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "detail")));
+  echo('</li>');
 
-if ($vars['view'] != "graphs")
-{
-  echo('</span>');
-}
+echo('</ul></div></div>');
 
-echo('</div>');
-
-print_optionbar_end();
 
 if (in_array($vars['metric'],array_keys($used_sensors))
   || $vars['metric'] == 'processor'

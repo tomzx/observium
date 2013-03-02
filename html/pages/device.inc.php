@@ -9,7 +9,7 @@ if ($vars['tab'] == "port" && is_numeric($vars['device']) && port_permitted($var
 
 if (device_permitted($vars['device']) || $check_device == $vars['device'])
 {
-  $selected['iface'] = "selected";
+  $selected['iface'] = "active";
 
   $tab = str_replace(".", "", mres($vars['tab']));
 
@@ -18,7 +18,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     $tab = "overview";
   }
 
-  $select[$tab] = "selected";
+  $select[$tab] = "active";
 
   $device  = device_by_id_cache($vars['device']);
   $attribs = get_dev_attribs($device['device_id']);
@@ -37,11 +37,11 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
   echo('</table>');
 
-  echo('<div class="tabBox">');
+  echo('<div class="tabbable">');
 
   if (device_permitted($device['device_id']))
   {
-  echo('<ul class="tabs">');
+  echo('<ul class="nav nav-tabs">');
 
    if ($config['show_overview_tab'])
     {
@@ -376,7 +376,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
  }
 
   if (device_permitted($device['device_id']) || $check_device == $vars['device']) {
-    echo('<div class="tabcontent">');
+    echo('<div class="tab-content">');
 
     include("pages/device/".mres(basename($tab)).".inc.php");
 

@@ -14,15 +14,15 @@ $services['disabled'] = dbFetchCell("SELECT COUNT(service_id) FROM `services` WH
 
 if ($services['down']) { $services_colour = $warn_colour_a; } else { $services_colour = $list_colour_a; }
 if ($ports['down']) { $ports_colour = $warn_colour_a; } else { $ports_colour = $list_colour_a; }
+?>
 
-echo("<table width=100% cellspacing=0 cellpadding=0><tr><td style='width: 50%; vertical-align: top;>");
+<div class="row-fluid">
 
-echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
+<div class="span6">
 
-include("includes/dev-overview-data.inc.php");
+<?php include("includes/dev-overview-data.inc.php"); ?>
 
-echo("</div>");
-
+<?
 include("overview/ports.inc.php");
 
 if ($services['total'])
@@ -69,9 +69,9 @@ if ($config['enable_syslog'])
   }
 }
 
-echo("</td>");
+echo("</div>");
 
-echo("<td style='width: 50%; vertical-align: top;'>");
+echo('<div class="span6">');
 
 // Right Pane
 include("overview/processors.inc.php");
@@ -102,5 +102,8 @@ print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' =
 echo("</div>");
 // End events
 
-echo("</td></tr></table>");
+echo("<div>");
+
 ?>
+
+</div>

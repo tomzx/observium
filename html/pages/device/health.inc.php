@@ -47,25 +47,19 @@ $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab'     => 'health');
 
-print_optionbar_start();
-
-echo("<span style='font-weight: bold;'>Health</span> &#187; ");
 
 if (!$vars['metric']) { $vars['metric'] = "overview"; }
 
-unset($sep);
+$navbar['brand'] = "Health";
+$navbar['class'] = "navbar-narrow";
+
 foreach ($datas as $type)
 {
-  echo($sep);
-
-  if ($vars['metric'] == $type)
-  { echo('<span class="pagemenu-selected">'); }
-  echo(generate_link($type_text[$type],$link_array,array('metric'=>$type)));
-  if ($vars['metric'] == $type) { echo("</span>"); }
-  $sep = " | ";
+  if ($vars['metric'] == $type) { $navbar['options'][$type]['class'] = "active"; }
+  $navbar['options'][$type]['url']  = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => $type));
+  $navbar['options'][$type]['text'] = $type_text[$type];
 }
-
-print_optionbar_end();
+print_navbar($navbar);
 
 if (is_file("pages/device/health/".mres($vars['metric']).".inc.php"))
 {

@@ -11,65 +11,69 @@ $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab' => 'ports');
 
-print_optionbar_start();
-
-echo("<span style='font-weight: bold;'>Ports</span> &#187; ");
-
-$menu_options['basic']   = 'Basic';
-$menu_options['details'] = 'Details';
-$menu_options['arp']     = 'ARP Table';
+$navbar['options']['basic']['text']   = 'Basic';
+$navbar['options']['details']['text'] = 'Details';
+$navbar['options']['arp']['text']     = 'ARP Table';
 
 if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `device_id` = ?", array($device['device_id'])))
 {
-  $menu_options['fdb'] = 'FDB Table';
+  $navbar['options']['fdb']['text']['text'] = 'FDB Table';
 }
 
 if(dbFetchCell("SELECT * FROM links AS L, ports AS I WHERE I.device_id = ? AND I.port_id = L.local_port_id", array($device['device_id'])))
 {
-  $menu_options['neighbours'] = 'Neighbours';
-  $menu_options['map']        = 'Map';
+  $navbar['options']['neighbours']['text'] = 'Neighbours';
+  $navbar['options']['map']['text']        = 'Map';
 }
 if(dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `ifType` = 'adsl' AND `device_id` = ?", array($device['device_id'])))
 {
-  $menu_options['adsl'] = 'ADSL';
+  $navbar['options']['adsl']['text'] = 'ADSL';
 }
 
-$sep = "";
-foreach ($menu_options as $option => $text)
+  $navbar['options']['graphs']     = array('text' => 'Graphs', 'class' => 'pull-right');
+  $navbar['options']['minigraphs'] = array('text' => 'Minigraphs', 'class' => 'pull-right');
+
+
+foreach ($navbar['options'] as $option => $array)
 {
-  echo($sep);
-  if ($vars['view'] == $option) { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link($text,$link_array,array('view'=>$option)));
-  if ($vars['view'] == $option) { echo("</span>"); }
-  $sep = " | ";
+  if ($vars['view'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
+  $navbar['options'][$option]['url'] = generate_url($link_array,array('view'=>$option));
 }
 
-unset($sep);
 
-echo(' | Graphs: ');
+  $graph_types = array("bits" => "Bits",
+                       "upkts" => "Ucast Packets",
+                       "nupkts" => "NUcast Packets",
+                       "errors" => "Errors",
+                       "etherlike" => "Etherlike");
 
-$graph_types = array("bits" => "Bits",
-                     "upkts" => "Ucast Packets",
-                     "nupkts" => "NUcast Packets",
-                     "errors" => "Errors",
-                     "etherlike" => "Etherlike");
-
-foreach ($graph_types as $type => $descr)
+foreach (array('graphs', 'minigraphs') as $option)
 {
-  echo("$type_sep");
-  if ($vars['graph'] == $type && $vars['view'] == "graphs") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link($descr,$link_array,array('view'=>'graphs','graph'=>$type)));
-  if ($vars['graph'] == $type && $vars['view'] == "graphs") { echo("</span>"); }
+ foreach ($graph_types as $type => $descr)
+ {
 
-  echo(' (');
-  if ($vars['graph'] == $type && $vars['view'] == "minigraphs") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link('Mini',$link_array,array('view'=>'minigraphs','graph'=>$type)));
-  if ($vars['graph'] == $type && $vars['view'] == "minigraphs") { echo("</span>"); }
-  echo(')');
-  $type_sep = " | ";
+  if($vars['view'] == $option)
+  {
+    $navbar_b['class'] = "navbar-narrow";
+    $navbar_b['brand'] = $navbar['options'][$option]['text'];
+
+    $navbar_b['options'][$type]['text'] = $descr;
+    $navbar_b['options'][$type]['url']  = generate_url($link_array,array('view'=>'graphs','graph'=>$type));
+    if($vars['graph'] == $type) { $navbar_b['options'][$type]['class'] = "active"; }
+
+  }
+  if($vars['view'] == $option && $vars['graph'] == $type) { $navbar['options'][$option]['suboptions'][$type]['class'] = "active"; }
+  $navbar['options'][$option]['suboptions'][$type]['text'] = $descr;
+  $navbar['options'][$option]['suboptions'][$type]['url']  = generate_url($link_array,array('view'=>$option,'graph'=>$type));
+ }
 }
 
-print_optionbar_end();
+$navbar['class'] = "navbar-narrow";
+$navbar['brand'] = "Ports";
+print_navbar($navbar);
+unset($navbar);
+
+if(is_array($navbar_b)) { print_navbar($navbar_b); }
 
 if ($vars['view'] == 'minigraphs')
 {
@@ -100,7 +104,6 @@ if ($vars['view'] == 'minigraphs')
   if ($vars['view'] == "details") { $port_details = 1; }
 
 if($vars['view'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
-
 echo('<table class="table table-hover table-condensed '.$table_class.'">');
 echo('  <thead>');
 

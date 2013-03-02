@@ -21,7 +21,7 @@ echo('      <th>Sensor</th>');
 echo('      <th width="40"></th>');
 echo('      <th width="100"></th>');
 echo('      <th width="100">Current</th>');
-echo('      <th width="150">Thresholds</th>');
+echo('      <th width="175">Thresholds</th>');
 echo('    </tr>');
 echo('  </thead>');
 
@@ -66,7 +66,18 @@ foreach (dbFetchRows($sql, $param) as $sensor)
 
     $sensor['sensor_descr'] = truncate($sensor['sensor_descr'], 48, '');
 
-    echo('<tr>
+    if ($class == "frequency") {
+      echo('<tr>
+          <td class=list-bold>' . generate_device_link($sensor) . '</td>
+          <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
+          <td>'.$alert.'</td>
+          <td>'.overlib_link($link_graph, $sensor_minigraph, $overlib_content).'</td>
+          <td style="font-weight: bold;">' . format_si($sensor['sensor_value']) . $unit . '</td>
+          <td>' . format_si(round($sensor['sensor_limit_low'],2)) . $unit . ' - ' . format_si(round($sensor['sensor_limit'],2)) . $unit . '</td>
+        </tr>
+      ');
+    } else{
+      echo('<tr>
           <td class=list-bold>' . generate_device_link($sensor) . '</td>
           <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
           <td>'.$alert.'</td>
@@ -74,7 +85,8 @@ foreach (dbFetchRows($sql, $param) as $sensor)
           <td style="font-weight: bold;">' . $sensor['sensor_value'] . $unit . '</td>
           <td>' . round($sensor['sensor_limit_low'],2) . $unit . ' - ' . round($sensor['sensor_limit'],2) . $unit . '</td>
         </tr>
-     ');
+      ');
+    }
 
     if ($vars['view'] == "graphs")
     {

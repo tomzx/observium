@@ -130,14 +130,6 @@ function getHostOS($device)
   if ($os) { return $os; } else { return "generic"; }
 }
 
-function percent_colour($perc)
-{
-  $r = min(255, 5 * ($perc - 25));
-  $b = max(0, 255 - (5 * ($perc + 25)));
-
-  return sprintf('#%02x%02x%02x', $r, $b, $b);
-}
-
 function interface_errors($rrd_file, $period = '-1d') // Returns the last in/out errors value in RRD
 {
   global $config;

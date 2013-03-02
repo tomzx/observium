@@ -205,7 +205,7 @@ textarea {
 }
 body {
   margin: 0;
-  font-family: Verdana, Arial, Helvetica;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   line-height: 20px;
   color: #555555;
@@ -3159,6 +3159,7 @@ input[type="submit"].btn.btn-mini {
   background-color: #e5e5e5;
   border-bottom: 1px solid #ffffff;
 }
+
 .nav-tabs,
 .nav-pills {
   *zoom: 1;
@@ -5271,6 +5272,9 @@ button.close {
 }
 .visible-desktop {
   display: inherit !important;
+}
+
+@media (min-width: 1800px) and (max-width: 2000px) {
 }
 
 @media (min-width: 768px) and (max-width: 979px) {

@@ -1,7 +1,7 @@
 <?php
 
 $graph_array['height'] = "100";
-$graph_array['width']  = "220";
+$graph_array['width']  = "217";
 $graph_array['to']     = $config['time']['now'];
 $graph_array['from']        = $config['time']['day'];
 $graph_array_zoom           = $graph_array;

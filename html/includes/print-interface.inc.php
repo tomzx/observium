@@ -40,7 +40,7 @@ echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" .
          <td valign="top" width="350">');
 
 echo("        <span class=list-large>
-              " . generate_port_link($port, $port['ifIndex_FIXME'] . ". ".$port['label']) . " ".$port['tags']."
+              " . generate_port_link($port, $port['ifIndex_FIXME'] . "".$port['label']) . " ".$port['tags']."
            </span><br /><span class=interface-desc>".$port['ifAlias']."</span>");
 
 if ($port['ifAlias']) { echo("<br />"); }
@@ -83,8 +83,8 @@ if ($port['ifOperStatus'] == "up")
   $port['out_rate'] = $port['ifOutOctets_rate'] * 8;
   $in_perc = @round($port['in_rate']/$port['ifSpeed']*100);
   $out_perc = @round($port['in_rate']/$port['ifSpeed']*100);
-  echo("<img src='images/16/arrow_left.png' align=absmiddle> <span style='color: " . percent_colour($in_perc) . "'>".formatRates($port['in_rate'])."<br />
-        <img align=absmiddle src='images/16/arrow_out.png'> <span style='color: " . percent_colour($out_perc) . "'>".formatRates($port['out_rate']) . "<br />
+  echo("<img src='images/16/arrow_left.png' align=absmiddle> <span style='color: " . percent_colour($in_perc) . "'>".formatRates($port['in_rate'])."</span><br />
+        <img align=absmiddle src='images/16/arrow_out.png'> <span style='color:  " . percent_colour($out_perc) . "'>".formatRates($port['out_rate']) . "</span><br />
         <img src='images/icons/arrow_pps_in.png' align=absmiddle> ".format_bi($port['ifInUcastPkts_rate'])."pps</span><br />
         <img src='images/icons/arrow_pps_out.png' align=absmiddle> ".format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
 }
@@ -283,7 +283,7 @@ if ($graph_type && is_file($graph_file))
 {
   $type = $graph_type;
 
-  echo("<tr style='background-color: $row_colour; padding: 0px;'><td colspan=7>");
+  echo("<tr style='background-color: $row_colour; padding: 0px;'><td colspan=9>");
 
   $graph_array['to']     = $config['time']['now'];
   $graph_array['id']     = $port['port_id'];

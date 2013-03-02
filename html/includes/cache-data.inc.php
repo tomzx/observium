@@ -20,6 +20,8 @@ foreach (dbFetchRows("SELECT * FROM `devices`") as $device)
 
     $cache['devices']['hostname'][$device['hostname']] = $device['device_id'];
     $cache['devices']['id'][$device['device_id']] = $device;
+    $cache['devices']['timers']['polling'] += $device['last_polled_timetaken'];
+    $cache['devices']['timers']['discovery'] += $device['last_discovered_timetaken'];
 
     $cache['device_types'][$device['type']]++;
   }

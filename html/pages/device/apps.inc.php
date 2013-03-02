@@ -1,41 +1,31 @@
 <?php
 
-print_optionbar_start();
+$link_array = array('page' => 'device', 'device'  => $device['device_id'], 'tab' => 'apps');
 
-echo("<span style='font-weight: bold;'>Apps</span> &#187; ");
+$navbar = array();
+$navbar['brand'] = "Apps";
+$navbar['class'] = "navbar-narrow";
 
-unset($sep);
-
-$link_array = array('page'    => 'device',
-                    'device'  => $device['device_id'],
-                    'tab' => 'apps');
-
+$i=1;
 foreach (dbFetchRows("SELECT * FROM `applications` WHERE `device_id` = ?", array($device['device_id'])) as $app)
 {
-  echo($sep);
-
+  $i++;
   if (!$vars['app']) { $vars['app'] = $app['app_type']; }
 
-  if ($vars['app'] == $app['app_type'])
-  {
-    echo("<span class='pagemenu-selected'>");
-    #echo('<img src="images/icons/'.$app['app_type'].'.png" class="optionicon" />');
-  } else {
-    #echo('<img src="images/icons/greyscale/'.$app['app_type'].'.png" class="optionicon" />');
-  }
-  $link_add = array('app'=>$app['app_type']);
-  $text = nicecase($app['app_type']);
   if (!empty($app['app_instance']))
   {
     $text .= "(".$app['app_instance'].")";
-    $link_add['instance'] = $app['app_id'];
+    $app['link_array']['instance'] = $app['app_id'];
   }
-  echo(generate_link($text,$link_array,$link_add));
-  if ($vars['app'] == $app['app_type']) { echo("</span>"); }
-  $sep = " | ";
-}
 
-print_optionbar_end();
+  $navbar['options'][$i]['url']  = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'apps', 'app' => $app['app_type'], 'instance' => $app['app_id'] ));
+  $navbar['options'][$i]['text'] = nicecase($app['app_type']);
+  if ($vars['app'] == $app['app_type']) { $navbar['options'][$i]['class'] = "active"; }
+
+}
+print_navbar($navbar);
+unset($navbar);
+
 
 $where_array = array($device['device_id'], $vars['app']);
 if($vars['instance'])

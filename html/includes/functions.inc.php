@@ -23,10 +23,10 @@ include("../includes/alerts.inc.php");
  * Example conversions to format 'd-m-Y H:i':
  * '2012-04-18 14:25:01' -> '18-04-2012 14:25'
  * 'Star wars' -> 'Star wars'
- * 
+ *
  * @param string $str
  * @return string
- * 
+ *
  * @author Mike Stupalov <mike@stupalov.ru>
  */
 function format_timestamp($str)
@@ -40,13 +40,13 @@ function format_timestamp($str)
 }
 
 /**
- * Return array with syslog prioritys.
+ * Return array with syslog prioritiess.
  *
  * This function return array with syslog priority names and colors.
- * 
+ *
  * @param none
  * @return array
- * 
+ *
  * @author Mike Stupalov <mike@stupalov.ru>
  */
 function syslog_prioritys()
@@ -63,9 +63,58 @@ function syslog_prioritys()
   {
     $prioritys[$i] = array('name' => 'other',        'color' => '#D2D8F9');
   }
-  
   return $prioritys;
 }
+
+/**
+ * Percent Colour
+ *
+ *   This function returns a colour based on a 0-100 value
+ *   It scales from green to red from 0-100 as default.
+ *
+ * @param integer $percent
+ * @param integer $brightness
+ * @param integer $max
+ * @param integer $min
+ * @param integer $thirdColorHex
+ * @return string
+ *
+ * @author Adam Armstrong <adama@memetic.org>
+ */
+
+function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdColourHex = '00')
+{
+    // Calculate first and second colour (Inverse relationship)
+    $first = (1-($value/$max))*$brightness;
+    $second = ($value/$max)*$brightness;
+
+    // Find the influence of the middle Colour (yellow if 1st and 2nd are red and green)
+    $diff = abs($first-$second);
+    $influence = ($brightness-$diff)/2;
+    $first = intval($first + $influence);
+    $second = intval($second + $influence);
+
+    // Convert to HEX, format and return
+    $firstHex = str_pad(dechex($first),2,0,STR_PAD_LEFT);
+    $secondHex = str_pad(dechex($second),2,0,STR_PAD_LEFT);
+
+    return '#'.$secondHex . $firstHex . $thirdColourHex;
+
+    // alternatives:
+    // return $thirdColourHex . $firstHex . $secondHex; 
+    // return $firstHex . $thirdColourHex . $secondHex;
+
+}
+
+// Old percent_colour
+//function percent_colour($percent)
+//{
+//  $r = min(255, 5 * ($percent - 25));
+//  $b = max(0, 255 - (5 * ($percent + 25)));
+//
+// return sprintf('#%02x%02x%02x', $r, $b, $b);
+//}
+
 
 function data_uri($file, $mime)
 {
@@ -115,7 +164,7 @@ function generate_link($text, $vars, $new_vars = array())
   return '<a href="'.generate_url($vars, $new_vars).'">'.$text.'</a>';
 }
 
-   function pagination($vars, $total, $per_page = 10){
+function pagination($vars, $total, $per_page = 10){
 
         if(is_numeric($vars['pageno']))   { $page = $vars['pageno']; } else { $page = "1"; }
         if(is_numeric($vars['pagesize'])) { $per_page = $vars['pagesize']; } else { $per_page = "10"; }

@@ -1,7 +1,8 @@
 <?php
 
+$graph_array['width']	    = "218";
 $graph_array['height']      = "100";
-$graph_array['width']       = "218";
+
 $graph_array['to']          = $config['time']['now'];
 $graph_array['from']        = $config['time']['day'];
 $graph_array_zoom           = $graph_array;
@@ -11,7 +12,8 @@ $graph_array['legend']      = "no";
 
 foreach ($app_list as $app)
 {
-  echo('<div style="clear: both;">');
+  echo('<div class="row"><div class="span12">');
+
   echo('<h4>'.generate_link(nicecase($app['app_type']),array('page'=>'apps','app'=>$app['app_type'])).'</h4>');
   $app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WHERE D.device_id = A.device_id AND A.app_type = ?", array($app['app_type']));
 
@@ -47,7 +49,7 @@ foreach ($app_list as $app)
     echo(overlib_link($overlib_url, $overlib_link, $overlib_content));
     echo("</div>");
   }
-  echo('</div>');
+  echo('</div></div>');
 }
 
 ?>
