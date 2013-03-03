@@ -419,7 +419,7 @@ if ($_SESSION['userlevel'] >= 10)
     </div><!-- /navbar-inner -->
   </div>
 
-<?
+<?php
 if($_SESSION['widescreen'] == 1)
 {
   echo('
