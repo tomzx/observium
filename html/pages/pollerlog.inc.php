@@ -52,12 +52,12 @@ foreach($cache['devices']['hostname'] as $hostname=>$id) {
   echo('    <tr class="'.$rowcolor.'">
       <td>'.generate_device_link($cache['devices']['id'][$id]).'<br />'.$cache['devices']['id'][$id]['sysName'].'</td>
       <td>'.deviceUptime($cache['devices']['id'][$id], 'short').'</td>
-      <td style="text-align: center;">'.format_timestamp($cache['devices']['id'][$id]['last_polled']).'</td>
+      <td style="text-align: center;">'.format_timestamp($cache['devices']['id'][$id]['last_polled']).'<br />'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_polled']), 'short').' ago</td>
       <td style="text-align: center;">
         '.$cache['devices']['id'][$id]['last_polled_timetaken'].' seconds<br>
         <div class="progress progress-'.$proc['color']['poller'].' active" style="margin-bottom: 5px;"><div class="bar" style="text-align: right; width: '.$proc['time']['poller'].'%;"></div></div>
       </td>
-      <td style="text-align: center;">'.format_timestamp($cache['devices']['id'][$id]['last_discovered']).'</td>
+      <td style="text-align: center;">'.format_timestamp($cache['devices']['id'][$id]['last_discovered']).'<br />'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_discovered']), 'short').' ago</td>
       <td style="text-align: center;">
         '.$cache['devices']['id'][$id]['last_discovered_timetaken'].' seconds<br>
         <div class="progress progress-'.$proc['color']['discovery'].' active" style="margin-bottom: 5px;"><div class="bar" style="text-align: right; width: '.$proc['time']['discovery'].'%;"></div></div>
