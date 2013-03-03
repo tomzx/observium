@@ -7,16 +7,6 @@ $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab' => 'munin');
 
-$bg="#ffffff";
-
-echo('<div style="clear: both;">');
-
-print_optionbar_start();
-
-echo("<span style='font-weight: bold;'>Munin</span> &#187; ");
-
-$sep = "";
-
 foreach (dbFetchRows("SELECT * FROM munin_plugins WHERE device_id = ? ORDER BY mplug_category, mplug_type", array($device['device_id'])) as $mplug)
 {
 #  if (strlen($mplug['mplug_category']) == 0) { $mplug['mplug_category'] = "general"; } else {  }
@@ -25,28 +15,24 @@ foreach (dbFetchRows("SELECT * FROM munin_plugins WHERE device_id = ? ORDER BY m
   $graph_enable[$mplug['mplug_category']][$mplug['mplug_type']]['plugin'] = $mplug['mplug_type'];
 }
 
+$navbar['class'] = "navbar-narrow";
+
 foreach ($graph_enable as $section => $nothing)
 {
   if (isset($graph_enable) && is_array($graph_enable[$section]))
   {
     $type = strtolower($section);
     if (!$vars['group']) { $vars['group'] = $type; }
-    echo($sep);
-    if ($vars['group'] == $type)
-    {
-      echo('<span class="pagemenu-selected">');
-    }
-    echo(generate_link(ucwords($type),$link_array,array('group'=>$type)));
-    if ($vars['group'] == $type)
-    {
-      echo("</span>");
-    }
-    $sep = " | ";
+    if ($vars['group'] == $type) { $navbar['options'][$type]['class'] = "active"; }
+
+    $navbar['options'][$type]['url'] = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'munin', 'group' => $type));
+    $navbar['options'][$type]['text'] = htmlspecialchars(ucwords($section));
+
   }
 }
 
-unset ($sep);
-print_optionbar_end();
+print_navbar($navbar);
+
 
 $graph_enable = $graph_enable[$vars['group']];
 
