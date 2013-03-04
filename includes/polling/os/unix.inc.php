@@ -30,14 +30,14 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
 
   $serial = snmp_get($device, ".1.3.6.1.4.1.674.10892.1.300.10.1.11.1", "-Oqv", "MIB-Dell-10892");
   $serial = trim(str_replace("\"", "", $serial));
-  
+
   # Use agent DMI data if available
   if (isset($agent_data['dmi']))
   {
     if ($agent_data['dmi']['system-product-name'])
     {
       $hardware = ($agent_data['dmi']['system-manufacturer'] ? $agent_data['dmi']['system-manufacturer'] . ' ' : '') . $agent_data['dmi']['system-product-name'];
-      
+
       # Clean up "Dell Computer Corporation" and "Intel Corporation"
       $hardware = str_replace(" Computer Corporation","",$hardware);
       $hardware = str_replace(" Corporation","",$hardware);

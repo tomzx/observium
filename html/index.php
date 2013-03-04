@@ -138,8 +138,6 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link href="css/sweetie.css" rel="stylesheet" type="text/css" />
   <link href="css/sprites.css" rel="stylesheet" type="text/css" />
 
-  <link href="http://fonts.googleapis.com/css?family=Cabin" rel="stylesheet" type="text/css">
-
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
 ?>
