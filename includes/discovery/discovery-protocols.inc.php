@@ -96,6 +96,7 @@ unset($lldp_array);
 $lldp_array = snmpwalk_cache_threepart_oid($device, "lldpRemoteSystemsData", array(), "LLDP-MIB");
 $dot1d_array = snmpwalk_cache_oid($device, "dot1dBasePortIfIndex", array(), "BRIDGE-MIB");
 
+// FIXME - needs change to dbFacile
 if ($lldp_array)
 {
   $lldp_links = "";
@@ -130,7 +131,11 @@ if ($lldp_array)
         if ($remote_device_id)
         {
           $if = $lldp['lldpRemPortDesc']; $id = $lldp['lldpRemPortId'];
-          $remote_port_id = @mysql_result(mysql_query("SELECT port_id FROM `ports` WHERE (`ifDescr` = '$if' OR `ifName`='$if' OR `ifDescr`= '$id' OR `ifName`='$id') AND `device_id` = '".$remote_device_id."'"),0);
+          $remote_port_id = @mysql_result(mysql_query("SELECT port_id FROM `ports` WHERE (`ifDescr`= '$id' OR `ifName`='$id') AND `device_id` = '".$remote_device_id."'"),0);
+          if (!$remote_port_id)
+          {
+            $remote_port_id = @mysql_result(mysql_query("SELECT port_id FROM `ports` WHERE (`ifDescr`= '$if' OR `ifName`='$if') AND `device_id` = '".$remote_device_id."'"),0);
+          }
         } else {
           $remote_port_id = "0";
         }
