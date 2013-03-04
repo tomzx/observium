@@ -56,10 +56,10 @@ foreach($cache['devices']['hostname'] as $hostname=>$id) {
         <div class="progress progress-'.$proc['color']['poller'].' active" style="margin-bottom: 5px;"><div class="bar" style="text-align: right; width: '.$proc['time']['poller'].'%;"></div></div>
       </td>
       <td width="7%">
-        '.$cache['devices']['id'][$id]['last_polled_timetaken'].'s</div>
+        '.$cache['devices']['id'][$id]['last_polled_timetaken'].'s
       </td>
       <td>'.format_timestamp($cache['devices']['id'][$id]['last_polled']).'</td>
-      <td>'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_polled']), 'shorter').' ago</td>
+      <td>'.formatUptime($config['time']['now'] - strtotime($cache['devices']['id'][$id]['last_polled']), 'shorter').' ago</td>
       <td  style="width: 12%;">
         <div class="progress progress-'.$proc['color']['discovery'].' active" style="margin-bottom: 5px;"><div class="bar" style="text-align: right; width: '.$proc['time']['discovery'].'%;"></div></div>
       </td>
@@ -67,7 +67,7 @@ foreach($cache['devices']['hostname'] as $hostname=>$id) {
         '.$cache['devices']['id'][$id]['last_discovered_timetaken'].'s
       </td>
       <td>'.format_timestamp($cache['devices']['id'][$id]['last_discovered']).' </td>
-      <td>'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_discovered']), 'shorter').' ago</td>
+      <td>'.formatUptime($config['time']['now'] - strtotime($cache['devices']['id'][$id]['last_discovered']), 'shorter').' ago</td>
     </tr>
 ');
 }
