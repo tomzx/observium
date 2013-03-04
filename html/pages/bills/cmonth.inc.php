@@ -109,7 +109,7 @@ foreach (dbFetchRows("SELECT * FROM `bills` ".$where." ORDER BY `bill_name`", $p
                   <a class=\"btn btn-mini btn-primary\" href=\"".$links['transfer']."\" rel=\"tooltip\" title=\"Show transfer graphs\"><i class=\"icon-tasks icon-white\"></i></a>
                   <a class=\"btn btn-mini btn-primary\" href=\"".$links['history']."\" rel=\"tooltip\" title=\"Show historical usage\"><i class=\"icon-calendar icon-white\"></i></a>
                 </div>
-                <div class=\"btn-group right\">
+                <div class=\"btn-group pull-right\">
                   <a class=\"btn btn-mini btn-success\" href=\"".$links['edit']."\" rel=\"tooltip\" title=\"Edit bill\"".$disabled."><i class=\"icon-edit icon-white\"></i></a>
                   <a class=\"btn btn-mini btn-warning\" href=\"".$links['reset']."\" rel=\"tooltip\" title=\"Reset bill\"".$disabled."><i class=\"icon-refresh icon-white\"></i></a>
                   <a class=\"btn btn-mini btn-danger\" href=\"".$links['delete']."\" rel=\"tooltip\" title=\"Delete bill\"".$disabled."><i class=\"icon-trash icon-white\"></i></a>
