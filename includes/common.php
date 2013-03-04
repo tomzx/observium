@@ -40,7 +40,23 @@ function formatUptime($diff, $format="long")
 
   $uptime = "";
 
-  if ($format == "short")
+  if ($format == "shorter")
+  {
+    if ($yearsDiff > '0') { $u['y'] = $yearsDiff; }
+    if ($daysDiff > '0')  { $u['d'] = $daysDiff; }
+    if ($hrsDiff > '0')   { $u['h'] = $hrsDiff; }
+    if ($minsDiff > '0')  { $u['m'] = $minsDiff; }
+    if ($secsDiff > '0')  { $u['s'] = $secsDiff; }
+
+    $count = 0; $uptime = '';
+    foreach($u as $period => $value)
+    {
+      if($count == "2") { break; }
+      $uptime .= $value.$period.' ';
+      $count++;
+    }
+  }
+  elseif ($format == "short")
   {
     if ($yearsDiff > '0') { $uptime .= $yearsDiff . "y "; }
     if ($daysDiff > '0') { $uptime .= $daysDiff . "d "; }

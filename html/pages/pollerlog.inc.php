@@ -21,11 +21,10 @@ $pagetitle[] = "Polling Information";
   <thead>
     <tr>
       <th>Device</th>
-      <th>Uptime</th>
-      <th style="width: 160px; text-align: center;">Polling: Last Run</th>
-      <th style="width: 135px; text-align: center;">Polling: Time</th>
-      <th style="width: 160px; text-align: center;">Discovery: Last Run</th>
-      <th style="width: 135px; text-align: center;">Discovery: Time</th>
+      <th colspan=3>Last Polled</th>
+      <th></th>
+      <th colspan=3>Last Discovered</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -49,28 +48,35 @@ foreach($cache['devices']['hostname'] as $hostname=>$id) {
   if ($cache['devices']['id'][$id]['status'] == 0) { $rowcolor = "error"; }
   if ($cache['devices']['id'][$id]['ignore'] == 1 && $cache['devices']['id'][$id]['status'] != 1) { $rowcolor = "warning"; }
   if ($cache['devices']['id'][$id]['disbaled'] == 1) { $rowcolor = "warning"; }
+
   echo('    <tr class="'.$rowcolor.'">
-      <td>'.generate_device_link($cache['devices']['id'][$id]).'<br />'.$cache['devices']['id'][$id]['sysName'].'</td>
-      <td>'.deviceUptime($cache['devices']['id'][$id], 'short').'</td>
-      <td style="text-align: center;">'.format_timestamp($cache['devices']['id'][$id]['last_polled']).'<br />'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_polled']), 'short').' ago</td>
-      <td style="text-align: center;">
-        '.$cache['devices']['id'][$id]['last_polled_timetaken'].' seconds<br>
+      <td>'.generate_device_link($cache['devices']['id'][$id]).'</td>
+      <td style="width: 12%;">
         <div class="progress progress-'.$proc['color']['poller'].' active" style="margin-bottom: 5px;"><div class="bar" style="text-align: right; width: '.$proc['time']['poller'].'%;"></div></div>
       </td>
-      <td style="text-align: center;">'.format_timestamp($cache['devices']['id'][$id]['last_discovered']).'<br />'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_discovered']), 'short').' ago</td>
-      <td style="text-align: center;">
-        '.$cache['devices']['id'][$id]['last_discovered_timetaken'].' seconds<br>
+      <td width="7%">
+        '.$cache['devices']['id'][$id]['last_polled_timetaken'].'s</div>
+      </td>
+      <td>'.format_timestamp($cache['devices']['id'][$id]['last_discovered']).' </td>
+      <td>'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_discovered']), 'shorter').' ago</td>
+      <td  style="width: 12%;">
         <div class="progress progress-'.$proc['color']['discovery'].' active" style="margin-bottom: 5px;"><div class="bar" style="text-align: right; width: '.$proc['time']['discovery'].'%;"></div></div>
       </td>
+      <td width="7%">
+        '.$cache['devices']['id'][$id]['last_discovered_timetaken'].'s
+      </td>
+      <td>'.format_timestamp($cache['devices']['id'][$id]['last_polled']).'</td>
+      <td>'.formatUptime(time() - strtotime($cache['devices']['id'][$id]['last_polled']), 'shorter').' ago</td>
+
     </tr>
 ');
 }
 
-echo('    <tr class="info" style="font-weight: bold;">
-      <td colspan="3" style="text-align: right;">Total time for all devices:</td>
-      <td style="text-align: center;">'.$cache['devices']['timers']['polling'].' seconds</td>
+echo('    <tr class="info">
+      <td colspan="2" style="text-align: right;">Total time for all devices:</td>
+      <td colspan="3" style="text-align: left;">'.$cache['devices']['timers']['polling'].'s</td>
       <td></td>
-      <td style="text-align: center;">'.$cache['devices']['timers']['discovery'].' seconds</td>
+      <td colspan="3" style="text-align: left;">'.$cache['devices']['timers']['discovery'].'s</td>
     </tr>
 ');
 

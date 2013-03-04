@@ -138,6 +138,8 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link href="css/sweetie.css" rel="stylesheet" type="text/css" />
   <link href="css/sprites.css" rel="stylesheet" type="text/css" />
 
+  <link href="http://fonts.googleapis.com/css?family=Cabin" rel="stylesheet" type="text/css">
+
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
 ?>
@@ -420,16 +422,16 @@ if (is_array($pagetitle))
 
 <script type="text/javascript">
 
-  $(document).ready(function()
-  {
-    $('#poller_status').load('ajax_poller_status.php');
-  });
+#  $(document).ready(function()
+#  {
+#    $('#poller_status').load('ajax_poller_status.php');
+#  });
 
-  var auto_refresh = setInterval(
-    function ()
-    {
-      $('#poller_status').load('ajax_poller_status.php');
-    }, 10000); // refresh every 10000 milliseconds
+#  var auto_refresh = setInterval(
+#    function ()
+#    {
+#      $('#poller_status').load('ajax_poller_status.php');
+#    }, 10000); // refresh every 10000 milliseconds
 
 </script>
 
