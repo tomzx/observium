@@ -27,7 +27,7 @@ if ($device['os'] == "ironware")
           $remote_device_id = discover_new_device($fdp['snFdpCacheDeviceId']);
           if ($remote_device_id)
           {
-            $int = ifNameDescr($interface);
+            $int = humanize_port($interface);
             log_event("Device autodiscovered through FDP on " . $device['hostname'] . " (port " . $int['label'] . ")", $remote_device_id, 'interface', $int['port_id']);
           }
         }
@@ -66,7 +66,7 @@ if ($cdp_array)
           $remote_device_id = discover_new_device($cdp['cdpCacheDeviceId']);
           if ($remote_device_id)
           {
-            $int = ifNameDescr($interface);
+            $int = humanize_port($interface);
             log_event("Device autodiscovered through CDP on " . $device['hostname'] . " (port " . $int['label'] . ")", $remote_device_id, 'interface', $int['port_id']);
           }
         }
@@ -122,7 +122,7 @@ if ($lldp_array)
           $remote_device_id = discover_new_device($lldp['lldpRemSysName']);
           if ($remote_device_id)
           {
-            $int = ifNameDescr($interface);
+            $int = humanize_port($interface);
             log_event("Device autodiscovered through LLDP on " . $device['hostname'] . " (port " . $int['label'] . ")", $remote_device_id, 'interface', $int['port_id']);
           }
         }

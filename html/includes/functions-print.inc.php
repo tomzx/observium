@@ -7,9 +7,9 @@
  *
  * @package    observium
  * @subpackage web
- * @author     Mike Stupalov <mike@stupalov.ru>
  * @copyright  (C) 2006 - 2013 Adam Armstrong
  * @version    1.0.6
+ *
  */
 
 /**
@@ -22,7 +22,6 @@
  * @param array $vars
  * @return none
  *
- * @author Adam Armstrong
  */
 
 function print_navbar($navbar)
@@ -96,7 +95,6 @@ function print_navbar($navbar)
  * @param array $vars
  * @return none
  *
- * @author Mike Stupalov <mike@stupalov.ru>
  */
 
 function print_addresses($vars)
@@ -216,7 +214,7 @@ function print_addresses($vars)
 
       if (port_permitted($entry['port_id']))
       {
-        $entry = ifLabel ($entry, $entry);
+        $entry = humanize_port ($entry, $entry);
         if ($entry['ifInErrors_delta'] > 0 || $entry['ifOutErrors_delta'] > 0)
         {
           $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
@@ -260,7 +258,6 @@ function print_addresses($vars)
  * @param array $vars
  * @return none
  *
- * @author Dennis de Houx <info@all-in-one.be>, Mike Stupalov <mike@stupalov.ru>
  */
 function print_events($vars)
 {
@@ -323,7 +320,8 @@ function print_events($vars)
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
   $query_count = 'SELECT COUNT(event_id) '.$query;
-  // FIXME Mike: bad table columns (`host` and `type`), they intersect with table `devices`
+  /// FIXME Mike: bad table columns (`host` and `type`), they intersect with table `devices`
+  /// FIXMEs should have three ///, i colour these RED in my editor - adama
   $query = 'SELECT STRAIGHT_JOIN E.host, E.datetime, E.message, E.type, E.reference '.$query;
   $query .= ' ORDER BY `datetime` DESC ';
   $query .= "LIMIT $start,$pagesize";
@@ -373,7 +371,7 @@ function print_events($vars)
     {
       if ($entry['type'] == 'interface')
       {
-        $this_if = ifLabel(getifbyid($entry['reference']), $entry);
+        $this_if = humanize_port(getifbyid($entry['reference']), $entry);
         $entry['link'] = '<span class="list-bold">' . generate_port_link($this_if, makeshortif($this_if['label'])) . '</span>';
       } else {
         $entry['link'] = 'System';
@@ -409,7 +407,6 @@ function print_events($vars)
  * @param array $vars
  * @return none
  *
- * @author Mike Stupalov <mike@stupalov.ru>
  */
 function print_events_short($var)
 {
@@ -431,7 +428,6 @@ function print_events_short($var)
  * @param array $vars
  * @return none
  *
- * @author Dennis de Houx <info@all-in-one.be>, Mike Stupalov <mike@stupalov.ru>
  */
 function print_syslogs($vars)
 {
@@ -574,7 +570,6 @@ function print_syslogs($vars)
  * @param array $status
  * @return none
  *
- * @author Dennis de Houx <info@all-in-one.be>, Mike Stupalov <mike@stupalov.ru>
  */
 function print_status($status)
 {
@@ -655,8 +650,8 @@ function print_status($status)
   // Ports Down
   if ($status['ports'])
   {
-    // FIXME Mike: This will be deleted in future
-    // because $config['warn']['ifdown'] - deprecated.
+    /// FIXME Mike: This will be deleted in future
+    /// because $config['warn']['ifdown'] - deprecated.
     if (isset($config['warn']['ifdown']) && !$config['warn']['ifdown'])
     {
   echo('
@@ -676,7 +671,7 @@ function print_status($status)
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
     {
-      $port = ifLabel($port, $port);
+      $port = humanize_port($port, $port);
       $string .= '  <tr>' . PHP_EOL;
       $string .= '    <td class="list-bold">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge badge-info">Port</span></td>' . PHP_EOL;
@@ -700,7 +695,7 @@ function print_status($status)
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
     {
-      $port = ifLabel($port, $port);
+      $port = humanize_port($port, $port);
       $string .= '  <tr>' . PHP_EOL;
       $string .= '    <td class="list-bold">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge badge-info">Port</span></td>' . PHP_EOL;
@@ -773,7 +768,7 @@ function print_status($status)
 
   $string .= '  </tbody>' . PHP_EOL;
   $string .= '</table>';
-  
+
   // Final print all statuses
   echo($string);
 }

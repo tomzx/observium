@@ -23,7 +23,7 @@ echo("<td class=list-bold>");
 
 foreach ($vlan_ports as $port)
 {
-  $port = ifLabel($port, $device);
+  $port = humanize_port($port, $device);
   if ($vars['view'] == "graphs")
   {
     echo("<div style='display: block; padding: 2px; margin: 2px; min-width: 139px; max-width:139px; min-height:85px; max-height:85px; text-align: center; float: left; background-color: ".$list_colour_b_b.";'>

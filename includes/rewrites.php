@@ -1,8 +1,23 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ *   These functions perform rewrites on strings and numbers.
+ *
+ * @package    observium
+ * @subpackage functions
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2012 Adam Armstrong
+ *
+ */
+
 function rewrite_location($location)
 {
-  // FIXME ' => 'also check the database for rewrites?
+  /// FIXME - also check the database for rewrites?
+  // Also roll this all up into some kind of 'rewrite_device' function? - adama
   global $config, $debug;
 
   if (isset($config['location_map'][$location]))
@@ -43,22 +58,24 @@ function rewrite_entity_descr ($descr)
   return $descr;
 }
 
-function ifNameDescr($port, $device = NULL)
-{
-  return ifLabel($port, $device);
-}
-
-function ifLabel($port, $device = NULL)
-{
-  return humanize_port($port, $device);
-}
+/**
+ * Humanize port.
+ *
+ * Returns a the $port array with processed information:
+ * label, humans_speed, human_type, html_class and human_mac
+ * row_class, table_tab_colour
+ *
+ * @param array $ports
+ * @return array $ports
+ *
+ */
 
 function humanize_port($port, $device = NULL)
 {
   global $config;
 
-  /// Process port data to make it pretty for printing. EVOLUTION, BITCHES.
-  /// Lots of hacky shit will end up here with if(os);
+  // Process port data to make it pretty for printing. EVOLUTION, BITCHES.
+  // Lots of hacky shit will end up here with if(os);
 
   if (!$device) { $device = device_by_id_cache($port['device_id']); }
 

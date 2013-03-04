@@ -690,7 +690,7 @@ function generate_port_link($port, $text = NULL, $type = NULL)
 {
   global $config;
 
-  $port = ifNameDescr($port);
+  $port = humanize_port($port);
   if (!$text) { $text = fixIfName($port['label']); }
   if ($type) { $port['graph_type'] = $type; }
   if (!isset($port['graph_type'])) { $port['graph_type'] = 'port_bits'; }
@@ -860,7 +860,7 @@ function generate_ap_link($args, $text = NULL, $type = NULL)
 {
   global $config;
 
-  $args = ifNameDescr($args);
+  $args = humanize_port($args);
   if (!$text) { $text = fixIfName($args['label']); }
   if ($type) { $args['graph_type'] = $type; }
   if (!isset($args['graph_type'])) { $args['graph_type'] = 'port_bits'; }

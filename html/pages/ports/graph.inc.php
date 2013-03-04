@@ -17,7 +17,7 @@ foreach ($ports as $port)
 
   if (port_permitted($port['port_id'], $port['device_id']))
   {
-    $port = ifLabel($port, $device);
+    $port = humanize_port($port, $device);
 
     $graph_type = "port_" . $subformat;
 

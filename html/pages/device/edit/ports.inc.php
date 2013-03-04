@@ -128,7 +128,7 @@ $(document).ready(function() {
 
 foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIndex` ", array($device['device_id'])) as $port)
 {
-  $port = ifLabel($port);
+  $port = humanize_port($port);
 
   echo("<tr>");
   echo("<td align=center>". $port['ifIndex']."</td>");
