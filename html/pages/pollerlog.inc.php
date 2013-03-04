@@ -34,7 +34,7 @@ $proc['avg']['poller'] = round($cache['devices']['timers']['polling'] / count($c
 $proc['avg']['discovery'] = round($cache['devices']['timers']['discovery'] / count($cache['devices']['hostname']));
 
 foreach($cache['devices']['hostname'] as $hostname=>$id) {
-  if ($cache['devices']['id'][$id]['disabled'] == 1) { continue; }
+  if ($cache['devices']['id'][$id]['disabled'] == 1 && !$config['web_show_disabled']) { continue; }
   $proc['time']['poller'] = round((100 / $cache['devices']['timers']['polling']) * $cache['devices']['id'][$id]['last_polled_timetaken']);
   if ($cache['devices']['id'][$id]['last_polled_timetaken'] > ($proc['avg']['poller'] * 3)) { $proc['color']['poller'] = "danger"; }
   elseif ($cache['devices']['id'][$id]['last_polled_timetaken'] > ($proc['avg']['poller'] * 2)) { $proc['color']['poller'] = "warning"; }
@@ -48,6 +48,7 @@ foreach($cache['devices']['hostname'] as $hostname=>$id) {
   $rowcolor = "";
   if ($cache['devices']['id'][$id]['status'] == 0) { $rowcolor = "error"; }
   if ($cache['devices']['id'][$id]['ignore'] == 1 && $cache['devices']['id'][$id]['status'] != 1) { $rowcolor = "warning"; }
+  if ($cache['devices']['id'][$id]['disabled'] == 1) { $rowcolor = "warning"; }
 
   echo('    <tr class="'.$rowcolor.'">
       <td>'.generate_device_link($cache['devices']['id'][$id]).'</td>
