@@ -1,46 +1,14 @@
 <?php
 
-if ($bg == $list_colour_b) { $bg = $list_colour_a; } else { $bg = $list_colour_b; }
-
-if ($device['status'] == '0')
-{
-  $class = "error";
-  $table_tab_colour = "#cc0000";
-} else {
-  $class = "";
-  /// This one looks too bright and out of place - adama
-  #$table_tab_colour = "#194BBF";
-  /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
-  $table_tab_colour = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
-                                 // Your mum's a semicolon - adama
-}
-if ($device['ignore'] == '1')
-{
-  $class = "warning";
-  $table_tab_colour = "#aaaaaa";
-  if ($device['status'] == '1')
-  {
-    $class = "";
-    $table_tab_colour = "#009900";
-  }
-}
-if ($device['disabled'] == '1')
-{
-  $class = "warning";
-  $table_tab_colour = "#aaaaaa";
-}
-
-$type = strtolower($device['os']);
+humanize_device($device);
 
 $image = getImage($device);
-if ($device['os'] == "ios") { formatCiscoHardware($device, true); }
-$device['os_text'] = $config['os'][$device['os']]['text'];
 
 $port_count   = dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `device_id` = ?", array($device['device_id']));
 $sensor_count = dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `device_id` = ?", array($device['device_id']));
 
-echo('  <tr class="'.$class.'" onclick="location.href=\'device/device='.$device['device_id'].'/\'" style="cursor: pointer;">
-          <td style="width: 1px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+echo('  <tr class="'.$device['html_row_class'].'" onclick="location.href=\'device/device='.$device['device_id'].'/\'" style="cursor: pointer;">
+          <td style="width: 1px; background-color: '.$device['html_tab_colour'].'; margin: 0px; padding: 0px"></td>
           <td width="40"  style="padding: 10px; text-align: center; vertical-align: middle;">' . $image . '</td>
           <td width="300" ><span style="font-size: 15px;">' . generate_device_link($device) . '</span>
           <br />' . $device['sysName'] . '</td>'
@@ -55,7 +23,6 @@ echo('    <td >' . $device['hardware'] . '<br />' . $device['features'] . '</td>
 echo('    <td >' . $device['os_text'] . '<br />' . $device['version'] . '</td>');
 echo('    <td >' . deviceUptime($device, 'short') . ' <br />');
 
-if (get_dev_attrib($device,'override_sysLocation_bool')) {  $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }
 echo('    ' . truncate($device['location'],32, '') . '</td>');
 
 echo(' </tr>');

@@ -6,6 +6,9 @@ foreach (dbFetchRows("SELECT * FROM `devices`") as $device)
   if(device_permitted($device))
   {
 
+    // Process device and add all the human-readable stuff.
+    humanize_device($device);
+
     $cache['devices']['hostname'][$device['hostname']] = $device['device_id'];
     $cache['devices']['id'][$device['device_id']] = $device;
     if (get_dev_attrib($device,'override_sysLocation_bool'))
@@ -15,7 +18,7 @@ foreach (dbFetchRows("SELECT * FROM `devices`") as $device)
     }
 
     if ($device['disabled'] == 1 && !$config['web_show_disabled']) { continue; }
-    
+
     $devices['count']++;
 
     if($device['status'] == 0)   { $devices['down']++; }

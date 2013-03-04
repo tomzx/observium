@@ -14,6 +14,62 @@
 
 include("../includes/alerts.inc.php");
 
+
+/**
+ * Humanize Device
+ *
+ *   Process the $device array to add/modify elements.
+ *
+ * @param array $device
+ * @return none
+ */
+
+function humanize_device(&$device)
+{
+
+  global $config;
+
+  // Set the HTML class and Tab color for the device based on status
+  if ($device['status'] == '0')
+  {
+    $device['html_row_class'] = "error";
+    $device['html_tab_colour'] = "#cc0000";
+  } else {
+    $device['html_row_class'] = "";
+    /// This one looks too bright and out of place - adama
+    #$device['html_tab_colour'] = "#194BBF";
+    /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
+    $device['html_tab_colour'] = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
+                                            // Your mum's a semicolon - adama
+  }
+  if ($device['ignore'] == '1')
+  {
+    $device['html_row_class'] = "warning";
+    $device['html_tab_colour'] = "#aaaaaa";
+    if ($device['status'] == '1')
+    {
+      $device['html_row_class'] = "";
+      $device['html_tab_colour'] = "#009900";
+    }
+  }
+  if ($device['disabled'] == '1')
+  {
+    $device['html_row_class'] = "warning";
+    $device['html_tab_colour'] = "#aaaaaa";
+  }
+
+  // Set location if it's overridden
+  /// FIXME - put this in poller, for fuck sake!
+  if (get_dev_attrib($device,'override_sysLocation_bool')) {  $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }
+
+  // Set the name we print for the OS
+  $device['os_text'] = $config['os'][$device['os']]['text'];
+
+  // Mark this device as being humanized
+  $device['humanized'] = TRUE;
+}
+
+
 /**
  * Format date string.
  *
@@ -26,8 +82,6 @@ include("../includes/alerts.inc.php");
  *
  * @param string $str
  * @return string
- *
- * @author Mike Stupalov <mike@stupalov.ru>
  */
 function format_timestamp($str)
 {
@@ -46,8 +100,6 @@ function format_timestamp($str)
  *
  * @param none
  * @return array
- *
- * @author Mike Stupalov <mike@stupalov.ru>
  */
 function syslog_priorities()
 {
@@ -78,8 +130,6 @@ function syslog_priorities()
  * @param integer $min
  * @param integer $thirdColorHex
  * @return string
- *
- * @author Adam Armstrong <adama@memetic.org>
  */
 
 function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdColourHex = '00')
@@ -329,45 +379,14 @@ function generate_device_link_header($device, $vars=array())
 {
   global $config;
 
-/// FIXMEFIXME FIXME FIXME THIS SHIT NEEDS TO BE A FUNCTION. REALLY.
-
-if ($device['status'] == '0')
-{
-  $row_class = "error";
-  $table_tab_colour = "#cc0000";
-} else {
-  $row_class = "";
-  /// This one looks too bright and out of place - adama
-  #$table_tab_colour = "#194BBF";
-  /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
-  $table_tab_colour = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
-                                 // Your mum's a semicolon - adama
-}
-if ($device['ignore'] == '1')
-{
-  $row_class = "warning";
-  $table_tab_colour = "#aaaaaa";
-  if ($device['status'] == '1')
-  {
-    $row_class = "";
-    $table_tab_colour = "#009900";
-  }
-}
-if ($device['disabled'] == '1')
-{
-  $row_class = "warning";
-  $table_tab_colour = "#aaaaaa";
-}
-
-/// END SHIT
+  if(!$device['humanized']) { humanize_device($device); }
 
   if ($device['os'] == "ios") { formatCiscoHardware($device, true); }
-  $device['os_text'] = $config['os'][$device['os']]['text'];
 
   $contents = '
       <table class="table table-striped table-bordered table-rounded table-condensed">
-        <tr class="'.$row_class.'" style="font-size: 10pt;">
-          <td style="width: 10px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+        <tr class="'.$device['html_row_class'].'" style="font-size: 10pt;">
+          <td style="width: 10px; background-color: '.$device['html_tab_colour'].'; margin: 0px; padding: 0px"></td>
           <td width="40" style="padding: 10px; text-align: center; vertical-align: middle;">'.getImage($device).'</td>
           <td width="200"><a href="#" class="'.$class.'" style="font-size: 15px; font-weight: bold;">'.$device['hostname'].'</a><br />'. $device['sysName'].'</td>
           <td>'.$device['hardware'].' <br /> '.$device['os_text'].' '.$device['version'].'</td>
@@ -677,7 +696,7 @@ function generate_port_link_header($port)
         <tr class="'.$port['row_class'].'" style="font-size: 10pt;">
           <td style="width: 10px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
           <td style="width: 10px;"></td>
-          <td width="250"><a href="#" class="'.$port['html_class'].'" style="font-size: 15px; font-weight: bold;">'.fixIfName($port['label']).'</a><br />'.htmlentities($port['ifAlias']).'</td>
+          <td width="250"><a href="#" class="'.$port['html_row_class'].'" style="font-size: 15px; font-weight: bold;">'.fixIfName($port['label']).'</a><br />'.htmlentities($port['ifAlias']).'</td>
           <td width="100">'.$port['human_speed'].'<br />'.$port['ifMtu'].'</td>
           <td>'.$port['human_type'].'<br />'.$port['human_mac'].'</td>
         </tr>

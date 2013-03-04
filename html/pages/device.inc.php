@@ -1,11 +1,14 @@
 <?php
 
+// Allow people to see this page if they have permission to see one of the ports, but don't show them tabs.
+
 if ($vars['tab'] == "port" && is_numeric($vars['device']) && port_permitted($vars['port']))
 {
   $check_device = get_device_id_by_port_id($vars['port']);
   $permit_ports = 1;
 }
 
+// Only show if they have access to the whole device or a single port.
 
 if (device_permitted($vars['device']) || $check_device == $vars['device'])
 {
