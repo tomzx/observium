@@ -144,7 +144,7 @@ function print_addresses($vars)
     }
   }
 
-  if ($_SESSION['userlevel'] >= 7)
+  if ($_SESSION['userlevel'] >= 5)
   {
     $query_perms = '';
     $query_user = '';
@@ -154,7 +154,9 @@ function print_addresses($vars)
     $param[] = $_SESSION['user_id'];
   }
 
-  $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
+  // Don't show ignored and disabled devices
+  $query_device = ' AND D.ignore = 0 ';
+  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
 
   $query = 'FROM `'.$address_type.'_addresses` AS A ';
   $query .= 'LEFT JOIN `ports`   AS I ON I.port_id   = A.port_id ';
@@ -303,7 +305,7 @@ function print_events($vars)
     }
   }
 
-  if ($_SESSION['userlevel'] >= 7)
+  if ($_SESSION['userlevel'] >= 5)
   {
     $query_perms = '';
     $query_user = '';
@@ -313,7 +315,9 @@ function print_events($vars)
     $param[] = $_SESSION['user_id'];
   }
 
-  $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
+  // Don't show ignored and disabled devices
+  $query_device = ' AND D.ignore = 0 ';
+  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
 
   $query = 'FROM `eventlog` AS E ';
   $query .= 'LEFT JOIN `devices` AS D ON E.device_id = D.device_id ';
@@ -473,7 +477,7 @@ function print_syslogs($vars)
     }
   }
 
-  if ($_SESSION['userlevel'] >= 7)
+  if ($_SESSION['userlevel'] >= 5)
   {
     $query_perms = '';
     $query_user = '';
@@ -483,7 +487,9 @@ function print_syslogs($vars)
     $param[] = $_SESSION['user_id'];
   }
 
-  $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
+  // Don't show ignored and disabled devices
+  $query_device = ' AND D.ignore = 0 ';
+  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
 
   $query = 'FROM `syslog` AS S ';
   $query .= 'LEFT JOIN `devices` AS D ON S.device_id = D.device_id ';
@@ -590,7 +596,7 @@ function print_status($status)
   $string .= '  <tbody>' . PHP_EOL;
 
   $param = array();
-  if ($_SESSION['userlevel'] >= 7)
+  if ($_SESSION['userlevel'] >= 5)
   {
     $query_perms = '';
     $query_user = '';
@@ -600,7 +606,9 @@ function print_status($status)
     $param[] = $_SESSION['user_id'];
   }
 
-  $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
+  // Don't show ignored and disabled devices
+  $query_device = ' AND D.ignore = 0 ';
+  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
 
   // Show Device Status
   if ($status['devices'])

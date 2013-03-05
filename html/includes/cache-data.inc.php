@@ -1,6 +1,6 @@
 <?php
 
-foreach (dbFetchRows("SELECT * FROM `devices`") as $device)
+foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 {
 
   if(device_permitted($device))

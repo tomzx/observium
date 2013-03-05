@@ -1,6 +1,11 @@
 <?php
 
-if ($_vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10') { dbFetchCell("TRUNCATE TABLE `syslog`"); }
+///FIXME. Mike: should be more checks, at least a confirmation click.
+//if ($vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10')
+//{
+//  dbFetchCell("TRUNCATE TABLE `syslog`");
+//  print_message('Syslog truncated');
+//}
 
 print_optionbar_start();
 
@@ -55,11 +60,14 @@ $pagetitle[] = 'Syslog';
     <select name="device" id="device" style="width: 140px;">
       <option value="">All Devices</option>
       <?php
-        $devices = dbFetchRows('SELECT S.`device_id` AS `device`, hostname FROM `syslog` AS S JOIN `devices` AS D ON S.device_id = D.device_id GROUP BY `hostname` ORDER BY `hostname`');
+        // Show devices only with syslog messages
+        $devices = dbFetchRows('SELECT S.`device_id` AS `device_id`, hostname FROM `syslog` AS S JOIN `devices` AS D ON S.device_id = D.device_id GROUP BY `hostname` ORDER BY `hostname`');
         foreach ($devices as $data)
         {
-          echo('<option value="' . $data['device'] . '"');
-          if ($data['device'] == $vars['device']) { echo('selected'); }
+          if (!isset($cache['devices']['hostname'][$data['hostname']])) { continue; } // Hack for show only permitted devices
+          if ($cache['devices']['id'][$data['device_id']]['disabled'] && !$config['web_show_disabled']) { continue; }
+          echo('<option value="' . $data['device_id'] . '"');
+          if ($data['device_id'] == $vars['device']) { echo('selected'); }
           echo('>' . $data['hostname'] . '</option>');
         }
       ?>

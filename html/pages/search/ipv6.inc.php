@@ -11,11 +11,11 @@
     <select name="device" id="device">
       <option value="">All Devices</option>
       <?php
-        foreach (get_all_devices() as $hostname)
+        foreach ($cache['devices']['hostname'] as $hostname => $device_id)
         {
-          $data['device'] = getidbyname($hostname);
-          echo("<option value='" . $data['device'] . "'");
-          if ($data['device'] == $vars['device']) { echo("selected"); }
+          if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
+          echo("<option value='" . $device_id . "'");
+          if ($device_id == $vars['device']) { echo("selected"); }
           echo(">" . $hostname . "</option>");
         }
       ?>

@@ -1,14 +1,13 @@
 <?php
 
-$param = array();
+///FIXME. Mike: should be more checks, at least a confirmation click.
+//if ($vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10')
+//{
+//  dbFetchCell('TRUNCATE TABLE `eventlog`');
+//  print_message('Event log truncated');
+//}
 
-if ($vars['action'] == "expunge" && $_SESSION['userlevel'] >= '10')
-{
-  mysql_query("TRUNCATE TABLE `eventlog`");
-  print_message("Event log truncated");
-}
-
-$pagetitle[] = "Eventlog";
+$pagetitle[] = 'Eventlog';
 
 ?>
 
@@ -47,11 +46,11 @@ $pagetitle[] = "Eventlog";
     <select name="device" id="device">
       <option value="">All Devices</option>
       <?php
-        foreach (get_all_devices() as $hostname)
+        foreach ($cache['devices']['hostname'] as $hostname => $device_id)
         {
-          $data['device'] = getidbyname($hostname);
-          echo("<option value='" . $data['device'] . "'");
-          if ($data['device'] == $vars['device']) { echo("selected"); }
+          if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
+          echo("<option value='" . $device_id . "'");
+          if ($device_id == $vars['device']) { echo("selected"); }
           echo(">" . $hostname . "</option>");
         }
       ?>
