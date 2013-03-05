@@ -179,6 +179,7 @@ foreach ($ports as $port)
     $port['state']['poll_period'] = $polled_period;
 
     // Copy ifHC[In|Out]Octets values to non-HC if they exist
+    // Check if they're greater than zero to work around stupid devices which expose HC counters, but don't populate them. HERPDERP. - adama
     if ($this_port['ifHCInOctets'] > 0 && is_numeric($this_port['ifHCInOctets']) && $this_port['ifHCOutOctets'] > 0 && is_numeric($this_port['ifHCOutOctets']))
     {
       echo("HC ");
