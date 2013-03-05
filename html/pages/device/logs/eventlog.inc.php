@@ -11,7 +11,7 @@
       <option value="">All Types</option>
       <option value="system" <?php  if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
       <?php
-        foreach (dbFetchRows("SELECT `type` FROM `eventlog` WHERE host = ? GROUP BY `type` ORDER BY `type`", array($vars['device'])) as $data)
+        foreach (dbFetchRows("SELECT `type` FROM `eventlog` WHERE `device_id` = ? GROUP BY `type` ORDER BY `type`", array($vars['device'])) as $data)
         {
           echo("<option value='".$data['type']."'");
           if ($data['type'] == $vars['type']) { echo(" selected"); }

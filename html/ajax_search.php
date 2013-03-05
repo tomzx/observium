@@ -58,15 +58,16 @@ if (!$_SESSION['authenticated']) { echo("unauthenticated"); exit; }
                      echo('<li class="divider" style="margin: 0px;"></li>');
                      echo("<li>");
                      echo '<a href="'.generate_device_url($result).'">';
-                     $image = getImage($result);
+                     humanize_device($result);
+
                      $name = $result['hostname'];
                      if(strlen($name) > 35) { $name = substr($name, 0, 35) . "..."; }
                      // $description = $result->desc;
                      // if(strlen($description) > 80) { $description = substr($description, 0, 80) . "..."; }
 
                      $num_ports = dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE device_id = ?", array($result['device_id']));
-                     echo('<dl class="dl-horizontal dl-search">
-                             <dt>'.$image.'</dt>
+                     echo('<dl style="border-left: 10px solid '.$result['html_tab_colour'].'; " class="dl-horizontal dl-search">
+                             <dt style="padding-left: 10px; text-align: center;">'.$result['icon'].'</dt>
                              <dd><h5>'.highlight_search($name).'</h5>
                                  <small>'.$result['hardware'].' | '.$config['os'][$result['os']]['text'].' '. $result['version'] .'
                                  <br /> '.highlight_search($result['location']).' | '.$num_ports.'ports</small></dd>

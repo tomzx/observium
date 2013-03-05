@@ -58,6 +58,8 @@ function humanize_device(&$device)
     $device['html_tab_colour'] = "#aaaaaa";
   }
 
+  $device['icon'] = getImage($device);
+
   // Set location if it's overridden
   /// FIXME - put this in poller, for fuck sake!
   if (get_dev_attrib($device,'override_sysLocation_bool')) {  $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }

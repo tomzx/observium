@@ -31,7 +31,7 @@ $pagetitle[] = "Eventlog";
       <option value="">All Types</option>
       <option value="system" <?php if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
       <?php
-        $where = ($vars['device']) ? "WHERE `host` = " . $vars['device'] : '';
+        $where = ($vars['device']) ? "WHERE `device_id` = " . $vars['device'] : '';
         foreach (dbFetchRows("SELECT `type` FROM `eventlog` " . $where . " GROUP BY `type` ORDER BY `type`") as $data)
         {
           echo("<option value='" . $data['type'] . "'");

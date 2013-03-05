@@ -47,6 +47,8 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
         } ?>
         <li><a href="<?php echo(generate_url(array('page'=>'pollerlog'))); ?>"><i class="menu-icon sweetie-clipboard-report-bar"></i> Polling Information</a></li>
         <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon fugue-bell"></i> Alerts</a></li>
+          <li class="divider"></li>
+
         <li><a href="<?php echo(generate_url(array('page'=>'inventory'))); ?>"><i class="menu-icon fugue-wooden-box"></i> Inventory</a></li>
 
 <?php
@@ -55,11 +57,12 @@ $packages = dbFetchCell("SELECT COUNT(*) from `packages`");
 
 if ($packages)
 {
-        echo('<li><a href="'.generate_url(array('page'=>'packages')).'"><i class="fugue-box-zipper"></i> All Packages</a></li>');
+        echo('<li><a href="'.generate_url(array('page'=>'packages')).'"><i class="fugue-box-zipper"></i> Software Packages</a></li>');
 }
 
 ?>
 
+          <li class="divider"></li>
           <li><a href="<?php echo(generate_url(array('page'=>'search','search'=>'ipv4'))); ?>"><i class="menu-icon fugue-magnifier-zoom-actual"></i> Search</a></li>
 
                 </ul>

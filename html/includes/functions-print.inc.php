@@ -278,7 +278,7 @@ function print_events($vars)
       switch ($var)
       {
         case 'device':
-          $where .= ' AND E.host = ?';
+          $where .= ' AND E.device_id = ?';
           $param[] = $value;
           break;
         case 'port':
@@ -316,13 +316,13 @@ function print_events($vars)
   $query_device = ' AND D.ignore = 0 AND D.disabled = 0 '; // Don't show ignored and disabled devices
 
   $query = 'FROM `eventlog` AS E ';
-  $query .= 'LEFT JOIN `devices` AS D ON E.host = D.device_id ';
+  $query .= 'LEFT JOIN `devices` AS D ON E.device_id = D.device_id ';
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
   $query_count = 'SELECT COUNT(event_id) '.$query;
-  /// FIXME Mike: bad table columns (`host` and `type`), they intersect with table `devices`
+  /// FIXME Mike: bad table column `type` they intersect with table `devices`
   /// FIXMEs should have three ///, i colour these RED in my editor - adama
-  $query = 'SELECT STRAIGHT_JOIN E.host, E.datetime, E.message, E.type, E.reference '.$query;
+  $query = 'SELECT STRAIGHT_JOIN E.device_id, E.datetime, E.message, E.type, E.reference '.$query;
   $query .= ' ORDER BY `datetime` DESC ';
   $query .= "LIMIT $start,$pagesize";
 
@@ -364,7 +364,7 @@ function print_events($vars)
     $string .= format_timestamp($entry['datetime']) . '</td>' . PHP_EOL;
     if ($list['device'])
     {
-      $dev = device_by_id_cache($entry['host']);
+      $dev = device_by_id_cache($entry['device_id']);
       $string .= '    <td class="list-bold">' . generate_device_link($dev, shorthost($dev['hostname'])) . '</td>' . PHP_EOL;
     }
     if ($list['port'])

@@ -285,7 +285,7 @@ if ($graph_type && is_file($graph_file))
 {
   $type = $graph_type;
 
-  echo("<tr style='background-color: $row_colour; padding: 0px;'><td colspan=9>");
+  echo("<tr><td colspan=9>");
 
   $graph_array['to']     = $config['time']['now'];
   $graph_array['id']     = $port['port_id'];
