@@ -1,14 +1,18 @@
 <?php
 
-if(!is_file("includes/jpgraph/src/jpgraph.php"))
+@include("includes/jpgraph/src/jpgraph.php");
+
+if(!is_file("includes/jpgraph/src/jpgraph.php") || defined('DEFAULT_THEME_CLASS'))
 {
   ?>
 
 <div class="alert alert-error">
-  <h4>No Jpgraph installed</h4>
-  <i>Jpgraph has been removed from the Observium repositories and must now be installed separately</i> <br />
-  * Please download from <a href="http://jpgraph.net/download/">http://jpgraph.net/download/</a> and unpack to html/includes/jpgraph.<br />
-  * Remove the theme definition from the bottom of html/includes/jpgraph/src/jpg-config.inc.php
+ <h4>JpGraph configuration error</h4>
+ <p><i>JpGraph has been removed from the Observium repositories and must now be installed separately.</i></p>
+ <ul style="margin-left: 30px"> <!-- ugly css hax, someone please FIXME -->
+   <li>Please download from <a href="http://jpgraph.net/download/">http://jpgraph.net/download/</a> and unpack to html/includes/jpgraph.</li>
+   <li>Remove the theme definition from the bottom of html/includes/jpgraph/src/jpg-config.inc.php</li>
+ </ul>
 </div>
 
   <?php
