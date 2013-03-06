@@ -294,6 +294,7 @@ $config['billing']['base']              = 1000; // Set the base to divider bytes
 // External Integration
 
 #$config['rancid_configs'][]             = '/var/lib/rancid/network/configs/';
+#$config['rancid_suffix']                = 'yourdomain.com'; // Domain suffix for non-FQDN device names
 $config['rancid_ignorecomments']        = 0; // Ignore lines starting with #
 #$config['collectd_dir']                 = '/var/lib/collectd/rrd';
 #$config['smokeping']['dir']             = "/var/lib/smokeping/";

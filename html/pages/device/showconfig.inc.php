@@ -2,9 +2,9 @@
 
 // FIXME svn stuff still using optc etc, won't work, needs updating!
 
-if ($_SESSION['userlevel'] >= '7')
+if ($_SESSION['userlevel'] >= 5)
 {
-  // Already defined $config_file in device.inc.php
+  // Note. $device_config_file defined in device.inc.php
 
   print_optionbar_start();
 
@@ -57,12 +57,12 @@ if ($_SESSION['userlevel'] >= '7')
 
   if ($config['rancid_ignorecomments'])
   {
-    $lines = explode("\n",$text);
+    $lines = explode('\n',$text);
     for ($i = 0;$i < count($lines);$i++)
     {
-      if ($lines[$i][0] == "#") { unset($lines[$i]); }
+      if ($lines[$i][0] == '#') { unset($lines[$i]); }
     }
-    $text = join("\n",$lines);
+    $text = join('\n',$lines);
   }
 
   $text = '<pre class="prettyprint linenums">' . PHP_EOL . $text;
