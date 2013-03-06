@@ -58,7 +58,7 @@ $disable_notify = get_dev_attrib($device,'disable_notify');
     <label class="control-label" for="override_sysContact">Disable alerts</label>
     <div class="controls">
       <input type="checkbox" name="disable_notify"<?php if ($disable_notify) { echo(' checked="1"'); } ?> />
-      <span class="help-inline">Don't sending alert mails (<i>but write to eventlog</i>)</span>
+      <span class="help-inline">Don't send alert mails (<i>but write to eventlog</i>)</span>
     </div>
   </div>
   <div class="form-actions">
