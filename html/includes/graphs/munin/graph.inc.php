@@ -41,12 +41,12 @@ foreach ($dbq as $ds)
 
   if ($ds['ds_graph'] == "yes")
   {
-    if (empty($ds['colour']))
+    if (empty($ds['ds_colour']))
     {
       if (!$config['graph_colours']['mixed'][$c_i]) { $c_i = 0; }
       $colour=$config['graph_colours']['mixed'][$c_i]; $c_i++;
     } else {
-      $colour = $ds['colour'];
+      $colour = $ds['ds_colour'];
     }
 
     $descr      = rrdtool_escape($ds['ds_label'], $descr_len);
