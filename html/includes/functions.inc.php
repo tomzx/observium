@@ -167,6 +167,16 @@ function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdCol
 // return sprintf('#%02x%02x%02x', $r, $b, $b);
 //}
 
+function bug()
+{
+
+  echo('<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Bug!</strong> Please report this to the Observium development team.
+</div>');
+
+}
+
 
 function data_uri($file, $mime)
 {

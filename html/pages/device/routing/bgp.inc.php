@@ -4,6 +4,9 @@
 
 <?php
 
+/// FIXME - this whole page needs rewritte. Use view = graphs / graph = $graphtype.
+
+
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab'     => 'routing',
@@ -55,10 +58,24 @@ if ($vars['view'] == "macaccounting_pkts") { echo("</span>"); }
 
 print_optionbar_end();
 
-echo('<table border="0" cellspacing="0" cellpadding="5" width="100%">');
-echo('<tr style="height: 30px"><th>Peer address</th><th>Type</th><th>AFI.SAFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
-$i = "1";
+  switch ($vars['view'])
+  {
+    case 'prefixes_ipv4unicast':
+    case 'prefixes_ipv4multicast':
+    case 'prefixes_ipv4vpn':
+    case 'prefixes_ipv6unicast':
+    case 'prefixes_ipv6multicast':
+    case 'updates':
+      $table_class = 'table-striped-two';
+      break;
+    default:
+      $table_class = 'table-striped';
+  }
 
+echo('<table class="table table-hover '.$table_class.' table-bordered table-condensed table-rounded">');
+echo('<thead>');
+echo('<tr><th>Peer address</th><th>Type</th><th>AFI.SAFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
+echo('</thead>');
 $sql  = "SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id";
 $sql .= " FROM  `bgpPeers`";
 $sql .= " LEFT JOIN  `bgpPeers-state` ON  `bgpPeers`.bgpPeer_id =  `bgpPeers-state`.bgpPeer_id";
@@ -68,12 +85,8 @@ $sql .= " ORDER BY `bgpPeerRemoteAs`, `bgpPeerIdentifier`";
 foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 {
   $has_macaccounting = dbFetchCell("SELECT COUNT(*) FROM `ipv4_mac` AS I, mac_accounting AS M WHERE I.ipv4_address = ? AND M.mac = I.mac_address", array($peer['bgpPeerIdentifier']));
-  unset($bg_image);
-  if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
-  unset ($alert, $bg_image);
   unset ($peerhost, $peername);
 
-  if (!is_integer($i/2)) { $bg_colour = $list_colour_b; } else { $bg_colour = $list_colour_a; }
   if ($peer['bgpPeerState'] == "established") { $col = "green"; } else { $col = "red"; $peer['alert']=1; }
   if ($peer['bgpPeerAdminStatus'] == "start" || $peer['bgpPeerAdminStatus'] == "running") { $admin_col = "green"; } else { $admin_col = "gray"; }
   if ($peer['bgpPeerAdminStatus'] == "stop") { $peer['alert']=0; $peer['disabled']=1; }
@@ -135,9 +148,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
   $peer_daily_url   = "graph.php?id=" . $peer['bgpPeer_id'] . "&amp;type=" . $graph_type . "&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=500&amp;height=150";
   $peeraddresslink  = "<span class=list-large><a onmouseover=\"return overlib('<img src=\'$peer_daily_url\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer['bgpPeerIdentifier'] . "</a></span>";
 
-  echo('<tr bgcolor="'.$bg_colour.'"' . ($peer['alert'] ? ' bordercolor="#cc0000"' : '') .
-                                        ($peer['disabled'] ? ' bordercolor="#cccccc"' : '') . ">
-  ");
+  echo('<tr>');
 
   echo("   <td>" . $peeraddresslink . "<br />".$peername."</td>
              <td>$peer_type</td>
@@ -147,8 +158,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
            <td>" .formatUptime($peer['bgpPeerFsmEstablishedTime']). "<br />
                Updates <img src='images/16/arrow_down.png' align=absmiddle> " . format_si($peer['bgpPeerInUpdates']) . "
                        <img src='images/16/arrow_up.png' align=absmiddle> " . format_si($peer['bgpPeerOutUpdates']) . "</td>
-          </tr>
-          <tr height=5></tr>");
+          </tr>");
 
   unset($invalid);
 
@@ -156,7 +166,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
   {
     case 'prefixes_ipv4unicast':
     case 'prefixes_ipv4multicast':
-    case 'prefixes_ipv4vpn':
+    case 'prefixes_vpnv4unicast':
     case 'prefixes_ipv6unicast':
     case 'prefixes_ipv6multicast':
       list(,$afisafi) = explode("_", $vars['view']);
@@ -180,22 +190,15 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
         $graph_array['type'] = $vars['view'];
       }
   }
-
   if ($vars['view'] == 'updates') { $peer['graph'] = 1; }
 
+  echo('<tr><td colspan="7">');
   if ($peer['graph'])
   {
-    $graph_array['height'] = "100";
-    $graph_array['width']  = "216";
     $graph_array['to']     = $config['time']['now'];
-    echo('<tr bgcolor="'.$bg_colour.'"' . ($bg_image ? ' background="'.$bg_image.'"' : '') . '"><td colspan="7">');
-
     include("includes/print-graphrow.inc.php");
-
-    echo("</td></tr>");
   }
-
-  $i++;
+  echo("</td></tr>");
 
   unset($valid_afi_safi);
 }

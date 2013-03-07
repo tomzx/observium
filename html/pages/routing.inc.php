@@ -8,43 +8,24 @@ if ($_GET['optb'] == "graphs" || $_GET['optc'] == "graphs") { $graphs = "graphs"
 
 // $routing_count is populated by print-menubar.inc.php
 
-#$type_text['overview'] = "Overview";
-$type_text['bgp'] = "BGP";
-$type_text['cef'] = "CEF";
-$type_text['ospf'] = "OSPF";
-$type_text['vrf'] = "VRFs";
+$navbar['brand'] = "Routing";
+$navbar['class'] = "navbar-narrow";
 
-print_optionbar_start();
-
-#if (!$vars['protocol']) { $vars['protocol'] = "overview"; }
-
-echo("<span style='font-weight: bold;'>Routing</span> &#187; ");
-
-unset($sep);
 foreach ($routing_count as $type => $value)
 {
-  if (!$vars['protocol']) { $vars['protocol'] = $type; }
-
-  echo($sep); unset($sep);
-
-  if ($vars['protocol'] == $type)
+  if($value > 0)
   {
-    echo('<span class="pagemenu-selected">');
-  }
-  if ($routing_count[$type])
-  {
-    echo(generate_link($type_text[$type] ." (".$routing_count[$type].")",array('page'=> 'routing', 'protocol' => $type)));
-    $sep = " | ";
-  }
+    if (!$vars['protocol']) { $vars['protocol'] = $type; }
+    if ($vars['protocol'] == $type) { $navbar['options'][$type]['class'] = "active"; }
 
-  if ($vars['protocol'] == $type) { echo("</span>"); }
+    $navbar['options'][$type]['url']  = generate_url(array('page' => 'routing', 'protocol' => $type));
+    $navbar['options'][$type]['text'] = $config['routing_types'][$type]['text'].' ('.$routing_count[$type].')';
+  }
 }
-
-print_optionbar_end();
+print_navbar($navbar);
 
 switch ($vars['protocol'])
 {
-  case 'overview':
   case 'bgp':
   case 'vrf':
   case 'cef':
@@ -52,7 +33,7 @@ switch ($vars['protocol'])
     include('pages/routing/'.$vars['protocol'].'.inc.php');
     break;
   default:
-    echo("<h2>Error. Please report this to observium developers.</h2>");
+    bug();
     break;
 }
 

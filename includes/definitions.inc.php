@@ -1292,6 +1292,10 @@ $config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Vo
 $config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'fugue-thermometer-high');
 $config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'sweetie-arrow-incident-red');
 
+$config['routing_types']['ospf']       = array( 'text' => 'OSPF');
+$config['routing_types']['cef']       = array( 'text' => 'CEF');
+$config['routing_types']['bgp']       = array( 'text' => 'BGP');
+$config['routing_types']['vrf']       = array( 'text' => 'VRFs');
 
 
 //////////////////////////////
