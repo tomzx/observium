@@ -1185,6 +1185,10 @@ $config['graph_types']['device']['ucd_interrupts']['descr'] = 'Interrupts';
 $config['graph_types']['device']['uptime']['section'] = 'system';
 $config['graph_types']['device']['uptime']['order'] = '0';
 $config['graph_types']['device']['uptime']['descr'] = 'System Uptime';
+$config['graph_types']['device']['ping']['section'] = 'system';
+$config['graph_types']['device']['ping']['order'] = '0';
+$config['graph_types']['device']['ping']['descr'] = 'Ping Response';
+
 
 $config['graph_types']['device']['ksm_pages']['section']           = 'system';
 $config['graph_types']['device']['ksm_pages']['order']             = '0';

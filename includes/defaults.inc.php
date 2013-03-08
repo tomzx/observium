@@ -110,6 +110,10 @@ $config['show_locations_dropdown'] = 1;  // Enable Locations dropdown on menu
 $config['show_services']           = 0;  // Enable Services on menu
 $config['ports_page_default']      = "details"; // eg "details" or "basic"
 
+// PING Settings - Retries/Timeouts
+#$config['ping_retries'] = 3;    // How many times to retry ping
+#$config['ping_timeout'] = 500;  // Timeout in milliseconds
+
 // SNMP Settings - Timeouts/Retries disabled as default
 #$config['snmp']['timeout'] = 1;            // timeout in seconds
 #$config['snmp']['retries'] = 5;            // how many times to retry the query
