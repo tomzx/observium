@@ -31,42 +31,22 @@ if ($_SESSION['userlevel'] < '7')
 
   $panes['ipmi']     = 'IPMI';
 
-  print_optionbar_start();
+  $navbar['brand'] = "Edit";
+  $navbar['class'] = "navbar-narrow";
 
-  unset($sep);
   foreach ($panes as $type => $text)
   {
     if (!isset($vars['section'])) { $vars['section'] = $type; }
-    echo($sep);
-    if ($vars['section'] == $type)
-    {
-      echo("<span class='pagemenu-selected'>");
-      #echo('<img src="images/icons/'.$type.'.png" class="optionicon" />');
-    } else {
-      #echo('<img src="images/icons/greyscale/'.$type.'.png" class="optionicon" />');
-    }
 
-    echo(generate_link($text,$link_array,array('section'=>$type)));
-
-#    echo("<a href='device/".$device['device_id']."/edit/" . $type . ($_GET['optd'] ? "/" . $_GET['optd'] : ''). "/'> " . $text ."</a>");
-    if ($vars['section'] == $type) { echo("</span>"); }
-    $sep = " | ";
+    if ($vars['section'] == $type) { $navbar['options'][$type]['class'] = "active"; }
+    $navbar['options'][$type]['url']  = generate_url($link_array,array('section'=>$type));
+    $navbar['options'][$type]['text'] = $text;
   }
+  $navbar['options_right']['delete']['url']  = generate_url($link_array,array('section'=>'delete'));
+  $navbar['options_right']['delete']['text'] = 'Delete';
+  if($vars['section'] == 'delete') { $navbar['options_right']['delete']['class'] = 'active'; }
+  print_navbar($navbar);
 
-  echo('<div style="float: right;">');
-  if ($vars['section'] == "delete")
-  {
-    echo("<span class='pagemenu-selected'>");
-    #echo('<img src="images/icons/'.$type.'.png" class="optionicon" />');
-  } else {
-    #echo('<img src="images/icons/greyscale/'.$type.'.png" class="optionicon" />');
-  }
-  echo(generate_link("Delete",$link_array,array('section'=>'delete')));
-  if ($vars['section'] == "delete") { echo("</span>"); }
-  $sep = " | ";
-  echo('</div>');
-
-  print_optionbar_end();
 
   if (is_file("pages/device/edit/".mres($vars['section']).".inc.php"))
   {

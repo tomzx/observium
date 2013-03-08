@@ -70,6 +70,9 @@ if (count($apps_enabled))
 ?>
 
 <form id='appedit' name='appedit' method='post' action='' class='form-inline'>
+  <fieldset>
+  <legend>Device Properties</legend>
+
   <input type=hidden name=device value='<?php echo $device['device_id'];?>'>
 <table class='table table-striped table-bordered table-condensed table-rounded'>
   <thead>
@@ -86,7 +89,8 @@ foreach ($applications as $app)
 {
   echo("    <tr>");
   echo("      <td align=center>");
-  echo("        <input type=checkbox" . (in_array($app,$app_enabled) ? ' checked="1"' : '') . " name='app_". $app ."'>");
+  echo("      <div class='switch switch-mini' data-on='primary' data-off='danger' data-on-label='Yes' data-off-label='No'>
+                <input type=checkbox ". (in_array($app,$app_enabled) ? ' checked="1"' : '') . " name='app_". $app ."'></div>");
   echo("      </td>");
   echo("      <td align=left>". ucfirst($app) . "</td>");
   echo("    </tr>
