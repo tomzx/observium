@@ -1032,19 +1032,24 @@ foreach ($config['os'] as $this_os => $blah)
 
 // Graph Types
 
-$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance');
+$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance', 'polling');
 
 $config['graph_types']['device']['wifi_clients']['section'] = 'wireless';
 $config['graph_types']['device']['wifi_clients']['order'] = '0';
 $config['graph_types']['device']['wifi_clients']['descr'] = 'Wireless Clients';
 
-$config['graph_types']['device']['agent']['section'] = 'Polling';
-$config['graph_types']['device']['agent']['order'] = '0';
-$config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';
-
-$config['graph_types']['device']['poller_perf']['section'] = 'Polling';
+/// Poller graphs
+$config['graph_types']['device']['poller_perf']['section'] = 'polling';
 $config['graph_types']['device']['poller_perf']['order'] = '0';
 $config['graph_types']['device']['poller_perf']['descr'] = 'Agent Execution Time';
+
+$config['graph_types']['device']['ping']['section'] = 'polling';
+$config['graph_types']['device']['ping']['order'] = '0';
+$config['graph_types']['device']['ping']['descr'] = 'Ping Response';
+
+$config['graph_types']['device']['agent']['section'] = 'polling';
+$config['graph_types']['device']['agent']['order'] = '0';
+$config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';
 
 
 $config['graph_types']['device']['netstat_arista_sw_ip'] = array(
@@ -1185,10 +1190,6 @@ $config['graph_types']['device']['ucd_interrupts']['descr'] = 'Interrupts';
 $config['graph_types']['device']['uptime']['section'] = 'system';
 $config['graph_types']['device']['uptime']['order'] = '0';
 $config['graph_types']['device']['uptime']['descr'] = 'System Uptime';
-$config['graph_types']['device']['ping']['section'] = 'system';
-$config['graph_types']['device']['ping']['order'] = '0';
-$config['graph_types']['device']['ping']['descr'] = 'Ping Response';
-
 
 $config['graph_types']['device']['ksm_pages']['section']           = 'system';
 $config['graph_types']['device']['ksm_pages']['order']             = '0';
