@@ -10,6 +10,7 @@ $graphs['ntpd']       = array('stats', 'freq', 'stratum', 'bits');
 $graphs['postgresql'] = array('xact', 'blks', 'tuples', 'tuples_query');
 $graphs['shoutcast']  = array('multi_stats', 'multi_bits');
 $graphs['nginx']      = array('connections', 'req');
+$graphs['freeradius']     = array('access');
 /// FIXME ^ recursing should be replaced by something else probably.
 
 $link_array = array('page'    => 'device',

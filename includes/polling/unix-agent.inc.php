@@ -48,6 +48,7 @@ if ($device['os_group'] == "unix")
       if ($section == "apache") { $sa = "app"; $sb = "apache"; }
       if ($section == "mysql")  { $sa = "app"; $sb = "mysql"; }
       if ($section == "nginx")  { $sa = "app"; $sb = "nginx"; }
+      if ($section == "freeradius")  { $sa = "app"; $sb = "freeradius"; }
       if ($section == "postfix_qshape")  { $sa = "app"; $sb = "postfix_qshape"; }
       if ($section == "postfix_mailgraph")  { $sa = "app"; $sb = "postfix_mailgraph"; }
 #      if ($section == "drbd")   { $sa = "app"; $sb = "drbd"; }
