@@ -95,6 +95,13 @@ function format_timestamp($str)
   }
 }
 
+function format_unixtime($timestamp)
+{
+  global $config;
+  return date($config['timestamp_format'], $timestamp);
+}
+
+
 /**
  * Return array with syslog priorities.
  *

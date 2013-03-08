@@ -376,11 +376,18 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
     if ($_SESSION['userlevel'] >= "7")
     {
-      echo('<li class="' . $select['edit'] . '" style="float: right;">
+      echo('<li class="' . $select['edit'] . ' pull-right" >
     <a href="'.generate_device_url($device, array('tab' => 'edit')).'">
       <i class="fugue-gear"></i>
     </a>
   </li>');
+
+   echo('<li class="' . $select['perf'] . ' pull-right">
+    <a href="'.generate_device_url($device, array('tab' => 'perf')).'">
+      <img src="images/16/time.png">
+    </a>
+  </li>');
+
     }
      echo("</ul>");
  }

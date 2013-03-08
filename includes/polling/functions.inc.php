@@ -243,6 +243,20 @@ function poll_device($device, $options)
     #echo("$device_end - $device_start; $device_time $device_run");
     echo("Polled in $device_time seconds\n");
 
+    // Only store performance data if we're not doing a single-module poll
+    if(!$options['m'])
+    {
+      dbInsert(array('device_id' => $device['device_id'], 'operation' => 'poll', 'start' => $device_start, 'duration' => $device_run), 'devices_perftimes');
+
+      $poller_rrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/perf-poller.rrd";
+      if (!is_file($poller_rrd))
+      {
+        rrdtool_create ($poller_rrd, "DS:val:GAUGE:600:0:38400 ".$config['rrd_rra']);
+      }
+      rrdtool_update($poller_rrd, "N:".$device_time);
+      $graphs['poller_perf'] = TRUE;
+    }
+
     if ($debug) { echo("Updating " . $device['hostname'] . " - ".print_r($update_array)." \n"); }
 
     $updated = dbUpdate($update_array, 'devices', '`device_id` = ?', array($device['device_id']));

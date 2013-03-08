@@ -150,6 +150,8 @@ function discover_device($device, $options = NULL)
 
   echo("Discovered in $device_time seconds\n");
 
+  // not worth putting discovery data into rrd. it's not done every 5 mins :)
+
   global $discovered_devices;
 
   echo("\n"); $discovered_devices++;

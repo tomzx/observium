@@ -1038,9 +1038,14 @@ $config['graph_types']['device']['wifi_clients']['section'] = 'wireless';
 $config['graph_types']['device']['wifi_clients']['order'] = '0';
 $config['graph_types']['device']['wifi_clients']['descr'] = 'Wireless Clients';
 
-$config['graph_types']['device']['agent']['section'] = 'system';
+$config['graph_types']['device']['agent']['section'] = 'Polling';
 $config['graph_types']['device']['agent']['order'] = '0';
 $config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';
+
+$config['graph_types']['device']['poller_perf']['section'] = 'Polling';
+$config['graph_types']['device']['poller_perf']['order'] = '0';
+$config['graph_types']['device']['poller_perf']['descr'] = 'Agent Execution Time';
+
 
 $config['graph_types']['device']['netstat_arista_sw_ip'] = array(
  'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv4 Statistics");
