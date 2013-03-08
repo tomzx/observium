@@ -152,33 +152,11 @@ function renamehost($id, $new, $source = 'console')
 {
   global $config;
 
-  // Test if new host exists in database
-  if (dbFetchCell('SELECT COUNT(device_id) FROM `devices` WHERE `hostname` = ?', array($new)) == 0)
-  {
-    // Test DNS lookup.
-    if (gethostbyname6($new, TRUE))
-    {
-      // Test reachability
-      if (isPingable($new))
-      {
-        $host = dbFetchCell("SELECT `hostname` FROM `devices` WHERE `device_id` = ?", array($id));
-        rename($config['rrd_dir']."/$host",$config['rrd_dir']."/$new");
-        $return = dbUpdate(array('hostname' => $new), 'devices', 'device_id=?', array($id));
-        log_event("Hostname changed -> $new ($source)", $id, 'system');
-        return TRUE;
-      } else {
-        // failed Reachability
-        print_error("Could not ping $new");
-      }
-    } else {
-      // Failed DNS lookup
-      print_error("Could not resolve $new");
-    }
-  } else {
-    // found in database
-    print_error("Already got host $new");
-  }
-  return FALSE;
+  // FIXME does not check if destination exists!
+  $host = dbFetchCell("SELECT `hostname` FROM `devices` WHERE `device_id` = ?", array($id));
+  rename($config['rrd_dir']."/$host",$config['rrd_dir']."/$new");
+  $return = dbUpdate(array('hostname' => $new), 'devices', 'device_id=?', array($id));
+  log_event("Hostname changed -> $new ($source)", $id, 'system');
 }
 
 function delete_device($id)
@@ -219,8 +197,8 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
   // Test if host exists in database
   if (dbFetchCell("SELECT COUNT(*) FROM `devices` WHERE `hostname` = ?", array($host)) == '0')
   {
-    // Test DNS lookup.
-    if (gethostbyname6($host, TRUE))
+    // Test DNS lookup # FIXME: Not needed, as long as we shellescape the host in isPingable. This breaks v6-only.
+    if (gethostbyname($host) != $host)
     {
       // Test reachability
       if (isPingable($host))
@@ -306,12 +284,10 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
         }
       } else {
         // failed Reachability
-        print_error("Could not ping $host");
-      }
+        print_error("Could not ping $host"); }
     } else {
       // Failed DNS lookup
-      print_error("Could not resolve $host");
-    }
+      print_error("Could not resolve $host"); }
   } else {
     // found in database
     print_error("Already got host $host");
@@ -386,69 +362,23 @@ function isSNMPable($device)
   }
 }
 
-/**
- * 
- * It's fully BOOLEAN safe function.
- * 
- */
 function isPingable($hostname)
 {
-  global $config;
-  
-  if(filter_var($config['ping_timeout'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 50, 'max_range' => 2000 ))))
-  {
-    $timeout = $config['ping_timeout'];
-  } else {
-    $timeout = 500;
-  }
-  if(filter_var($config['ping_retries'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 10 ))))
-  {
-    $retries = $config['ping_retries'];
-  } else {
-    $retries = 1;
-  }
-  $sleep = floor(1000000 / $retries); // interval between retries, max 1 sec
-  
-  ///$file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time());/// DEBUG
-  
-  // First try IPv4
-  $ip = gethostbyname($hostname);
-  if ($ip && $ip != $hostname)
-  {
-    $cmd = $config['fping'] . " -t $timeout -c 1 -q $ip 2>&1";
-  } else {
-    $ip = gethostbyname6($hostname);
-    // Second try IPv6
-    if ($ip)
-    {
-      $cmd = $config['fping6'] . " -t $timeout -c 1 -q $ip 2>&1";
-    } else {
-      // No DNS records
-      ///file_put_contents($file, "$time | DNS ERROR: $hostname\n", FILE_APPEND); /// DEBUG
-      return 0;
-    }
-  }
-  
-  for ($i=1; $i <= $retries; $i++)
-  {
-    exec($cmd, $output, $return);
-    if ($return === 0)
-    {
-      // normal $output[0] = '8.8.8.8 : xmt/rcv/%loss = 1/1/0%, min/avg/max = 1.21/1.21/1.21'
-      $ping = explode('/', $output[0])[7];
-      /// FIXME. Mike: I do not know, maybe it is, but just in case the protection from zero.
-      if (!$ping) $ping = 0.01;
-    } else {
-      $ping = 0;
-    }
-    if ($ping) break;
-    
-    ///file_put_contents($file, "$time | PING ERROR: $hostname ($i)\n", FILE_APPEND);  /// DEBUG
-    
-    if ($i < $retries) usleep($sleep);
-  }
+   global $config;
 
-  return $ping;
+   $status = shell_exec($config['fping'] . " $hostname 2>/dev/null");
+   if (strstr($status, "alive"))
+   {
+     return TRUE;
+   } else {
+     $status = shell_exec($config['fping6'] . " $hostname 2>/dev/null");
+     if (strstr($status, "alive"))
+     {
+       return TRUE;
+     } else {
+       return FALSE;
+     }
+   }
 }
 
 function is_odd($number)

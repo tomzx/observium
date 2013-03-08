@@ -143,16 +143,13 @@ function poll_device($device, $options)
     if ($device['snmpable'])
     {
       $status = "1";
-      $status_type = '';
     } else {
       echo("SNMP Unreachable");
       $status = "0";
-      $status_type = ' (snmp)';
     }
   } else {
     echo("Unpingable");
     $status = "0";
-    $status_type = ' (ping)';
   }
 
   if ($device['status'] != $status)
@@ -163,8 +160,8 @@ function poll_device($device, $options)
     dbUpdate(array('status' => $status), 'devices', 'device_id=?', array($device['device_id']));
     dbInsert(array('importance' => '0', 'device_id' => $device['device_id'], 'message' => "Device is " .($status == '1' ? 'up' : 'down')), 'alerts');
 
-    log_event('Device status changed to ' . ($status == '1' ? 'Up' : 'Down') . $status_type, $device, 'system');
-    notify($device, "Device ".($status == '1' ? 'Up' : 'Down').": " . $device['hostname'] . $status_type, "Device ".($status == '1' ? 'up' : 'down').": " . $device['hostname']);
+    log_event('Device status changed to ' . ($status == '1' ? 'Up' : 'Down'), $device, 'system');
+    notify($device, "Device ".($status == '1' ? 'Up' : 'Down').": " . $device['hostname'], "Device ".($status == '1' ? 'up' : 'down').": " . $device['hostname']);
   }
 
   $rrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/status.rrd";
@@ -181,21 +178,10 @@ function poll_device($device, $options)
     rrdtool_update($rrd,"N:U");
   }
 
-  // Ping RRD database. It's always updated even if the device is down.
-  $ping_rrd  = $config['rrd_dir'] . '/' . $device['hostname'] . '/ping.rrd';
-  if (!is_file($ping_rrd))
-  {
-    rrdtool_create ($ping_rrd, "DS:ping:GAUGE:600:0:65535 " . $config['rrd_rra']);
-  }
-  rrdtool_update($ping_rrd,"N:".$device['pingable']);
-
   if ($status == "1")
   {
     $graphs = array();
     $oldgraphs = array();
-
-    // Enable Ping graphs
-    $graphs['ping'] = TRUE;
 
     if ($options['m'])
     {

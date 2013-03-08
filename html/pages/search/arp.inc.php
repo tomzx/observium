@@ -10,6 +10,10 @@
 
 $pagetitle[] = "ARP Search";
 
+//ini_set('display_errors', 1);
+ini_set('memory_limit', '-1');
+//error_reporting(E_ALL);
+
 // Select the devices only with ARP tables
 foreach (dbFetchRows("SELECT D.device_id AS device_id, `hostname` FROM `ipv4_mac` AS M, `ports` AS P, `devices` AS D WHERE M.port_id = P.port_id AND P.device_id = D.device_id GROUP BY `device_id` ORDER BY `hostname`;") as $data)
 {

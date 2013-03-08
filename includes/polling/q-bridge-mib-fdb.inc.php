@@ -2,6 +2,10 @@
 
 echo("Q-BRIDGE-MIB FDB Tables\n");
 
+// For cisco FDB see:
+// http://www.cisco.com/en/US/tech/tk648/tk362/technologies_tech_note09186a00801c9199.shtml
+// http://www.csse.uwa.edu.au/~ryan/tech/findmac.php.txt
+
 // Build ifIndex > port cache table
 $port_ifIndex_table = array();
 foreach(dbFetchRows("SELECT `ifIndex`,`port_id`,`ifDescr` FROM `ports` WHERE `device_id` = ?", array($device['device_id'])) as $cache_port)
