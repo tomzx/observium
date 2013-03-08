@@ -733,6 +733,79 @@ function is_valid_hostname($hostname)
   return ctype_alnum(str_replace('_','',str_replace('-','',str_replace('.','',$hostname))));
 }
 
+// get $host record from /etc/hosts
+function ipFromEtcHosts($host) {
+  foreach (new SplFileObject('/etc/hosts') as $line) {
+    $d = preg_split('/\s/', $line, -1, PREG_SPLIT_NO_EMPTY);
+    if (empty($d) || substr(reset($d), 0, 1) == '#') continue;
+    $ip = array_shift($d);
+    $hosts = array_map('strtolower', $d);
+    if (in_array(strtolower($host), $hosts)) return $ip;
+  }
+  return FALSE;
+}
+
+function gethostbyname6($host, $try_a = false) {
+  // get AAAA record for $host
+  // if $try_a is true, if AAAA fails, it tries for A
+  // the first match found is returned
+  // otherwise returns false
+
+  $dns = gethostbynamel6($host, $try_a);
+  if ($dns == false) {
+    return false;
+  } else {
+    return $dns[0];
+  }
+}
+
+function gethostbynamel6($host, $try_a = false) {
+  // get AAAA records for $host,
+  // if $try_a is true, if AAAA fails, it tries for A
+  // results are returned in an array of ips found matching type
+  // otherwise returns false
+
+  $ip6 = array();
+  $ip4 = array();
+
+  // First try /etc/hosts
+  /// FIXME. Mike: it is necessary to use nsswitch, but I yet didn't think up as.
+  $etc = ipFromEtcHosts($host);
+  if ($etc && strstr($etc, ':')) $ip6[] = $etc;
+  
+  if ($try_a == true) {
+    if ($etc && strstr($etc, '.')) $ip4[] = $etc;
+    $dns = dns_get_record($host, DNS_A + DNS_AAAA);
+  } else {
+    $dns = dns_get_record($host, DNS_AAAA);
+  }
+  
+  foreach ($dns as $record) {
+    switch ($record['type']) {
+      case 'A':
+        $ip4[] = $record['ip'];
+        break;
+      case 'AAAA':
+        $ip6[] = $record['ipv6'];
+        break;
+    }
+  }
+
+  if (count($ip6) < 1) {
+    if ($try_a == true) {
+      if (count($ip4) < 1) {
+        return false;
+      } else {
+        return $ip4;
+      }
+    } else {
+      return false;
+    }
+  } else {
+    return $ip6;
+  }
+}
+
 function add_service($device, $service, $descr)
 {
   $insert = array('device_id' => $device['device_id'], 'service_ip' => $device['hostname'], 'service_type' => $service,
