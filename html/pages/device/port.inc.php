@@ -34,6 +34,8 @@ echo("<table width=100% cellpadding=10 cellspacing=0>");
 include("includes/print-interface.inc.php");
 echo("</table>");
 
+
+
 if ( strpos(strtolower($ifname), "vlan") !== false ) {  $broke = yes; }
 if ( strpos(strtolower($ifname), "loopback") !== false ) {  $broke = yes; }
 

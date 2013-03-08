@@ -228,6 +228,9 @@ function poll_device($device, $options)
       // If there any don't match, they're added/deleted from the database.
       // Ideally we should hold graphs for xx days/weeks/polls so that we don't needlessly hide information.
 
+      // Hardcoded poller performance
+      $graphs['poller_perf'] = TRUE;
+
       foreach (dbFetch("SELECT `graph` FROM `device_graphs` WHERE `device_id` = ?", array($device['device_id'])) as $graph)
       {
         if (!isset($graphs[$graph["graph"]]))
@@ -268,7 +271,6 @@ function poll_device($device, $options)
         rrdtool_create ($poller_rrd, "DS:val:GAUGE:600:0:38400 ".$config['rrd_rra']);
       }
       rrdtool_update($poller_rrd, "N:".$device_time);
-      $graphs['poller_perf'] = TRUE;
     }
 
     if ($debug) { echo("Updating " . $device['hostname'] . " - ".print_r($update_array)." \n"); }
