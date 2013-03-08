@@ -857,46 +857,48 @@ function snmp_cache_portName($device, $array)
   return $array;
 }
 
-function snmp_gen_auth (&$device, $vlan = 0)
+function snmp_gen_auth (&$device)
 {
   global $debug;
 
-  $cmd = '';
-  $vlan = ($vlan > 0 && $vlan < 4096 ) ? $vlan : 0;
-  switch($device['snmpver'])
+  $cmd = "";
+
+  if ($device['snmpver'] === "v3")
   {
-    case 'v3':
-      $cmd = ' -v3 -l ' . $device['authlevel'];
-      
-      if ($vlan) { $cmd .= ' -n "vlan-' . $vlan . '"'; }
-      
-      switch($device['authlevel'])
-      {
-        case 'authPriv':
-          $cmd .= ' -x ' . $device['cryptoalgo'];
-          $cmd .= ' -X "' . $device['cryptopass'] . '"';
-        case 'authNoPriv':
-          $cmd .= ' -a ' . $device['authalgo'];
-          $cmd .= ' -A "' . $device['authpass'] . '"';
-          $cmd .= ' -u ' . $device['authname'];
-          break;
-        case 'noAuthNoPriv':
-          // We have to provide a username anyway (see Net-SNMP doc)
-          $cmd .= ' -u observium';
-          break;
-        default:
-          if ($debug) { print 'DEBUG: ' . $device['snmpver'] . ' : Unsupported SNMPv3 AuthLevel (wtf have you done ?)' . PHP_EOL; }
-      }
-      break;
-    
-    case 'v2c':
-    case 'v1':
-      $cmd  = ' -' . $device['snmpver'];
-      $cmd .= ' -c ' . $device['community'];
-      if ($vlan) { $cmd .= '@' . $vlan; }
-      break;
-    default:
-      if ($debug) { print 'DEBUG: ' . $device['snmpver'] . ' : Unsupported SNMP Version (wtf have you done ?)' . PHP_EOL; }
+    $cmd = " -v3 -n \"\" -l " . $device['authlevel'];
+
+    if ($device['authlevel'] === "noAuthNoPriv")
+    {
+      // We have to provide a username anyway (see Net-SNMP doc)
+      $cmd .= " -u observium";
+    }
+    elseif ($device['authlevel'] === "authNoPriv")
+    {
+      $cmd .= " -a " . $device['authalgo'];
+      $cmd .= " -A \"" . $device['authpass'] . "\"";
+      $cmd .= " -u " . $device['authname'];
+    }
+    elseif ($device['authlevel'] === "authPriv")
+    {
+      $cmd .= " -a " . $device['authalgo'];
+      $cmd .= " -A \"" . $device['authpass'] . "\"";
+      $cmd .= " -u " . $device['authname'];
+      $cmd .= " -x " . $device['cryptoalgo'];
+      $cmd .= " -X \"" . $device['cryptopass'] . "\"";
+    }
+    else
+    {
+      if ($debug) { print "DEBUG: " . $device['snmpver'] ." : Unsupported SNMPv3 AuthLevel (wtf have you done ?)\n"; }
+    }
+  }
+  elseif ($device['snmpver'] === "v2c" or $device['snmpver'] === "v1")
+  {
+    $cmd  = " -" . $device['snmpver'];
+    $cmd .= " -c " . $device['community'];
+  }
+  else
+  {
+    if ($debug) { print "DEBUG: " . $device['snmpver'] ." : Unsupported SNMP Version (wtf have you done ?)\n"; }
   }
 
   if ($debug) { print "DEBUG: SNMP Auth options = $cmd\n"; }
