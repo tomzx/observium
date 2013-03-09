@@ -1032,22 +1032,22 @@ foreach ($config['os'] as $this_os => $blah)
 
 // Graph Types
 
-$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance', 'polling');
+$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance', 'poller');
 
 $config['graph_types']['device']['wifi_clients']['section'] = 'wireless';
 $config['graph_types']['device']['wifi_clients']['order'] = '0';
 $config['graph_types']['device']['wifi_clients']['descr'] = 'Wireless Clients';
 
 /// Poller graphs
-$config['graph_types']['device']['poller_perf']['section'] = 'polling';
+$config['graph_types']['device']['poller_perf']['section'] = 'poller';
 $config['graph_types']['device']['poller_perf']['order'] = '0';
-$config['graph_types']['device']['poller_perf']['descr'] = 'Agent Execution Time';
+$config['graph_types']['device']['poller_perf']['descr'] = 'Poller Duration';
 
-$config['graph_types']['device']['ping']['section'] = 'polling';
+$config['graph_types']['device']['ping']['section'] = 'poller';
 $config['graph_types']['device']['ping']['order'] = '0';
 $config['graph_types']['device']['ping']['descr'] = 'Ping Response';
 
-$config['graph_types']['device']['agent']['section'] = 'polling';
+$config['graph_types']['device']['agent']['section'] = 'poller';
 $config['graph_types']['device']['agent']['order'] = '0';
 $config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';
 
