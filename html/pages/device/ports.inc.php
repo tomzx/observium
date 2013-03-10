@@ -17,7 +17,7 @@ $navbar['options']['arp']['text']     = 'ARP Table';
 
 if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `device_id` = ?", array($device['device_id'])))
 {
-  $navbar['options']['fdb']['text']['text'] = 'FDB Table';
+  $navbar['options']['fdb']['text'] = 'FDB Table';
 }
 
 if(dbFetchCell("SELECT * FROM links AS L, ports AS I WHERE I.device_id = ? AND I.port_id = L.local_port_id", array($device['device_id'])))
