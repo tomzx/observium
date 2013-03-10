@@ -34,7 +34,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
   if ($config['os'][$device['os']]['group']) { $device['os_group'] = $config['os'][$device['os']]['group']; }
 
-  echo('<table style="margin: 0px 7px 7px 7px;" cellspacing="0" class="devicetable" width="99%">');
+  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="vertical-align: middle; margin-top: 5px; margin-bottom: 10px;">');
   #include("includes/hostbox.inc.php");
   include("includes/device-header.inc.php");
 

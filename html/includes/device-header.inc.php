@@ -19,9 +19,10 @@ $type = strtolower($device['os']);
 $image = getImage($device);
 
 echo('
-            <tr bgcolor="'.$device_colour.'" class="'.$class.'">
-             <td width="40" align=center valign=middle style="padding: 21px;">'.$image.'</td>
-             <td valign=middle style="padding: 0 15px;"><span style="font-size: 20px;">' . generate_device_link($device) . '</span>
+            <tr class="'.$device['html_row_class'].'" style="vertical-align: middle;">
+             <td style="width: 1px; background-color: '.$device['html_tab_colour'].'; margin: 0px; padding: 0px; min-width: 10px; max-width: 10px;"></td>
+             <td width="40" align="center" valign="middle" style="padding: 21px;">'.$image.'</td>
+             <td style="vertical-align: middle;" valign="middle" style="padding: 0 15px;"><span style="font-size: 20px;">' . generate_device_link($device) . '</span>
              <br />' . $device['location'] . '</td>
              <td>');
 
@@ -58,9 +59,9 @@ foreach ($graphs as $entry)
   {
     $graph_array['type']   = $entry['graph'];
 
-    echo("<div style='float: right; text-align: center; padding: 1px 5px; margin: 0 1px; background: #f5f5f5;' class='rounded-5px'>");
+    echo('<div class="pull-right" style="padding: 2px; margin: 0;">');
     print_graph_popup($graph_array);
-    echo("<div style='font-weight: bold; font-size: 7pt; margin: -3px;'>".$entry['text']."</div>");
+    echo("<center style='font-weight: bold; font-size: 7pt;'>".$entry['text']."</center>");
     echo("</div>");
   }
 }
