@@ -13,7 +13,8 @@ $ds = "val";
 $colour_area = "EEEEEE";
 $colour_line = "36393D";
 $colour_area_max = "FFEE99";
-$unit_text = "sec";
+$unit_text = "Seconds";
+$line_text = 'Poller';
 include("includes/graphs/generic_simplex.inc.php");
 
 ?>
