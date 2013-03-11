@@ -1047,6 +1047,10 @@ $config['graph_types']['device']['ping']['section'] = 'poller';
 $config['graph_types']['device']['ping']['order'] = '0';
 $config['graph_types']['device']['ping']['descr'] = 'Ping Response';
 
+$config['graph_types']['device']['ping_snmp']['section'] = 'poller';
+$config['graph_types']['device']['ping_snmp']['order'] = '0';
+$config['graph_types']['device']['ping_snmp']['descr'] = 'SNMP Response';
+
 $config['graph_types']['device']['agent']['section'] = 'poller';
 $config['graph_types']['device']['agent']['order'] = '0';
 $config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';

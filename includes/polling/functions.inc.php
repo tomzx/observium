@@ -181,7 +181,7 @@ function poll_device($device, $options)
     rrdtool_update($rrd,"N:U");
   }
 
-  // Ping RRD database. It's always updated even if the device is down.
+  // Ping response RRD database. It's always updated even if the device is down.
   $ping_rrd  = $config['rrd_dir'] . '/' . $device['hostname'] . '/ping.rrd';
   if (!is_file($ping_rrd))
   {
@@ -189,6 +189,14 @@ function poll_device($device, $options)
   }
   rrdtool_update($ping_rrd,"N:".$device['pingable']);
 
+  // SNMP response RRD database. It's always updated even if the device is down.
+  $ping_snmp_rrd  = $config['rrd_dir'] . '/' . $device['hostname'] . '/ping_snmp.rrd';
+  if (!is_file($ping_snmp_rrd))
+  {
+    rrdtool_create ($ping_snmp_rrd, "DS:ping_snmp:GAUGE:600:0:65535 " . $config['rrd_rra']);
+  }
+  rrdtool_update($ping_snmp_rrd,"N:".$device['snmpable']);
+  
   if ($status == "1")
   {
     $graphs = array();
@@ -196,6 +204,9 @@ function poll_device($device, $options)
 
     // Enable Ping graphs
     $graphs['ping'] = TRUE;
+
+    // Enable SNMP graphs
+    $graphs['ping_snmp'] = TRUE;
 
     if ($options['m'])
     {

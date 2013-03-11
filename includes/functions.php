@@ -377,12 +377,20 @@ function isSNMPable($device)
 {
   global $config;
 
+  $time_start = microtime(true);
   $pos = snmp_get($device, "sysObjectID.0", "-Oqv", "SNMPv2-MIB");
+  $time_end = microtime(true);
+  
   if ($pos === '' || $pos === false)
   {
-    return false;
+    return 0;
   } else {
-    return true;
+    $time_snmp = $time_end - $time_start;
+    $time_snmp *= 1000;
+    // SNMP response time in milliseconds.
+    /// Note, it's full SNMP get/response time (not only UDP request).
+    $time_snmp = number_format($time_snmp, 2, '.', '');
+    return $time_snmp;
   }
 }
 
