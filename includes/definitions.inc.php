@@ -1229,6 +1229,15 @@ $config['graph_types']['device']['netscalervsvr_hitmiss']['descr'] = 'Aggregate 
 $config['graph_descr']['device_smokeping_in_all'] = "This is an aggregate graph of the incoming smokeping tests to this host. The line corresponds to the average RTT. The shaded area around each line denotes the standard deviation.";
 $config['graph_descr']['device_processor']        = "This is an aggregate graph of all processors in the system.";
 
+$config['graph_descr']['application_unbound_queries'] = "DNS queries to the recursive resolver. The unwanted replies could be innocent duplicate packets, late replies, or spoof threats.";
+$config['graph_descr']['application_unbound_queue']   = "The queries that did not hit the cache and need recursion service take up space in the requestlist. If there are too many queries, first queries get overwritten, and at last resort dropped.";
+$config['graph_descr']['application_unbound_memory']  = "The memory used by unbound.";
+$config['graph_descr']['application_unbound_qtype']   = "Queries by DNS RR type queried for.";
+$config['graph_descr']['application_unbound_class']   = "Queries by DNS RR class queried for.";
+$config['graph_descr']['application_unbound_opcode']  = "Queries by DNS opcode in the query packet.";
+$config['graph_descr']['application_unbound_rcode']   = "Answers sorted by return value. RRSets bogus is the number of RRSets marked bogus per second by the validator.";
+$config['graph_descr']['application_unbound_flags']   = "This graphs plots the flags inside incoming queries. For example, if QR, AA, TC, RA, Z flags are set, the query can be rejected. RD, AD, CD and DO are legitimately set by some software.";
+
 // Device Types
 
 $i = 0;

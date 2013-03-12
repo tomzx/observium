@@ -199,7 +199,7 @@ $warn_colour_b = "#ffcccc";
 #$config['graph_colours']['greens'] = array("B7d6A9","8fcb73","50b91d","3ab419","0a8612","034f11");
 #$config['graph_colours']['blues']   = array("b5d7ff","6eb7ff","0064ff","0082ff","0019d5","0016cb","00007d"); // Cold Blues
 
-$config['graph_colours']['mixed']   = array('CC0000','008C00','4096EE','73880A','D01F3C','36393D','FF0084');
+$config['graph_colours']['mixed']   = array('CC0000','008C00','4096EE','73880A','F03F5C','36393D','FF0084');
 $config['graph_colours']['oranges'] = array('E43C00','E74B00','EB5B00','EF6A00','F37900','F78800','FB9700','FFA700');
 $config['graph_colours']['greens']  = array('B6D14B','91B13C','6D912D','48721E','24520F','003300');
 $config['graph_colours']['reds']    = array("220000","440000","660000","880000","AA0000","CC0000"); // Red

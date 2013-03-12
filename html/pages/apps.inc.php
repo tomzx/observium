@@ -6,12 +6,13 @@ $graphs['drbd']       = array('disk_bits', 'network_bits', 'queue', 'unsynced');
 $graphs['mysql']      = array('network_traffic', 'connections', 'command_counters', 'select_types');
 $graphs['memcached']  = array('bits', 'commands', 'data', 'items');
 $graphs['powerdns']   = array('recursing', 'queries', 'querycache', 'latency');
+/// FIXME ^ recursing should be replaced by something else probably; we should have the recursor as app and as such get such stats there.
 $graphs['ntpd']       = array('stats', 'freq', 'stratum', 'bits');
 $graphs['postgresql'] = array('xact', 'blks', 'tuples', 'tuples_query');
 $graphs['shoutcast']  = array('multi_stats', 'multi_bits');
 $graphs['nginx']      = array('connections', 'req');
-$graphs['freeradius']     = array('access');
-/// FIXME ^ recursing should be replaced by something else probably.
+$graphs['unbound']    = array('queries', 'queue', 'memory', 'qtype');
+$graphs['freeradius'] = array('access');
 
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
@@ -26,7 +27,7 @@ $link_array = array('page'    => 'device',
     <li class="divider-vertical"></li>
 
 <?php
-/// FIXME - standarise and function?
+/// FIXME - standardise and function?
 foreach ($app_list as $app)
 {
   if ($vars['app'] == $app['app_type'])

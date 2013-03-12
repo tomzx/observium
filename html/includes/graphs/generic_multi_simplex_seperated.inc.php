@@ -2,21 +2,28 @@
 
 include("includes/graphs/common.inc.php");
 
-if ($width > "500")
+if ($width > "1000")
 {
-  $descr_len = 24; // FIXME may even be more imo?
+  $descr_len = 36;
+}
+else if ($width > "500")
+{
+  $descr_len = 24;
 } else {
   $descr_len = 12;
   $descr_len += round(($width - 250) / 8);
 }
 
+if ($nototal) { $descrlen += "2"; $unitlen += "2";}
+
 if ($width > "500")
 {
-  $rrd_options .= " COMMENT:'".str_pad(truncate($unit_text, $descr_len),$descr_len+4)." Now      Min     Max     Avg";
-  if (!$nototal) { $rrd_options .= "      Total"; }
-  $rrd_options .= "\l' COMMENT:'\l'";
+  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg'";
+  if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
+  $rrd_options .= " COMMENT:'\l'";
 } else {
-  $rrd_options .= " COMMENT:'".str_pad(truncate($unit_text, $descr_len),$descr_len+4)." Now      Min     Max     Avg\l'";
+  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
+  $nototal = 1;
 }
 
 $colour_iter = 0;
@@ -78,7 +85,7 @@ foreach ($rrd_list as $i => $rrd)
     $rrd_options .= " CDEF:" . $g_defname . $i . "max=" . $rrd['ds'] . $i . "max," . $divider . ",/";
   }
 
-  // Are our text values related to te multiplier/divisor or not?
+  // Are our text values related to the multiplier/divisor or not?
   if (isset($text_orig) && $text_orig)
   {
     $t_defname = $rrd['ds'];

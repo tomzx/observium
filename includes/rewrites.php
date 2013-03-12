@@ -287,6 +287,7 @@ $rewrite_junos_hardware = array(
   '.1.3.6.1.4.1.2636.1.1.1.2.37' => 'TXPlus',
 );
 
+# FIXME needs a rewrite, preferrably in form above? ie cat3524tXLEn etc
 $rewrite_cisco_hardware = array(
   '.1.3.6.1.4.1.9.1.275' => 'C2948G-L3',
 );
