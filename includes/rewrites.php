@@ -1430,7 +1430,7 @@ function fixifName ($inf)
 {
   global $rewrite_ifname;
 
-  $inf = strtolower($inf);
+//  $inf = strtolower($inf); // ew. -tom
   $inf = array_str_replace($rewrite_ifname, $inf);
 
   return $inf;

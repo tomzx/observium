@@ -15,12 +15,16 @@ if ($device['os'] == "ironware")
     unset($fdp_links);
     foreach (array_keys($fdp_array) as $key)
     {
+      /// FIXME dbFacile
       $interface = mysql_fetch_assoc(mysql_query("SELECT * FROM `ports` WHERE device_id = '".$device['device_id']."' AND `ifIndex` = '".$key."'"));
       $fdp_if_array = $fdp_array[$key];
       foreach (array_keys($fdp_if_array) as $entry_key)
       {
         $fdp = $fdp_if_array[$entry_key];
+        /// FIXME dbFacile
         $remote_device_id = @mysql_result(mysql_query("SELECT `device_id` FROM `devices` WHERE `sysName` = '".$fdp['snFdpCacheDeviceId']."' OR `hostname`='".$fdp['snFdpCacheDeviceId']."'"), 0);
+
+        // FIXME do LLDP-code-style hostname overwrite here as well? (see below)
 
         if (!$remote_device_id)
         {
@@ -35,8 +39,11 @@ if ($device['os'] == "ironware")
         if ($remote_device_id)
         {
           $if = $fdp['snFdpCacheDevicePort'];
+          /// FIXME dbFacile
           $remote_port_id = @mysql_result(mysql_query("SELECT port_id FROM `ports` WHERE (`ifDescr` = '$if' OR `ifName`='$if') AND `device_id` = '".$remote_device_id."'"),0);
-        } else { $remote_port_id = "0"; }
+        } else {
+          $remote_port_id = "0";
+        }
 
         discover_link($interface['port_id'], $fdp['snFdpCacheVendorId'], $remote_port_id, $fdp['snFdpCacheDeviceId'], $fdp['snFdpCacheDevicePort'], $fdp['snFdpCachePlatform'], $fdp['snFdpCacheVersion']);
       }
@@ -60,6 +67,8 @@ if ($cdp_array)
       if (is_valid_hostname($cdp['cdpCacheDeviceId']))
       {
         $remote_device_id = dbFetchCell("SELECT `device_id` FROM `devices` WHERE `sysName` = ? OR `hostname` = ?", array($cdp['cdpCacheDeviceId'], $cdp['cdpCacheDeviceId']));
+        
+        // FIXME do LLDP-code-style hostname overwrite here as well? (see below)
 
         if (!$remote_device_id)
         {
@@ -75,7 +84,9 @@ if ($cdp_array)
         {
           $if = $cdp['cdpCacheDevicePort'];
           $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE (`ifDescr` = ? OR `ifName` = ?) AND `device_id` = ?", array($if, $if, $remote_device_id));
-        } else { $remote_port_id = "0"; }
+        } else { 
+          $remote_port_id = "0";
+        }
 
         if ($interface['port_id'] && $cdp['cdpCacheDeviceId'] && $cdp['cdpCacheDevicePort'])
         {
@@ -96,7 +107,6 @@ unset($lldp_array);
 $lldp_array = snmpwalk_cache_threepart_oid($device, "lldpRemoteSystemsData", array(), "LLDP-MIB");
 $dot1d_array = snmpwalk_cache_oid($device, "dot1dBasePortIfIndex", array(), "BRIDGE-MIB");
 
-// FIXME - needs change to dbFacile
 if ($lldp_array)
 {
   $lldp_links = "";
@@ -111,12 +121,17 @@ if ($lldp_array)
       } else {
         $ifIndex = $entry_key;
       }
-      $interface = mysql_fetch_assoc(mysql_query("SELECT * FROM `ports` WHERE device_id = '".$device['device_id']."' AND `ifIndex` = '".$ifIndex."'"));
+
+      $interface = dbFetchRow("SELECT * FROM `ports` WHERE device_id = ? AND `ifIndex` = ?", array($device['device_id'], $ifIndex));
       $lldp_instance = $lldp_if_array[$entry_key];
       foreach (array_keys($lldp_instance) as $entry_instance)
       {
         $lldp = $lldp_instance[$entry_instance];
-        $remote_device_id = @mysql_result(mysql_query("SELECT `device_id` FROM `devices` WHERE `sysName` = '".$lldp['lldpRemSysName']."' OR `hostname`='".$lldp['lldpRemSysName']."'"), 0);
+        $remote_device = dbFetchRow("SELECT `device_id`, `hostname` FROM `devices` WHERE `sysName` = ? OR `hostname` = ?", array($lldp['lldpRemSysName'],$lldp['lldpRemSysName']));
+        $remote_device_id = $remote_device['device_id']; 
+
+        // Overwrite remote hostname with the one we know, for devices that we identify by sysName
+        $lldp['lldpRemSysName'] = $remote_device['hostname'];
 
         if (!$remote_device_id && is_valid_hostname($lldp['lldpRemSysName']))
         {
@@ -131,10 +146,17 @@ if ($lldp_array)
         if ($remote_device_id)
         {
           $if = $lldp['lldpRemPortDesc']; $id = $lldp['lldpRemPortId'];
-          $remote_port_id = @mysql_result(mysql_query("SELECT port_id FROM `ports` WHERE (`ifDescr`= '$id' OR `ifName`='$id') AND `device_id` = '".$remote_device_id."'"),0);
+          $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE (`ifDescr`= ? OR `ifName`= ?) AND `device_id` = ?",array($id,$id,$remote_device_id));
           if (!$remote_port_id)
           {
-            $remote_port_id = @mysql_result(mysql_query("SELECT port_id FROM `ports` WHERE (`ifDescr`= '$if' OR `ifName`='$if') AND `device_id` = '".$remote_device_id."'"),0);
+            $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE (`ifDescr`= ? OR `ifName`= ?) AND `device_id` = ?",array($if,$if,$remote_device_id));
+            if (!$remote_port_id)
+            {
+              if ($lldp['lldpRemChassisIdSubtype'] == 'macAddress')
+              { // Find the port by MAC address, still matches multiple ports sometimes, we use the first one and hope we're lucky
+                $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE `ifPhysAddress` = ? AND `device_id` = ?", array(str_replace(' ','',$lldp['lldpRemChassisId']),$remote_device_id));
+              }
+            }
           }
         } else {
           $remote_port_id = "0";
@@ -151,6 +173,7 @@ if ($lldp_array)
 
 if ($debug) { print_r($link_exists); }
 
+/// FIXME dbFacile
 $sql = "SELECT * FROM `links` AS L, `ports` AS I WHERE L.local_port_id = I.port_id AND I.device_id = '".$device['device_id']."'";
 if ($query = mysql_query($sql))
 {

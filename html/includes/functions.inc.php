@@ -747,7 +747,7 @@ function generate_port_link($port, $text = NULL, $type = NULL)
   $graph_array['legend']   = "yes";
   $graph_array['height']   = "100";
   $graph_array['width']    = "275";
-  $graph_array['to']           = $config['time']['now'];
+  $graph_array['to']       = $config['time']['now'];
   $graph_array['from']     = $config['time']['day'];
   $graph_array['id']       = $port['port_id'];
   $content .= generate_graph_tag($graph_array);
