@@ -64,7 +64,7 @@ form {
 
 label, input, button, select, textarea {
   font-size: 13px;
-  #font-weight: bold;
+  /*font-weight: bold;*/
   line-height: 18px;
 }
 
@@ -442,13 +442,13 @@ legend {
   width: 149px;
   height: 30px;
   padding: 0;
-  margin: 5px; 10px 0 0;
+  margin: 5px;/* 10px 0 0;*/
 }
 
 .nav-tabs
 {
   margin-bottom: 10px;
-#  border-bottom: 4px solid #194b7f;
+  /*border-bottom: 4px solid #194b7f;*/
 }
 
 .nav-tabs > li:first-child {
