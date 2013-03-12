@@ -2,7 +2,6 @@
 
 // FOUNDRY-SN-SWITCH-GROUP-MIB
 
-
 if ($device['os'] == "ironware" || $device['os_group'] == "ironware")
 {
   echo("FOUNDRY-SN-SWITCH-GROUP-MIB ");
@@ -17,7 +16,7 @@ if ($device['os'] == "ironware" || $device['os_group'] == "ironware")
       $entry['current'] = $entry['snIfOpticalMonitoringTxBiasCurrent'];
       $entry['port']    = get_port_by_index_cache($device['device_id'], $index);
 
-      if(is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
+      if (is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
       if (!preg_match("|N/A|",$entry['current'])) {
         discover_sensor($valid['sensor'], 'current', $device, $entry['oid'], $index, 'brocade-dom', $entry['descr'], '1000', '1', NULL, NULL, NULL, NULL, NULL,'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
       }

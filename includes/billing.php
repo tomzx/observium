@@ -61,7 +61,7 @@ function getValues($port)
 {
   global $config;
 
-  if($device['snmpver'] == "1") {
+  if ($device['snmpver'] == "1") {
     $oids = "IF-MIB::ifInOctets.".$port['ifIndex']." IF-MIB::ifOutOctets.".$port['ifIndex'];
   } else {
     $oids = "IF-MIB::ifHCInOctets.".$port['ifIndex']." IF-MIB::ifHCOutOctets.".$port['ifIndex'];
@@ -85,7 +85,7 @@ function getValues($port)
 function getLastPortCounter($port_id,$inout)
 {
   $row = dbFetchRow("SELECT counter,delta FROM `bill_port_".mres($inout)."_data` WHERE `port_id`='".mres($port_id)."' ORDER BY timestamp DESC LIMIT 0,1");
-  if(is_numeric($row['delta']))
+  if (is_numeric($row['delta']))
   {
     $return[counter] = $row['counter'];
     $return[delta] = $row['delta'];
@@ -102,7 +102,7 @@ function getLastMeasurement($bill_id)
 
   print_r($row);
 
-  if(is_numeric($row['delta']))
+  if (is_numeric($row['delta']))
   {
     $return[delta]     = $row['delta'];
     $return[delta_in]  = $row['delta_in'];

@@ -11,7 +11,6 @@
  *
  */
 
-
 /**
  * Build a cache of default alert conditions
  *
@@ -61,16 +60,16 @@ function test_condition($value_a, $condition, $value_b)
       switch($condition)
       {
         case ">":
-         if($value_a > $value_b) { $alert = 1; } else { $alert = 0; }
+         if ($value_a > $value_b) { $alert = 1; } else { $alert = 0; }
          break;
         case "<":
-         if($value_a < $value_b) { $alert = 1; } else { $alert = 0; }
+         if ($value_a < $value_b) { $alert = 1; } else { $alert = 0; }
          break;
         case "!=":
-         if($value_a != $value_b) { $alert = 1; } else { $alert = 0; }
+         if ($value_a != $value_b) { $alert = 1; } else { $alert = 0; }
          break;
         case "=":
-         if($value_a = $value_b) { $alert = 1; } else { $alert = 0; }
+         if ($value_a = $value_b) { $alert = 1; } else { $alert = 0; }
          break;
         default:
          $alert = -1;
@@ -90,16 +89,17 @@ function test_condition($value_a, $condition, $value_b)
 function check_entity($device, $entity_type, $entity_id, $data)
 {
   global $glo_conditions;
+
   global $dev_conditions;
 
-  if(!empty($entity_id)) { echo(" $entity_id"); }
+  if (!empty($entity_id)) { echo(" $entity_id"); }
 
-  foreach($data as $name => $value)
+  foreach ($data as $name => $value)
   {
-    foreach($dev_conditions[$entity_type][$entity_id][$name] as $condition)
+    foreach ($dev_conditions[$entity_type][$entity_id][$name] as $condition)
     {
       $alert = test_condition($value, $condition['condition'], $condition['value']);
-      if($alert == 1)
+      if ($alert == 1)
       {
         echo("ALERT ");
       } else {
@@ -108,7 +108,5 @@ function check_entity($device, $entity_type, $entity_id, $data)
     }
   }
 }
-
-
 
 ?>

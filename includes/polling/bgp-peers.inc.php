@@ -110,7 +110,7 @@ if ($config['enable_bgp'])
     $polled = time();
     $polled_period = $polled - $peer['bgpPeer_polled'];
 
-    if($debug) { echo("[ polled $polled -> period $polled_period ]"); }
+    if ($debug) { echo("[ polled $polled -> period $polled_period ]"); }
 
     $peerrrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("bgp-" . $peer['bgpPeerIdentifier'] . ".rrd");
     if (!is_file($peerrrd))
@@ -128,10 +128,10 @@ if ($config['enable_bgp'])
 
     // Update config
     $peer['update'] = array();
-    if($bgpPeerState != $peer['bgpPeerState']) { $peer['update']['bgpPeerState'] = $bgpPeerState; }
-    if($bgpPeerAdminStatus != $peer['bgpPeerAdminStatus']) { $peer['update']['bgpPeerAdminStatus'] = $bgpPeerAdminStatus; }
-    if($bgpLocalAddr != $peer['bgpLocalAddr']) { $peer['update']['bgpLocalAddr'] = $bgpLocalAddr; }
-    if(count($peer['update']))
+    if ($bgpPeerState != $peer['bgpPeerState']) { $peer['update']['bgpPeerState'] = $bgpPeerState; }
+    if ($bgpPeerAdminStatus != $peer['bgpPeerAdminStatus']) { $peer['update']['bgpPeerAdminStatus'] = $bgpPeerAdminStatus; }
+    if ($bgpLocalAddr != $peer['bgpLocalAddr']) { $peer['update']['bgpLocalAddr'] = $bgpLocalAddr; }
+    if (count($peer['update']))
     {
       dbUpdate($peer['update'], 'bgpPeers', '`bgpPeer_id` = ?', array($peer['bgpPeer_id']));
     }
@@ -149,7 +149,7 @@ if ($config['enable_bgp'])
       }
     }
 
-    if(!is_numeric($peer['bgpPeer_polled'])) { dbInsert(array('bgpPeer_id' => $peer['bgpPeer_id']), 'bgpPeers-state'); }
+    if (!is_numeric($peer['bgpPeer_polled'])) { dbInsert(array('bgpPeer_id' => $peer['bgpPeer_id']), 'bgpPeers-state'); }
     $peer['state']['bgpPeerFsmEstablishedTime'] = $bgpPeerFsmEstablishedTime;
     $peer['state']['bgpPeerInUpdateElapsedTime'] = $bgpPeerInUpdateElapsedTime;
 #    $peer['state']['bgpPeer_polled'] = $polled; #FIXME not in DB

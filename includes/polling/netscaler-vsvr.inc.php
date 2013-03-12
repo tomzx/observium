@@ -54,7 +54,7 @@ if ($device['os'] == "netscaler")
     {
       echo(str_pad($vserver, 25) . " | " . str_pad($service,25) . " | " .  str_pad($sv['vsvrServiceEntityType'],16) ." | ". str_pad($sv['serviceWeight'],16));
 
-      if(is_array($svs_db[$vserver][$service]))
+      if (is_array($svs_db[$vserver][$service]))
       {
         /// FIXME Update Code
         dbUpdate(array('service_weight' => $sv['serviceWeight']), 'netscaler_services_vservers', '`device_id` = ? AND `vsvr_name` = ? AND `svc_name` = ?', array($device['device_id'], $vserver, $service));
@@ -75,7 +75,6 @@ if ($device['os'] == "netscaler")
     echo("-".$sv['vsvr_name']."/".$sv['svc_name']." ");
     dbDelete('netscaler_services_vservers', "`sv_id` =  ?", array($sv_id));
   }
-
 
   echo("\n");
 
@@ -117,7 +116,7 @@ if ($device['os'] == "netscaler")
       $vsvr['label'] = $vsvr['vsvrFullName'];
       $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrName']).".rrd";
       $rrd_file_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-vsvr-".safename($vsvr['vsvrFullName']).".rrd";
-      if(is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
+      if (is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
     } else {
       $vsvr['label'] = $vsvr['vsvrName'];
     }
@@ -272,11 +271,10 @@ if ($device['os'] == "netscaler")
       $svc['label'] = $svc['svcServiceFullName'];
       $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceName']).".rrd";
       $rrd_file_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceFullName']).".rrd";
-      if(is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
+      if (is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
     } else {
       $svc['label'] = $svc['svcServiceName'];
     }
-
 
     if (isset($svc['svcServiceName']))
     {

@@ -26,9 +26,9 @@ if ($device['os'] == "wut")
         $lowwarnlimit = floatval(trim(snmp_get($device, $lowwarnlimit_oid, "-Oqv", ""),'"'));
         $warnlimit    = floatval(trim(snmp_get($device, $warnlimit_oid, "-Oqv", ""),'"'));
         $limit        = floatval(trim(snmp_get($device, $limit_oid, "-Oqv", ""),'"'));
-        $lowlimit     = floatval(trim(snmp_get($device, $lowlimit_oid, "-Oqv", ""),'"'));	
-#	echo ("\n\rID:".$temperature_id."|OID:".$temperature_oid."|Temp:".$temperature."|lowwarnlimit:".$lowwarnlimit."|warnlimit:".$warnlimit."|limit:".$limit."|lowlimit:".$lowlimit);
-        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'wut', $descr, '1', '1', $lowlimit, $lowwarnlimit, $warnlimit, $limit, $temperature); 
+        $lowlimit     = floatval(trim(snmp_get($device, $lowlimit_oid, "-Oqv", ""),'"'));
+#        echo("\n\rID:".$temperature_id."|OID:".$temperature_oid."|Temp:".$temperature."|lowwarnlimit:".$lowwarnlimit."|warnlimit:".$warnlimit."|limit:".$limit."|lowlimit:".$lowlimit);
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'wut', $descr, '1', '1', $lowlimit, $lowwarnlimit, $warnlimit, $limit, $temperature);
     }
   }
 }

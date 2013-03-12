@@ -101,7 +101,7 @@ function error($message)
 {
   global $config, $debug;
 
-  if($debug) { echo($message); }
+  if ($debug) { echo($message); }
 
 }
 
@@ -380,7 +380,7 @@ function isSNMPable($device)
   $time_start = microtime(true);
   $pos = snmp_get($device, "sysObjectID.0", "-Oqv", "SNMPv2-MIB");
   $time_end = microtime(true);
-  
+
   if ($pos === '' || $pos === false)
   {
     return 0;
@@ -395,30 +395,30 @@ function isSNMPable($device)
 }
 
 /**
- * 
+ *
  * It's fully BOOLEAN safe function.
- * 
+ *
  */
 function isPingable($hostname)
 {
   global $config;
-  
-  if(filter_var($config['ping_timeout'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 50, 'max_range' => 2000 ))))
+
+  if (filter_var($config['ping_timeout'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 50, 'max_range' => 2000 ))))
   {
     $timeout = $config['ping_timeout'];
   } else {
     $timeout = 500;
   }
-  if(filter_var($config['ping_retries'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 10 ))))
+  if (filter_var($config['ping_retries'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 10 ))))
   {
     $retries = $config['ping_retries'];
   } else {
     $retries = 1;
   }
   $sleep = floor(1000000 / $retries); // interval between retries, max 1 sec
-  
+
   ///$file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time());/// DEBUG
-  
+
   // First try IPv4
   $ip = gethostbyname($hostname);
   if ($ip && $ip != $hostname)
@@ -436,7 +436,7 @@ function isPingable($hostname)
       return 0;
     }
   }
-  
+
   for ($i=1; $i <= $retries; $i++)
   {
     exec($cmd, $output, $return);
@@ -451,12 +451,12 @@ function isPingable($hostname)
       $ping = 0;
     }
     if ($ping) break;
-    
+
     ///file_put_contents($file, "$time | PING ERROR: $hostname ($i)\n", FILE_APPEND);  /// DEBUG
-    
+
     if ($i < $retries) usleep($sleep);
   }
-  
+
   return $ping;
 }
 

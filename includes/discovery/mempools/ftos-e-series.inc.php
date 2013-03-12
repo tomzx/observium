@@ -6,7 +6,6 @@
 #F10-CHASSIS-MIB::chRpmMemUsageUtil.2 = 36
 #F10-CHASSIS-MIB::chRpmMemUsageUtil.3 = 9
 
-
 if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
 {
   echo("FTOS E-Series MemPools");

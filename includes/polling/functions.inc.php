@@ -78,7 +78,7 @@ function poll_sensor($device, $class, $unit)
     echo("$sensor_value $unit ");
 
     // FIXME also warn when crossing WARN level!!
-    if($sensor['sensor_ignore'] != "1")
+    if ($sensor['sensor_ignore'] != "1")
      {
      if ($sensor['sensor_limit_low'] != "" && $sensor['sensor_value'] >= $sensor['sensor_limit_low'] && $sensor_value < $sensor['sensor_limit_low'])
      {
@@ -200,13 +200,13 @@ function poll_device($device, $options)
   {
     rrdtool_create ($ping_snmp_rrd, "DS:ping_snmp:GAUGE:600:0:65535 " . $config['rrd_rra']);
   }
-  if($device['snmpable'])
+  if ($device['snmpable'])
   {
     rrdtool_update($ping_snmp_rrd,"N:".$device['snmpable']);
   } else {
     rrdtool_update($ping_snmp_rrd,"N:U");
   }
-  
+
   if ($status == "1")
   {
     $graphs = array();
@@ -233,6 +233,7 @@ function poll_device($device, $options)
         if ($attribs['poll_'.$module] || ( $module_status && !isset($attribs['poll_'.$module])))
         {
           if ($debug) { echo("including: includes/polling/$module.inc.php\n"); }
+
           include('includes/polling/'.$module.'.inc.php');
         } elseif (isset($attribs['poll_'.$module]) && $attribs['poll_'.$module] == "0") {
           echo("Module [ $module ] disabled on host.\n");
@@ -282,7 +283,7 @@ function poll_device($device, $options)
     echo("Polled in $device_time seconds\n");
 
     // Only store performance data if we're not doing a single-module poll
-    if(!$options['m'])
+    if (!$options['m'])
     {
       dbInsert(array('device_id' => $device['device_id'], 'operation' => 'poll', 'start' => $device_start, 'duration' => $device_run), 'devices_perftimes');
 

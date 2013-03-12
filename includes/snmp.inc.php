@@ -8,7 +8,7 @@
 // Crappy function to get workaround 32bit counter wrapping in HOST-RESOURCES-MIB
 function snmp_dewrap32bit($value)
 {
- if( preg_match('/^-/',$value) ){
+ if ( preg_match('/^-/',$value) ) {
  return (abs($value) + 2147483647);
  } else {
  return $value;
@@ -66,14 +66,12 @@ function string_to_oid($string)
 
 // Dirty attempt to parse snmp stuff. YUCK.
 
-function snmp_parser_quote($m){
+function snmp_parser_quote($m) {
     return str_replace(array('.',' '),
       array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE'), $m[1]);
 }
 
-
-
-function snmp_parser_unquote($str){
+function snmp_parser_unquote($str) {
     return str_replace(array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE', 'PLACEHOLDER-ESCAPED-QUOTE'),
       array('.',' ','"'), $str);
 }
@@ -184,14 +182,12 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
   else { return false; }
 }
 
-
-
 function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = NULL)
 {
   $data = snmp_walk($device, $oid, "-Oqs", $mib, $mibdir, FALSE);
-  foreach(explode("\n", $data) as $text) {
+  foreach (explode("\n", $data) as $text) {
     $ret = parse_oid($text);
-    if(!empty($ret['value'])) {
+    if (!empty($ret['value'])) {
       // this seems retarded. need a way to just build this automatically.
       switch ($oid_elements) {
         case "1":
@@ -246,7 +242,7 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
 
   if (!$debug) { $cmd .= " 2>/dev/null"; }
   $data = trim(external_exec($cmd));
-  if($strip_quotes) { $data = str_replace("\"", "", $data); }
+  if ($strip_quotes) { $data = str_replace("\"", "", $data); }
 
   if (is_string($data) && (preg_match("/No Such (Object|Instance)/i", $data)))
   {
@@ -410,7 +406,6 @@ function snmpwalk_values($device, $oid, $array, $mib = NULL, $mibdir = NULL)
   return $array;
 }
 
-
 function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {
   $data = snmp_walk($device, $oid, "-OQUs", $mib, $mibdir);
@@ -430,7 +425,7 @@ function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 
 // just like snmpwalk_cache_oid except that it returns the numerical oid as the index
 // this is useful when the oid is indexed by the mac address and snmpwalk would
-// return periods (.) for non-printable numbers, thus making many different indexes appear 
+// return periods (.) for non-printable numbers, thus making many different indexes appear
 // to be the same.
 function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {
@@ -449,7 +444,6 @@ function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NU
 
   return $array;
 }
-
 
 function snmpwalk_cache_multi_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {

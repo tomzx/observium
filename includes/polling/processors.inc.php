@@ -37,7 +37,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $processor)
   rrdtool_update($procrrd,"N:$proc");
 
   // Update SQL State
-  if(is_numeric($processor['processor_polled']))
+  if (is_numeric($processor['processor_polled']))
   {
     dbUpdate(array('processor_usage' => $proc, 'processor_polled' => time()), 'processors-state', '`processor_id` = ?', array($processor['processor_id']));
   } else {

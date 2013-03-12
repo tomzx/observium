@@ -7,7 +7,7 @@ if ($device['os'] == "arista_eos")
   $data = snmpwalk_cache_oid($device, "aristaSwFwdIpStatsTable", array(), "ARISTA-SW-IP-FORWARDING-MIB");
   $oids = array ('HCInReceives', 'InHdrErrors', 'InNoRoutes', 'InAddrErrors',
                  'InUnknownProtos', 'InTruncatedPkts',
-                 'HCInForwDatagrams', 
+                 'HCInForwDatagrams',
                  'ReasmReqds', 'ReasmOKs', 'ReasmFails',
                  'OutNoRoutes', 'HCOutForwDatagrams',
                  'OutDiscards',
@@ -49,6 +49,5 @@ if ($device['os'] == "arista_eos")
     $graphs['netstat_arista_sw_ip6_frag'] = TRUE;
   }
 }
-
 
 ?>

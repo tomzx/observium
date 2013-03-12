@@ -11,8 +11,6 @@ if ($device['os_group'] == "cisco")
 
   print_r(snmp_walk_parser($device, "CISCO-IP-STAT-MIB::cipMacSwitchedBytes", "3"));
 
-
-
 #if (is_array($oids))
 #{
 #  foreach ($oids as $index => $entry)

@@ -4,7 +4,6 @@ $version = trim(snmp_get($device, "productVersion.0", "-OQv", "JUNIPER-IVE-MIB")
 $hardware = "Juniper " . trim(snmp_get($device, "productName.0", "-OQv", "JUNIPER-IVE-MIB"),'"');
 $hostname = snmp_get($device, "sysName.0","-OQv");
 
-
 $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/juniperive_users.rrd";
 $clusterusers = snmp_get($device, "clusterConcurrentUsers.0", "-OQv", "JUNIPER-IVE-MIB");
 $iveusers = snmp_get($device, "iveConcurrentUsers.0", "-OQv", "JUNIPER-IVE-MIB");
@@ -14,12 +13,11 @@ if (!is_null($clusterusers) and !is_null($iveusers))
  if (!is_file($rrd_filename))
  {
   rrdtool_create($rrd_filename, " --step 300 \
-	DS:clusterusers:GAUGE:600:0:3000000 \
-	DS:iveusers:GAUGE:600:0:3000000 ".$config['rrd_rra']); }
+        DS:clusterusers:GAUGE:600:0:3000000 \
+        DS:iveusers:GAUGE:600:0:3000000 ".$config['rrd_rra']); }
   rrdtool_update("$rrd_filename", "N:$clusterusers:$iveusers");
   $graphs['juniperive_users'] = TRUE;
 }
-
 
 $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/juniperive_meetings.rrd";
 $meetingusers = snmp_get($device, "meetingUserCount.0", "-OQv", "JUNIPER-IVE-MIB");
@@ -35,7 +33,6 @@ if (is_numeric($meetingusers) and is_numeric($meetings))
   rrdtool_update("$rrd_filename", "N:$meetingusers:$meetings");
   $graphs['juniperive_meetings'] = TRUE;
 }
-
 
 $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/juniperive_connections.rrd";
 $webusers = snmp_get($device, "signedInWebUsers.0", "-OQv", "JUNIPER-IVE-MIB");

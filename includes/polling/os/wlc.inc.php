@@ -1,8 +1,6 @@
 <?php
 
-
 $oids = "entPhysicalModelName.1 entPhysicalSoftwareRev.1 entPhysicalSerialNum.1";
-	  
 
 $data = snmp_get_multi($device, $oids, "-OQUs", "ENTITY-MIB");
 
@@ -19,6 +17,6 @@ $data = snmp_get_multi($device, $oids, "-OQUs", "ENTITY-MIB");
     $hardware = $data[1]['entPhysicalModelName'];
   }
 
-  if(empty($hardware)) {   $hardware = snmp_get($device, "sysObjectID.0", "-Osqv", "SNMPv2-MIB:CISCO-PRODUCTS-MIB"); }
+  if (empty($hardware)) { $hardware = snmp_get($device, "sysObjectID.0", "-Osqv", "SNMPv2-MIB:CISCO-PRODUCTS-MIB"); }
 
 ?>

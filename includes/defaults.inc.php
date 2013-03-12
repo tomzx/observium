@@ -49,7 +49,6 @@ $config['neato']          = "/usr/bin/neato";
 $config['sfdp']           = "/usr/bin/sfdp";
 $config['svn']            = "/usr/bin/svn";
 
-
 // RRD Format Settings
 // These should not normally be changed
 // Though one could conceivably increase or decrease the size of each RRA if one had performance problems
@@ -59,7 +58,6 @@ $config['rrd_rra']  = " RRA:AVERAGE:0.5:1:2016 RRA:AVERAGE:0.5:6:1440 RRA:AVERAG
 $config['rrd_rra'] .= " RRA:MIN:0.5:1:720 RRA:MIN:0.5:6:1440     RRA:MIN:0.5:24:775     RRA:MIN:0.5:288:797 ";
 $config['rrd_rra'] .= " RRA:MAX:0.5:1:720 RRA:MAX:0.5:6:1440     RRA:MAX:0.5:24:775     RRA:MAX:0.5:288:797 ";
 $config['rrd_rra'] .= " RRA:LAST:0.5:1:1440 ";
-
 
 // RRDCacheD - Make sure it can write to your RRD dir!
 
@@ -139,7 +137,7 @@ $config['autodiscovery']['xdp']            = TRUE; // Autodiscover hosts via dis
 $config['autodiscovery']['ospf']           = TRUE; // Autodiscover hosts via OSPF
 $config['autodiscovery']['bgp']            = TRUE; // Autodiscover hosts via BGP
 $config['autodiscovery']['snmpscan']       = TRUE; // Autodiscover hosts via SNMP scanning
-$config['autodiscovery']['ip_nets']	   = array("127.0.0.0/8", "192.168.0.0/16", "10.0.0.0/8", "172.0.0.0/8");  // Networks to permit autodiscovery
+$config['autodiscovery']['ip_nets']           = array("127.0.0.0/8", "192.168.0.0/16", "10.0.0.0/8", "172.0.0.0/8");  // Networks to permit autodiscovery
 
 $config['discover_services']               = FALSE; // Autodiscover services via SNMP on devices of type "server"
 
@@ -249,7 +247,6 @@ $config['frontpage']['minigraphs']['legend']       = false;        // Enable/Dis
 
 // Frontpage order you can use: status_summary, map, device_status, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
 $config['frontpage']['order']           = array('status_summary', 'map', 'device_status', 'eventlog');
-
 
 // Device page options
 
@@ -530,7 +527,7 @@ $config['poller_modules']['netscaler-vsvr']               = 1;
 $config['poller_modules']['aruba-controller']             = 1;
 $config['poller_modules']['entity-physical']              = 1;
 $config['poller_modules']['applications']                 = 1;
-$config['poller_modules']['q-bridge-mib-fdb']		  = 1;
+$config['poller_modules']['q-bridge-mib-fdb']                  = 1;
 
 // List of discovery modules. Need to be in this array to be
 // considered for execution.
@@ -567,15 +564,13 @@ $config['modules_compat']['rfc1628']['netmanplus']        = 1;
 $config['modules_compat']['rfc1628']['deltaups']          = 1;
 $config['modules_compat']['rfc1628']['poweralert']        = 1;
 
-
 // Simple Observium API Settings
 
-$config['api']['enabled']			= 0;	// Enable or disable the API
-$config['api']['module']['inventory']		= 0;	// Enable or disable the inventory module for the API
-$config['api']['module']['billing']		= 0;	// Enable or disable the billing module for the API
-$config['api']['module']['packages']		= 0;	// Enable or disable the packages module for the API
-$config['api']['module']['encryption']		= 0;	// Enable encryption of data (be aware that this can be very slow and cpu intensive!!!)
-$config['api']['encryption']['key']		= "I_Need_To_Change_This_Key";	// Set a random encryption/decryption key
-
+$config['api']['enabled']                        = 0;        // Enable or disable the API
+$config['api']['module']['inventory']                = 0;        // Enable or disable the inventory module for the API
+$config['api']['module']['billing']                = 0;        // Enable or disable the billing module for the API
+$config['api']['module']['packages']                = 0;        // Enable or disable the packages module for the API
+$config['api']['module']['encryption']                = 0;        // Enable encryption of data (be aware that this can be very slow and cpu intensive!!!)
+$config['api']['encryption']['key']                = "I_Need_To_Change_This_Key";        // Set a random encryption/decryption key
 
 ?>

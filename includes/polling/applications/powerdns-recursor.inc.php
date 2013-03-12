@@ -60,13 +60,13 @@ if (!empty($agent_data['app']['powerdns-recursor']))
     list($key,$value) = explode("\t",$line,2);
     $powerdns_recursor[$key] = $value;
   }
-  
+
   # FIXME should we really use app_id here? means if app is disabled, then reenabled, we will lose the data as a new id will be created...
   $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-powerdns-recursor-".$app['app_id'].".rrd";
 
   unset($rrd_values);
 
-  foreach(array('all-outqueries', 'dont-outqueries', 'tcp-outqueries', 'throttled-out', 'ipv6-outqueries', 'noedns-outqueries', 'noping-outqueries',
+  foreach (array('all-outqueries', 'dont-outqueries', 'tcp-outqueries', 'throttled-out', 'ipv6-outqueries', 'noedns-outqueries', 'noping-outqueries',
     'dlg-only-drops', 'over-capacity-drops', 'outgoing-timeouts', 'unreachables', 'answers-slow', 'answers0-1', 'answers1-10', 'answers10-100',
     'answers100-1000', 'noerror-answers', 'nxdomain-answers', 'servfail-answers', 'case-mismatches', 'chain-resends', 'client-parse-errors',
     'edns-ping-matches', 'edns-ping-mismatches', 'no-packet-error', 'nsset-invalidations', 'qa-latency', 'questions', 'resource-limits',

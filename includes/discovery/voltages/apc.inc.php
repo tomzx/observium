@@ -34,16 +34,16 @@ if ($device['os'] == "apc")
       for ($p = 1;$p <= $phases;$p++)
       {
         $type = "apc";
-        
+
         $index     = "2.3.1.3.$tindex.1.$p";
         $current_oid = ".1.3.6.1.4.1.318.1.1.1.9.$index";
 
         $current   = $cache['apc']["$tindex.1.$p"]['upsPhaseInputVoltage'];
         $limit     = $cache['apc']["$tindex.1.$p"]['upsPhaseInputMaxVoltage'];
         $lowlimit  = $cache['apc']["$tindex.1.$p"]['upsPhaseInputMinVoltage'];
-        
+
         if ($itype == "bypass") { $name = "Bypass"; }
-        
+
         $descr     = "$name Phase $p";
 
         if ($current != -1)
@@ -65,14 +65,14 @@ if ($device['os'] == "apc")
       for ($p = 1;$p <= $phases;$p++)
       {
         $type = "apc";
-        
+
         $index     = "3.3.1.3.$tindex.1.$p";
         $current_oid = ".1.3.6.1.4.1.318.1.1.1.9.$index";
-        
+
         $current   = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputVoltage'];
         $limit     = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputMaxVoltage'];
         $lowlimit  = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputMinVoltage'];
-        
+
         $descr     = "$name Phase $p";
 
         if ($current != -1)
@@ -85,7 +85,7 @@ if ($device['os'] == "apc")
   else
   {
     # Try other APC MIB parts
-    
+
     ## ATS ##################################################################################################
 
     $oids = snmp_walk($device, "atsInputVoltage", "-OsqnU", "PowerNet-MIB");
@@ -103,11 +103,11 @@ if ($device['os'] == "apc")
         $index = $split_oid[count($split_oid)-3];
         $oid  = "1.3.6.1.4.1.318.1.1.8.5.3.3.1.3." . $index . ".1.1";
         $descr = "Input Feed " . chr(64+$index);
-  
+
         discover_sensor($valid['sensor'], 'voltage', $device, $oid, "3.3.1.3.$index", $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
       }
     }
-  
+
     $oids = snmp_walk($device, "atsOutputVoltage", "-OsqnU", "PowerNet-MIB");
     if ($debug) { echo($oids."\n"); }
     if ($oids) echo(" APC Out ");
@@ -123,13 +123,13 @@ if ($device['os'] == "apc")
         $index = $split_oid[count($split_oid)-3];
         $oid  = "1.3.6.1.4.1.318.1.1.8.5.4.3.1.3." . $index . ".1.1";
         $descr = "Output Feed"; if (count(explode("\n", $oids)) > 1) { $descr .= " $index"; }
-  
+
         discover_sensor($valid['sensor'], 'voltage', $device, $oid, "4.3.1.3.$index", $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
       }
     }
 
     ## UPS ##################################################################################################
-     
+
     # Fetch high precision voltage (Precision 0.1)
     $oids = snmp_get($device, "upsHighPrecInputLineVoltage.0", "-OsqnU", "PowerNet-MIB");
     if ($debug) { echo($oids."\n"); }
@@ -142,7 +142,7 @@ if ($device['os'] == "apc")
       $type = "apc";
       $index = "3.3.1.0";
       $descr = "Input";
-    
+
       discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
     }
     else
@@ -158,11 +158,11 @@ if ($device['os'] == "apc")
         $type = "apc";
         $index = "3.2.1.0";
         $descr = "Input";
-  
+
         discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
       }
     }
-  
+
     # Fetch high precision voltage (Precision 0.1)
     $oids = snmp_get($device, "upsHighPrecOutputVoltage.0", "-OsqnU", "PowerNet-MIB");
     if ($debug) { echo($oids."\n"); }
@@ -175,7 +175,7 @@ if ($device['os'] == "apc")
       $type = "apc";
       $index = "4.3.1.0";
       $descr = "Output";
-    
+
       discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
     }
     else
@@ -191,11 +191,11 @@ if ($device['os'] == "apc")
         $type = "apc";
         $index = "4.2.1.0";
         $descr = "Output";
-  
+
         discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
       }
     }
-  
+
     ## PDU ##################################################################################################
 
     $oids = snmp_walk($device, "rPDUIdentDeviceLinetoLineVoltage.0", "-OsqnU", "PowerNet-MIB");
@@ -208,10 +208,10 @@ if ($device['os'] == "apc")
       $type = "apc";
       $index = "1";
       $descr = "Input";
-  
+
       discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
     }
-  
+
     $oids = snmp_walk($device, "rPDU2PhaseStatusVoltage", "-OsqnU", "PowerNet-MIB");
     if ($debug) { echo($oids."\n"); }
     if ($oids)
@@ -222,10 +222,10 @@ if ($device['os'] == "apc")
       $type = "apc";
       $index = "1";
       $descr = "Input";
-  
+
       discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
     }
   }
 }
-  
+
 ?>

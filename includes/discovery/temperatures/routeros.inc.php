@@ -1,6 +1,6 @@
 <?php
 
-// Mikrotik RouterOS 
+// Mikrotik RouterOS
 
 # MIKROTIK-MIB::mtxrHlTemperature.0 = INTEGER: 22.0
 

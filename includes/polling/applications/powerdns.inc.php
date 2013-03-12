@@ -13,7 +13,7 @@ if (!empty($agent_data['app']['powerdns']))
 
   unset($rrd_values);
 
-  foreach(array('corrupt-packets', 'deferred-cache-inserts', 'deferred-cache-lookup', 'latency', 'packetcache-hit', 'packetcache-miss', 'packetcache-size', 'qsize-q',
+  foreach (array('corrupt-packets', 'deferred-cache-inserts', 'deferred-cache-lookup', 'latency', 'packetcache-hit', 'packetcache-miss', 'packetcache-size', 'qsize-q',
     'query-cache-hit', 'query-cache-miss', 'recursing-answers', 'recursing-questions', 'servfail-packets', 'tcp-answers', 'tcp-queries', 'timedout-packets', 'udp-answers',
     'udp-queries', 'udp4-answers', 'udp4-queries', 'udp6-answers', 'udp6-queries') as $key)
   {

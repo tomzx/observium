@@ -36,10 +36,10 @@ function discover_new_device_ip($host)
   }
 }
 
-
 function discover_new_device($hostname)
 {
   global $config, $debug;
+
   if ($config['autodiscovery']['xdp'])
   {
     echo("Discovering new host $hostname\n");
@@ -105,7 +105,7 @@ function discover_device($device, $options = NULL)
   // If we've specified a module, use that, else walk the modules array
   if ($options['m'])
   {
-    foreach(explode(",", $options['m']) as $module) {
+    foreach (explode(",", $options['m']) as $module) {
       if (is_file("includes/discovery/".$module.".inc.php"))
       {
         include("includes/discovery/".$module.".inc.php");
@@ -114,7 +114,7 @@ function discover_device($device, $options = NULL)
   } else {
     foreach ($config['discovery_modules'] as $module => $module_status)
     {
-      if(in_array($device['os_group'], $config['os']['discovery_blacklist']))
+      if (in_array($device['os_group'], $config['os']['discovery_blacklist']))
       {
         // Module is blacklisted for this OS.
         debug("Module $module is in the blacklist for ".$device['os_group']."\n");

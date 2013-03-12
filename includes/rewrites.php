@@ -75,7 +75,7 @@ function humanize_port($port, $device = NULL)
   global $config;
 
   // Process port data to make it pretty for printing. EVOLUTION, BITCHES.
-  // Lots of hacky shit will end up here with if(os);
+  // Lots of hacky shit will end up here with if (os);
 
   if (!$device) { $device = device_by_id_cache($port['device_id']); }
 
@@ -1463,13 +1463,12 @@ function short_port_descr ($desc)
 
 function replace_from_array($array, $string)
 {
-  if(array_key_exists($string, $array))
+  if (array_key_exists($string, $array))
   {
     $string = $array[$string];
   }
   return $string;
 }
-
 
 function array_str_replace($array, $string)
 {

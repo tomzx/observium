@@ -5,14 +5,14 @@ if (!empty($agent_data['app']['mysql']))
   $data = explode("\n",$agent_data['app']['mysql']);
 
   $mysql_rrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-mysql-".$app['app_id'].".rrd";
-  
+
   $map = array();
   foreach ($data as $str)
   {
     list($key, $value) = explode(":", $str);
     $map[$key] = (float)trim($value);
   }
-  
+
   // General Stats
   $mapping = array(
     'IDBLBSe' => 'cr',
@@ -96,13 +96,13 @@ if (!empty($agent_data['app']['mysql']))
     'CUe' => 'c3',
     'CUMi' => 'c9',
   );
-  
+
   $values = array();
   foreach ($mapping as $key)
   {
     $values[] = isset($map[$key]) ? $map[$key] : -1;
   }
-  
+
   if (!is_file($mysql_rrd))
   {
     rrdtool_create ($mysql_rrd, "--step 300 \

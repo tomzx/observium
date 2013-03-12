@@ -11,7 +11,6 @@ if (!empty($agent_data['app']['shoutcast'])) {
   echo(" shoutcast");
 }
 
-
 $servers = explode("\n", $shoutcast);
 
 foreach ($servers as $item=>$server)

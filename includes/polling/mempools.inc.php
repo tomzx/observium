@@ -36,7 +36,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
   }
   rrdtool_update($mempool_rrd,"N:".$mempool['used'].":".$mempool['free']);
 
-  if(!is_numeric($mempool['mempool_polled'])) { dbInsert(array('mempool_id' => $mempool['mempool_id']), 'mempools-state'); }
+  if (!is_numeric($mempool['mempool_polled'])) { dbInsert(array('mempool_id' => $mempool['mempool_id']), 'mempools-state'); }
 
   $mempool['state'] = array('mempool_polled' => time(), 'mempool_used' => $mempool['used'], 'mempool_perc' => $percent, 'mempool_free' => $mempool['free'],
                  'mempool_total' => $mempool['total'], 'mempool_largestfree' => $mempool['largestfree'], 'mempool_lowestfree' => $mempool['lowestfree']);

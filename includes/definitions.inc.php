@@ -135,7 +135,7 @@ $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "OpenIndiana";
 
 $os = "nexenta";
-$config['os'][$os]['type']		= "server";
+$config['os'][$os]['type']              = "server";
 $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "NexentaOS";
 
@@ -298,7 +298,6 @@ $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory Usage";
 $config['os'][$os]['icon']              = "cisco";
-
 
 // Cisco Small Business (Linksys)
 
@@ -997,20 +996,19 @@ $config['os'][$os]['type']              = "storage";
 $config['os'][$os]['icon']              = "synology";
 
 $os = "airos";
-$config['os'][$os]['text']		= "Ubiquiti AirOS";
-$config['os'][$os]['type']		= "network";
-$config['os'][$os]['icon']		= "ubiquiti";
-$config['os'][$os]['nobulk']		= 1;
-$config['os'][$os]['over'][0]['graph']	= "device_bits";
-$config['os'][$os]['over'][0]['text']	= "Device Traffic";
-$config['os'][$os]['over'][1]['graph']	= "device_processor";
-$config['os'][$os]['over'][1]['text']	= "CPU Usage";
+$config['os'][$os]['text']              = "Ubiquiti AirOS";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "ubiquiti";
+$config['os'][$os]['nobulk']            = 1;
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Device Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
 
 $os = "draytek";
 $config['os'][$os]['text']              = "Draytek";
 $config['os'][$os]['type']              = "firewall";
 $config['os'][$os]['icon']              = "draytek";
-
 
 foreach ($config['os'] as $this_os => $blah)
 {
@@ -1055,7 +1053,6 @@ $config['graph_types']['device']['agent']['section'] = 'poller';
 $config['graph_types']['device']['agent']['order'] = '0';
 $config['graph_types']['device']['agent']['descr'] = 'Agent Execution Time';
 
-
 $config['graph_types']['device']['netstat_arista_sw_ip'] = array(
  'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv4 Statistics");
 $config['graph_types']['device']['netstat_arista_sw_ip_frag'] = array(
@@ -1065,7 +1062,6 @@ $config['graph_types']['device']['netstat_arista_sw_ip6'] = array(
  'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv6 Statistics");
 $config['graph_types']['device']['netstat_arista_sw_ip6_frag'] = array(
  'section' => 'netstats', 'order' => '0', 'descr' => "Software forwarded IPv6 Fragmentation Statistics");
-
 
 $config['graph_types']['device']['cipsec_flow_bits']['section'] = 'firewall';
 $config['graph_types']['device']['cipsec_flow_bits']['order'] = '0';
@@ -1283,7 +1279,7 @@ if (isset($config['enable_printers']) && $config['enable_printers'])
   $config['device_types'][$i]['icon'] = 'fugue-printer-color';
 }
 
-// fixme - remove this old variable from use
+// FIXME - remove this old variable from use
 
 $config['sensor_classes'] = array('current' => 'A',
                            'frequency' => 'Hz',
@@ -1294,8 +1290,7 @@ $config['sensor_classes'] = array('current' => 'A',
                            'temperature' => 'C',
                            'dbm' => 'dBm');
 
-
-// fixme - different icons for power/volt/current
+// FIXME - different icons for power/volt/current
 
 $config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'fugue-lightning');
 $config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'fugue-lightning');
@@ -1310,7 +1305,6 @@ $config['routing_types']['ospf']       = array( 'text' => 'OSPF');
 $config['routing_types']['cef']       = array( 'text' => 'CEF');
 $config['routing_types']['bgp']       = array( 'text' => 'BGP');
 $config['routing_types']['vrf']       = array( 'text' => 'VRFs');
-
 
 //////////////////////////////
 # No changes below this line #

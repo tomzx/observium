@@ -168,7 +168,7 @@ foreach ($ports as $port)
 
     if ($device['os'] == "vmware" && preg_match("/Device ([a-z0-9]+) at .*/", $this_port['ifDescr'], $matches)) { $this_port['ifDescr'] = $matches[1]; }
 
-    if($device['os'] == 'zxr10') { $this_port['ifAlias'] = preg_replace("/^" . str_replace("/", "\\/", $this_port['ifName']) . "\s*/", '', $this_port['ifDescr']); }
+    if ($device['os'] == 'zxr10') { $this_port['ifAlias'] = preg_replace("/^" . str_replace("/", "\\/", $this_port['ifName']) . "\s*/", '', $this_port['ifDescr']); }
 
     $polled_period = $polled - $port['poll_time'];
 
@@ -289,7 +289,7 @@ foreach ($ports as $port)
       }
     }
 
-    if($config['debug_port'][$port['port_id']])
+    if ($config['debug_port'][$port['port_id']])
     {
       $port_debug  = $port['port_id']."|".$polled."|".$polled_period."|".$this_port['ifHCInOctets']."|".$this_port['ifHCOutOctets'];
       $port_debug .= "|".formatRates($port['stats']['ifInOctets_rate'])."|".formatRates($port['stats']['ifOutOctets_rate'])."\n";
@@ -300,7 +300,7 @@ foreach ($ports as $port)
     $port['stats']['ifInBits_rate'] = round($port['stats']['ifInOctets_rate'] * 8);
     $port['stats']['ifOutBits_rate'] = round($port['stats']['ifOutOctets_rate'] * 8);
 
-    if($this_port['ifSpeed'] > "0" && ($port['stats']['ifInBits_rate'] > $this_port['ifSpeed'] || $port['stats']['ifOutBits_rate'] > $this_port['ifSpeed']))
+    if ($this_port['ifSpeed'] > "0" && ($port['stats']['ifInBits_rate'] > $this_port['ifSpeed'] || $port['stats']['ifOutBits_rate'] > $this_port['ifSpeed']))
     {
       echo("Spike above ifSpeed detected!");
       $debug_file = "/tmp/port_debug.txt";
@@ -414,7 +414,7 @@ foreach ($ports as $port)
     // Update State
     if (count($port['state']))
     {
-      if(empty($port['poll_prev']))
+      if (empty($port['poll_prev']))
       {
         $insert = dbInsert(array('port_id' => $port['port_id']), 'ports-state');
         if ($debug) { echo("state inserted"); }
@@ -424,8 +424,6 @@ foreach ($ports as $port)
     }
 
     // End Update Database
-
-
 
     // Send alerts for interface flaps.
     if ($port['ignore'] == 0 && $config['alerts']['port']['ifdown'] && ($port['ifOperStatus'] != $this_port['ifOperStatus']))

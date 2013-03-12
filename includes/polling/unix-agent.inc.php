@@ -94,6 +94,7 @@ if ($device['os_group'] == "unix")
           if ($debug) { echo("Including: applications/$key.inc.php"); }
 
           echo($key);
+
           include("includes/polling/applications/$key.inc.php");
         }
       }

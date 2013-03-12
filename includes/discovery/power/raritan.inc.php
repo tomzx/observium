@@ -5,7 +5,7 @@ if ($device['os'] == 'raritan')
   $divisor = "1";
   $outlet_divisor = $divisor;
   $multiplier = "1";
-  
+
   $ratedvoltage = snmp_get($device,"ratedVoltage.0", "-Ovq", "PDU-MIB");
 
   /////////////////////////////////
@@ -39,7 +39,7 @@ if ($device['os'] == 'raritan')
         discover_sensor($valid['sensor'], 'power', $device, $outlet_oid, $outlet_insert_index, 'raritan', $outlet_descr, $outlet_divisor, $multiplier, $outlet_low_limit, $outlet_low_warn_limit, $outlet_high_warn_limit, $outlet_high_limit, $outlet_current);
       }
     }
-  } 
+  }
 }
 
 ?>

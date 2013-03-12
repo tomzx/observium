@@ -202,14 +202,14 @@ if ($device['os'] == "apc")
       for ($p = 1;$p <= $phases;$p++)
       {
         $type = "apc";
-        
+
         $index     = "6.$tindex.1.$p";
         $current_oid = ".1.3.6.1.4.1.318.1.1.1.9.2.3.1.$index";
 
         $current   = $cache['apc']["$tindex.1.$p"]['upsPhaseInputCurrent'] / 10;
         $limit     = $cache['apc']["$tindex.1.$p"]['upsPhaseInputMaxCurrent'];
         $lowlimit  = $cache['apc']["$tindex.1.$p"]['upsPhaseInputMinCurrent'];
-        
+
         $descr     = "$name Phase $p";
 
         if ($current != -0.1)
@@ -231,14 +231,14 @@ if ($device['os'] == "apc")
       for ($p = 1;$p <= $phases;$p++)
       {
         $type = "apc";
-        
+
         $index     = "4.$tindex.1.$p";
         $current_oid = ".1.3.6.1.4.1.318.1.1.1.9.3.3.1.$index";
 
         $current   = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputCurrent'] / 10;
         $limit     = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputMaxCurrent'];
         $lowlimit  = $cache['apc']["$tindex.1.$p"]['upsPhaseOutputMinCurrent'];
-        
+
         $descr     = "$name Phase $p";
 
         if ($current != -0.1)

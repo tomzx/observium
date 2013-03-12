@@ -21,9 +21,9 @@ if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
   $results = external_exec($config['ipmitool'] . $remote . " sensor 2>/dev/null");
 
   $ipmi_end = utime(); $ipmi_time = round(($ipmi_end - $ipmi_start) * 1000);
-  
+
   echo('(' . $ipmi_time . 'ms) ');
-          
+
   $index = 0;
 
   foreach (explode("\n",$results) as $row)
@@ -52,6 +52,6 @@ foreach ($config['ipmi_unit'] as $type)
   check_valid_sensors($device, $type, $valid['sensor'], 'ipmi');
 }
 
-echo("\n");      
+echo("\n");
 
 ?>

@@ -13,10 +13,11 @@ foreach ($switch_info_oids as $oid) { echo("$oid "); $aruba_info = snmpwalk_cach
 
 echo("\n");
 
-if ($aruba_info[0]['wlsxSwitchRole']=='master') {
-	$features="Master Controller";
+if ($aruba_info[0]['wlsxSwitchRole']=='master')
+{
+  $features="Master Controller";
 } else {
-	$features="Local Controller for ".$aruba_info[0]['wlsxSwitchMasterIp'];
+  $features="Local Controller for ".$aruba_info[0]['wlsxSwitchMasterIp'];
 }
 
 ?>

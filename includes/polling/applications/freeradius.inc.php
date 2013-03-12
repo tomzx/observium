@@ -1,6 +1,5 @@
 <?php
 
-
 if (!empty($agent_data['app']['freeradius']))
 {
   $data = explode("\n",$agent_data['app']['freeradius']);
@@ -13,7 +12,7 @@ if (!empty($agent_data['app']['freeradius']))
     list($key, $value) = explode(":", $str);
     $map[$key] = (float)trim($value);
   }
-  
+
   // General Stats
   $mapping = array(
     'AccessAccepts' => 'FreeRADIUS-Total-Access-Accepts',
@@ -40,7 +39,7 @@ if (!empty($agent_data['app']['freeradius']))
   {
     $values[] = isset($map[$key]) ? $map[$key] : -1;
   }
-  
+
   if (!is_file($freeradius_rrd))
   {
     rrdtool_create($freeradius_rrd, "--step 300 \

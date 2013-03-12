@@ -49,9 +49,9 @@ function formatUptime($diff, $format="long")
     if ($secsDiff > '0')  { $u['s'] = $secsDiff; }
 
     $count = 0; $uptime = '';
-    foreach($u as $period => $value)
+    foreach ($u as $period => $value)
     {
-      if($count == "2") { break; }
+      if ($count == "2") { break; }
       $uptime .= $value.$period.' ';
       $count++;
     }
@@ -458,7 +458,6 @@ function device_by_name($name, $refresh = 0)
   return device_by_id_cache(getidbyname($name), $refresh);
 }
 
-
 function accesspoint_by_id($ap_id, $refresh = '0') {
 
   $ap = dbFetchRow("SELECT * FROM `accesspoint` WHERE `accesspoint_id` = ?", array($ap_id));
@@ -466,7 +465,6 @@ function accesspoint_by_id($ap_id, $refresh = '0') {
   return $ap;
 
 }
-
 
 function device_by_id_cache($device_id, $refresh = '0')
 {
@@ -772,14 +770,14 @@ function gethostbynamel6($host, $try_a = false) {
   /// FIXME. Mike: it is necessary to use nsswitch, but I yet didn't think up as.
   $etc = ipFromEtcHosts($host);
   if ($etc && strstr($etc, ':')) $ip6[] = $etc;
-  
+
   if ($try_a == true) {
     if ($etc && strstr($etc, '.')) $ip4[] = $etc;
     $dns = dns_get_record($host, DNS_A + DNS_AAAA);
   } else {
     $dns = dns_get_record($host, DNS_AAAA);
   }
-  
+
   foreach ($dns as $record) {
     switch ($record['type']) {
       case 'A':
@@ -818,7 +816,7 @@ function get_port_rrdfilename($device, $interface, $suffix = "")
 {
   global $config;
 
-  if($device['hostname'] == "")
+  if ($device['hostname'] == "")
   {
     die(" Error: hostname for device is empty\n");
   }
@@ -828,12 +826,12 @@ function get_port_rrdfilename($device, $interface, $suffix = "")
   // default to ifIndex
   $this_port_identifier = $interface['ifIndex'];
 
-  if($device_identifier == "ifname" && $interface['ifName'] != "")
+  if ($device_identifier == "ifname" && $interface['ifName'] != "")
   {
     $this_port_identifier = strtolower(str_replace("/", "-", $interface['ifName']));
   }
 
-  if($suffix == "")
+  if ($suffix == "")
   {
     return sprintf("%s/%s/port-%s.rrd", trim($config['rrd_dir']), trim($device['hostname']), $this_port_identifier);
   }
