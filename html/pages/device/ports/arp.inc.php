@@ -1,43 +1,43 @@
+<div class="row">
+<div class="span12">
+  
+<div class="well well-shaded">
+
+<form method="post" action="" class="form form-inline">
+
+
+  <span style="font-weight: bold;">ARP Search</span> &#187;
+  
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Search By</span>
+    <select name="searchby" id="searchby">
+      <option value="mac" <?php if ($vars['searchby'] != 'ip') { echo("selected"); } ?> >MAC Address</option>
+      <option value="ip" <?php if ($vars['searchby'] == 'ip') { echo("selected"); } ?> >IP Address</option>
+    </select>
+  </div>
+
+  <div class="input-prepend" style="margin-right: 3px;">
+    <span class="add-on">Address</span>
+    <input type="text" name="address" id="address" class="input" value="<?php echo($vars['address']); ?>" />
+  </div>
+  
+  <input type="hidden" name="pageno" value="1">
+  <button type="submit" class="btn pull-right"><i class="icon-search"></i> Search</button>
+</form>
+
+</div> <!-- well -->
+
 <?php
 
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
-echo("  <thead>\n");
-echo("    <tr>\n");
-echo("      <th>Port</th>\n");
-echo("      <th>MAC Address</th>\n");
-echo("      <th>IP Address</th>\n");
-echo("      <th>Remote Host</th>\n");
-echo("      <th>Remote Port</th>\n");
-echo("    </tr>\n");
-echo("  </thead>\n");
-echo("  <tbody>\n");
+// Pagination
+$vars['pagination'] = TRUE;
+if(!$vars['pagesize']) { $vars['pagesize'] = 100; }
+if(!$vars['pageno']) { $vars['pageno'] = 1; }
 
-$i = "1";
-
-foreach (dbFetchRows("SELECT * FROM ipv4_mac AS M, ports AS I WHERE I.port_id = M.port_id AND I.device_id = ?", array($device['device_id'])) as $arp)
-{
-  if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
-
-  $arp_host = dbFetchRow("SELECT * FROM ipv4_addresses AS A, ports AS I, devices AS D WHERE A.ipv4_address = ? AND I.port_id = A.port_id AND D.device_id = I.device_id", array($arp['ipv4_address']));
-
-  if ($arp_host) { $arp_name = generate_device_link($arp_host); } else { unset($arp_name); }
-  if ($arp_host) { $arp_if = generate_port_link($arp_host); } else { unset($arp_if); }
-
-  if ($arp_host['device_id'] == $device['device_id']) { $arp_name = "Localhost"; }
-  if ($arp_host['port_id'] == $arp['port_id']) { $arp_if = "Local Port"; }
-
-  echo("
-  <tr bgcolor=$bg_colour>
-    <td width=200><b>".generate_port_link(array_merge($arp, $device))."</b></td>
-    <td width=160>".formatmac($arp['mac_address'])."</td>
-    <td width=160>".$arp['ipv4_address']."</td>
-    <td width=280>$arp_name</td>
-    <td>$arp_if</td>
-  </tr>");
-  $i++;
-}
-
-echo("  </tbody>\n");
-echo("</table>\n");
+print_arptable($vars);
 
 ?>
+
+  </div> <!-- span12 -->
+
+</div> <!-- row -->

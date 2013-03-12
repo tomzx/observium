@@ -8,7 +8,7 @@
  * @package    observium
  * @subpackage web
  * @copyright  (C) 2006 - 2013 Adam Armstrong
- * @version    1.0.6
+ * @version    1.0.7
  *
  */
 
@@ -200,6 +200,7 @@ function print_addresses($vars)
     $address_show = TRUE;
     if ($address_search)
     {
+      // If address not in specified network, don't show entry.
       if ($address_type === 'ipv4')
       {
         $address_show = Net_IPv4::ipInNetwork($entry[$address_type.'_address'], $addr . '/' . $mask);
@@ -210,8 +211,6 @@ function print_addresses($vars)
 
     if ($address_show)
     {
-      $speed = humanspeed($entry['ifSpeed']);
-
       list($prefix, $length) = explode('/', $entry[$address_type.'_network']);
 
       if (port_permitted($entry['port_id']))
@@ -243,6 +242,158 @@ function print_addresses($vars)
   if ($pagination) { echo pagination($vars, $count); }
 
   // Print addresses
+  echo $string;
+}
+
+/**
+ * Display ARP table addresses.
+ *
+ * Display pages with ARP tables addresses from devices.
+ *
+ * @param array $vars
+ * @return none
+ *
+ */
+
+function print_arptable($vars)
+{
+  // With pagination? (display page numbers in header)
+  $pagination = (isset($vars['pagination']) && $vars['pagination']) ? TRUE : FALSE;
+  $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
+  $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
+  $start = $pagesize * $pageno - $pagesize;
+
+  $address_search = FALSE;
+  
+  $param = array();
+  $where = ' WHERE 1 ';
+  foreach ($vars as $var => $value)
+  {
+    if ($value != '')
+    {
+      switch ($var)
+      {
+        case 'device':
+        case 'device_id':
+          $where .= ' AND D.device_id = ?';
+          $param[] = $value;
+          break;
+        case 'port':
+        case 'port_id':
+          $where .= ' AND I.port_id = ?';
+          $param[] = $value;
+          break;
+        case 'address':
+          $address_search = TRUE;
+          if (isset($vars['searchby']) && $vars['searchby'] == 'ip')
+          {
+            $where .= ' AND `ipv4_address` LIKE ?';
+            $param[] = '%'.trim($value).'%';
+          } else {
+            $where .= ' AND `mac_address` LIKE ?';
+            $param[] = '%'.str_replace(array(':', ' ', '-', '.', '0x'),'',mres($value)).'%';
+          }
+          break;
+      }
+    }
+  }
+
+  if ($_SESSION['userlevel'] >= 5)
+  {
+    $query_perms = '';
+    $query_user = '';
+  } else {
+    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
+    $query_user = ' AND P.user_id = ? ';
+    $param[] = $_SESSION['user_id'];
+  }
+
+  // Don't show ignored and disabled devices
+  $query_device = ' AND D.ignore = 0 ';
+  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+
+  $query = 'FROM `ipv4_mac` AS M ';
+  $query .= 'LEFT JOIN `ports`   AS I ON I.port_id   = M.port_id ';
+  $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
+  $query .= $query_perms;
+  $query .= $where . $query_device . $query_user;
+  ///FIXME. Mike: need column `mac_id` and index it in `ipv4_mac` table.
+  $query_count = 'SELECT COUNT(*) ' . $query;
+  $query =  'SELECT * ' . $query;
+  $query .= ' ORDER BY M.mac_address';
+  if ($address_search) {
+    $pagination = FALSE;
+  } else {
+    $query .= " LIMIT $start,$pagesize";
+  }
+
+  // Query ARP table addresses
+  $entries = dbFetchRows($query, $param);
+  // Query ARP table address count
+  if ($pagination) { $count = dbFetchCell($query_count, $param); }
+
+  $list = array('device' => FALSE, 'port' => FALSE);
+  if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'search') { $list['device'] = TRUE; }
+  if (!isset($vars['port']) || empty($vars['port']) || $vars['page'] == 'search') { $list['port'] = TRUE; }
+
+  $string = '<table class="table table-bordered table-striped table-hover table-condensed table-rounded">' . PHP_EOL;
+  if (!$short)
+  {
+    $string .= '  <thead>' . PHP_EOL;
+    $string .= '    <tr>' . PHP_EOL;
+    $string .= '      <th>MAC Address</th>' . PHP_EOL;
+    $string .= '      <th>IP Address</th>' . PHP_EOL;
+    if ($list['device']) { $string .= '      <th>Device</th>' . PHP_EOL; }
+    if ($list['port']) { $string .= '      <th>Interface</th>' . PHP_EOL; }
+    $string .= '      <th>Remote Device</th>' . PHP_EOL;
+    $string .= '      <th>Remote Interface</th>' . PHP_EOL;
+    $string .= '    </tr>' . PHP_EOL;
+    $string .= '  </thead>' . PHP_EOL;
+  }
+  $string .= '  <tbody>' . PHP_EOL;
+
+  foreach ($entries as $entry)
+  {
+    if (port_permitted($entry['port_id']))
+    {
+      $entry = humanize_port ($entry, $entry);
+      $arp_host = dbFetchRow('SELECT * FROM ipv4_addresses AS A
+                             LEFT JOIN ports AS I ON A.port_id = I.port_id
+                             LEFT JOIN devices AS D ON D.device_id = I.device_id
+                             WHERE A.ipv4_address = ?', array($entry['ipv4_address']));
+      $arp_name = ($arp_host) ? generate_device_link($arp_host) : '';
+      $arp_if = ($arp_host) ? generate_port_link($arp_host) : '';
+      if ($arp_host['device_id'] == $entry['device_id']) { $arp_name = 'Self Device'; }
+      if ($arp_host['port_id'] == $entry['port_id']) { $arp_if = 'Self Port'; }
+
+      $string .= '  <tr>' . PHP_EOL;
+      $string .= '    <td width="160">' . formatMac($entry['mac_address']) . '</td>' . PHP_EOL;
+      $string .= '    <td width="140">' . $entry['ipv4_address'] . '</td>' . PHP_EOL;
+      if ($list['device'])
+      {
+        $string .= '    <td class="list-bold" nowrap>' . generate_device_link($entry) . '</td>' . PHP_EOL;
+      }
+      if ($list['port'])
+      { 
+        if ($entry['ifInErrors_delta'] > 0 || $entry['ifOutErrors_delta'] > 0)
+        {
+          $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
+        }
+        $string .= '    <td class="list-bold">' . generate_port_link($entry, makeshortif($entry['label'])) . ' ' . $port_error . '</td>' . PHP_EOL;
+      }
+      $string .= '    <td class="list-bold" width="200">' . $arp_name . '</td>' . PHP_EOL;
+      $string .= '    <td class="list-bold">' . $arp_if . '</td>' . PHP_EOL;
+      $string .= '  </tr>' . PHP_EOL;
+    }
+  }
+
+  $string .= '  </tbody>' . PHP_EOL;
+  $string .= '</table>';
+
+  // Print pagination header
+  if ($pagination) { echo pagination($vars, $count); }
+
+  // Print ARP table
   echo $string;
 }
 
