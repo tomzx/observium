@@ -10,7 +10,7 @@ if (is_file($rrd))
 }
 
 $ds = 'ping_snmp';
-$colour_area = '00000000';
+$colour_area = 'EEEEFF';
 $colour_line = '0000CC';
 $colour_area_max = 'FFEE99';
 $unit_text = 'Milliseconds';

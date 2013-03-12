@@ -10,7 +10,7 @@ if (is_file($rrd))
 }
 
 $ds = 'ping';
-$colour_area = '00000000';
+$colour_area = 'FFEEEE';
 $colour_line = 'CC0000';
 $colour_area_max = 'FFEE99';
 $unit_text = 'Milliseconds';
