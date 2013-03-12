@@ -100,7 +100,7 @@ function print_navbar($navbar)
 function print_addresses($vars)
 {
   // With pagination? (display page numbers in header)
-  $pagination = (isset($vars['pagination']) && $vars['pagination']) ? TRUE : FALSE;
+  $pagination = (isset($vars['pagination']) && $vars['pagination']);
   $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
@@ -258,7 +258,7 @@ function print_addresses($vars)
 function print_arptable($vars)
 {
   // With pagination? (display page numbers in header)
-  $pagination = (isset($vars['pagination']) && $vars['pagination']) ? TRUE : FALSE;
+  $pagination = (isset($vars['pagination']) && $vars['pagination']);
   $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
@@ -415,9 +415,9 @@ function print_arptable($vars)
 function print_events($vars)
 {
   // Short events? (no pagination, small out)
-  $short = (isset($vars['short']) && $vars['short']) ? TRUE : FALSE;
+  $short = (isset($vars['short']) && $vars['short']);
   // With pagination? (display page numbers in header)
-  $pagination = (isset($vars['pagination']) && $vars['pagination']) ? TRUE : FALSE;
+  $pagination = (isset($vars['pagination']) && $vars['pagination']);
   $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
@@ -587,9 +587,9 @@ function print_events_short($var)
 function print_syslogs($vars)
 {
   // Short events? (no pagination, small out)
-  $short = (isset($vars['short']) && $vars['short']) ? TRUE : FALSE;
+  $short = (isset($vars['short']) && $vars['short']);
   // With pagination? (display page numbers in header)
-  $pagination = (isset($vars['pagination']) && $vars['pagination']) ? TRUE : FALSE;
+  $pagination = (isset($vars['pagination']) && $vars['pagination']);
   $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
