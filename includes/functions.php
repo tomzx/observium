@@ -38,49 +38,51 @@ if ($config['alerts']['email']['enable'])
 
 function array_sort($array, $on, $order=SORT_ASC)
 {
-    $new_array = array();
-    $sortable_array = array();
+  $new_array = array();
+  $sortable_array = array();
 
-    if (count($array) > 0) {
-        foreach ($array as $k => $v) {
-            if (is_array($v)) {
-                foreach ($v as $k2 => $v2) {
-                    if ($k2 == $on) {
-                        $sortable_array[$k] = $v2;
-                    }
-                }
-            } else {
-                $sortable_array[$k] = $v;
-            }
+  if (count($array) > 0)
+  {
+    foreach ($array as $k => $v)
+    {
+      if (is_array($v))
+      {
+        foreach ($v as $k2 => $v2)
+        {
+          if ($k2 == $on)
+          {
+            $sortable_array[$k] = $v2;
+          }
         }
-
-        switch ($order) {
-            case SORT_ASC:
-                asort($sortable_array);
-            break;
-            case SORT_DESC:
-                arsort($sortable_array);
-            break;
-        }
-
-        foreach ($sortable_array as $k => $v) {
-            $new_array[$k] = $array[$k];
-        }
+      } else {
+        $sortable_array[$k] = $v;
+      }
     }
-    return $new_array;
+
+    switch ($order)
+    {
+      case SORT_ASC:
+        asort($sortable_array);
+      break;
+      case SORT_DESC:
+        arsort($sortable_array);
+      break;
+    }
+
+    foreach ($sortable_array as $k => $v)
+    {
+      $new_array[$k] = $array[$k];
+    }
+  }
+
+  return $new_array;
 }
 
-# FIXME horrible
 function mac_clean_to_readable($mac)
 {
-  $r = substr($mac, 0, 2);
-  $r .= ":".substr($mac, 2, 2);
-  $r .= ":".substr($mac, 4, 2);
-  $r .= ":".substr($mac, 6, 2);
-  $r .= ":".substr($mac, 8, 2);
-  $r .= ":".substr($mac, 10, 2);
-
-  return($r);
+  for ($i = 0; $i < 12; $i+=2) { $r[] .= substr($mac, $i, 2); }
+   
+  return implode($r, ':');
 }
 
 function only_alphanumeric($string)
@@ -102,7 +104,6 @@ function error($message)
   global $config, $debug;
 
   if ($debug) { echo($message); }
-
 }
 
 function getHostOS($device)
@@ -274,7 +275,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
         }
         elseif ($snmpver === "v2c" or $snmpver === "v1")
         {
-          // try each community from config
+          // Try each community from config
           foreach ($config['snmp']['community'] as $community)
           {
             $device = deviceArray($host, $community, $snmpver, $port, $transport, NULL);
@@ -581,12 +582,14 @@ function get_astext($asn)
 {
   global $config,$cache;
 
+  // Fetch pre-set AS text from config first
   if (isset($config['astext'][$asn]))
   {
     return $config['astext'][$asn];
   }
   else
   {
+    // Not preconfigured, check cache before doing a new DNS request
     if (isset($cache['astext'][$asn]))
     {
       return $cache['astext'][$asn];
@@ -597,6 +600,7 @@ function get_astext($asn)
       $txt = explode('|',$result[0]['txt']);
       $result = trim(str_replace('"', '', $txt[4]));
       $cache['astext'][$asn] = $result;
+
       return $result;
     }
   }
@@ -711,7 +715,8 @@ function notify($device,$title,$message)
             $mail->Timeout    = $config['email_smtp_timeout'];
             $mail->SMTPAuth   = $config['email_smtp_auth'];
             $mail->SMTPSecure = $config['email_smtp_secure'];
-            if ($config['email_smtp_secure'] == "ssl" && $config['email_smtp_port'] == 25) {
+            if ($config['email_smtp_secure'] == "ssl" && $config['email_smtp_port'] == 25)
+            {
               $mail->Port     = 465; // Default port for SSL
             }
             $mail->Port       = $config['email_smtp_port'];
@@ -783,7 +788,6 @@ function include_dir($dir, $regex = "")
 
 function is_port_valid($port, $device)
 {
-
   global $config, $debug;
 
   if (strstr($port['ifDescr'], "irtual"))
@@ -800,6 +804,7 @@ function is_port_valid($port, $device)
         if ($debug) { echo("ignored : $bi : $if"); }
       }
     }
+
     if (is_array($config['bad_if_regexp']))
     {
       foreach ($config['bad_if_regexp'] as $bi)
@@ -811,6 +816,7 @@ function is_port_valid($port, $device)
         }
       }
     }
+
     if (is_array($config['bad_iftype']))
     {
       foreach ($config['bad_iftype'] as $bi)
