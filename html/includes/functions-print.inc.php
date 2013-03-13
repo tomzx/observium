@@ -317,8 +317,7 @@ function print_arptable($vars)
   $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
-  ///FIXME. Mike: need column `mac_id` and index it in `ipv4_mac` table.
-  $query_count = 'SELECT COUNT(*) ' . $query;
+  $query_count = 'SELECT COUNT(mac_id) ' . $query;
   $query =  'SELECT * ' . $query;
   $query .= ' ORDER BY M.mac_address';
   if ($address_search) {
