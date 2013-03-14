@@ -4,17 +4,25 @@
 
 unset ($mac_table);
 
+// Caching ifIndex
+$query = 'SELECT port_id, ifIndex FROM ports WHERE device_id = ? GROUP BY port_id';
+foreach(dbFetchRows($query, array($device['device_id'])) as $entry)
+{
+  $entry_if = $entry['ifIndex'];
+  $interface[$entry_if] = $entry['port_id'];
+}
+
 // IPv4 ARP table
 echo("ARP Table : ");
 
-$ipNetToMedia_data = snmp_walk($device, 'ipNetToMediaPhysAddress', '-Oq', 'IP-MIB');
-$ipNetToMedia_data = str_replace("ipNetToMediaPhysAddress.", "", trim($ipNetToMedia_data));
-$ipNetToMedia_data = str_replace("IP-MIB::", "", trim($ipNetToMedia_data));
+// GENERIC (-OXqs):
+//ipNetToMediaPhysAddress[213][10.0.0.162] 70:81:5:ec:f9:bf
+$oid_data = snmp_walk($device, 'ipNetToMediaPhysAddress', '-OXqs', 'IP-MIB');
+$oid_data = trim($oid_data);
 
 // Caching old ARP table
-/// FIXME. Need only 'mac_id', 'port_id', 'ifIndex', 'mac_address', 'ipv4_address'
-$query = 'SELECT mac_id, M.port_id, mac_address, ipv4_address, ifIndex from ipv4_mac AS M
-          LEFT JOIN ports as I ON M.port_id = I.port_id
+$query = 'SELECT mac_id, mac_address, ipv4_address, ifIndex FROM ipv4_mac AS M
+          LEFT JOIN ports AS I ON M.port_id = I.port_id
           WHERE I.device_id = ?';
 $cache_arp = dbFetchRows($query, array($device['device_id']));
 foreach($cache_arp as $entry)
@@ -23,22 +31,20 @@ foreach($cache_arp as $entry)
   $old_mac = $entry['mac_address'];
   $old_address = $entry['ipv4_address'];
   $old_table[$old_if][$old_address] = $old_mac;
-  if(!isset($interface[$old_if])) { $interface[$old_if] = $entry['port_id']; }
 }
 
-foreach (explode("\n", $ipNetToMedia_data) as $data)
+foreach (explode("\n", $oid_data) as $data)
 {
-  list($oid, $mac) = explode(" ", $data);
-  list($if, $first, $second, $third, $fourth) = explode(".", $oid);
-  $ip = $first . "." . $second . "." . $third . "." . $fourth;
-  if ($ip != '...')
+  $ipv4_pattern = '/\[(\d+)\]\[([\d\.]+)\]\s+([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+)/i';
+  preg_match($ipv4_pattern, $data, $matches);
+  $if = $matches[1];
+  $ip = $matches[2];
+  if ($ip)
   {
-    list($m_a, $m_b, $m_c, $m_d, $m_e, $m_f) = explode(":", $mac);
-    $m_a = zeropad($m_a);$m_b = zeropad($m_b);$m_c = zeropad($m_c);$m_d = zeropad($m_d);$m_e = zeropad($m_e);$m_f = zeropad($m_f);
-    //$md_a = hexdec($m_a);$md_b = hexdec($m_b);$md_c = hexdec($m_c);$md_d = hexdec($m_d);$md_e = hexdec($m_e);$md_f = hexdec($m_f);
-    $mac = "$m_a:$m_b:$m_c:$m_d:$m_e:$m_f";
+    $mac = zeropad($matches[3]);
+    for ($i = 4; $i <= 8; $i++) { $mac .= ':' . zeropad($matches[$i]); }
+    $clean_mac = str_replace(':', '', $mac);
 
-    $clean_mac = $m_a . $m_b . $m_c . $m_d . $m_e . $m_f;
     $mac_table[$if][$ip] = $clean_mac;
     $port_id = $interface[$if];
 
@@ -70,10 +76,10 @@ foreach (explode("\n", $ipNetToMedia_data) as $data)
 foreach($cache_arp as $entry)
 {
   $entry_mac_id = $entry['mac_id'];
-  $entry_port_id = $entry['port_id'];
   $entry_mac = $entry['mac_address'];
   $entry_ip = $entry['ipv4_address'];
   $entry_if  = $entry['ifIndex'];
+  $entry_port_id = $interface[$entry_if];
   if (!isset($mac_table[$entry_if][$entry_ip]))
   {
     dbDelete('ipv4_mac', 'mac_id = ?', array($entry_mac_id));
