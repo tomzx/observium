@@ -148,6 +148,10 @@ function discover_device($device, $options = NULL)
 
   dbUpdate(array('last_discovered' => array('NOW()'), 'type' => $device['type'], 'last_discovered_timetaken' => $device_time), 'devices', '`device_id` = ?', array($device['device_id']));
 
+  // put performance into devices_perftimes
+
+  dbInsert(array('device_id' => $device['device_id'], 'operation' => 'discover', 'start' => $device_start, 'duration' => $device_run), 'devices_perftimes');
+
   echo("Discovered in $device_time seconds\n");
 
   // not worth putting discovery data into rrd. it's not done every 5 mins :)
