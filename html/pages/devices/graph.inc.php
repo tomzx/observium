@@ -36,8 +36,8 @@
         $height = 159;
         $height_div = 230;
       } else {
-        $width_div=294;
-        $width=222;
+        $width_div=286;
+        $width=213;
         $height = 100;
         $height_div = 163;
       }
