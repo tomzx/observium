@@ -1,22 +1,25 @@
 <?php
 
-//  This file prints a table row for each interface
-//  Various port properties are processed by humanize_port(), generating class and description.
-
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ *   This file prints a table row for each interface
+ *   Various port properties are processed by humanize_port(), generating class and description.
+ *
+ * @package    observium
+ * @subpackage webinterface
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
 
 $port['device_id'] = $device['device_id'];
 $port['hostname'] = $device['hostname'];
 
-$if_id = $port['port_id'];
-
+// Process port properties and generate printable values
 $port = humanize_port($port);
-
-if($int_colour)
-{
-  $row_colour = $int_colour;
-} else {
-  if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-}
 
 $port_adsl = dbFetchRow("SELECT * FROM `ports_adsl` WHERE `port_id` = ?", array($port['port_id']));
 
@@ -53,12 +56,12 @@ if ($port_details)
 {
   foreach (dbFetchRows("SELECT * FROM `ipv4_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip)
   {
-    echo("$break <a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=$ip[ipv4_address]')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
+    echo($break ."<a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=$ip[ipv4_address]')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
     $break = "<br />";
   }
   foreach (dbFetchRows("SELECT * FROM `ipv6_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip6)
   {
-    echo("$break <a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=".$ip6['ipv6_address']."')\">".Net_IPv6::compress($ip6['ipv6_address'])."/".$ip6['ipv6_prefixlen']."</a>");
+    echo($break ."<a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=".$ip6['ipv6_address']."')\">".Net_IPv6::compress($ip6['ipv6_address'])."/".$ip6['ipv6_prefixlen']."</a>");
     $break = "<br />";
   }
 }
@@ -77,7 +80,7 @@ if ($port_details)
   echo(generate_port_link($port, "<img src='graph.php?type=port_errors&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no'>"));
 }
 
-echo("</td><td width=120>");
+echo('</td><td width=120 class="interface-desc">');
 
 if ($port['ifOperStatus'] == "up")
 {

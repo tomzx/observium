@@ -125,8 +125,27 @@ else
 
   print_optionbar_end();
 
-  echo("<table border=0 cellspacing=0 cellpadding=5 width=100% class='sortable'>");
-  echo('<tr style="height: 30px"><td width=1></td><th>Local address</th><th></th><th>Peer address</th><th>Type</th><th>Family</th><th>Remote AS</th><th>State</th><th width=200>Uptime / Updates</th></tr>');
+  switch ($vars['view'])
+  {
+    case 'prefixes_ipv4unicast':
+    case 'prefixes_ipv4multicast':
+    case 'prefixes_ipv4vpn':
+    case 'prefixes_ipv6unicast':
+    case 'prefixes_ipv6multicast':
+    case 'macaccounting_bits':
+    case 'macaccounting_pkts':
+    case 'updates':
+      $table_class = 'table-striped-two';
+      break;
+    default:
+      $table_class = 'table-striped';
+  }
+
+  echo('<table class="table table-hover table-bordered '.$table_class.' table-condensed table-rounded">');
+  echo('<thead>');
+
+  echo('<tr><th></th><th></th><th>Local address</th><th></th><th>Peer address</th><th>Type</th><th>Family</th><th>Remote AS</th><th>State</th><th width=200>Uptime / Updates</th></tr>');
+  echo('</thead>');
 
   if ($vars['type'] == "external")
   {
@@ -151,14 +170,8 @@ else
   $peer_query = "select * from `bgpPeers` AS B, `devices` AS D, `bgpPeers-state` AS S WHERE B.device_id = D.device_id AND B.bgpPeer_id = S.bgpPeer_id ".$where." ORDER BY D.hostname, B.bgpPeerRemoteAs, B.bgpPeerIdentifier";
   foreach (dbFetchRows($peer_query) as $peer)
   {
-    unset ($alert, $bg_image);
 
-    if ($peer['bgpPeerState'] == "established") { $col = "green"; } else { $col = "red"; $peer['alert']=1; }
-    if ($peer['bgpPeerAdminStatus'] == "start" || $peer['bgpPeerAdminStatus'] == "running") { $admin_col = "green"; } else { $admin_col = "gray"; }
-    if ($peer['bgpPeerAdminStatus'] == "stop") { $peer['alert']=0; $peer['disabled']=1; }
-    if ($peer['bgpPeerRemoteAs'] == $peer['bgpLocalAs']) { $peer_type = "<span style='color: #00f;'>iBGP</span>"; } else { $peer_type = "<span style='color: #0a0;'>eBGP</span>";
-     if ($peer['bgpPeerRemoteAS'] >= '64512' && $peer['bgpPeerRemoteAS'] <= '65535') { $peer_type = "<span style='color: #f00;'>Priv eBGP</span>"; }
-    }
+    humanize_bgp($peer);
 
     $peerhost = dbFetchRow("SELECT * FROM ipaddr AS A, ports AS I, devices AS D WHERE A.addr = ? AND I.port_id = A.port_id AND D.device_id = I.device_id", array($peer['bgpPeerIdentifier']));
 
@@ -174,7 +187,7 @@ else
     $peer_daily_url   = "graph.php?id=" . $peer['bgpPeer_id'] . "&amp;type=" . $graph_type . "&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=500&amp;height=150";
     $peeraddresslink  = "<span class=list-large><a href='device/device=" . $peer['device_id'] . "/tab=routing/proto=bgp/' onmouseover=\"return overlib('<img src=\'$peer_daily_url\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer['bgpPeerIdentifier'] . "</a></span>";
 
-    echo('<tr class="bgp"' . ($peer['alert'] ? ' bordercolor="#cc0000"' : '') . ($peer['disabled'] ? ' bordercolor="#cccccc"' : '') . ">");
+    echo('<tr class="'.$peer['html_row_class'].'">');
 
     unset($sep);
     foreach (dbFetchRows("SELECT * FROM `bgpPeers_cbgp` WHERE `device_id` = ? AND bgpPeerIdentifier = ?", array($peer['device_id'], $peer['bgpPeerIdentifier'])) as $afisafi)
@@ -188,14 +201,19 @@ else
     }
     unset($sep);
 
-    echo("  <td></td>
+    echo('
+         <td style="width: 1px; background-color: '.$peer['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
+         <td style="width: 1px;"></td>');
+
+
+    echo("
             <td width=150>" . $localaddresslink . "<br />".generate_device_link($peer, shorthost($peer['hostname']), array('tab' => 'routing', 'proto' => 'bgp'))."</td>
             <td width=30><b>&#187;</b></td>
             <td width=150>" . $peeraddresslink . "</td>
-            <td width=50><b>$peer_type</b></td>
-            <td width=50>".$peer['afi']."</td>
+            <td width=50><b>".$peer['peer_type']."</b></td>
+            <td width=50><small>".$peer['afi']."</small></td>
             <td><strong>AS" . $peer['bgpPeerRemoteAs'] . "</strong><br />" . $peer['astext'] . "</td>
-            <td><strong><span style='color: $admin_col;'>" . $peer['bgpPeerAdminStatus'] . "</span><br /><span style='color: $col;'>" . $peer['bgpPeerState'] . "</span></strong></td>
+            <td><strong><span class='".$peer['admin_class']."'>" . $peer['bgpPeerAdminStatus'] . "</span><br /><span class='".$peer['state_class']."'>" . $peer['bgpPeerState'] . "</span></strong></td>
             <td>" .formatUptime($peer['bgpPeerFsmEstablishedTime']). "<br />
                 Updates <img src='images/16/arrow_down.png' align=absmiddle /> " . format_si($peer['bgpPeerInUpdates']) . "
                         <img src='images/16/arrow_up.png' align=absmiddle /> " . format_si($peer['bgpPeerOutUpdates']) . "</td></tr>");
@@ -234,7 +252,8 @@ else
     if ($peer['graph'])
     {
         $graph_array['to']     = $config['time']['now'];
-        echo('<tr></tr><tr class="bgp"' . ($bg_image ? ' background="'.$bg_image.'"' : '') . '"><td colspan="9">');
+    echo('<tr class="'.$peer['html_row_class'].'">
+         <td colspan="11">');
 
         include("includes/print-graphrow.inc.php");
 
