@@ -10,7 +10,7 @@ echo('  <tr class="'.$device['html_row_class'].'" onclick="location.href=\'devic
           <td style="width: 1px; background-color: '.$device['html_tab_colour'].'; margin: 0px; padding: 0px"></td>
           <td width="40"  style="padding: 10px; text-align: center; vertical-align: middle;">' . $device['icon'] . '</td>
           <td width="300" ><span style="font-size: 15px;">' . generate_device_link($device) . '</span>
-          <br />' . $device['sysName'] . '</td>'
+          <br />' . truncate($device['location'],32, '') . '</td>'
         );
 
 echo('<td width="55">');
@@ -22,7 +22,7 @@ echo('    <td >' . $device['hardware'] . '<br />' . $device['features'] . '</td>
 echo('    <td >' . $device['os_text'] . '<br />' . $device['version'] . '</td>');
 echo('    <td >' . deviceUptime($device, 'short') . ' <br />');
 
-echo('    ' . truncate($device['location'],32, '') . '</td>');
+echo('    ' . $device['sysName'] . '</td>');
 
 echo(' </tr>');
 
