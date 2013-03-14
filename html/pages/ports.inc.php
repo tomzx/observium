@@ -6,7 +6,7 @@ $pagetitle[] = "Ports";
 
 if(!isset($vars['format'])) { $vars['format'] = "list_basic"; }
 
-echo('<div class="well well-shaded" style="padding: 10px;">');
+echo('<div class="well" style="padding: 10px;">');
 
 if($vars['searchbar'] != "hide")
 {
