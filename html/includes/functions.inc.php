@@ -407,9 +407,9 @@ function generate_device_link_header($device, $vars=array())
         <tr class="'.$device['html_row_class'].'" style="font-size: 10pt;">
           <td style="width: 10px; background-color: '.$device['html_tab_colour'].'; margin: 0px; padding: 0px"></td>
           <td width="40" style="padding: 10px; text-align: center; vertical-align: middle;">'.getImage($device).'</td>
-          <td width="200"><a href="#" class="'.$class.'" style="font-size: 15px; font-weight: bold;">'.$device['hostname'].'</a><br />'. $device['sysName'].'</td>
+          <td width="200"><a href="#" class="'.$class.'" style="font-size: 15px; font-weight: bold;">'.$device['hostname'].'</a><br />'. truncate($device['location'],64, '') .'</td>
           <td>'.$device['hardware'].' <br /> '.$device['os_text'].' '.$device['version'].'</td>
-          <td>'.deviceUptime($device, 'short').'<br />'.truncate($device['location'],32, '').'
+          <td>'.deviceUptime($device, 'short').'<br />'.$device['sysName'].'
           </tr>
         </table>
 ';
