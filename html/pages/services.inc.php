@@ -28,7 +28,9 @@ print_optionbar_end();
 
 if ($_GET['status'] == '0') { $where = " AND service_status = '0'"; } else { unset ($where); }
 
-echo("<div style='margin: 5px;'><table cellpadding=7 border=0 cellspacing=0 width=100%>");
+if ($vars['view'] == "details") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
+
+echo('<table class="table table-condensed '.$stripe_class.'" style="margin-top: 10px;">');
 //echo("<tr class=interface-desc bgcolor='#e5e5e5'><td>Device</td><td>Service</td><td>Status</td><td>Changed</td><td>Checked</td><td>Message</td></tr>");
 
 if ($_SESSION['userlevel'] >= '5')
@@ -47,7 +49,6 @@ if ($_SESSION['userlevel'] >= '5')
     {
        include("includes/print-service.inc.php");
 
-#       $samehost = 1;
        if ($vars['view'] == "details")
        {
          $graph_array['height'] = "100";
@@ -58,14 +59,10 @@ if ($_SESSION['userlevel'] >= '5')
 
          $periods = array('day', 'week', 'month', 'year');
 
-         echo('<tr style="background-color: '.$bg.'; padding: 5px;"><td colspan=6>');
+         echo('<tr><td colspan=6>');
 
-         foreach ($periods as $period)
-         {
-           $graph_array['from'] = $$period;
-           $graph_array_zoom   = $graph_array; $graph_array_zoom['height'] = "150"; $graph_array_zoom['width'] = "400";
-           echo(overlib_link("", generate_graph_tag($graph_array), generate_graph_tag($graph_array_zoom),  NULL));
-         }
+         include("includes/print-graphrow.inc.php");
+
          echo("</td></tr>");
        }
     }

@@ -29,8 +29,8 @@ $popup  = "onmouseover=\"return overlib('<div class=list-large>".$device['hostna
 $popup .= "</div><img src=\'graph.php?id=" . $service['service_id'] . "&amp;type=service_availability&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";
 $popup .= "', RIGHT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\"";
 
-echo("
-       <tr style=\"background-color: $bg; padding: 5px;\">");
+echo('
+       <tr>');
 
 if ($device_id)
 {

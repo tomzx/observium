@@ -7,12 +7,8 @@ $sql .= " LEFT JOIN  `sensors-state` ON `sensors`.`sensor_id` = `sensors-state`.
 $sql .= " WHERE `sensors`.`sensor_class` = '".$class."'";
 $sql .= " ORDER BY `devices`.`hostname`, `sensors`.`sensor_descr`";
 
-if ($vars['view'] == "graphs")
-{
-  $stripe_class = "table-striped-two";
-} else {
-  $stripe_class = "table-striped";
-}
+if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
+
 echo('<table class="table '.$stripe_class.' table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
 echo('    <tr>');

@@ -2,8 +2,9 @@
 
 $graph_type = "mempool_usage";
 
-echo("<div style='margin-top: 5px; padding: 0px;'>");
-echo('<table class="table table-striped table-condensed">');
+if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
+
+echo('<table class="table '.$stripe_class.' table-condensed">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="250">Device</th>');
@@ -49,7 +50,7 @@ foreach (dbFetchRows($sql) as $mempool)
 
     $background = get_percentage_colours($mempool['mempool_perc']);
 
-    echo('<tr class="health">
+    echo('<tr>
           <td class=list-bold>' . generate_device_link($mempool) . '</td>
           <td>'.overlib_link($link, $mempool['mempool_descr'],$overlib_content).'</td>
           <td>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
@@ -63,7 +64,7 @@ foreach (dbFetchRows($sql) as $mempool)
 
     if ($vars['view'] == "graphs")
     {
-      echo("<tr></tr><tr class='health'><td colspan=5>");
+      echo("<tr><td colspan=5>");
 
       unset($graph_array['height'], $graph_array['width'], $graph_array['legend']);
       $graph_array['to']     = $config['time']['now'];
@@ -78,6 +79,5 @@ foreach (dbFetchRows($sql) as $mempool)
 }
 
 echo("</table>");
-echo("</div>");
 
 ?>

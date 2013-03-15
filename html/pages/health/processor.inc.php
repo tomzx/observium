@@ -2,10 +2,9 @@
 
 $graph_type = "processor_usage";
 
-echo("<div style='margin-top: 5px; padding: 0px;'>");
-echo("  <table width=100% cellpadding=6 cellspacing=0>");
+if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
 
-echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('<table class="table '.$stripe_class.' table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="200">Device</th>');
@@ -71,7 +70,7 @@ foreach (dbFetchRows($sql) as $proc)
 
     if ($vars['view'] == "graphs")
     {
-      echo("<tr></tr><tr><td colspan=5>");
+      echo("<tr><td colspan=5>");
 
       unset($graph_array['height'], $graph_array['width'], $graph_array['legend']);
       $graph_array['to']     = $config['time']['now'];
@@ -87,6 +86,5 @@ foreach (dbFetchRows($sql) as $proc)
 }
 
 echo("</table>");
-echo("</div>");
 
 ?>

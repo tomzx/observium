@@ -8,9 +8,9 @@ $sql .= " LEFT JOIN  `devices` ON  `storage`.device_id =  `devices`.device_id";
 $sql .= " LEFT JOIN  `storage-state` ON  `storage`.storage_id =  `storage-state`.storage_id";
 $sql .= " ORDER BY `hostname`, `storage_descr`";
 
-echo("<div style='margin-top: 5px; padding: 0px;'>");
+if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
 
-echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('<table class="table '.$stripe_class.' table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="250">Device</th>');
@@ -51,7 +51,7 @@ foreach (dbFetchRows($sql) as $storage)
 
     $background = get_percentage_colours($storage['storage_perc']);
 
-    echo('<tr class="health">
+    echo('<tr>
           <td class=list-bold>' . generate_device_link($storage) . '</td>
           <td>'.overlib_link($link, $storage['storage_descr'],$overlib_content).'</td>
           <td>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
@@ -65,7 +65,7 @@ foreach (dbFetchRows($sql) as $storage)
 
     if ($vars['view'] == "graphs")
     {
-      echo("<tr></tr><tr class='health'><td colspan=5>");
+      echo("<tr><td colspan=5>");
 
       unset($graph_array['height'], $graph_array['width'], $graph_array['legend']);
       $graph_array['to']     = $config['time']['now'];
@@ -80,6 +80,5 @@ foreach (dbFetchRows($sql) as $storage)
 }
 
 echo("</table>");
-echo("</div>");
 
 ?>
