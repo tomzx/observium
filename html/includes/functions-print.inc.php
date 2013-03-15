@@ -826,7 +826,7 @@ function print_status($status)
      <button type="button" class="close" data-dismiss="alert">&times;</button>
      <p><i class="fugue-bell"></i> <strong>Config option obsolete</strong></p>
      <p>Please note that config option <strong>$config[\'warn\'][\'ifdown\']</strong> is now obsolete.<br />Use options: <strong>$config[\'frontpage\'][\'device_status\'][\'ports\']</strong> and <strong>$config[\'frontpage\'][\'device_status\'][\'errors\']</strong></p>
-     <p>For cancel this message, delete $config[\'warn\'][\'ifdown\'] from configuration file.</p>
+     <p>To remove this message, delete <strong>$config[\'warn\'][\'ifdown\']</strong> from configuration file.</p>
   </div>');
     }
 
