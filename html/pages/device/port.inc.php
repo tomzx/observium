@@ -52,7 +52,7 @@ if (dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `measured_class` = 'port' 
 {  $navbars['main']['options']['sensors']['text'] = 'Sensors'; }
 
 $navbars['main']['options']['realtime']['text'] = 'Real time';   // FIXME CONDITIONAL
-$navbars['main']['options']['arp']['text']      = 'ARP Table';   // FIXME CONDITIONAL?
+$navbars['main']['options']['arp']['text']      = 'ARP/NDP Table';   // FIXME CONDITIONAL?
 
 if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id'])) ){
   $navbars['main']['options']['fdb']['text'] = 'FDB Table';

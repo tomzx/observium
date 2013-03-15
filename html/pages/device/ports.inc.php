@@ -13,7 +13,7 @@ $link_array = array('page'    => 'device',
 
 $navbar['options']['basic']['text']   = 'Basic';
 $navbar['options']['details']['text'] = 'Details';
-$navbar['options']['arp']['text']     = 'ARP Table';
+$navbar['options']['arp']['text']     = 'ARP/NDP Table';
 
 if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `device_id` = ?", array($device['device_id'])))
 {

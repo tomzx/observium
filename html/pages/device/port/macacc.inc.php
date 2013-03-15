@@ -118,15 +118,17 @@ if ($vars['subview'] == "top10")
   foreach (dbFetchRows($query, $param) as $acc)
   {
     if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-    $addy = dbFetchRow("SELECT * FROM ipv4_mac where mac_address = ?", array($acc['mac']));
+    $addy = dbFetchRow("SELECT * FROM ip_mac where mac_address = ?", array($acc['mac']));
+    
+    ///FIXME. Need rewrite, because $addy is array with multiple items.
     #$name = gethostbyaddr($addy['ipv4_address']); FIXME - Maybe some caching for this?
-    $arp_host = dbFetchRow("SELECT * FROM ipv4_addresses AS A, ports AS I, devices AS D WHERE A.ipv4_address = ? AND I.port_id = A.port_id AND D.device_id = I.device_id", array($addy['ipv4_address']));
+    $arp_host = dbFetchRow("SELECT * FROM ipv4_addresses AS A, ports AS I, devices AS D WHERE A.ipv4_address = ? AND I.port_id = A.port_id AND D.device_id = I.device_id", array($addy['ip_address']));
     if ($arp_host) { $arp_name = generate_device_link($arp_host); $arp_name .= " ".generate_port_link($arp_host); } else { unset($arp_if); }
 
-    if ($name == $addy['ipv4_address']) { unset ($name); }
-    if (dbFetchCell("SELECT count(*) FROM bgpPeers WHERE device_id = ? AND bgpPeerIdentifier = ?", array($acc['device_id'], $addy['ipv4_address'])))
+    if ($name == $addy['ip_address']) { unset ($name); }
+    if (dbFetchCell("SELECT COUNT(*) FROM bgpPeers WHERE device_id = ? AND bgpPeerIdentifier = ?", array($acc['device_id'], $addy['ip_address'])))
     {
-      $peer_info = dbFetchRow("SELECT * FROM bgpPeers WHERE device_id = ? AND bgpPeerIdentifier = ?", array($acc['device_id'], $addy['ipv4_address']));
+      $peer_info = dbFetchRow("SELECT * FROM bgpPeers WHERE device_id = ? AND bgpPeerIdentifier = ?", array($acc['device_id'], $addy['ip_address']));
     } else { unset ($peer_info); }
 
     if ($peer_info)
@@ -167,7 +169,7 @@ if ($vars['subview'] == "top10")
       <table>
         <tr>
           <td class=list-large width=200>".mac_clean_to_readable($acc['mac'])."</td>
-          <td class=list-large width=200>".$addy['ipv4_address']."</td>
+          <td class=list-large width=200>".$addy['ip_address']."</td>
           <td class=list-large width=500>".$name." ".$arp_name . "</td>
           <td class=list-large width=100>".formatRates($acc['bytes_input_rate'] / 8)."</td>
           <td class=list-large width=100>".formatRates($acc['bytes_output_rate'] / 8)."</td>

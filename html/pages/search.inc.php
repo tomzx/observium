@@ -2,7 +2,7 @@
 
 $pagetitle[] = "Search";
 
-$sections = array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP Tables', 'fdb' => 'MAC Tables');
+$sections = array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'MAC Tables');
 
 if (!isset($vars['search'])) { $vars['search'] = "ipv4"; }
 

@@ -246,9 +246,9 @@ function print_addresses($vars)
 }
 
 /**
- * Display ARP table addresses.
+ * Display ARP/NDP table addresses.
  *
- * Display pages with ARP tables addresses from devices.
+ * Display pages with ARP/NDP tables addresses from devices.
  *
  * @param array $vars
  * @return none
@@ -283,12 +283,19 @@ function print_arptable($vars)
           $where .= ' AND I.port_id = ?';
           $param[] = $value;
           break;
+        case 'ip_version':
+          $where .= ' AND ip_version = ?';
+          $param[] = $value;
+          break;
         case 'address':
           $address_search = TRUE;
           if (isset($vars['searchby']) && $vars['searchby'] == 'ip')
           {
-            $where .= ' AND `ipv4_address` LIKE ?';
-            $param[] = '%'.trim($value).'%';
+            $where .= ' AND `ip_address` LIKE ?';
+            $value = trim($value);
+            ///FIXME. Need another conversion ("2001:b08:b08" -> "2001:0b08:0b08") -- mike
+            if (Net_IPv6::checkIPv6($value)) { $value = Net_IPv6::uncompress($value, true); }
+            $param[] = '%'.$value.'%';
           } else {
             $where .= ' AND `mac_address` LIKE ?';
             $param[] = '%'.str_replace(array(':', ' ', '-', '.', '0x'),'',mres($value)).'%';
@@ -312,7 +319,7 @@ function print_arptable($vars)
   $query_device = ' AND D.ignore = 0 ';
   if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
 
-  $query = 'FROM `ipv4_mac` AS M ';
+  $query = 'FROM `ip_mac` AS M ';
   $query .= 'LEFT JOIN `ports`   AS I ON I.port_id   = M.port_id ';
   $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
   $query .= $query_perms;
@@ -326,9 +333,9 @@ function print_arptable($vars)
     $query .= " LIMIT $start,$pagesize";
   }
 
-  // Query ARP table addresses
+  // Query ARP/NDP table addresses
   $entries = dbFetchRows($query, $param);
-  // Query ARP table address count
+  // Query ARP/NDP table address count
   if ($pagination) { $count = dbFetchCell($query_count, $param); }
 
   $list = array('device' => FALSE, 'port' => FALSE);
@@ -356,10 +363,12 @@ function print_arptable($vars)
     if (port_permitted($entry['port_id']))
     {
       $entry = humanize_port ($entry, $entry);
-      $arp_host = dbFetchRow('SELECT * FROM ipv4_addresses AS A
+      $ip_version = $entry['ip_version'];
+      $ip_address = ($ip_version == 6) ? Net_IPv6::compress($entry['ip_address']) : $entry['ip_address'];
+      $arp_host = dbFetchRow('SELECT * FROM ipv'.$ip_version.'_addresses AS A
                              LEFT JOIN ports AS I ON A.port_id = I.port_id
                              LEFT JOIN devices AS D ON D.device_id = I.device_id
-                             WHERE A.ipv4_address = ?', array($entry['ipv4_address']));
+                             WHERE A.ipv'.$ip_version.'_address = ?', array($ip_address));
       $arp_name = ($arp_host) ? generate_device_link($arp_host) : '';
       $arp_if = ($arp_host) ? generate_port_link($arp_host) : '';
       if ($arp_host['device_id'] == $entry['device_id']) { $arp_name = 'Self Device'; }
@@ -367,7 +376,7 @@ function print_arptable($vars)
 
       $string .= '  <tr>' . PHP_EOL;
       $string .= '    <td width="160">' . formatMac($entry['mac_address']) . '</td>' . PHP_EOL;
-      $string .= '    <td width="140">' . $entry['ipv4_address'] . '</td>' . PHP_EOL;
+      $string .= '    <td width="140">' . $ip_address . '</td>' . PHP_EOL;
       if ($list['device'])
       {
         $string .= '    <td class="list-bold" nowrap>' . generate_device_link($entry) . '</td>' . PHP_EOL;
@@ -392,7 +401,7 @@ function print_arptable($vars)
   // Print pagination header
   if ($pagination) { echo pagination($vars, $count); }
 
-  // Print ARP table
+  // Print ARP/NDP table
   echo $string;
 }
 

@@ -6,7 +6,7 @@
 <form method="post" action="" class="form form-inline">
 
 
-  <span style="font-weight: bold;">ARP Search</span> &#187;
+  <span style="font-weight: bold;">ARP/NDP Search</span> &#187;
   
   <div class="input-prepend" style="margin-right: 3px;">
     <span class="add-on">Search By</span>

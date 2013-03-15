@@ -1,6 +1,12 @@
 <?php
 
-/// FIXME. Maybe it is necessary move to Poller? -- mike 2013/03
+// IP-MIB contains two tables:
+//  ipNetToMediaTable     -- deprecated, as it contains only entries for IPv4.
+//  ipNetToPhysicalTable  -- current, address version agnostic table
+// IPV6-MIB has been abandoned in favor of the revised IP-MIB, but has one table:
+//  ipv6NetToMediaTable
+// CISCO-IETF-IP-MIB      -- based on an early draft of the revised IP-MIB
+//  cInetNetToMediaTable
 
 unset ($mac_table);
 
@@ -12,16 +18,52 @@ foreach(dbFetchRows($query, array($device['device_id'])) as $entry)
   $interface[$entry_if] = $entry['port_id'];
 }
 
-// IPv4 ARP table
-echo("ARP Table : ");
+echo("ARP/NDP Tables : ");
 
-// GENERIC (-OXqs):
-//ipNetToMediaPhysAddress[213][10.0.0.162] 70:81:5:ec:f9:bf
-$oid_data = snmp_walk($device, 'ipNetToMediaPhysAddress', '-OXqs', 'IP-MIB');
+/// FIXME. Here necessary to use snmpwalk_cache_oid, but snmpwalk_cache_oid() not support custom options like (-OXqs) for parser. -- mike
+
+// First check IP-MIB::ipNetToPhysicalPhysAddress (IPv4 & IPv6)
+//ipNetToPhysicalPhysAddress[5][ipv4]["80.93.52.129"] 0:23:ab:64:d:42
+//ipNetToPhysicalPhysAddress[34][ipv6]["2a:01:00:d8:00:00:00:01:00:00:00:00:00:00:00:03"] 0:15:63:e8:fb:31:0:0
+$ipNetToPhysicalPhysAddress_oid = snmp_walk($device, 'ipNetToPhysicalPhysAddress', '-OXqs', 'IP-MIB');
+if ($ipNetToPhysicalPhysAddress_oid)
+{
+  $oid_data = $ipNetToPhysicalPhysAddress_oid;
+  if ($debug) { echo("Used IP-MIB::ipNetToPhysicalPhysAddress\n"); }
+} else {
+  // Second check IP-MIB::ipNetToMediaPhysAddress (IPv4 only)
+  //ipNetToMediaPhysAddress[213][10.0.0.162] 70:81:5:ec:f9:bf
+  $ipNetToMediaPhysAddress_oid = snmp_walk($device, 'ipNetToMediaPhysAddress', '-OXqs', 'IP-MIB');
+  if ($ipNetToMediaPhysAddress_oid)
+  {
+    $oid_data = $ipNetToMediaPhysAddress_oid;
+    if ($debug) { echo("Used IP-MIB::ipNetToMediaPhysAddress\n"); }
+  }
+  if ($device['os_group'] == 'cisco')
+  {
+    // Last check CISCO-IETF-IP-MIB::cInetNetToMediaPhysAddress (IPv6 only, Cisco only)
+    //cInetNetToMediaPhysAddress[167][ipv6]["20:01:0b:08:0b:08:0b:08:00:00:00:00:00:00:00:b1"] 0:24:c4:db:9b:40:0:0
+    $cInetNetToMediaPhysAddress_oid = snmp_walk($device, 'cInetNetToMediaPhysAddress', '-OXqs', 'CISCO-IETF-IP-MIB');
+    if ($cInetNetToMediaPhysAddress_oid)
+    {
+      $oid_data .= $cInetNetToMediaPhysAddress_oid;
+      if ($debug) { echo("Used CISCO-IETF-IP-MIB::cInetNetToMediaPhysAddress\n"); }
+    }
+  } else {
+    // Or check IPV6-MIB::ipv6NetToMediaPhysAddress (IPv6 only, deprecated)
+    //ipv6NetToMediaPhysAddress[167][ipv6]["20:01:0b:08:0b:08:0b:08:00:00:00:00:00:00:00:b1"] 0:24:c4:db:9b:40:0:0
+    $ipv6NetToMediaPhysAddress_oid = snmp_walk($device, 'ipv6NetToMediaPhysAddress', '-OXqs', 'IPV6-MIB');
+    if ($ipv6NetToMediaPhysAddress_oid)
+    {
+      $oid_data .= $ipv6NetToMediaPhysAddress_oid;
+      if ($debug) { echo("Used IPV6-MIB::ipv6NetToMediaPhysAddress\n"); }
+    }
+  }
+}
 $oid_data = trim($oid_data);
 
-// Caching old ARP table
-$query = 'SELECT mac_id, mac_address, ipv4_address, ifIndex FROM ipv4_mac AS M
+// Caching old ARP/NDP table
+$query = 'SELECT mac_id, mac_address, ip_address, ip_version, ifIndex FROM ip_mac AS M
           LEFT JOIN ports AS I ON M.port_id = I.port_id
           WHERE I.device_id = ?';
 $cache_arp = dbFetchRows($query, array($device['device_id']));
@@ -29,42 +71,58 @@ foreach($cache_arp as $entry)
 {
   $old_if = $entry['ifIndex'];
   $old_mac = $entry['mac_address'];
-  $old_address = $entry['ipv4_address'];
-  $old_table[$old_if][$old_address] = $old_mac;
+  $old_address = $entry['ip_address'];
+  $old_version = $entry['ip_version'];
+  $old_table[$old_if][$old_version][$old_address] = $old_mac;
 }
+$ipv4_pattern = '/\[(\d+)\](?:\[ipv4\])?\["?([\d\.]+)"?\]\s+([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
+$ipv6_pattern = '/\[(\d+)\]\[ipv6\]\["?([a-f\d:]+)"?\]\s+([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
 
 foreach (explode("\n", $oid_data) as $data)
 {
-  $ipv4_pattern = '/\[(\d+)\]\[([\d\.]+)\]\s+([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+):([[:xdigit:]]+)/i';
-  preg_match($ipv4_pattern, $data, $matches);
+  if (preg_match($ipv4_pattern, $data, $matches))
+  {
+    $ip = $matches[2];
+    $ip_version = 4;
+  }
+  elseif (preg_match($ipv6_pattern, $data, $matches))
+  {
+    $ip = str_replace(':', '', $matches[2]);
+    $ip = substr(preg_replace('/([a-f\d]{4})/', "$1:", $ip), 0, -1);
+    $ip_version = 6;
+  } else {
+    // In principle the such shouldn't be.
+    continue;
+  }
   $if = $matches[1];
-  $ip = $matches[2];
-  if ($ip)
+  $port_id = $interface[$if];
+  
+  if ($ip & $port_id)
   {
     $mac = zeropad($matches[3]);
     for ($i = 4; $i <= 8; $i++) { $mac .= ':' . zeropad($matches[$i]); }
     $clean_mac = str_replace(':', '', $mac);
 
-    $mac_table[$if][$ip] = $clean_mac;
-    $port_id = $interface[$if];
+    $mac_table[$if][$ip_version][$ip] = $clean_mac;
 
-    if (isset($old_table[$if][$ip]))
+    if (isset($old_table[$if][$ip_version][$ip]))
     {
-      $old_mac = $old_table[$if][$ip];
+      $old_mac = $old_table[$if][$ip_version][$ip];
 
       if ($clean_mac != $old_mac && $clean_mac != '' && $old_mac != '')
       {
         if ($debug) { echo("Changed MAC address for $ip from $old_mac to $clean_mac\n"); }
         log_event("MAC change: $ip : " . mac_clean_to_readable($old_mac) . " -> " . mac_clean_to_readable($clean_mac), $device, "interface", $port_id);
-        dbUpdate(array('mac_address' => $clean_mac) , 'ipv4_mac', 'port_id = ? AND ipv4_address = ?', array($port_id, $ip));
+        dbUpdate(array('mac_address' => $clean_mac) , 'ip_mac', 'port_id = ? AND ip_address = ?', array($port_id, $ip));
         echo(".");
       }
     } else {
       $params = array(
                       'port_id' => $port_id,
                       'mac_address' => $clean_mac,
-                      'ipv4_address' => $ip);
-      dbInsert($params, 'ipv4_mac');
+                      'ip_address' => $ip,
+                      'ip_version' => $ip_version);
+      dbInsert($params, 'ip_mac');
       if ($debug) { echo("Add MAC $clean_mac\n"); }
       //log_event("MAC add: $ip : " . mac_clean_to_readable($clean_mac), $device, "interface", $port_id);
       echo("+");
@@ -72,17 +130,18 @@ foreach (explode("\n", $oid_data) as $data)
   }
 }
 
-// Remove expired ARP entries
+// Remove expired ARP/NDP entries
 foreach($cache_arp as $entry)
 {
   $entry_mac_id = $entry['mac_id'];
   $entry_mac = $entry['mac_address'];
-  $entry_ip = $entry['ipv4_address'];
+  $entry_ip = $entry['ip_address'];
+  $entry_version = $entry['ip_version'];
   $entry_if  = $entry['ifIndex'];
   $entry_port_id = $interface[$entry_if];
-  if (!isset($mac_table[$entry_if][$entry_ip]))
+  if (!isset($mac_table[$entry_if][$entry_version][$entry_ip]))
   {
-    dbDelete('ipv4_mac', 'mac_id = ?', array($entry_mac_id));
+    dbDelete('ip_mac', 'mac_id = ?', array($entry_mac_id));
     if ($debug) { echo("Removing MAC address $entry_mac for $entry_ip\n"); }
     //log_event("MAC remove: $entry_ip : " . mac_clean_to_readable($entry_mac), $device, "interface", $entry['port_id']);
     echo("-");
@@ -90,13 +149,7 @@ foreach($cache_arp as $entry)
 }
 
 echo(PHP_EOL);
-// End IPv4 ARP table
 
-// IPv6 Neighbors table
-//echo("IPv6 Neighbors Table : ");
+unset($interface);
 
-//echo(PHP_EOL);
-// End IPv6 Neighbors table
-
-unset($mac, $interface);
 ?>

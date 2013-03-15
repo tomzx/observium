@@ -40,11 +40,11 @@ foreach (dbFetchRows("SELECT * FROM `vlans_fdb` WHERE port_id = ?", array($port[
     <td width=160>VLAN".$fdb['vlan_id']."</td>
     <td width=160>".formatmac($fdb['mac_address'])."</td>
     <td width=280>$fdb_name</td>
-    <td>$fdb_if</td>
+    <td><strong>$fdb_if</strong></td>
     <td width=160>");
-  foreach(dbFetchRow("SELECT * FROM ipv4_mac AS M, ports AS I, devices AS D WHERE A.mac_address = ? AND I.port_id = M.port_id AND D.device_id = I.device_id", array($fdb['mac_address'])) as $ip)
+  foreach(dbFetchRows("SELECT ip_address FROM ip_mac WHERE mac_address = ? GROUP BY ip_address", array($fdb['mac_address'])) as $ip)
   {
-    echo("a");
+    echo($ip['ip_address']."</ br>");
   }
     echo("</td>
 

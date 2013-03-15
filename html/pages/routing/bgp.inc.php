@@ -237,7 +237,12 @@ else
     {
       case 'macaccounting_bits':
       case 'macaccounting_pkts':
-        $acc = dbFetchRow("SELECT * FROM `ipv4_mac` AS I, `mac_accounting` AS M, `ports` AS P, `devices` AS D WHERE I.ipv4_address = ? AND M.mac = I.mac_address AND P.port_id = M.port_id AND D.device_id = P.device_id", array($peer['bgpPeerIdentifier']));
+        ///FIXME. This is worked? -- mike
+        $acc = dbFetchRow("SELECT * FROM `mac_accounting` AS M
+                          LEFT JOIN `ip_mac` AS I ON M.mac = I.mac_address
+                          LEFT JOIN `ports` AS P ON P.port_id = M.port_id
+                          LEFT JOIN `devices` AS D ON D.device_id = P.device_id
+                          WHERE I.ip_address = ?", array($peer['bgpPeerIdentifier']));
         $database = $config['rrd_dir'] . "/" . $device['hostname'] . "/cip-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd";
         if (is_array($acc) && is_file($database))
         {

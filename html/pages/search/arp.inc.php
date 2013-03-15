@@ -6,7 +6,7 @@
 <form method="post" action="" class="form form-inline">
 
 
-  <span style="font-weight: bold;">ARP Search</span> &#187;
+  <span style="font-weight: bold;">ARP/NDP Search</span> &#187;
   
   <div class="input-prepend" style="margin-right: 3px;">
     <span class="add-on">Device</span>
@@ -14,9 +14,9 @@
       <option value="">All Devices</option>
 <?php
 
-// Select the devices only with ARP tables
+// Select the devices only with ARP/NDP tables
 foreach (dbFetchRows('SELECT D.device_id AS device_id, `hostname`
-                     FROM `ipv4_mac` AS M
+                     FROM `ip_mac` AS M
                      LEFT JOIN `ports` AS P ON M.port_id = P.port_id
                      LEFT JOIN `devices` AS D ON P.device_id = D.device_id
                      GROUP BY `device_id`
@@ -64,7 +64,7 @@ if(!$vars['pageno']) { $vars['pageno'] = 1; }
 
 print_arptable($vars);
 
-$pagetitle[] = 'ARP Search';
+$pagetitle[] = 'ARP/NDP Search';
 
 ?>
 
