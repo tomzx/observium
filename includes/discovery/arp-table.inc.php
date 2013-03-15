@@ -31,14 +31,6 @@ if ($ipNetToPhysicalPhysAddress_oid)
   $oid_data = $ipNetToPhysicalPhysAddress_oid;
   if ($debug) { echo("Used IP-MIB::ipNetToPhysicalPhysAddress\n"); }
 } else {
-  // Second check IP-MIB::ipNetToMediaPhysAddress (IPv4 only)
-  //ipNetToMediaPhysAddress[213][10.0.0.162] 70:81:5:ec:f9:bf
-  $ipNetToMediaPhysAddress_oid = snmp_walk($device, 'ipNetToMediaPhysAddress', '-OXqs', 'IP-MIB');
-  if ($ipNetToMediaPhysAddress_oid)
-  {
-    $oid_data = $ipNetToMediaPhysAddress_oid;
-    if ($debug) { echo("Used IP-MIB::ipNetToMediaPhysAddress\n"); }
-  }
   if ($device['os_group'] == 'cisco')
   {
     // Last check CISCO-IETF-IP-MIB::cInetNetToMediaPhysAddress (IPv6 only, Cisco only)
@@ -58,6 +50,17 @@ if ($ipNetToPhysicalPhysAddress_oid)
       $oid_data .= $ipv6NetToMediaPhysAddress_oid;
       if ($debug) { echo("Used IPV6-MIB::ipv6NetToMediaPhysAddress\n"); }
     }
+  }
+}
+if (!strstr($oid_data, 'ipv4'))
+{
+  // Check IP-MIB::ipNetToMediaPhysAddress (IPv4 only)
+  //ipNetToMediaPhysAddress[213][10.0.0.162] 70:81:5:ec:f9:bf
+  $ipNetToMediaPhysAddress_oid = snmp_walk($device, 'ipNetToMediaPhysAddress', '-OXqs', 'IP-MIB');
+  if ($ipNetToMediaPhysAddress_oid)
+  {
+    $oid_data = $ipNetToMediaPhysAddress_oid;
+    if ($debug) { echo("Used IP-MIB::ipNetToMediaPhysAddress\n"); }
   }
 }
 $oid_data = trim($oid_data);
