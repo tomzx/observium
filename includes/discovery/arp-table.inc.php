@@ -31,6 +31,7 @@ if ($ipNetToPhysicalPhysAddress_oid)
   $oid_data = $ipNetToPhysicalPhysAddress_oid;
   if ($debug) { echo("Used IP-MIB::ipNetToPhysicalPhysAddress\n"); }
 } else {
+  $oid_data = '';
   if ($device['os_group'] == 'cisco')
   {
     // Last check CISCO-IETF-IP-MIB::cInetNetToMediaPhysAddress (IPv6 only, Cisco only)
@@ -59,7 +60,7 @@ if (!strstr($oid_data, 'ipv4'))
   $ipNetToMediaPhysAddress_oid = snmp_walk($device, 'ipNetToMediaPhysAddress', '-OXqs', 'IP-MIB');
   if ($ipNetToMediaPhysAddress_oid)
   {
-    $oid_data = $ipNetToMediaPhysAddress_oid;
+    $oid_data .= $ipNetToMediaPhysAddress_oid;
     if ($debug) { echo("Used IP-MIB::ipNetToMediaPhysAddress\n"); }
   }
 }
