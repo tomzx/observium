@@ -208,6 +208,8 @@ function nicecase($item)
       return "NTPd";
     case "powerdns-recursor":
       return "PowerDNS Recursor";
+    case "freeradius":
+      return "FreeRADIUS";
     default:
       return ucfirst($item);
   }
