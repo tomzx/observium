@@ -114,7 +114,7 @@ if ($updated && $update_message)
       <div class="control-group">
         <label class="control-label" for="authpass">Auth Password</label>
         <div class="controls">
-          <input type=text name="authpass" size="32" value="<?php echo $device['authpass']; ?>"/>
+          <input type="password" name="authpass" size="32" value="<?php echo $device['authpass']; ?>"/>
         </div>
       </div>
 
@@ -123,8 +123,8 @@ if ($updated && $update_message)
         <label class="control-label" for="authalgo">Auth Algorithm</label>
         <div class="controls">
           <select name="authalgo">
-            <option value='MD5'>MD5</option>
-            <option value='SHA' " . ($device['authalgo'] === "SHA" ? 'selected' : '') . ">SHA</option>
+            <option value="MD5">MD5</option>
+            <option value="SHA" <?php echo($device['authalgo'] == 'SHA' ? 'selected' : ''); ?> >SHA</option>
           </select>
         </div>
       </div>
@@ -132,7 +132,7 @@ if ($updated && $update_message)
       <div class="control-group">
         <label class="control-label" for="cryptopass">Crypto Password</label>
         <div class="controls">
-          <input type=text name="cryptopass" size="32" value="<?php echo $device['cryptopass']; ?>"/>
+          <input type="password" name="cryptopass" size="32" value="<?php echo $device['cryptopass']; ?>"/>
         </div>
       </div>
 
@@ -141,8 +141,8 @@ if ($updated && $update_message)
         <label class="control-label" for="cryptoalgo">Crypto Algorithm</label>
         <div class="controls">
           <select name="authalgo">
-            <option value='AES'>AES</option>
-            <option value='DES' " . ($device['cryptoalgo'] === "DES" ? 'selected' : '') . ">AES</option>
+            <option value="AES">AES</option>
+            <option value="DES" <?php echo($device['cryptoalgo'] == "DES" ? 'selected' : ''); ?> >DES</option>
           </select>
         </div>
       </div>
