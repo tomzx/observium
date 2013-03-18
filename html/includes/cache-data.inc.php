@@ -11,11 +11,6 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 
     $cache['devices']['hostname'][$device['hostname']] = $device['device_id'];
     $cache['devices']['id'][$device['device_id']] = $device;
-    if (get_dev_attrib($device,'override_sysLocation_bool'))
-    {
-      $device['real_location'] = $device['location'];
-      $device['location'] = get_dev_attrib($device,'override_sysLocation_string');
-    }
 
     if ($device['disabled'] == 1 && !$config['web_show_disabled']) { continue; }
 
