@@ -50,6 +50,7 @@ if ($config['enable_printers'])
         DS:pagecount:GAUGE:600:0:20000 ".$config['rrd_rra']);
       }
 
+      set_dev_attrib($device, "pagecounter", $pages);
       rrdtool_update($pagecountrrd,"N:$pages");
 
       echo("$pages\n");
