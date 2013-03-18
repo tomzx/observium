@@ -8,19 +8,9 @@ if ($config['enable_printers'])
   {
     echo("Checking toner " . $toner['toner_descr'] . "... ");
 
-    if ($toner['toner_capacity_oid']) // FIXME this if can go on 1-Sep-2012
-    {
-      $toner['toner_capacity'] = snmp_get($device, $toner['toner_capacity_oid'], "-OUqnv");
-    }
     $tonerperc = round(snmp_get($device, $toner['toner_oid'], "-OUqnv") / $toner['toner_capacity'] * 100);
 
-    $old_tonerrrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("toner-" . $toner['toner_descr'] . ".rrd");
     $tonerrrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("toner-" . $toner['toner_index'] . ".rrd");
-
-    if (!is_file($tonerrrd) && is_file($old_tonerrrd))
-    {
-      rename($old_tonerrrd, $tonerrrd);
-    }
 
     if (!is_file($tonerrrd))
     {
@@ -32,7 +22,7 @@ if ($config['enable_printers'])
 
     rrdtool_update($tonerrrd,"N:$tonerperc");
 
-    #FIXME should report for toner out... :)
+    #FIXME should "alert" for toner out... :)
 
     # Log toner swap
     if ($tonerperc > $toner['toner_current'])
@@ -41,6 +31,29 @@ if ($config['enable_printers'])
     }
 
     dbUpdate(array('toner_current' => $tonerperc, 'toner_capacity' => $toner['toner_capacity']), 'toner', '`toner_id` = ?', array($toner['toner_id']));
+  }
+  
+  if ($device['type'] == 'printer')
+  {
+    $oid = get_dev_attrib($device, 'pagecount_oid');
+
+    if ($oid)
+    {
+      echo("Checking page count... ");
+      $pages = snmp_get($device, $oid, "-OUqnv");
+
+      $pagecountrrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("pagecount.rrd");
+
+      if (!is_file($pagecountrrd))
+      {
+        rrdtool_create($pagecountrrd,"--step 300 \
+        DS:pagecount:GAUGE:600:0:20000 ".$config['rrd_rra']);
+      }
+
+      rrdtool_update($pagecountrrd,"N:$pages");
+
+      echo("$pages\n");
+    }
   }
 }
 

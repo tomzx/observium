@@ -300,9 +300,9 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
     if (@dbFetchCell("SELECT COUNT(toner_id) FROM toner WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['toner'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'toner')).'">
-      <i class="fugue-contrast"></i> Toner
+      echo('<li class="' . $select['printing'] . '">
+    <a href="'.generate_device_url($device, array('tab' => 'printing')).'">
+      <i class="fugue-printer-color"></i> Printing
     </a>
   </li>');
     }

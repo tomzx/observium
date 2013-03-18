@@ -63,7 +63,25 @@ if ($config['enable_printers'])
     }
   }
 
-  unset($valid_toner); echo("\n");
+  unset($valid_toner);
+  echo("\n");
+  
+  // Discover other counters and monitored values
+  echo("Attributes: ");
+  
+  $pagecounters = array("1.3.6.1.2.1.43.10.2.1.4.1.1");
+  
+  foreach ($pagecounters as $oid)
+  {
+    if (snmp_get($device, $oid, "-OUqnv"))
+    {
+      echo("Pagecounter ");
+      set_dev_attrib($device, "pagecount_oid", $oid);
+      break;
+    }
+  }
+  
+  echo("\n");
 } # if ($config['enable_printers'])
 
 ?>
