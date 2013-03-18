@@ -92,7 +92,7 @@ foreach ($applications as $app)
   echo("      <div class='switch switch-mini' data-on='primary' data-off='danger' data-on-label='Yes' data-off-label='No'>
                 <input type=checkbox ". (in_array($app,$app_enabled) ? ' checked="1"' : '') . " name='app_". $app ."'></div>");
   echo("      </td>");
-  echo("      <td align=left>". ucfirst($app) . "</td>");
+  echo("      <td align=left>". nicecase($app) . "</td>");
   echo("    </tr>
 ");
 
