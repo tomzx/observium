@@ -46,7 +46,7 @@ foreach (dbFetchRows("SELECT * FROM `vlans_fdb` AS V, ports AS P WHERE V.device_
     <td width=160>");
   foreach(dbFetchRows("SELECT ip_address FROM ip_mac WHERE mac_address = ? GROUP BY ip_address", array($fdb['mac_address'])) as $ip)
   {
-    echo($ip['ip_address']."</ br>");
+    echo($ip['ip_address']."<br />");
   }
     echo("</td>
 
