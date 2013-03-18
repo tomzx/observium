@@ -8,7 +8,7 @@
  * @package    observium
  * @subpackage web
  * @copyright  (C) 2006 - 2013 Adam Armstrong
- * @version    1.0.7
+ * @version    1.0.8
  *
  */
 
@@ -85,6 +85,86 @@ function print_navbar($navbar)
 
   echo '</div></div></div></div>';
 
+}
+
+/**
+ * Generate search form (one line format)
+ *
+ * generates a simple search form.
+ * Example of use:
+ *  - array for 'select' item type
+ *  $search[] = array('type'    => 'select',          // types allowed (select, text)
+ *                    'name'    => 'Search By',       // Displayed name for item
+ *                    'id'      => 'searchby',        // Item id
+ *                    'width'   => '120px',           // (Optional) Item width
+ *                    'value'   => $vars['searchby'], // (Optional) Current value for item
+ *                    'values'  => array('mac' => 'MAC Address',
+ *                                       'ip'  => 'IP Address'));  // Array with option items
+ *  - array for 'text' item type (array keys same as above)
+ *  $search[] = array('type'  => 'text',
+ *                    'name'  => 'Address',
+ *                    'id'    => 'address',
+ *                    'width' => '120px',
+ *                    'value' => $vars['address']);
+ *  print_search_simple($search, 'Title here');
+ *
+ * @param array $data, string $title
+ * @return none
+ *
+ */
+
+function print_search_simple($data, $title = '')
+{
+  // Form header
+  $string = PHP_EOL . '<!-- START search form -->' . PHP_EOL;
+  $string .= '<div class="well well-shaded">' . PHP_EOL;
+  $string .= '<form method="POST" action="" class="form form-inline">' . PHP_EOL;
+  $string .= '  <table width="100%">' . PHP_EOL . '    <tr>' . PHP_EOL;
+  $string .= '  <td><span style="font-weight: bold;">' . $title . '</span>&nbsp;&#187;</td>' . PHP_EOL;
+  
+  // Main
+  $string .= '    <td>' . PHP_EOL;
+  foreach($data as $item)
+  {
+    if (!isset($item['value'])) { $item['value'] = ''; }
+    
+    $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
+    $string .= '    <span class="add-on">'.$item['name'].'</span>' . PHP_EOL;
+    switch($item['type'])
+    {
+      case 'text':
+        $string .= '    <input type="'.$item['type'].'" ';
+        $string .= (isset($item['width'])) ? 'style="width:'.$item['width'].'" ' : '';
+        $string .= 'name="'.$item['id'].'" id="'.$item['id'].'" class="input" value="'.$item['value'].'"/>' . PHP_EOL;
+        break;
+      case 'select':
+        $string .= '    <select ';
+        $string .= (isset($item['width'])) ? 'style="width:'.$item['width'].'" ' : '';
+        $string .= 'name="'.$item['id'].'" id="'.$item['id'].'">' . PHP_EOL . '      ';
+        foreach($item['values'] as $k => $v)
+        {
+          $string .= '<option value="'.$k.'"';
+          $string .= ($k == $item['value']) ? ' selected>' : '>';
+          $string .= $v.'</option> ';
+        }
+        $string .= PHP_EOL . '    </select>' . PHP_EOL;
+        break;
+    }
+    $string .= '  </div>' . PHP_EOL;
+  }
+  $string .= '    </td>' . PHP_EOL;
+  
+  // Form footer
+  $string .= '    <td align="center">' . PHP_EOL;
+  $string .= '      <input type="hidden" name="pageno" value="1">' . PHP_EOL;
+  $string .= '      <button type="submit" class="btn"><i class="icon-search"></i> Search</button>' . PHP_EOL;
+  $string .= '    </td>' . PHP_EOL;
+  $string .= '  </table>' . PHP_EOL . '    </tr>' . PHP_EOL;
+  $string .= '</form>' . PHP_EOL . '</div>' . PHP_EOL;
+  $string .= '<!-- END search form -->' . PHP_EOL . PHP_EOL;
+  
+  // Print search form
+  echo($string);
 }
 
 /**

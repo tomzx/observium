@@ -1,19 +1,10 @@
 <div class="row">
 <div class="span12">
 
-<div class="well well-shaded">
-
-<form method="post" action="" class="form form-inline">
-
-
-  <span style="font-weight: bold;">ARP/NDP Search</span> &#187;
-  
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Device</span>
-    <select name="device_id" id="device_id">
-      <option value="">All Devices</option>
 <?php
+unset($search, $devices);
 
+$devices[''] = 'All Devices';
 // Select the devices only with ARP/NDP tables
 foreach (dbFetchRows('SELECT D.device_id AS device_id, `hostname`
                      FROM `ip_mac` AS M
@@ -27,35 +18,38 @@ foreach (dbFetchRows('SELECT D.device_id AS device_id, `hostname`
   if (isset($cache['devices']['id'][$device_id]))
   {
     if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
-    echo('<option value="' . $device_id . '"');
-    if ($device_id == $vars['device_id']) { echo('selected'); }
-    echo('>' . $data['hostname'] . '</option>');
+    $devices[$device_id] = $data['hostname'];
   }
 }
-?>
-    </select>
-  </div>
-  
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Search By</span>
-    <select name="searchby" id="searchby">
-      <option value="mac" <?php if ($vars['searchby'] != 'ip') { echo("selected"); } ?> >MAC Address</option>
-      <option value="ip" <?php if ($vars['searchby'] == 'ip') { echo("selected"); } ?> >IP Address</option>
-    </select>
-  </div>
+//Device field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Device',
+                  'id'      => 'device_id',
+                  'width'   => '130px',
+                  'value'   => $vars['device_id'],
+                  'values'  => $devices);
+//Search by field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Search By',
+                  'id'      => 'searchby',
+                  'width'   => '120px',
+                  'value'   => $vars['searchby'],
+                  'values'  => array('mac' => 'MAC Address', 'ip' => 'IP Address'));
+//IP version field
+$search[] = array('type'    => 'select',
+                  'name'    => 'IP',
+                  'id'      => 'ip_version',
+                  'width'   => '120px',
+                  'value'   => $vars['ip_version'],
+                  'values'  => array('' => 'IPv4 & IPv6', '4' => 'IPv4 only', '6' => 'IPv6 only'));
+//Address field 
+$search[] = array('type'    => 'text',
+                  'name'    => 'Address',
+                  'id'      => 'address',
+                  'width'   => '120px',
+                  'value'   => $vars['address']);
 
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Address</span>
-    <input type="text" name="address" id="address" class="input" value="<?php echo($vars['address']); ?>" />
-  </div>
-  
-  <input type="hidden" name="pageno" value="1">
-  <button type="submit" class="btn pull-right"><i class="icon-search"></i> Search</button>
-</form>
-
-</div> <!-- well -->
-
-<?php
+print_search_simple($search, 'ARP/NDP');
 
 // Pagination
 $vars['pagination'] = TRUE;
@@ -69,5 +63,4 @@ $pagetitle[] = 'ARP/NDP Search';
 ?>
 
   </div> <!-- span12 -->
-
 </div> <!-- row -->
