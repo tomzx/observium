@@ -1,33 +1,31 @@
 <div class="row">
 <div class="span12">
 
-<div class="well well-shaded">
-
-<form method="post" action="" class="form form-inline">
-
-
-  <span style="font-weight: bold;">ARP Search</span> &#187;
-  
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Search By</span>
-    <select name="searchby" id="searchby">
-      <option value="mac" <?php if ($vars['searchby'] != 'ip') { echo("selected"); } ?> >MAC Address</option>
-      <option value="ip" <?php if ($vars['searchby'] == 'ip') { echo("selected"); } ?> >IP Address</option>
-    </select>
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Address</span>
-    <input type="text" name="address" id="address" class="input" value="<?php echo($vars['address']); ?>" />
-  </div>
-  
-  <input type="hidden" name="pageno" value="1">
-  <button type="submit" class="btn pull-right"><i class="icon-search"></i> Search</button>
-</form>
-
-</div> <!-- well -->
-
 <?php
+
+unset($search, $devices);
+
+//Search by field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Search By',
+                  'id'      => 'searchby',
+                  'width'   => '120px',
+                  'value'   => $vars['searchby'],
+                  'values'  => array('mac' => 'MAC Address', 'ip' => 'IP Address'));
+//IP version field
+$search[] = array('type'    => 'select',
+                  'name'    => 'IP',
+                  'id'      => 'ip_version',
+                  'width'   => '120px',
+                  'value'   => $vars['ip_version'],
+                  'values'  => array('' => 'IPv4 & IPv6', '4' => 'IPv4 only', '6' => 'IPv6 only'));
+//Address field 
+$search[] = array('type'    => 'text',
+                  'name'    => 'Address',
+                  'id'      => 'address',
+                  'value'   => $vars['address']);
+
+print_search_simple($search, 'ARP/NDP Search');
 
 // Pagination
 $vars['pagination'] = TRUE;
