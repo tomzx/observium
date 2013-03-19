@@ -2,7 +2,7 @@
 
 include_once("includes/discovery/functions.inc.php");
 
-global $debug;
+global $debug, $valid, $agent_sensors;
 
 if ($device['os_group'] == "unix")
 {
@@ -60,6 +60,8 @@ if ($device['os_group'] == "unix")
         $agent_data[$section] = trim($data);
       }
     }
+    
+    $agent_sensors = array(); # Init to empty to be able to use array_merge() later on
 
     if ($debug) { print_r($agent_data); }
 
@@ -171,7 +173,10 @@ if ($device['os_group'] == "unix")
   }
 
   echo("Sensors: ");
-  check_valid_sensors($device, 'temperature', $valid['sensor'], 'agent'); # FIXME should check all, not just temperature
+  foreach (array_keys($config['sensor_classes']) as $sensor_class)
+  {
+    check_valid_sensors($device, $sensor_class, $valid['sensor'], 'agent');
+  }
   echo("\n");
 }
 
