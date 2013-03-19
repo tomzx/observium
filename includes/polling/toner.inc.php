@@ -10,7 +10,7 @@ if ($config['enable_printers'])
 
     $tonerperc = round(snmp_get($device, $toner['toner_oid'], "-OUqnv") / $toner['toner_capacity'] * 100);
 
-    $tonerrrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("toner-" . $toner['toner_index'] . ".rrd");
+    $tonerrrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("toner-" . $toner['toner_index'] . ".rrd");
 
     if (!is_file($tonerrrd))
     {
@@ -24,7 +24,6 @@ if ($config['enable_printers'])
 
     #FIXME should "alert" for toner out... :)
 
-    # Log toner swap
     if ($tonerperc > $toner['toner_current'])
     {
       log_event('Toner ' . $toner['toner_descr'] . ' was replaced (new level: ' . $tonerperc . '%)', $device, 'toner', $toner['toner_id']);
@@ -42,7 +41,7 @@ if ($config['enable_printers'])
       echo("Checking page count... ");
       $pages = snmp_get($device, $oid, "-OUqnv");
 
-      $pagecountrrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("pagecount.rrd");
+      $pagecountrrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("pagecount.rrd");
 
       if (!is_file($pagecountrrd))
       {
@@ -54,6 +53,91 @@ if ($config['enable_printers'])
       rrdtool_update($pagecountrrd,"N:$pages");
 
       echo("$pages\n");
+    }
+
+    $oid = get_dev_attrib($device, 'imagingdrum_oid');
+
+    if ($oid)
+    {
+      echo("Checking Imaging Drum... ");
+      $capacity = snmp_get($device, get_dev_attrib($device, 'imagingdrum_cap_oid'), '-OUqnv');
+      $level = round(snmp_get($device, $oid, "-OUqnv") / $capacity * 100);
+
+      $drumrrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("drum.rrd");
+
+      if (!is_file($drumrrd))
+      {
+        rrdtool_create($drumrrd,"--step 300 \
+        DS:drum:GAUGE:600:0:100 ".$config['rrd_rra']);
+      }
+
+      set_dev_attrib($device, "drum", $level);
+      rrdtool_update($drumrrd,"N:$level");
+
+      echo("$level%\n");
+    }
+
+    $drums = array(
+      'Cyan' => 'c', 
+      'Magenta' => 'm', 
+      'Yellow' => 'y',
+      'Black' => 'k'
+    );
+    
+    foreach ($drums as $drum => $letter)
+    {
+      $oid = get_dev_attrib($device, 'imagingdrum_' . $letter . '_oid');
+
+      if ($oid)
+      {
+        echo("Checking $drum Imaging Drum... ");
+        $capacity = snmp_get($device, get_dev_attrib($device, 'imagingdrum_' . $letter . '_cap_oid'), '-OUqnv');
+        $level = round(snmp_get($device, $oid, "-OUqnv") / $capacity * 100);
+    
+        $drumrrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("drum-" . $letter . ".rrd");
+
+        if (!is_file($drumrrd))
+        {
+          rrdtool_create($drumrrd,"--step 300 \
+          DS:drum:GAUGE:600:0:100 ".$config['rrd_rra']);
+        }
+
+        set_dev_attrib($device, "drum-" . $letter, $level);
+        rrdtool_update($drumrrd,"N:$level");
+
+        echo("$level%\n");
+      }
+    }
+    
+    $levels = array(
+      'Waste Toner Box' => 'wastebox',
+      'Fuser' => 'fuser',
+      'Transfer roller' => 'transferroller',
+    );
+    
+    foreach ($levels as $key => $value)
+    {
+      $oid = get_dev_attrib($device, $value.'_oid');
+    
+      if ($oid)
+      {
+        echo("Checking $key... ");
+        $capacity = snmp_get($device, get_dev_attrib($device, $value.'_cap_oid'), '-OUqnv');
+        $level = round(snmp_get($device, $oid, "-OUqnv") / $capacity * 100);
+
+        $rrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("$value.rrd");
+
+        if (!is_file($rrd))
+        {
+          rrdtool_create($rrd,"--step 300 \
+          DS:level:GAUGE:600:0:100 ".$config['rrd_rra']);
+        }
+
+        set_dev_attrib($device, $value, $level);
+        rrdtool_update($rrd,"N:$level");
+
+        echo("$level%\n");
+      }
     }
   }
 }
