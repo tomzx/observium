@@ -38,6 +38,7 @@ if ($config['enable_printers'])
           $resourcetype = snmp_get($device, $type_oid, "-Oqv");
 
           $descr        = trim(str_replace("\n","",str_replace('"','',snmp_get($device, $descr_oid, "-Oqv"))));
+          if (isHexString($descr)) { $descr = snmp_hexstring($descr); }
 
           if ($descr != "")
           {
@@ -49,7 +50,6 @@ if ($config['enable_printers'])
                 $capacity = snmp_get($device, $capacity_oid, "-Oqv");
                 $current  = $current / $capacity * 100;
                 $type     = "jetdirect";
-                if (isHexString($descr)) { $descr = snmp_hexstring($descr); }
                 discover_toner($valid_toner,$device, $toner_oid, $index, $type, $descr, $capacity_oid, $capacity, $current);
               break;
               case 9:
@@ -94,7 +94,7 @@ if ($config['enable_printers'])
                   set_dev_attrib($device, "fuser_oid", $toner_oid);
                   set_dev_attrib($device, "fuser_cap_oid", $capacity_oid);
                   }
-                elseif (stristr($descr, 'roller') !== FALSE)
+                elseif (stristr($descr, 'transfer') !== FALSE)
                 {
                   echo(" TransferRoller");
                   set_dev_attrib($device, "transferroller_oid", $toner_oid);
