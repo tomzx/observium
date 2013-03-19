@@ -66,6 +66,7 @@ if ($config['enable_printers'])
       {
         echo("-");
         mysql_query("DELETE FROM `toner` WHERE toner_id = '" . $test_toner['toner_id'] . "'");
+        log_event("Toner removed: type ".mres($toner_type)." index ".mres($toner_index)." descr ". mres($test_toner['toner_descr']), $device, 'toner', $test_toner['toner_id']);
       }
     }
   }
