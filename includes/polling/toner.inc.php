@@ -47,7 +47,7 @@ if ($config['enable_printers'])
       if (!is_file($pagecountrrd))
       {
         rrdtool_create($pagecountrrd,"--step 300 \
-        DS:pagecount:GAUGE:600:0:20000 ".$config['rrd_rra']);
+        DS:pagecount:GAUGE:600:0:U ".$config['rrd_rra']);
       }
 
       set_dev_attrib($device, "pagecounter", $pages);
