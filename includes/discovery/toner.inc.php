@@ -10,10 +10,10 @@ if ($config['enable_printers'])
 
   if ($device['os_group'] == 'printer')
   {
-    $oids = trim(snmp_walk($device, "SNMPv2-SMI::mib-2.43.12.1.1.2.1 ", "-OsqnU"));
+    $oids = trim(snmp_walk($device, "1.3.6.1.2.1.43.11.1.1.3", "-OsqnU"));
     if (!$oids)
     {
-      $oids = trim(snmp_walk($device, "SNMPv2-SMI::mib-2.43.11.1.1.2.1 ", "-OsqnU"));
+      $oids = trim(snmp_walk($device, "1.3.6.1.2.1.43.12.1.1.2.1", "-OsqnU"));
     }
     if ($debug) { echo($oids."\n"); }
     if ($oids) echo("Jetdirect ");
@@ -30,15 +30,22 @@ if ($config['enable_printers'])
           $toner_oid     = ".1.3.6.1.2.1.43.11.1.1.9.1.$index";
           $descr_oid     = ".1.3.6.1.2.1.43.11.1.1.6.1.$index";
           $capacity_oid  = ".1.3.6.1.2.1.43.11.1.1.8.1.$index";
-          $descr         = trim(str_replace("\n","",str_replace('"','',snmp_get($device, $descr_oid, "-Oqv"))));
-          if ($descr != "")
+          $type_oid      = ".1.3.6.1.2.1.43.11.1.1.5.1.$index";
+
+          $resourcetype = snmp_get($device, $type_oid, "-Oqv");
+          
+          if ($resourcetype == 3 || $resourcetype == 21)
           {
-            $current       = snmp_get($device, $toner_oid, "-Oqv");
-            $capacity      = snmp_get($device, $capacity_oid, "-Oqv");
-            $current       = $current / $capacity * 100;
-            $type          = "jetdirect";
-            if (isHexString($descr)) { $descr = snmp_hexstring($descr); }
-            discover_toner($valid_toner,$device, $toner_oid, $index, $type, $descr, $capacity_oid, $capacity, $current);
+            $descr         = trim(str_replace("\n","",str_replace('"','',snmp_get($device, $descr_oid, "-Oqv"))));
+            if ($descr != "")
+            {
+              $current      = snmp_get($device, $toner_oid, "-Oqv");
+              $capacity     = snmp_get($device, $capacity_oid, "-Oqv");
+              $current      = $current / $capacity * 100;
+              $type         = "jetdirect";
+              if (isHexString($descr)) { $descr = snmp_hexstring($descr); }
+              discover_toner($valid_toner,$device, $toner_oid, $index, $type, $descr, $capacity_oid, $capacity, $current);
+            }
           }
         }
       }
