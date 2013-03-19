@@ -18,9 +18,6 @@ $config['log_file']     = $config['install_dir'] . "/observium.log";
 // It will prevent the web interface being usable form any other hostname
 #$config['base_url']        = "http://observium.company.com";
 
-// Frontpage modules you can use: map, device_status, overall_traffic, custom_traffic, syslog, eventlog
-$config['frontpage']['order']     = array('map', 'device_status', 'eventlog');
-
 // Enable the below to use rrdcached. be sure rrd_dir is within the rrdcached dir
 // and that your web server has permission to talk to rrdcached.
 #$config['rrdcached']    = "unix:/var/run/rrdcached.sock";
