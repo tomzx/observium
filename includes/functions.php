@@ -206,7 +206,7 @@ function delete_device($id)
     dbDelete($table, "`device_id` =  ?", array($id));
   }
 
-  shell_exec("rm -rf ".trim($config['rrd_dir'])."/$host");
+  #shell_exec("rm -rf ".trim($config['rrd_dir'])."/$host");
 
   $ret = "Removed device $host\n";
   return $ret;
