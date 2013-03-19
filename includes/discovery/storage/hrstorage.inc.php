@@ -4,15 +4,15 @@ $hrstorage_array = snmpwalk_cache_oid($device, "hrStorageEntry", NULL, "HOST-RES
 
 if (is_array($hrstorage_array))
 {
+  //64bit counters
+  $dsk_array = snmpwalk_cache_oid($device, 'dskEntry', NULL, 'UCD-SNMP-MIB');
+
   echo("hrStorage : ");
   foreach ($hrstorage_array as $index => $storage)
   {
     $fstype = $storage['hrStorageType'];
     $descr = $storage['hrStorageDescr'];
-    $size = snmp_dewrap32bit($storage['hrStorageSize']) * $storage['hrStorageAllocationUnits'];
-    $used = snmp_dewrap32bit($storage['hrStorageUsed']) * $storage['hrStorageAllocationUnits'];
     $units = $storage['hrStorageAllocationUnits'];
-    $percent = round($used / $size * 100);
 
     switch($fstype)
     {
@@ -43,13 +43,41 @@ if (is_array($hrstorage_array))
     if (isset($config['ignore_mount_network']) && $config['ignore_mount_network'] && $fstype == "hrStorageNetworkDisk") { $deny = 1; if ($debug) echo("skip(network)\n"); }
     if (isset($config['ignore_mount_optical']) && $config['ignore_mount_optical'] && $fstype == "hrStorageCompactDisc") { $deny = 1; if ($debug) echo("skip(cd)\n"); }
 
+    if(!$deny)
+    {
+      //32bit counters
+      $size = snmp_dewrap32bit($storage['hrStorageSize']) * $units;
+      $used = snmp_dewrap32bit($storage['hrStorageUsed']) * $units;
+
+      // hrStorageDescr.8 = /mnt/Media, type: zfs, dev: Media
+      // hrStorageDescr.31 = /
+      list($path) = explode(',', $descr);
+  
+      // Find index from 'dskTable'
+      foreach($dsk_array as $dsk)
+      {
+        if ($dsk['dskPath'] === $path)
+        {
+          //Using 64bit counters if available
+          if(isset($dsk['dskTotalLow']))
+          {
+            $size = $dsk['dskTotalLow'] * $units;
+            $used = $dsk['dskUsedLow'] * $units;
+          }
+          break;
+        }
+      }
+      $percent = round($used / $size * 100);
+    }
+    
     if (!$deny && is_numeric($index))
     {
       discover_storage($valid_storage, $device, $index, $fstype, "hrstorage", $descr, $size , $units, $used, $free, $percent);
     }
 
-    unset($deny, $fstype, $descr, $size, $used, $units, $storage_rrd, $old_storage_rrd, $hrstorage_array);
+    unset($deny, $fstype, $descr, $size, $used, $units, $path, $dsk, $storage_rrd, $old_storage_rrd);
   }
+  unset($hrstorage_array, $dsk_array);
 }
 
 ?>
