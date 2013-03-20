@@ -256,9 +256,13 @@ function pagination($vars, $total, $per_page = 10)
   if ($lastpage > 1)
   {
     $pagination .= '<form action="">';
-    $pagination .= '<div class="pagination pagination-centered">';   
+    $pagination .= '<div class="pagination pagination-centered"><ul>';   
 
-    $pagination .= '<ul><li><a href="#">Prev</a></li>';
+    if ($prev)
+    {
+      #$pagination .= '<li><a href="'.generate_url($vars, array('pageno' => 1)).'">First</a></li>';
+      $pagination .= '<li><a href="'.generate_url($vars, array('pageno' => $prev)).'">Prev</a></li>';
+    }
 
     if ($lastpage < 7 + ($adjacents * 2))
     {
@@ -324,10 +328,11 @@ function pagination($vars, $total, $per_page = 10)
     if ($page < $counter - 1)
     {  
       $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $next))."'>Next</a></li>";
-      $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>Last</a></li>";
+      # No need for "Last" as we don't have "First", 1, 2 and the 2 last pages are always in the list.
+      #$pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>Last</a></li>";
     } else {
       $pagination.= "<li class='active'><a>Next</a></li>";
-      $pagination.= "<li class='active'><a>Last</a></li>";
+      #$pagination.= "<li class='active'><a>Last</a></li>";
     }
     
     $pagination.= "</ul>";
