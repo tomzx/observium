@@ -57,7 +57,7 @@ elseif ($device['os'] == "freebsd")
   if (strstr($poll_device['sysDescr'], "i386")) { $hardware = "i386"; }
   else if (strstr($poll_device['sysDescr'], "amd64")) { $hardware = "amd64"; }
   else { $hardware = "i386"; }
-  $features = "GENERIC";
+  list($version, $features) = explode('-', $version);
 }
 elseif ($device['os'] == "dragonfly")
 {
@@ -82,6 +82,19 @@ elseif ($device['os'] == "monowall" || $device['os'] == "Voswall")
   $features = $freebsda . " " . $freebsdb;
   $hardware = "$hardware ($arch)";
   $hardware = str_replace("\"", "", $hardware);
+}
+elseif ($device['os'] == "pfsense")
+{
+  list(,,,$version) = explode(' ', $poll_device['sysDescr']);
+  list($version,$features) = explode('-', $version);
+  $hardware = 'Generic'; ///pfSense had no information about platform
+}
+elseif ($device['os'] == "freenas" || $device['os'] == "nas4free")
+{
+  preg_match('/^Hardware: ([^\s]+) (.+) running at \d+ Software: FreeBSD ([\d\.]+)-(\w+)/', $poll_device['sysDescr'], $matches);
+  $hardware = $matches[1];
+  $version = $matches[3];
+  $features = $matches[4];
 }
 elseif ($device['os'] == "qnap")
 {

@@ -113,6 +113,25 @@ $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
 $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 
+$os = "pfsense";
+$config['os'][$os]['group']             = "unix";
+$config['os'][$os]['text']              = "pfSense";
+$config['os'][$os]['type']              = "firewall";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Device Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+
+$os = "freenas";
+$config['os'][$os]['group']             = "unix";
+$config['os'][$os]['text']              = "FreeNAS";
+$config['os'][$os]['type']              = "storage";
+
+$os = "nas4free";
+$config['os'][$os]['group']             = "unix";
+$config['os'][$os]['text']              = "NAS4Free";
+$config['os'][$os]['type']              = "storage";
+
 $os = "solaris";
 $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "Sun Solaris";
