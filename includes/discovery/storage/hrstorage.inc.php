@@ -61,8 +61,8 @@ if (is_array($hrstorage_array))
           //Using 64bit counters if available
           if(isset($dsk['dskTotalLow']))
           {
-            $size = $dsk['dskTotalLow'] * $units;
-            $used = $dsk['dskUsedLow'] * $units;
+            $size = $dsk['dskTotalLow'] * 1024;
+            $used = $dsk['dskUsedLow'] * 1024;
           }
           break;
         }

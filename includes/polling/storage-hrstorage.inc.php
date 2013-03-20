@@ -31,8 +31,8 @@ foreach($storage_cache['dsk'] as $dsk)
     //Using 64bit counters if available
     if(isset($dsk['dskTotalLow']))
     {
-      $storage['size'] = $dsk['dskTotalLow'] * $storage['units'];
-      $storage['used'] = $dsk['dskUsedLow'] * $storage['units'];
+      $storage['size'] = $dsk['dskTotalLow'] * 1024;
+      $storage['used'] = $dsk['dskUsedLow'] * 1024;
     }
     break;
   }
