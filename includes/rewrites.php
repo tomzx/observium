@@ -1452,6 +1452,22 @@ function rewrite_junos_hardware ($hardware)
   return ($hardware);
 }
 
+function rewrite_unix_hardware($hardware)
+{
+  if (preg_match('/i[3456]86/i', $hardware)) { $hardware = 'Generic x86'; }
+  elseif (preg_match('/x86_64|amd64/i', $hardware)) { $hardware = 'Generic x86 64-bit'; }
+  elseif (strstr($hardware, 'sparc32')) { $hardware = 'Generic SPARC 32-bit'; }
+  elseif (strstr($hardware, 'sparc64')) { $hardware = 'Generic SPARC 64-bit'; }
+  elseif (strstr($hardware, 'mips')) { $hardware = 'Generic MIPS'; }
+  elseif (strstr($hardware, 'armv5')) { $hardware = 'Generic ARMv5'; }
+  elseif (strstr($hardware, 'armv6')) { $hardware = 'Generic ARMv6'; }
+  elseif (strstr($hardware, 'armv7')) { $hardware = 'Generic ARMv7'; }
+  elseif (strstr($hardware, 'armv')) { $hardware = 'Generic ARM'; }
+  else { $hardware = 'Generic'; }
+
+  return ($hardware);
+}
+
 function fixiftype ($type)
 {
   global $rewrite_iftype;
