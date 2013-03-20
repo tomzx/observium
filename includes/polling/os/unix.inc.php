@@ -45,9 +45,13 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
 elseif ($device['os'] == "freebsd")
 {
   $poll_device['sysDescr'] = str_replace(" 0 ", " ", $poll_device['sysDescr']);
-  list(,,$version) = explode (" ", $poll_device['sysDescr']);
-  $hardware = rewrite_unix_hardware($poll_device['sysDescr']);
+  list(,,$version,$bsnmp_version) = explode (' ', $poll_device['sysDescr']);
+  if ($version == 'FreeBSD')
+  {
+    $version = $bsnmp_version;
+  }
   list($version, $features) = explode('-', $version);
+  $hardware = rewrite_unix_hardware($poll_device['sysDescr']);
 }
 elseif ($device['os'] == "dragonfly")
 {

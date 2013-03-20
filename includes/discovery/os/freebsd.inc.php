@@ -21,7 +21,7 @@ if (!$os)
       if (preg_match('/^[^\s]+ \d+ FreeBSD [\d\.-]+RELEASE/', $sysDescr))
       {
         // pfSense - sysDescr.0 = pfsense.localdomain 3255662572 FreeBSD 8.1-RELEASE-p13
-        $os = "pfsense";
+        //$os = "pfsense"; ///FIXME. it's horrible, disabled for now.
       }
       else
       {
