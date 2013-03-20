@@ -26,7 +26,6 @@ include("../includes/alerts.inc.php");
 
 function humanize_device(&$device)
 {
-
   global $config;
 
   // Set the HTML class and Tab color for the device based on status
@@ -124,6 +123,7 @@ function syslog_priorities()
   {
     $priorities[$i] = array('name' => 'other',        'color' => '#D2D8F9');
   }
+
   return $priorities;
 }
 
@@ -189,6 +189,7 @@ function data_uri($file, $mime)
 {
   $contents = file_get_contents($file);
   $base64   = base64_encode($contents);
+
   return ('data:' . $mime . ';base64,' . $base64);
 }
 
@@ -244,18 +245,18 @@ function pagination($vars, $total, $per_page = 10)
 
   $page = ($page == 0 ? 1 : $page);
   $start = ($page - 1) * $per_page;
-
+  
   $prev = $page - 1;
   $next = $page + 1;
   $lastpage = ceil($total/$per_page);
   $lpm1 = $lastpage - 1;
-
+ 
   $pagination = "";
 
   if ($lastpage > 1)
   {
     $pagination .= '<form action="">';
-    $pagination .= '<div class="pagination pagination-centered">';
+    $pagination .= '<div class="pagination pagination-centered">';   
 
     $pagination .= '<ul><li><a href="#">Prev</a></li>';
 
@@ -283,7 +284,7 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }
+        }  
 
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
@@ -301,28 +302,27 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }
-        
+        }  
+           
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
-      }
-      else
-      {
+      } else {
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '1'))."'>1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '2'))."'>2</a></li>";
-        for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++)
+        for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++)   
         {
           if ($counter == $page)
+          {
             $pagination.= "<li class='active'><a>$counter</a></li>";
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }
-      }
-    }
-    
+        }  
+      }    
+    }      
+           
     if ($page < $counter - 1)
-    {
+    {  
       $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $next))."'>Next</a></li>";
       $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>Last</a></li>";
     } else {
@@ -337,7 +337,6 @@ function pagination($vars, $total, $per_page = 10)
        <select name="type" id="type" class="span1"
        onchange="window.open(this.options[this.selectedIndex].value,\'_top\')">';
 
-
     foreach (array('10','20','50','100','500','1000') as $pagesize)
     {
       $pagination .= "<option value='".generate_url($vars, array('pagesize' => $pagesize))."'";
@@ -350,7 +349,6 @@ function pagination($vars, $total, $per_page = 10)
 
   return $pagination;
 }
-
 
 function generate_url($vars, $new_vars = array())
 {
@@ -383,7 +381,7 @@ function generate_overlib_content($graph_array, $text)
     $overlib_content = '<div style="width: 590px;"><span style="font-weight: bold; font-size: 16px;">'.$text."</span><br />";
     foreach (array('day','week','month','year') as $period)
     {
-      $graph_array['from'] = $config['time'][$period];
+      $graph_array['from']        = $config['time'][$period];
       $overlib_content .= generate_graph_tag($graph_array);
 
     }
@@ -430,7 +428,6 @@ function generate_device_link_header($device, $vars=array())
 ';
 
   return $contents;
-
 }
 
 function generate_device_link_contents($device, $vars=array(), $start=0, $end=0)
@@ -468,7 +465,6 @@ function generate_device_link_contents($device, $vars=array(), $start=0, $end=0)
   }
 
   return $contents;
-
 }
 
 function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end=0)
@@ -488,6 +484,7 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
   {
     return $device['hostname'];
   }
+
   return $link;
 }
 
