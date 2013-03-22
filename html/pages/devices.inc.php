@@ -17,7 +17,8 @@ if ($vars['features']) { $where .= " AND features = ?";    $sql_param[] = $vars[
 if ($vars['type'])     { $where .= " AND type = ?";        $sql_param[] = $vars['type']; }
 if (isset($vars['status']))   { $where .= " AND status = ?";      $sql_param[] = $vars['status']; }
 if (isset($vars['ignore']))   { $where .= " AND ignore = ?";      $sql_param[] = $vars['ignore']; }
-if (isset($vars['disabled'])) { $where .= " AND disabled = ?";    $sql_param[] = $vars['disabled']; }
+if (!$config['web_show_disabled']) { $where .= " AND disabled = 0"; }
+elseif (isset($vars['disabled'])) { $where .= " AND disabled = ?";    $sql_param[] = $vars['disabled']; }
 
 
 if ($vars['location'] == "Unset") { $location_filter = ''; }
@@ -53,7 +54,8 @@ if($vars['searchbar'] != "hide")
           <option value=''>All OSes</option>
           <?php
 
-foreach (dbFetch('SELECT `os` FROM `devices` AS D WHERE 1 GROUP BY `os` ORDER BY `os`') as $data)
+$where_form = ($config['web_show_disabled']) ? '' : 'AND disabled = 0';
+foreach (dbFetch('SELECT `os` FROM `devices` AS D WHERE 1 '.$where_form.' GROUP BY `os` ORDER BY `os`') as $data)
 {
   if ($data['os'])
   {
@@ -69,7 +71,7 @@ foreach (dbFetch('SELECT `os` FROM `devices` AS D WHERE 1 GROUP BY `os` ORDER BY
           <option value=''>All Versions</option>
           <?php
 
-foreach (dbFetch('SELECT `version` FROM `devices` AS D WHERE 1 GROUP BY `version` ORDER BY `version`') as $data)
+foreach (dbFetch('SELECT `version` FROM `devices` AS D WHERE 1 '.$where_form.' GROUP BY `version` ORDER BY `version`') as $data)
 {
   if ($data['version'])
   {
@@ -85,7 +87,7 @@ foreach (dbFetch('SELECT `version` FROM `devices` AS D WHERE 1 GROUP BY `version
         <select name="hardware" id="hardware">
           <option value="">All Platforms</option>
           <?php
-foreach (dbFetch('SELECT `hardware` FROM `devices` AS D WHERE 1 GROUP BY `hardware` ORDER BY `hardware`') as $data)
+foreach (dbFetch('SELECT `hardware` FROM `devices` AS D WHERE 1 '.$where_form.' GROUP BY `hardware` ORDER BY `hardware`') as $data)
 {
   if ($data['hardware'])
   {
@@ -101,7 +103,7 @@ foreach (dbFetch('SELECT `hardware` FROM `devices` AS D WHERE 1 GROUP BY `hardwa
           <option value="">All Featuresets</option>
           <?php
 
-foreach (dbFetch('SELECT `features` FROM `devices` AS D WHERE 1 GROUP BY `features` ORDER BY `features`') as $data)
+foreach (dbFetch('SELECT `features` FROM `devices` AS D WHERE 1 '.$where_form.' GROUP BY `features` ORDER BY `features`') as $data)
 {
   if ($data['features'])
   {
@@ -135,7 +137,7 @@ foreach (getlocations() as $location) // FIXME function name sucks maybe get_loc
           <option value="">All Device Types</option>
           <?php
 
-foreach (dbFetch('SELECT `type` FROM `devices` AS D WHERE 1 GROUP BY `type` ORDER BY `type`') as $data)
+foreach (dbFetch('SELECT `type` FROM `devices` AS D WHERE 1 '.$where_form.' GROUP BY `type` ORDER BY `type`') as $data)
 {
   if ($data['type'])
   {
