@@ -11,7 +11,7 @@ IMPORTS
         FROM VMWARE-ROOT-MIB;
 
 vmwProducts MODULE-IDENTITY
-       LAST-UPDATED "200707300000Z"
+       LAST-UPDATED "201109290000Z"
        ORGANIZATION "VMware, Inc"
        CONTACT-INFO
                "VMware, Inc
@@ -26,6 +26,9 @@ vmwProducts MODULE-IDENTITY
                 which are returned from SNMPv2-MIB sysObjectId for 
                 agents in specific VMware products.
                "
+       REVISION      "201109290000Z"
+       DESCRIPTION
+               "Add vmwVCOps snmp agent's sysObjectId value."
        REVISION      "200707300000Z"
        DESCRIPTION
                "The initial revision."
@@ -42,6 +45,9 @@ vmwVC OBJECT IDENTIFIER
 
 vmwServer OBJECT IDENTIFIER
     ::= { vmwProductSpecific 4 }
+
+vmwVCOps OBJECT IDENTIFIER
+    ::= { vmwProductSpecific 5 }
 
 oidESX OBJECT IDENTIFIER
     ::= { vmwOID 1 }
