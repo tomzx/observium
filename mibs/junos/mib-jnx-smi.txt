@@ -64,6 +64,12 @@ juniperMIB MODULE-IDENTITY
     REVISION    "201208010000Z" -- 01-Aug-12
     DESCRIPTION
             "Added jnxSDKApplicationsRoot branch."
+    REVISION    "201211010000Z" -- 01-Nov12
+    DESCRIPTION
+            "Added jnxJVAEMibRoot branch."
+    REVISION    "201212070000Z" -- 7-Dec-12
+    DESCRIPTION
+            "Added jnxStrm branch."
     ::= { enterprises 2636 }
 
 --
@@ -89,15 +95,18 @@ jnxProducts OBJECT-IDENTITY
     --
     -- Top-level object identifier registry used by the JunosSpace Products.
 
-    --#if REL13.1
     jnxJunosSpace                   OBJECT IDENTIFIER ::= { jnxProducts 3 }
 
     jnxReservedProducts3            OBJECT IDENTIFIER ::= { jnxProducts 4 }
     jnxReservedProducts4            OBJECT IDENTIFIER ::= { jnxProducts 5 }
     jnxReservedProducts5            OBJECT IDENTIFIER ::= { jnxProducts 6 }
     jnxSDKApplicationsRoot          OBJECT IDENTIFIER ::= { jnxProducts 7 }
+    jnxJAB                          OBJECT IDENTIFIER ::= { jnxProducts 8 }
 
 
+   -- jnxStrm refers to the root MIB object for STRM products.
+   -- STRM is a non-JUNOS based product.
+    jnxStrm                         OBJECT IDENTIFIER ::= { jnxProducts 9 }
 
 jnxServices OBJECT-IDENTITY
     STATUS  current
@@ -180,19 +189,15 @@ jnxMibs OBJECT-IDENTITY
     -- juniper Subscriber MIB
     jnxSubscriberMibRoot       OBJECT IDENTIFIER ::= { jnxMibs 64 }
 
-    --#if REL11.1
     -- juniper MAG MIB 
     jnxMagMibRoot              OBJECT IDENTIFIER ::= { jnxMibs 65 }
 
-    --#if REL12.3
     -- Root of juniper MobileGateway MIBs
     jnxMobileGatewayMibRoot    OBJECT IDENTIFIER ::= { jnxMibs 66 }
 
-    --#if REL11.4
     -- juniper PPPOE MIB 
     jnxPppoeMibRoot            OBJECT IDENTIFIER ::= { jnxMibs 67 }
 
-    --#if REL11.4
     -- juniper PPP MIB 
     jnxPppMibRoot            OBJECT IDENTIFIER ::= { jnxMibs 68 }
 
@@ -223,6 +228,8 @@ jnxTraps OBJECT-IDENTITY
     jnxSAIDPNotifications      OBJECT IDENTIFIER ::= { jnxTraps 16 }
     jnxCosNotifications        OBJECT IDENTIFIER ::= { jnxTraps 17 }
     jnxDomNotifications        OBJECT IDENTIFIER ::= { jnxTraps 18 }
+    jnxFabricChassisTraps      OBJECT IDENTIFIER ::= { jnxTraps 19 }
+    jnxFabricChassisOKTraps    OBJECT IDENTIFIER ::= { jnxTraps 20 }
 
 
 --  This is the top-level object identifier registry used by Juniper

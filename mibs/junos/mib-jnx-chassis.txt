@@ -86,6 +86,22 @@ jnxBoxAnatomy MODULE-IDENTITY
     DESCRIPTION
                "Added new jnxFruType: PDU and PSM,
                 and new traps: jnxFmLinkErr and jnxFmCellDropErr."
+    REVISION     "201206250000Z"    -- Jun 25, 2012
+    DESCRIPTION
+               "Added new offline reason hwFault"
+    REVISION     "201208240000Z"    -- Aug 24, 2012
+    DESCRIPTION 
+               "Added new offline reason fruTypeConfigMismatch to
+                jnxFruOfflineReason enumeration."
+    REVISION     "201210120000Z"    -- Oct 12, 2012
+    DESCRIPTION 
+               "Added new offline reason fruPICOfflineOnEccErrors to
+                jnxFruOfflineReason enumeration."
+    REVISION     "201211070000Z"    -- Nov 07, 2012
+    DESCRIPTION 
+               "Added new offline reasons fruFpcIncompatible and
+                fruFpcFanTrayPEMIncompatible to
+                jnxFruOfflineReason enumeration."
 
 
 
@@ -136,7 +152,11 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                      member4       (35),
                      member5       (36),
                      member6       (37),
-                     member7       (38)
+                     member7       (38),
+                     nodeDevice    (39),
+                     interconnectDevice (40),
+                     controlPlaneDevice (41),
+                     directorDevice (42)
                  }
 
 
@@ -1406,7 +1426,9 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                 forwardingEngineBoard(15),              -- FEB
                 protectedSystemDomain(16),              -- PSD
 		powerDistributionUnit(17),              -- PDU
-		powerSupplyModule(18)                   -- PSM
+		powerSupplyModule(18),                  -- PSM
+		switchFabricBoard(19),                  -- SFB
+		adapterCard(20)                         -- ADC
 	}
 	MAX-ACCESS	read-only
 	STATUS		current
@@ -1530,7 +1552,19 @@ JnxChassisId ::= TEXTUAL-CONVENTION
                 badVoltage(74),                  -- bad voltage
                 fruFPCReducedFabricBW(75),       -- FPC offlined due to Reduced Fabric Bandwidth
                 fruAutoheal(76),                 -- FRU offlined due to software autoheal action
-                builtinPicBounce(77)             -- Builtin PIC Bounce
+                builtinPicBounce(77),            -- Builtin PIC Bounce
+                fruFabricDegraded(78),           -- Fabric running in degraded state
+                fruFPCFabricDegradedOffline(79), -- FPC offlined due to degraded fabric action 
+                fruUnsupportedSlot(80),          -- FRU unsupported in the current slot
+                fruRouteLocalizationMisCfg(81),  -- Route Localization - FPC Misconfiguration
+                fruTypeConfigMismatch(82),       -- FRU Type configuration mismatch
+                lccModeChanged(83),              -- LCC mode changed on the SFC
+                hwFault(84),                     -- Hardware fault
+                fruPICOfflineOnEccErrors(85),    -- PIC offlined on ecc errors cross ceratins limit.
+                fruFpcIncompatible(86),          -- FPC imcompatible with other FPCs
+                fruFpcFanTrayPEMIncompatible(87),-- FPC incompatible with FAN-TRAYs ,PEMs
+                fruUnsupportedFirmware(88)       -- Firmware on this FRU not supported
+
 	}
 	MAX-ACCESS	read-only
 	STATUS		current

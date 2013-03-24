@@ -12,7 +12,7 @@ JNX-IPSEC-MONITOR-MIB DEFINITIONS ::= BEGIN
         jnxSpSvcSetName 
            FROM JUNIPER-SP-MIB;
       jnxIpSecMonitorMIB MODULE-IDENTITY
-         LAST-UPDATED "200508312153Z" --  2005 UTC      
+         LAST-UPDATED "201202102100Z" --  2012 UTC      
          ORGANIZATION "Juniper Networks, Inc."
          CONTACT-INFO
                 "Juniper Technical Assistance Center
@@ -21,7 +21,7 @@ JNX-IPSEC-MONITOR-MIB DEFINITIONS ::= BEGIN
                       Sunnyvale, CA 94089
                       E-mail: support@juniper.net"
 	     DESCRIPTION " "
-         REVISION "200508312153Z"
+         REVISION "201202102100Z"
          DESCRIPTION
                    "Initial version implements only the following
                     tables:
@@ -68,7 +68,8 @@ JNX-IPSEC-MONITOR-MIB DEFINITIONS ::= BEGIN
             IKE negotiations."
          SYNTAX INTEGER {
                    md5(1),
-                   sha(2)
+                   sha(2),
+                   sha256(3)
          }
 
       JnxIkeAuthMethod ::= TEXTUAL-CONVENTION
@@ -171,7 +172,8 @@ JNX-IPSEC-MONITOR-MIB DEFINITIONS ::= BEGIN
          SYNTAX INTEGER{
                    unknown(0),
                    hmacMd5(2),
-                   hmacSha(3)
+                   hmacSha(3),
+                   hmacSha256(4)
          }
 
       JnxRemotePeerType  ::= TEXTUAL-CONVENTION

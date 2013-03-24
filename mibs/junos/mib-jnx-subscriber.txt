@@ -24,7 +24,7 @@ IMPORTS
 
 
 jnxSubscriberMIB  MODULE-IDENTITY
-       LAST-UPDATED "201005110000Z"  -- 11-May-10
+       LAST-UPDATED "201205020000Z"  -- 02-May-12
        ORGANIZATION "Juniper Networks, Inc."
        CONTACT-INFO
              " Juniper Technical Assistance Center
@@ -38,6 +38,9 @@ jnxSubscriberMIB  MODULE-IDENTITY
        REVISION    "201005110000Z"  -- 11-May-10
        DESCRIPTION
              "Initial version of jnxSubscriberMIB module."
+       REVISION    "201205020000Z"  -- 02-May-12
+       DESCRIPTION
+             "Updated related to subscriber accounting session id."
        ::= { jnxSubscriberMibRoot  1 }
 
 
@@ -150,7 +153,8 @@ JnxSubscriberEntry ::= SEQUENCE {
        jnxSubscriberInterfaceType        INTEGER,
        jnxSubscriberMacAddress           MacAddress,
        jnxSubscriberState                JnxSubscriberState,
-       jnxSubscriberLoginTime            DisplayString }
+       jnxSubscriberLoginTime            DisplayString,
+       jnxSubscriberAcctSessionId        DisplayString }
 
 jnxSubscriberHandleHiWord OBJECT-TYPE
        SYNTAX      Unsigned32(0..4294967295)
@@ -266,6 +270,15 @@ jnxSubscriberLoginTime OBJECT-TYPE
        DESCRIPTION
              "The time this subscriber logged in to the server."
        ::= { jnxSubscriberEntry 13 }
+
+jnxSubscriberAcctSessionId OBJECT-TYPE
+       SYNTAX      DisplayString
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+             "The accounting session id associated with this subscriber."
+       ::= { jnxSubscriberEntry 14 }
+
 
 -- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- Subscriber information by logical system

@@ -398,7 +398,7 @@ JNX-L2TP-MIB DEFINITIONS ::= BEGIN
                jnxL2tpTunnelStatsErrorTxPkts
                    Counter32,
                jnxL2tpTunnelStatsErrorRxPkts
-                   Counter32
+                   Counter32,
                jnxL2tpTunnelStatsControlTxBytes32
                    Counter32,
                jnxL2tpTunnelStatsControlRxBytes32
@@ -406,7 +406,7 @@ JNX-L2TP-MIB DEFINITIONS ::= BEGIN
                jnxL2tpTunnelStatsDataTxPkts64
                    Counter64,
                jnxL2tpTunnelStatsDataRxPkts64
-                   Counter64,
+                   Counter64
            }
 
    jnxL2tpTunnelStatsLocalTID OBJECT-TYPE
@@ -927,7 +927,7 @@ JNX-L2TP-MIB DEFINITIONS ::= BEGIN
                jnxL2tpSessionStatsErrorTxPkts
                    Counter32,
                jnxL2tpSessionStatsErrorRxPkts
-                   Counter32
+                   Counter32,
                jnxL2tpSessionStatsControlTxBytes32
                    Counter32,
                jnxL2tpSessionStatsControlRxBytes32
@@ -935,7 +935,7 @@ JNX-L2TP-MIB DEFINITIONS ::= BEGIN
                jnxL2tpSessionStatsDataTxPkts64
                    Counter64,
                jnxL2tpSessionStatsDataRxPkts64
-                   Counter64,
+                   Counter64
            }
 
    jnxL2tpSessionStatsLocalTID OBJECT-TYPE

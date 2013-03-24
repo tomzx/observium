@@ -1170,7 +1170,7 @@ JnxPppSessionEntry ::= SEQUENCE {
     jnxPppSessionInOctets64                    Counter64,
     jnxPppSessionOutOctets64                   Counter64,
     jnxPppSessionInPackets64                   Counter64,
-    jnxPppSessionOutPackets64                  Counter64,}
+    jnxPppSessionOutPackets64                  Counter64}
 
 jnxPppSessionGrant OBJECT-TYPE
     SYNTAX      TruthValue
