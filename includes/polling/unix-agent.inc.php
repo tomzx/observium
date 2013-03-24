@@ -8,8 +8,8 @@ if ($device['os_group'] == "unix")
 {
   echo("Observium UNIX Agent: ");
 
-  // FIXME - this should be in config and overridable in database
-  $agent_port = '6556';
+  // FIXME - this should be overridable in database
+  $agent_port = $config['unix-agent']['port'];
 
   $agent_start = utime();
   $agent_socket = "tcp://".$device['hostname'].":".$agent_port;
