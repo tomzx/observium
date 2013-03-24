@@ -38,7 +38,6 @@ if (dbFetchCell("SELECT COUNT(*) FROM `mac_accounting` WHERE `port_id` = ?", arr
   $port['tags'] .= '<a href="' . generate_port_url($port, array('view' => 'macaccounting')) . '"><span class="label label-info">MAC</span></a>';
 }
 
-
 echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" . generate_port_url($port) . "/\'" style="cursor: pointer;">
          <td style="width: 1px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
          <td style="width: 1px;"></td>
@@ -52,11 +51,12 @@ if ($port['ifAlias']) { echo("<br />"); }
 
 unset ($break);
 
+
 if ($port_details)
 {
   foreach (dbFetchRows("SELECT * FROM `ipv4_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip)
   {
-    echo($break ."<a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=$ip[ipv4_address]')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
+    echo($break ."<a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=".$ip['ipv4_address']."')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
     $break = "<br />";
   }
   foreach (dbFetchRows("SELECT * FROM `ipv6_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip6)

@@ -12,12 +12,6 @@
  *
  */
 
-// Include from PEAR
-
-include_once("includes/pear/Net/IPv4.php");
-include_once("includes/pear/Net/IPv6.php");
-include_once("includes/pear/Net/MAC.php");
-
 // Observium Includes
 
 include_once($config['install_dir'] . "/includes/common.php");
@@ -30,6 +24,11 @@ include_once($config['install_dir'] . "/includes/snmp.inc.php");
 include_once($config['install_dir'] . "/includes/services.inc.php");
 include_once($config['install_dir'] . "/includes/dbFacile.php");
 include_once($config['install_dir'] . "/includes/console_colour.php");
+
+// Include from PEAR
+include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
+include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
+include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
 
 if ($config['alerts']['email']['enable'])
 {
