@@ -111,15 +111,17 @@ if ($vars['subview'] == "top10")
   else
   {
 
-  $query = "SELECT *, (M.bytes_input_rate + M.bytes_output_rate) as bps FROM `mac_accounting` AS M,
-                       `ports` AS I, `devices` AS D WHERE M.port_id = ? AND I.port_id = M.port_id AND I.device_id = D.device_id ORDER BY bps DESC";
+  $query = "SELECT *, `mac_accounting`.`ma_id` as `ma_id` FROM `mac_accounting` LEFT JOIN `mac_accounting-state` ON  `mac_accounting`.`ma_id` =  `mac_accounting-state`.`ma_id` WHERE port_id = ?";
+
+#  $query = "SELECT *, (M.bytes_input_rate + M.bytes_output_rate) as bps FROM `mac_accounting` AS M,
+#                       `ports` AS I, `devices` AS D WHERE M.port_id = ? AND I.port_id = M.port_id AND I.device_id = D.device_id ORDER BY bps DESC";
   $param = array($port['port_id']);
 
   foreach (dbFetchRows($query, $param) as $acc)
   {
     if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
     $addy = dbFetchRow("SELECT * FROM ip_mac where mac_address = ?", array($acc['mac']));
-    
+
     ///FIXME. Need rewrite, because $addy is array with multiple items.
     #$name = gethostbyaddr($addy['ipv4_address']); FIXME - Maybe some caching for this?
     $arp_host = dbFetchRow("SELECT * FROM ipv4_addresses AS A, ports AS I, devices AS D WHERE A.ipv4_address = ? AND I.port_id = A.port_id AND D.device_id = I.device_id", array($addy['ip_address']));

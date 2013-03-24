@@ -14,8 +14,9 @@
 
 // Include from PEAR
 
-include_once("Net/IPv4.php");
-include_once("Net/IPv6.php");
+include_once("includes/pear/Net/IPv4.php");
+include_once("includes/pear/Net/IPv6.php");
+include_once("includes/pear/Net/MAC.php");
 
 // Observium Includes
 

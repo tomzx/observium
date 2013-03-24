@@ -15,6 +15,61 @@ function snmp_dewrap32bit($value)
  }
 }
 
+// Take -OXsq output and parse it into an array. Fancy.
+function parse_oid2($string)
+{
+	$result = array();
+	$matches = array();
+
+	// Match OID - If wrapped in double-quotes ('"'), must escape '"', else must escape ' ' (space) or '[' - Other escaping is optional
+	$match_count = preg_match('/^(?:((?!")(?:[^\\\\\\[ ]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))/', $string, $matches);
+	if (null !== $match_count && $match_count > 0)
+	{
+		// [1] = unquoted, [2] = quoted
+		$value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+
+		$result[] = stripslashes($value);
+
+		// I do this (vs keeping track of offset) to use ^ in regex
+		$string = substr($string, strlen($matches[0]));
+
+		// Match indexes (optional) - If wrapped in double-quotes ('"'), must escape '"', else must escape ']' - Other escaping is optional
+		while (true)
+		{
+			$match_count = preg_match('/^\\[(?:((?!")(?:[^\\\\\\]]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))\\]/', $string, $matches);
+			if (null !== $match_count && $match_count > 0)
+			{
+				// [1] = unquoted, [2] = quoted
+				$value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+
+				$result[] = stripslashes($value);
+
+				// I do this (vs keeping track of offset) to use ^ in regex
+				$string = substr($string, strlen($matches[0]));
+			}
+			else
+			{
+				break;
+			}
+		} // while
+		// Match value - Skips leading ' ' characters - If remainder is wrapped in double-quotes ('"'), must escape '"', othe escaping is optional
+		$match_count = preg_match('/^\\s+(?:((?!")(?:[^\\\\]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))$/', $string, $matches);
+		if (null !== $match_count && $match_count > 0)
+		{
+			// [1] = unquoted, [2] = quoted
+			$value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+
+			$result[] = stripslashes($value);
+
+			if (strlen($string) != strlen($matches[0])) { echo "Length error!"; return null; }
+
+			return $result;
+		}
+	}
+	// All or nothing
+	return null;
+}
+
 // Take -Oqs output and parse it into an array containing OID array and the value
 // Hopefully this is the beginning of more intelligent OID parsing!
 // Thanks to David Farrell <DavidPFarrell@gmail.com> for the parser solution.

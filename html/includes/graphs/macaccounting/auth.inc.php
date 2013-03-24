@@ -16,12 +16,12 @@ if (is_numeric($vars['id']))
 
     if ($auth || port_permitted($acc['port_id']))
     {
-      if ($debug) { echo($config['rrd_dir'] . "/" . $acc['hostname'] . "/" . safename("cip-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd")); }
+      if ($debug) { echo($config['rrd_dir'] . "/" . $acc['hostname'] . "/" . safename("mac_acc-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd")); }
 
-      if (is_file($config['rrd_dir'] . "/" . $acc['hostname'] . "/" . safename("cip-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd")))
+      if (is_file($config['rrd_dir'] . "/" . $acc['hostname'] . "/" . safename("mac_acc-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd")))
       {
         if ($debug) { echo("exists"); }
-        $rrd_filename = $config['rrd_dir'] . "/" . $acc['hostname'] . "/" . safename("cip-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd");
+        $rrd_filename = $config['rrd_dir'] . "/" . $acc['hostname'] . "/" . safename("mac_acc-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd");
         $port   = get_port_by_id($acc['port_id']);
         $device = device_by_id_cache($port['device_id']);
         $title  = generate_device_link($device);
