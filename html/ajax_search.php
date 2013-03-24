@@ -52,9 +52,6 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
     if (count($results))
     {
       echo '<li class="nav-header">Devices found: '.count($results).'</li>';
-      // While there are results loop through them - fetching an Object.
-      // Store the category id
-      $catid = 0;
 
       foreach ($results as $result)
       {
@@ -88,9 +85,6 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
       if (count($results))
       {
         echo '<li class="nav-header">Ports found: '.count($results).'</li>';
-        // While there are results loop through them - fetching an Object.
-        // Store the category id
-        $catid = 0;
 
         foreach ($results as $result)
         {
@@ -103,16 +97,19 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
           if (strlen($description) > 80) { $description = substr($description, 0, 80) . "..."; }
 
           /// FIXME : THIS SUCKS
-          if ($result['ifAdminStatus'] == "down") { $icon = "search-port-disabled";
-          } elseif ($result['ifAdminStatus'] == "up" && $result['ifOperStatus']== "down") { $icon = "search-port-down";
-          } elseif ($result['ifAdminStatus'] == "up" && $result['ifOperStatus']== "lowerLayerDown") { $icon = "search-port-down";
-          } elseif ($result['ifAdminStatus'] == "up" && $result['ifOperStatus']== "up") { $icon = "search-port-up"; }
+          if ($result['ifAdminStatus'] == "down") { $icon = "search-port-disabled"; $tab_colour = '#009900'; // FIXME: Why green for ignore? Also see humanize_device()
+          } elseif ($result['ifAdminStatus'] == "up" && $result['ifOperStatus']== "down") { $icon = "search-port-down"; $tab_colour = '#AAAAAA';
+          } elseif ($result['ifAdminStatus'] == "up" && $result['ifOperStatus']== "lowerLayerDown") { $icon = "search-port-down"; $tab_colour = '#AAAAAA';
+          } elseif ($result['ifAdminStatus'] == "up" && $result['ifOperStatus']== "up") { $icon = "search-port-up"; $tab_colour = '#194B7F'; // FIXME: This colour pulled from functions.inc.php humanize_device, maybe set it centrally in definitions?
+}
 
-          echo('<dl style="min-height: 32px;" class="dl-horizontal dl-search">
-                   <dt><img src="images/'.$icon.'.png" /></dt>
-                   <dd><h5>'.highlight_search($name).'</h5>
+          echo('<dl style="border-left: 10px solid '.$tab_colour.'; " class="dl-horizontal dl-search">
+                  <dt style="padding-left: 10px; text-align: center;">
+                    <img src="images/'.$icon.'.png" /></dt>
+                  <dd><h5>'.highlight_search($name).'</h5>
                        <small>'.$result['hostname'].'<br />'.highlight_search($description).'</small></dd>
                   </dl>');
+
         }
 
         echo("</a></li>");
@@ -126,9 +123,6 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
       if (count($results))
       {
         echo '<li class="nav-header">Sensors found: '.count($results).'</li>';
-        // While there are results loop through them - fetching an Object.
-        // Store the category id
-        $catid = 0;
 
         foreach ($results as $result)
         {
@@ -138,9 +132,13 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
           $name = $result['sensor_descr'];
           if (strlen($name) > 35) { $name = substr($name, 0, 35) . "..."; }
 
-          echo('<dl style="min-height: 32px;" class="dl-horizontal dl-search">
-                   <dt><i class="'.$config['sensor_types'][$result['sensor_class']]['icon'].'"></i></dt>
-                   <dd><h5>'.highlight_search($name).'</h5>
+          /// FIXME: once we have alerting, colour this to the sensor's status
+          $tab_colour = '#194B7F'; // FIXME: This colour pulled from functions.inc.php humanize_device, maybe set it centrally in definitions?
+          
+          echo('<dl style="border-left: 10px solid '.$tab_colour.'; " class="dl-horizontal dl-search">
+                  <dt style="padding-left: 10px; text-align: center;">
+                    <i class="'.$config['sensor_types'][$result['sensor_class']]['icon'].'"></i></dt>
+                  <dd><h5>'.highlight_search($name).'</h5>
                        <small>'.$result['hostname'].'<br />
                        '.$result['location'] . ' | ' .ucfirst($result['sensor_class']).' sensor</small></dd>
                   </dl>');

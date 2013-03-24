@@ -48,7 +48,7 @@ function humanize_device(&$device)
     if ($device['status'] == '1')
     {
       $device['html_row_class'] = "";
-      $device['html_tab_colour'] = "#009900";
+      $device['html_tab_colour'] = "#009900"; // Why green for ignore? Confusing!
     }
   }
   if ($device['disabled'] == '1')
