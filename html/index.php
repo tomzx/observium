@@ -101,7 +101,7 @@ if (isset($config['branding']) && is_array($config['branding']))
   {
     foreach ($config['branding'][$_SERVER['SERVER_NAME']] as $confitem => $confval)
     {
-        eval("\$config['" . $confitem . "'] = \$confval;");
+      eval("\$config['" . $confitem . "'] = \$confval;");
     }
   } else {
     foreach ($config['branding']['default'] as $confitem => $confval)
@@ -201,9 +201,6 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
   -->
   <script type="text/javascript">
-
-
-
     <!--
 
     $(function () {
@@ -276,8 +273,7 @@ function popUp(URL)
   </script>
 
 <body style="padding-top: 50px;">
-
-<div class="container">
+  <div class="container">
 
 <?php
 
@@ -292,7 +288,6 @@ if ($devel || $vars['devel'])
 
 if ($_SESSION['authenticated'])
 {
-
   // Do various queries which we use in multiple places
   include("includes/cache-data.inc.php");
 
@@ -415,10 +410,7 @@ if (is_array($pagetitle))
 }
 ?>
 
-  </body>
-</html>
-
-<script type="text/javascript">
+    <script type="text/javascript">
 
 #  $(document).ready(function()
 #  {
@@ -431,5 +423,6 @@ if (is_array($pagetitle))
 #      $('#poller_status').load('ajax_poller_status.php');
 #    }, 10000); // refresh every 10000 milliseconds
 
-</script>
-
+    </script>
+  </body>
+</html>

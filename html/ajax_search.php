@@ -109,9 +109,39 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
           } elseif ($result['ifAdminStatus'] == "up" && $result['ifOperStatus']== "up") { $icon = "search-port-up"; }
 
           echo('<dl style="min-height: 32px;" class="dl-horizontal dl-search">
-                   <dt><img src="images/'.$icon.'.png"></img></dt>
+                   <dt><img src="images/'.$icon.'.png" /></dt>
                    <dd><h5>'.highlight_search($name).'</h5>
-                       <small>'.$result['hostname'].'<br/>'.highlight_search($description).'</small></dd>
+                       <small>'.$result['hostname'].'<br />'.highlight_search($description).'</small></dd>
+                  </dl>');
+        }
+
+        echo("</a></li>");
+      }
+
+      /// SEARCH SENSORS
+      $results = dbFetchRows("SELECT * FROM `sensors` ".
+                             "LEFT JOIN `devices` ON  `sensors`.`device_id` =  `devices`.`device_id` ".
+                             "WHERE `sensor_descr` LIKE '%" . $queryString . "%' ORDER BY sensor_descr LIMIT 8");
+
+      if (count($results))
+      {
+        echo '<li class="nav-header">Sensors found: '.count($results).'</li>';
+        // While there are results loop through them - fetching an Object.
+        // Store the category id
+        $catid = 0;
+
+        foreach ($results as $result)
+        {
+          echo('<li class="divider" style="margin: 0px;"></li>');
+          echo('<li>');
+          echo '<a href="graphs/type=sensor_'  . $result['sensor_class'] . '/id=' . $result['sensor_id'] . '/">';
+          $name = $result['sensor_descr'];
+          if (strlen($name) > 35) { $name = substr($name, 0, 35) . "..."; }
+
+          echo('<dl style="min-height: 32px;" class="dl-horizontal dl-search">
+                   <dt><i class="'.$config['sensor_types'][$result['sensor_class']]['icon'].'"></i></dt>
+                   <dd><h5>'.highlight_search($name).'</h5>
+                       <small>'.$result['hostname'].'<br />'.ucfirst($result['sensor_class']).' sensor</small></dd>
                   </dl>');
         }
 
