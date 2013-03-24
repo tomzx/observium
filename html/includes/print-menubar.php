@@ -1,5 +1,7 @@
 <?php
 
+/// FIXME THIS FILE IS NO LONGER USED! CAN BE REMOVED?
+
 // FIXME - this could do with some performance improvements, i think. possible rearranging some tables and setting flags at poller time (nothing changes outside of then anyways)
 
 $service_alerts = dbFetchCell("SELECT COUNT(service_id) FROM services WHERE service_status = '0'");

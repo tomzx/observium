@@ -141,7 +141,8 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
           echo('<dl style="min-height: 32px;" class="dl-horizontal dl-search">
                    <dt><i class="'.$config['sensor_types'][$result['sensor_class']]['icon'].'"></i></dt>
                    <dd><h5>'.highlight_search($name).'</h5>
-                       <small>'.$result['hostname'].'<br />'.ucfirst($result['sensor_class']).' sensor</small></dd>
+                       <small>'.$result['hostname'].'<br />
+                       '.$result['location'] . ' | ' .ucfirst($result['sensor_class']).' sensor</small></dd>
                   </dl>');
         }
 
