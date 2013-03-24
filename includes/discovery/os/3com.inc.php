@@ -2,8 +2,7 @@
 
 if (!$os)
 {
-  if (strstr($sysDescr, "3Com Switch ")) { $os = "3com"; }
-  else if (strstr($sysDescr, "3Com SuperStack")) { $os = "3com"; }
+  if (strstr($sysObjectId, ".1.3.6.1.4.1.43")) { $os = "3com"; }
 }
 
 ?>

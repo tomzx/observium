@@ -5,7 +5,7 @@ if ($device['os_group'] == "cisco")
   echo("Cisco CEF Switching Path: ");
 
   $cefs = array();
-  $cefs = snmpwalk_cache_threepart_oid($device, "CISCO-CEF-MIB::cefSwitchingStatsEntry", $cefs, "CISCO-CEF-MIB");
+  $cefs = snmpwalk_cache_threepart_oid($device, "CISCO-CEF-MIB::cefSwitchingStatsEntry", $cefs, "CISCO-CEF-MIB", mib_dirs(array("cisco")));
   $polled = time();
 
   $cefs_query = dbFetchRows("SELECT * FROM `cef_switching` WHERE `device_id` = ?", array($device['device_id']));

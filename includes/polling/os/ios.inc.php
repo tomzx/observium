@@ -39,14 +39,6 @@ else
   }
 }
 
-#   if ($slot_1 == "-1" && strpos($descr_1, "No") === FALSE) { $ciscomodel = $descr_1; }
-#   if (($contained_1 == "0" || $name_1 == "Chassis") && strpos($model_1, "No") === FALSE) { $ciscomodel = $model_1; list($version_1) = explode(",",$ver_1); }
-#   if ($contained_1001 == "0" && strpos($model_1001, "No") === FALSE) { $ciscomodel = $model_1001; }
-#   $ciscomodel = str_replace("\"","",$ciscomodel);
-#   if ($ciscomodel) { $hardware = $ciscomodel; unset($ciscomodel); }
-
 if(empty($hardware)) {   $hardware = snmp_get($device, "sysObjectID.0", "-Osqv", "SNMPv2-MIB:CISCO-PRODUCTS-MIB"); }
-
-#if(isset($cisco_hardware_oids[$poll_device['sysObjectID']])) { $hardware = $cisco_hardware_oids[$poll_device['sysObjectID']]; }
 
 ?>

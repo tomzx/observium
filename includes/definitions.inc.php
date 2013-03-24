@@ -684,19 +684,39 @@ $config['os'][$os]['text']              = "Blade Network Technologies";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "bnt";
 
-$os = "comware";
-$config['os'][$os]['text']              = "HP Comware";
+// HP / 3Com
+
+$os = "3com";
+$config['os'][$os]['text']              = "3Com OS";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "3com";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+
+$os = "procurve";
+$config['os'][$os]['text']              = "HP ProCurve";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "hp";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Traffic";
-#$config['os'][$os]['over'][1]['graph']  = "device_processor";
-#$config['os'][$os]['over'][1]['text']   = "CPU Usage";
-#$config['os'][$os]['over'][2]['graph']  = "device_mempool";
-#$config['os'][$os]['over'][2]['text']   = "Memory Usage";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_mempool";
+$config['os'][$os]['over'][2]['text']   = "Memory Usage";
 
-$os = "procurve";
-$config['os'][$os]['text']              = "HP ProCurve";
+$os = "h3c";
+$config['os'][$os]['text']              = "H3C Comware";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "h3c";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_mempool";
+$config['os'][$os]['over'][2]['text']   = "Memory Usage";
+
+$os = "hh3c";
+$config['os'][$os]['text']              = "HP Comware";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "hp";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
@@ -935,12 +955,6 @@ $config['os'][$os]['over'][0]['graph']  = "device_toner";
 $config['os'][$os]['over'][0]['text']   = "Toner";
 $config['os'][$os]['ifname']            = 1;
 $config['os'][$os]['type']              = "printer";
-
-$os = "3com";
-$config['os'][$os]['text']              = "3Com";
-$config['os'][$os]['over'][0]['graph']  = "device_bits";
-$config['os'][$os]['over'][0]['text']   = "Traffic";
-$config['os'][$os]['type']              = "network";
 
 $os = "sentry3";
 $config['os'][$os]['text']              = "ServerTech Sentry3";

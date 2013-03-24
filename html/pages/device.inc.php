@@ -122,11 +122,11 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
   </li>');
     }
 
-    if (@dbFetchCell("SELECT COUNT(accesspoint_id) FROM accesspoint WHERE device_id = '" . $device['device_id'] . "'") > '0')
+    if (@dbFetchCell("SELECT COUNT(accesspoint_id) FROM accesspoints WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
       echo('<li class="' . $select['accesspoints'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'accesspoints')). '">
-      <i class="fugue-wi-fi-zone"> Access Points
+      <i class="fugue-wi-fi-zone"></i> Access Points
     </a>
   </li>');
     }

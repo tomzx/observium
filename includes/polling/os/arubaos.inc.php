@@ -9,7 +9,7 @@ list(,,$hardware,,$version,) = str_replace($badchars, "", explode (" ", $poll_de
 //stuff about the controller
 $switch_info_oids = array('wlsxSwitchRole','wlsxSwitchMasterIp');
 echo("Caching Oids: ");
-foreach ($switch_info_oids as $oid) { echo("$oid "); $aruba_info = snmpwalk_cache_oid($device, $oid, $aruba_info, "WLSX-SWITCH-MIB"); }
+foreach ($switch_info_oids as $oid) { echo("$oid "); $aruba_info = snmpwalk_cache_oid($device, $oid, $aruba_info, "WLSX-SWITCH-MIB", mib_dirs(array("aruba"))); }
 
 echo("\n");
 

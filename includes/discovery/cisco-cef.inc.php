@@ -3,7 +3,7 @@
 echo("Cisco CEF Switching Path: ");
 
 $cefs = array();
-$cefs = snmpwalk_cache_threepart_oid($device, "CISCO-CEF-MIB::cefSwitchingPath", $cefs);
+$cefs = snmpwalk_cache_threepart_oid($device, "CISCO-CEF-MIB::cefSwitchingPath", $cefs, NULL, mib_dirs(array("cisco")));
 if ($debug) { print_r($cefs); }
 
 if (is_array($cefs))

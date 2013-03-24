@@ -27,6 +27,8 @@ echo("VMware VM: ");
 
 $db_info_list = dbFetchRows("SELECT id, vmwVmVMID, vmwVmDisplayName, vmwVmGuestOS, vmwVmMemSize, vmwVmCpus, vmwVmState FROM vminfo WHERE device_id = ?", array($device["device_id"]));
 
+$vm_data = snmpwalk_cache_oid($device, "vmwVmTable", array(), "VMWARE-VMINFO-MIB", mib_dirs(array("vmware")));
+
 foreach ($db_info_list as $db_info)
 {
   /*
@@ -40,13 +42,13 @@ foreach ($db_info_list as $db_info)
    *  VMWARE-VMINFO-MIB::vmwVmCpus.224 = INTEGER: 2
    */
 
-  $vm_info = array();
+  $vm_info = $vm_data[$db_info["vmwVmVMID"]];
 
-  $vm_info["vmwVmDisplayName"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmDisplayName." . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
-  $vm_info["vmwVmGuestOS"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmGuestOS."   . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
-  $vm_info["vmwVmMemSize"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmMemSize."   . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
-  $vm_info["vmwVmState"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmState."     . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
-  $vm_info["vmwVmCpus"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmCpus."    . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
+#  $vm_info["vmwVmDisplayName"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmDisplayName." . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
+#  $vm_info["vmwVmGuestOS"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmGuestOS."   . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
+#  $vm_info["vmwVmMemSize"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmMemSize."   . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
+#  $vm_info["vmwVmState"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmState."     . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
+#  $vm_info["vmwVmCpus"] = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmCpus."    . $db_info["vmwVmVMID"], "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB","+" . $config['install_dir'] . "/mibs/vmware:" . $config['install_dir'] . "/mibs");
 
   /*
    * VMware does not return an INTEGER but a STRING of the vmwVmMemSize. This bug

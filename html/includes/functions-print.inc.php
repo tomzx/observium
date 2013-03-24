@@ -12,6 +12,52 @@
  *
  */
 
+function print_vm_row($vm, $device = NULL)
+{
+  echo('<tr>');
+
+  echo('<td>');
+
+  if (getidbyname($vm['vmwVmDisplayName']))
+  {
+    echo(generate_device_link(device_by_name($vm['vmwVmDisplayName'])));
+  } else {
+    echo $vm['vmwVmDisplayName'];
+  }
+
+  echo("</td>");
+  echo('<td>' . $vm['vmwVmState'] . "</td>");
+
+  if ($vm['vmwVmGuestOS'] == "E: tools not installed")
+  {
+    echo('<td class="box-desc">Unknown (VMware Tools not installed)</td>');
+  }
+  else if ($vm['vmwVmGuestOS'] == "")
+  {
+    echo('<td class="box-desc"><i>(Unknown)</i></td>');
+  }
+  elseif (isset($config['vmware_guestid'][$vm['vmwVmGuestOS']]))
+  {
+    echo('<td>' . $config['vmware_guestid'][$vm['vmwVmGuestOS']] . "</td>");
+  }
+  else
+  {
+    echo('<td>' . $vm['vmwVmGuestOS'] . "</td>");
+  }
+
+  if ($vm['vmwVmMemSize'] >= 1024)
+  {
+    echo("<td class=list>" . sprintf("%.2f",$vm['vmwVmMemSize']/1024) . " GB</td>");
+  } else {
+    echo("<td class=list>" . sprintf("%.2f",$vm['vmwVmMemSize']) . " MB</td>");
+  }
+
+  echo('<td>' . $vm['vmwVmCpus'] . " CPU</td>");
+
+
+}
+
+
 /**
  * Generate Bootstrap-format Navbar
  *

@@ -5,6 +5,26 @@
 //
 // TRUE STORY. THAT SHIT IS WHACK. -- adama.
 
+
+function mib_dirs($mibs)
+{
+  global $config;
+
+  $dirs = array($config['mib_dir']."/rfc", $config['mib_dir']."/net-snmp");
+
+  if(is_array($mibs))
+  {
+    foreach($mibs as $mib)
+    {
+      if(ctype_alnum($mib))
+      {
+        $dirs[] = $config['mib_dir']."/".$mib;
+      }
+    }
+  }
+  return implode(":", $dirs);
+}
+
 // Crappy function to get workaround 32bit counter wrapping in HOST-RESOURCES-MIB
 function snmp_dewrap32bit($value)
 {
@@ -568,52 +588,12 @@ function snmpwalk_cache_triple_oid($device, $oid, $array, $mib = NULL, $mibdir =
   return $array;
 }
 
-function snmpwalk_cache_twopart_oid($device, $oid, $array, $mib = 0)
+function snmpwalk_cache_twopart_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {
-  global $config;
+  global $config, $debug;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
-  }
+  $data = snmp_walk($device, $oid, "-OQUs", $mib, $mibdir);
 
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
-
-  if ($device['snmpver'] == 'v1' || $config['os'][$device['os']]['nobulk'])
-  {
-    $snmpcommand = $config['snmpwalk'];
-  }
-  else
-  {
-    $snmpcommand = $config['snmpbulkwalk'];
-  }
-
-  $cmd = $snmpcommand;
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -O QUs";
-  $cmd .= " -M ".$config['install_dir']."/mibs";
-  if ($mib) { $cmd .= " -m $mib"; }
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." ".$oid;
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
-
-  $data = trim(external_exec($cmd));
-
-  $device_id = $device['device_id'];
   foreach (explode("\n", $data) as $entry)
   {
     list($oid,$value) = explode("=", $entry);
@@ -628,51 +608,12 @@ function snmpwalk_cache_twopart_oid($device, $oid, $array, $mib = 0)
   return $array;
 }
 
-function snmpwalk_cache_threepart_oid($device, $oid, $array, $mib = 0)
+function snmpwalk_cache_threepart_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {
   global $config, $debug;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
-  }
+  $data = snmp_walk($device, $oid, "-OQUs", $mib, $mibdir);
 
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
-
-  if ($device['snmpver'] == 'v1' || $config['os'][$device['os']]['nobulk'])
-  {
-    $snmpcommand = $config['snmpwalk'];
-  }
-  else
-  {
-    $snmpcommand = $config['snmpbulkwalk'];
-  }
-
-  $cmd = $snmpcommand;
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -O QUs";
-  $cmd .= " -M ".$config['install_dir']."/mibs";
-  if ($mib) { $cmd .= " -m $mib"; }
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." ".$oid;
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
-  $data = trim(external_exec($cmd));
-
-  $device_id = $device['device_id'];
   foreach (explode("\n", $data) as $entry)
   {
     list($oid,$value) = explode("=", $entry);

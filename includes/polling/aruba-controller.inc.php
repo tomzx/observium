@@ -17,9 +17,9 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
 
   $aruba_oids=array_merge($switch_info_oids,$switch_counter_oids);
   echo("Caching Oids: ");
-  foreach ($aruba_oids as $oid) { echo("$oid "); $aruba_stats = snmpwalk_cache_oid($device, $oid, $aruba_stats, "WLSX-SWITCH-MIB"); }
-  foreach ($switch_apinfo_oids as $oid) { echo("$oid "); $aruba_apstats = snmpwalk_cache_oid_num($device, $oid, $aruba_apstats, "WLSX-WLAN-MIB"); }
-  foreach ($switch_apname_oids as $oid) { echo("$oid "); $aruba_apnames = snmpwalk_cache_oid_num($device, $oid, $aruba_apnames, "WLSX-WLAN-MIB"); }
+  foreach ($aruba_oids as $oid) { echo("$oid "); $aruba_stats = snmpwalk_cache_oid($device, $oid, $aruba_stats, "WLSX-SWITCH-MIB", mib_dirs(array("aruba"))); }
+  foreach ($switch_apinfo_oids as $oid) { echo("$oid "); $aruba_apstats = snmpwalk_cache_oid_num($device, $oid, $aruba_apstats, "WLSX-WLAN-MIB", mib_dirs(array("aruba"))); }
+  foreach ($switch_apname_oids as $oid) { echo("$oid "); $aruba_apnames = snmpwalk_cache_oid_num($device, $oid, $aruba_apnames, "WLSX-WLAN-MIB", mib_dirs(array("aruba"))); }
 
   echo("\n");
 
@@ -44,7 +44,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
 
   $graphs['wifi_clients'] = TRUE;
 
-  $ap_db = dbFetchRows("SELECT * FROM `accesspoint` WHERE `device_id` = ?", array($device['device_id']));
+  $ap_db = dbFetchRows("SELECT * FROM `accesspoints` WHERE `device_id` = ?", array($device['device_id']));
 
   foreach ($aruba_apnames as $key => $value) {
     $radioid=str_replace("1.3.6.1.4.1.14823.2.2.1.5.2.1.5.1.16.","",$key);
@@ -104,6 +104,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
 
     $foundid=0;
 
+    // whoever write this: fuck you.
     for ($z=0;$z<sizeof($ap_db);$z++) {
       if ($ap_db[$z]['name']==$name && $ap_db[$z]['radio_number']==$radionum) {
         $foundid=$ap_db[$z]['accesspoint_id'];
@@ -113,9 +114,17 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
     }
 
     if ($foundid==0) {
-      $ap_id = dbInsert(array('device_id' => $device['device_id'], 'name' => $name,'radio_number'=>$radionum, 'type'=>$type,'mac_addr'=>$mac,'channel'=>$channel,'txpow'=>$txpow,'radioutil'=>$radioutil,'numasoclients'=>$numasoclients,'nummonclients'=>$nummonclients,'numactbssid'=>$numactbssid,'nummonbssid'=>$nummonbssid,'interference'=>$interference), 'accesspoint');
+      $ap_id = dbInsert(array('device_id' => $device['device_id'], 'name' => $name,'radio_number'=>$radionum, 'type'=>$type,'mac_addr'=>$mac, 'deleted' => '0'), 'accesspoints');
+
+      dbInsert(array('accesspoint_id' => $ap_id, 'channel'=>$channel,'txpow'=>$txpow,'radioutil'=>$radioutil,'numasoclients'=>$numasoclients,'nummonclients'=>$nummonclients,'numactbssid'=>$numactbssid,
+               'nummonbssid'=>$nummonbssid,'interference'=>$interference), 'accesspoints');
+
     } else {
-      dbUpdate(array('mac_addr' => $mac,'deleted'=>0,'channel'=>$channel,'txpow'=>$txpow,'radioutil'=>$radioutil,'numasoclients'=>$numasoclients,'nummonclients'=>$nummonclients,'numactbssid'=>$numactbssid,'nummonbssid'=>$nummonbssid,'interference'=>$interference), 'accesspoint', '`accesspoint_id` = ?', Array($foundid));
+      dbUpdate(array('mac_addr' => $mac,'deleted'=>0), 'accesspoints', '`accesspoint_id` = ?', Array($foundid));
+
+      dbUpdate(array('channel'=>$channel,'txpow'=>$txpow,'radioutil'=>$radioutil,'numasoclients'=>$numasoclients,'nummonclients'=>$nummonclients,
+               'numactbssid'=>$numactbssid,'nummonbssid'=>$nummonbssid,'interference'=>$interference), 'accesspoints-state', '`accesspoint_id` = ?', Array($foundid));
+
     }
 
   }
@@ -123,7 +132,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
   //mark APs which are not on this controller anymore as deleted
   for ($z=0;$z<sizeof($ap_db);$z++) {
     if (!isset($ap_db[$z]['seen']) && $ap_db[$z]['deleted']==0) {
-      dbUpdate(array('deleted'=>1), 'accesspoint', '`accesspoint_id` = ?', Array($ap_db[$z]['accesspoint_id']));
+      dbUpdate(array('deleted'=>1), 'accesspoints', '`accesspoint_id` = ?', Array($ap_db[$z]['accesspoint_id']));
     }
 
   }
