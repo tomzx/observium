@@ -359,6 +359,7 @@ $config['os'][$os]['ifname']            = 1;
 $os = "junos";
 $config['os'][$os]['text']              = "Juniper JunOS";
 $config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "juniper";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
@@ -370,7 +371,7 @@ $config['os'][$os]['discovery_blacklist'] = array('entity-sensor', 'entity-physi
 $os = "junose";
 $config['os'][$os]['text']              = "Juniper JunOSe";
 $config['os'][$os]['type']              = "network";
-$config['os'][$os]['icon']              = "junos";
+$config['os'][$os]['icon']              = "juniper";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
@@ -381,7 +382,7 @@ $config['os'][$os]['over'][2]['text']   = "Memory Usage";
 $os = "jwos";
 $config['os'][$os]['text']              = "Juniper JWOS";
 $config['os'][$os]['type']              = "network";
-$config['os'][$os]['icon']              = "junos";
+$config['os'][$os]['icon']              = "juniper";
 
 $os = "screenos";
 $config['os'][$os]['text']              = "Juniper ScreenOS";
@@ -396,7 +397,7 @@ $config['os'][$os]['over'][2]['text']   = "Memory Usage";
 $os = "juniperive";
 $config['os'][$os]['text']              = "Juniper IVE";
 $config['os'][$os]['type']              = "network";
-$config['os'][$os]['icon']              = "junos";
+$config['os'][$os]['icon']              = "juniper";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
@@ -1289,11 +1290,11 @@ $config['device_types'][$i]['text'] = 'Environment';
 $config['device_types'][$i]['type'] = 'environment';
 $config['device_types'][$i]['icon'] = 'fugue-water';
 
-$i++;
+$i++;                                                                                                                                                                                                       
 $config['device_types'][$i]['text'] = 'Load Balancers';
 $config['device_types'][$i]['type'] = 'loadbalancer';
 $config['device_types'][$i]['icon'] = 'fugue-arrow-split';
-
+                                                                                                                                                                                                            
 $i++;
 $config['device_types'][$i]['text'] = 'Storage';
 $config['device_types'][$i]['type'] = 'storage';
