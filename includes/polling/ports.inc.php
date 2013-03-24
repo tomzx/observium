@@ -414,7 +414,7 @@ foreach ($ports as $port)
     // Update State
     if (count($port['state']))
     {
-      if (empty($port['poll_prev']))
+      if (empty($port['poll_time']))
       {
         $insert = dbInsert(array('port_id' => $port['port_id']), 'ports-state');
         if ($debug) { echo("state inserted"); }

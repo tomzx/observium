@@ -1,11 +1,15 @@
 <?php
 
+echo("Mac Accounting: ");
+
 // FIXME -- we're walking, so we can discover here too.
 
 // Cisco MAC Accounting
 
 if ($device['os_group'] == "cisco")
 {
+
+  echo("Cisco ");
 
   $sql  = "SELECT *, `mac_accounting`.`ma_id` as `ma_id`";
   $sql .= " FROM  `mac_accounting`";
@@ -21,7 +25,7 @@ if ($device['os_group'] == "cisco")
     $ma_db[$acc['ifIndex']][$acc['mac']] = $acc;
   }
 
-  print_r($ma_db);
+  if($debug) { print_r($ma_db); }
 
   $datas = snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedBytes", "-OUqsX", "NS-ROOT-MIB");
   $datas .= "\n".snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedPkts", "-OUqsX", "NS-ROOT-MIB");
@@ -41,7 +45,7 @@ if ($device['os_group'] == "cisco")
     $ma_array[$ifIndex][$mac][$oid][$dir] = $value;
   }
 
-  print_r($ma_array);
+  if($debug) { print_r($ma_array); }
 
 }
 
@@ -55,14 +59,14 @@ if(count($ma_array))
 
   foreach (dbFetchRows($sql, $arg) as $acc)
   {
-    print_r($acc);
+    if($debug) { print_r($acc); }
     $port = get_port_by_id($acc['port_id']);
     $device_id = $port['device_id'];
     $ifIndex = $port['ifIndex'];
     $mac = $acc['mac'];
     $polled_period = $polled - $acc['poll_time'];
 
-    print_r($ma_array[$ifIndex][$mac]);
+    if($debug) { print_r($ma_array[$ifIndex][$mac]); }
 
     if ($ma_array[$ifIndex][$mac])
     {
@@ -75,6 +79,8 @@ if(count($ma_array))
       $p_out = $ma_array[$ifIndex][$mac]['pkts']['output'];
 
       $this_ma = &$ma_array[$ifIndex][$mac];
+
+      echo(" ".$port['ifDescr']."(".$ifIndex.") -> ".$mac);
 
       // Update metrics
       foreach (array('bytes','pkts') as $oid)
@@ -112,7 +118,13 @@ if(count($ma_array))
 
       if ($acc['update'])
       { // Do Updates
+        if (empty($acc['poll_time']))
+        {
+          $insert = dbInsert(array('ma_id' => $acc['ma_id']), 'mac_accounting-state');
+          if ($debug) { echo("state inserted"); }
+        }
         dbUpdate($acc['update'], 'mac_accounting-state', '`ma_id` = ?', array($acc['ma_id']));
+        if ($debug) { echo("state updated"); }
       } // End Updates
     }
   }
@@ -123,5 +135,7 @@ if(count($ma_array))
 
   echo("\n");
 }
+
+echo("\n");
 
 ?>
