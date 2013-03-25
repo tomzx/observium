@@ -41,6 +41,7 @@ foreach (dbFetchRows("SELECT * FROM storage WHERE device_id = ?", array($device[
 
   $update = dbUpdate(array('storage_polled' => time(), 'storage_used' => $storage['used'], 'storage_free' => $storage['free'], 'storage_size' => $storage['size'],
     'storage_units' => $storage['units'], 'storage_perc' => $percent), 'storage-state', '`storage_id` = ?', array($storage['storage_id']));
+  $graphs['storage'] = TRUE;
 
   echo("\n");
 }

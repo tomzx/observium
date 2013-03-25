@@ -5,27 +5,38 @@ $scale_max = "100";
 
 include("includes/graphs/common.inc.php");
 
-$iter = "1";
-$rrd_options .= " COMMENT:'                    Size      Used    %age\\l'";
+if($width > 500)
+{
+  $descr_len = 22;
+} else {
+  $descr_len = 12;
+}
+$descr_len += round(($width - 250) / 8);
+
+$iter = 0;
+$colours = 'mixed';
+$rrd_options .= " COMMENT:'".str_pad('Size      Used    %used', $descr_len+31, ' ', STR_PAD_LEFT)."\\l'";
+//$rrd_options .= " COMMENT:'                    Size      Used    %age\\l'";
 
 foreach (dbFetchRows("SELECT * FROM storage where device_id = ?", array($device['device_id'])) as $storage)
 {
-  // FIXME generic colour function
-  if ($iter=="1") { $colour="CC0000"; } elseif ($iter=="2") { $colour="008C00"; } elseif ($iter=="3") { $colour="4096EE"; }
-  elseif ($iter=="4") { $colour="73880A"; } elseif ($iter=="5") { $colour="D01F3C"; } elseif ($iter=="6") { $colour="36393D"; }
-  elseif ($iter=="7") { $colour="FF0084"; $iter = "0"; }
+  if (!$config['graph_colours'][$colours][$iter]) { $iter = 0; }
+  $colour=$config['graph_colours'][$colours][$iter];
 
-  $descr = rrdtool_escape($storage['storage_descr'], 12);
+  $descr = rrdtool_escape($storage['storage_descr'], $descr_len);
   $rrd = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("storage-".$storage['storage_mib']."-".$storage['storage_descr'].".rrd");
-  $rrd_options .= " DEF:$storage[storage_id]used=$rrd:used:AVERAGE";
-  $rrd_options .= " DEF:$storage[storage_id]free=$rrd:free:AVERAGE";
-  $rrd_options .= " CDEF:$storage[storage_id]size=$storage[storage_id]used,$storage[storage_id]free,+";
-  $rrd_options .= " CDEF:$storage[storage_id]perc=$storage[storage_id]used,$storage[storage_id]size,/,100,*";
-  $rrd_options .= " LINE1.25:$storage[storage_id]perc#" . $colour . ":'$descr'";
-  $rrd_options .= " GPRINT:$storage[storage_id]size:LAST:%6.2lf%sB";
-  $rrd_options .= " GPRINT:$storage[storage_id]used:LAST:%6.2lf%sB";
-  $rrd_options .= " GPRINT:$storage[storage_id]perc:LAST:%5.2lf%%\\\\l";
-  $iter++;
+  if (is_file($rrd))
+  {
+    $rrd_options .= " DEF:$storage[storage_id]used=$rrd:used:AVERAGE";
+    $rrd_options .= " DEF:$storage[storage_id]free=$rrd:free:AVERAGE";
+    $rrd_options .= " CDEF:$storage[storage_id]size=$storage[storage_id]used,$storage[storage_id]free,+";
+    $rrd_options .= " CDEF:$storage[storage_id]perc=$storage[storage_id]used,$storage[storage_id]size,/,100,*";
+    $rrd_options .= " LINE1.25:$storage[storage_id]perc#" . $colour . ":'$descr'";
+    $rrd_options .= " GPRINT:$storage[storage_id]size:LAST:%6.2lf%sB";
+    $rrd_options .= " GPRINT:$storage[storage_id]used:LAST:%6.2lf%sB";
+    $rrd_options .= " GPRINT:$storage[storage_id]perc:LAST:%5.2lf%%\\\\l";
+    $iter++;
+  }
 }
 
 ?>

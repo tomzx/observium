@@ -1,40 +1,44 @@
 <?php
 
+$scale_min = "0";
+$scale_max = "100";
+
 include("includes/graphs/common.inc.php");
 
-$rrd_options .= " -u 100 -l 0 -E -b 1024 ";
+if($width > 500)
+{
+  $descr_len = 22;
+} else {
+  $descr_len = 12;
+}
+$descr_len += round(($width - 250) / 8);
 
-$iter = "1"; $i=1;
-$rrd_options .= " COMMENT:'                           Min   Cur    Max\\n'";
+$iter = 0;
+$colours = 'mixed';
+
+$rrd_options .= " COMMENT:'".str_pad('Size      Used    %used', $descr_len+31, ' ', STR_PAD_LEFT)."\\\l'";
 
 foreach (dbFetchRows("SELECT * FROM `mempools` where `device_id` = ?", array($device['device_id'])) as $mempool)
 {
-  #  FIXME generic colour function
-  if ($iter=="1") { $colour="CC0000"; } elseif ($iter=="2") { $colour="008C00"; } elseif ($iter=="3") { $colour="4096EE"; }
-  elseif ($iter=="4") { $colour="73880A"; } elseif ($iter=="5") { $colour="D01F3C"; } elseif ($iter=="6") { $colour="36393D"; }
-  elseif ($iter=="7") { $colour="FF0084"; unset($iter); }
+  if (!$config['graph_colours'][$colours][$iter]) { $iter = 0; }
+  $colour=$config['graph_colours'][$colours][$iter];
 
-  $descr = rrdtool_escape(short_hrDeviceDescr($mempool['mempool_descr']), 22);
+  $descr = rrdtool_escape(short_hrDeviceDescr($mempool['mempool_descr']), $descr_len);
   $rrd_filename  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("mempool-".$mempool['mempool_type']."-".$mempool['mempool_index'].".rrd");
 
   if (is_file($rrd_filename))
   {
-    $rrd_options .= " DEF:mempoolfree$i=$rrd_filename:free:AVERAGE ";
-    $rrd_options .= " DEF:mempoolused$i=$rrd_filename:used:AVERAGE ";
-    $rrd_options .= " CDEF:mempooltotal$i=mempoolused$i,mempoolused$i,mempoolfree$i,+,/,100,* ";
-
-    $rrd_options .= " AREA:mempooltotal$i#" . $colour . "10";
-
-    $rrd_optionsb .= " LINE1:mempooltotal$i#" . $colour . ":'" . $descr . "' ";
-    $rrd_optionsb .= " GPRINT:mempooltotal$i:MIN:%3.0lf%%";
-    $rrd_optionsb .= " GPRINT:mempooltotal$i:LAST:%3.0lf%%";
-    $rrd_optionsb .= " GPRINT:mempooltotal$i:MAX:%3.0lf%%\\\l ";
-    $iter++; $i++;
+    $rrd_options .= " DEF:$mempool[mempool_id]used=$rrd_filename:used:AVERAGE";
+    $rrd_options .= " DEF:$mempool[mempool_id]free=$rrd_filename:free:AVERAGE";
+    $rrd_options .= " CDEF:$mempool[mempool_id]size=$mempool[mempool_id]used,$mempool[mempool_id]free,+";
+    $rrd_options .= " CDEF:$mempool[mempool_id]perc=$mempool[mempool_id]used,$mempool[mempool_id]size,/,100,*";
+    $rrd_options .= " AREA:$mempool[mempool_id]perc#" . $colour . "10";
+    $rrd_options .= " LINE1.25:$mempool[mempool_id]perc#" . $colour . ":'$descr'";
+    $rrd_options .= " GPRINT:$mempool[mempool_id]size:LAST:%6.2lf%sB";
+    $rrd_options .= " GPRINT:$mempool[mempool_id]used:LAST:%6.2lf%sB";
+    $rrd_options .= " GPRINT:$mempool[mempool_id]perc:LAST:%5.2lf%%\\\l";
+    $iter++;
   }
 }
-
-$rrd_options .= $rrd_optionsb;
-
-$rrd_options .= " HRULE:0#999999";
 
 ?>

@@ -42,6 +42,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
                  'mempool_total' => $mempool['total'], 'mempool_largestfree' => $mempool['largestfree'], 'mempool_lowestfree' => $mempool['lowestfree']);
 
   dbUpdate($mempool['state'], 'mempools-state', '`mempool_id` = ?', array($mempool['mempool_id']));
+  $graphs['mempool'] = TRUE;
 
   echo("\n");
 }

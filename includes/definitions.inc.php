@@ -111,7 +111,9 @@ $config['os'][$os]['type']              = "firewall";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
-$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['over'][1]['text']   = "Processor Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_ucd_memory";
+$config['os'][$os]['over'][2]['text']   = "Memory Usage";
 
 $os = "pfsense";
 $config['os'][$os]['group']             = "unix";
@@ -120,17 +122,31 @@ $config['os'][$os]['type']              = "firewall";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
-$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['over'][1]['text']   = "Processor Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_ucd_memory";
+$config['os'][$os]['over'][2]['text']   = "Memory Usage";
 
 $os = "freenas";
 $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "FreeNAS";
 $config['os'][$os]['type']              = "storage";
+$config['os'][$os]['over'][0]['graph']  = "device_processor";
+$config['os'][$os]['over'][0]['text']   = "Processor Usage";
+$config['os'][$os]['over'][1]['graph']  = "device_ucd_memory";
+$config['os'][$os]['over'][1]['text']   = "Memory Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_storage";
+$config['os'][$os]['over'][2]['text']   = "Storage Usage";
 
 $os = "nas4free";
 $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "NAS4Free";
 $config['os'][$os]['type']              = "storage";
+$config['os'][$os]['over'][0]['graph']  = "device_processor";
+$config['os'][$os]['over'][0]['text']   = "Processor Usage";
+$config['os'][$os]['over'][1]['graph']  = "device_ucd_memory";
+$config['os'][$os]['over'][1]['text']   = "Memory Usage";
+$config['os'][$os]['over'][2]['graph']  = "device_storage";
+$config['os'][$os]['over'][2]['text']   = "Storage Usage";
 
 $os = "solaris";
 $config['os'][$os]['group']             = "unix";
@@ -1306,11 +1322,11 @@ $config['device_types'][$i]['text'] = 'Environment';
 $config['device_types'][$i]['type'] = 'environment';
 $config['device_types'][$i]['icon'] = 'fugue-water';
 
-$i++;                                                                                                                                                                                                       
+$i++;
 $config['device_types'][$i]['text'] = 'Load Balancers';
 $config['device_types'][$i]['type'] = 'loadbalancer';
 $config['device_types'][$i]['icon'] = 'fugue-arrow-split';
-                                                                                                                                                                                                            
+
 $i++;
 $config['device_types'][$i]['text'] = 'Storage';
 $config['device_types'][$i]['type'] = 'storage';

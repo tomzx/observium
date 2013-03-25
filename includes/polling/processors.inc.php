@@ -31,6 +31,8 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $processor)
   if (!$processor['processor_precision']) { $processor['processor_precision'] = "1"; };
   $proc = round($proc / $processor['processor_precision'],2);
 
+  $graphs['processor'] = TRUE;
+  
   echo($proc . "%\n");
 
   // Update RRD
