@@ -146,8 +146,12 @@ function external_exec($command)
   return $output;
 }
 
-function shorthost($hostname, $len=12)
+function shorthost($hostname, $len = 0)
 {
+  global $config;
+
+  if (!$len) { $len = $config['shorthost']['length']; }
+
   $parts = explode(".", $hostname);
   $shorthost = $parts[0];
   $i = 1;

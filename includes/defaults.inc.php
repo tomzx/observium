@@ -576,4 +576,8 @@ $config['api']['module']['packages']                = 0;        // Enable or dis
 $config['api']['module']['encryption']                = 0;        // Enable encryption of data (be aware that this can be very slow and cpu intensive!!!)
 $config['api']['encryption']['key']                = "I_Need_To_Change_This_Key";        // Set a random encryption/decryption key
 
+// Unsupported settings
+
+$config['shorthost']['length'] = 12; // Alter shorthost() target length, changing this is not officially supported!
+
 ?>
