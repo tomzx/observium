@@ -78,11 +78,11 @@ class observiumbot
     mysql_connect($config['db_host'],$config['db_user'],$config['db_pass']);
     mysql_select_db($config['db_name']);
 
-    $entry = dbFetchRow("SELECT `event_id`,`device_id`,`datetime`,`message`,`type` FROM `eventlog` ORDER BY `event_id` DESC LIMIT 1");
+    $entry = dbFetchRow("SELECT `event_id`,`device_id`,`timestamp`,`message`,`type` FROM `eventlog` ORDER BY `event_id` DESC LIMIT 1");
     $device_id = $entry['device_id'];
     $device = dbFetchRow("SELECT `hostname` FROM `devices` WHERE `device_id` = $device_id");
 
-    $irc->message(SMARTIRC_TYPE_CHANNEL, $data->channel, $entry['event_id'] ." ". $device['hostname'] ." ". $entry['datetime'] ." ". $entry['message'] ." ". $entry['type']);
+    $irc->message(SMARTIRC_TYPE_CHANNEL, $data->channel, $entry['event_id'] ." ". $device['hostname'] ." ". $entry['timestamp'] ." ". $entry['message'] ." ". $entry['type']);
 
     echo date("m-d-y H:i:s ");
     echo "LOG\n";

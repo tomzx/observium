@@ -610,9 +610,8 @@ function print_events($vars)
   $query .= $where . $query_device . $query_user;
   $query_count = 'SELECT COUNT(event_id) '.$query;
   /// FIXME Mike: bad table column `type` they intersect with table `devices`
-  /// FIXMEs should have three ///, i colour these RED in my editor - adama
-  $query = 'SELECT STRAIGHT_JOIN E.device_id, E.datetime, E.message, E.type, E.reference '.$query;
-  $query .= ' ORDER BY `datetime` DESC ';
+  $query = 'SELECT STRAIGHT_JOIN E.device_id, E.timestamp, E.message, E.type, E.reference '.$query;
+  $query .= ' ORDER BY `timestamp` DESC ';
   $query .= "LIMIT $start,$pagesize";
 
   // Query events
@@ -650,7 +649,7 @@ function print_events($vars)
     } else {
       $string .= '    <td width="160">';
     }
-    $string .= format_timestamp($entry['datetime']) . '</td>' . PHP_EOL;
+    $string .= format_timestamp($entry['timestamp']) . '</td>' . PHP_EOL;
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['device_id']);

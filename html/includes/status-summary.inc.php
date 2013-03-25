@@ -26,7 +26,7 @@ if($_SESSION['userlevel'] >= 5)
   $sensors['up']       = dbFetchCell("SELECT COUNT(sensor_id) FROM sensors WHERE sensor_status = '1' AND sensor_ignore ='0'");
   $sensors['down']     = dbFetchCell("SELECT COUNT(sensor_id) FROM sensors WHERE sensor_status = '0' AND sensor_ignore = '0'");
   $sensors['ignored']  = dbFetchCell("SELECT COUNT(sensor_id) FROM sensors WHERE sensor_ignore = '1'");
-  $sensors['disabled'] = dbFetchCell("SELECT COUNT(sensor_id) FROM sensors WHERE sensor_disabled = '1'");
+ #$sensors['disabled'] = dbFetchCell("SELECT COUNT(sensor_id) FROM sensors WHERE sensor_disabled = '1'"); /// FIXME sensor_disabled is not a database field
 
 
 
