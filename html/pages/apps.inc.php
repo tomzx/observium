@@ -1,18 +1,19 @@
 <?php
 
 /// FIXME should come from somewhere else; these are also kind of duplicated more eloquently in device/apps
-$graphs['apache']     = array('bits', 'hits', 'scoreboard', 'cpu');
-$graphs['drbd']       = array('disk_bits', 'network_bits', 'queue', 'unsynced');
-$graphs['mysql']      = array('network_traffic', 'connections', 'command_counters', 'select_types');
-$graphs['memcached']  = array('bits', 'commands', 'data', 'items');
-$graphs['powerdns']   = array('recursing', 'queries', 'querycache', 'latency');
+$graphs['apache']            = array('bits', 'hits', 'scoreboard', 'cpu');
+$graphs['drbd']              = array('disk_bits', 'network_bits', 'queue', 'unsynced');
+$graphs['mysql']             = array('network_traffic', 'connections', 'command_counters', 'select_types');
+$graphs['memcached']         = array('bits', 'commands', 'data', 'items');
+$graphs['powerdns']          = array('recursing', 'queries', 'querycache', 'latency');
 /// FIXME ^ recursing should be replaced by something else probably; we should have the recursor as app and as such get such stats there.
-$graphs['ntpd']       = array('stats', 'freq', 'stratum', 'bits');
-$graphs['postgresql'] = array('xact', 'blks', 'tuples', 'tuples_query');
-$graphs['shoutcast']  = array('multi_stats', 'multi_bits');
-$graphs['nginx']      = array('connections', 'req');
-$graphs['unbound']    = array('queries', 'queue', 'memory', 'qtype');
-$graphs['freeradius'] = array('access');
+$graphs['ntpd']              = array('stats', 'freq', 'stratum', 'bits');
+$graphs['postgresql']        = array('xact', 'blks', 'tuples', 'tuples_query');
+$graphs['shoutcast']         = array('multi_stats', 'multi_bits');
+$graphs['nginx']             = array('connections', 'req');
+$graphs['unbound']           = array('queries', 'queue', 'memory', 'qtype');
+$graphs['freeradius']        = array('access');
+$graphs['powerdns-recursor'] = array('queries', 'timeouts', 'cache', 'latency');
 
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
