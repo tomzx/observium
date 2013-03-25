@@ -532,10 +532,12 @@ $os = "netscaler";
 $config['os'][$os]['text']              = "Citrix Netscaler";
 $config['os'][$os]['type']              = "loadbalancer";
 $config['os'][$os]['icon']              = "citrix";
-$config['os'][$os]['over'][0]['graph']  = "device_bits";
-$config['os'][$os]['over'][0]['text']   = "Device Traffic";
-$config['os'][$os]['over'][1]['graph']  = "device_processor";
-$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['over'][0]['graph']  = "device_netscaler_tcp_conn";
+$config['os'][$os]['over'][0]['text']   = "TCP Connections";
+$config['os'][$os]['over'][1]['graph']  = "device_bits";
+$config['os'][$os]['over'][1]['text']   = "Device Traffic";
+$config['os'][$os]['over'][2]['graph']  = "device_processor";
+$config['os'][$os]['over'][2]['text']   = "CPU Usage";
 
 // F5
 
