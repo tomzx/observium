@@ -44,13 +44,8 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
 }
 elseif ($device['os'] == "freebsd")
 {
-  $poll_device['sysDescr'] = str_replace(" 0 ", " ", $poll_device['sysDescr']);
-  list(,,$version,$bsnmp_version) = explode (' ', $poll_device['sysDescr']);
-  if ($version == 'FreeBSD')
-  {
-    $version = $bsnmp_version;
-  }
-  $version = preg_replace('/([\d\.]+-[\w\d-]+)/', '$1', $version);
+  preg_match('/FreeBSD ([\d\.]+-[\w\d-]+)/i', $poll_device['sysDescr'], $matches);
+  $version = $matches[1];
   $hardware = rewrite_unix_hardware($poll_device['sysDescr']);
 }
 elseif ($device['os'] == "dragonfly")
@@ -80,7 +75,8 @@ elseif ($device['os'] == "monowall" || $device['os'] == "pfsense" || $device['os
 }
 elseif ($device['os'] == "freenas" || $device['os'] == "nas4free")
 {
-  $version = preg_replace('/Software: FreeBSD ([\d\.]+-[\w\d-]+)/i', '$1', $poll_device['sysDescr']);
+  preg_match('/Software: FreeBSD ([\d\.]+-[\w\d-]+)/i', $poll_device['sysDescr'], $matches);
+  $version = $matches[1];
   $hardware = rewrite_unix_hardware($poll_device['sysDescr']);
 }
 elseif ($device['os'] == "qnap")
