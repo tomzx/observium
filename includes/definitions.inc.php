@@ -930,7 +930,7 @@ $config['os'][$os]['over'][0]['text']   = "Toner";
 
 $os = "jetdirect";
 $config['os'][$os]['group']             = "printer";
-$config['os'][$os]['text']              = "HP Print server";
+$config['os'][$os]['text']              = "HP Printer";
 $config['os'][$os]['ifname']            = 1;
 $config['os'][$os]['type']              = "printer";
 $config['os'][$os]['icon']              = "hp";
@@ -973,6 +973,13 @@ $config['os'][$os]['over'][0]['graph']  = "device_toner";
 $config['os'][$os]['over'][0]['text']   = "Toner";
 $config['os'][$os]['ifname']            = 1;
 $config['os'][$os]['type']              = "printer";
+
+$os = "samsung";
+$config['os'][$os]['group']             = "printer";
+$config['os'][$os]['text']              = "Samsung Printer";
+$config['os'][$os]['type']              = "printer";
+$config['os'][$os]['over'][0]['graph']  = "device_toner";
+$config['os'][$os]['over'][0]['text']   = "Toner";
 
 $os = "sentry3";
 $config['os'][$os]['text']              = "ServerTech Sentry3";
