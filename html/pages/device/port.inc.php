@@ -74,25 +74,25 @@ if (dbFetchCell("SELECT COUNT(*) FROM `ports_vlans` WHERE `port_id` = '".$port['
 if (dbFetchCell("SELECT count(*) FROM mac_accounting WHERE port_id = '".$port['port_id']."'") > "0" )
 {
 
-  $navbars['main']['options']['macacc']['text'] = 'MAC Accounting';
+  $navbars['main']['options']['macaccounting']['text'] = 'MAC Accounting';
 
-  echo(generate_link($descr,$link_array,array('view'=>'macacc','graph'=>$type)));
+  echo(generate_link($descr,$link_array,array('view'=>'macaccounting','graph'=>$type)));
   $graphs = array('bits', 'packets');
-  $option = 'macacc';
+  $option = 'macaccounting';
 
 
-  $navbars['macacc']['class'] = "navbar-narrow";
-  $navbars['macacc']['brand'] = $navbars['main']['options'][$option]['text'];
+  $navbars['macaccounting']['class'] = "navbar-narrow";
+  $navbars['macaccounting']['brand'] = $navbars['main']['options'][$option]['text'];
 
   foreach($graphs as $type)
   {
     if($vars['view'] == $option && $vars['graph'] == $type) { $navbars['main']['options'][$option]['suboptions'][$type]['class'] = "active"; }
     $navbars['main']['options'][$option]['suboptions'][$type]['text'] = ucfirst($type);
-    $navbars['main']['options'][$option]['suboptions'][$type]['url']  = generate_url($vars,array('view' => 'macacc', 'subview' => 'graphs', 'graph'=>$type));
+    $navbars['main']['options'][$option]['suboptions'][$type]['url']  = generate_url($vars,array('view' => 'macaccounting', 'subview' => 'graphs', 'graph'=>$type));
 
-    $navbars['macacc']['options'][$type]['text'] = ucfirst($type);
-    $navbars['macacc']['options'][$type]['url']  = generate_url($link_array,array('graph'=>$type));
-    if($vars['graph'] == $type) { $navbars['macacc']['options'][$type]['class'] = "active"; }
+    $navbars['macaccounting']['options'][$type]['text'] = ucfirst($type);
+    $navbars['macaccounting']['options'][$type]['url']  = generate_url($link_array,array('graph'=>$type));
+    if($vars['graph'] == $type) { $navbars['macaccounting']['options'][$type]['class'] = "active"; }
   }
 
   $subviews = array('graphs', 'mini-graphs', 'top10');
@@ -102,9 +102,9 @@ if (dbFetchCell("SELECT count(*) FROM mac_accounting WHERE port_id = '".$port['p
     $navbars['main']['options'][$option]['suboptions'][$type]['text'] = ucfirst($type);
     $navbars['main']['options'][$option]['suboptions'][$type]['url']  = generate_url($vars,array('subview'=>$type));
 
-    $navbars['macacc']['options_right'][$type]['text'] = ucfirst($type);
-    $navbars['macacc']['options_right'][$type]['url']  = generate_url($link_array,array('subview'=>$type));
-    if($vars['graph'] == $type) { $navbars['macacc']['options'][$type]['class'] = "active"; }
+    $navbars['macaccounting']['options_right'][$type]['text'] = ucfirst($type);
+    $navbars['macaccounting']['options_right'][$type]['url']  = generate_url($link_array,array('subview'=>$type));
+    if($vars['graph'] == $type) { $navbars['macaccounting']['options'][$type]['class'] = "active"; }
   }
 }
 
