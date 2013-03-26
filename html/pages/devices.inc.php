@@ -266,11 +266,11 @@ if(count($devices)) {
     echo("    <tr>\n");
     echo("      <th></th>\n");
     echo("      <th></th>\n");
-    echo("      <th>Device</th>\n");
+    echo("      <th>Device/Location</th>\n");
     echo("      <th></th>\n");
     echo("      <th>Platform</th>\n");
     echo("      <th>Operating System</th>\n");
-    echo("      <th>Uptime/Location</th>\n");
+    echo("      <th>Uptime/sysName</th>\n");
     echo("    </tr>\n");
     echo("  </thead>\n");
     }
