@@ -1,32 +1,29 @@
 <hr />
-<form method="post" action="" class="form-inline">
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Message</span>
-    <input type="text" name="message" id="message" value="<?php echo($vars['message']); ?>" />
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Type</span>
-    <select name="type" id="type">
-      <option value="">All Types</option>
-      <option value="system" <?php  if ($vars['type'] == "system") { echo(" selected"); } ?>>System</option>
-      <?php
-        foreach (dbFetchRows("SELECT `type` FROM `eventlog` WHERE `device_id` = ? GROUP BY `type` ORDER BY `type`", array($vars['device'])) as $data)
-        {
-          echo("<option value='".$data['type']."'");
-          if ($data['type'] == $vars['type']) { echo(" selected"); }
-          echo(">".$data['type']."</option>");
-        }
-      ?>
-    </select>
-  </div>
-  <input type="hidden" name="pageno" value="1">
-  <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
-</form>
 
 <?php
+unset($search, $types);
 
-print_optionbar_end();
+//Message field 
+$search[] = array('type'    => 'text',
+                  'name'    => 'Message',
+                  'id'      => 'message',
+                  'value'   => $vars['message']);
+//Type field
+$types[''] = 'All Types';
+$types['system'] = 'System';
+foreach (dbFetchRows('SELECT `type` FROM `eventlog` WHERE `device_id` = ? GROUP BY `type` ORDER BY `type`', array($vars['device'])) as $data)
+{
+  $type = $data['type'];
+  $types[$type] = ucfirst($type);
+}
+$search[] = array('type'    => 'select',
+                  'name'    => 'Type',
+                  'id'      => 'type',
+                  'width'   => '130px',
+                  'value'   => $vars['type'],
+                  'values'  => $types);
+
+print_search_simple($search);
 
 /// Pagination
 $vars['pagination'] = TRUE;

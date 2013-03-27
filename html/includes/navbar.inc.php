@@ -63,7 +63,17 @@ if ($packages)
 ?>
 
           <li class="divider"></li>
-          <li><a href="<?php echo(generate_url(array('page'=>'search','search'=>'ipv4'))); ?>"><i class="menu-icon fugue-magnifier-zoom-actual"></i> Search</a></li>
+          <li class="dropdown-submenu">
+            <a tabindex="-1" href="<?php echo(generate_url(array('page'=>'search'))); ?>"><i class="menu-icon fugue-magnifier-zoom-actual"></i> Search</a>
+            <ul class="dropdown-menu">
+<?php
+    foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'FDB Tables') as $search_page => $search_name)
+    {
+      echo('            <li><a href="' . generate_url(array('page'=>'search','search'=>$search_page)) . '/"><i class="menu-icon  fugue-magnifier-zoom-actual"></i> ' . $search_name . ' </a></li>');
+    }
+?>
+            </ul>
+          </li>
 
                 </ul>
             </li>

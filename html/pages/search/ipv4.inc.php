@@ -2,47 +2,42 @@
 <div class="row">
 <div class="span12">
 
-<div class="well well-shaded">
-
-<form method="post" action="" class="form form-inline">
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Device</span>
-    <select name="device" id="device">
-      <option value="">All Devices</option>
-      <?php
-        foreach ($cache['devices']['hostname'] as $hostname => $device_id)
-        {
-          if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
-          echo("<option value='" . $device_id . "'");
-          if ($device_id == $vars['device']) { echo("selected"); }
-          echo(">" . $hostname . "</option>");
-        }
-      ?>
-    </select>
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Interface</span>
-    <select name="interface" id="interface">
-      <option value="">All Interfaces</option>
-      <option value="Loopback%" <?php if ($vars['interface'] == "Loopback%") { echo("selected"); } ?> >Loopbacks</option>
-      <option value="Vlan%" <?php if ($vars['interface'] == "Vlan%") { echo("selected"); } ?> >VLANs</option>
-    </select>
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">IP Address</span>
-    <input type="text" name="address" id="address" class="input" value="<?php echo($vars['address']); ?>" />
-  </div>
-  
-  <input type="hidden" name="pageno" value="1">
-  <button type="submit" class="btn pull-right"><i class="icon-search"></i> Search</button>
-</form>
-
-</div> <!-- well -->
-
 <?php
+unset($search, $devices);
+
+$devices[''] = 'All Devices';
+foreach ($cache['devices']['hostname'] as $hostname => $device_id)
+{
+  if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
+  $devices[$device_id] = $hostname;
+}
+//Device field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Device',
+                  'id'      => 'device_id',
+                  'value'   => $vars['device_id'],
+                  'values'  => $devices);
+//Interface field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Interface',
+                  'id'      => 'interface',
+                  'width'   => '130px',
+                  'value'   => $vars['interface'],
+                  'values'  => array('' => 'All Interfaces', 'Loopback%' => 'Loopbacks', 'Vlan%' => 'Vlans'));
+////IP version field
+//$search[] = array('type'    => 'select',
+//                  'name'    => 'IP',
+//                  'id'      => 'ip_version',
+//                  'width'   => '120px',
+//                  'value'   => $vars['ip_version'],
+//                  'values'  => array('' => 'IPv4 & IPv6', '4' => 'IPv4 only', '6' => 'IPv6 only'));
+//IP address field 
+$search[] = array('type'    => 'text',
+                  'name'    => 'IP Address',
+                  'id'      => 'address',
+                  'value'   => $vars['address']);
+
+print_search_simple($search);
 
 // Pagination
 $vars['pagination'] = TRUE;

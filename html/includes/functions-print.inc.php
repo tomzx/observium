@@ -166,7 +166,7 @@ function print_search_simple($data, $title = '')
   $string .= '<div class="well well-shaded">' . PHP_EOL;
   $string .= '<form method="POST" action="" class="form form-inline">' . PHP_EOL;
   $string .= '  <table width="100%">' . PHP_EOL . '    <tr>' . PHP_EOL;
-  $string .= '  <td><span style="font-weight: bold;">' . $title . '</span>&nbsp;&#187;</td>' . PHP_EOL;
+  if ($title) { $string .= '  <td><span style="font-weight: bold;">' . $title . '</span>&nbsp;&#187;</td>' . PHP_EOL; }
   
   // Main
   $string .= '    <td>' . PHP_EOL;
@@ -175,6 +175,7 @@ function print_search_simple($data, $title = '')
     if (!isset($item['value'])) { $item['value'] = ''; }
     
     $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
+    if (!$item['name']) { $item['name'] = '&bull;'; }
     $string .= '    <span class="add-on">'.$item['name'].'</span>' . PHP_EOL;
     switch($item['type'])
     {
@@ -189,8 +190,9 @@ function print_search_simple($data, $title = '')
         $string .= 'name="'.$item['id'].'" id="'.$item['id'].'">' . PHP_EOL . '      ';
         foreach($item['values'] as $k => $v)
         {
+          $k = (string)$k;
           $string .= '<option value="'.$k.'"';
-          $string .= ($k == $item['value']) ? ' selected>' : '>';
+          $string .= ($k === $item['value']) ? ' selected>' : '>';
           $string .= $v.'</option> ';
         }
         $string .= PHP_EOL . '    </select>' . PHP_EOL;
@@ -201,7 +203,7 @@ function print_search_simple($data, $title = '')
   $string .= '    </td>' . PHP_EOL;
   
   // Form footer
-  $string .= '    <td align="center">' . PHP_EOL;
+  $string .= '    <td width="90px" align="center">' . PHP_EOL;
   $string .= '      <input type="hidden" name="pageno" value="1">' . PHP_EOL;
   $string .= '      <button type="submit" class="btn"><i class="icon-search"></i> Search</button>' . PHP_EOL;
   $string .= '    </td>' . PHP_EOL;
@@ -252,6 +254,7 @@ function print_addresses($vars)
       switch ($var)
       {
         case 'device':
+        case 'device_id':
           $where .= ' AND I.device_id = ?';
           $param[] = $value;
           break;
@@ -565,6 +568,7 @@ function print_events($vars)
       switch ($var)
       {
         case 'device':
+        case 'device_id':
           $where .= ' AND E.device_id = ?';
           $param[] = $value;
           break;
@@ -738,6 +742,7 @@ function print_syslogs($vars)
       switch ($var)
       {
         case 'device':
+        case 'device_id':
           $where .= ' AND D.device_id = ?';
           $param[] = $value;
           break;

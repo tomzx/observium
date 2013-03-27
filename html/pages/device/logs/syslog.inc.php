@@ -1,53 +1,44 @@
 
 <hr />
-<form method="post" action="" class="form-inline">
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Message</span>
-    <input type="text" name="message" id="message" class="input" value="<?php echo($vars['message']); ?>" />
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Priority</span>
-    <select name="priority" id="priority">
-      <?php
-      $priorities = syslog_priorities();
-      $string = '      <option value="">All Priorities</option>';
-      for($i = 0; $i <= 7; $i++)
-      {
-        $string .= '<option value="' . $i . '"';
-        $string .= ($vars['priority'] === "$i") ? ' selected>' : '>';
-        $string .= '(' . $i . ') ' . $priorities[$i]['name'] . '</option>' . PHP_EOL;
-      }
-      echo $string;
-      ?>
-    </select>
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Program</span>
-    <select name="program" id="program">
-      <option value="">All Programs</option>
-      <?php
-        $where = ($vars['device']) ? 'WHERE `device_id` = ' . $vars['device'] : '';
-        foreach (dbFetchRows('SELECT `program` FROM `syslog` ' . $where . ' GROUP BY `program` ORDER BY `program`') as $data)
-        {
-          $data['program'] = ($data['program'] === '') ? '[[EMPTY]]' : $data['program'];
-          echo('<option value="' . $data['program'] . '"');
-          if ($data['program'] === $vars['program']) { echo(' selected'); }
-          echo('>' . $data['program'] . '</option>');
-        }
-      ?>
-    </select>
-  </div>
-  
-  <input type="hidden" name="pageno" value="1">
-  <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
-</form>
 
 <?php
 
-print_optionbar_end();
+unset($search, $priorities, $programs);
+
+//Message field 
+$search[] = array('type'    => 'text',
+                  'name'    => 'Message',
+                  'id'      => 'message',
+                  'width'   => '130px',
+                  'value'   => $vars['message']);
+//Priority field
+$priorities[''] = 'All Priorities';
+foreach (syslog_priorities() as $p => $priority)
+{
+  if ($p > 7) { continue; }
+  $priorities[$p] = '(' . $p . ') ' . ucfirst($priority['name']);
+}
+$search[] = array('type'    => 'select',
+                  'name'    => 'Priority',
+                  'id'      => 'priority',
+                  'width'   => '130px',
+                  'value'   => $vars['priority'],
+                  'values'  => $priorities);
+//Program field
+$programs[''] = 'All Programs';
+foreach (dbFetchRows('SELECT `program` FROM `syslog` WHERE `device_id` = ? GROUP BY `program` ORDER BY `program`', array($vars['device'])) as $data)
+{
+  $program = ($data['program']) ? $data['program'] : '[[EMPTY]]';
+  $programs[$program] = $program;
+}
+$search[] = array('type'    => 'select',
+                  'name'    => 'Program',
+                  'id'      => 'program',
+                  'width'   => '130px',
+                  'value'   => $vars['program'],
+                  'values'  => $programs);
+
+print_search_simple($search);
 
 // Pagination
 $vars['pagination'] = TRUE;
