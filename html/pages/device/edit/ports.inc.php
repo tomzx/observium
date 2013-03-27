@@ -32,9 +32,9 @@ if ($updated && $update_message)
       <th width=145>ifType</th>
       <th width=110>Polling</th>
       <th width=110>Alerts</th>
-      <th width=110>% Threshold</th>
-      <th width=110>BPS Threshold</th>
-      <th width=110>PPS Threshold</th>
+      <!-- <th width=110>% Threshold</th>   -->
+      <!-- <th width=110>BPS Threshold</th> -->
+      <!-- <th width=110>PPS Threshold</th> -->
     </tr>
     <tr align=center>
       <th><button class='btn btn-mini btn-primary' type='submit' value='Save' title='Save current port disable/ignore settings'><i class="icon-ok icon-white"></i> Save</button></td>
@@ -45,9 +45,9 @@ if ($updated && $update_message)
           <button class='btn btn-mini' type='submit' value='Select' id='disable-select' title='Disable polling on all ports'>All</button></th>
       <th><button class='btn btn-mini' type='submit' value='Toggle' id='ignore-toggle' title='Toggle alerting for all ports'>Toggle</button>
           <button class='btn btn-mini' type='submit' value='Select' id='ignore-select' title='Disable alerting on all ports'>All</button></th>
+<!--      <th></th>
       <th></th>
-      <th></th>
-      <td></th>
+      <td></th> -->
     </tr>
   </thead>
 
@@ -157,15 +157,14 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIn
   echo("</td>");
 
   ?>
-                <td>
-                <div id="cdrDiv"<?php if ($bill_data['bill_type'] == "quota") { echo(' style="display: none"'); } ?>>
-                <input class="input-mini" name="threshold_perc_in-<?php echo($port['port_id']); ?>" size="3" value="<?php echo($port['threshold_perc_in']); ?>"></input>
+
   <?php
-  echo('<br /><input class="input-mini" name="threshold_perc_out-'.$port['port_id'].'" size="3" value="'.$port['threshold_perc_out'].'"></input></td>');
-  echo('<td>  <input class="input-mini" name="threshold_bps_in-'.$port['port_id'].'" size="3" value="'.$port['threshold_bps_in'].'"></input>');
-  echo('<br /><input class="input-mini" name="threshold_bps_out-'.$port['port_id'].'" size="3" value="'.$port['threshold_bps_out'].'"></input></td>');
-  echo('<td>  <input class="input-mini" name="threshold_pps_in-'.$port['port_id'].'" size="3" value="'.$port['threshold_pps_in'].'"></input>');
-  echo('<br /><input class="input-mini" name="threshold_pps_out-'.$port['port_id'].'" size="3" value="'.$port['threshold_pps_out'].'"></input></td>');
+#  echo('<td>  <input class="input-mini" name="threshold_perc_in-'.$port['port_id'].'" size="3" value="'.$port['threshold_perc_in'].'"></input>');
+#  echo('<br /><input class="input-mini" name="threshold_perc_out-'.$port['port_id'].'" size="3" value="'.$port['threshold_perc_out'].'"></input></td>');
+#  echo('<td>  <input class="input-mini" name="threshold_bps_in-'.$port['port_id'].'" size="3" value="'.$port['threshold_bps_in'].'"></input>');
+#  echo('<br /><input class="input-mini" name="threshold_bps_out-'.$port['port_id'].'" size="3" value="'.$port['threshold_bps_out'].'"></input></td>');
+#  echo('<td>  <input class="input-mini" name="threshold_pps_in-'.$port['port_id'].'" size="3" value="'.$port['threshold_pps_in'].'"></input>');
+#  echo('<br /><input class="input-mini" name="threshold_pps_out-'.$port['port_id'].'" size="3" value="'.$port['threshold_pps_out'].'"></input></td>');
 
   echo("</tr>\n");
 
