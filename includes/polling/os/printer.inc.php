@@ -22,7 +22,7 @@ if ($printer)
   }
 }
 // Strip off useless brand fields
-$hardware = str_ireplace(array('HP ', 'Hewlett-Packard ', ' Series', 'Samsung ', 'Epson ', 'Brother '), '', $hardware);
+$hardware = str_ireplace(array('HP ', 'Hewlett-Packard ', ' Series', 'Samsung ', 'Epson ', 'Brother ', 'OKI '), '', $hardware);
 $hardware = ucfirst($hardware);
 
 // Features
@@ -67,6 +67,13 @@ if ($device['os'] == "samsung")
   // STRING: Samsung ML-2850 Series OS 1.03.00.16 01-22-2008;Engine 1.01.06;NIC V4.01.02(ML-285x) 09-13-2007;S/N 4F66BKEQ410592R
   list($version) = explode (';', $poll_device['sysDescr']);
   preg_match('/([\d]+\.[\d\.]+)/', $version, $matches);
+  $version = $matches[1];
+}
+elseif ($device['os'] == "okilan")
+{
+  // STRING: OKI OkiLAN 8100e Rev.02.73 10/100BASE Ethernet PrintServer: Attached to C3200n Rev.N2.14 : (C)2004 Oki Data Corporation
+  list(,$version) = explode (':', $poll_device['sysDescr']);
+  preg_match('/Rev\.N*([\d]+\.[\d\.]+)/', $version, $matches);
   $version = $matches[1];
 }
 

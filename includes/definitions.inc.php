@@ -947,8 +947,8 @@ $config['os'][$os]['over'][0]['text']   = "Toner";
 $os = "okilan";
 $config['os'][$os]['group']             = "printer";
 $config['os'][$os]['text']              = "OKI Printer";
-$config['os'][$os]['overgraph'][]       = "device_toner";
-$config['os'][$os]['overtext']          = "Toner";
+$config['os'][$os]['over'][0]['graph']  = "device_toner";
+$config['os'][$os]['over'][0]['text']   = "Toner";
 $config['os'][$os]['type']              = "printer";
 $config['os'][$os]['icon']              = "oki";
 
