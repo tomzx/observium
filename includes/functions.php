@@ -414,7 +414,7 @@ function isPingable($hostname)
   {
     $retries = $config['ping_retries'];
   } else {
-    $retries = 1;
+    $retries = 3;
   }
   $sleep = floor(1000000 / $retries); // interval between retries, max 1 sec
 
