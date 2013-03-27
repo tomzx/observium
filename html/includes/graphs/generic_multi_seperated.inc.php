@@ -2,18 +2,20 @@
 
 include("includes/graphs/common.inc.php");
 
-$units_descr = rrdtool_escape($units_descr, 18);
 
 if($format == "octets" || $format == "bytes")
 {
   $units = "Bps";
-  $format = "bits"; // FIXME bits? or bytes?
+  $format = "bytes";
+  $units_descr = "Bytes/s";
 } else {
   $units = "bps";
   $format = "bits";
+  $units_descr = "Bits/s";
 }
 
 $i = 0;
+$units_descr = rrdtool_escape($units_descr, 18);
 $rrd_options .= " COMMENT:'$units_descr Current  Average  Maximum'";
 if (!$nototal) { $rrd_options .= " COMMENT:'Total'"; }
 $rrd_options .= " COMMENT:'\\n'";

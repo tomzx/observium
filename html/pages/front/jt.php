@@ -112,7 +112,7 @@ echo("</div>
 if ($_SESSION['userlevel'] >= '5')
 {
 
-  $sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Transit: %' AND I.device_id = D.device_id ORDER BY I.ifAlias";
+  $sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'ISP-Transit: %' AND I.device_id = D.device_id ORDER BY I.ifAlias";
   $query = mysql_query($sql);
   unset ($seperator);
   while ($interface = mysql_fetch_assoc($query)) {
@@ -120,7 +120,7 @@ if ($_SESSION['userlevel'] >= '5')
     $seperator = ",";
   }
 
-  $sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Peering: %' AND I.device_id = D.device_id ORDER BY I.ifAlias";
+  $sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'ISP-Peering: %' AND I.device_id = D.device_id ORDER BY I.ifAlias";
   $query = mysql_query($sql);
   unset ($seperator);
   while ($interface = mysql_fetch_assoc($query)) {

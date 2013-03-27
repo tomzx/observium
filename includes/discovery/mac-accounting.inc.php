@@ -2,7 +2,9 @@
 
 $mac_list = array();
 
-if ($device['os_group'] == "cisco")
+// Disabled because we can do this better in poller now without performance hit
+
+if ($device['os_group'] == "cisco" && FALSE)
 {
   echo("Cisco MAC Accounting : ");
   $datas = snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedBytes", "-OUqsX", "NS-ROOT-MIB");

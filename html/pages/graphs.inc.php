@@ -1,5 +1,4 @@
 <?php
-
 unset($vars['page']);
 
 // Setup here

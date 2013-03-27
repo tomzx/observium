@@ -10,14 +10,14 @@ $graph_types = array("bits"   => "Bits",
                      "hitmiss" => "Hit/Miss");
 
 
-echo("<table class='table table-striped table-condensed table-bordered' style=\"margin-top: 10px;\">\n");
-echo("  <thead>\n");
-echo("    <tr>\n");
-echo("      <th>vServer</th>\n");
-echo("      <th width=250>Addresses</th>\n");
-echo("      <th width=200>Type</th>\n");
-echo("      <th width=130>Status</th>\n");
-echo("      <th width=130>Traffic</th>\n");
+echo("<table class='table table-striped table-condensed table-bordered' style=\"margin-top: 10px;\">");
+echo("  <thead>");
+echo("    <tr>");
+echo("      <th>vServer</th>");
+echo("      <th width=250>Addresses</th>");
+echo("      <th width=200>Type</th>");
+echo("      <th width=130>Status</th>");
+echo("      <th width=130>Traffic</th>");
 echo("    </tr>");
 echo("   </thead>");
 
@@ -47,8 +47,8 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   if(count($svcs))
   {
     echo('<tr><td colspan="5">');
-    echo("<table class=\"table table-striped table-condensed table-bordered\" style=\"margin-top: 10px;\">\n");
-    echo("  <thead>\n");
+    echo("<table class=\"table table-striped table-condensed table-bordered\" style=\"margin-top: 10px;\">");
+    echo("  <thead>");
     echo("    <th>Service</th>");
     echo("    <th>Address</th>");
     echo("    <th>Status</th>");
@@ -76,8 +76,6 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
     echo('<tr class="list-bold">');
     echo('<td colspan="5">');
     $graph_type = "netscalervsvr_" . $graph_type;
-    $graph_array['height'] = "100";
-    $graph_array['width']  = "213";
     $graph_array['to']     = $config['time']['now'];
     $graph_array['id']     = $vsvr['vsvr_id'];
     $graph_array['type']   = $graph_type;
@@ -100,8 +98,6 @@ if(!$vars['graph'])
 { $graph_type = "device_netscalervsvr_bits"; } else {
   $graph_type = "device_netscalervsvr_".$vars['graph'];  }
 
-$graph_array['height'] = "100";
-$graph_array['width']  = "213";
 $graph_array['to']     = $config['time']['now'];
 $graph_array['device'] = $device['device_id'];
 $graph_array['nototal'] = "yes";
@@ -142,6 +138,7 @@ foreach ($graph_types as $type => $descr)
 
 print_navbar($navbar); unset($navbar);
 
+if($vars['view'] == "graphs" || $vars['view'] == "services") { $table_class="table-striped-two"; } else { $table_class="table-striped"; }
 
 echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
@@ -177,11 +174,11 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
   if ($vars['view'] == "services")
   {
    $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name']));
+   echo('<tr><td colspan="5">');
    if(count($svcs))
    {
-    echo('<tr><td colspan="5">');
-    echo("<table class=\"table table-bordered table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
-    echo("  <thead>\n");
+    echo('<table class="table table-striped table-condensed">');
+    echo("  <thead>");
     echo("    <th>Service</th>");
     echo("    <th>Address</th>");
     echo("    <th>Status</th>");
@@ -191,7 +188,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
 
     foreach ($svcs as $svc)
     {
-      if ($svc['svc_state'] == "up") { $svc_class="green"; unset($svc_row); $svc_row = "error";} else { $svc_class="red"; $svc_row = "error"; }
+      if ($svc['svc_state'] == "up") { $svc_class="green"; unset($svc_row);} else { $svc_class="red"; $svc_row = "error"; }
       echo('<tr class="'.$svc_row.'">');
       echo('<td class="object-name"><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_label'] . '</a></td>');
       echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
@@ -201,8 +198,8 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
       echo("</td></tr>");
     }
     echo("</table>");
-    echo("</tr>");
    }
+   echo("</td></tr>");
 
   }
   if ($vars['view'] == "graphs")
@@ -210,8 +207,6 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
     echo('<tr class="list-bold" bgcolor="'.$bg_colour.'">');
     echo('<td colspan="5">');
     $graph_type = "netscalervsvr_" . $vars['graph'];
-    $graph_array['height'] = "100";
-    $graph_array['width']  = "213";
     $graph_array['to']     = $config['time']['now'];
     $graph_array['id']     = $vsvr['vsvr_id'];
     $graph_array['type']   = $graph_type;

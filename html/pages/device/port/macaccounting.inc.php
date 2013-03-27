@@ -26,8 +26,9 @@ if ($vars['subview'] == "top10")
 {
 
   if (!isset($vars['sort'])) { $vars['sort'] = "in"; }
-  if (!isset($vars['period'])) { $vars['period'] = "1day"; }
+  if (!isset($vars['period'])) { $vars['period'] = "day"; }
   $from = "-" . $vars['period'];
+  $from = $config['time'][$vars['period']];
 
   echo("<div style='margin: 0px 0px 0px 0px'>
          <div style=' margin:0px; float: left;';>
@@ -117,13 +118,75 @@ if ($vars['subview'] == "top10")
 #                       `ports` AS I, `devices` AS D WHERE M.port_id = ? AND I.port_id = M.port_id AND I.device_id = D.device_id ORDER BY bps DESC";
   $param = array($port['port_id']);
 
-  foreach (dbFetchRows($query, $param) as $acc)
-  {
-    if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-    $addy = dbFetchRow("SELECT * FROM ip_mac where mac_address = ?", array($acc['mac']));
+  if($vars['subview'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
 
+  echo('<table class="table table-hover table-condensed table-rounded table-bordered '.$table_class.'">');
+  echo('  <thead>');
+
+  echo('<tr>');
+
+  $cols = array(
+              'BLANK' => NULL,
+              'mac' => 'MAC Address',
+              'BLANK' => NULL,
+              'ip' => 'IP Address',
+              'graphs' => NULL,
+              'bps_in' => 'Traffic In',
+              'bps_out' => 'Traffic Out',
+              'pkts_in' => 'Packets In',
+              'pkts_out' => 'Packets Out',
+              'BLANK' => NULL);
+
+foreach ($cols as $sort => $col)
+{
+  if ($col == NULL)
+  {
+    echo('<th></th>');
+  }
+  elseif ($vars['sort'] == $sort)
+  {
+    echo('<th>'.$col.' *</th>');
+  } else {
+    echo('<th><a href="'. generate_url($vars, array('sort' => $sort)).'">'.$col.'</a></th>');
+  }
+}
+
+  echo("      </tr>");
+  echo('  </thead>');
+
+
+
+  $ma_array = dbFetchRows($query, $param);
+
+  switch ($vars['sort'])
+  {
+    case 'bps_in':
+      $ma_array = array_sort($ma_array, 'bytes_input_rate', SORT_DESC);
+      break;
+    case 'bps_out':
+      $ma_array = array_sort($ma_array, 'bytes_output_rate', SORT_DESC);
+      break;
+    case 'pkts_in':
+      $ma_array = array_sort($ma_array, 'bytes_input_rate', SORT_DESC);
+      break;
+    case 'pkts_out':
+      $ma_array = array_sort($ma_array, 'bytes_output_rate', SORT_DESC);
+      break;
+  }
+
+  foreach ($ma_array as $acc)
+  {
+
+    $ips = array();
+    foreach (dbFetchRows("SELECT * FROM `ip_mac` WHERE `mac_address` = ?", array($acc['mac'], $acc['port_id'])) AS $ip)
+    {
+      $ips[] = $ip['ip_address'];
+    }
+
+    unset($name);
     ///FIXME. Need rewrite, because $addy is array with multiple items.
     #$name = gethostbyaddr($addy['ipv4_address']); FIXME - Maybe some caching for this?
+
     $arp_host = dbFetchRow("SELECT * FROM ipv4_addresses AS A, ports AS I, devices AS D WHERE A.ipv4_address = ? AND I.port_id = A.port_id AND D.device_id = I.device_id", array($addy['ip_address']));
     if ($arp_host) { $arp_name = generate_device_link($arp_host); $arp_name .= " ".generate_port_link($arp_host); } else { unset($arp_if); }
 
@@ -165,18 +228,17 @@ if ($vars['subview'] == "top10")
    }
    else
    {
-     echo("<div style='background-color: $row_colour; padding: 0px;'>");
-
      echo("
-      <table>
         <tr>
-          <td class=list-large width=200>".mac_clean_to_readable($acc['mac'])."</td>
-          <td class=list-large width=200>".$addy['ip_address']."</td>
-          <td class=list-large width=500>".$name." ".$arp_name . "</td>
-          <td class=list-large width=100>".formatRates($acc['bytes_input_rate'] / 8)."</td>
-          <td class=list-large width=100>".formatRates($acc['bytes_output_rate'] / 8)."</td>
+          <td width=20></td>
+          <td width=200><bold>".mac_clean_to_readable($acc['mac'])."</bold></td>
+          <td width=200>".implode($ips, "<br />")."</td>
+          <td width=500>".$name." ".$arp_name . "</td>
+          <td width=100>".formatRates($acc['bytes_input_rate'] / 8)."</td>
+          <td width=100>".formatRates($acc['bytes_output_rate'] / 8)."</td>
+          <td width=100>".format_number($acc['pkts_input_rate'] / 8)."pps</td>
+          <td width=100>".format_number($acc['pkts_output_rate'] / 8)."pps</td>
         </tr>
-      </table>
     ");
 
      $peer_info['astext'];
@@ -184,9 +246,8 @@ if ($vars['subview'] == "top10")
      $graph_array['type']   = $graph_type;
      $graph_array['id']     = $acc['ma_id'];
      $graph_array['height'] = "100";
-     $graph_array['width']  = "216";
      $graph_array['to']     = $config['time']['now'];
-     echo('<tr bgcolor="'.$bg_colour.'"' . ($bg_image ? ' background="'.$bg_image.'"' : '') . '"><td colspan="7">');
+     echo('<tr><td colspan="8">');
 
      include("includes/print-graphrow.inc.php");
 
@@ -195,6 +256,7 @@ if ($vars['subview'] == "top10")
      $i++;
     }
   }
+  echo("</table>");
 }
 
 ?>

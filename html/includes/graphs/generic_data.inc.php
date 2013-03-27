@@ -5,6 +5,23 @@
 
 include("includes/graphs/common.inc.php");
 
+if($format == "octets" || $format == "bytes")
+{
+  $units = "Bps";
+  $format = "bytes";
+  $units_descr = "Bytes/s";
+} else {
+  $units = "bps";
+  $format = "bits";
+  $units_descr = "Bits/s";
+}
+
+$i = 0;
+$units_descr = rrdtool_escape($units_descr, 9);
+$rrd_options .= " COMMENT:'$units_descr  Now       Ave      Max      95th %\\n'";
+
+
+
 if ($rrd_filename) { $rrd_filename_out = $rrd_filename; $rrd_filename_in = $rrd_filename; }
 if ($inverse) { $in = 'out'; $out = 'in'; } else { $in = 'in'; $out = 'out'; }
 
@@ -84,14 +101,12 @@ $rrd_options .= " VDEF:d95thout=doutbits,5,PERCENT";
 
 if($format == "octets" || $format == "bytes")
 {
-  $units = "Bps";
+  $units = "Bytes/sec";
   $format = "octets";
 } else {
-  $units = "bps";
+  $units = "bits/sec";
   $format = "bits";
 }
-
-$rrd_options .= " COMMENT:'bps      Now       Ave      Max      95th %\\n'";
 
 $rrd_options .= " AREA:in".$format."_max#aDEB7B:";
 $rrd_options .= " AREA:in".$format."#91B13C:'In '";

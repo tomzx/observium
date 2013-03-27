@@ -12,16 +12,16 @@ function mib_dirs($mibs)
 
   $dirs = array($config['mib_dir']."/rfc", $config['mib_dir']."/net-snmp");
 
-  if(is_array($mibs))
+  if(!is_array($mibs)) { $mibs = array($mibs); }
+
+  foreach($mibs as $mib)
   {
-    foreach($mibs as $mib)
+    if(ctype_alnum($mib))
     {
-      if(ctype_alnum($mib))
-      {
-        $dirs[] = $config['mib_dir']."/".$mib;
-      }
+      $dirs[] = $config['mib_dir']."/".$mib;
     }
   }
+
   return implode(":", $dirs);
 }
 
@@ -256,6 +256,33 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
   elseif (!empty($data)) { return $data; }
   else { return false; }
 }
+
+function snmp_walk_parser2($device, $oid, $oid_elements, $mib = NULL, $mibdir = NULL)
+{
+  $data = snmp_walk($device, $oid, "-Oqs", $mib, $mibdir, FALSE);
+  foreach (explode("\n", $data) as $text) {
+    $ret = parse_oid2($text);
+    if (!empty($ret['value'])) {
+      // this seems retarded. need a way to just build this automatically.
+      switch ($oid_elements) {
+        case "1":
+          $array[$ret['oid'][0]] = $ret['value'];
+          break;
+        case "2":
+          $array[$ret['oid'][1]][$ret['oid'][0]] = $ret['value'];
+          break;
+        case "3":
+          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][0]] = $ret['value'];
+          break;
+        case "4":
+          $array[$ret['oid'][1]][$ret['oid'][2]][$ret['oid'][3]][$ret['oid'][0]] = $ret['value'];
+          break;
+      }
+    }
+  }
+  return $array;
+}
+
 
 function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = NULL)
 {

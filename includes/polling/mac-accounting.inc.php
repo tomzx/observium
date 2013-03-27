@@ -4,12 +4,11 @@ echo("Mac Accounting: ");
 
 // FIXME -- we're walking, so we can discover here too.
 
-// Cisco MAC Accounting
+#mysql_query("TRUNCATE TABLE `mac_accounting`");
+#mysql_query("TRUNCATE TABLE `mac_accounting-state`");
 
-if ($device['os_group'] == "cisco")
-{
-
-  echo("Cisco ");
+// Cache DB entries
+echo("Caching DB...");
 
   $sql  = "SELECT *, `mac_accounting`.`ma_id` as `ma_id`";
   $sql .= " FROM  `mac_accounting`";
@@ -22,87 +21,142 @@ if ($device['os_group'] == "cisco")
     $port = get_port_by_id($acc['port_id']);
     $acc['ifIndex'] = $port['ifIndex'];
     unset($port);
-    $ma_db[$acc['ifIndex']][$acc['mac']] = $acc;
+    $ma_db_array[$acc['ifIndex'].'-'.$acc['vlan_id'].'-'.$acc['mac']] = $acc;
   }
 
-  if($debug) { print_r($ma_db); }
+  if($debug) { print_r($ma_db_array); }
+  echo(count($ma_db_array)." entries. ");
 
-  $datas = snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedBytes", "-OUqsX", "NS-ROOT-MIB");
-  $datas .= "\n".snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedPkts", "-OUqsX", "NS-ROOT-MIB");
+// JUNIPER-MAC-MIB
+if($device['os'] == "junos")
+{
+
+  $datas = snmp_walk($device, "JUNIPER-MAC-MIB::jnxMacStatsEntry", "-OUqsX", "JUNIPER-MAC-MIB", mib_dirs("juniper"));
+
+  foreach (explode("\n", $datas) as $data) {
+    list($oid,$ifIndex,$vlan,$mac,$value) = parse_oid2($data);
+    list($a_a, $a_b, $a_c, $a_d, $a_e, $a_f) = explode(":", $mac);
+    $ah_a = zeropad($a_a); $ah_b = zeropad($a_b); $ah_c = zeropad($a_c); $ah_d = zeropad($a_d); $ah_e = zeropad($a_e); $ah_f = zeropad($a_f);
+    $mac = "$ah_a$ah_b$ah_c$ah_d$ah_e$ah_f";
+
+    $oid = str_replace(array("cipMacSwitchedBytes", "cipMacSwitchedPkts"), array("bytes", "pkts"), $oid);
+
+    if($oid == "jnxMacHCOutFrames") { $oid = "pkts"; $dir = "output"; }
+    if($oid == "jnxMacHCInFrames")  { $oid = "pkts"; $dir = "input"; }
+    if($oid == "jnxMacHCOutOctets") { $oid = "bytes"; $dir = "output"; }
+    if($oid == "jnxMacHCInOctets")  { $oid = "bytes"; $dir = "input"; }
+
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['ifIndex'] = $ifIndex;
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['vlan'] = $vlan;
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['mac'] = $mac;
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac][$oid][$dir] = $value;
+
+  }
+}
+
+// Cisco MAC Accounting
+if ($device['os_group'] == "cisco")
+{
+  echo("Cisco ");
+
+  $datas = snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedBytes", "-OUqsX", "CISCO-IP-STAT-MIB");
+  $datas .= "\n".snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedPkts", "-OUqsX", "CISCO-IP-STAT-MIB");
 
   foreach (explode("\n", $datas) as $data) {
     list($oid,$ifIndex,$dir,$mac,$value) = parse_oid2($data);
     list($a_a, $a_b, $a_c, $a_d, $a_e, $a_f) = explode(":", $mac);
-    $ah_a = zeropad($a_a);
-    $ah_b = zeropad($a_b);
-    $ah_c = zeropad($a_c);
-    $ah_d = zeropad($a_d);
-    $ah_e = zeropad($a_e);
-    $ah_f = zeropad($a_f);
+    $ah_a = zeropad($a_a); $ah_b = zeropad($a_b); $ah_c = zeropad($a_c); $ah_d = zeropad($a_d); $ah_e = zeropad($a_e); $ah_f = zeropad($a_f);
     $mac = "$ah_a$ah_b$ah_c$ah_d$ah_e$ah_f";
 
+    // Cisco isn't per-VLAN.
+    $vlan = "0";
+
     $oid = str_replace(array("cipMacSwitchedBytes", "cipMacSwitchedPkts"), array("bytes", "pkts"), $oid);
-    $ma_array[$ifIndex][$mac][$oid][$dir] = $value;
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['ifIndex'] = $ifIndex;
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['vlan'] = $vlan;
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['mac'] = $mac;
+    $ma_array[$ifIndex.'-'.$vlan.'-'.$mac][$oid][$dir] = $value;
+
   }
-
   if($debug) { print_r($ma_array); }
-
 }
 
 // Below this should be MIB / vendor agnostic.
 
+#function array_defuffle_three($array)
+#{
+#  foreach ($array as $key_a => $a)
+#  {
+#    foreach($a as $key_b => $b)
+#    {
+#      foreach($b as $key_c => $c)
+#      {
+#        $new_array[] = array($key_a, $key_b, $key_c, $c);
+#      }
+#    }
+#  }
+#  return $new_array;
+#}
+
 if(count($ma_array))
 {
-
   $polled = time();
   $mac_entries = 0;
+  echo("Entries: ".$ma_db[$id].PHP_EOL);
 
-  foreach (dbFetchRows($sql, $arg) as $acc)
+  foreach ($ma_array as $id => $ma)
   {
-    if($debug) { print_r($acc); }
-    $port = get_port_by_id($acc['port_id']);
-    $device_id = $port['device_id'];
-    $ifIndex = $port['ifIndex'];
-    $mac = $acc['mac'];
+
+    $port = get_port_by_ifIndex($device['device_id'], $ma['ifIndex']);
+
+    echo(' '.$id.' ');
+
+    if(!is_array($ma_db_array[$id]))
+    {
+      $ma_id = dbInsert(array('port_id' => $port['port_id'], 'device_id' => $device['device_id'], 'vlan_id' => $ma['vlan'], 'mac' => $ma['mac'] ), 'mac_accounting');
+      dbInsert(array('ma_id' => $ma_id), 'mac_accounting-state');
+      echo("+");
+    } else {
+      $ma_db = $ma_db_array[$id];
+    }
+
     $polled_period = $polled - $acc['poll_time'];
 
-    if($debug) { print_r($ma_array[$ifIndex][$mac]); }
+    if($debug) { print_r($ma_array[$ifIndex][$vlan_id][$mac]); }
 
-    if ($ma_array[$ifIndex][$mac])
+    $ma['update']['poll_time'] = $polled;
+    $ma['update']['poll_period'] = $polled_period;
+    $mac_entries++;
+    $b_in = $ma['bytes']['input'];
+    $b_out = $ma['bytes']['output'];
+    $p_in = $ma['pkts']['input'];
+    $p_out = $ma['pkts']['output'];
+
+    echo(" ".$port['ifDescr']."(".$ifIndex.") -> ".$mac);
+
+    // Update metrics
+    foreach (array('bytes','pkts') as $oid)
     {
-      $acc['update']['poll_time'] = $polled;
-      $acc['update']['poll_period'] = $polled_period;
-      $mac_entries++;
-      $b_in = $ma_array[$ifIndex][$mac]['bytes']['input'];
-      $b_out = $ma_array[$ifIndex][$mac]['bytes']['output'];
-      $p_in = $ma_array[$ifIndex][$mac]['pkts']['input'];
-      $p_out = $ma_array[$ifIndex][$mac]['pkts']['output'];
-
-      $this_ma = &$ma_array[$ifIndex][$mac];
-
-      echo(" ".$port['ifDescr']."(".$ifIndex.") -> ".$mac);
-
-      // Update metrics
-      foreach (array('bytes','pkts') as $oid)
+      foreach (array('input','output') as $dir)
       {
-        foreach (array('input','output') as $dir)
+        $oid_dir = $oid . "_" . $dir;
+        $ma['update'][$oid_dir] = $ma[$oid][$dir];
+
+        if ($ma[$oid][$dir] && $ma_db[$oid_dir])
         {
-          $oid_dir = $oid . "_" . $dir;
-          $acc['update'][$oid_dir] = $this_ma[$oid][$dir];
-          if ($this_ma[$oid][$dir])
-          {
-            $oid_diff = $this_ma[$oid][$dir] - $acc[$oid_dir];
-            $oid_rate  = $oid_diff / $polled_period;
-            $acc['update'][$oid_dir.'_rate'] = $oid_rate;
-            $acc['update'][$oid_dir.'_delta'] = $oid_diff;
-            if ($debug) { echo("\n $oid_dir ($oid_diff B) $oid_rate Bps $polled_period secs\n"); }
-          }
+          $oid_diff = $ma[$oid][$dir] - $ma_db[$oid_dir];
+          $oid_rate  = $oid_diff / $polled_period;
+          $ma['update'][$oid_dir.'_rate'] = $oid_rate;
+          $ma['update'][$oid_dir.'_delta'] = $oid_diff;
+          if ($debug) { echo("\n $oid_dir ($oid_diff B) $oid_rate Bps $polled_period secs\n"); }
         }
       }
 
-      if ($debug) { echo("\n" . $acc['hostname']." ".$acc['ifDescr'] . "  $mac -> $b_in:$b_out:$p_in:$p_out "); }
+      if ($debug) { echo("\n" . $ma['hostname']." ".$ma['ifDescr'] . "  $mac -> $b_in:$b_out:$p_in:$p_out "); }
 
-      $rrdfile = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("mac_acc-" . $port['ifIndex'] . "-" . $acc['mac'] . ".rrd");
+      $rrdfile = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("mac_acc-" . $port['ifIndex'] . "-" . $ma['vlan'] ."-" . $ma['mac'] . ".rrd");
+      $rrdfile_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("mac_acc-" . $port['ifIndex'] . "-" . $ma['mac'] . ".rrd");
+
 
       if (!is_file($rrdfile))
       {
@@ -116,14 +170,16 @@ if(count($ma_array))
       $rrdupdate = array($b_in, $b_out, $p_in, $p_out);
       rrdtool_update($rrdfile, $rrdupdate);
 
-      if ($acc['update'])
+      print_r($ma['update']);
+
+      if (is_array($ma['update']))
       { // Do Updates
-        if (empty($acc['poll_time']))
+        if (empty($ma['poll_time']))
         {
-          $insert = dbInsert(array('ma_id' => $acc['ma_id']), 'mac_accounting-state');
+          $insert = dbInsert(array('ma_id' => $ma['ma_id']), 'mac_accounting-state');
           if ($debug) { echo("state inserted"); }
         }
-        dbUpdate($acc['update'], 'mac_accounting-state', '`ma_id` = ?', array($acc['ma_id']));
+        dbUpdate($ma['update'], 'mac_accounting-state', '`ma_id` = ?', array($ma_db['ma_id']));
         if ($debug) { echo("state updated"); }
       } // End Updates
     }

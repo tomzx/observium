@@ -702,6 +702,23 @@ $config['os'][$os]['text']              = "Blade Network Technologies";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "bnt";
 
+// NetAPP
+
+/// FIXME - NetApp can have some ace graphs once they're done :)
+
+$os = "netapp";
+$config['os'][$os]['text']              = "NetApp";
+$config['os'][$os]['type']              = "storage";
+$config['os'][$os]['icon']              = "netapp";
+$config['os'][$os]['over'][0]['graph']  = "device_netapp_net_io";
+$config['os'][$os]['over'][0]['text']   = "Network Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_netapp_ops";
+$config['os'][$os]['over'][1]['text']   = "Operations";
+$config['os'][$os]['over'][2]['graph']  = "device_netapp_disk_io";
+$config['os'][$os]['over'][2]['text']   = "Disk I/O";
+
+
+
 // HP / 3Com
 
 $os = "3com";
@@ -1089,11 +1106,18 @@ foreach ($config['os'] as $this_os => $blah)
 
 // Graph Types
 
-$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance', 'poller');
+$config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance', 'poller', 'netapp');
 
 $config['graph_types']['device']['wifi_clients']['section'] = 'wireless';
 $config['graph_types']['device']['wifi_clients']['order'] = '0';
 $config['graph_types']['device']['wifi_clients']['descr'] = 'Wireless Clients';
+
+/// NetApp graphs
+
+$config['graph_types']['device']['netapp_ops']     = array('section' => 'netapp', 'descr' => 'NetApp Operations', 'order' => '0');
+$config['graph_types']['device']['netapp_net_io']  = array('section' => 'netapp', 'descr' => 'NetApp Network I/O', 'order' => '1');
+$config['graph_types']['device']['netapp_disk_io'] = array('section' => 'netapp', 'descr' => 'NetApp Disk I/O', 'order' => '2');
+$config['graph_types']['device']['netapp_tape_io'] = array('section' => 'netapp', 'descr' => 'NetApp Tape I/O', 'order' => '3');
 
 /// Poller graphs
 $config['graph_types']['device']['poller_perf']['section'] = 'poller';

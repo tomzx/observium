@@ -37,6 +37,17 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
                 <li><a href="<?php echo(generate_url(array('page'=>'overview'))); ?>"><i class="fugue-globe-model"></i> Overview</a></li>
                 <li class="divider"></li>
 
+<?php
+// Custom menubar entries.
+if(is_file("includes/navbar-custom.inc.php"))
+{
+ include("includes/navbar-custom.inc.php");
+ echo('<li class="divider"></li>');
+}
+?>
+
+
+
         <?php if (isset($config['enable_map']) && $config['enable_map']) {
           echo('<li><a href="'.generate_url(array('page'=>'overview')).'"><span class="menu-icon icon-map"></span> Network Map</a></li>');
         } ?>

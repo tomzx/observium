@@ -61,10 +61,8 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? A
   {
     $i++;
     echo('<tr class="list-bold" bgcolor="'.$bg_colour.'">');
-    echo('<td colspan="5">');
+    echo('<td colspan="5" style="padding: 0px;">');
     $graph_type = "netscalersvc_" . $graph_type;
-    $graph_array['height'] = "100";
-    $graph_array['width']  = "213";
     $graph_array['to']     = $config['time']['now'];
     $graph_array['id']     = $svc['svc_id'];
     $graph_array['type']   = $graph_type;
@@ -89,8 +87,6 @@ if(!$vars['graph'])
 { $graph_type = "device_netscalersvc_bits"; } else {
   $graph_type = "device_netscalersvc_".$vars['graph'];  }
 
-$graph_array['height'] = "100";
-$graph_array['width']  = "213";
 $graph_array['to']     = $config['time']['now'];
 $graph_array['device'] = $device['device_id'];
 $graph_array['nototal'] = "yes";
@@ -159,10 +155,8 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? O
   if ($vars['view'] == "graphs")
   {
     echo('<tr class="list-bold" bgcolor="'.$bg_colour.'">');
-    echo('<td colspan="5">');
+    echo('<td style="padding: 0px;" colspan="5">');
     $graph_type = "netscalersvc_" . $vars['graph'];
-    $graph_array['height'] = "100";
-    $graph_array['width']  = "213";
     $graph_array['to']     = $config['time']['now'];
     $graph_array['id']     = $svc['svc_id'];
     $graph_array['type']   = $graph_type;

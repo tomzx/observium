@@ -34,22 +34,28 @@ if ($stat == "pkts")
   }
 }
 
-$accs = dbFetchRows("SELECT *, (M.bytes_input_rate + M.bytes_output_rate) AS bps,
-        (M.pkts_input_rate + M.pkts_output_rate) AS pps
-        FROM `mac_accounting` AS M, `ports` AS I, `devices` AS D WHERE M.port_id = ?
-        AND I.port_id = M.port_id AND D.device_id = I.device_id ORDER BY $sort DESC LIMIT 0," . $topn, array($port));
+$mas = dbFetchRows("SELECT *, (bytes_input_rate + bytes_output_rate) AS bps,
+        (pkts_input_rate + pkts_output_rate) AS pps
+        FROM `mac_accounting`
+        LEFT JOIN  `mac_accounting-state` ON  `mac_accounting`.ma_id =  `mac_accounting-state`.ma_id
+        WHERE `mac_accounting`.port_id = ?
+        ORDER BY $sort DESC LIMIT 0," . $topn, array($port));
+
+$port    = get_port_by_id($port);
+$device =  device_by_id_cache($port['device_id']);
 
 $pluses = ""; $iter = '0';
 $rrd_options .= " COMMENT:'                                     In\: Current     Maximum      Total      Out\: Current     Maximum     Total\\\\n'";
 
-foreach ($accs as $acc)
+foreach ($mas as $ma)
 {
-  $this_rrd = $config['rrd_dir'] . "/" . $acc['hostname'] . "/" . safename("cip-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd");
+  $this_rrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("mac_acc-" . $port['ifIndex'] . "-" . $ma['vlan_id'] ."-" . $ma['mac'] . ".rrd");
+
   if (is_file($this_rrd))
   {
-    $mac = formatmac($acc['mac']);
+    $mac = formatmac($ma['mac']);
     $name = $mac;
-    $addy = dbFetchRow("SELECT * FROM ipv4_mac where mac_address = ? AND port_id = ?", array($acc['mac'], $acc['port_id']));
+    $addy = dbFetchRow("SELECT * FROM ipv4_mac where mac_address = ? AND port_id = ?", array($ma['mac'], $ma['port_id']));
 
     if ($addy)
     {
@@ -61,9 +67,9 @@ foreach ($accs as $acc)
         $name = $peer['hostname'] . " " . makeshortif($peer['ifDescr']) . " (".$mac.")";
       }
 
-      if (dbFetchCell("SELECT count(*) FROM bgpPeers WHERE device_id = '".$acc['device_id']."' AND bgpPeerIdentifier = ?", array($addy['ipv4_address'])))
+      if (dbFetchCell("SELECT count(*) FROM bgpPeers WHERE device_id = '".$ma['device_id']."' AND bgpPeerIdentifier = ?", array($addy['ipv4_address'])))
       {
-        $peer_info = dbFetchRow("SELECT * FROM bgpPeers WHERE device_id = ? AND bgpPeerIdentifier = ?", array($acc['device_id'], $addy['ipv4_address']));
+        $peer_info = dbFetchRow("SELECT * FROM bgpPeers WHERE device_id = ? AND bgpPeerIdentifier = ?", array($ma['device_id'], $addy['ipv4_address']));
         $name .= " - AS".$peer_info['bgpPeerRemoteAs'];
       }
 
@@ -75,7 +81,7 @@ foreach ($accs as $acc)
       }
     }
 
-    $this_id = str_replace(".", "", $acc['mac']);
+    $this_id = str_replace(".", "", $ma['mac']);
     if (!$config['graph_colours'][$colours][$iter]) { $iter = 0; }
     $colour=$config['graph_colours'][$colours][$iter];
     $descr = rrdtool_escape($name, 36);

@@ -259,6 +259,7 @@ function get_port_by_index_cache($device_id, $ifIndex)
     $port = $port_index_cache[$device_id][$ifIndex];
   } else {
     $port = get_port_by_ifIndex($device_id, $ifIndex);
+    humanize_port($port);
     $port_index_cache[$device_id][$ifIndex] = $port;
   }
 
@@ -280,6 +281,8 @@ function get_port_id_by_ifDescr($device_id, $ifDescr)
 function get_port_by_ifIndex($device_id, $ifIndex)
 {
   $port = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?", array($device_id, $ifIndex));
+
+  humanize_port($port);
 
   if (is_array($port))
   {

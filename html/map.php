@@ -45,16 +45,17 @@ if (is_array($config['branding']))
   }
 }
 
-if (isset($_GET['device'])) { $where = "WHERE device_id = ".mres($_GET['device']); } else { $where = ""; }
+if (isset($_GET['device'])) { $where = "WHERE D.device_id = ".mres($_GET['device']); } else { $where = ""; }
 
 // FIXME this shit probably needs tidied up.
 
 if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
 {
-  $map = 'digraph G { bgcolor=transparent; splines=true; overlap=scale; concentrate=0; epsilon=0.001; rankdir=LR;
+#  $map = 'digraph G { bgcolor=transparent; splines=true; overlap=scale; concentrate=0; epsilon=0.001; rankdir=LR
+  $map = 'digraph G { bgcolor=transparent; splines=true; overlap=scale; rankdir=LR
      node [ fontname="helvetica", fontstyle=bold, style=filled, color=white, fillcolor=lightgrey, overlap=false];
      edge [ bgcolor=white, fontname="helvetica", fontstyle=bold, arrowhead=dot, arrowtail=dot];
-     graph [bgcolor=transparent];
+     graph [bgcolor=transparent;];
 
 ';
 
@@ -66,16 +67,28 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
   {
     $loc_count = 1;
 
-    foreach (dbFetch("SELECT * from devices ".$where) as $device)
-    {
+#    foreach (dbFetch("SELECT * from devices ".$where) as $device)
+#    foreach (dbFetch("SELECT D.*, COUNT(L.local_port_id) FROM devices AS D LEFT JOIN (ports AS I, links AS L) ON (D.device_id = I.device_id AND I.port_id = L.local_port_id) ". $where. " GROUP BY D.hostname ORDER BY COUNT(L.local_port_id) DESC".$where) as $device)
+    
+    foreach (dbFetch("SELECT D.*, COUNT(L.local_port_id) FROM devices AS D LEFT JOIN (ports AS I, links AS L) ON (D.device_id = I.device_id AND I.port_id = L.local_port_id) ". $where. " 
+                  GROUP BY D.hostname ORDER BY COUNT(L.local_port_id) DESC") as $device)
+      {
       if ($device)
       {
         $links = dbFetch("SELECT * from ports AS I, links AS L WHERE I.device_id = ? AND L.local_port_id = I.port_id ORDER BY L.remote_hostname", array($device['device_id']));
         if (count($links))
         {
+	  $ranktype = substr($device['hostname'], 0, 2);
+	  $ranktype2 = substr($device['hostname'], 0, 3);
+	  if(!strncmp($device['hostname'], "c", 1) && !strstr($device['hostname'], "kalooga")) {
+  	    $ranks[$ranktype][] = $device['hostname'];
+          } else {
+	    $ranks[$ranktype2][] = $device['hostname'];
+	  }
           if ($anon) { $device['hostname'] = md5($device['hostname']); }
           if (!isset($locations[$device['location']])) { $locations[$device['location']] = $loc_count; $loc_count++; }
-          $loc_id = $locations[$device['location']];
+          #$loc_id = $locations[$device['location']];
+	  $loc_id = '"'.$ranktype.'"';
 
           $map .= "\"".$device['hostname']."\" [fontsize=20, fillcolor=\"lightblue\", group=".$loc_id." URL=\"{$config['base_url']}device/device=".$device['device_id']."/tab=ports/view=map/\" shape=box3d]\n";
         }
@@ -133,7 +146,7 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
             {
               if (!$ifdone[$dst][$dif['port_id']] && !$ifdone[$src][$sif['port_id']])
               {
-                $map .= "\"$src\" -> \"" . $dst . "\" [weight=500000, arrowsize=0, len=0];\n";
+                $map .= "\"$src\" -> \"" . $dst . "\" [weight=500000, arrowsize=0, len=0, $info];\n";
               }
               $ifdone[$src][$sif['port_id']] = 1;
             } else {
@@ -177,6 +190,13 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
     }
   }
 
+  foreach ($ranks as $rank) {
+    if(substr($rank[0], 0, 2) == "cr") {
+      $map .= '{ rank=min; "' . implode('"; "', $rank) . "\"};\n";
+    } else {
+      $map .= '{ rank=same; "' . implode('"; "', $rank) . "\"};\n";
+    }
+  }
   $map .= "\n};";
 
   if ($_GET['debug'] == 1)
