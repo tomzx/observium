@@ -19,8 +19,8 @@ $config['log_file']     = $config['install_dir'] . "/observium.log";
 #$config['base_url']        = "http://observium.company.com";
 
 // PING Settings - Timeouts/Retries
-#$config['ping_timeout'] = 500;         // PING timeout in milliseconds
-#$config['ping_retries'] = 3;           // How many times to retry ping
+#$config['ping']['timeout'] = 500;         // PING timeout in milliseconds
+#$config['ping']['retries'] = 3;           // How many times to retry ping
 
 // SNMP Settings - Timeouts/Retries
 #$config['snmp']['timeout'] = 1;        // SNMP timeout in seconds

@@ -404,15 +404,15 @@ function isPingable($hostname)
 {
   global $config;
 
-  if (filter_var($config['ping_timeout'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 50, 'max_range' => 2000 ))))
+  if (filter_var($config['ping']['timeout'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 50, 'max_range' => 2000 ))))
   {
-    $timeout = $config['ping_timeout'];
+    $timeout = $config['ping']['timeout'];
   } else {
     $timeout = 500;
   }
-  if (filter_var($config['ping_retries'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 10 ))))
+  if (filter_var($config['ping']['retries'], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 10 ))))
   {
-    $retries = $config['ping_retries'];
+    $retries = $config['ping']['retries'];
   } else {
     $retries = 3;
   }
