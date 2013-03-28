@@ -418,7 +418,7 @@ function isPingable($hostname)
   }
   $sleep = floor(1000000 / $retries); // interval between retries, max 1 sec
 
-  ///$file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time());/// DEBUG
+  //$ping_debug = TRUE; $file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time()); /// Uncomment this line for DEBUG isPingable()
 
   // First try IPv4
   $ip = gethostbyname($hostname);
@@ -433,7 +433,7 @@ function isPingable($hostname)
       $cmd = $config['fping6'] . " -t $timeout -c 1 -q $ip 2>&1";
     } else {
       // No DNS records
-      ///file_put_contents($file, "$time | DNS ERROR: $hostname\n", FILE_APPEND); /// DEBUG
+      if ($ping_debug) { file_put_contents($file, "$time | DNS ERROR: $hostname | NO DNS record found" . PHP_EOL, FILE_APPEND); }
       return 0;
     }
   }
@@ -453,7 +453,7 @@ function isPingable($hostname)
     }
     if ($ping) break;
 
-    ///file_put_contents($file, "$time | PING ERROR: $hostname ($i)\n", FILE_APPEND);  /// DEBUG
+    if ($ping_debug) { file_put_contents($file, "$time | PING ERROR: $hostname ($i) | FPING OUT: " . $output[0] . PHP_EOL, FILE_APPEND); }
 
     if ($i < $retries) usleep($sleep);
   }
