@@ -3,23 +3,40 @@
 // Set Defaults here
 
 if(!isset($vars['format'])) { $vars['format'] = "list_detail"; }
-
-$sql_param = array();
+if (!$config['web_show_disabled']) { $vars['disabled'] = '0'; }
 
 /// FIXME - new style of searching here
 
-if ($vars['hostname']) { $where .= " AND hostname LIKE ?"; $sql_param[] = "%".$vars['hostname']."%"; }
-if ($vars['sysname']) { $where .= " AND sysName LIKE ?"; $sql_param[] = "%".$vars['sysname']."%"; }
-if ($vars['os'])       { $where .= " AND os = ?";          $sql_param[] = $vars['os']; }
-if ($vars['version'])  { $where .= " AND version = ?";     $sql_param[] = $vars['version']; }
-if ($vars['hardware']) { $where .= " AND hardware = ?";    $sql_param[] = $vars['hardware']; }
-if ($vars['features']) { $where .= " AND features = ?";    $sql_param[] = $vars['features']; }
-if ($vars['type'])     { $where .= " AND type = ?";        $sql_param[] = $vars['type']; }
-if (isset($vars['status']))   { $where .= " AND status = ?";      $sql_param[] = $vars['status']; }
-if (isset($vars['ignore']))   { $where .= " AND ignore = ?";      $sql_param[] = $vars['ignore']; }
-if (!$config['web_show_disabled']) { $where .= " AND disabled = 0"; }
-elseif (isset($vars['disabled'])) { $where .= " AND disabled = ?";    $sql_param[] = $vars['disabled']; }
-
+$sql_param = array();
+$where = ' WHERE 1 ';
+foreach ($vars as $var => $value)
+{
+  if ($value != '')
+  {
+    switch ($var)
+    {
+      case 'hostname':
+        $where .= ' AND `hostname` LIKE ?';
+        $sql_param[] = '%'.$value.'%';
+        break;
+      case 'sysname':
+        $where .= ' AND `sysName` LIKE ?';
+        $sql_param[] = '%'.$value.'%';
+        break;
+      case 'os':
+      case 'version':
+      case 'hardware':
+      case 'features':
+      case 'type':
+      case 'status':
+      case 'ignore':
+      case 'disabled':
+        $where .= ' AND `'.$var.'` = ?';
+        $sql_param[] = $value;
+        break;
+    }
+  }
+}
 
 if ($vars['location'] == "Unset") { $location_filter = ''; }
 if ($vars['location']) { $location_filter = $vars['location']; }
@@ -247,7 +264,7 @@ foreach ($menu_options as $option => $text)
 
 <?php
 
-$query = "SELECT * FROM `devices` WHERE 1 ".$where." ORDER BY hostname";
+$query = "SELECT * FROM `devices` " . $where . " ORDER BY hostname";
 
 list($format, $subformat) = explode("_", $vars['format']);
 
