@@ -3,7 +3,7 @@
 // Set Defaults here
 
 if(!isset($vars['format'])) { $vars['format'] = "list_detail"; }
-if (!$config['web_show_disabled']) { $vars['disabled'] = '0'; }
+if (!$config['web_show_disabled'] && !isset($vars['disabled'])) { $vars['disabled'] = '0'; }
 
 /// FIXME - new style of searching here
 
