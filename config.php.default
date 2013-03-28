@@ -18,16 +18,20 @@ $config['log_file']     = $config['install_dir'] . "/observium.log";
 // It will prevent the web interface being usable form any other hostname
 #$config['base_url']        = "http://observium.company.com";
 
-// Enable the below to use rrdcached. be sure rrd_dir is within the rrdcached dir
-// and that your web server has permission to talk to rrdcached.
-#$config['rrdcached']    = "unix:/var/run/rrdcached.sock";
+// PING Settings - Timeouts/Retries
+#$config['ping_timeout'] = 500;         // PING timeout in milliseconds
+#$config['ping_retries'] = 3;           // How many times to retry ping
+
+// SNMP Settings - Timeouts/Retries
+#$config['snmp']['timeout'] = 1;        // SNMP timeout in seconds
+#$config['snmp']['retries'] = 5;        // how many times to retry the query
 
 // Default community
 $config['snmp']['community'] = array("public");
 
 // Authentication Model
-$config['auth_mechanism'] = "mysql"; # default, other options: ldap, http-auth
-#$config['http_auth_guest'] = "guest"; # remember to configure this user if you use http-auth
+$config['auth_mechanism'] = "mysql";    // default, other options: ldap, http-auth
+#$config['http_auth_guest'] = "guest";  // remember to configure this user if you use http-auth
 
 // List of networks to allow scanning-based discovery
 $config['nets'][] = "172.22.0.0/16";
