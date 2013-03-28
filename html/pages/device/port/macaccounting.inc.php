@@ -178,7 +178,7 @@ foreach ($cols as $sort => $col)
   {
 
     $ips = array();
-    foreach (dbFetchRows("SELECT * FROM `ip_mac` WHERE `mac_address` = ?", array($acc['mac'], $acc['port_id'])) AS $ip)
+    foreach (dbFetchRows("SELECT `ip_address` FROM `ip_mac` WHERE `mac_address` = ? AND `port_id` = ?", array($acc['mac'], $acc['port_id'])) AS $ip)
     {
       $ips[] = $ip['ip_address'];
     }
