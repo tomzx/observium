@@ -1,6 +1,6 @@
 <?php
 
-## Have a look in defaults.inc.php for examples of settings you can set here. DO NOT EDIT defaults.inc.php!
+## Have a look in includes/defaults.inc.php for examples of settings you can set here. DO NOT EDIT defaults.inc.php!
 
 // Database config
 $config['db_host'] = "localhost";
@@ -20,9 +20,5 @@ $config['snmp']['community'] = array("public");
 
 // Authentication Model
 $config['auth_mechanism'] = "mysql";    // default, other options: ldap, http-auth, please see documentation for config help
-
-// List of networks to allow scanning-based discovery
-$config['nets'][] = "172.22.0.0/16";
-$config['nets'][] = "192.168.0.0/24";
 
 ?>
