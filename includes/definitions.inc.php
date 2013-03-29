@@ -1438,7 +1438,7 @@ if (isset($config['rrdgraph_def_text']))
 if (!isset($config['html_dir'])) { $config['html_dir'] = $config['install_dir'] . '/html'; }
 if (!isset($config['rrd_dir']))  { $config['rrd_dir']  = $config['install_dir'] . '/rrd'; }
 if (!isset($config['log_file'])) { $config['log_file'] = $config['install_dir'] . '/observium.log'; }
-if (!isset($config['temp_dir'])) { $config['temp_dir'] = $config['install_dir'] . '/tmp'; }
+if (!isset($config['temp_dir'])) { $config['temp_dir'] = '/tmp'; }
 /// FIXME. I really do not understand why a separate option $config['mibdir']. -- mike
 if (!isset($config['mibdir']))   { $config['mibdir']   = $config['install_dir'] . '/mibs'; }
 $config['mib_dir'] = $config['mibdir'];
