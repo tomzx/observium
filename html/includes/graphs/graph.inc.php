@@ -38,7 +38,7 @@ $graphfile = $config['temp_dir'] . "/"  . strgen() . ".png";
 $type = $graphtype['type'];
 $subtype = $graphtype['subtype'];
 
-if (is_file($config['install_dir'] . "/html/includes/graphs/$type/$subtype.inc.php"))
+if (is_file($config['html_dir'] . "/includes/graphs/$type/$subtype.inc.php"))
 {
 
   if (isset($config['allow_unauth_graphs']) && $config['allow_unauth_graphs'])
@@ -78,11 +78,11 @@ if (is_file($config['install_dir'] . "/html/includes/graphs/$type/$subtype.inc.p
     }
   }
 
-  include($config['install_dir'] . "/html/includes/graphs/$type/auth.inc.php");
+  include($config['html_dir'] . "/includes/graphs/$type/auth.inc.php");
 
   if (isset($auth) && $auth)
   {
-    include($config['install_dir'] . "/html/includes/graphs/$type/$subtype.inc.php");
+    include($config['html_dir'] . "/includes/graphs/$type/$subtype.inc.php");
   }
 
 }

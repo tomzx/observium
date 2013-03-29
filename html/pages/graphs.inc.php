@@ -46,7 +46,7 @@ if (!$auth)
 
   # Load our list of available graphtypes for this object
   // FIXME not all of these are going to be valid
-  if ($handle = opendir($config['install_dir'] . "/html/includes/graphs/".$type."/"))
+  if ($handle = opendir($config['html_dir'] . "/includes/graphs/".$type."/"))
   {
     while (false !== ($file = readdir($handle)))
     {

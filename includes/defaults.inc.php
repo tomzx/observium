@@ -19,11 +19,11 @@ error_reporting(E_ERROR);
 
 // Default directories
 
-$config['temp_dir']      = "/tmp";
 $config['install_dir']   = "/opt/observium";
-$config['html_dir']      = $config['install_dir'] . "/html";
-$config['rrd_dir']       = $config['install_dir'] . "/rrd";
-$config['log_file']      = $config['install_dir'] . "/observium.log";
+#$config['html_dir']      = $config['install_dir'] . "/html";
+#$config['rrd_dir']       = $config['install_dir'] . "/rrd";
+#$config['log_file']      = $config['install_dir'] . "/observium.log";
+#$config['temp_dir']      = "/tmp";
 
 // What is my own hostname (used so observium can identify its host in its own database)
 $config['own_hostname'] = "localhost";

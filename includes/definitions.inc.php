@@ -1398,9 +1398,9 @@ $config['routing_types']['cef']       = array( 'text' => 'CEF');
 $config['routing_types']['bgp']       = array( 'text' => 'BGP');
 $config['routing_types']['vrf']       = array( 'text' => 'VRFs');
 
-//////////////////////////////
-# No changes below this line #
-//////////////////////////////
+////////////////////////////////
+// No changes below this line //
+////////////////////////////////
 
 $config['version']  = "0.SVN.ERROR";
 
@@ -1434,24 +1434,21 @@ if (isset($config['rrdgraph_def_text']))
   $config['rrd_opts_array'] = explode(" ", trim($config['rrdgraph_def_text']));
 }
 
-if (!isset($config['log_file']))
-{
-  $config['log_file'] = $config['install_dir'] . "/observium.log";
-}
+// Set default paths.
+if (!isset($config['html_dir'])) { $config['html_dir'] = $config['install_dir'] . '/html'; }
+if (!isset($config['rrd_dir']))  { $config['rrd_dir']  = $config['install_dir'] . '/rrd'; }
+if (!isset($config['log_file'])) { $config['log_file'] = $config['install_dir'] . '/observium.log'; }
+if (!isset($config['temp_dir'])) { $config['temp_dir'] = $config['install_dir'] . '/tmp'; }
+/// FIXME. I really do not understand why a separate option $config['mibdir']. -- mike
+if (!isset($config['mibdir']))   { $config['mibdir']   = $config['install_dir'] . '/mibs'; }
+$config['mib_dir'] = $config['mibdir'];
 
 if (isset($config['cdp_autocreate']))
 {
   $config['dp_autocreate'] = $config['cdp_autocreate'];
 }
 
-if (!isset($config['mibdir']))
-{
-  $config['mibdir'] =  $config['install_dir']."/mibs";
-}
-$config['mib_dir'] = $config['mibdir'];
-
-# If we're on SSL, let's properly detect it
-#if (isset($_SERVER['HTTPS']))
+// If we're on SSL, let's properly detect it
 function is_ssl()
 {
   if ( isset($_SERVER['HTTPS']) )
@@ -1481,8 +1478,7 @@ if (!$observium_link)
 }
 $observium_db = mysql_select_db($config['db_name'], $observium_link);
 
-# Set some times needed by loads of scripts (it's dynamic, so we do it here!)
-
+// Set some times needed by loads of scripts (it's dynamic, so we do it here!)
 $config['time']['now']        = time();
 $config['time']['fourhour']   = $config['time']['now'] - 14400;    //time() - (4 * 60 * 60);
 $config['time']['sixhour']    = $config['time']['now'] - 21600;    //time() - (6 * 60 * 60);
@@ -1498,7 +1494,7 @@ $config['time']['sixmonth']   = $config['time']['now'] - 16070400; //time() - (6
 $config['time']['year']       = $config['time']['now'] - 31536000; //time() - (365 * 24 * 60 * 60);
 $config['time']['twoyear']    = $config['time']['now'] - 63072000; //time() - (2 * 365 * 24 * 60 * 60);
 
-# IPMI sensor type mappings
+// IPMI sensor type mappings
 $config['ipmi_unit']['Volts']     = 'voltage';
 $config['ipmi_unit']['degrees C'] = 'temperature';
 $config['ipmi_unit']['RPM']       = 'fanspeed';
