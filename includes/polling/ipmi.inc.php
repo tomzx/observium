@@ -1,6 +1,6 @@
 <?php
 
-global $ipmi_sensors;
+global $debug, $ipmi_sensors;
 
 include_once("includes/discovery/functions.inc.php");
 
@@ -24,7 +24,12 @@ if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
 
   echo('(' . $ipmi_time . 'ms) ');
 
-  parse_ipmitool_sensor($device, $results);
+  $ipmi_sensors = parse_ipmitool_sensor($device, $results);
+}
+
+if ($debug)
+{
+  print_r($valid);
 }
 
 foreach ($config['ipmi_unit'] as $type)
