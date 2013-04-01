@@ -29,8 +29,8 @@ foreach ($ports as $port)
       {
         $width_div = 585;
         $width = 507;
-        $height = 129;
-        $height_div = 200;
+        $height = 149;
+        $height_div = 220;
       } else {
         $width_div=349;
         $width=275;
@@ -40,13 +40,13 @@ foreach ($ports as $port)
     } else {
       if($_SESSION['big_graphs'])
       {
-        $width_div = 593;
-        $width = 512;
+        $width_div = 579;
+        $width = 500;
         $height = 159;
         $height_div = 230;
       } else {
-        $width_div=294;
-        $width=222;
+        $width_div=286;
+        $width=213;
         $height = 100;
         $height_div = 163;
       }
