@@ -35,25 +35,53 @@ if (!$_SESSION['authenticated']) { echo("unauthenticated"); exit; }
 if ($_GET['query'] && $_GET['cmd'])
 {
   $host = $_GET['query'];
-  if (Net_IPv6::checkIPv6($host)||Net_IPv4::validateip($host)||preg_match("/^[a-zA-Z0-9.-]*$/", $host))
+  $ip = '';
+  if (Net_IPv4::validateIP($host))
+  {
+    $ip = $host;
+    $ip_version = 4;
+  }
+  elseif (Net_IPv6::checkIPv6($host))
+  {
+    $ip = $host;
+    $ip_version = 6;
+  }
+  else
+  {
+    $ip = gethostbyname($host);
+    if ($ip && $ip != $host)
+    {
+      $ip_version = 4;
+    } else {
+      $ip = gethostbyname6($host);
+      if ($ip)
+      {
+        $ip_version = 6;
+      }
+    }
+  }
+  if ($ip)
   {
     switch ($_GET['cmd'])
     {
       case 'whois':
-        $cmd = $config['whois'] . " $host | grep -v \%";
+        $cmd = $config['whois'] . " $ip | grep -v \%";
         break;
       case 'ping':
-        $cmd = $config['ping'] . " -c 5 $host";
+        $cmd = ($ip_version == 4) ? $config['fping'] : $config['fping6'];
+        $cmd .= " -c 5 $ip";
         break;
       case 'tracert':
-        $cmd = $config['mtr'] . " -r -c 5 $host";
+      case 'traceroute':
+      case 'mtr':
+        $cmd = $config['mtr'] . " -r -c 5 $ip";
         break;
       case 'nmap':
         if ($_SESSION['userlevel'] != '10')
         {
             echo("insufficient privileges");
         } else {
-            $cmd = $config['nmap'] . " $host";
+            $cmd = $config['nmap'] . " $ip";
         }
         break;
     }
