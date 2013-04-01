@@ -65,6 +65,8 @@ foreach ($plugins as &$plugin)
 
 print_navbar($navbar);
 
+echo('<table class="table table-condensed table-striped table-hover">');
+
    $i=0;
 
     $pinsts = collectd_list_pinsts($device['hostname'], $vars['plugin']);
@@ -81,14 +83,15 @@ print_navbar($navbar);
        $i++;
        if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
 
-       echo('<div style="background-color: '.$row_colour.';">');
-       echo('<div class="graphhead" style="padding:4px 0px 0px 8px;">');
+       echo('<tr><td>');
+       echo('<div style="padding:4px 0px 0px 8px;" class=graphhead>'.$graph_title);
+
        if ($tinst) {
        echo($vars['plugin']." $instance - $type - $tinst");
        } else {
         echo($vars['plugin']." $instance - $type");
        }
-       echo("</div>");
+       echo('</div>');
 
        $graph_array['type']                    = "device_collectd";
        $graph_array['device']                      = $device['device_id'];
@@ -100,12 +103,14 @@ print_navbar($navbar);
 
        include("includes/print-graphrow.inc.php");
 
-       echo("</div>");
+       echo('</tr></td>');
 
       }
      }
 
     }
+
+echo('</table>');
 
 $pagetitle[] = "CollectD";
 ?>
