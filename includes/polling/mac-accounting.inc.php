@@ -113,7 +113,8 @@ if(count($ma_array))
 
     if(!is_array($ma_db_array[$id]))
     {
-      $ma_id = dbInsert(array('port_id' => $port['port_id'], 'device_id' => $device['device_id'], 'vlan_id' => $ma['vlan'], 'mac' => $ma['mac'] ), 'mac_accounting');
+      dbInsert(array('port_id' => $port['port_id'], 'device_id' => $device['device_id'], 'vlan_id' => $ma['vlan'], 'mac' => $ma['mac'] ), 'mac_accounting');
+      $ma_id = dbFetchCell("SELECT * FROM mac_accounting WHERE port_id = ? AND device_id = ? AND vlan_id = ? AND mac = ?", array($port['port_id'], $device['device_id'], $ma['vlan'], $ma['mac']));
       dbInsert(array('ma_id' => $ma_id), 'mac_accounting-state');
       echo("+");
     } else {

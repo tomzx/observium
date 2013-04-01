@@ -2,27 +2,56 @@
 
 $pagetitle[] = "Pseudowires";
 
-if(!isset($vars['view'])) { $vars['view'] = 'detail'; }
-
 $link_array = array('page' => 'pseudowires');
 
-print_optionbar_start();
+$navbar['brand'] = "Pseudowires";
+$navbar['class'] = "navbar-narrow";
 
-echo('<span style="font-weight: bold;">Pseudowires</span> &#187; ');
+$nav_options = array('detail' => 'Details', 'minigraphs' => 'Mini Graphs');
 
-if ($vars['view'] == "detail") { echo('<span class="pagemenu-selected">'); }
-echo(generate_link("Details",$link_array,array('view'=> 'detail')));
-if ($vars['view'] == "detail") { echo('</span>'); }
+foreach ($nav_options as $type => $text)
+{
+  if (!$vars['view']) { $vars['view'] = $type; }
+  if ($vars['view'] == $type) { $navbar['options'][$type]['class'] = "active"; }
 
-echo(" | ");
+  $navbar['options'][$type]['url']  = generate_url(array('page' => 'pseudowires', 'view' => $type));
+  $navbar['options'][$type]['text'] = $text;
+}
+print_navbar($navbar);
 
-if ($vars['view'] == "minigraphs") { echo('<span class="pagemenu-selected">'); }
-echo(generate_link("Mini Graphs",$link_array,array('view' => "minigraphs")));
-if ($vars['view'] == "minigraphs") { echo('</span>'); }
+  if ($vars['view'] == "minigraphs") { $table_class = "table-striped-two";  } else { $table_class = "table-striped"; }
 
-print_optionbar_end();
+  echo('<table class="table table-hover table-condensed table-rounded table-bordered '.$table_class.'">');
+  echo('  <thead>');
 
-echo("<table cellpadding=5 cellspacing=0 class=devicetable width=100%>");
+  echo('<tr>');
+
+  $cols = array(
+              'id' => 'id',
+              'hostname_a' => 'Device',
+              'port_a' => 'Port',
+              'NONE' => NULL,
+              'hostname_b' => 'Device',
+              'port_b' => 'Port');
+
+foreach ($cols as $sort => $col)
+{
+  if ($col == NULL)
+  {
+    echo('<th></th>');
+  }
+  elseif ($vars['sort'] == $sort)
+  {
+    echo('<th>'.$col.' *</th>');
+  } else {
+    echo('<th><a href="'. generate_url($vars, array('sort' => $sort)).'">'.$col.'</a></th>');
+  }
+}
+
+  echo("      </tr>");
+  echo('  </thead>');
+
+/// FIXME - we should walk to database to build an array of pseudowires with all details so we can then use SORT on both A and B end variables.
 
 foreach (dbFetchRows("SELECT * FROM pseudowires AS P, ports AS I, devices AS D WHERE P.port_id = I.port_id AND I.device_id = D.device_id ORDER BY D.hostname,I.ifDescr") as $pw_a)
 {
@@ -44,15 +73,16 @@ foreach (dbFetchRows("SELECT * FROM pseudowires AS P, ports AS I, devices AS D W
   {
     unset($skip);
   } else {
-    if ($bg == "ffffff") { $bg = "e5e5e5"; } else { $bg="ffffff"; }
-    echo("<tr style=\"background-color: #$bg;\"><td rowspan=2 style='font-size:18px; padding:4px;'>".$pw_a['cpwVcID']."</td><td>".generate_device_link($pw_a)."</td><td>".generate_port_link($pw_a)."</td>
-                                                                                          <td rowspan=2> <img src='images/16/arrow_right.png'> </td>
-                                                                                          <td>".generate_device_link($pw_b)."</td><td>".generate_port_link($pw_b)."</td></tr>");
-    echo("<tr style=\"background-color: #$bg;\"><td colspan=2>".$pw_a['ifAlias']."</td><td colspan=2>".$pw_b['ifAlias']."</td></tr>");
+    echo("<tr><td><strong>".$pw_a['cpwVcID']."</strong></td>
+              <td>".generate_device_link($pw_a)."<br /></td>
+              <td>".generate_port_link($pw_a)."<br />".$pw_a['ifAlias']."</td>
+              <td style='vertical-align: middle;'> <img src='images/16/arrow_right.png'></td>
+              <td>".generate_device_link($pw_b)."</td>
+              <td>".generate_port_link($pw_b)."<br />".$pw_b['ifAlias']."</td></tr>");
 
     if ($vars['view'] == "minigraphs")
     {
-      echo("<tr style=\"background-color: #$bg;\"><td></td><td colspan=2>");
+      echo("<tr><td></td><td colspan=2>");
 
       if ($pw_a)
       {
