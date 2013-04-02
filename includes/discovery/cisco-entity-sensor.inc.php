@@ -57,9 +57,14 @@ if ($device['os_group'] == "cisco")
       if ($entitysensor[$entry['entSensorType']] && is_numeric($entry['entSensorValue']) && is_numeric($index))
       {
         $entPhysicalIndex = $index;
+
         if ($entity_array[$index]['entPhysicalName'] || $device['os'] == "iosxr")
         {
-          $descr = rewrite_entity_descr($entity_array[$index]['entPhysicalName']) . " - " . rewrite_entity_descr($entity_array[$index]['entPhysicalDescr']);
+          if($entity_array[$index]['entPhysicalName'] == $entity_array[$index]['entPhysicalDescr']) {
+            $descr = rewrite_entity_descr($entity_array[$index]['entPhysicalName']);
+          } else {
+            $descr = rewrite_entity_descr($entity_array[$index]['entPhysicalName']) . " - " . rewrite_entity_descr($entity_array[$index]['entPhysicalDescr']);
+          }
         } else {
           $descr = $entity_array[$index]['entPhysicalDescr'];
           $descr = rewrite_entity_descr($descr);
@@ -73,7 +78,6 @@ if ($device['os_group'] == "cisco")
           {
             $measured_descr = $entity_array[$entry['entSensorMeasuredEntity']]['entPhysicalDescr'];
           }
-
           $descr = $measured_descr . " - " . $descr;
         }
 
