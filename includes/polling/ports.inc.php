@@ -178,13 +178,18 @@ foreach ($ports as $port)
     $port['state']['poll_time'] = $polled;
     $port['state']['poll_period'] = $polled_period;
 
-    // Copy ifHC[In|Out]Octets values to non-HC if they exist
+    // Copy ifHC[In|Out] values to non-HC if they exist
     // Check if they're greater than zero to work around stupid devices which expose HC counters, but don't populate them. HERPDERP. - adama
-    if ($this_port['ifHCInOctets'] > 0 && is_numeric($this_port['ifHCInOctets']) && $this_port['ifHCOutOctets'] > 0 && is_numeric($this_port['ifHCOutOctets']))
+    foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
     {
-      echo("HC ");
-      $this_port['ifInOctets']  = $this_port['ifHCInOctets'];
-      $this_port['ifOutOctets'] = $this_port['ifHCOutOctets'];
+      $hcin = 'ifHCIn'.$hc;
+      $hcout = 'ifHCOut'.$hc;
+      if (is_numeric($this_port[$hcin]) && $this_port[$hcin] > 0 && is_numeric($this_port[$hcout]) && $this_port[$hcout] > 0)
+      {
+        echo("HC $hc, ");
+        $this_port['ifIn'.$hc]  = $this_port[$hcin];
+        $this_port['ifOut'.$hc] = $this_port[$hcout];
+      }
     }
 
     // rewrite the ifPhysAddress
@@ -194,26 +199,17 @@ foreach ($ports as $port)
       $this_port['ifPhysAddress'] = zeropad($a_a).zeropad($a_b).zeropad($a_c).zeropad($a_d).zeropad($a_e).zeropad($a_f);
     }
 
-    if (is_numeric($this_port['ifHCInBroadcastPkts']) && is_numeric($this_port['ifHCOutBroadcastPkts']) && is_numeric($this_port['ifHCInMulticastPkts']) && is_numeric($this_port['ifHCOutMulticastPkts']))
-    {
-      echo("HC ");
-      $this_port['ifInBroadcastPkts'] = $this_port['ifHCInBroadcastPkts'];
-      $this_port['ifOutBroadcastPkts'] = $this_port['ifHCOutBroadcastPkts'];
-      $this_port['ifInMulticastPkts'] = $this_port['ifHCInMulticastPkts'];
-      $this_port['ifOutMulticastPkts'] = $this_port['ifHCOutMulticastPkts'];
-    }
-
     // Overwrite ifSpeed with ifHighSpeed if it's over 10G
     if (is_numeric($this_port['ifHighSpeed']) && $this_port['ifSpeed'] > "1000000000")
     {
-      echo("HighSpeed ");
+      echo("HighSpeed, ");
       $this_port['ifSpeed'] = $this_port['ifHighSpeed'] * 1000000;
     }
 
     // Overwrite ifDuplex with dot3StatsDuplexStatus if it exists
     if (isset($this_port['dot3StatsDuplexStatus']))
     {
-      echo("dot3Duplex ");
+      echo("dot3Duplex, ");
       $this_port['ifDuplex'] = $this_port['dot3StatsDuplexStatus'];
     }
 
@@ -370,9 +366,10 @@ foreach ($ports as $port)
       DS:OUTMULTICASTPKTS:DERIVE:600:0:12500000000 ".$config['rrd_rra']);
     }
 
-    $this_port['rrd_update']  = array($this_port['ifInOctets'], $this_port['ifOutOctets'], $this_port['ifInErrors'], $this_port['ifOutErrors'], $this_port['ifInUcastPkts'], $this_port['ifOutUcastPkts'],
-                            $this_port['ifInNUcastPkts'], $this_port['ifOutNUcastPkts'], $this_port['ifInDiscards'], $this_port['ifOutDiscards'], $this_port['ifInUnknownProtos'],
-                            $this_port['ifInBroadcastPkts'], $this_port['ifOutBroadcastPkts'], $this_port['ifInMulticastPkts'], $this_port['ifOutMulticastPkts']);
+    $this_port['rrd_update']  = array($this_port['ifInOctets'], $this_port['ifOutOctets'], $this_port['ifInErrors'], $this_port['ifOutErrors'],
+                                      $this_port['ifInUcastPkts'], $this_port['ifOutUcastPkts'], $this_port['ifInNUcastPkts'], $this_port['ifOutNUcastPkts'],
+                                      $this_port['ifInDiscards'], $this_port['ifOutDiscards'], $this_port['ifInUnknownProtos'],
+                                      $this_port['ifInBroadcastPkts'], $this_port['ifOutBroadcastPkts'], $this_port['ifInMulticastPkts'], $this_port['ifOutMulticastPkts']);
 
     rrdtool_update("$rrdfile", $this_port['rrd_update']);
     // End Update IF-MIB
@@ -392,6 +389,7 @@ foreach ($ports as $port)
     }
     // End Update PAgP
 
+    /// FIXME. Is that true include for EACH port? -- mike
     // Do EtherLike-MIB
     if ($config['enable_ports_etherlike']) { include("port-etherlike.inc.php"); }
 

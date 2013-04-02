@@ -12,7 +12,7 @@ $colour_area_in_max = "cc88cc";
 $colour_area_out_max = "FFefaa";
 
 $graph_max = 1;
-$unit_text = "Packets";
+$unit_text = "Packets/s";
 
   $args['nototal'] = 1; $print_total = 0; $nototal = 1;
 
