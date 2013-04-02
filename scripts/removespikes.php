@@ -1,5 +1,5 @@
-#!/usr/bin/php -q
 <?php
+#!/usr/bin/php -q
 /*
  ex: set tabstop=4 shiftwidth=4 autoindent:
  +-------------------------------------------------------------------------+
@@ -39,16 +39,23 @@ if (strpos($dir, 'spikekill') !== false) {
 	chdir('../../');
 }
 
-$using_cacti = false;
+/* Start Initialization Section */
+if (file_exists("./include/global.php")) {
+	include_once("./include/global.php");
+	$using_cacti = true;
+}else{
+	$using_cacti = false;
+}
 
 /* setup defaults */
 $debug     = FALSE;
 $dryrun    = FALSE;
 $avgnan    = 'avg';
 $rrdfile   = "";
-$std_kills = TRUE;
-$var_kills = TRUE;
+$std_kills = FALSE;
+$var_kills = FALSE;
 $html      = FALSE;
+$backup    = FALSE;
 
 if ($using_cacti) {
 	$method   = read_config_option("spikekill_method");
@@ -81,7 +88,7 @@ foreach($parms as $parameter) {
 		}else{
 			echo "FATAL: You must specify either 'stddev' or 'variance' as methods.\n\n";
 			display_help();
-			exit;
+			exit(-11);
 		}
 
 		break;
@@ -94,7 +101,7 @@ foreach($parms as $parameter) {
 		}else{
 			echo "FATAL: You must specify either 'avg' or 'nan' as replacement methods.\n\n";
 			display_help();
-			exit;
+			exit(-10);
 		}
 
 		break;
@@ -104,12 +111,12 @@ foreach($parms as $parameter) {
 
 		if (!file_exists($rrdfile)) {
 			echo "FATAL: File '$rrdfile' does not exist.\n";
-			exit;
+			exit(-9);
 		}
 
 		if (!is_writable($rrdfile)) {
 			echo "FATAL: File '$rrdfile' is not writable by this account.\n";
-			exit;
+			exit(-8);
 		}
 
 		break;
@@ -120,7 +127,7 @@ foreach($parms as $parameter) {
 		if (!is_numeric($stddev) || ($stddev < 1)) {
 			echo "FATAL: Standard Deviation must be a positive integer.\n\n";
 			display_help();
-			exit;
+			exit(-7);
 		}
 
 		break;
@@ -131,7 +138,7 @@ foreach($parms as $parameter) {
 		if (!is_numeric($outliers) || ($outliers < 1)) {
 			echo "FATAL: The number of outliers to exlude must be a positive integer.\n\n";
 			display_help();
-			exit;
+			exit(-6);
 		}
 
 		break;
@@ -142,12 +149,16 @@ foreach($parms as $parameter) {
 		if (!is_numeric($percent) || ($percent <= 0)) {
 			echo "FATAL: Percent deviation must be a positive floating point number.\n\n";
 			display_help();
-			exit;
+			exit(-5);
 		}
 
 		break;
 	case "--html":
 		$html = TRUE;
+
+		break;
+	case "--backup":
+		$backup = TRUE;
 
 		break;
 	case "-d":
@@ -167,7 +178,7 @@ foreach($parms as $parameter) {
 		if (!is_numeric($numspike) || ($numspike < 1)) {
 			echo "FATAL: Number of spikes to remove must be a positive integer\n\n";
 			display_help();
-			exit;
+			exit(-4);
 		}
 
 		break;
@@ -177,11 +188,11 @@ foreach($parms as $parameter) {
 	case "--version":
 	case "--help":
 		display_help();
-		exit;
+		exit(0);
 	default:
 		print "ERROR: Invalid Parameter " . $parameter . "\n\n";
 		display_help();
-		exit;
+		exit(-3);
 	}
 }
 
@@ -189,17 +200,44 @@ foreach($parms as $parameter) {
 if ($rrdfile == "") {
 	echo "FATAL: You must specify an RRDfile!\n\n";
 	display_help();
-	exit;
+	exit(-2);
+}
+
+/* let's see if we can find rrdtool */
+if (!$using_cacti) {
+	if (substr_count(PHP_OS, "WIN")) {
+		$response = shell_exec("rrdtool.exe");
+	}else{
+		$response = shell_exec("rrdtool");
+	}
+
+	if (strlen($response)) {
+		$response_array = explode(" ", $response);
+		echo "NOTE: Using " . $response_array[0] . " Version " . $response_array[1] . "\n";
+	}else{
+		echo "FATAL: RRDTool not found in path.  Please insure RRDTool can be found in your path!\n";
+		exit(-1);
+	}
 }
 
 /* determine the temporary file name */
 $seed = mt_rand();
-if ($config["cacti_server_os"] == "win32") {
-	$tempdir  = getenv("TEMP");
+if ($using_cacti) {
+	if ($config["cacti_server_os"] == "win32") {
+		$tempdir  = getenv("TEMP");
+		$xmlfile = $tempdir . "/" . str_replace(".rrd", "", basename($rrdfile)) . ".dump." . $seed;
+		$bakfile = $tempdir . "/" . str_replace(".rrd", "", basename($rrdfile)) . ".backup." . $seed . ".rrd";
+	}else{
+		$tempdir = "/tmp";
+		$xmlfile = "/tmp/" . str_replace(".rrd", "", basename($rrdfile)) . ".dump." . $seed;
+		$bakfile = "/tmp/" . str_replace(".rrd", "", basename($rrdfile)) . ".backup." . $seed . ".rrd";
+	}
+}elseif (substr_count(PHP_OS, "WIN")) {	$tempdir  = getenv("TEMP");
 	$xmlfile = $tempdir . "/" . str_replace(".rrd", "", basename($rrdfile)) . ".dump." . $seed;
-}else{
-	$tempdir = "/tmp";
+	$bakfile = $tempdir . "/" . str_replace(".rrd", "", basename($rrdfile)) . ".backup." . $seed . ".rrd";
+}else{	$tempdir = "/tmp";
 	$xmlfile = "/tmp/" . str_replace(".rrd", "", basename($rrdfile)) . ".dump." . $seed;
+	$bakfile = "/tmp/" . str_replace(".rrd", "", basename($rrdfile)) . ".backup." . $seed . ".rrd";
 }
 
 if ($html) {
@@ -229,9 +267,19 @@ if (file_exists($xmlfile)) {
 	if ($using_cacti) {
 		echo ($html ? "<tr><td colspan='20' class='spikekill_note'>":"") . "FATAL: RRDtool Command Failed.  Please verify that the RRDtool path is valid in Settings->Paths!" . ($html ? "</td></tr>\n":"\n");
 	}else{
-		echo ($html ? "<tr><td colspan='20' class='spikekill_note'>":"") . "FATAL: RRDtool Command Failed.  Please insure RRDtool is in your path!" . ($html ? "</td></tr>\n":"\n");
+		echo ($html ? "<tr><td colspan='20' class='spikekill_note'>":"") . "FATAL: RRDtool Command Failed.  Please insure your RRDtool install is valid!" . ($html ? "</td></tr>\n":"\n");
 	}
-	exit;
+	exit(-12);
+}
+
+/* backup the rrdfile if requested */
+if ($backup && !$dryrun) {
+	if (copy($rrdfile, $bakfile)) {
+		echo ($html ? "<tr><td colspan='20' class='spikekill_note'>":"") . "NOTE: RRDfile '$rrdfile' backed up to '$bakfile'" . ($html ? "</td></tr>\n":"\n");
+	}else{
+		echo ($html ? "<tr><td colspan='20' class='spikekill_note'>":"") . "FATAL: RRDfile Backup of '$rrdfile' to '$bakfile' FAILED!" . ($html ? "</td></tr>\n":"\n");
+		exit(-13);
+	}
 }
 
 /* process the xml file and remove all comments */
@@ -812,13 +860,14 @@ function display_help () {
 	if ($using_cacti) {
 		$version = spikekill_version();
 	}else{
-		$version = "v1.0";
+		$version = "v1.1";
 	}
 
 	echo "Cacti Spike Remover " . ($using_cacti ? "v" . $version["version"] : $version) . ", Copyright 2009, The Cacti Group, Inc.\n\n";
 	echo "Usage:\n";
 	echo "removespikes.php -R|--rrdfile=rrdfile [-M|--method=stddev] [-A|--avgnan] [-S|--stddev=N]\n";
-	echo "                 [-P|--percent=N] [-N|--number=N] [-D|--dryrun] [-d|--debug] [-h|--help|-v|-V|--version]\n\n";
+	echo "                 [-P|--percent=N] [-N|--number=N] [-D|--dryrun] [-d|--debug]\n";
+	echo "                 [--html] [-h|--help|-v|-V|--version]\n\n";
 
 	echo "The RRDfile input parameter is mandatory.  If no other input parameters are specified the defaults\n";
 	echo "are taken from the Spikekill Plugin settings.\n\n";
@@ -829,9 +878,11 @@ function display_help () {
 	echo "-P|--percent     - The sample to sample percentage variation allowed\n";
 	echo "-N|--number      - The maximum number of spikes to remove from the RRDfile\n";
 	echo "-D|--dryrun      - If specified, the RRDfile will not be changed.  Instead a summary of\n";
-	echo "                   changes that would have been performed will be issued.\n\n";
+	echo "                   changes that would have been performed will be issued.\n";
+	echo "--backup         - Backup the original RRDfile to preserve prior values.\n\n";
 
 	echo "The remainder of arguments are informational\n";
+	echo "--html           - Format the output for a web browser\n";
 	echo "-d|--debug       - Display verbose output during execution\n";
 	echo "-v -V --version  - Display this help message\n";
 	echo "-h --help        - display this help message\n";
