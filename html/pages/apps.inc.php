@@ -14,6 +14,7 @@ $graphs['nginx']             = array('connections', 'req');
 $graphs['unbound']           = array('queries', 'queue', 'memory', 'qtype');
 $graphs['freeradius']        = array('access');
 $graphs['powerdns-recursor'] = array('queries', 'timeouts', 'cache', 'latency');
+$graphs['exim-mailqueue']    = array('total');
 
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
