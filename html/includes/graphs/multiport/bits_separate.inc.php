@@ -23,7 +23,8 @@ $colours_in='greens';
 $multiplier = "8";
 $colours_out = 'blues';
 
-$nototal = 1;
+#$nototal = 1;
+
 $ds_in  = "INOCTETS";
 $ds_out = "OUTOCTETS";
 

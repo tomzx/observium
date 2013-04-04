@@ -1,5 +1,32 @@
 <?php
 
+  echo(generate_link($descr,$link_array,array('view'=>'macaccounting')));
+  $graphs = array('bits' => 'Bits', 'pkts' => 'Packets');
+
+  $navbar = array();
+
+  $navbar['class'] = "navbar-narrow";
+  $navbar['brand'] = 'Mac Accounting';
+
+  $subviews = array('details', 'graphs', 'minigraphs', 'top10');
+  foreach($subviews as $type)
+  {
+   $navbar['options'][$type]['text'] = nicecase($type);
+   $navbar['options'][$type]['url']  = generate_url($vars,array('subview'=>$type));
+    if($vars['subview'] == $type) {$navbar['options'][$type]['class'] = "active"; }
+  }
+
+  foreach($graphs as $type => $text)
+  {
+   $navbar['options_right'][$type]['text'] = $text;
+   $navbar['options_right'][$type]['url']  = generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'graphs', 'graph'=>$type));
+    if($vars['graph'] == $type) {$navbar['options_right'][$type]['class'] = "active"; }
+  }
+
+print_navbar($navbar);
+
+
+
 // FIXME - REWRITE!
 
 $hostname = $device['hostname'];
@@ -25,98 +52,16 @@ echo("<div style='clear: both;'>");
 if ($vars['subview'] == "top10")
 {
 
-  if (!isset($vars['sort'])) { $vars['sort'] = "in"; }
-  if (!isset($vars['period'])) { $vars['period'] = "day"; }
-  $from = "-" . $vars['period'];
-  $from = $config['time'][$vars['period']];
+  include("macaccounting_top10.inc.php");
 
-  echo("<div style='margin: 0px 0px 0px 0px'>
-         <div style=' margin:0px; float: left;';>
-           <div style='margin: 0px 10px 5px 0px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Day</span><br />
-
-           <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => $vars['sort'], 'period' => 'day'))."'>
-
-             <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id'].
-                    "&amp;stat=".$vars['graph']."&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-           </a>
-           </div>
-           <div style='margin: 0px 10px 5px 0px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Two Day</span><br />
-           <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => $vars['sort'], 'period' => 'twoday'))."/'>
-             <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id'].
-                    "&amp;stat=".$vars['graph']."&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;from=".$config['time']['twoday']."&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-           </a>
-           </div>
-           <div style='margin: 0px 10px 5px 0px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Week</span><br />
-            <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => $vars['sort'], 'period' => 'week'))."/'>
-            <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id']."&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;stat=".$vars['graph']."&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-            </a>
-            </div>
-            <div style='margin: 0px 10px 5px 0px; padding:5px; background: #e5e5e5;'>
-            <span class=device-head>Month</span><br />
-            <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => $vars['sort'], 'period' => 'month'))."/'>
-            <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id']."&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;stat=".$vars['graph']."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-            </a>
-            </div>
-            <div style='margin: 0px 10px 5px 0px; padding:5px; background: #e5e5e5;'>
-            <span class=device-head>Year</span><br />
-            <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => $vars['sort'], 'period' => 'year'))."/'>
-            <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id']."&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;stat=".$vars['graph']."&amp;from=".$config['time']['year']."&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-            </a>
-            </div>
-       </div>
-       <div style='float: left;'>
-         <img src='graph.php?id=".$port['port_id']."&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;stat=".$vars['graph']."&amp;from=$from&amp;to=".$config['time']['now']."&amp;width=745&amp;height=300' />
-       </div>
-       <div style=' margin:0px; float: left;';>
-            <div style='margin: 0px 0px 5px 10px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Traffic</span><br />
-           <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>'bits', sort => $vars['sort'], 'period' => $vars['period']))."'>
-             <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id']."&amp;stat=bits&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;from=$from&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-           </a>
-           </div>
-           <div style='margin: 0px 0px 5px 10px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Packets</span><br />
-           <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>'pkts', sort => $vars['sort'], 'period' => $vars['period']))."/'>
-             <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id']."&amp;stat=pkts&amp;type=port_mac_acc_total&amp;sort=".$vars['sort']."&amp;from=$from&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-           </a>
-           </div>
-           <div style='margin: 0px 0px 5px 10px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Top Input</span><br />
-           <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => 'in', 'period' => $vars['period']))."'>
-             <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id'].
-                    "&amp;stat=".$vars['graph']."&amp;type=port_mac_acc_total&amp;sort=in&amp;from=$from&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-           </a>
-           </div>
-           <div style='margin: 0px 0px 5px 10px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Top Output</span><br />
-           <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => 'out', 'period' => $vars['period']))."'>
-             <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id'].
-                    "&amp;stat=".$vars['graph']."&amp;type=port_mac_acc_total&amp;sort=out&amp;from=$from&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-           </a>
-           </div>
-           <div style='margin: 0px 0px 5px 10px; padding:5px; background: #e5e5e5;'>
-           <span class=device-head>Top Aggregate</span><br />
-           <a href='".generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'top10', 'graph'=>$vars['graph'], sort => 'both', 'period' => $vars['period']))."'>
-             <img style='border: #5e5e5e 2px;' valign=middle src='graph.php?id=".$port['port_id'].
-                    "&amp;stat=".$vars['graph']."&amp;type=port_mac_acc_total&amp;sort=both&amp;from=$from&amp;to=".$config['time']['now']."&amp;width=150&amp;height=50' />
-           </a>
-           </div>
-       </div>
-     </div>
-");
-  unset($query);
-  }
-  else
-  {
+}
+else
+{
 
   $query = "SELECT *, `mac_accounting`.`ma_id` as `ma_id` FROM `mac_accounting` LEFT JOIN `mac_accounting-state` ON  `mac_accounting`.`ma_id` =  `mac_accounting-state`.`ma_id` WHERE port_id = ?";
-
-#  $query = "SELECT *, (M.bytes_input_rate + M.bytes_output_rate) as bps FROM `mac_accounting` AS M,
-#                       `ports` AS I, `devices` AS D WHERE M.port_id = ? AND I.port_id = M.port_id AND I.device_id = D.device_id ORDER BY bps DESC";
   $param = array($port['port_id']);
+
+ if($vars['subview'] != minigraphs) {
 
   if($vars['subview'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
 
@@ -124,7 +69,6 @@ if ($vars['subview'] == "top10")
   echo('  <thead>');
 
   echo('<tr>');
-
   $cols = array(
               'BLANK' => NULL,
               'mac' => 'MAC Address',
@@ -154,6 +98,7 @@ foreach ($cols as $sort => $col)
   echo("      </tr>");
   echo('  </thead>');
 
+  }
 
 
   $ma_array = dbFetchRows($query, $param);
@@ -203,12 +148,8 @@ foreach ($cols as $sort => $col)
       unset ($as); unset ($astext); unset($asn);
     }
 
-    if ($vars['graph'])
-    {
-      $graph_type = "macaccounting_" . $vars['graph'];
-    } else {
-      $graph_type = "macaccounting_bits";
-    }
+    if ($vars['graph']) { $vars['graph'] == "bits"; }
+    $graph_type = "macaccounting_" . $vars['graph'];
 
     if ($vars['subview'] == "minigraphs")
     {
@@ -243,17 +184,17 @@ foreach ($cols as $sort => $col)
 
      $peer_info['astext'];
 
-     $graph_array['type']   = $graph_type;
-     $graph_array['id']     = $acc['ma_id'];
-     $graph_array['height'] = "100";
-     $graph_array['to']     = $config['time']['now'];
-     echo('<tr><td colspan="8">');
-
-     include("includes/print-graphrow.inc.php");
-
-     echo("</td></tr>");
-
-     $i++;
+     if($vars['subview'] == "graphs")
+     {
+       $graph_array['type']   = $graph_type;
+       $graph_array['id']     = $acc['ma_id'];
+       $graph_array['height'] = "100";
+       $graph_array['to']     = $config['time']['now'];
+       echo('<tr><td colspan="8">');
+       include("includes/print-graphrow.inc.php");
+       echo("</td></tr>");
+       $i++;
+      }
     }
   }
   echo("</table>");

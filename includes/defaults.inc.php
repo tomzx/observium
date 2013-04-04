@@ -199,12 +199,14 @@ $warn_colour_b = "#ffcccc";
 #$config['graph_colours']['blues']   = array("b5d7ff","6eb7ff","0064ff","0082ff","0019d5","0016cb","00007d"); // Cold Blues
 
 $config['graph_colours']['mixed']   = array('CC0000','008C00','4096EE','73880A','F03F5C','36393D','FF0084');
-$config['graph_colours']['oranges'] = array('E43C00','E74B00','EB5B00','EF6A00','F37900','F78800','FB9700','FFA700');
-$config['graph_colours']['greens']  = array('B6D14B','91B13C','6D912D','48721E','24520F','003300');
+$config['graph_colours']['oranges'] = array('FFC344', 'FCB53D', 'F9A836', 'F69A2F', 'F48D28', 'F17F22', 'EE721B', 'EC6414', 'E9570D', 'E64906', 'E43C00');
+#array('FFA700', 'FC9C00', 'F99100', 'F68600', 'F47C00', 'F17100', 'EE6600', 'EC5C00', 'E95100', 'E64600', 'E43C00');
+$config['graph_colours']['greens']  = array('B6D14B', 'A4C445', '92B73F', '80AA39', '6E9D33', '5C902E', '4A8328', '387622', '26691C', '145C16', '034F11');
+
 $config['graph_colours']['reds']    = array("220000","440000","660000","880000","AA0000","CC0000"); // Red
 $config['graph_colours']['pinks']   = array('D0558F','B34773','943A57','792C38','5C1F1E','401F10');
-$config['graph_colours']['blues']   = array('A0A0E5','8080BD','606096','40406F','202048','000033');
-$config['graph_colours']['purples'] = array('CC7CCC','AF63AF','934A93','773177','5B185B','3F003F');
+$config['graph_colours']['blues']   = array('A0A0E5', '9090D3', '8080C1', '7070AF', '60609D', '50508C', '40407A', '303068', '1F1F56', '0F0F44', '000033');
+$config['graph_colours']['purples'] = array('CC7CCC', 'BD6FBD', 'AF63AF', 'A156A1', '934A93', '853E85', '773177', '692569', '5B185B', '4D0C4D', '3F003F');
 $config['graph_colours']['default'] = $config['graph_colours']['blues'];
 $config['graph_colours']['juniperive']   = array('F7C729','52A6EF');
 

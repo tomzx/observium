@@ -49,6 +49,12 @@ foreach ($rrd_list as $rrd)
   $rrd_options .= " CDEF:outB".$i."_neg=outB".$i.",-1,*";
   $rrd_options .= " CDEF:octets".$i."=inB".$i.",outB".$i.",+";
 
+  $in_thing .= $seperator . $in.$i . ",UN,0," . $in.$i . ",IF";
+  $out_thing .= $seperator . $out.$i . ",UN,0," . $out.$i . ",IF";
+  $pluses .= $plus;
+  $seperator = ",";
+  $plus = ",+";
+
   if (!$args['nototal'])
   {
     $rrd_options .= " VDEF:totin".$i."=inB".$i.",TOTAL";
@@ -61,21 +67,47 @@ foreach ($rrd_list as $rrd)
   $rrd_options .= " AREA:inB".$i."#" . $colour_in . ":'" . $descr . "':$stack";
   $rrd_options .= " GPRINT:inB".$i.":LAST:%6.2lf%s$units";
   $rrd_options .= " GPRINT:inB".$i.":AVERAGE:%6.2lf%s$units";
-  $rrd_options .= " GPRINT:inB".$i.":MAX:%6.2lf%s$units\l";
+  $rrd_options .= " GPRINT:inB".$i.":MAX:%6.2lf%s$units";
 
-  if (!$nototal) { $rrd_options .= " GPRINT:totin".$i.":%6.2lf%s$total_units"; }
+  if (!$nototal && $width > "500") { $rrd_options .= " GPRINT:totin".$i.":%6.2lf%s$total_units"; }
+
+  $rrd_options .= " 'COMMENT:\\n'";
 
   $rrd_options  .= " 'HRULE:0#" . $colour_out.":".$descr_out."'";
   $rrd_optionsb .= " 'AREA:outB".$i."_neg#" . $colour_out . "::$stack'";
   $rrd_options  .= " GPRINT:outB".$i.":LAST:%6.2lf%s$units";
   $rrd_options  .= " GPRINT:outB".$i.":AVERAGE:%6.2lf%s$units";
-  $rrd_options  .= " GPRINT:outB".$i.":MAX:%6.2lf%s$units\l";
+  $rrd_options  .= " GPRINT:outB".$i.":MAX:%6.2lf%s$units";
 
-  if (!$nototal) { $rrd_options .= " GPRINT:totout".$i.":%6.2lf%s$total_unit"; }
+  if (!$nototal && $width > "500") { $rrd_options .= " GPRINT:totout".$i.":%6.2lf%s$total_units"; }
+  $rrd_options .= " 'COMMENT:\\n'";
 
-  $rrd_options .= " 'COMMENT:\l'";
+
   $i++; $iter++;
 }
+
+  $rrd_options .= " CDEF:".$in."octets=" . $in_thing . $pluses;
+  $rrd_options .= " CDEF:".$out."octets=" . $out_thing . $pluses;
+  $rrd_options .= " CDEF:doutoctets=outoctets,-1,*";
+  $rrd_options .= " CDEF:inbits=inoctets,8,*";
+  $rrd_options .= " CDEF:outbits=outoctets,8,*";
+  $rrd_options .= " CDEF:doutbits=doutoctets,8,*";
+  $rrd_options .= " VDEF:95thin=inbits,95,PERCENT";
+  $rrd_options .= " VDEF:95thout=outbits,95,PERCENT";
+  $rrd_options .= " VDEF:d95thout=doutbits,5,PERCENT";
+
+  $rrd_options .= " LINE1.25:inbits#005500:'Total In '";
+  $rrd_options .= " GPRINT:inbits:LAST:%6.2lf%s";
+  $rrd_options .= " GPRINT:inbits:AVERAGE:%6.2lf%s";
+  $rrd_options .= " GPRINT:inbits:MAX:%6.2lf%s";
+  $rrd_options .= " GPRINT:95thin:%6.2lf%s\\\\n";
+
+  $rrd_options .= " LINE1.25:doutbits#000055:'".str_pad("Total Out", $descr_len+5)."'";
+  $rrd_options .= " GPRINT:outbits:LAST:%6.2lf%s";
+  $rrd_options .= " GPRINT:outbits:AVERAGE:%6.2lf%s";
+  $rrd_options .= " GPRINT:outbits:MAX:%6.2lf%s";
+  $rrd_options .= " GPRINT:95thout:%6.2lf%s\\\\n";
+
 
 if ($custom_graph) { $rrd_options .= $custom_graph; }
 

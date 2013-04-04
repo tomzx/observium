@@ -331,6 +331,15 @@ legend {
     box-shadow: none;
 }
 
+.well-small {
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
 .well-shaded {
   background-color: #fafafa;
   background-image: -moz-linear-gradient(top, #ffffff, #f0f0f0);
