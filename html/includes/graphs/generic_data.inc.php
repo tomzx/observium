@@ -108,17 +108,17 @@ if($format == "octets" || $format == "bytes")
   $format = "bits";
 }
 
-$rrd_options .= " AREA:in".$format."_max#aDEB7B:";
-$rrd_options .= " AREA:in".$format."#91B13C:'In '";
-#$rrd_options .= " LINE1.25:in".$format."#006600:'In '";
+$rrd_options .= " AREA:in".$format."_max#B6D14B:";
+$rrd_options .= " AREA:in".$format."#92B73F:'In '";
+$rrd_options .= " LINE1.25:in".$format."#4A8328:'In '";
 $rrd_options .= " GPRINT:in".$format.":LAST:%6.2lf%s";
 $rrd_options .= " GPRINT:in".$format.":AVERAGE:%6.2lf%s";
 $rrd_options .= " GPRINT:in".$format."_max:MAX:%6.2lf%s";
 $rrd_options .= " GPRINT:95thin:%6.2lf%s\\\\n";
 
-$rrd_options .= " AREA:dout".$format."_max#a3b9FF:";
-$rrd_options .= " AREA:dout".$format."#8080BD:'Out'";
-#$rrd_options .= " LINE1.25:dout".$format."#000099:Out";
+$rrd_options .= " AREA:dout".$format."_max#A0A0E5:";
+$rrd_options .= " AREA:dout".$format."#7075B8:'Out'";
+$rrd_options .= " LINE1.25:dout".$format."#323B7C:Out";
 $rrd_options .= " GPRINT:out".$format.":LAST:%6.2lf%s";
 $rrd_options .= " GPRINT:out".$format.":AVERAGE:%6.2lf%s";
 $rrd_options .= " GPRINT:out".$format."_max:MAX:%6.2lf%s";

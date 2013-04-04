@@ -167,11 +167,11 @@ function show_map($config)
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span6 \">");
 		echo("        <h3 class=\"bill\">Overall Transit Traffic Today</h3>");
-		echo("        <a href=\"".$links['transit']."\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
+		echo("        <a href=\"".$links['transit']."\"><img src=\"graph.php?type=multiport_bits_separate&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("    <div class=\"span6 \">");
 		echo("        <h3 class=\"bill\">Overall Peering Traffic Today</h3>");
-		echo("        <a href=\"".$links['peering']."\"><img src=\"graph.php?type=multiport_bits&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
+		echo("        <a href=\"".$links['peering']."\"><img src=\"graph.php?type=multiport_bits_separate&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("</div>");
 		echo("<div class=\"row-fluid\">");
