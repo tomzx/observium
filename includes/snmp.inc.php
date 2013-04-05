@@ -252,7 +252,7 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
   {
     return false;
   }
-  elseif (!empty($data)) { return $data; }
+  elseif (!empty($data) || is_numeric($data)) { return $data; }
   else { return false; }
 }
 
