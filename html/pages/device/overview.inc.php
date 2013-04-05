@@ -17,7 +17,6 @@ if ($ports['down']) { $ports_colour = $warn_colour_a; } else { $ports_colour = $
 ?>
 
 <div class="row-fluid">
-
 <div class="span6">
 
 <?php include("overview/information.inc.php"); ?>
@@ -33,7 +32,7 @@ if ($services['total'])
     <div id="title"><i class="fugue-network-ethernet"></i> Services</div>
     <div id="content">
 
-<?
+<?php
 
   echo("
 <table class='table table-condensed table-striped'>

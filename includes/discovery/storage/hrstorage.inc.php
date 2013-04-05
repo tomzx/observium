@@ -69,7 +69,7 @@ if (is_array($hrstorage_array))
       }
       $percent = round($used / $size * 100);
     }
-    
+
     if (!$deny && is_numeric($index))
     {
       discover_storage($valid_storage, $device, $index, $fstype, "hrstorage", $descr, $size , $units, $used, $free, $percent);
