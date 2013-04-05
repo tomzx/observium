@@ -59,8 +59,15 @@ if ($device['os_group'] == "cisco")
 {
   echo("Cisco ");
 
-  $datas = snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedBytes", "-OUqsX", "CISCO-IP-STAT-MIB");
-  $datas .= "\n".snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedPkts", "-OUqsX", "CISCO-IP-STAT-MIB");
+  $datas = snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacHCSwitchedBytes", "-OUqsX", "CISCO-IP-STAT-MIB");
+  $datas .= "\n".snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacHCSwitchedPkts", "-OUqsX", "CISCO-IP-STAT-MIB");
+
+  // No 64-bit counters? Try 32-bit. How necessary is this? How lacking is 64-bit support?
+  if(strlen($datas) == 0)
+  {
+    $datas = snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedBytes", "-OUqsX", "CISCO-IP-STAT-MIB");
+    $datas .= "\n".snmp_walk($device, "CISCO-IP-STAT-MIB::cipMacSwitchedPkts", "-OUqsX", "CISCO-IP-STAT-MIB");
+  }
 
   foreach (explode("\n", $datas) as $data) {
     list($oid,$ifIndex,$dir,$mac,$value) = parse_oid2($data);
@@ -71,7 +78,7 @@ if ($device['os_group'] == "cisco")
     // Cisco isn't per-VLAN.
     $vlan = "0";
 
-    $oid = str_replace(array("cipMacSwitchedBytes", "cipMacSwitchedPkts"), array("bytes", "pkts"), $oid);
+    $oid = str_replace(array("cipMacSwitchedBytes", "cipMacSwitchedPkts", "cipMacHCSwitchedBytes", "cipMacHCSwitchedPkts"), array("bytes", "pkts", "bytes", "pkts"), $oid);
     $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['ifIndex'] = $ifIndex;
     $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['vlan'] = $vlan;
     $ma_array[$ifIndex.'-'.$vlan.'-'.$mac]['mac'] = $mac;
