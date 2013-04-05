@@ -10,7 +10,7 @@
 
 if (!is_array($mempool_cache['hpLocal']))
 {
-  $mempool_cache['hpLocal'] = snmpwalk_cache_oid($device, "hpLocal", NULL, "NETSWITCH-MIB", $config['mibdir'].":".$config['mibdir']."/hp");
+  $mempool_cache['hpLocal'] = snmpwalk_cache_oid($device, "hpLocal", NULL, "NETSWITCH-MIB", mib_dirs('hp'));
   if ($debug) { print_r($mempool_cache); }
 }
 else

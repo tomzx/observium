@@ -11,11 +11,11 @@
 if ($device['os'] == "junos" || $device['os_group'] == "junose")
 {
   echo("JUNIPER-DOM-MIB ");
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperature", array(), "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureHighAlarmThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureLowAlarmThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureHighWarningThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureLowWarningThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperature", array(), "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureHighAlarmThreshold", $oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureLowAlarmThreshold", $oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureHighWarningThreshold", $oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentModuleTemperatureLowWarningThreshold", $oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
 
   if (is_array($oids))
   {

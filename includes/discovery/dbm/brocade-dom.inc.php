@@ -5,7 +5,7 @@
 if ($device['os'] == "ironware" || $device['os_group'] == "ironware")
 {
   echo("FOUNDRY-SN-SWITCH-GROUP-MIB ");
-  $oids = snmpwalk_cache_oid($device, "snIfOpticalMonitoringTxPower", $oids, "FOUNDRY-SN-SWITCH-GROUP-MIB", $config['mib_dir'] );
+  $oids = snmpwalk_cache_oid($device, "snIfOpticalMonitoringTxPower", $oids, "FOUNDRY-SN-SWITCH-GROUP-MIB", mib_dirs('foundry'));
 
   if (is_array($oids))
   {
@@ -22,7 +22,7 @@ if ($device['os'] == "ironware" || $device['os_group'] == "ironware")
     }
   }
 
-  $oids = snmpwalk_cache_oid($device, "snIfOpticalMonitoringRxPower", $oids, "FOUNDRY-SN-SWITCH-GROUP-MIB", $config['mib_dir'] );
+  $oids = snmpwalk_cache_oid($device, "snIfOpticalMonitoringRxPower", $oids, "FOUNDRY-SN-SWITCH-GROUP-MIB", mib_dirs('foundry'));
   if (is_array($oids))
   {
     foreach ($oids as $index => $entry)

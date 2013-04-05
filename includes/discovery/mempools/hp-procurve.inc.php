@@ -16,8 +16,8 @@
 #NETSWITCH-MIB::hpGlobalMemFreeBytes.1 = INTEGER: 9669104
 #NETSWITCH-MIB::hpGlobalMemAllocBytes.1 = INTEGER: 1668728
 
-$array = snmpwalk_cache_oid($device, "hpLocal", NULL, "NETSWITCH-MIB", $config['mibdir'].":".$config['mibdir']."/hp");
-$array = snmpwalk_cache_oid($device, "hpGlobal", $array, "NETSWITCH-MIB", $config['mibdir'].":".$config['mibdir']."/hp");
+$array = snmpwalk_cache_oid($device, "hpLocal", NULL, "NETSWITCH-MIB", mib_dirs('hp'));
+$array = snmpwalk_cache_oid($device, "hpGlobal", $array, "NETSWITCH-MIB", mib_dirs('hp'));
 
 if (is_array($array))
 {

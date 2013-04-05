@@ -8,7 +8,7 @@ if ($device['os'] == "routeros")
 {
   echo("Mikrotik RouterOS ");
 
-  $oids = snmpwalk_cache_oid($device, "mtxrHlVoltage", array(), "MIKROTIK-MIB", $config['mib_dir'].":".$config['mib_dir'] );
+  $oids = snmpwalk_cache_oid($device, "mtxrHlVoltage", array(), "MIKROTIK-MIB", mib_dirs('mikrotik'));
 
   if (is_array($oids))
   {

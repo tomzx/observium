@@ -28,7 +28,7 @@ if (($device['os'] == "vmware") || ($device['os'] == "linux"))
    *  ...
    */
 
-  $oids = snmp_walk($device, "VMWARE-VMINFO-MIB::vmwVmVMID", "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", "+" . $config["install_dir"] . "/mibs/vmware:" . $config["install_dir"] . "/mibs");
+  $oids = snmp_walk($device, "VMWARE-VMINFO-MIB::vmwVmVMID", "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
   if ($oids != "")
   {
     $oids = explode("\n", $oids);
@@ -52,11 +52,11 @@ if (($device['os'] == "vmware") || ($device['os'] == "linux"))
        *  VMWARE-VMINFO-MIB::vmwVmCpus.416 = INTEGER: 2
        */
 
-      $vmwVmDisplayName = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmDisplayName." . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", "+" . $config["install_dir"] . "/mibs/vmware:" . $config["install_dir"] . "/mibs");
-      $vmwVmGuestOS   = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmGuestOS."   . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", "+" . $config["install_dir"] . "/mibs/vmware:" . $config["install_dir"] . "/mibs");
-      $vmwVmMemSize   = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmMemSize."   . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", "+" . $config["install_dir"] . "/mibs/vmware:" . $config["install_dir"] . "/mibs");
-      $vmwVmState     = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmState."     . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", "+" . $config["install_dir"] . "/mibs/vmware:" . $config["install_dir"] . "/mibs");
-      $vmwVmCpus    = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmCpus."    . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", "+" . $config["install_dir"] . "/mibs/vmware:" . $config["install_dir"] . "/mibs");
+      $vmwVmDisplayName = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmDisplayName.". $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
+      $vmwVmGuestOS     = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmGuestOS."    . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
+      $vmwVmMemSize     = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmMemSize."    . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
+      $vmwVmState       = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmState."      . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
+      $vmwVmCpus        = snmp_get($device, "VMWARE-VMINFO-MIB::vmwVmCpus."       . $oid, "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
 
       /*
        * VMware does not return an INTEGER but a STRING of the vmwVmMemSize. This bug

@@ -5,7 +5,7 @@
 if ($device['os'] == "junos" || $device['os_group'] == "junos")
 {
   echo("JunOS ");
-  $oids = snmp_walk($device,"1.3.6.1.4.1.2636.3.1.13.1.7","-Osqn","JUNIPER-MIB", $config['install_dir']."/mibs/junos");
+  $oids = snmp_walk($device,"1.3.6.1.4.1.2636.3.1.13.1.7","-Osqn","JUNIPER-MIB", mib_dirs('junos'));
   $oids = trim($oids);
   foreach (explode("\n", $oids) as $data)
   {
@@ -16,8 +16,8 @@ if ($device['os'] == "junos" || $device['os_group'] == "junos")
       list($oid) = explode(" ", $data);
       $temperature_oid  = "1.3.6.1.4.1.2636.3.1.13.1.7.$oid";
       $descr_oid = "1.3.6.1.4.1.2636.3.1.13.1.5.$oid";
-      $descr = snmp_get($device,$descr_oid,"-Oqv","JUNIPER-MIB", '+'.$config['install_dir']."/mibs/junos");
-      $temperature = snmp_get($device,$temperature_oid,"-Oqv","JUNIPER-MIB", '+'.$config['install_dir']."/mibs/junos");
+      $descr = snmp_get($device, $descr_oid, "-Oqv", "JUNIPER-MIB", mib_dirs('junos'));
+      $temperature = snmp_get($device, $temperature_oid, "-Oqv", "JUNIPER-MIB", mib_dirs('junos'));
       if (!strstr($descr, "No") && !strstr($temperature, "No") && $descr != "" && $temperature != "0")
       {
         $descr = str_replace("\"", "", $descr);

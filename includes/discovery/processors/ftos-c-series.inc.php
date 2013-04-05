@@ -8,7 +8,7 @@ if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
 {
   echo("FTOS C-Series ");
 
-  $processors_array = snmpwalk_cache_oid($device, "chRpmCpuUtil5Min", array(), "F10-C-SERIES-CHASSIS-MIB", $config['mib_dir'].":".$config['mib_dir']."/ftos" );
+  $processors_array = snmpwalk_cache_oid($device, "chRpmCpuUtil5Min", array(), "F10-C-SERIES-CHASSIS-MIB", mib_dirs('force10'));
   if ($debug) { print_r($processors_array); }
 
   if (is_array($processors_array))

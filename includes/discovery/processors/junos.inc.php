@@ -4,10 +4,10 @@
 if ($device['os'] == "junos")
 {
   echo("JUNOS : ");
-  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingCPU", $processors_array, "JUNIPER-MIB" , '+'.$config['install_dir']."/mibs/junos");
-  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingDRAMSize", $processors_array, "JUNIPER-MIB" , '+'.$config['install_dir']."/mibs/junos");
-  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingMemory", $processors_array, "JUNIPER-MIB" , '+'.$config['install_dir']."/mibs/junos");
-  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingDescr", $processors_array, "JUNIPER-MIB" , '+'.$config['install_dir']."/mibs/junos");
+  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingCPU",      $processors_array, "JUNIPER-MIB", mib_dirs('junos'));
+  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingDRAMSize", $processors_array, "JUNIPER-MIB", mib_dirs('junos'));
+  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingMemory",   $processors_array, "JUNIPER-MIB", mib_dirs('junos'));
+  $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingDescr",    $processors_array, "JUNIPER-MIB", mib_dirs('junos'));
   if ($debug) { print_r($processors_array); }
 
   if (is_array($processors_array))
@@ -30,7 +30,7 @@ if ($device['os'] == "junos")
   } // End if array
   else
   {
-    $srx_processors_array = snmpwalk_cache_multi_oid($device, "jnxJsSPUMonitoringCPUUsage", $srx_processors_array, "JUNIPER-SRX5000-SPU-MONITORING-MIB" , '+'.$config['install_dir']."/mibs/junos");
+    $srx_processors_array = snmpwalk_cache_multi_oid($device, "jnxJsSPUMonitoringCPUUsage", $srx_processors_array, "JUNIPER-SRX5000-SPU-MONITORING-MIB", mib_dirs('junos'));
 
     if (is_array($srx_processors_array))
     {

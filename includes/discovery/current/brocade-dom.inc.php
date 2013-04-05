@@ -5,7 +5,7 @@
 if ($device['os'] == "ironware" || $device['os_group'] == "ironware")
 {
   echo("FOUNDRY-SN-SWITCH-GROUP-MIB ");
-  $oids = snmpwalk_cache_oid($device, "snIfOpticalMonitoringTxBiasCurrent", array(), "FOUNDRY-SN-SWITCH-GROUP-MIB", $config['mib_dir'] );
+  $oids = snmpwalk_cache_oid($device, "snIfOpticalMonitoringTxBiasCurrent", array(), "FOUNDRY-SN-SWITCH-GROUP-MIB", mib_dirs('foundry'));
 
   if (is_array($oids))
   {

@@ -7,10 +7,11 @@ $hardware = snmp_get($device, "sysObjectID.0", "-Ovqsn");
 $hardware = rewrite_junos_hardware($hardware);
 
 $sessrrd  = $config['rrd_dir'] . "/" . $device['hostname'] . "/screenos_sessions.rrd";
-$sess_cmd  = $config['snmpget'] . " -M ".$config['mibdir'] . " -O qv " . snmp_gen_auth($device) . " " . $device['hostname'];
-$sess_cmd .= " .1.3.6.1.4.1.3224.16.3.2.0 .1.3.6.1.4.1.3224.16.3.3.0 .1.3.6.1.4.1.3224.16.3.4.0";
-$sess_data = shell_exec($sess_cmd);
-list ($sessalloc, $sessmax, $sessfailed) = explode("\n", $sess_data);
+
+$snmpdata = snmp_get_multi($device, "nsResSessAllocate.0 nsResSessMaxium.0 nsResSessFailed.0", "-OQUs", "NETSCREEN-RESOURCE-MIB", mib_dirs("netscreen"));
+$sessalloc = $snmpdata[0]['nsResSessAllocate'];
+$sessmax = $snmpdata[0]['nsResSessMaxium'];
+$sessfailed = $snmpdata[0]['nsResSessFailed'];
 
 if (!is_file($sessrrd))
 {

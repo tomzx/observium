@@ -13,7 +13,7 @@ if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
 {
   echo("FTOS E-Series ");
 
-  $oids = snmpwalk_cache_oid($device, "chSysCardUpperTemp", array(), "F10-CHASSIS-MIB", $config['mib_dir'].":".$config['mib_dir']."/ftos" );
+  $oids = snmpwalk_cache_oid($device, "chSysCardUpperTemp", array(), "F10-CHASSIS-MIB", mib_dirs('force10'));
 
   if (is_array($oids))
   {

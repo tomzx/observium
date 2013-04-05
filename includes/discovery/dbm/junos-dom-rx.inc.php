@@ -7,11 +7,11 @@
 if ($device['os'] == "junos" || $device['os_group'] == "junose")
 {
   echo("JUNIPER-DOM-MIB (RX) ");
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPower", array(), "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerHighAlarmThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerLowAlarmThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerHighWarningThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
-  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerLowWarningThreshold", $oids, "JUNIPER-DOM-MIB", $config['mib_dir'].":".$config['mib_dir']."/junos" );
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPower",                  array(), "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerHighAlarmThreshold",  $oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerLowAlarmThreshold",   $oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerHighWarningThreshold",$oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
+  $oids = snmpwalk_cache_oid($device, "jnxDomCurrentRxLaserPowerLowWarningThreshold", $oids, "JUNIPER-DOM-MIB", mib_dirs('junos'));
 
   if (is_array($oids))
   {

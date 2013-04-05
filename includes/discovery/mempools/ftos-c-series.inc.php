@@ -8,7 +8,7 @@ if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
 {
   echo("FTOS C-Series MemPools");
 
-  $mempools_array = snmpwalk_cache_oid($device, "chRpmMemUsageUtil", array(), "F10-C-SERIES-CHASSIS-MIB", $config['mib_dir'].":".$config['mib_dir']."/ftos" );
+  $mempools_array = snmpwalk_cache_oid($device, "chRpmMemUsageUtil", array(), "F10-C-SERIES-CHASSIS-MIB", mib_dirs('force10'));
   if ($debug) { print_r($mempools_array); }
 
   if (is_array($mempools_array))
