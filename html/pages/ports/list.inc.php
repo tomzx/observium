@@ -3,6 +3,7 @@
 
 /// Pagination
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
+if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 echo pagination($vars, count($ports));
 
 if($vars['pageno'])
