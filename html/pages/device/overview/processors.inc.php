@@ -11,10 +11,12 @@ $processors = dbFetchRows($sql, array($device['device_id']));
 
 if (count($processors))
 {
-  echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-  echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
-  echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=processor/">');
-  echo("<img align='absmiddle' src='images/icons/processor.png'> Processors</a></p>");
+?>
+<div class="well info_box">
+    <div id="title"><i class="fugue-processor"></i> Processors</div>
+    <div id="content">
+
+<?php
   echo('<table class="table table-condensed-more table-striped">');
 
   foreach ($processors as $proc)
@@ -56,7 +58,7 @@ if (count($processors))
   }
 
   echo("</table>");
-  echo("</div>");
+  echo("</div></div>");
 }
 
 ?>

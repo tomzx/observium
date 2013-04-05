@@ -9,8 +9,14 @@ $sensors = dbFetchRows($sql, array($sensor_class, $device['device_id']));
 
 if (count($sensors))
 {
-  echo('<div style="background-color: #eeeeee; margin: 5px; padding: 5px;">');
-  echo('<p style="padding: 0px 5px 5px;" class="sectionhead"><a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=' . strtolower($sensor_type) . '/"><img align="absmiddle" src="images/icons/' . strtolower($sensor_type) . '.png"> ' . $sensor_type . '</a></p>');
+?>
+
+<div class="well info_box">
+    <div id="title"><i class="<?php echo($config['sensor_types'][strtolower($sensor_type)]['icon']); ?>"></i> <?php echo($sensor_type) ?></div>
+    <div id="content">
+
+<?php
+
   echo('<table class="table table-condensed table-striped">');
   foreach ($sensors as $sensor)
   {
@@ -61,7 +67,7 @@ if (count($sensors))
   }
 
   echo("</table>");
-  echo("</div>");
+  echo("</div></div>");
 }
 
 ?>

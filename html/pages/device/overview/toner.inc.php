@@ -6,10 +6,13 @@ $toners = dbFetchRows("SELECT * FROM `toner` WHERE device_id = ?", array($device
 
 if (count($toners))
 {
-  echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-  echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
-  echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=toner/">');
-  echo("<img align='absmiddle' src='images/icons/toner.png'> Toner</a></p>");
+?>
+
+   <div class="well info_box">
+      <div id="title"><i class="fugue-drive"></i> Storage</div>
+      <div id="content">
+
+<?php
   echo('<table class="table table-condensed table-striped">');
 
   foreach ($toners as $toner)
@@ -50,7 +53,7 @@ if (count($toners))
   }
 
   echo("</table>");
-  echo("</div>");
+  echo("</div></div>");
 }
 
 unset ($toner_rows);

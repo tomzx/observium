@@ -25,7 +25,7 @@ echo("VMware VM: ");
  * Get a list of all the known Virtual Machines for this host.
  */
 
-$db_info_list = dbFetchRows("SELECT id, vmwVmVMID, vmwVmDisplayName, vmwVmGuestOS, vmwVmMemSize, vmwVmCpus, vmwVmState FROM vminfo WHERE device_id = ?", array($device["device_id"]));
+$db_info_list = dbFetchRows("SELECT * FROM vminfo WHERE device_id = ?", array($device["device_id"]));
 
 $vm_data = snmpwalk_cache_oid($device, "vmwVmTable", array(), "VMWARE-VMINFO-MIB", mib_dirs(array("vmware")));
 
@@ -81,6 +81,8 @@ foreach ($db_info_list as $db_info)
 
     if ($vm_info[$property] != $db_info[$property])
     {
+
+      echo($vm_info[$property] ."!=". $db_info[$property].PHP_EOL);
 
       // FIXME - this should loop building a query and then run the query after the loop (bad geert!)
       dbUpdate(array($property => $vm_info[$property]), 'vminfo', '`id` = ?', array($db_info["id"]));

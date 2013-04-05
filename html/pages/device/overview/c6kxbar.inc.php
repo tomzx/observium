@@ -1,9 +1,11 @@
+
+<div class="well info_box">
+    <div id="title"><i class="sweetie-arrow-branch-byr"></i> 6500/7600 Crossbar</div>
+    <div id="content">
+
+
 <?php
 
-echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
-echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=mempool/">');
-echo("<img align='absmiddle' src='images/16/arrow_switch.png'> Catalyst 6k Crossbar</a></p>");
 echo('<table class="table table-condensed table-striped">');
 
 foreach ($entity_state['group']['c6kxbar'] as $index => $entry)
@@ -90,6 +92,6 @@ foreach ($entity_state['group']['c6kxbar'] as $index => $entry)
 }
 
 echo("</table>");
-echo("</div>");
+echo("</div></div>");
 
 ?>

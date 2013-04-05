@@ -32,6 +32,10 @@ function print_vm_row($vm, $device = NULL)
   {
     echo('<td class="box-desc">Unknown (VMware Tools not installed)</td>');
   }
+  else if ($vm['vmwVmGuestOS'] == "E: tools not running")
+  {
+    echo('<td class="box-desc">Unknown (VMware Tools not running)</td>');
+  }
   else if ($vm['vmwVmGuestOS'] == "")
   {
     echo('<td class="box-desc"><i>(Unknown)</i></td>');

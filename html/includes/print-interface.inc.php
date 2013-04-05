@@ -19,7 +19,7 @@ $port['device_id'] = $device['device_id'];
 $port['hostname'] = $device['hostname'];
 
 // Process port properties and generate printable values
-$port = humanize_port($port);
+humanize_port($port);
 
 $port_adsl = dbFetchRow("SELECT * FROM `ports_adsl` WHERE `port_id` = ?", array($port['port_id']));
 

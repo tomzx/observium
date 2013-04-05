@@ -354,6 +354,7 @@ function get_port_by_id($port_id)
   }
   if (is_array($port))
   {
+    humanize_port($port);
     return $port;
   } else {
     return FALSE;

@@ -2,10 +2,16 @@
 
 if ($ports['total'])
 {
-  echo('<div style="background-color: #eeeeee; margin: 5px; padding: 5px;">');
+?>
 
+<div class="well info_box">
+    <div id="title"><i class="fugue-network-ethernet"></i> Ports</div>
+    <div id="content">
+
+
+<?php
   $graph_array['height'] = "100";
-  $graph_array['width']  = "485";
+  $graph_array['width']  = "477";
   $graph_array['to']     = $config['time']['now'];
   $graph_array['device']          = $device['device_id'];
   $graph_array['type']   = "device_bits";
@@ -48,7 +54,7 @@ if ($ports['total'])
 
   unset($ifsep);
   echo("  </div>");
-  echo("</div>");
+  echo("</div></div>");
 }
 
 ?>

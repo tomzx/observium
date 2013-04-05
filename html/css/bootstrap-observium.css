@@ -69,11 +69,11 @@ label, input, button, select, textarea {
 }
 
 .row-fluid .span6 {
-  width: 49.75%;
+  width: 49.50%;
 }
 
 .row-fluid [class*="span"] {
-  margin-left: 0.5%;
+  margin-left: 1%;
 }
 
 .input-append .add-on, .input-prepend .add-on {
@@ -317,7 +317,7 @@ legend {
 .well {
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid #dddddd;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -329,12 +329,12 @@ legend {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
+    background-color: #fafafa;
 }
 
 .well-small {
     padding: 5px;
     margin-bottom: 5px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -351,12 +351,43 @@ legend {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff0f0f0', GradientType=0);
 }
 
-.well-light {
-    background-color: #f5f5f5;
+.info_box { 
+    margin-top: 15px;
+    margin-bottom: 20px;
 }
+
+.info_box #title { 
+    position: relative; 
+    top : -20px;
+    margin-left: 0em;
+    padding: 2px 7px;
+    display: inline; 
+    font-size: 1em;
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    border: 1px solid #dddddd;
+    background-color: #fafafa;
+    background-image: -moz-linear-gradient(top, #ffffff, #f0f0f0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f0f0f0));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f0f0f0);
+    background-image: -o-linear-gradient(top, #ffffff, #f0f0f0);
+    background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff0f0f0', GradientType=0);
+
+}
+
+.info_box #content {
+  margin-top: -10px;
+}
+
 
 .table {
     color: #777;
+    margin-bottom: 0px;
 }
 .table thead {
   background-color: #fafafa;

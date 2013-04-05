@@ -193,10 +193,23 @@ function data_uri($file, $mime)
   return ('data:' . $mime . ';base64,' . $base64);
 }
 
+// This function does rewrites from the lowercase identifiers we use to the
+// standard capitalisation. UK English style plurals, please.
+// I also think this should perhaps be an array.
 function nicecase($item)
 {
   switch ($item)
   {
+    case "eigrp":
+      return "EIGRP";
+    case "ospf":
+      return "OSPF";
+    case "bgp":
+      return "BGP";
+    case "ases":
+      return "ASes";
+    case "vpns":
+      return "VPNs";
     case "dbm":
       return "dBm";
     case "mysql":
@@ -313,7 +326,7 @@ function pagination($vars, $total, $per_page = 10)
       } else {
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '1'))."'>1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => '2'))."'>2</a></li>";
-        for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++)   
+        for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++)
         {
           if ($counter == $page)
           {
@@ -321,12 +334,12 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }  
-      }    
-    }      
-           
+        }
+      }
+    }
+
     if ($page < $counter - 1)
-    {  
+    {
       $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $next))."'>Next</a></li>";
       # No need for "Last" as we don't have "First", 1, 2 and the 2 last pages are always in the list.
       #$pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>Last</a></li>";
@@ -334,7 +347,7 @@ function pagination($vars, $total, $per_page = 10)
       $pagination.= "<li class='active'><a>Next</a></li>";
       #$pagination.= "<li class='active'><a>Last</a></li>";
     }
-    
+
     $pagination.= "</ul>";
 
     $pagination.= '<div style="clear: none; float: right;" class="input-prepend">
@@ -493,6 +506,7 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
   return $link;
 }
 
+/// Generate overlib links from URL, link text, contents and a class.
 function overlib_link($url, $text, $contents, $class)
 {
   global $config, $link_iter;
@@ -510,6 +524,7 @@ function overlib_link($url, $text, $contents, $class)
   return $output;
 }
 
+// Generate a typical 4-graph popup using $graph_array
 function generate_graph_popup($graph_array)
 {
   global $config;
@@ -543,6 +558,7 @@ function generate_graph_popup($graph_array)
   return overlib_link($graph_array['link'], $graph, $content, NULL);
 }
 
+// output the popup generated in generate_graph_popup();
 function print_graph_popup($graph_array)
 {
   echo(generate_graph_popup($graph_array));
@@ -654,7 +670,7 @@ function generate_graph_tag($args)
     $urlargs[] = $key."=".$arg;
   }
 
-  return '<img src="graph.php?' . implode('&',$urlargs).'" border="0" />';
+  return '<img src="graph.php?' . implode('&',$urlargs).'" border="0" style="max-width: 100%; width: auto;" />';
 }
 
 function generate_graph_js_state($args) {

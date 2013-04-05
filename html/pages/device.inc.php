@@ -227,6 +227,9 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     $device_routing_count['ospf'] = dbFetchCell("SELECT COUNT(*) FROM `ospf_instances` WHERE `ospfAdminStat` = 'enabled' AND `device_id` = ?", array($device['device_id']));
     if ($device_routing_count['ospf']) { $routing_tabs[] = 'ospf'; }
 
+    $device_routing_count['eigrp'] = dbFetchCell("SELECT COUNT(*) FROM `eigrp_ports` WHERE `device_id` = ?", array($device['device_id']));
+    if ($device_routing_count['eigrp']) { $routing_tabs[] = 'eigrp'; }
+
     $device_routing_count['cef'] = dbFetchCell("SELECT COUNT(*) FROM `cef_switching` WHERE `device_id` = ?", array($device['device_id']));
     if ($device_routing_count['cef']) { $routing_tabs[] = 'cef'; }
 
@@ -394,6 +397,12 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
   if (device_permitted($device['device_id']) || $check_device == $vars['device']) {
     echo('<div class="tab-content">');
+
+    if(!$device['last_polled']) {
+      echo('<div class="alert alert-info"><h3>Device not yet polled</h3><p>This device has not yet been successfully polled. System information and statistics will not be populated and graphs will not draw. Please wait 5-10 minutes for graphs to draw correctly.</p></div>');
+    }
+
+    
 
     include("pages/device/".mres(basename($tab)).".inc.php");
 

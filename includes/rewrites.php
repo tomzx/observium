@@ -104,7 +104,7 @@ function humanize_bgp (&$peer)
  *
  */
 
-function humanize_port($port, $device = NULL)
+function humanize_port(&$port, $device = NULL)
 {
   global $config;
 

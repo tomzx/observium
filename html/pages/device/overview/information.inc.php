@@ -1,12 +1,12 @@
-<?php
+<div class="well info_box">
+    <div id="title"><i class="fugue-server"></i> Device Information</div>
+    <div id="content">
 
-echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
+<?php
 
 if ($config['overview_show_sysDescr'])
 {
-  echo("<p style='padding: 0px;' class=sectionhead>");
   echo('<div style="font-family: courier, serif; margin: 3px"><strong>' . $device['sysDescr'] . "</strong></div>");
-  echo("</p>");
 }
 
 $uptime = $device['uptime'];
@@ -80,6 +80,6 @@ if ($uptime)
 
   echo("</table>");
 
-  echo("</div>");
+  echo("</div></div>");
 
 ?>

@@ -20,15 +20,20 @@ if ($ports['down']) { $ports_colour = $warn_colour_a; } else { $ports_colour = $
 
 <div class="span6">
 
-<?php include("includes/dev-overview-data.inc.php"); ?>
+<?php include("overview/information.inc.php"); ?>
 
 <?php
 include("overview/ports.inc.php");
 
 if ($services['total'])
 {
-  echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-  echo("<p style='padding: 0px 5px 5px;' class=sectionhead><img align='absmiddle' src='images/16/cog.png'> Services</p><div style='height: 5px;'></div>");
+?>
+
+<div class="well info_box">
+    <div id="title"><i class="fugue-network-ethernet"></i> Services</div>
+    <div id="content">
+
+<?
 
   echo("
 <table class='table table-condensed table-striped'>
@@ -52,20 +57,25 @@ if ($services['total'])
   }
 
   echo("</div>");
-  echo("</div>");
+  echo("</div></div>");
 }
 
 if ($config['enable_syslog'])
 {
   $syslog =  dbFetchCell("SELECT COUNT(*) from syslog WHERE device_id = ?", array($device['device_id']));
   if ($syslog)
-  {
-    $show_syslog = "<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>";
-    $show_syslog .= '<p style="padding: 0px 5px 5px;" class="sectionhead"><a class="sectionhead" href="device/device=';
-    $show_syslog .= $device['device_id'] . '/tab=logs/section=syslog/"><img align="absmiddle" src="images/16/report_key.png" /> Recent Syslog</a></p>';
-    echo $show_syslog;
+  { ?>
+
+    <div class="well info_box">
+      <div id="title"><i class="sweetie-clipboard-eye"></i> Syslog</div>
+      <div id="content">
+
+    <?php
     print_syslogs(array('device' => $device['device_id'], 'short' => TRUE));
-    echo("</div>");
+    ?>
+      </div>
+    </div>
+<?php
   }
 }
 
@@ -91,19 +101,13 @@ include("overview/sensors/power.inc.php");
 include("overview/sensors/frequencies.inc.php");
 
 // Start events
-$show_event = "<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>";
-$show_event .= "<p style='padding: 0px 5px 5px;' class=sectionhead>";
-$show_event .= '<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=logs/section=eventlog/">';
-$show_event .= "<img align='absmiddle' src='images/16/report.png'> Recent Events</a></p>";
-echo $show_event;
-
-print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' => TRUE));
-
-echo("</div>");
-// End events
-
-echo("<div>");
-
 ?>
-
+   <div class="well info_box">
+      <div id="title"><i class="sweetie-clipboard-eye"></i> Syslog</div>
+      <div id="content">
+<?php
+      print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' => TRUE));
+?>
+    </div>
+  <div>
 </div>

@@ -10,11 +10,14 @@ $sql .= " WHERE `device_id` = ?";
 $mempools = dbFetchRows($sql, array($device['device_id']));
 
 if (count($mempools))
-{
-  echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-  echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
-  echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=mempool/">');
-  echo("<img align='absmiddle' src='images/icons/memory.png'> Memory Pools</a></p>");
+{ ?>
+
+<div class="well info_box">
+    <div id="title"><i class="fugue-memory"></i> Memory Pools</div>
+    <div id="content">
+
+
+<?php
   echo('<table class="table table-condensed table-striped">');
 
   foreach ($mempools as $mempool)
@@ -55,7 +58,7 @@ if (count($mempools))
   }
 
   echo("</table>");
-  echo("</div>");
+  echo("</div></div>");
 }
 
 ?>

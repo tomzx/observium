@@ -11,39 +11,25 @@ $type_text['ipsec_tunnels'] = "IPSEC Tunnels";
 $type_text['loadbalancer_rservers'] = "Rservers";
 $type_text['loadbalancer_vservers'] = "Serverfarms";
 
-// Citrix Netscaler
-$type_text['netscaler_vsvr'] = "VServers";
-
-$type_text['bgp'] = "BGP";
-$type_text['cef'] = "CEF";
-$type_text['ospf'] = "OSPF";
-$type_text['vrf'] = "VRFs";
-
-print_optionbar_start();
-
 $pagetitle[] = "Routing";
 
-echo("<span style='font-weight: bold;'>Routing</span> &#187; ");
+$navbar = array();
+$navbar['brand'] = "Routing";
+$navbar['class'] = "navbar-narrow";
 
-unset($sep);
 foreach ($routing_tabs as $type)
 {
 
   if (!$vars['proto']) { $vars['proto'] = $type; }
 
-  echo($sep);
+  $navbar['options'][$type]['url']  = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'routing', 'proto' => $type ));
+  $navbar['options'][$type]['text'] = nicecase($type);
+  if ($vars['proto'] == $type) { $navbar['options'][$type]['class'] = "active"; }
 
-  if ($vars['proto'] == $type)
-  {
-    echo('<span class="pagemenu-selected">');
-  }
-
-  echo(generate_link($type_text[$type] ." (".$device_routing_count[$type].")",$link_array,array('proto'=>$type)));
-  if ($vars['proto'] == $type) { echo("</span>"); }
-  $sep = " | ";
 }
+print_navbar($navbar);
+unset($navbar);
 
-print_optionbar_end();
 
 if (is_file("pages/device/routing/".mres($vars['proto']).".inc.php"))
 {

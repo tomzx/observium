@@ -11,10 +11,14 @@ $drives = dbFetchRows($sql, array($device['device_id']));
 
 if (count($drives))
 {
-  echo("<div style='background-color: #eeeeee; margin: 5px; padding: 5px;'>");
-  echo("<p style='padding: 0px 5px 5px;' class=sectionhead>");
-  echo('<a class="sectionhead" href="device/device='.$device['device_id'].'/tab=health/metric=storage/">');
-  echo("<img align='absmiddle' src='images/icons/storage.png'> Storage</a></p>");
+?>
+
+   <div class="well info_box">
+      <div id="title"><i class="fugue-drive"></i> Storage</div>
+      <div id="content">
+
+
+<?php
   echo('<table class="table table-condensed table-striped">');
 
   foreach ($drives as $drive)
@@ -80,6 +84,7 @@ if (count($drives))
   }
 
   echo("</table>");
+  echo("</div>");
   echo("</div>");
 }
 
