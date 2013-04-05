@@ -2,7 +2,7 @@
 
 global $agent_sensors;
 
-if ($agent_data['haddtemp'] != '|')
+if ($agent_data['hddtemp'] != '|')
 {
   $disks = explode('||',trim($agent_data['hddtemp'],'|'));
 
