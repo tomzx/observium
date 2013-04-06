@@ -13,7 +13,7 @@ if (count($processors))
 {
 ?>
 <div class="well info_box">
-    <div id="title"><i class="fugue-processor"></i> Processors</div>
+    <div id="title"><i class="icon-processor"></i> Processors</div>
     <div id="content">
 
 <?php

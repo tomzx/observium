@@ -14,7 +14,7 @@ if (count($drives))
 ?>
 
    <div class="well info_box">
-      <div id="title"><i class="fugue-drive"></i> Storage</div>
+      <div id="title"><i class="icon-drive"></i> Storage</div>
       <div id="content">
 
 

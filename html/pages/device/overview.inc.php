@@ -29,7 +29,7 @@ if ($services['total'])
 ?>
 
 <div class="well info_box">
-    <div id="title"><i class="fugue-network-ethernet"></i> Services</div>
+    <div id="title"><i class="icon-network-ethernet"></i> Services</div>
     <div id="content">
 
 <?php
@@ -66,7 +66,7 @@ if ($config['enable_syslog'])
   { ?>
 
     <div class="well info_box">
-      <div id="title"><i class="sweetie-clipboard-eye"></i> Syslog</div>
+      <div id="title"><i class="icon-clipboard-eye"></i> Syslog</div>
       <div id="content">
 
     <?php
@@ -102,7 +102,7 @@ include("overview/sensors/frequencies.inc.php");
 // Start events
 ?>
    <div class="well info_box">
-      <div id="title"><i class="sweetie-clipboard-eye"></i> Syslog</div>
+      <div id="title"><i class="icon-clipboard-eye"></i> Syslog</div>
       <div id="content">
 <?php
       print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' => TRUE));

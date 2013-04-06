@@ -135,7 +135,6 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link href="css/bootstrap-switch.css"  rel="stylesheet" type="text/css" />
   <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
   <link href="css/mktree.css" rel="stylesheet" type="text/css" />
-  <link href="css/sweetie.css" rel="stylesheet" type="text/css" />
   <link href="css/sprites.css" rel="stylesheet" type="text/css" />
 
 <?php

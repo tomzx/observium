@@ -1,5 +1,5 @@
 <div class="well info_box">
-    <div id="title"><i class="fugue-server"></i> Device Information</div>
+    <div id="title"><i class="icon-server"></i> Device Information</div>
     <div id="content">
 
 <?php

@@ -96,7 +96,7 @@ if (dbFetchCell("SELECT COUNT(*) FROM juniAtmVp WHERE port_id = '".$port['port_i
 
 if ($_SESSION['userlevel'] == '10' && $config['enable_billing'])
 {
-  $navbars['main']['options_right']['bills'] = array('text' => 'Create Bill', 'icon' => 'fugue-money-coin', 'url' => generate_url(array('page' => 'bills', 'view' => 'add', 'port' => $port['port_id'])));
+  $navbars['main']['options_right']['bills'] = array('text' => 'Create Bill', 'icon' => 'icon-money-coin', 'url' => generate_url(array('page' => 'bills', 'view' => 'add', 'port' => $port['port_id'])));
 }
 
 
