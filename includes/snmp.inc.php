@@ -507,7 +507,7 @@ function snmpwalk_values($device, $oid, $array, $mib = NULL, $mibdir = NULL)
   return $array;
 }
 
-function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
+function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL, $set_cache = FALSE)
 {
   global $cache;
    
@@ -524,16 +524,21 @@ function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
         $array[$index][$oid] = $value;
       }
     }
-    $cache['snmp'][$device['device_id']][$oid] = $array;
+    if ($set_cache)
+    {
+      $cache['snmp'][$device['device_id']][$oid] = $array;
+    } else {
+      return $array;
+    }
   }
-  return $cache['snmp'][$device['device_id']][$oid] = $array;
+  return $cache['snmp'][$device['device_id']][$oid];
 }
 
 // just like snmpwalk_cache_oid except that it returns the numerical oid as the index
 // this is useful when the oid is indexed by the mac address and snmpwalk would
 // return periods (.) for non-printable numbers, thus making many different indexes appear
 // to be the same.
-function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NULL)
+function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NULL, $set_cache = FALSE)
 {
   global $cache;
    
@@ -550,9 +555,14 @@ function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NU
         $array[$index][$oid] = $value;
       }
     }
-    $cache['snmp'][$device['device_id']][$oid] = $array;
+    if ($set_cache)
+    {
+      $cache['snmp'][$device['device_id']][$oid] = $array;
+    } else {
+      return $array;
+    }
   }
-  return $cache['snmp'][$device['device_id']][$oid] = $array;
+  return $cache['snmp'][$device['device_id']][$oid];
 }
 
 function snmpwalk_cache_multi_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL)
