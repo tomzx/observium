@@ -12,7 +12,7 @@
 $icons = '';
 foreach (new SplFileObject('css/sprites.css') as $line)
 {
-  if (preg_match('/\.(icon[\w\-]+)\s*{/', $line, $matches)) { $icons .= $matches[1] . ' '; }
+  if (preg_match('/\.(oicon[\w\-]+)\s*{/', $line, $matches)) { $icons .= $matches[1] . ' '; }
 }
 
 foreach(explode(" ",$icons) as $icon)
