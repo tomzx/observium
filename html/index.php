@@ -348,7 +348,7 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
           <li class="divider-vertical" style="margin:0;"></li>
           <li class="dropdown">
             <a href="<?php echo(generate_url(array('page'=>'overview'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
-              <img src="images/16/time.png" class="optionicon"> Perf <b class="caret"></b></a>
+              <i class="icon-time"></i> Perf <b class="caret"></b></a>
             <div class="dropdown-menu" style="padding: 10px;">
               <table class="table table-bordered table-condensed-more table-rounded table-striped">
                 <tr>
