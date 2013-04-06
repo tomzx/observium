@@ -173,7 +173,7 @@ $pagetitle[] = "Add host";
 
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-success" name="submit" value="save"><i class="icon-plus icon-white"></i> Add Device</button>
+    <button type="submit" class="btn btn-success" name="submit" value="save"><i class="oicon-plus oicon-white"></i> Add Device</button>
   </div>
 
 

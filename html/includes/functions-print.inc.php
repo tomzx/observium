@@ -84,7 +84,7 @@ function print_navbar($navbar)
     <div class="navbar-inner">
       <div class="container">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#nav-'.$id.'">
-          <span class="icon-bar"></span>
+          <span class="oicon-bar"></span>
         </button>';
 
   if(isset($navbar['brand'])) { echo ' <a class="brand">'.$navbar['brand'].'</a>'; }
@@ -209,7 +209,7 @@ function print_search_simple($data, $title = '')
   // Form footer
   $string .= '    <td width="90px" align="center">' . PHP_EOL;
   $string .= '      <input type="hidden" name="pageno" value="1">' . PHP_EOL;
-  $string .= '      <button type="submit" class="btn"><i class="icon-search"></i> Search</button>' . PHP_EOL;
+  $string .= '      <button type="submit" class="btn"><i class="oicon-search"></i> Search</button>' . PHP_EOL;
   $string .= '    </td>' . PHP_EOL;
   $string .= '  </table>' . PHP_EOL . '    </tr>' . PHP_EOL;
   $string .= '</form>' . PHP_EOL . '</div>' . PHP_EOL;
@@ -958,7 +958,7 @@ function print_status($status)
   echo('
   <div class="alert">
      <button type="button" class="close" data-dismiss="alert">&times;</button>
-     <p><i class="icon-bell"></i> <strong>Config option obsolete</strong></p>
+     <p><i class="oicon-bell"></i> <strong>Config option obsolete</strong></p>
      <p>Please note that config option <strong>$config[\'warn\'][\'ifdown\']</strong> is now obsolete.<br />Use options: <strong>$config[\'frontpage\'][\'device_status\'][\'ports\']</strong> and <strong>$config[\'frontpage\'][\'device_status\'][\'errors\']</strong></p>
      <p>To remove this message, delete <strong>$config[\'warn\'][\'ifdown\']</strong> from configuration file.</p>
   </div>');

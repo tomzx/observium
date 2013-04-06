@@ -46,7 +46,7 @@
     </select>
   </div>
 
-  <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
+  <button type="submit" class="btn"><i class="oicon-search"></i> Search</button>
   </form>
 
 <?php

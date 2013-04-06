@@ -13,7 +13,7 @@ if (count($mempools))
 { ?>
 
 <div class="well info_box">
-    <div id="title"><i class="icon-memory"></i> Memory Pools</div>
+    <div id="title"><i class="oicon-memory"></i> Memory Pools</div>
     <div id="content">
 
 

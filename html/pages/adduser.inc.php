@@ -88,7 +88,7 @@ if ($_SESSION['userlevel'] == '10') {
           </div>
         </fieldset>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary"><i class="icon-ok-sign icon-white"></i> <strong>Add User</strong></button>
+          <button type="submit" class="btn btn-primary"><i class="oicon-ok-sign oicon-white"></i> <strong>Add User</strong></button>
         </div>
       </form>
     </div>

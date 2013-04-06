@@ -28,12 +28,12 @@ echo("
 ?>
 
         <p>
-          <a class="btn btn-mini" href="http://www.observium.org"><i class="icon icon-globe"></i> Website</a>
-          <a class="btn btn-mini" href="http://jira.observium.org/"><i class="icon icon-fire"></i> Bugtracker</a>
-          <a class="btn btn-mini" href="http://www.observium.org/wiki/Mailing_Lists"><i class="icon icon-envelope"></i> Mailing List</a>
-          <a class="btn btn-mini" href="http://twitter.com/observium"><i class="icon icon-share-alt"></i> Twitter</a>
-          <a class="btn btn-mini" href="http://twitter.com/observium_svn"><i class="icon icon-share-alt"></i> SVN Twitter</a>
-          <a class="btn btn-mini" href="http://www.facebook.com/pages/Observium/128354461353"><i class="icon icon-thumbs-up"></i> Facebook</a>
+          <a class="btn btn-mini" href="http://www.observium.org"><i class="icon oicon-globe"></i> Website</a>
+          <a class="btn btn-mini" href="http://jira.observium.org/"><i class="icon oicon-fire"></i> Bugtracker</a>
+          <a class="btn btn-mini" href="http://www.observium.org/wiki/Mailing_Lists"><i class="icon oicon-envelope"></i> Mailing List</a>
+          <a class="btn btn-mini" href="http://twitter.com/observium"><i class="icon oicon-share-alt"></i> Twitter</a>
+          <a class="btn btn-mini" href="http://twitter.com/observium_svn"><i class="icon oicon-share-alt"></i> SVN Twitter</a>
+          <a class="btn btn-mini" href="http://www.facebook.com/pages/Observium/128354461353"><i class="icon oicon-thumbs-up"></i> Facebook</a>
         </p>
 
         <h3>The Team</h3>
@@ -50,17 +50,17 @@ echo("
         <h3>Acknowledgements</h3>
         <div class="well well-light">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
-          <dt style="text-align: left;"><i class="icon-user"></i> Twitter</dt><dd>Bootstrap CSS Framework</dd>
-          <dt style="text-align: left;  width:200px;"><i class="icon-user"></i> Yusuke Kamiyamane (p@yusukekamiyamane.com)</dt><dd>Fugue Iconset</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> Twitter</dt><dd>Bootstrap CSS Framework</dd>
+          <dt style="text-align: left;  width:200px;"><i class="oicon-user"></i> Yusuke Kamiyamane (p@yusukekamiyamane.com)</dt><dd>Fugue Iconset</dd>
 
-          <dt style="text-align: left;"><i class="icon-user"></i> Stu Nicholls</dt><dd>Dropdown menu CSS code.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Mark James</dt><dd>Silk Iconset.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Erik Bosrup</dt><dd>Overlib Library.</dd>
-          <dt style="text-align: left; width:200px;"><i class="icon-user"></i> Jonathan De Graeve</dt><dd>SNMP code improvements.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Xiaochi Jin</dt><dd>Logo design.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Bruno Pramont</dt><dd>Collectd code.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> David Farrell (DavidPFarrell@gmail.com)</dt><dd>Help with parsing net-SNMP output in PHP.</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Job Snijders</dt><dd>Python-based multi-instance poller wrapper.</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> Stu Nicholls</dt><dd>Dropdown menu CSS code.</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> Mark James</dt><dd>Silk Iconset.</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> Erik Bosrup</dt><dd>Overlib Library.</dd>
+          <dt style="text-align: left; width:200px;"><i class="oicon-user"></i> Jonathan De Graeve</dt><dd>SNMP code improvements.</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> Xiaochi Jin</dt><dd>Logo design.</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> Bruno Pramont</dt><dd>Collectd code.</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> David Farrell (DavidPFarrell@gmail.com)</dt><dd>Help with parsing net-SNMP output in PHP.</dd>
+          <dt style="text-align: left;"><i class="oicon-user"></i> Job Snijders</dt><dd>Python-based multi-instance poller wrapper.</dd>
         </dl>
         </div>
       </div>

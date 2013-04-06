@@ -24,7 +24,7 @@ foreach (dbFetchRows("SELECT D.device_id AS device_id, `hostname` FROM `vlans_fd
        <span class="add-on">String</span>
        <input type="text" name="address" id="address" size=40 value="<?php echo($_POST['address']); ?>" />
      </div>
-    <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
+    <button type="submit" class="btn"><i class="oicon-search"></i> Search</button>
   </form>
 
 <?php

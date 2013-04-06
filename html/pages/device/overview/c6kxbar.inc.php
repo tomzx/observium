@@ -1,6 +1,6 @@
 
 <div class="well info_box">
-    <div id="title"><i class="icon-arrow-branch-byr"></i> 6500/7600 Crossbar</div>
+    <div id="title"><i class="oicon-arrow-switch"></i> 6500/7600 Crossbar</div>
     <div id="content">
 
 

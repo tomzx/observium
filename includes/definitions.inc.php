@@ -1326,49 +1326,49 @@ $config['graph_descr']['application_unbound_flags']   = "This graphs plots the f
 $i = 0;
 $config['device_types'][$i]['text'] = 'Servers';
 $config['device_types'][$i]['type'] = 'server';
-$config['device_types'][$i]['icon'] = 'icon-server';
+$config['device_types'][$i]['icon'] = 'oicon-server';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Network';
 $config['device_types'][$i]['type'] = 'network';
-$config['device_types'][$i]['icon'] = 'icon-network-hub';
+$config['device_types'][$i]['icon'] = 'oicon-network-hub';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Wireless';
 $config['device_types'][$i]['type'] = 'wireless';
-$config['device_types'][$i]['icon'] = 'icon-wi-fi-zone';
+$config['device_types'][$i]['icon'] = 'oicon-wi-fi-zone';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Firewalls';
 $config['device_types'][$i]['type'] = 'firewall';
-$config['device_types'][$i]['icon'] = 'icon-wall-brick';
+$config['device_types'][$i]['icon'] = 'oicon-wall-brick';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Power';
 $config['device_types'][$i]['type'] = 'power';
-$config['device_types'][$i]['icon'] = 'icon-plug';
+$config['device_types'][$i]['icon'] = 'oicon-plug';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Environment';
 $config['device_types'][$i]['type'] = 'environment';
-$config['device_types'][$i]['icon'] = 'icon-water';
+$config['device_types'][$i]['icon'] = 'oicon-water';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Load Balancers';
 $config['device_types'][$i]['type'] = 'loadbalancer';
-$config['device_types'][$i]['icon'] = 'icon-arrow-split';
+$config['device_types'][$i]['icon'] = 'oicon-arrow-split';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Storage';
 $config['device_types'][$i]['type'] = 'storage';
-$config['device_types'][$i]['icon'] = 'icon-database';
+$config['device_types'][$i]['icon'] = 'oicon-database';
 
 if (isset($config['enable_printers']) && $config['enable_printers'])
 {
   $i++;
   $config['device_types'][$i]['text'] = 'Printers';
   $config['device_types'][$i]['type'] = 'printer';
-  $config['device_types'][$i]['icon'] = 'icon-printer-color';
+  $config['device_types'][$i]['icon'] = 'oicon-printer-color';
 }
 
 // FIXME - remove this old variable from use
@@ -1384,14 +1384,14 @@ $config['sensor_classes'] = array('current' => 'A',
 
 // FIXME - different icons for power/volt/current
 
-$config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'icon-lightning');
-$config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'icon-lightning');
-$config['sensor_types']['humidity']    = array( 'symbol' => '%',   'text' => 'Percent', 'icon' => 'icon-water');
-$config['sensor_types']['fanspeed']    = array( 'symbol' => 'RPM', 'text' => 'RPM',     'icon' => 'icon-weather-wind');
-$config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Watts',   'icon' => 'icon-lightning');
-$config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'icon-lightning');
-$config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'icon-thermometer-high');
-$config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'icon-arrow-incident-red');
+$config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'oicon-lightning');
+$config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'oicon-lightning');
+$config['sensor_types']['humidity']    = array( 'symbol' => '%',   'text' => 'Percent', 'icon' => 'oicon-water');
+$config['sensor_types']['fanspeed']    = array( 'symbol' => 'RPM', 'text' => 'RPM',     'icon' => 'oicon-weather-wind');
+$config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Watts',   'icon' => 'oicon-lightning');
+$config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'oicon-lightning');
+$config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'oicon-thermometer-high');
+$config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'oicon-arrow-incident-red');
 
 $config['routing_types']['ospf']       = array( 'text' => 'OSPF');
 $config['routing_types']['cef']       = array( 'text' => 'CEF');

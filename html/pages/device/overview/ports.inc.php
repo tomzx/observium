@@ -5,7 +5,7 @@ if ($ports['total'])
 ?>
 
 <div class="well info_box">
-    <div id="title"><i class="icon-network-ethernet"></i> Ports</div>
+    <div id="title"><i class="oicon-network-ethernet"></i> Ports</div>
     <div id="content">
 
 

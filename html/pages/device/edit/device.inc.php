@@ -122,7 +122,7 @@ if ($unknown) { echo('          <option value="other">Other</option>'); }
   </fieldset>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="oicon-ok oicon-white"></i> Save Changes</button>
   </div>
 
 </form>

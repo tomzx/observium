@@ -37,8 +37,8 @@ if ($updated && $update_message)
       <!-- <th width=110>PPS Threshold</th> -->
     </tr>
     <tr align=center>
-      <th><button class='btn btn-mini btn-primary' type='submit' value='Save' title='Save current port disable/ignore settings'><i class="icon-ok icon-white"></i> Save</button></td>
-      <th><!-- <button class='btn btn-mini btn-danger' type='submit' value='Reset' id='form-reset' title='Reset form to previously-saved settings'><i class="icon-remove icon-white"></i> Reset</button> --></th>
+      <th><button class='btn btn-mini btn-primary' type='submit' value='Save' title='Save current port disable/ignore settings'><i class="oicon-ok oicon-white"></i> Save</button></td>
+      <th><!-- <button class='btn btn-mini btn-danger' type='submit' value='Reset' id='form-reset' title='Reset form to previously-saved settings'><i class="oicon-remove oicon-white"></i> Reset</button> --></th>
       <th><button class='btn btn-mini' type='submit' value='Alerted' id='alerted-toggle' title='Toggle alerting on all currently-alerted ports'>Alerted</button>
           <button class='btn btn-mini' type='submit' value='Down' id='down-select' title='Disable alerting on all currently-down ports'>Down</button></th>
       <th><button class='btn btn-mini' type='submit' value='Toggle' id='disable-toggle' title='Toggle polling for all ports'>Toggle</button>
@@ -174,6 +174,6 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIn
 </table>
 </fieldset>
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="oicon-ok oicon-white"></i> Save Changes</button>
   </div>
 </form>

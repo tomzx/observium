@@ -1,6 +1,6 @@
 <h2 style="margin-bottom: 10px;">Simple Observium API - Error codes</h2>
 <div class="alert alert-info">
-  <i class="icon-white icon-info-sign"></i> <strong>Information:</strong>
+  <i class="oicon-white oicon-info-sign"></i> <strong>Information:</strong>
   <p>
     Here you can find out what the error number means when it returns a errorcode when
     you call the simple api.

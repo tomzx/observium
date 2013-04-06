@@ -77,7 +77,7 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $data)
   </fieldset>
 
   <div class="form-actions">
-    <button id="deleteBtn" type="submit" class="btn btn-danger" disabled="disabled"><i class="icon-remove icon-white"></i> Remove Device</button>
+    <button id="deleteBtn" type="submit" class="btn btn-danger" disabled="disabled"><i class="oicon-remove oicon-white"></i> Remove Device</button>
   </div>
 
 </form>

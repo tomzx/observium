@@ -13,14 +13,14 @@ echo("
         <div class=\"navbar-inner\">
           <a class=\"brand\">Users:</a>
           <ul class=\"nav\">
-            <li class=\"".$active['add']." first\"><a href=\"".$links['add']."\"><i class=\"icon-plus-sign\"></i> Add User</a></li>
-            <li class=\"".$active['edit']."\"><a href=\"".$links['edit']."\"><i class=\"icon-edit\"></i> Edit Users</a></li>
-            <li class=\"".$active['log']."\"><a href=\"".$links['log']."\"><i class=\"icon-calendar\"></i> Authlog</a></li>
+            <li class=\"".$active['add']." first\"><a href=\"".$links['add']."\"><i class=\"oicon-plus-sign\"></i> Add User</a></li>
+            <li class=\"".$active['edit']."\"><a href=\"".$links['edit']."\"><i class=\"oicon-edit\"></i> Edit Users</a></li>
+            <li class=\"".$active['log']."\"><a href=\"".$links['log']."\"><i class=\"oicon-calendar\"></i> Authlog</a></li>
           </ul>");
 if ($isUserlist) {
   echo("
           <ul class=\"nav pull-right\">
-            <li class=\"first\"><a href=\"".$links['edit']."\"><i class=\"icon-chevron-left\"></i> <strong>Back to userlist</strong></a></li>
+            <li class=\"first\"><a href=\"".$links['edit']."\"><i class=\"oicon-chevron-left\"></i> <strong>Back to userlist</strong></a></li>
           </ul>");
 }
 echo("

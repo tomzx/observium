@@ -64,7 +64,7 @@ function api_show_modules() {
   $res     = "";
   foreach ($config['api']['module'] as $item=>$value) {
     $img   = ($value ? "ok" : "ban");
-    $res  .= "<i class=\"icon-".$img."-circle\" style=\"margin-top: 1px;\"></i> <strong>".ucfirst($item)."</strong><br />";
+    $res  .= "<i class=\"oicon-".$img."-circle\" style=\"margin-top: 1px;\"></i> <strong>".ucfirst($item)."</strong><br />";
   }
   return $res;
 }

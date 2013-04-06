@@ -22,9 +22,9 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
     <div class="navbar-inner">
       <div class="container">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#main-nav">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+          <span class="oicon-bar"></span>
+          <span class="oicon-bar"></span>
+          <span class="oicon-bar"></span>
         </button>
         <a class="brand brand-observium" href="<?php generate_url(''); ?>">&nbsp;</a>
         <div class="nav-collapse" id="main-nav">
@@ -32,9 +32,9 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
               <a href="<?php echo(generate_url(array('page'=>'overview'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
-                <i class="icon-globe-model"></i> <b class="caret"></b></a>
+                <i class="oicon-globe-model"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                <li><a href="<?php echo(generate_url(array('page'=>'overview'))); ?>"><i class="icon-globe-model"></i> Overview</a></li>
+                <li><a href="<?php echo(generate_url(array('page'=>'overview'))); ?>"><i class="oicon-globe-model"></i> Overview</a></li>
                 <li class="divider"></li>
 
 <?php
@@ -49,18 +49,18 @@ if(is_file("includes/navbar-custom.inc.php"))
 
 
         <?php if (isset($config['enable_map']) && $config['enable_map']) {
-          echo('<li><a href="'.generate_url(array('page'=>'overview')).'"><span class="menu-icon icon-map"></span> Network Map</a></li>');
+          echo('<li><a href="'.generate_url(array('page'=>'overview')).'"><span class="menu-icon oicon-map"></span> Network Map</a></li>');
         } ?>
 
-        <li><a href="<?php echo(generate_url(array('page'=>'eventlog'))); ?>"><i class="menu-icon icon-clipboard-audit"></i> Eventlog</a></li>
+        <li><a href="<?php echo(generate_url(array('page'=>'eventlog'))); ?>"><i class="menu-icon oicon-clipboard-audit"></i> Eventlog</a></li>
         <?php if (isset($config['enable_syslog']) && $config['enable_syslog']) {
-          echo('<li><a href="'.generate_url(array('page'=>'syslog')).'"><i class="menu-icon icon-clipboard-eye"></i> Syslog</a></li>');
+          echo('<li><a href="'.generate_url(array('page'=>'syslog')).'"><i class="menu-icon oicon-clipboard-eye"></i> Syslog</a></li>');
         } ?>
-        <li><a href="<?php echo(generate_url(array('page'=>'pollerlog'))); ?>"><i class="menu-icon icon-clipboard-report-bar"></i> Polling Information</a></li>
-        <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon icon-bell"></i> Alerts</a></li>
+        <li><a href="<?php echo(generate_url(array('page'=>'pollerlog'))); ?>"><i class="menu-icon oicon-clipboard-report-bar"></i> Polling Information</a></li>
+        <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon oicon-bell"></i> Alerts</a></li>
           <li class="divider"></li>
 
-        <li><a href="<?php echo(generate_url(array('page'=>'inventory'))); ?>"><i class="menu-icon icon-wooden-box"></i> Inventory</a></li>
+        <li><a href="<?php echo(generate_url(array('page'=>'inventory'))); ?>"><i class="menu-icon oicon-wooden-box"></i> Inventory</a></li>
 
 <?php
 
@@ -68,19 +68,19 @@ $packages = dbFetchCell("SELECT COUNT(*) from `packages`");
 
 if ($packages)
 {
-        echo('<li><a href="'.generate_url(array('page'=>'packages')).'"><i class="icon-box-zipper"></i> Software Packages</a></li>');
+        echo('<li><a href="'.generate_url(array('page'=>'packages')).'"><i class="oicon-box-zipper"></i> Software Packages</a></li>');
 }
 
 ?>
 
           <li class="divider"></li>
           <li class="dropdown-submenu">
-            <a tabindex="-1" href="<?php echo(generate_url(array('page'=>'search'))); ?>"><i class="menu-icon icon-magnifier-zoom-actual"></i> Search</a>
+            <a tabindex="-1" href="<?php echo(generate_url(array('page'=>'search'))); ?>"><i class="menu-icon oicon-magnifier-zoom-actual"></i> Search</a>
             <ul class="dropdown-menu">
 <?php
     foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'FDB Tables') as $search_page => $search_name)
     {
-      echo('            <li><a href="' . generate_url(array('page'=>'search','search'=>$search_page)) . '/"><i class="menu-icon  icon-magnifier-zoom-actual"></i> ' . $search_name . ' </a></li>');
+      echo('            <li><a href="' . generate_url(array('page'=>'search','search'=>$search_page)) . '/"><i class="menu-icon  oicon-magnifier-zoom-actual"></i> ' . $search_name . ' </a></li>');
     }
 ?>
             </ul>
@@ -92,22 +92,22 @@ if ($packages)
 
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
-              <a href="<?php echo(generate_url(array('page'=>'devices'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="icon-servers"></i> Devices <b class="caret"></b></a>
+              <a href="<?php echo(generate_url(array('page'=>'devices'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-servers"></i> Devices <b class="caret"></b></a>
               <ul class="dropdown-menu" style="width:200px;">
 
-                <li><a href="<?php echo(generate_url(array('page'=>'devices'))); ?>"><i class="icon-servers"></i> All Devices</a></li>
+                <li><a href="<?php echo(generate_url(array('page'=>'devices'))); ?>"><i class="oicon-servers"></i> All Devices</a></li>
                 <li class="divider"></li>
 
 
                   <li class="dropdown-submenu">
-                    <a tabindex="-1" href="#"><i class="menu-icon icon-building"></i> Locations</a>
+                    <a tabindex="-1" href="#"><i class="menu-icon oicon-building"></i> Locations</a>
                     <ul class="dropdown-menu">
 
 
 <?php
     foreach (getlocations() as $location)
     {
-      echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon icon-building"></i> ' . $location . ' </a></li>');
+      echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon oicon-building"></i> ' . $location . ' </a></li>');
     }
 ?>
                   </ul>
@@ -129,17 +129,17 @@ foreach ($config['device_types'] as $devtype)
 }
 ?>
                 <li class="divider"></li>
-                <li><a href="addhost/"><i class="icon-server--plus"></i> Add Device</a></li>
-                <li><a href="delhost/"><i class="icon-server--minus"></i> Delete Device</a></li>
+                <li><a href="addhost/"><i class="oicon-server--plus"></i> Add Device</a></li>
+                <li><a href="delhost/"><i class="oicon-server--minus"></i> Delete Device</a></li>
               </ul>
             </li>
 
             <li class="divider-vertical" style="margin:0;"></li>
 
             <li class="dropdown">
-              <a href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="icon-network-ethernet"></i> Ports <b class="caret"></b></a>
+              <a href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-network-ethernet"></i> Ports <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="<?php echo(generate_url(array('page'=>'ports'))); ?>"><i class="icon-network-ethernet"></i> All Ports</b></a></li>
+                <li><a href="<?php echo(generate_url(array('page'=>'ports'))); ?>"><i class="oicon-network-ethernet"></i> All Ports</b></a></li>
                 <li class="divider"></li>
 
 
@@ -155,9 +155,9 @@ if ($ports['ignored'])
   echo('<li><a href="ports/ignore=1/"><img src="images/16/chart_curve_link.png" border="0" align="absmiddle" /> Ignored ('.$ports['ignored'].')</a></li>');
 }
 
-if ($config['enable_billing']) { echo('<li><a href="bills/"><i class="icon-money-coin"></i> Traffic Bills</a></li>'); $ifbreak = 1; }
+if ($config['enable_billing']) { echo('<li><a href="bills/"><i class="oicon-money-coin"></i> Traffic Bills</a></li>'); $ifbreak = 1; }
 
-if ($config['enable_pseudowires']) { echo('<li><a href="pseudowires/"><i class="icon-layer-shape-curve"></i> Pseudowires</a></li>'); $ifbreak = 1; }
+if ($config['enable_pseudowires']) { echo('<li><a href="pseudowires/"><i class="oicon-layer-shape-curve"></i> Pseudowires</a></li>'); $ifbreak = 1; }
 
 ?>
 
@@ -192,10 +192,10 @@ foreach (dbFetchRows("SELECT * FROM `ports` AS P, `devices` as D WHERE P.`delete
 }
 ?>
 
-<li><a href="ports/state=down/"><i class="icon-network-status-busy"></i> Down</a></li>
-<li><a href="ports/state=admindown/"><i class="icon-network-status-offline"></i> Disabled</a></li>
+<li><a href="ports/state=down/"><i class="oicon-network-status-busy"></i> Down</a></li>
+<li><a href="ports/state=admindown/"><i class="oicon-network-status-offline"></i> Disabled</a></li>
 <?php
-if ($deleted_ports) { echo('<li><a href="deleted-ports/"><i class="icon-badge-square-minus"></i> Deleted&nbsp;<span class="right">('.$deleted_ports.')</span></a></li>'); }
+if ($deleted_ports) { echo('<li><a href="deleted-ports/"><i class="oicon-badge-square-minus"></i> Deleted&nbsp;<span class="right">('.$deleted_ports.')</span></a></li>'); }
 ?>
 
               </ul>
@@ -217,13 +217,13 @@ $menu_sensors = $used_sensors;
 ?>
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
-              <a href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="icon-system-monitor"></i> Health <b class="caret"></b></a>
+              <a href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-system-monitor"></i> Health <b class="caret"></b></a>
               <ul class="dropdown-menu">
 
 <?php
-$items = array('mempool' => array('text' => "Memory", 'icon' => 'icon-memory'),
-               'processor' => array('text' => "Processors", 'icon' => 'icon-processor'),
-               'storage' => array('text' => "Storage", 'icon' => 'icon-drive'));
+$items = array('mempool' => array('text' => "Memory", 'icon' => 'oicon-memory'),
+               'processor' => array('text' => "Processors", 'icon' => 'oicon-processor'),
+               'storage' => array('text' => "Storage", 'icon' => 'oicon-drive'));
 
 foreach ($items as $item => $item_data)
 {
@@ -288,7 +288,7 @@ if ($_SESSION['userlevel'] >= '5' && ($app_count) > "0")
 ?>
             <li class="divider-vertical" style="margin:0;"></li>
     <li class="dropdown">
-      <a href="<?php echo(generate_url(array('page'=>'apps'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="icon-application-icon-large"></i> Apps <b class="caret"></b></a>
+      <a href="<?php echo(generate_url(array('page'=>'apps'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-application-oicon-large"></i> Apps <b class="caret"></b></a>
       <ul class="dropdown-menu">
 <?php
 
@@ -319,7 +319,7 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
 ?>
      <li class="divider-vertical" style="margin:0;"></li>
      <li class="dropdown">
-       <a href="<?php echo(generate_url(array('page'=>'routing'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="icon-arrow-branch-000-left"></i> Routing <b class="caret"></b></a>
+       <a href="<?php echo(generate_url(array('page'=>'routing'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-arrow-branch-000-left"></i> Routing <b class="caret"></b></a>
        <ul class="dropdown-menu">
 
 <?php
@@ -327,7 +327,7 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
 
   if ($_SESSION['userlevel'] >= '5' && $routing_count['vrf'])
   {
-    echo('<li><a href="routing/protocol=vrf/"><i class="icon-arrow-branch-byr"></i> VRFs</a></li>');
+    echo('<li><a href="routing/protocol=vrf/"><i class="oicon-arrow-branch-byr"></i> VRFs</a></li>');
     $separator++;
   }
 
@@ -381,35 +381,35 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
           </li>
 
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="icon-gear"></i> <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-gear"></i> <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="http://www.observium.org/wiki/Documentation" title="Help"><i class="icon-question"></i> Help</a></li>
+                <li><a href="http://www.observium.org/wiki/Documentation" title="Help"><i class="oicon-question"></i> Help</a></li>
                 <li class="divider"></li>
 
 <?php
 
 if($_SESSION['widescreen'] == 1)
 {
-  echo('<li><a href="'.generate_url($vars, array('widescreen' => 'no')).'" title="Switch to normal screen width layout"><i class="icon-arrow-in" style="font-size: 16px; color: #555;"></i> Normal Width</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('widescreen' => 'no')).'" title="Switch to normal screen width layout"><i class="oicon-arrow-in" style="font-size: 16px; color: #555;"></i> Normal Width</a></li>');
 } else {
-  echo('<li><a href="'.generate_url($vars, array('widescreen' => 'yes')).'" title="Switch to wide screen layout"><i class="icon-arrow-move" style="font-size: 16px; color: #555;"></i> Widescreen</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('widescreen' => 'yes')).'" title="Switch to wide screen layout"><i class="oicon-arrow-move" style="font-size: 16px; color: #555;"></i> Widescreen</a></li>');
 }
 
 if($_SESSION['big_graphs'] == 1)
 {
-  echo('<li><a href="'.generate_url($vars, array('big_graphs' => 'no')).'" title="Switch to normal graphs"><i class="icon-layout-6" style="font-size: 16px; color: #555;"></i> Normal Graphs</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('big_graphs' => 'no')).'" title="Switch to normal graphs"><i class="oicon-layout-6" style="font-size: 16px; color: #555;"></i> Normal Graphs</a></li>');
 } else {
-  echo('<li><a href="'.generate_url($vars, array('big_graphs' => 'yes')).'" title="Switch to larger graphs"><i class="icon-layout-4" style="font-size: 16px; color: #555;"></i> Large Graphs</a></li>');
+  echo('<li><a href="'.generate_url($vars, array('big_graphs' => 'yes')).'" title="Switch to larger graphs"><i class="oicon-layout-4" style="font-size: 16px; color: #555;"></i> Large Graphs</a></li>');
 }
 
 if ($config['api']['enabled'])
 {
   echo('<li class="divider"></li>');
   echo('<li class="dropdown-submenu">');
-  echo('  <a tabindex="-1" href="'.generate_url(array('page'=>'simpleapi')).'"><i class="icon-application-block"></i> Simple API</a>');
+  echo('  <a tabindex="-1" href="'.generate_url(array('page'=>'simpleapi')).'"><i class="oicon-application-block"></i> Simple API</a>');
   echo('  <ul class="dropdown-menu">');
-  echo('    <li><a href="'.generate_url(array('page'=>'simpleapi')).'"><i class="icon-application-block"></i> API Manual</a></li>');
-  echo('    <li><a href="'.generate_url(array('page'=>'simpleapi','api'=>'errorcodes')).'"><i class="icon-application--exclamation"></i> Error Codes</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'simpleapi')).'"><i class="oicon-application-block"></i> API Manual</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'simpleapi','api'=>'errorcodes')).'"><i class="oicon-application--exclamation"></i> Error Codes</a></li>');
   echo('  </ul>');
   echo('</li>');
 }
@@ -418,23 +418,23 @@ if ($_SESSION['userlevel'] >= 10)
 {
   echo('<li class="divider"></li>');
   echo('<li class="dropdown-submenu">');
-  echo('  <a tabindex="-1" href="'.generate_url(array('page'=>'adduser')).'"><i class="icon-users"></i> Users</a>');
+  echo('  <a tabindex="-1" href="'.generate_url(array('page'=>'adduser')).'"><i class="oicon-users"></i> Users</a>');
   echo('  <ul class="dropdown-menu">');
-  echo('    <li><a href="'.generate_url(array('page'=>'adduser')).'"><i class="icon-user--plus"></i> Add User</a></li>');
-  echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="icon-user--pencil"></i> Edit User</a></li>');
-  echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="icon-user--minus"></i> Remove User</a></li>');
-  echo('    <li><a href="'.generate_url(array('page'=>'authlog')).'"><i class="icon-user-detective"></i> Authentication Log</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'adduser')).'"><i class="oicon-user--plus"></i> Add User</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="oicon-user--pencil"></i> Edit User</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="oicon-user--minus"></i> Remove User</a></li>');
+  echo('    <li><a href="'.generate_url(array('page'=>'authlog')).'"><i class="oicon-user-detective"></i> Authentication Log</a></li>');
   echo('  </ul>');
   echo('</li>');
 }
 ?>
                 <li class="divider"></li>
-                <li><a href="<?php echo generate_url(array('page'=>'settings')); ?>" title="Global Settings"><i class="icon-wrench"></i> Global Settings</a></li>
-                <li><a href="<?php echo generate_url(array('page'=>'preferences')); ?>" title="My Settings "><i class="icon-wrench-screwdriver"></i> My Settings</a></li>
+                <li><a href="<?php echo generate_url(array('page'=>'settings')); ?>" title="Global Settings"><i class="oicon-wrench"></i> Global Settings</a></li>
+                <li><a href="<?php echo generate_url(array('page'=>'preferences')); ?>" title="My Settings "><i class="oicon-wrench-screwdriver"></i> My Settings</a></li>
                 <li class="divider"></li>
-                <li><a href="<?php echo generate_url(array('page'=>'logout')); ?>" title="Logout"><i class="icon-door-open-out"></i> Logout</a></li>
+                <li><a href="<?php echo generate_url(array('page'=>'logout')); ?>" title="Logout"><i class="oicon-door-open-out"></i> Logout</a></li>
                 <li class="divider"></li>
-                <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="icon-information"></i> About Observium</a></li>
+                <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="oicon-information"></i> About Observium</a></li>
               </ul>
             </li>
           </ul>
@@ -449,9 +449,9 @@ if($_SESSION['widescreen'] == 1)
   echo('
   <div class="alert">
      <button type="button" class="close" data-dismiss="alert">&times;</button>
-     <p><i class="icon-arrow-move"></i> <strong>Widescreen Mode</strong></p>
+     <p><i class="oicon-arrow-move"></i> <strong>Widescreen Mode</strong></p>
      <p>Please note that widescreen mode is currently not working, but will return once it has been ported to Bootstrap properly.</p>
-     <p><a class="btn btn" href="'.generate_url($vars, array('widescreen' => 'no')).'"><i class="icon-arrow-in"></i> Return to normal</a></p>
+     <p><a class="btn btn" href="'.generate_url($vars, array('widescreen' => 'no')).'"><i class="oicon-arrow-in"></i> Return to normal</a></p>
   </div>');
 
 }
