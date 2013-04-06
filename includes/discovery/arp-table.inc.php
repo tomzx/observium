@@ -97,8 +97,7 @@ foreach (explode("\n", $oid_data) as $data)
     }
     else
     {
-      $ip = str_replace(':', '', $matches[2]);
-      $ip = substr(preg_replace('/([a-f\d]{4})/', "$1:", $ip), 0, -1);
+      $ip = hex2ip($matches[2]);
     }
     $ip_version = 6;
   } else {

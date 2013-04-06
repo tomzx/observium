@@ -453,7 +453,14 @@ function isPingable($hostname)
     }
     if ($ping) break;
 
-    if ($ping_debug) { file_put_contents($file, "$time | PING ERROR: $hostname ($i) | FPING OUT: " . $output[0] . PHP_EOL, FILE_APPEND); }
+    if ($ping_debug)
+    {
+      file_put_contents($file, "$time | PING ERROR: $hostname ($i) | FPING OUT: " . $output[0] . PHP_EOL, FILE_APPEND);
+      if ($i == $retries) {
+        $mtr = $config['mtr'] . " -r -n -c 5 $ip";
+        file_put_contents($file, "MTR OUT: " . `$mtr` . PHP_EOL, FILE_APPEND);
+      }
+    }
 
     if ($i < $retries) usleep($sleep);
   }
@@ -549,6 +556,28 @@ function match_network($nets, $ip, $first=false)
   }
 
   return $return;
+}
+
+// Convert HEX IP value to pretty string:
+// IPv4 "C1 9C 5A 26" => "193.156.90.38"
+// IPv6 "20 01 07 F8 00 12 00 01 00 00 00 00 00 05 02 72" => "2001:07f8:0012:0001:0000:0000:0005:0272"
+// IPv6 "20:01:07:F8:00:12:00:01:00:00:00:00:00:05:02:72" => "2001:07f8:0012:0001:0000:0000:0005:0272"
+function hex2ip($ip_snmp)
+{
+  $ip = trim(str_replace(':', ' ', $ip_snmp));
+  if (!isHexString($ip)) { return $ip_snmp; };
+  
+  $ip_array = explode(' ', $ip);
+  if (count($ip_array) == 4)
+  {
+    // IPv4
+    $ip = hexdec($ip_array[0]).'.'.hexdec($ip_array[1]).'.'.hexdec($ip_array[2]).'.'.hexdec($ip_array[3]);
+  } else {
+    // IPv6
+    $ip = str_replace(' ', '', strtolower($ip));
+    $ip = substr(preg_replace('/([a-f\d]{4})/', "$1:", $ip), 0, -1);
+  }
+  return $ip;
 }
 
 function snmp2ipv6($ipv6_snmp)
