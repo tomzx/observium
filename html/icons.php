@@ -10,14 +10,9 @@
 
 /// FIXME. :D -- mike
 $icons = '';
-foreach (new SplFileObject('css/sweetie.css') as $line)
-{
-  if (preg_match('/\.(sweetie[\w\-]+)\s*{/', $line, $matches)) { $icons .= $matches[1] . ' '; }
-}
-
 foreach (new SplFileObject('css/sprites.css') as $line)
 {
-  if (preg_match('/\.(fugue[\w\-]+)\s*{/', $line, $matches)) { $icons .= $matches[1] . ' '; }
+  if (preg_match('/\.(icon[\w\-]+)\s*{/', $line, $matches)) { $icons .= $matches[1] . ' '; }
 }
 
 foreach(explode(" ",$icons) as $icon)
