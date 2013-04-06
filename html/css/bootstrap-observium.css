@@ -249,6 +249,11 @@ h3.bill > i {
   padding: 3px 5px 1px 5px;
 }
 
+.table-striped, .table-striped-two, .table-striped-three, .table-striped-four
+{
+  background: #fff;
+}
+
 .table-striped-two tbody tr:nth-child(4n+3) td,
 .table-striped-two tbody tr:nth-child(4n+3) th,
 .table-striped-two tbody tr:nth-child(4n+4) td,

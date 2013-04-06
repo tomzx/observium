@@ -35,7 +35,7 @@ if ($services['total'])
 <?php
 
   echo("
-<table class='table table-condensed table-striped'>
+<table class='table table-condensed-more table-striped'>
 <tr bgcolor=$services_colour align=center><td></td>
 <td width=25%><img src='images/16/cog.png' align=absmiddle> $services[total]</td>
 <td width=25% class=green><img src='images/16/cog_go.png' align=absmiddle> $services[up]</td>

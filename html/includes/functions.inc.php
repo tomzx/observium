@@ -141,6 +141,25 @@ function syslog_priorities()
  * @return string
  */
 
+function percent_class ($percent)
+{
+
+  if($percent < "25")
+  {
+    $class = "info";
+  } elseif ($percent < "50") {
+    $class = "";
+  } elseif ($percent < "75") {
+    $class = "success";
+  } elseif ($percent < "90") {
+    $class = "warning";
+  } else {
+    $class = "danger";
+  }
+
+  return $class;
+}
+
 function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdColourHex = '00')
 {
     // Calculate first and second colour (Inverse relationship)
@@ -695,19 +714,28 @@ STATE;
   return $state;
 }
 
+## FIXME - this needs to move to $args array. FUCK THIS SHIT.
 function print_percentage_bar($width, $height, $percent, $left_text, $left_colour, $left_background, $right_text, $right_colour, $right_background)
 {
 
   if ($percent > "100") { $size_percent = "100"; } else { $size_percent = $percent; }
 
-  $output = '
-<div style="font-size:11px;">
-  <div style=" width:'.$width.'px; height:'.$height.'px; background-color:#'.$right_background.';">
-    <div style="width:'.$size_percent.'%; height:'.$height.'px; background-color:#'.$left_background.'; border-right:0px white solid;"></div>
-    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$left_colour .'; padding-left :4px;"><b>'.$left_text.'</b></div>
-    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$right_colour.'; padding-right:4px;text-align:right;"><b>'.$right_text.'</b></div>
-  </div>
-</div>';
+#  $output = '
+#<div style="font-size:11px;">
+#  <div style=" width:'.$width.'px; height:'.$height.'px; background-color:#'.$right_background.';">
+#    <div style="width:'.$size_percent.'%; height:'.$height.'px; background-color:#'.$left_background.'; border-right:0px white solid;"></div>
+#    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$left_colour .'; padding-left :4px;"><b>'.$left_text.'</b></div>
+#    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$right_colour.'; padding-right:4px;text-align:right;"><b>'.$right_text.'</b></div>
+#  </div>
+#</div>';
+
+  $class = percent_class($percent);
+  if (strlen($class)) { $class = "bar-".$class; }
+
+  $output = '<div class="progress" style="margin-top: 3px; margin-bottom: 4px;">
+    <div class="bar '.$class.'" style="width: '.$size_percent.'%;">'.$size_percent.'%</div>
+  </div>';
+
 
   return $output;
 }

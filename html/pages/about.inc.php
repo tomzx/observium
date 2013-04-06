@@ -11,48 +11,54 @@ $mysql_version = dbFetchCell("SELECT version()");
 #$netsnmp_version = shell_exec($config['snmpget'] . " --version 2>&1");
 $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdtool'] . " --version |head -n1")),1,1));
 
-echo("
-      <div class=''>
-        <h3>Versions</h3>
-        <table class=\"table table-bordered table-striped table-condensed table-rounded\">
+?>
+  <div class="well info_box">
+    <div id="title"><i class="oicon-information"></i> Version Information</div>
+    <div id="content">
+        <table class="table table-striped table-condensed-more">
           <tbody>
-            <tr><td><b>Observium</b></td><td>$Observium_version</td></tr>
-            <tr><td><b>Apache</b></td><td>$apache_version</td></tr>
-            <tr><td><b>PHP</b></td><td>$php_version</td></tr>
-            <tr><td><b>MySQL</b></td><td>$mysql_version</td></tr>
-            <tr><td><b>RRDtool</b></td><td>$rrdtool_version</td></tr>
+            <tr><td><b>Observium</b></td><td><?php echo($Observium_version); ?></td></tr>
+            <tr><td><b>Apache</b></td><td><?php echo($apache_version); ?></td></tr>
+            <tr><td><b>PHP</b></td><td><?php echo($php_version); ?></td></tr>
+            <tr><td><b>MySQL</b></td><td><?php echo($mysql_version); ?></td></tr>
+            <tr><td><b>RRDtool</b></td><td><?php echo($rrdtool_version); ?></td></tr>
           </tbody>
         </table>
-");
+    </div>
+  </div>
 
-?>
+  <div style="margin-bottom: 20px; margin-top: -10px;">
+  <table width=100%>
+    <tr>
+      <td><a class="btn btn-small" href="http://www.observium.org"><i class="icon oicon-globe"></i> Website</a></td>
+      <td><a class="btn btn-small" href="http://jira.observium.org/"><i class="icon oicon-fire"></i> Bugtracker</a></td>
+      <td><a class="btn btn-small" href="http://www.observium.org/wiki/Mailing_Lists"><i class="icon oicon-mail"></i> Mailing List</a></td>
+      <td><a class="btn btn-small" href="http://twitter.com/observium"><i class="icon oicon-globe"></i> Twitter</a></td>
+      <td><a class="btn btn-small" href="http://twitter.com/observium_svn"><i class="icon oicon-globe"></i> SVN Twitter</a></td>
+      <td><a class="btn btn-small" href="http://www.facebook.com/pages/Observium/128354461353"><i class="icon oicon-globe"></i> Facebook</a></td>
+    </tr>
+  </table>
+  </div>
 
-        <p>
-          <a class="btn btn-mini" href="http://www.observium.org"><i class="icon oicon-globe"></i> Website</a>
-          <a class="btn btn-mini" href="http://jira.observium.org/"><i class="icon oicon-fire"></i> Bugtracker</a>
-          <a class="btn btn-mini" href="http://www.observium.org/wiki/Mailing_Lists"><i class="icon oicon-envelope"></i> Mailing List</a>
-          <a class="btn btn-mini" href="http://twitter.com/observium"><i class="icon oicon-share-alt"></i> Twitter</a>
-          <a class="btn btn-mini" href="http://twitter.com/observium_svn"><i class="icon oicon-share-alt"></i> SVN Twitter</a>
-          <a class="btn btn-mini" href="http://www.facebook.com/pages/Observium/128354461353"><i class="icon oicon-thumbs-up"></i> Facebook</a>
-        </p>
-
-        <h3>The Team</h3>
-        <div class="well well-light">
+  <div class="well info_box">
+    <div id="title"><i class="oicon-user-detective"></i> Development Team</div>
+    <div id="content">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
-          <dt style="text-align: left;"><img src="images/icons/flags/gb.png"> Adam Armstrong</dt><dd>Project Founder</dd>
-          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Tom Laermans</dt><dd>Developer/Committer</dd>
+          <dt style="text-align: left;"><img src="images/icons/flags/gb.png"> Adam Armstrong</dt><dd>Project Leader</dd>
+          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Tom Laermans</dt><dd>Committer & Developer</dd>
           <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Geert Hauwaerts</dt><dd>Developer</dd>
           <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Dennis de Houx</dt><dd>Developer</dd>
           <dt style="text-align: left;"><img src="images/icons/flags/ru.png"> Mike Stupalov</dt><dd>Developer</dd>
         </dl>
-        </div>
+    </div>
+  </div>
 
-        <h3>Acknowledgements</h3>
-        <div class="well well-light">
+  <div class="well info_box">
+    <div id="title"><i class="oicon-users"></i> Acknowledgements</div>
+    <div id="content">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
           <dt style="text-align: left;"><i class="oicon-user"></i> Twitter</dt><dd>Bootstrap CSS Framework</dd>
           <dt style="text-align: left;  width:200px;"><i class="oicon-user"></i> Yusuke Kamiyamane (p@yusukekamiyamane.com)</dt><dd>Fugue Iconset</dd>
-
           <dt style="text-align: left;"><i class="oicon-user"></i> Stu Nicholls</dt><dd>Dropdown menu CSS code.</dd>
           <dt style="text-align: left;"><i class="oicon-user"></i> Mark James</dt><dd>Silk Iconset.</dd>
           <dt style="text-align: left;"><i class="oicon-user"></i> Erik Bosrup</dt><dd>Overlib Library.</dd>
@@ -65,8 +71,9 @@ echo("
         </div>
       </div>
 
-      <div class="">
-        <h3>Statistics</h3>
+  <div class="well info_box">
+    <div id="title"><i class="oicon-system-monitor"></i> Statistics</div>
+    <div id="content">
 
 <?php
 $stat_devices = dbFetchCell("SELECT COUNT(device_id) FROM `devices`");
@@ -136,11 +143,12 @@ echo("
       </table>
 ");
 ?>
+      </div>
     </div>
   </div>
   <div class="span6">
 
-      <div class="alert alert-info" style="text-align: center;">
+      <div class="alert alert-info" style="margin-top: 15px; text-align: center;">
         <h3>Observium is a Free software project. <br />Please donate to support continued development.</h3>
         <div style="margin-top:10px;">
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
@@ -152,11 +160,13 @@ echo("
         </div>
       </div>
 
-    <div class="">
-      <h3>License</h3>
+  <div class="well info_box">
+    <div id="title"><i class="oicon-notebook"></i> License</div>
+    <div id="content">
       <pre>
 <?php include("../LICENSE"); ?>
       </pre>
     </div>
+  </div>
   </div>
 </div>

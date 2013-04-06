@@ -15,7 +15,7 @@ if ($device['os'] == "ios") { formatCiscoHardware($device); }
 if ($device['features']) { $device['features'] = "(".$device['features'].")"; }
 $device['os_text'] = $config['os'][$device['os']]['text'];
 
-echo('<table class="table table-condensed table-striped">');
+echo('<table class="table table-condensed-more table-striped">');
 
 if ($device['hardware'])
 {
