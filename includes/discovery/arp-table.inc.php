@@ -43,8 +43,8 @@ if ($ipNetToPhysicalPhysAddress_oid)
       if ($debug) { echo("Used CISCO-IETF-IP-MIB::cInetNetToMediaPhysAddress\n"); }
     }
   } else {
-    // Or check IPV6-MIB::ipv6NetToMediaPhysAddress (IPv6 only, deprecated)
-    //ipv6NetToMediaPhysAddress[167][ipv6]["20:01:0b:08:0b:08:0b:08:00:00:00:00:00:00:00:b1"] 0:24:c4:db:9b:40:0:0
+    // Or check IPV6-MIB::ipv6NetToMediaPhysAddress (IPv6 only, deprecated, junos)
+    //ipv6NetToMediaPhysAddress[18][fe80:0:0:0:200:ff:fe00:4] 2:0:0:0:0:4
     $ipv6NetToMediaPhysAddress_oid = snmp_walk($device, 'ipv6NetToMediaPhysAddress', '-OXqs', 'IPV6-MIB');
     if ($ipv6NetToMediaPhysAddress_oid)
     {
@@ -80,7 +80,7 @@ foreach($cache_arp as $entry)
   $old_table[$old_if][$old_version][$old_address] = $old_mac;
 }
 $ipv4_pattern = '/\[(\d+)\](?:\[ipv4\])?\["?([\d\.]+)"?\]\s+([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
-$ipv6_pattern = '/\[(\d+)\]\[ipv6\]\["?([a-f\d:]+)"?\]\s+([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
+$ipv6_pattern = '/\[(\d+)\](?:\[ipv6\])?\["?([a-f\d:]+)"?\]\s+([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
 
 foreach (explode("\n", $oid_data) as $data)
 {
@@ -91,8 +91,15 @@ foreach (explode("\n", $oid_data) as $data)
   }
   elseif (preg_match($ipv6_pattern, $data, $matches))
   {
-    $ip = str_replace(':', '', $matches[2]);
-    $ip = substr(preg_replace('/([a-f\d]{4})/', "$1:", $ip), 0, -1);
+    if (count(explode(':', $matches[2])) === 8)
+    {
+      $ip = Net_IPv6::uncompress($matches[2], TRUE);
+    }
+    else
+    {
+      $ip = str_replace(':', '', $matches[2]);
+      $ip = substr(preg_replace('/([a-f\d]{4})/', "$1:", $ip), 0, -1);
+    }
     $ip_version = 6;
   } else {
     // In principle the such shouldn't be.
