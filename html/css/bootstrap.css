@@ -3731,8 +3731,10 @@ input[type="submit"].btn.btn-mini {
 .btn-navbar .icon-bar + .icon-bar {
   margin-top: 3px;
 }
+
+/*
 .navbar .nav > li > .dropdown-menu:before {
-  content: '';
+  content: 'a';
   display: inline-block;
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
@@ -3742,7 +3744,8 @@ input[type="submit"].btn.btn-mini {
   top: -7px;
   left: 9px;
 }
-.navbar .nav > li > .dropdown-menu:after {
+
+.navbar .nav > li > .dropdown-menu:after-off {
   content: '';
   display: inline-block;
   border-left: 6px solid transparent;
@@ -3752,19 +3755,22 @@ input[type="submit"].btn.btn-mini {
   top: -6px;
   left: 10px;
 }
-.navbar-fixed-bottom .nav > li > .dropdown-menu:before {
+.navbar-fixed-bottom .nav > li > .dropdown-menu:before-off {
   border-top: 7px solid #ccc;
   border-top-color: rgba(0, 0, 0, 0.2);
   border-bottom: 0;
   bottom: -7px;
   top: auto;
 }
-.navbar-fixed-bottom .nav > li > .dropdown-menu:after {
+
+.navbar-fixed-bottom .nav > li > .dropdown-menu:after-off {
   border-top: 6px solid #ffffff;
   border-bottom: 0;
   bottom: -6px;
   top: auto;
 }
+*/
+
 .navbar .nav li.dropdown > a:hover .caret,
 .navbar .nav li.dropdown > a:focus .caret {
   border-top-color: #333333;
@@ -4840,21 +4846,23 @@ a.thumbnail:focus {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 1000;
+  z-index: 0;
   display: none;
   float: left;
   min-width: 160px;
   padding: 5px 0;
-  margin: 2px 0 0;
+  margin: 0px -1px 0;
   list-style: none;
   background-color: #ffffff;
+  background-color: #fafafa;
   border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
   *border-right-width: 2px;
   *border-bottom-width: 2px;
+  /*
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
+  */
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -4957,9 +4965,11 @@ a.thumbnail:focus {
   left: 100%;
   margin-top: -6px;
   margin-left: -1px;
+  /*
   -webkit-border-radius: 0 6px 6px 6px;
   -moz-border-radius: 0 6px 6px 6px;
   border-radius: 0 6px 6px 6px;
+  */
 }
 .dropdown-submenu:hover > .dropdown-menu {
   display: block;
