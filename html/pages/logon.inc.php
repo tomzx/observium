@@ -37,7 +37,7 @@
                 </div>
                 <div class="controls">
                   <button type="submit" class="btn-large btn">
-                    <i class="oicon-lock"></i>
+                    <i class="icon-lock"></i>
                     Log in
                   </button>
                 </div>
