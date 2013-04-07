@@ -19,7 +19,7 @@ if (count($drives))
 
 
 <?php
-  echo('<table class="table table-condensed table-striped">');
+  echo('<table class="table table-condensed-more table-striped">');
 
   foreach ($drives as $drive)
   {

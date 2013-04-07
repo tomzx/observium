@@ -102,7 +102,7 @@ include("overview/sensors/frequencies.inc.php");
 // Start events
 ?>
    <div class="well info_box">
-      <div id="title"><i class="oicon-clipboard-eye"></i> Syslog</div>
+      <div id="title"><i class="oicon-clipboard-audit"></i> Events</div>
       <div id="content">
 <?php
       print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' => TRUE));

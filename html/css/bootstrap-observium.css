@@ -282,6 +282,20 @@ h3.bill > i {
   border-top: 0px;
 }
 
+.table-striped td {
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-striped tr:last-child td {
+  border: none;
+}
+
+.table-striped tr:first-child td {
+  border-top: 1px solid #ddd;
+}
+
+
 .table thead th {
   font-size: 13px;
 }

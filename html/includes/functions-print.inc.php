@@ -209,7 +209,7 @@ function print_search_simple($data, $title = '')
   // Form footer
   $string .= '    <td width="90px" align="center">' . PHP_EOL;
   $string .= '      <input type="hidden" name="pageno" value="1">' . PHP_EOL;
-  $string .= '      <button type="submit" class="btn"><i class="oicon-search"></i> Search</button>' . PHP_EOL;
+  $string .= '      <button type="submit" class="btn"><i class="icon-search"></i> Search</button>' . PHP_EOL;
   $string .= '    </td>' . PHP_EOL;
   $string .= '  </table>' . PHP_EOL . '    </tr>' . PHP_EOL;
   $string .= '</form>' . PHP_EOL . '</div>' . PHP_EOL;
@@ -631,7 +631,7 @@ function print_events($vars)
   if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'eventlog') { $list['device'] = TRUE; }
   if ($short || !isset($vars['port']) || empty($vars['port'])) { $list['port'] = TRUE; }
 
-  $string = '<table class="table table-bordered table-striped table-hover table-condensed table-rounded">' . PHP_EOL;
+  $string = '<table class="table table-bordered table-striped table-hover table-condensed-more table-rounded">' . PHP_EOL;
   if (!$short)
   {
     $string .= '  <thead>' . PHP_EOL;
@@ -653,7 +653,7 @@ function print_events($vars)
     $string .= '  <tr>' . PHP_EOL;
     if ($short)
     {
-      $string .= '    <td width="160" class="syslog">';
+      $string .= '    <td width="105" class="syslog">';
     } else {
       $string .= '    <td width="160">';
     }

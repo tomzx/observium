@@ -150,8 +150,8 @@ foreach ($sorts as $sort => $sort_text)
 
         </select>
         </td>
-        <td style="text-align: center;" width=80>
-        <button type="submit" class="btn btn-large"><i class="oicon-search"></i> Search</button>
+        <td style="text-align: center;" width=90>
+        <button type="submit" class="btn btn-large"><i class="icon-search"></i> Search</button>
         <br />
         <a href="<?php echo(generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare']))); ?>" title="Reset critera to default." >Reset</a>
       </td>

@@ -13,7 +13,7 @@ if (count($toners))
       <div id="content">
 
 <?php
-  echo('<table class="table table-condensed table-striped">');
+  echo('<table class="table table-condensed-more table-striped">');
 
   foreach ($toners as $toner)
   {
