@@ -720,21 +720,19 @@ function print_percentage_bar($width, $height, $percent, $left_text, $left_colou
 
   if ($percent > "100") { $size_percent = "100"; } else { $size_percent = $percent; }
 
-#  $output = '
-#<div style="font-size:11px;">
-#  <div style=" width:'.$width.'px; height:'.$height.'px; background-color:#'.$right_background.';">
-#    <div style="width:'.$size_percent.'%; height:'.$height.'px; background-color:#'.$left_background.'; border-right:0px white solid;"></div>
-#    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$left_colour .'; padding-left :4px;"><b>'.$left_text.'</b></div>
-#    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$right_colour.'; padding-right:4px;text-align:right;"><b>'.$right_text.'</b></div>
-#  </div>
-#</div>';
-
-  $class = percent_class($percent);
-  if (strlen($class)) { $class = "bar-".$class; }
-
-  $output = '<div class="progress" style="margin-top: 3px; margin-bottom: 4px;">
-    <div class="bar '.$class.'" style="width: '.$size_percent.'%;">'.$size_percent.'%</div>
+  $output = '
+  <div style="font-size:11px; width:'.$width.'px; height:'.$height.'px; background-color:#'.$right_background.'; border-radius: 4px; border: 1px solid #'.$left_background.'; margin: -1px;">
+    <div style="width:'.$size_percent.'%; height:'.$height.'px; background-color:#'.$left_background.'; border: none; border-right: none; border-radius: 4px;"></div>
+    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$left_colour .'; padding-left :4px;"><b>'.$left_text.'</b></div>
+    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$right_colour.'; padding-right:4px;text-align:right;"><b>'.$right_text.'</b></div>
   </div>';
+
+#  $class = percent_class($percent);
+#  if (strlen($class)) { $class = "bar-".$class; }
+
+#  $output = '<div class="progress" style="margin-top: 3px; margin-bottom: 4px;">
+#    <div class="bar '.$class.'" style="width: '.$size_percent.'%;">'.$size_percent.'%</div>
+#  </div>';
 
 
   return $output;
