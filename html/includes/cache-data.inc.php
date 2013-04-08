@@ -26,11 +26,11 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
   }
 }
 
-foreach (dbFetchRows("SELECT * FROM `ports`") as $port)
+foreach (dbFetchRows("SELECT port_id, ifAdminStatus, ifOperStatus FROM `ports`") as $port)
 {
   if(port_permitted($port))
   {
-    if($port['ifAdminStatus'] == "down") 
+    if($port['ifAdminStatus'] == "down")
     {
       $ports['disabled']++;
     } else {
