@@ -145,6 +145,8 @@ function poll_device($device, $options)
 {
   global $config, $debug, $device, $polled_devices, $db_stats, $memcache;
 
+  $old_device_state = unserialize($device['device_state']);
+
   $attribs = get_dev_attribs($device['device_id']);
 
   $status = 0; unset($array);
@@ -306,6 +308,8 @@ function poll_device($device, $options)
 
     $update_array['last_polled'] = array('NOW()');
     $update_array['last_polled_timetaken'] = $device_time;
+
+    $update_array['device_state'] = serialize($device_state);
 
     #echo("$device_end - $device_start; $device_time $device_run");
     echo("Polled in $device_time seconds\n");

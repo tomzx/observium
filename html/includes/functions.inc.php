@@ -14,6 +14,7 @@
 
 include("../includes/alerts.inc.php");
 
+
 /**
  * Humanize Device
  *
@@ -69,6 +70,7 @@ function humanize_device(&$device)
   $device['humanized'] = TRUE;
 }
 
+
 /**
  * Format date string.
  *
@@ -85,9 +87,7 @@ function humanize_device(&$device)
 function format_timestamp($str)
 {
   global $config;
-
-  if (($timestamp = strtotime($str)) === false)
-  {
+  if (($timestamp = strtotime($str)) === false) {
     return $str;
   } else {
     return date($config['timestamp_format'], $timestamp);
@@ -97,9 +97,9 @@ function format_timestamp($str)
 function format_unixtime($timestamp)
 {
   global $config;
-
   return date($config['timestamp_format'], $timestamp);
 }
+
 
 /**
  * Return array with syslog priorities.
@@ -144,7 +144,7 @@ function syslog_priorities()
 function percent_class ($percent)
 {
 
-  if ($percent < "25")
+  if($percent < "25")
   {
     $class = "info";
   } elseif ($percent < "50") {
@@ -179,7 +179,7 @@ function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdCol
     return '#'.$secondHex . $firstHex . $thirdColourHex;
 
     // alternatives:
-    // return $thirdColourHex . $firstHex . $secondHex;
+    // return $thirdColourHex . $firstHex . $secondHex; 
     // return $firstHex . $thirdColourHex . $secondHex;
 
 }
@@ -202,6 +202,7 @@ function bug()
 </div>');
 
 }
+
 
 function data_uri($file, $mime)
 {
@@ -276,18 +277,18 @@ function pagination($vars, $total, $per_page = 10)
 
   $page = ($page == 0 ? 1 : $page);
   $start = ($page - 1) * $per_page;
-
+  
   $prev = $page - 1;
   $next = $page + 1;
   $lastpage = ceil($total/$per_page);
   $lpm1 = $lastpage - 1;
-
+ 
   $pagination = "";
 
   if ($lastpage > 1)
   {
     $pagination .= '<form action="">';
-    $pagination .= '<div class="pagination pagination-centered"><ul>';
+    $pagination .= '<div class="pagination pagination-centered"><ul>';   
 
     if ($prev)
     {
@@ -319,7 +320,7 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }
+        }  
 
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
@@ -337,8 +338,8 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }
-
+        }  
+           
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
       } else {
@@ -411,7 +412,6 @@ function generate_url($vars, $new_vars = array())
 function generate_overlib_content($graph_array, $text)
 {
     global $config;
-
     $graph_array['height'] = "100";
     $graph_array['width']  = "210";
 
@@ -692,8 +692,7 @@ function generate_graph_tag($args)
   return '<img src="graph.php?' . implode('&',$urlargs).'" border="0" style="max-width: 100%; width: auto;" />';
 }
 
-function generate_graph_js_state($args)
-{
+function generate_graph_js_state($args) {
   // we are going to assume we know roughly what the graph url looks like here.
   // TODO: Add sensible defaults
   $from   = (is_numeric($args['from'])   ? $args['from']   : 0);
@@ -715,25 +714,61 @@ STATE;
   return $state;
 }
 
-## FIXME - this needs to move to $args array. FUCK THIS SHIT.
+/**
+ * Generate Percentage Bar
+ *
+ * This function generates an Observium percentage bar from a supplied array of arguments.
+ * It is possible to draw a bar that does not work at all,
+ * So care should be taken to make sure values are valid.
+ *
+ * @param array $args
+ * @return string
+ */
+
+function percentage_bar($args)
+{
+
+  if(strlen($args['bg']))     { $style .= 'background-color:'.$args['bg'].';'; }
+  if(strlen($args['border'])) { $style .= 'border-color:'.$args['border'].';'; }
+  if(strlen($args['width']))  { $style .= 'width:'.$args['width'].';'; }
+  if(strlen($args['text_c'])) { $style_b .= 'color:'.$args['text_c'].';'; }
+
+  $total = '0';
+  $output = '<div class="percbar" style="'.$style.'">';
+  foreach($args['bars'] as $bar)
+  {
+    $output .= '<div class="bar" style="width:'.$bar['percent'].'%; background-color:'.$bar['colour'].';"></div>';
+    $total += $bar['percent'];
+  }
+  $left = '100' - $total;
+  if($left > '0') { $output .= '<div class="bar" style="width:'.$left.'%;"></div>'; }
+
+  foreach($args['bars'] as $bar)
+  {
+    $output .= '<div class="bar-text" style="width:'.$bar['percent'].'%; padding-left: 4px;">'.$bar['text'].'</div>';
+  }
+  if($left > '0') { $output .= '<div class="bar-text" style="float: right; text-align: right; width:'.$left.'%;'.$style_b.'">'.$args['text'].'</div>'; }
+
+  $output .= '</div>';
+
+  return $output;
+
+}
+
+// Legacy function
+// DO NOT USE THIS. Please replace instances of it with generate_percentage_bar from above.
 function print_percentage_bar($width, $height, $percent, $left_text, $left_colour, $left_background, $right_text, $right_colour, $right_background)
 {
 
   if ($percent > "100") { $size_percent = "100"; } else { $size_percent = $percent; }
 
-  $output = '
-  <div style="font-size:11px; width:'.$width.'px; height:'.$height.'px; background-color:#'.$right_background.'; border-radius: 4px; border: 1px solid #'.$left_background.'; margin: -1px;">
-    <div style="width:'.$size_percent.'%; height:'.$height.'px; background-color:#'.$left_background.'; border: none; border-right: none; border-radius: 4px;"></div>
-    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$left_colour .'; padding-left :4px;"><b>'.$left_text.'</b></div>
-    <div style="vertical-align: middle;height: '.$height.'px;margin-top:-'.($height).'px; color:#'.$right_colour.'; padding-right:4px;text-align:right;"><b>'.$right_text.'</b></div>
-  </div>';
+  $percentage_bar['border']  = "#".$left_background;
+  $percentage_bar['bg']      = "#".$right_background;
+  $percentage_bar['width']   = $width;
+  $percentage_bar['text']    = $right_text;
+  $percentage_bar['bars'][0] = array('percent' => $size_percent, 'colour' => '#'.$left_background, 'text' => $left_text);
 
-#  $class = percent_class($percent);
-#  if (strlen($class)) { $class = "bar-".$class; }
-
-#  $output = '<div class="progress" style="margin-top: 3px; margin-bottom: 4px;">
-#    <div class="bar '.$class.'" style="width: '.$size_percent.'%;">'.$size_percent.'%</div>
-#  </div>';
+  $output = percentage_bar($percentage_bar);
 
   return $output;
 }
@@ -820,8 +855,7 @@ function generate_port_link($port, $text = NULL, $type = NULL)
 
   $url = generate_port_url($port);
 
-  if (port_permitted($port['port_id'], $port['device_id']))
-  {
+  if (port_permitted($port['port_id'], $port['device_id'])) {
     return overlib_link($url, $text, $content, $class);
   } else {
     return fixifName($text);
@@ -984,9 +1018,9 @@ function generate_ap_link($args, $text = NULL, $type = NULL)
   $content .= generate_graph_tag($graph_array);
   $content .= "</div>";
 
+
   $url = generate_ap_url($args);
-  if (port_permitted($args['interface_id'], $args['device_id']))
-  {
+  if (port_permitted($args['interface_id'], $args['device_id'])) {
     return overlib_link($url, $text, $content, $class);
   } else {
     return fixifName($text);
@@ -997,5 +1031,6 @@ function generate_ap_url($ap, $vars=array())
 {
   return generate_url(array('page' => 'device', 'device' => $ap['device_id'], 'tab' => 'accesspoint', 'ap' => $ap['accesspoint_id']), $vars);
 }
+
 
 ?>

@@ -85,7 +85,13 @@ echo('<div class="span6">');
 
 // Right Pane
 include("overview/processors.inc.php");
-include("overview/mempools.inc.php");
+if(is_array($device_state['ucd_mem']))
+{
+  include("overview/ucd_mem.inc.php");
+} else {
+  include("overview/mempools.inc.php");
+}
+
 include("overview/storage.inc.php");
 
 if(is_array($entity_state['group']['c6kxbar'])) { include("overview/c6kxbar.inc.php"); }

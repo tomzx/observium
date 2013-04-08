@@ -127,6 +127,16 @@ if (is_numeric($memTotalReal) && is_numeric($memAvailReal) && is_numeric($memTot
   }
   rrdtool_update($mem_rrd,  array($memTotalSwap, $memAvailSwap, $memTotalReal, $memAvailReal, $memTotalFree, $memShared, $memBuffer, $memCached));
   $graphs['ucd_memory'] = TRUE;
+
+  $device_state['ucd_mem']['swap_total'] = $memTotalSwap;
+  $device_state['ucd_mem']['swap_avail'] = $memAvailSwap;
+
+  $device_state['ucd_mem']['mem_total'] = $memTotalReal;
+  $device_state['ucd_mem']['mem_avail'] = $memAvailReal;
+  $device_state['ucd_mem']['mem_shared'] = $memShared;
+  $device_state['ucd_mem']['mem_buffer'] = $memBuffer;
+  $device_state['ucd_mem']['mem_cached'] = $memCached;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +157,8 @@ if (is_numeric($load_raw[2]['laLoadInt']))
   }
   rrdtool_update($load_rrd, array($load_raw[1]['laLoadInt'], $load_raw[2]['laLoadInt'], $load_raw[3]['laLoadInt']));
   $graphs['ucd_load'] = "TRUE";
+
+  $device_state['ucd_load']  = $load_raw[2]['laLoadInt'];
 }
 
 unset($ss, $load_rrd, $load_raw, $snmpdata);

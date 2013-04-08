@@ -10,7 +10,7 @@ if ($ports['total'])
 
 <?php
   $graph_array['height'] = "100";
-  $graph_array['width']  = "477";
+  $graph_array['width']  = "475";
   $graph_array['to']     = $config['time']['now'];
   $graph_array['device']          = $device['device_id'];
   $graph_array['type']   = "device_bits";

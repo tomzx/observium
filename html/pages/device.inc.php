@@ -25,8 +25,10 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
   $device  = device_by_id_cache($vars['device']);
   $attribs = get_dev_attribs($device['device_id']);
-
   $entity_state = get_dev_entity_state($device['device_id']);
+  $device_state = unserialize($device['device_state']);
+
+#  print_r($device_state);
 
 #  print_r($entity_state);
 
