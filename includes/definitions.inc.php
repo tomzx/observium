@@ -1055,6 +1055,11 @@ $os = "panos";
 $config['os'][$os]['text']              = "PanOS";
 $config['os'][$os]['type']              = "firewall";
 $config['os'][$os]['icon']              = "panos";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+
 
 $os = "arubaos";
 $config['os'][$os]['text']              = "ArubaOS";
