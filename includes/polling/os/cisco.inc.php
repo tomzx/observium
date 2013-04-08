@@ -15,7 +15,7 @@ echo("\n".$poll_device['sysDescr']."\n");
 
 $oids = "entPhysicalModelName.1 entPhysicalContainedIn.1 entPhysicalName.1 entPhysicalSoftwareRev.1 entPhysicalModelName.1001 entPhysicalContainedIn.1001 cardDescr.1 cardSlotNumber.1";
 
-$data = snmp_get_multi($device, $oids, "-OQUs", "ENTITY-MIB:OLD-CISCO-CHASSIS-MIB");
+$data = snmp_get_multi($device, $oids, "-OQUs", "ENTITY-MIB:OLD-CISCO-CHASSIS-MIB", mib_dirs(array("cisco")));
 
 if ($data[1]['entPhysicalContainedIn'] == "0")
 {
@@ -41,7 +41,7 @@ if ($data[1]['entPhysicalContainedIn'] == "0")
 #   $ciscomodel = str_replace("\"","",$ciscomodel);
 #   if ($ciscomodel) { $hardware = $ciscomodel; unset($ciscomodel); }
 
-if(empty($hardware)) {   $hardware = snmp_get($device, "sysObjectID.0", "-Osqv", "SNMPv2-MIB:CISCO-PRODUCTS-MIB"); }
+if(empty($hardware)) {   $hardware = snmp_get($device, "sysObjectID.0", "-Osqv", "SNMPv2-MIB:CISCO-PRODUCTS-MIB:CISCO-ENTITY-VENDORTYPE-OID-MIB", mib_dirs(array("cisco"))); }
 
 #if(isset($cisco_hardware_oids[$poll_device['sysObjectID']])) { $hardware = $cisco_hardware_oids[$poll_device['sysObjectID']]; }
 
