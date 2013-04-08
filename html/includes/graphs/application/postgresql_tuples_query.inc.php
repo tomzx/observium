@@ -1,4 +1,5 @@
 <?php
+
 include("includes/graphs/common.inc.php");
 
 $colours      = "mixed";
@@ -8,20 +9,20 @@ $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-postgresq
 
 $array = array(
                'tup_inserted' => array('descr' => 'Insert'),
-	       'tup_updated' => array('descr' => 'Update'),
-	       'tup_deleted' => array('descr' => 'Delete')
-	       );
+               'tup_updated' => array('descr' => 'Update'),
+               'tup_deleted' => array('descr' => 'Delete')
+               );
 $i = 0;
 
 if (is_file($rrd_filename))
 {
     foreach ($array as $ds => $vars)
     {
-	$rrd_list[$i]['filename']        = $rrd_filename;
-	$rrd_list[$i]['descr']        = $vars['descr'];
-	$rrd_list[$i]['ds']                = $ds;
-	$rrd_list[$i]['colour']        = $config['graph_colours'][$colours][$i];
-	$i++;
+        $rrd_list[$i]['filename']        = $rrd_filename;
+        $rrd_list[$i]['descr']        = $vars['descr'];
+        $rrd_list[$i]['ds']                = $ds;
+        $rrd_list[$i]['colour']        = $config['graph_colours'][$colours][$i];
+        $i++;
     }
 } else {
     echo("file missing: $file");

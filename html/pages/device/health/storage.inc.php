@@ -4,7 +4,6 @@ $graph_type = "storage_usage";
 
 echo('<table class="table table-striped-two table-condensed">');
 
-
 echo("<thead><tr>
         <th width=250>Drive</th>
         <th width=420>Usage</th>

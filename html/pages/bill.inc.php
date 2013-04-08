@@ -14,7 +14,6 @@ if(!is_file("includes/jpgraph/src/jpgraph.php"))
   <?php
 }
 
-
 $bill_id    = mres($vars['bill_id']);
 $isAdmin    = (($_SESSION['userlevel'] == "10") ? true : false);
 $isUser     = bill_permitted($bill_id);
@@ -95,21 +94,26 @@ if ($isUser) {
       break;
     case "edit":
       include("pages/bill/navbar.inc.php");
+
       if ($isAdmin) { include("pages/bill/edit.inc.php"); } else { include("includes/error-no-perm.inc.php"); }
       break;
     case "reset":
       include("pages/bill/navbar.inc.php");
+
       if ($isAdmin) { include("pages/bill/reset.inc.php"); } else { include("includes/error-no-perm.inc.php"); }
       break;
     case "delete":
       include("pages/bill/navbar.inc.php");
+
       if ($isAdmin) { include("pages/bill/delete.inc.php"); } else { include("includes/error-no-perm.inc.php"); }
       break;
     case "api":
       include("pages/bill/navbar.inc.php");
+
       if ($isAdmin) { include("pages/bill/api.inc.php"); } else { include("includes/error-no-perm.inc.php"); }
       break;
     default:
+
       include("pages/bill/navbar.inc.php");
       include("includes/error-no-perm.inc.php");
   }

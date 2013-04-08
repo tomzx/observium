@@ -19,12 +19,12 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
           <span style="font-weight: bold;">Edit User</span> &#187;
           <input type="hidden" value="edituser" name="page">
           <select name="user_id" onchange="location.href=\'/edituser/user_id=\' + this.options[this.selectedIndex].value + \'/\';">');
-  if(!isset($vars['user_id'])) { echo('<option value="">Select User</option>'); }
+  if (!isset($vars['user_id'])) { echo('<option value="">Select User</option>'); }
 
   foreach ($user_list as $user_entry)
   {
     echo("<option value='" . $user_entry['user_id']  . "'");
-    if($user_entry['user_id'] == $vars['user_id']) { echo(' selected '); }
+    if ($user_entry['user_id'] == $vars['user_id']) { echo(' selected '); }
     #echo(" onchange=\"location.href='/edituser/user_id=' + this.options[this.selectedIndex].value + '/';\" ");
     echo(">" . $user_entry['username'] . "</option>");
   }
@@ -50,7 +50,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
 
   if ($vars['user_id'])
   {
-   if($vars['action'] == "deleteuser")
+   if ($vars['action'] == "deleteuser")
    {
 
      include("pages/edituser/deleteuser.inc.php");
@@ -61,7 +61,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
 
     if (passwordscanchange($user_data['username']) && $vars['action'] == "changepass")
     {
-      if($_POST['new_pass'] == $_POST['new_pass2'])
+      if ($_POST['new_pass'] == $_POST['new_pass2'])
       {
         changepassword($user_data['username'], $_POST['new_pass']);
         print_message("Password Changed.");
@@ -76,6 +76,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
       $_SESSION['username'] = $user_data['username'];
       header("Location: /");
       dbInsert(array('user' => $_SESSION['origusername'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Became ' . $_SESSION['username']), 'authlog');
+
       include("includes/authenticate.inc.php");
     }
 

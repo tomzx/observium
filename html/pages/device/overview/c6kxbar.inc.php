@@ -3,7 +3,6 @@
     <div id="title"><i class="oicon-arrow-switch"></i> 6500/7600 Crossbar</div>
     <div id="content">
 
-
 <?php
 
 echo('<table class="table table-condensed table-striped">');

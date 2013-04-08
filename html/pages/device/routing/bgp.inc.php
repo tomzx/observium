@@ -6,7 +6,6 @@
 
 /// FIXME - this whole page needs rewritte. Use view = graphs / graph = $graphtype.
 
-
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab'     => 'routing',
@@ -185,7 +184,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
     case 'macaccounting_pkts':
       $acc = dbFetchRow("SELECT * FROM `mac_accounting` AS M
                         LEFT JOIN `ipv4_mac` AS I ON M.mac = I.mac_address
-                        LEFT JOIN `ports`    AS P ON P.port_id = M.port_id 
+                        LEFT JOIN `ports`    AS P ON P.port_id = M.port_id
                         LEFT JOIN `devices`  AS D ON D.device_id = P.device_id
                         WHERE I.ip_address = ?", array($peer['bgpPeerIdentifier']));
       $database = $config['rrd_dir'] . "/" . $device['hostname'] . "/cip-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd";
@@ -198,12 +197,13 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
   }
   if ($vars['view'] == 'updates') { $peer['graph'] = 1; }
 
-  if($graphs == 1)
+  if ($graphs == 1)
   {
     echo('<tr><td colspan="8">');
     if ($peer['graph'])
     {
       $graph_array['to']     = $config['time']['now'];
+
       include("includes/print-graphrow.inc.php");
     }
     echo("</td></tr>");

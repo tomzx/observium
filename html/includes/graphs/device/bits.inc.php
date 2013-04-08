@@ -24,15 +24,15 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ?", array($devic
     {
       if (preg_match($ifdescr."i", $port['ifDescr']))
       {
-        if($debug) { echo("[".$port['ifIndex'].":ifDescr ignored]"); }
+        if ($debug) { echo("[".$port['ifIndex'].":ifDescr ignored]"); }
         $ignore = 1;
       } elseif (preg_match($ifdescr."i", $port['ifName']))
       {
-        if($debug) { echo("[".$port['ifIndex'].":ifName ignored(".$ifdescr."||".$port['ifName'].")]"); }
+        if ($debug) { echo("[".$port['ifIndex'].":ifName ignored(".$ifdescr."||".$port['ifName'].")]"); }
         $ignore = 1;
       } elseif (preg_match($ifdescr."i", $port['portName']))
       {
-        if($debug) { echo("[".$port['ifIndex'].":portName ignored]"); }
+        if ($debug) { echo("[".$port['ifIndex'].":portName ignored]"); }
         $ignore = 1;
       }
 

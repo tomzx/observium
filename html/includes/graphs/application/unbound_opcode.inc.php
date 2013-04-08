@@ -12,7 +12,7 @@ $i            = 0;
 $array        = array();
 
 $dns_opcode = array('QUERY', 'IQUERY', 'STATUS', 'NOTIFY', 'UPDATE');
-  
+
 $colours = $config['graph_colours']['mixed']; # needs moar colours!
 
 foreach ($dns_opcode as $opcode)

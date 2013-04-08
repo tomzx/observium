@@ -12,9 +12,4 @@ include("includes/print-accesspoint.inc.php");
 
 echo("</table></div>");
 
-
-
-
-
-
 ?>

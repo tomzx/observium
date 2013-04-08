@@ -82,7 +82,6 @@ foreach ($rrd_list as $rrd)
   if (!$nototal && $width > "500") { $rrd_options .= " GPRINT:totout".$i.":%6.2lf%s$total_units"; }
   $rrd_options .= " 'COMMENT:\\n'";
 
-
   $i++; $iter++;
 }
 
@@ -107,7 +106,6 @@ foreach ($rrd_list as $rrd)
   $rrd_options .= " GPRINT:outbits:AVERAGE:%6.2lf%s";
   $rrd_options .= " GPRINT:outbits:MAX:%6.2lf%s";
   $rrd_options .= " GPRINT:95thout:%6.2lf%s\\\\n";
-
 
 if ($custom_graph) { $rrd_options .= $custom_graph; }
 

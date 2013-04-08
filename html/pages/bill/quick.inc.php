@@ -159,5 +159,3 @@ $perc['width']    = (($percent <= "100") ? $percent : "100");
   </div>
 </div>
 
-
-

@@ -14,12 +14,12 @@ $array        = array(
 /*
 FIXME:
 
-  133 	DEF:cachehits=pdns_recursor.rrd:cache-hits:AVERAGE  \
-  134 	DEF:cachemisses=pdns_recursor.rrd:cache-misses:AVERAGE  \
-  135 	DEF:packetcachehits=pdns_recursor.rrd:packetcache-hits:AVERAGE  \
-  136 	DEF:packetcachemisses=pdns_recursor.rrd:packetcache-misses:AVERAGE  \
-  137 	CDEF:perc=cachehits,100,*,cachehits,cachemisses,+,/ \
-  138 	CDEF:packetperc=packetcachehits,100,*,packetcachehits,packetcachemisses,+,/ \
+  133         DEF:cachehits=pdns_recursor.rrd:cache-hits:AVERAGE  \
+  134         DEF:cachemisses=pdns_recursor.rrd:cache-misses:AVERAGE  \
+  135         DEF:packetcachehits=pdns_recursor.rrd:packetcache-hits:AVERAGE  \
+  136         DEF:packetcachemisses=pdns_recursor.rrd:packetcache-misses:AVERAGE  \
+  137         CDEF:perc=cachehits,100,*,cachehits,cachemisses,+,/ \
+  138         CDEF:packetperc=packetcachehits,100,*,packetcachehits,packetcachemisses,+,/ \
   139         LINE1:perc#0000ff:"percentage cache hits"  \
   140         LINE1:packetperc#ff00ff:"percentage packetcache hits"  \
   141         COMMENT:"\l" \
@@ -32,8 +32,8 @@ FIXME:
   148         GPRINT:packetperc:AVERAGE:"avg %-3.1lf%%\t" \
   149         GPRINT:packetperc:LAST:"last %-3.1lf%%\t" \
   150         GPRINT:packetperc:MAX:"max %-3.1lf%%" \
-  151         COMMENT:"\l" 
-  152 
+  151         COMMENT:"\l"
+  152
 */
 
 $i            = 0;

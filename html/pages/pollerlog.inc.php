@@ -34,11 +34,10 @@ $pagetitle[] = "Polling Information";
 $proc['avg']['poller'] = round($cache['devices']['timers']['polling'] / count($cache['devices']['hostname']));
 $proc['avg']['discovery'] = round($cache['devices']['timers']['discovery'] / count($cache['devices']['hostname']));
 
-foreach($cache['devices']['hostname'] as $hostname=>$id) {
-
+foreach ($cache['devices']['hostname'] as $hostname=>$id)
+{
   // Reference the cache.
   $device = &$cache['devices']['id'][$id];
-
 
   if ($device['disabled'] == 1 && !$config['web_show_disabled']) { continue; }
   $proc['time']['poller'] = round((100 / $cache['devices']['timers']['polling']) * $device['last_polled_timetaken']);

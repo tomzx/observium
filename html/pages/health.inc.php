@@ -64,7 +64,6 @@ if ($vars['view'] == "graphs")
   echo(generate_link("Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "graphs")));
   echo('</li>');
 
-
 if ($vars['view'] != "graphs")
 {
     $class = "active";
@@ -75,7 +74,6 @@ if ($vars['view'] != "graphs")
   echo('</li>');
 
 echo('</ul></div></div>');
-
 
 if (in_array($vars['metric'],array_keys($used_sensors))
   || $vars['metric'] == 'processor'

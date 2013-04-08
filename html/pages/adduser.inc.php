@@ -65,9 +65,9 @@ if ($_SESSION['userlevel'] == '10') {
             <label class="control-label" for="new_level"><strong>User Level</strong></label>
             <div class="controls">
               <select name="new_level" class="span2">
-                <option <?php if($_POST['new_level'] == "1") { echo "selected"; } ?> value="1">Normal User</option>
-                <option <?php if($_POST['new_level'] == "5") { echo "selected"; } ?> value="5">Global Read</option>
-                <option <?php if($_POST['new_level'] == "10") { echo "selected"; } ?> value="10">Administrator</option>
+                <option <?php if ($_POST['new_level'] == "1") { echo "selected"; } ?> value="1">Normal User</option>
+                <option <?php if ($_POST['new_level'] == "5") { echo "selected"; } ?> value="5">Global Read</option>
+                <option <?php if ($_POST['new_level'] == "10") { echo "selected"; } ?> value="10">Administrator</option>
               </select>
             </div>
           </div>

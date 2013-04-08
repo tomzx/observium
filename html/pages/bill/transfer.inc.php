@@ -85,6 +85,7 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
 // GB Convert (1000 vs 1024)
 function gbConvert($data) {
   global $config;
+
   $count = strlen($data);
   $div   = floor($count / 4);
   $res   = round($data / pow(1000, $div) * pow($config['billing']['base'], $div));

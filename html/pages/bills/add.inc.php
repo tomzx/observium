@@ -104,7 +104,7 @@ for ($x=1;$x<32;$x++) {
     <div class="tab-pane fade in" id="ports">
 <?php
 
-  if(is_array($port)) {
+  if (is_array($port)) {
     $devicebtn = str_replace("list-device", "btn", generate_device_link($port));
     $portbtn   = str_replace("interface-upup", "btn", generate_port_link($port));
     $portalias = (empty($port['ifAlias']) ? "" : " - ".$port['ifAlias']."");

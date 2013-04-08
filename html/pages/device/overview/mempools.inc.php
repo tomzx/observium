@@ -16,7 +16,6 @@ if (count($mempools))
     <div id="title"><i class="oicon-memory"></i> Memory Pools</div>
     <div id="content">
 
-
 <?php
   echo('<table class="table table-condensed-more table-striped">');
 

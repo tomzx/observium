@@ -3,7 +3,8 @@
 
 include("usermenu.inc.php");
 
-if ($_SESSION['userlevel'] == '10') {
+if ($_SESSION['userlevel'] == '10')
+{
   echo("
 <table class=\"table table-bordered table-striped table-hover table-condensed table-rounded\">
   <thead>
@@ -16,19 +17,20 @@ if ($_SESSION['userlevel'] == '10') {
   </thead>
   <tbody>");
 
-  foreach (dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `authlog` ORDER BY `datetime` DESC LIMIT 0,250") as $entry) {
+  foreach (dbFetchRows("SELECT *,DATE_FORMAT(datetime, '%D %b %Y %T') as humandate  FROM `authlog` ORDER BY `datetime` DESC LIMIT 0,250") as $entry)
+  {
     $class = "";
-    if (strstr(strtolower($entry['result']), 'fail', true))	  { $class = " class=\"error\""; }
-    echo("
-    <tr".$class.">
-      <td>".$entry['datetime']."</td>
-      <td>".$entry['user']."</td>
-      <td>".$entry['address']."</td>
-      <td>".$entry['result']."</td>
-    </tr>");
+    if (strstr(strtolower($entry['result']), 'fail', true)) { $class = " class=\"error\""; }
+    echo('
+    <tr'.$class.'>
+      <td>'.$entry['datetime'].'</td>
+      <td>'.$entry['user'].'</td>
+      <td>'.$entry['address'].'</td>
+      <td>'.$entry['result'].'</td>
+    </tr>');
   }
 
-  $pagetitle[] = "Authlog";
+  $pagetitle[] = 'Authlog';
 
   echo("  </tbody>\n");
   echo("</table>\n");

@@ -14,7 +14,6 @@
 
 include("../includes/alerts.inc.php");
 
-
 /**
  * Humanize Device
  *
@@ -70,7 +69,6 @@ function humanize_device(&$device)
   $device['humanized'] = TRUE;
 }
 
-
 /**
  * Format date string.
  *
@@ -87,7 +85,9 @@ function humanize_device(&$device)
 function format_timestamp($str)
 {
   global $config;
-  if (($timestamp = strtotime($str)) === false) {
+
+  if (($timestamp = strtotime($str)) === false)
+  {
     return $str;
   } else {
     return date($config['timestamp_format'], $timestamp);
@@ -97,9 +97,9 @@ function format_timestamp($str)
 function format_unixtime($timestamp)
 {
   global $config;
+
   return date($config['timestamp_format'], $timestamp);
 }
-
 
 /**
  * Return array with syslog priorities.
@@ -144,7 +144,7 @@ function syslog_priorities()
 function percent_class ($percent)
 {
 
-  if($percent < "25")
+  if ($percent < "25")
   {
     $class = "info";
   } elseif ($percent < "50") {
@@ -179,7 +179,7 @@ function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdCol
     return '#'.$secondHex . $firstHex . $thirdColourHex;
 
     // alternatives:
-    // return $thirdColourHex . $firstHex . $secondHex; 
+    // return $thirdColourHex . $firstHex . $secondHex;
     // return $firstHex . $thirdColourHex . $secondHex;
 
 }
@@ -202,7 +202,6 @@ function bug()
 </div>');
 
 }
-
 
 function data_uri($file, $mime)
 {
@@ -277,18 +276,18 @@ function pagination($vars, $total, $per_page = 10)
 
   $page = ($page == 0 ? 1 : $page);
   $start = ($page - 1) * $per_page;
-  
+
   $prev = $page - 1;
   $next = $page + 1;
   $lastpage = ceil($total/$per_page);
   $lpm1 = $lastpage - 1;
- 
+
   $pagination = "";
 
   if ($lastpage > 1)
   {
     $pagination .= '<form action="">';
-    $pagination .= '<div class="pagination pagination-centered"><ul>';   
+    $pagination .= '<div class="pagination pagination-centered"><ul>';
 
     if ($prev)
     {
@@ -320,7 +319,7 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }  
+        }
 
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
@@ -338,8 +337,8 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }  
-           
+        }
+
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
       } else {
@@ -412,6 +411,7 @@ function generate_url($vars, $new_vars = array())
 function generate_overlib_content($graph_array, $text)
 {
     global $config;
+
     $graph_array['height'] = "100";
     $graph_array['width']  = "210";
 
@@ -692,7 +692,8 @@ function generate_graph_tag($args)
   return '<img src="graph.php?' . implode('&',$urlargs).'" border="0" style="max-width: 100%; width: auto;" />';
 }
 
-function generate_graph_js_state($args) {
+function generate_graph_js_state($args)
+{
   // we are going to assume we know roughly what the graph url looks like here.
   // TODO: Add sensible defaults
   $from   = (is_numeric($args['from'])   ? $args['from']   : 0);
@@ -733,7 +734,6 @@ function print_percentage_bar($width, $height, $percent, $left_text, $left_colou
 #  $output = '<div class="progress" style="margin-top: 3px; margin-bottom: 4px;">
 #    <div class="bar '.$class.'" style="width: '.$size_percent.'%;">'.$size_percent.'%</div>
 #  </div>';
-
 
   return $output;
 }
@@ -820,7 +820,8 @@ function generate_port_link($port, $text = NULL, $type = NULL)
 
   $url = generate_port_url($port);
 
-  if (port_permitted($port['port_id'], $port['device_id'])) {
+  if (port_permitted($port['port_id'], $port['device_id']))
+  {
     return overlib_link($url, $text, $content, $class);
   } else {
     return fixifName($text);
@@ -983,9 +984,9 @@ function generate_ap_link($args, $text = NULL, $type = NULL)
   $content .= generate_graph_tag($graph_array);
   $content .= "</div>";
 
-
   $url = generate_ap_url($args);
-  if (port_permitted($args['interface_id'], $args['device_id'])) {
+  if (port_permitted($args['interface_id'], $args['device_id']))
+  {
     return overlib_link($url, $text, $content, $class);
   } else {
     return fixifName($text);
@@ -996,6 +997,5 @@ function generate_ap_url($ap, $vars=array())
 {
   return generate_url(array('page' => 'device', 'device' => $ap['device_id'], 'tab' => 'accesspoint', 'ap' => $ap['accesspoint_id']), $vars);
 }
-
 
 ?>

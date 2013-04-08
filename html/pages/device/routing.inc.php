@@ -30,7 +30,6 @@ foreach ($routing_tabs as $type)
 print_navbar($navbar);
 unset($navbar);
 
-
 if (is_file("pages/device/routing/".mres($vars['proto']).".inc.php"))
 {
    include("pages/device/routing/".mres($vars['proto']).".inc.php");

@@ -5,6 +5,7 @@ switch ($vars['api']) {
     include("pages/api/errorcodes.inc.php");
     break;
   default:
+
     include("pages/api/manual.inc.php");
 }
 

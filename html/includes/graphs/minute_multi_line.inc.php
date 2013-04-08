@@ -2,7 +2,6 @@
 
 include("includes/graphs/common.inc.php");
 
-
 // Here we scale the number of numerical columns shown to make sure we keep the text.
 
 if($width > "400") {
@@ -73,10 +72,10 @@ foreach ($rrd_list as $i => $rrd)
     if (!empty($rrd['areacolour'])) { $rrd_optionsb .= " AREA:".$id."#" . $rrd['areacolour']; }
   }
 
-  if(in_array("lst", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."m:LAST:%6.1lf%s"; }
-  if(in_array("min", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."mmin:MIN:%6.1lf%s"; }
-  if(in_array("max", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."mmax:MAX:%6.1lf%s"; }
-  if(in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."m:AVERAGE:%6.1lf%s"; }
+  if (in_array("lst", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."m:LAST:%6.1lf%s"; }
+  if (in_array("min", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."mmin:MIN:%6.1lf%s"; }
+  if (in_array("max", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."mmax:MAX:%6.1lf%s"; }
+  if (in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."m:AVERAGE:%6.1lf%s"; }
 
   $rrd_optionsb .= " COMMENT:'\\l'";
   $iter++;

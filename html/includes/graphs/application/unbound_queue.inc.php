@@ -7,7 +7,7 @@ $colours      = "mixed";
 $nototal      = 1;
 $unit_text    = "Queries";
 $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-unbound-".$app['app_id']."-total.rrd";
-    
+
 $array        = array(
                       'reqListAvg' => array('descr' => 'Average size', 'colour' => '00FF00FF'),
                       'reqListMax' => array('descr' => 'Max size', 'colour' => '0000FFFF'),

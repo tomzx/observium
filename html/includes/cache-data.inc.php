@@ -3,7 +3,7 @@
 foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 {
 
-  if(device_permitted($device))
+  if (device_permitted($device))
   {
 
     // Process device and add all the human-readable stuff.
@@ -16,8 +16,8 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 
     $devices['count']++;
 
-    if($device['status'] == 0)   { $devices['down']++; }
-    if($device['status'] == 1)   { $devices['up']++; }
+    if ($device['status'] == 0)   { $devices['down']++; }
+    if ($device['status'] == 1)   { $devices['up']++; }
 
     $cache['devices']['timers']['polling'] += $device['last_polled_timetaken'];
     $cache['devices']['timers']['discovery'] += $device['last_discovered_timetaken'];
@@ -28,14 +28,14 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 
 foreach (dbFetchRows("SELECT port_id, ifAdminStatus, ifOperStatus FROM `ports`") as $port)
 {
-  if(port_permitted($port))
+  if (port_permitted($port))
   {
-    if($port['ifAdminStatus'] == "down")
+    if ($port['ifAdminStatus'] == "down")
     {
       $ports['disabled']++;
     } else {
-      if($port['ifOperStatus'] == "up") { $ports['up']++; }
-      if($port['ifOperStatus'] == "down" || $port['ifOperStatus'] == "lowerLayerDown") { $ports['down']++; }
+      if ($port['ifOperStatus'] == "up") { $ports['up']++; }
+      if ($port['ifOperStatus'] == "down" || $port['ifOperStatus'] == "lowerLayerDown") { $ports['down']++; }
     }
   }
 }

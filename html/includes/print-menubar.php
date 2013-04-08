@@ -534,7 +534,6 @@ if ($config['api']['enabled'])
 <?php
 } # if ($packages)
 
-
 // Custom menubar entries.
 if(is_file("includes/print-menubar-custom.inc.php"))
 {

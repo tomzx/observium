@@ -23,7 +23,7 @@ $array['flagAD'] = array('descr' => "AD (auth data) flag", 'colour' => $colours[
 $array['flagCD'] = array('descr' => "CD (check disabled) flag", 'colour' => $colours[(count($array) % count($colours))]);
 $array['ednsPresent'] = array('descr' => "EDNS OPT present", 'colour' => $colours[(count($array) % count($colours))]);
 $array['ednsDO'] = array('descr' => "DO (DNSSEC OK) flag", 'colour' => $colours[(count($array) % count($colours))]);
-  
+
 if (is_file($rrd_filename))
 {
   foreach ($array as $ds => $vars)

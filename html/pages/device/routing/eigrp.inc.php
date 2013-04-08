@@ -14,7 +14,6 @@ foreach (array("vpns", "ases", "ports", "neighbours") as $type)
 print_navbar($navbar);
 unset($navbar);
 
-
 switch($vars['view'])
 {
 

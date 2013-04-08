@@ -118,7 +118,6 @@ if ($updated && $update_message)
         </div>
       </div>
 
-
       <div class="control-group">
         <label class="control-label" for="authalgo">Auth Algorithm</label>
         <div class="controls">
@@ -136,7 +135,6 @@ if ($updated && $update_message)
         </div>
       </div>
 
-
       <div class="control-group">
         <label class="control-label" for="cryptoalgo">Crypto Algorithm</label>
         <div class="controls">
@@ -147,13 +145,8 @@ if ($updated && $update_message)
         </div>
       </div>
 
-
-
     </fieldset>
   </div>
-
-
-
 
     <fieldset>
       <legend>SNMP Connectivity</legend>
@@ -199,6 +192,5 @@ foreach ($config['snmp']['transports'] as $transport)
   <div class="form-actions">
     <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="oicon-ok oicon-white"></i> Save Changes</button>
   </div>
-
 
 </form>

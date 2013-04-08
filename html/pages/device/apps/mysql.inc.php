@@ -1,11 +1,9 @@
 <?php
 global $config;
 
-
 $app_sections = array('system' => "System",
                       'queries' => "Queries",
                       'innodb' => "InnoDB");
-
 
 include("app_navbar.inc.php");
 

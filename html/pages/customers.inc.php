@@ -48,19 +48,19 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GRO
     unset($customer_name);
   }
 
-  if ($config['int_customers_graphs']) {
-  
+  if ($config['int_customers_graphs'])
+  {
     echo("<tr><td colspan=7>");
 
     $graph_array['type']   = "customer_bits";
     $graph_array['to']     = $config['time']['now'];
     $graph_array['id']     = $customer['port_descr_descr'];
 
-  include("includes/print-graphrow.inc.php");
+    include("includes/print-graphrow.inc.php");
 
     echo("</tr>");
   }
-  
+
 }
 
 echo("</table>");

@@ -69,8 +69,8 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
 
 #    foreach (dbFetch("SELECT * from devices ".$where) as $device)
 #    foreach (dbFetch("SELECT D.*, COUNT(L.local_port_id) FROM devices AS D LEFT JOIN (ports AS I, links AS L) ON (D.device_id = I.device_id AND I.port_id = L.local_port_id) ". $where. " GROUP BY D.hostname ORDER BY COUNT(L.local_port_id) DESC".$where) as $device)
-    
-    foreach (dbFetch("SELECT D.*, COUNT(L.local_port_id) FROM devices AS D LEFT JOIN (ports AS I, links AS L) ON (D.device_id = I.device_id AND I.port_id = L.local_port_id) ". $where. " 
+
+    foreach (dbFetch("SELECT D.*, COUNT(L.local_port_id) FROM devices AS D LEFT JOIN (ports AS I, links AS L) ON (D.device_id = I.device_id AND I.port_id = L.local_port_id) ". $where. "
                   GROUP BY D.hostname ORDER BY COUNT(L.local_port_id) DESC") as $device)
       {
       if ($device)
@@ -78,17 +78,17 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
         $links = dbFetch("SELECT * from ports AS I, links AS L WHERE I.device_id = ? AND L.local_port_id = I.port_id ORDER BY L.remote_hostname", array($device['device_id']));
         if (count($links))
         {
-	  $ranktype = substr($device['hostname'], 0, 2);
-	  $ranktype2 = substr($device['hostname'], 0, 3);
-	  if(!strncmp($device['hostname'], "c", 1) && !strstr($device['hostname'], "kalooga")) {
-  	    $ranks[$ranktype][] = $device['hostname'];
+          $ranktype = substr($device['hostname'], 0, 2);
+          $ranktype2 = substr($device['hostname'], 0, 3);
+          if (!strncmp($device['hostname'], "c", 1) && !strstr($device['hostname'], "kalooga")) {
+              $ranks[$ranktype][] = $device['hostname'];
           } else {
-	    $ranks[$ranktype2][] = $device['hostname'];
-	  }
+            $ranks[$ranktype2][] = $device['hostname'];
+          }
           if ($anon) { $device['hostname'] = md5($device['hostname']); }
           if (!isset($locations[$device['location']])) { $locations[$device['location']] = $loc_count; $loc_count++; }
           #$loc_id = $locations[$device['location']];
-	  $loc_id = '"'.$ranktype.'"';
+          $loc_id = '"'.$ranktype.'"';
 
           $map .= "\"".$device['hostname']."\" [fontsize=20, fillcolor=\"lightblue\", group=".$loc_id." URL=\"{$config['base_url']}device/device=".$device['device_id']."/tab=ports/view=map/\" shape=box3d]\n";
         }
@@ -191,7 +191,7 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
   }
 
   foreach ($ranks as $rank) {
-    if(substr($rank[0], 0, 2) == "cr") {
+    if (substr($rank[0], 0, 2) == "cr") {
       $map .= '{ rank=min; "' . implode('"; "', $rank) . "\"};\n";
     } else {
       $map .= '{ rank=same; "' . implode('"; "', $rank) . "\"};\n";

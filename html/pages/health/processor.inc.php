@@ -67,7 +67,6 @@ foreach (dbFetchRows($sql) as $proc)
         </tr>
      ');
 
-
     if ($vars['view'] == "graphs")
     {
       echo("<tr><td colspan=5>");

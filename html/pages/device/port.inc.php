@@ -31,10 +31,10 @@ $inf = fixifName($ifname);
 $show_all = 1;
 
 echo("<table width=100% cellpadding=10 cellspacing=0>");
+
 include("includes/print-interface.inc.php");
+
 echo("</table>");
-
-
 
 if ( strpos(strtolower($ifname), "vlan") !== false ) {  $broke = yes; }
 if ( strpos(strtolower($ifname), "loopback") !== false ) {  $broke = yes; }
@@ -54,7 +54,7 @@ if (dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `measured_class` = 'port' 
 $navbars['main']['options']['realtime']['text'] = 'Real time';   // FIXME CONDITIONAL
 $navbars['main']['options']['arp']['text']      = 'ARP/NDP Table';   // FIXME CONDITIONAL?
 
-if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id'])) ){
+if(dbFetchCell("SELECT COUNT(*) FROM `vlans_fdb` WHERE `port_id` = ?", array($port['port_id'])) ) {
   $navbars['main']['options']['fdb']['text'] = 'FDB Table';
 }
 
@@ -68,8 +68,6 @@ if (dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `pagpGroupIfIndex` = '".$por
 
 if (dbFetchCell("SELECT COUNT(*) FROM `ports_vlans` WHERE `port_id` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'"))
 {  $navbars['main']['options']['vlans']['text'] = 'VLANs'; }
-
-
 
 if (dbFetchCell("SELECT count(*) FROM mac_accounting WHERE port_id = '".$port['port_id']."'") > "0" )
 {
@@ -85,9 +83,9 @@ if (dbFetchCell("SELECT COUNT(*) FROM juniAtmVp WHERE port_id = '".$port['port_i
   $navbars['main']['options']['atm-vp']['text'] = 'ATM VPs';
 
   $graphs = array('bits', 'packets', 'cells', 'errors');
-  foreach($graphs as $type)
+  foreach ($graphs as $type)
   {
-    if($vars['view'] == "atm-vp" && $vars['graph'] == $type) { $navbars['main']['options']['atm-vp']['suboptions'][$type]['class'] = "active"; }
+    if ($vars['view'] == "atm-vp" && $vars['graph'] == $type) { $navbars['main']['options']['atm-vp']['suboptions'][$type]['class'] = "active"; }
     $navbars['main']['options']['atm-vp']['suboptions'][$type]['text'] = ucfirst($type);
     $navbars['main']['options']['atm-vp']['suboptions'][$type]['url']  = generate_url($link_array,array('view'=>'atm-vc','graph'=>$type));
 
@@ -99,7 +97,6 @@ if ($_SESSION['userlevel'] == '10' && $config['enable_billing'])
   $navbars['main']['options_right']['bills'] = array('text' => 'Create Bill', 'icon' => 'oicon-money-coin', 'url' => generate_url(array('page' => 'bills', 'view' => 'add', 'port' => $port['port_id'])));
 }
 
-
 foreach ($navbars['main']['options'] as $option => $array)
 {
   if ($vars['view'] == $option) { $navbars['main']['options'][$option]['class'] .= " active"; }
@@ -109,9 +106,9 @@ foreach ($navbars['main']['options'] as $option => $array)
 $navbars['main']['class'] = "navbar-narrow";
 $navbars['main']['brand'] = "Port";
 
-foreach($navbars as $type => $navbar)
+foreach ($navbars as $type => $navbar)
 {
-  if($type == $vars['view'] || $type == 'main')
+  if ($type == $vars['view'] || $type == 'main')
     print_navbar($navbar);
 }
 

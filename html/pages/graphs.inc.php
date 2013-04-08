@@ -288,7 +288,7 @@ if (!$auth)
     $link_array['to'] = $preset['to'];
     $link_array['page'] = "graphs";
     $link = generate_url($link_array);
-    echo ("<option value=\"".$link."\">".$preset['desc']."</option>");
+    echo("<option value=\"".$link."\">".$preset['desc']."</option>");
   }
   echo("
     </select>

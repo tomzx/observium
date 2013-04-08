@@ -19,6 +19,4 @@ $graph_title .= "::reqs";
 
 include("includes/graphs/generic_multi_seperated.inc.php");
 
-
-
 ?>

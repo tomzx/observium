@@ -13,7 +13,7 @@ $navbar['class'] = "navbar-narrow";
 
 foreach ($routing_count as $type => $value)
 {
-  if($value > 0)
+  if ($value > 0)
   {
     if (!$vars['protocol']) { $vars['protocol'] = $type; }
     if ($vars['protocol'] == $type) { $navbar['options'][$type]['class'] = "active"; }

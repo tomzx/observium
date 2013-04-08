@@ -15,15 +15,15 @@ $array        = array(
 FIXME:
 
 rrdtool graph $GRAPHOPTS --start -$1 $WWWPREFIX/cpuload-$2.png -w $WSIZE -h $HSIZE -l 0\
-  154 	-v "percentage" \
-  155 	-t "cpu load" \
-  156 	DEF:usermsec=pdns_recursor.rrd:user-msec:AVERAGE \
-  157 	DEF:sysmsec=pdns_recursor.rrd:sys-msec:AVERAGE \
-  158 	DEF:musermsec=pdns_recursor.rrd:user-msec:MAX \
-  159 	DEF:msysmsec=pdns_recursor.rrd:sys-msec:MAX \
-  160 	CDEF:userperc=usermsec,10,/ \
-  161 	CDEF:sysperc=sysmsec,10,/ \
-  162 	CDEF:totmperc=usermsec,sysmsec,+,10,/ \
+  154         -v "percentage" \
+  155         -t "cpu load" \
+  156         DEF:usermsec=pdns_recursor.rrd:user-msec:AVERAGE \
+  157         DEF:sysmsec=pdns_recursor.rrd:sys-msec:AVERAGE \
+  158         DEF:musermsec=pdns_recursor.rrd:user-msec:MAX \
+  159         DEF:msysmsec=pdns_recursor.rrd:sys-msec:MAX \
+  160         CDEF:userperc=usermsec,10,/ \
+  161         CDEF:sysperc=sysmsec,10,/ \
+  162         CDEF:totmperc=usermsec,sysmsec,+,10,/ \
   163         LINE1:totmperc#ffff00:"max cpu use" \
   164         AREA:userperc#ff0000:"user cpu percentage" \
   165         STACK:sysperc#00ff00:"system cpu percentage" \
@@ -37,7 +37,7 @@ rrdtool graph $GRAPHOPTS --start -$1 $WWWPREFIX/cpuload-$2.png -w $WSIZE -h $HSI
   173         GPRINT:userperc:AVERAGE:"avg %-3.1lf%%\t" \
   174         GPRINT:userperc:LAST:"last %-3.1lf%%\t" \
   175         GPRINT:userperc:MAX:"max %-3.1lf%%" \
-  176         COMMENT:"\l"  
+  176         COMMENT:"\l"
 */
 
 $i            = 0;

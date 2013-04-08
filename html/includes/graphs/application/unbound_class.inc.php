@@ -12,7 +12,7 @@ $i            = 0;
 $array        = array();
 
 $dns_class = array('ANY', 'CH', 'HS', 'IN', 'NONE');
-  
+
 $colours = $config['graph_colours']['mixed']; # needs moar colours!
 
 foreach ($dns_class as $class)

@@ -75,7 +75,6 @@ $pagetitle[] = "Add host";
       </div>
     </div>
 
-
   <input type=hidden name="editing" value="yes">
   <fieldset>
     <legend>SNMP Properties</legend>
@@ -140,7 +139,6 @@ $pagetitle[] = "Add host";
         </div>
       </div>
 
-
       <div class="control-group">
         <label class="control-label" for="authalgo">Auth Algorithm</label>
         <div class="controls">
@@ -171,10 +169,8 @@ $pagetitle[] = "Add host";
     </fieldset>
   </div>
 
-
   <div class="form-actions">
     <button type="submit" class="btn btn-success" name="submit" value="save"><i class="oicon-plus oicon-white"></i> Add Device</button>
   </div>
-
 
 </form>

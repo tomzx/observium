@@ -8,7 +8,6 @@ if ($ports['total'])
     <div id="title"><i class="oicon-network-ethernet"></i> Ports</div>
     <div id="content">
 
-
 <?php
   $graph_array['height'] = "100";
   $graph_array['width']  = "477";

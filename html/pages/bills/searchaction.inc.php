@@ -3,7 +3,7 @@
 if (isset($_POST['billsearch'])) {
   $where = " WHERE 1 ";
   $param = array();
-  foreach($_POST as $item=>$value) {
+  foreach ($_POST as $item=>$value) {
     if (!empty($value)) {
       switch($item) {
         case "billingname":
@@ -29,7 +29,7 @@ if (isset($_POST['billsearch'])) {
         case "billinguser":
           $first = true;
           $where      .= " AND (";
-          foreach(dbFetchRows("SELECT bill_id FROM `bill_perms` WHERE `user_id`= ? ORDER BY `bill_id`", array($value)) as $bill) {
+          foreach (dbFetchRows("SELECT bill_id FROM `bill_perms` WHERE `user_id`= ? ORDER BY `bill_id`", array($value)) as $bill) {
             if ($first) {
               $where  .= "`bill_id` = ?";
               $first   = false;

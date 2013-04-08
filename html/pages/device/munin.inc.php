@@ -33,7 +33,6 @@ foreach ($graph_enable as $section => $nothing)
 
 print_navbar($navbar);
 
-
 $graph_enable = $graph_enable[$vars['group']];
 
 #foreach ($config['graph_types']['device'] as $graph => $entry)

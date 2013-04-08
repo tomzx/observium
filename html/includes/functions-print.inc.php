@@ -58,9 +58,7 @@ function print_vm_row($vm, $device = NULL)
 
   echo('<td>' . $vm['vmwVmCpus'] . " CPU</td>");
 
-
 }
-
 
 /**
  * Generate Bootstrap-format Navbar
@@ -87,41 +85,41 @@ function print_navbar($navbar)
           <span class="oicon-bar"></span>
         </button>';
 
-  if(isset($navbar['brand'])) { echo ' <a class="brand">'.$navbar['brand'].'</a>'; }
+  if (isset($navbar['brand'])) { echo ' <a class="brand">'.$navbar['brand'].'</a>'; }
   echo('<div class="nav-collapse" id="nav-'.$id.'">');
 
-  foreach(array('options', 'options_right') as $array_name)
+  foreach (array('options', 'options_right') as $array_name)
   {
-    if($array_name == "options_right") {
+    if ($array_name == "options_right") {
       echo('<ul class="nav pull-right">');
     } else {
       echo('<ul class="nav">');
     }
-    foreach($navbar[$array_name] as $option => $array)
+    foreach ($navbar[$array_name] as $option => $array)
     {
-      if($array[''] == "pull-right"){
+      if ($array[''] == "pull-right") {
         $navbar['options_right'][$option] = $array;
       } else {
-        if(!is_array($array['suboptions']))
+        if (!is_array($array['suboptions']))
         {
           echo('<li class="'.$array['class'].'">');
           echo('<a href="'.$array['url'].'">');
-          if(isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
+          if (isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
           echo($array['text'].'</a>');
           echo('</li>');
         } else {
           echo('  <li class="dropdown">');
           echo('    <a class="dropdown-toggle" data-toggle="dropdown"  href="'.$array['url'].'">');
-          if(isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
+          if (isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
           echo($array['text'].'
             <b class="caret"></b>
           </a>
         <ul class="dropdown-menu">');
-          foreach($array['suboptions'] as $suboption => $subarray)
+          foreach ($array['suboptions'] as $suboption => $subarray)
           {
             echo('<li class="'.$subarray['class'].'">');
             echo('<a href="'.$subarray['url'].'">');
-            if(isset($subarray['icon'])) { echo('<i class="'.$subarray['icon'].'"></i> '); }
+            if (isset($subarray['icon'])) { echo('<i class="'.$subarray['icon'].'"></i> '); }
             echo($subarray['text'].'</a>');
             echo('</li>');
           }
@@ -171,13 +169,13 @@ function print_search_simple($data, $title = '')
   $string .= '<form method="POST" action="" class="form form-inline">' . PHP_EOL;
   $string .= '  <table width="100%">' . PHP_EOL . '    <tr>' . PHP_EOL;
   if ($title) { $string .= '  <td><span style="font-weight: bold;">' . $title . '</span>&nbsp;&#187;</td>' . PHP_EOL; }
-  
+
   // Main
   $string .= '    <td>' . PHP_EOL;
-  foreach($data as $item)
+  foreach ($data as $item)
   {
     if (!isset($item['value'])) { $item['value'] = ''; }
-    
+
     $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
     if (!$item['name']) { $item['name'] = '&bull;'; }
     $string .= '    <span class="add-on">'.$item['name'].'</span>' . PHP_EOL;
@@ -192,7 +190,7 @@ function print_search_simple($data, $title = '')
         $string .= '    <select ';
         $string .= (isset($item['width'])) ? 'style="width:'.$item['width'].'" ' : '';
         $string .= 'name="'.$item['id'].'" id="'.$item['id'].'">' . PHP_EOL . '      ';
-        foreach($item['values'] as $k => $v)
+        foreach ($item['values'] as $k => $v)
         {
           $k = (string)$k;
           $string .= '<option value="'.$k.'"';
@@ -205,7 +203,7 @@ function print_search_simple($data, $title = '')
     $string .= '  </div>' . PHP_EOL;
   }
   $string .= '    </td>' . PHP_EOL;
-  
+
   // Form footer
   $string .= '    <td width="90px" align="center">' . PHP_EOL;
   $string .= '      <input type="hidden" name="pageno" value="1">' . PHP_EOL;
@@ -214,7 +212,7 @@ function print_search_simple($data, $title = '')
   $string .= '  </table>' . PHP_EOL . '    </tr>' . PHP_EOL;
   $string .= '</form>' . PHP_EOL . '</div>' . PHP_EOL;
   $string .= '<!-- END search form -->' . PHP_EOL . PHP_EOL;
-  
+
   // Print search form
   echo($string);
 }
@@ -248,7 +246,7 @@ function print_addresses($vars)
     default:
       $address_type = 'ipv4';
   }
-  
+
   $param = array();
   $where = ' WHERE 1 ';
   foreach ($vars as $var => $value)
@@ -397,7 +395,7 @@ function print_arptable($vars)
   $start = $pagesize * $pageno - $pagesize;
 
   $address_search = FALSE;
-  
+
   $param = array();
   $where = ' WHERE 1 ';
   foreach ($vars as $var => $value)
@@ -515,7 +513,7 @@ function print_arptable($vars)
         $string .= '    <td class="list-bold" nowrap>' . generate_device_link($entry) . '</td>' . PHP_EOL;
       }
       if ($list['port'])
-      { 
+      {
         if ($entry['ifInErrors_delta'] > 0 || $entry['ifOutErrors_delta'] > 0)
         {
           $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
@@ -585,7 +583,7 @@ function print_events($vars)
           $param[] = $value;
           break;
         case 'message':
-          foreach(explode(',', $value) as $val)
+          foreach (explode(',', $value) as $val)
           {
             $param[] = '%'.$val.'%';
             $cond[] = "`$var` LIKE ?";
@@ -757,7 +755,7 @@ function print_syslogs($vars)
           $param[] = $value;
           break;
         case 'message':
-          foreach(explode(',', $value) as $val)
+          foreach (explode(',', $value) as $val)
           {
             $param[] = '%'.$val.'%';
             $cond[] = '`msg` LIKE ?';
@@ -1004,9 +1002,9 @@ function print_status($status)
       $string .= '    <td class="list-bold">'.generate_port_link($port, makeshortif($port['label']), 'port_errors') . '</td>' . PHP_EOL;
       $string .= '    <td nowrap>' . substr($port['location'], 0, 30) . '</td>' . PHP_EOL;
       $string .= '    <td>Errors ';
-      if($port['ifInErrors_delta']) { $string .= 'In: ' . $port['ifInErrors_delta']; }
-      if($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $string .= ', '; }
-      if($port['ifOutErrors_delta']) { $string .= 'Out: ' . $port['ifOutErrors_delta']; }
+      if ($port['ifInErrors_delta']) { $string .= 'In: ' . $port['ifInErrors_delta']; }
+      if ($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $string .= ', '; }
+      if ($port['ifOutErrors_delta']) { $string .= 'Out: ' . $port['ifOutErrors_delta']; }
       $string .= '</td>' . PHP_EOL;
       $string .= '  </tr>' . PHP_EOL;
     }

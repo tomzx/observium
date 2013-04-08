@@ -27,7 +27,6 @@ foreach ($loadbalancer_tabs as $type)
 
 print_navbar($navbar); unset($navbar);
 
-
 if (is_file("pages/device/loadbalancer/".mres($vars['type']).".inc.php"))
 {
    include("pages/device/loadbalancer/".mres($vars['type']).".inc.php");

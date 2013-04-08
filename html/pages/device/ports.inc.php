@@ -33,13 +33,11 @@ if(dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `ifType` = 'adsl' AND `device
   $navbar['options']['graphs']     = array('text' => 'Graphs', 'class' => 'pull-right');
   $navbar['options']['minigraphs'] = array('text' => 'Minigraphs', 'class' => 'pull-right');
 
-
 foreach ($navbar['options'] as $option => $array)
 {
   if ($vars['view'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
   $navbar['options'][$option]['url'] = generate_url($link_array,array('view'=>$option));
 }
-
 
   $graph_types = array("bits" => "Bits",
                        "upkts" => "Ucast Packets",
@@ -52,17 +50,17 @@ foreach (array('graphs', 'minigraphs') as $option)
  foreach ($graph_types as $type => $descr)
  {
 
-  if($vars['view'] == $option)
+  if ($vars['view'] == $option)
   {
     $navbar_b['class'] = "navbar-narrow";
     $navbar_b['brand'] = $navbar['options'][$option]['text'];
 
     $navbar_b['options'][$type]['text'] = $descr;
     $navbar_b['options'][$type]['url']  = generate_url($link_array,array('view'=>'graphs','graph'=>$type));
-    if($vars['graph'] == $type) { $navbar_b['options'][$type]['class'] = "active"; }
+    if ($vars['graph'] == $type) { $navbar_b['options'][$type]['class'] = "active"; }
 
   }
-  if($vars['view'] == $option && $vars['graph'] == $type) { $navbar['options'][$option]['suboptions'][$type]['class'] = "active"; }
+  if ($vars['view'] == $option && $vars['graph'] == $type) { $navbar['options'][$option]['suboptions'][$type]['class'] = "active"; }
   $navbar['options'][$option]['suboptions'][$type]['text'] = $descr;
   $navbar['options'][$option]['suboptions'][$type]['url']  = generate_url($link_array,array('view'=>$option,'graph'=>$type));
  }
@@ -162,6 +160,7 @@ echo('  </thead>');
   foreach ($ports as $port)
   {
     include("includes/print-interface.inc.php");
+
     $i++;
   }
   echo("</table></div>");

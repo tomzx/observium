@@ -10,7 +10,6 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
   $bgp_alerts = dbFetchCell("SELECT COUNT(*) FROM bgpPeers AS B where (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established'");
 }
 
-
 // Custom menubar entries.
 #if(is_file("includes/print-menubar-custom.inc.php"))
 #{
@@ -42,23 +41,25 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
 if(is_file("includes/navbar-custom.inc.php"))
 {
  include("includes/navbar-custom.inc.php");
+
  echo('<li class="divider"></li>');
 }
+
+if (isset($config['enable_map']) && $config['enable_map'])
+{
+  echo('<li><a href="'.generate_url(array('page'=>'overview')).'"><span class="menu-icon oicon-map"></span> Network Map</a></li>');
+}
 ?>
-
-
-
-        <?php if (isset($config['enable_map']) && $config['enable_map']) {
-          echo('<li><a href="'.generate_url(array('page'=>'overview')).'"><span class="menu-icon oicon-map"></span> Network Map</a></li>');
-        } ?>
-
         <li><a href="<?php echo(generate_url(array('page'=>'eventlog'))); ?>"><i class="menu-icon oicon-clipboard-audit"></i> Eventlog</a></li>
-        <?php if (isset($config['enable_syslog']) && $config['enable_syslog']) {
+<?php
+if (isset($config['enable_syslog']) && $config['enable_syslog'])
+{
           echo('<li><a href="'.generate_url(array('page'=>'syslog')).'"><i class="menu-icon oicon-clipboard-eye"></i> Syslog</a></li>');
-        } ?>
+}
+?>
         <li><a href="<?php echo(generate_url(array('page'=>'pollerlog'))); ?>"><i class="menu-icon oicon-clipboard-report-bar"></i> Polling Information</a></li>
         <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon oicon-bell"></i> Alerts</a></li>
-          <li class="divider"></li>
+        <li class="divider"></li>
 
         <li><a href="<?php echo(generate_url(array('page'=>'inventory'))); ?>"><i class="menu-icon oicon-wooden-box"></i> Inventory</a></li>
 
@@ -68,27 +69,25 @@ $packages = dbFetchCell("SELECT COUNT(*) from `packages`");
 
 if ($packages)
 {
-        echo('<li><a href="'.generate_url(array('page'=>'packages')).'"><i class="oicon-box-zipper"></i> Software Packages</a></li>');
+  echo('<li><a href="'.generate_url(array('page'=>'packages')).'"><i class="oicon-box-zipper"></i> Software Packages</a></li>');
 }
 
 ?>
-
           <li class="divider"></li>
           <li class="dropdown-submenu">
             <a tabindex="-1" href="<?php echo(generate_url(array('page'=>'search'))); ?>"><i class="menu-icon oicon-magnifier-zoom-actual"></i> Search</a>
             <ul class="dropdown-menu">
 <?php
-    foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'FDB Tables') as $search_page => $search_name)
-    {
-      echo('            <li><a href="' . generate_url(array('page'=>'search','search'=>$search_page)) . '/"><i class="menu-icon  oicon-magnifier-zoom-actual"></i> ' . $search_name . ' </a></li>');
-    }
+foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'FDB Tables') as $search_page => $search_name)
+{
+  echo('            <li><a href="' . generate_url(array('page'=>'search','search'=>$search_page)) . '/"><i class="menu-icon  oicon-magnifier-zoom-actual"></i> ' . $search_name . ' </a></li>');
+}
 ?>
             </ul>
           </li>
 
                 </ul>
             </li>
-
 
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
@@ -98,28 +97,22 @@ if ($packages)
                 <li><a href="<?php echo(generate_url(array('page'=>'devices'))); ?>"><i class="oicon-servers"></i> All Devices</a></li>
                 <li class="divider"></li>
 
-
                   <li class="dropdown-submenu">
                     <a tabindex="-1" href="#"><i class="menu-icon oicon-building"></i> Locations</a>
                     <ul class="dropdown-menu">
 
-
 <?php
-    foreach (getlocations() as $location)
-    {
-      echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon oicon-building"></i> ' . $location . ' </a></li>');
-    }
+foreach (getlocations() as $location)
+{
+  echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon oicon-building"></i> ' . $location . ' </a></li>');
+}
 ?>
                   </ul>
                 </li>
 
                 <li class="divider"></li>
 
-
-
-
 <?php
-
 foreach ($config['device_types'] as $devtype)
 {
   if (in_array($devtype['type'],array_keys($cache['device_types'])))
@@ -141,7 +134,6 @@ foreach ($config['device_types'] as $devtype)
               <ul class="dropdown-menu">
                 <li><a href="<?php echo(generate_url(array('page'=>'ports'))); ?>"><i class="oicon-network-ethernet"></i> All Ports</b></a></li>
                 <li class="divider"></li>
-
 
 <?php
 
@@ -165,7 +157,7 @@ if ($config['enable_pseudowires']) { echo('<li><a href="pseudowires/"><i class="
 
 if ($_SESSION['userlevel'] >= '5')
 {
-  // fixme new icons
+  // FIXME new icons
   echo('<li class="divider"></li>');
   if ($config['int_customers']) { echo('<li><a href="customers/"><img src="images/16/group_link.png" border="0" align="absmiddle" /> Customers</a></li>'); $ifbreak = 1; }
   if ($config['int_l2tp']) { echo('<li><a href="iftype/type=l2tp/"><img src="images/16/user.png" border="0" align="absmiddle" /> L2TP</a></li>'); $ifbreak = 1; }
@@ -460,7 +452,7 @@ if($_SESSION['widescreen'] == 1)
 <script>
 
 function lookup(inputString) {
-   if(inputString.length == 0) {
+   if (inputString.length == 0) {
       $('#suggestions').fadeOut(); // Hide the suggestions box
    } else {
       $.post("ajax_search.php", {queryString: ""+inputString+""}, function(data) { // Do an AJAX call

@@ -17,14 +17,14 @@ if ($_POST['submit'] == "update-sensors")
   foreach ($sensors AS $sensor)
   {
     $sid = $sensor['sensor_id'];
-    if($su[$sid]['sensor_ignore'] == "on") { $su[$sid]['sensor_ignore'] = "1"; } else { $su[$sid]['sensor_ignore'] = "0"; }
+    if ($su[$sid]['sensor_ignore'] == "on") { $su[$sid]['sensor_ignore'] = "1"; } else { $su[$sid]['sensor_ignore'] = "0"; }
 
-    foreach(array('sensor_ignore','sensor_limit_low','sensor_limit') as $field)
+    foreach (array('sensor_ignore','sensor_limit_low','sensor_limit') as $field)
     {
-      if($su[$sid][$field]    != $sensor[$field])    { $sup[$field] = $su[$sid][$field]; }
+      if ($su[$sid][$field]    != $sensor[$field])    { $sup[$field] = $su[$sid][$field]; }
     }
 
-    if(is_array($sup))
+    if (is_array($sup))
     {
       dbUpdate($sup, 'sensors', '`sensor_id` = ?', array($sensor['sensor_id']));
       $did_update = TRUE;

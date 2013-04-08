@@ -3,7 +3,7 @@
 <?php
 unset($search, $types);
 
-//Message field 
+//Message field
 $search[] = array('type'    => 'text',
                   'name'    => 'Message',
                   'id'      => 'message',

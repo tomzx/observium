@@ -19,7 +19,7 @@
 
 $times = dbFetchRows("SELECT * FROM `devices_perftimes` WHERE `operation` = 'poll' AND `device_id` = ? ORDER BY `start` DESC", array($device['device_id']));
 
-foreach($times as $time)
+foreach ($times as $time)
 {
 
   echo('    <tr>
@@ -51,7 +51,7 @@ foreach($times as $time)
 
 $times = dbFetchRows('SELECT * FROM `devices_perftimes` WHERE `operation` = "discover" AND `device_id` = ? ORDER BY `start` DESC', array($device['device_id']));
 
-foreach($times as $time)
+foreach ($times as $time)
 {
 
   echo('    <tr>
@@ -65,8 +65,6 @@ foreach($times as $time)
 ?>
   </tbody>
 </table>
-
-
 
 </div>
 </div>

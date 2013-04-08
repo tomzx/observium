@@ -34,7 +34,7 @@ foreach (dbFetchRows("SELECT * FROM pseudowires AS P, ports AS I WHERE P.port_id
     $i++;
   }
 
-  if($peer_device_id) { $peer_device = get_device_by_id_cache($peer_device_id); }
+  if ($peer_device_id) { $peer_device = get_device_by_id_cache($peer_device_id); }
 
   $pw_b = dbFetchRow("SELECT * from `devices` AS D, `ports` AS I, `pseudowires` AS P WHERE D.device_id = ? AND D.device_id = I.device_id
                       AND P.cpwVcID = ? AND P.port_id = I.port_id", array($pw_a['peer_device_id'], $pw_a['cpwVcID']));

@@ -2,7 +2,6 @@
 
 include("includes/graphs/common.inc.php");
 
-
 if($format == "octets" || $format == "bytes")
 {
   $units = "Bps";

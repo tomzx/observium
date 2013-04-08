@@ -12,7 +12,7 @@ if (isset($_POST['billsearch'])) {
 if ($isAdmin) {
   $data .= "<option value=\"\">All Customers</option>";
   $data .= "<optgroup label=\"Customer:\">";
-  foreach(dbFetchRows("SELECT * FROM `bill_perms` GROUP BY `user_id` ORDER BY `user_id` ") as $customers) {
+  foreach (dbFetchRows("SELECT * FROM `bill_perms` GROUP BY `user_id` ORDER BY `user_id` ") as $customers) {
     if (bill_permitted($customers['bill_id'])) {
       $customer = dbFetchRow("SELECT * FROM `users` WHERE `user_id` = ? ORDER BY `user_id`", array($customers['user_id']));
       $name     = (empty($customer['realname']) ? $customer['username'] : $customer['realname']);

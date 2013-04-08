@@ -5,7 +5,7 @@
 
 unset($search, $priorities, $programs);
 
-//Message field 
+//Message field
 $search[] = array('type'    => 'text',
                   'name'    => 'Message',
                   'id'      => 'message',

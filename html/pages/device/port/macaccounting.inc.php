@@ -9,23 +9,21 @@
   $navbar['brand'] = 'Mac Accounting';
 
   $subviews = array('details', 'graphs', 'minigraphs', 'top10');
-  foreach($subviews as $type)
+  foreach ($subviews as $type)
   {
    $navbar['options'][$type]['text'] = nicecase($type);
    $navbar['options'][$type]['url']  = generate_url($vars,array('subview'=>$type));
-    if($vars['subview'] == $type) {$navbar['options'][$type]['class'] = "active"; }
+    if ($vars['subview'] == $type) {$navbar['options'][$type]['class'] = "active"; }
   }
 
-  foreach($graphs as $type => $text)
+  foreach ($graphs as $type => $text)
   {
    $navbar['options_right'][$type]['text'] = $text;
    $navbar['options_right'][$type]['url']  = generate_url($link_array,array('view' => 'macaccounting', 'subview' => 'graphs', 'graph'=>$type));
-    if($vars['graph'] == $type) {$navbar['options_right'][$type]['class'] = "active"; }
+    if ($vars['graph'] == $type) {$navbar['options_right'][$type]['class'] = "active"; }
   }
 
 print_navbar($navbar);
-
-
 
 // FIXME - REWRITE!
 
@@ -61,9 +59,9 @@ else
   $query = "SELECT *, `mac_accounting`.`ma_id` as `ma_id` FROM `mac_accounting` LEFT JOIN `mac_accounting-state` ON  `mac_accounting`.`ma_id` =  `mac_accounting-state`.`ma_id` WHERE port_id = ?";
   $param = array($port['port_id']);
 
- if($vars['subview'] != minigraphs) {
+ if ($vars['subview'] != minigraphs) {
 
-  if($vars['subview'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
+  if ($vars['subview'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
 
   echo('<table class="table table-hover table-condensed table-rounded table-bordered '.$table_class.'">');
   echo('  <thead>');
@@ -99,7 +97,6 @@ foreach ($cols as $sort => $col)
   echo('  </thead>');
 
   }
-
 
   $ma_array = dbFetchRows($query, $param);
 
@@ -184,14 +181,16 @@ foreach ($cols as $sort => $col)
 
      $peer_info['astext'];
 
-     if($vars['subview'] == "graphs")
+     if ($vars['subview'] == "graphs")
      {
        $graph_array['type']   = $graph_type;
        $graph_array['id']     = $acc['ma_id'];
        $graph_array['height'] = "100";
        $graph_array['to']     = $config['time']['now'];
        echo('<tr><td colspan="8">');
+
        include("includes/print-graphrow.inc.php");
+
        echo("</td></tr>");
        $i++;
       }

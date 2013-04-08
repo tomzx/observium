@@ -8,7 +8,7 @@
     </p>
     <pre>
       <strong>Explaination:</strong> Collect encrypted data from the demo module
-      <strong>Example 1   :</strong> http://<?php echo ($_SERVER["SERVER_NAME"]); ?>/api.php?username=demo&password=demo&module=demo
+      <strong>Example 1   :</strong> http://<?php echo($_SERVER["SERVER_NAME"]); ?>/api.php?username=demo&password=demo&module=demo
       <strong>Result      :</strong> [DATA]</pre>
     <br />
     <h3>Decryption:</h3>

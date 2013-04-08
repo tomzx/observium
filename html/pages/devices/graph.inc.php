@@ -14,9 +14,9 @@
 
     $graph_array           = array();
 
-    if($_SESSION['widescreen'])
+    if ($_SESSION['widescreen'])
     {
-      if($_SESSION['big_graphs'])
+      if ($_SESSION['big_graphs'])
       {
         $width_div = 585;
         $width = 507;
@@ -29,7 +29,7 @@
         $height_div = 180;
       }
     } else {
-      if($_SESSION['big_graphs'])
+      if ($_SESSION['big_graphs'])
       {
         $width_div = 579;
         $width = 500;

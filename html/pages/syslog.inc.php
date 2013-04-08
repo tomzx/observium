@@ -1,6 +1,6 @@
 <div class="row">
 <div class="span12">
-  
+
 <?php
 
 ///FIXME. Mike: should be more checks, at least a confirmation click.
@@ -12,7 +12,7 @@
 
 unset($search, $devices, $priorities, $programs);
 
-//Message field 
+//Message field
 $search[] = array('type'    => 'text',
                   'name'    => 'Message',
                   'id'      => 'message',

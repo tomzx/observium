@@ -12,7 +12,7 @@
 
 unset($search, $devices, $types);
 
-//Message field 
+//Message field
 $search[] = array('type'    => 'text',
                   'name'    => 'Message',
                   'id'      => 'message',

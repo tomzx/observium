@@ -32,7 +32,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? A
   $vsvrs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_vservers` AS V ".
                        "WHERE SV. device_id = ? AND SV.svc_name = ? AND V.device_id = SV.device_id AND V.vsvr_name = SV.vsvr_name", array($device['device_id'], $svc['svc_name']));
 
-  if(count($vsvrs))
+  if (count($vsvrs))
   {
     echo('<tr><td colspan="5">');
     echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
@@ -93,11 +93,10 @@ $graph_array['nototal'] = "yes";
 $graph_array['legend'] = "no";
 $graph_array['type']   = $graph_type;
 echo('<h5>Aggregate</h5>');
+
 include("includes/print-graphrow.inc.php");
+
 unset($graph_array);
-
-
-
 
 $menu_options = array('basic' => 'Basic',
                      );

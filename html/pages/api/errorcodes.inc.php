@@ -18,7 +18,7 @@
 
 include_once("includes/api/errorcodes.inc.php");
 
-foreach($errorcodes as $item=>$value) {
+foreach ($errorcodes as $item=>$value) {
   echo("<tr><td>".$value['code']."</td><td>".$value['msg']."</td></tr>");
 }
 

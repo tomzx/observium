@@ -26,7 +26,6 @@ foreach (dbFetchRows("SELECT * FROM `applications` WHERE `device_id` = ?", array
 print_navbar($navbar);
 unset($navbar);
 
-
 $where_array = array($device['device_id'], $vars['app']);
 if($vars['instance'])
 {

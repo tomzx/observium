@@ -31,7 +31,7 @@ while (1)
 }
 
 $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-unbound-".$app['app_id']."-total.rrd";
-    
+
 $array        = array(
                       'numQueries' => array('descr' => 'Total queries', 'colour' => '00FF00FF'), /// FIXME better colours
                       'cacheHits' => array('descr' => 'Cache hits', 'colour' => '0000FFFF'),
@@ -53,7 +53,7 @@ if (is_file($rrd_filename))
 }
 
 $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-unbound-".$app['app_id']."-queries.rrd";
-    
+
 $array        = array(
                       'numQueryTCP' => array('descr' => 'TCP queries', 'colour' => '00FFFFFF'),
                       'numQueryIPv6' => array('descr' => 'IPv6 queries', 'colour' => '00FFFFFF'),

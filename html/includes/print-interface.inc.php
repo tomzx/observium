@@ -51,7 +51,6 @@ if ($port['ifAlias']) { echo("<br />"); }
 
 unset ($break);
 
-
 if ($port_details)
 {
   foreach (dbFetchRows("SELECT * FROM `ipv4_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip)
@@ -93,8 +92,6 @@ if ($port['ifOperStatus'] == "up")
         <img src='images/icons/arrow_pps_in.png' align=absmiddle> ".format_bi($port['ifInUcastPkts_rate'])."pps</span><br />
         <img src='images/icons/arrow_pps_out.png' align=absmiddle> ".format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
 }
-
-
 
 echo("</td><td width=75>");
 if ($port['ifSpeed']) { echo("<span class=box-desc>".humanspeed($port['ifSpeed'])."</span>"); }

@@ -1,6 +1,6 @@
 <?php
 
-$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] ."/". 
+$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] ."/".
 safename("arubaap-$ap[name].$ap[radio_number].rrd");
 
 $rrd_list[0]['filename'] = $rrd_filename;
@@ -21,6 +21,5 @@ if ($rrd_list)
 {
   include("includes/graphs/generic_multi_line.inc.php");
 }
-
 
 ?>

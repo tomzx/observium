@@ -31,7 +31,7 @@ $search[] = array('type'    => 'select',
 //                  'width'   => '120px',
 //                  'value'   => $vars['ip_version'],
 //                  'values'  => array('' => 'IPv4 & IPv6', '4' => 'IPv4 only', '6' => 'IPv6 only'));
-//IP address field 
+//IP address field
 $search[] = array('type'    => 'text',
                   'name'    => 'IP Address',
                   'id'      => 'address',

@@ -17,7 +17,7 @@ foreach ($ports as $port) {
   $devicebtn = str_replace("list-device", "btn btn-mini", generate_device_link($port, ""));
   $devicebtn = str_replace("\">".$port['hostname'], "\" style=\"color: #000;\"><i class=\"icon-hdd\"></i> ".$port['hostname'], $devicebtn);
 
-  if(empty($port['ifAlias'])) { $portalias = ""; } else { $portalias = " - ".$port['ifAlias'].""; }
+  if (empty($port['ifAlias'])) { $portalias = ""; } else { $portalias = " - ".$port['ifAlias'].""; }
 
   $portbtn = str_replace("interface-upup", "btn btn-mini", generate_port_link($port, "<i class='icon-random'></i> ".$port['ifName'].$portalias));
   $portbtn = str_replace("interface-updown", "btn btn-mini btn-danger", $portbtn);

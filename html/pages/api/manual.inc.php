@@ -25,6 +25,7 @@ include("includes/api/functions.inc.php");
 <?php
 
   include_once("pages/api/manual.general.inc.php");
+
   api_show_manual();
 
 ?>

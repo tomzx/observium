@@ -205,7 +205,6 @@ else
          <td style="width: 1px; background-color: '.$peer['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
          <td style="width: 1px;"></td>');
 
-
     echo("
             <td width=150>" . $localaddresslink . "<br />".generate_device_link($peer, shorthost($peer['hostname']), array('tab' => 'routing', 'proto' => 'bgp'))."</td>
             <td width=30><b>&#187;</b></td>

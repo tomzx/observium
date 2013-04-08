@@ -151,27 +151,27 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
   <script type="text/javascript">
   jQuery(document).ready(function($) {
-    $(".tooltip-from-element").each(function(){
+    $(".tooltip-from-element").each(function() {
       var selector = '#' + $(this).data('tooltip-id');
       $(this).qtip({
         content: $(selector),
         style: {
-	  classes: 'qtip-bootstrap',
-	},
+          classes: 'qtip-bootstrap',
+        },
         position: {
-		target: 'mouse',
-		adjust: {
-			x: 2,
+                target: 'mouse',
+                adjust: {
+                        x: 2,
                         y: 2
-		}
-	}
+                }
+        }
       });
     });
 
   $('.tooltip-from-data').qtip({
-	content: {
-		attr: 'data-tooltip'
-	},
+        content: {
+                attr: 'data-tooltip'
+        },
         style: {
           classes: 'qtip-bootstrap',
         },
@@ -266,7 +266,7 @@ function popUp(URL)
 {
   day = new Date();
   id = day.getTime();
-  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,	menubar=0,resizable=1,width=550,height=600');");
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,        menubar=0,resizable=1,width=550,height=600');");
 }
 // End -->
   </script>
@@ -291,7 +291,7 @@ if ($_SESSION['authenticated'])
   include("includes/cache-data.inc.php");
 
   // Include navbar
-  if(!$vars['bare'] == "yes") {  include("includes/navbar.inc.php"); }
+  if (!$vars['bare'] == "yes") {  include("includes/navbar.inc.php"); }
 
   // Authenticated. Print a page.
   if (isset($vars['page']) && !strstr("..", $vars['page']) &&  is_file("pages/" . $vars['page'] . ".inc.php"))

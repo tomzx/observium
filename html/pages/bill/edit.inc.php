@@ -1,6 +1,7 @@
 <?php
 
 include("includes/javascript-interfacepicker.inc.php");
+
 // This needs more verification. Is it already added? Does it exist?
 
 $base = $config["billing"]["base"];

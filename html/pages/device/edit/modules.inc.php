@@ -60,7 +60,7 @@ foreach ($config['poller_modules'] as $module => $module_status)
 
   if (isset($attribs['poll_'.$module]))
   {
-    if ($attribs['poll_'.$module]) { echo("<span class=green>enabled</span>"); $toggle = "Disable"; $btn_class = "btn-danger"; 
+    if ($attribs['poll_'.$module]) { echo("<span class=green>enabled</span>"); $toggle = "Disable"; $btn_class = "btn-danger";
     } else { echo('<span class=red>disabled</span>'); $toggle = "Enable"; $btn_class = "btn-success";}
   } else {
     if ($module_status) { echo("<span class=green>enabled</span>"); $toggle = "Disable"; $btn_class = "btn-danger";

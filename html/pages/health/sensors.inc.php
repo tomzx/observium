@@ -26,7 +26,7 @@ echo('  <tbody>');
 foreach (dbFetchRows($sql, $param) as $sensor)
 {
 
- if(device_permitted($sensor['device_id']))
+ if (device_permitted($sensor['device_id']))
  {
 
   $alert = "";

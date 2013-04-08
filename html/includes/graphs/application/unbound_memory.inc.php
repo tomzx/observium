@@ -13,9 +13,9 @@ $array        = array(
                       'memModIterator' => array('descr' => 'Iterator module', 'colour' => '6699CCFF'),
                       'memModValidator' => array('descr' => 'Validator module', 'colour' => '99CCEEFF'),
                      );
-                                                                                        
+
 #DS:memTotal:DERIVE:600:0:125000000000 \
-                        
+
 $i            = 0;
 
 if (is_file($rrd_filename))

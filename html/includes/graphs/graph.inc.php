@@ -128,7 +128,6 @@ function graph_error($string)
   }
 }
 
-
 if ($error_msg) {
   // We have an error :(
 

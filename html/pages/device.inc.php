@@ -395,14 +395,14 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
      echo("</ul>");
  }
 
-  if (device_permitted($device['device_id']) || $check_device == $vars['device']) {
+  if (device_permitted($device['device_id']) || $check_device == $vars['device'])
+  {
     echo('<div class="tab-content">');
 
-    if(!$device['last_polled']) {
+    if (!$device['last_polled'])
+    {
       echo('<div class="alert alert-info"><h3>Device not yet polled</h3><p>This device has not yet been successfully polled. System information and statistics will not be populated and graphs will not draw. Please wait 5-10 minutes for graphs to draw correctly.</p></div>');
     }
-
-    
 
     include("pages/device/".mres(basename($tab)).".inc.php");
 

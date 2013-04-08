@@ -19,5 +19,4 @@ $graph_title .= "::packets";
 
 include("includes/graphs/generic_multi_seperated.inc.php");
 
-
 ?>

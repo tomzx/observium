@@ -47,7 +47,6 @@ $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab'     => 'health');
 
-
 if (!$vars['metric']) { $vars['metric'] = "overview"; }
 
 $navbar['brand'] = "Health";

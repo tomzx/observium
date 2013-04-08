@@ -9,7 +9,6 @@ echo('<thead><tr>
         <th>CPU</th>
       </tr></thead>');
 
-
 foreach (dbFetchRows("SELECT * FROM vminfo WHERE device_id = ? ORDER BY vmwVmDisplayName", array($device['device_id'])) as $vm)
 {
   print_vm_row($vm, $device);

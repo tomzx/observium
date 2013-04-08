@@ -18,7 +18,6 @@ if(!is_file("includes/jpgraph/src/jpgraph.php") || defined('DEFAULT_THEME_CLASS'
   <?php
 }
 
-
 $isAdmin    = (($_SESSION['userlevel'] == "10") ? true : false);
 $isUser     = bill_permitted($bill_id);
 
@@ -69,17 +68,20 @@ switch($vars["view"]) {
   case "history":
     echo("<meta http-equiv=\"refresh\" content=\"360\">\n");
     echo("<h2 style=\"margin-bottom: 10px;\">Customer billing: Previous period</h2>\n");
+
     include("pages/bills/search.inc.php");
     include("pages/bills/pmonth.inc.php");
     break;
   case "add":
     echo("<h2 style=\"margin-bottom: 10px;\">Customer billing: Add bill</h2>\n");
+
     include("pages/bill/navbar.inc.php");
     include("pages/bills/add.inc.php");
     break;
   default:
     echo("<meta http-equiv=\"refresh\" content=\"360\">\n");
     echo("<h2 style=\"margin-bottom: 10px;\">Customer billing: Current period</h2>\n");
+
     include("pages/bills/search.inc.php");
     include("pages/bills/cmonth.inc.php");
 }

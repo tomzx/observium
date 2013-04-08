@@ -73,7 +73,7 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
                     <br /> '.highlight_search($result['location']).' | '.$num_ports.'ports</small></dd>
                 </dl>');
         }
-        
+
         echo("</a></li>");
       }
 
@@ -134,7 +134,7 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
 
           /// FIXME: once we have alerting, colour this to the sensor's status
           $tab_colour = '#194B7F'; // FIXME: This colour pulled from functions.inc.php humanize_device, maybe set it centrally in definitions?
-          
+
           echo('<dl style="border-left: 10px solid '.$tab_colour.'; " class="dl-horizontal dl-search">
                   <dt style="padding-left: 10px; text-align: center;">
                     <i class="'.$config['sensor_types'][$result['sensor_class']]['icon'].'"></i></dt>
@@ -154,6 +154,7 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
 function highlight_search($text)
 {
    global $queryString;
+
    return preg_replace("/".preg_quote($queryString, "/")."/i", "<em class=text-error>$0</em>", $text);
 }
 ?>

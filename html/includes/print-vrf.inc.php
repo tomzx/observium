@@ -1,6 +1,6 @@
 <?php
 
-// fixme new url format
+// FIXME new url format
 
 if (is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
 

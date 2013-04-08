@@ -1,6 +1,6 @@
 <?php
 
-$graph_array['width']	    = "218";
+$graph_array['width']       = "218";
 $graph_array['height']      = "100";
 
 $graph_array['to']          = $config['time']['now'];

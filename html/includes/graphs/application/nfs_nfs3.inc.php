@@ -5,10 +5,10 @@ include("includes/graphs/common.inc.php");
   $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-nfs-".$app['app_id'].".rrd";
 
   $array = array(
-	"null",   "getattr", "setattr",  "lookup", "access",  "readlink",
-	"read",   "write",   "create",   "mkdir",  "symlink", "mknod",
-	"remove", "rmdir",   "rename",   "link",   "readdir", "readdirplus",
-	"fsstat", "fsinfo",  "pathconf", "commit"
+        "null",   "getattr", "setattr",  "lookup", "access",  "readlink",
+        "read",   "write",   "create",   "mkdir",  "symlink", "mknod",
+        "remove", "rmdir",   "rename",   "link",   "readdir", "readdirplus",
+        "fsstat", "fsinfo",  "pathconf", "commit"
   );
 
 $i = 0;

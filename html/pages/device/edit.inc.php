@@ -44,9 +44,8 @@ if ($_SESSION['userlevel'] < '7')
   }
   $navbar['options_right']['delete']['url']  = generate_url($link_array,array('section'=>'delete'));
   $navbar['options_right']['delete']['text'] = 'Delete';
-  if($vars['section'] == 'delete') { $navbar['options_right']['delete']['class'] = 'active'; }
+  if ($vars['section'] == 'delete') { $navbar['options_right']['delete']['class'] = 'active'; }
   print_navbar($navbar);
-
 
   if (is_file("pages/device/edit/".mres($vars['section']).".inc.php"))
   {

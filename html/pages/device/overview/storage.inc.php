@@ -17,7 +17,6 @@ if (count($drives))
       <div id="title"><i class="oicon-drive"></i> Storage</div>
       <div id="content">
 
-
 <?php
   echo('<table class="table table-condensed-more table-striped">');
 

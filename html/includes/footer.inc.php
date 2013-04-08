@@ -67,7 +67,6 @@ if ($services['down']) { $services['class'] = "error"; } else { $services['class
 
 ?>
 
-
             <div class="navbar navbar-fixed-bottom">
               <div class="navbar-inner">
                 <div class="container">

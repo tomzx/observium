@@ -30,7 +30,6 @@ foreach (dbFetchRows($sql, array($port['port_id'], $device['device_id'])) as $se
      break;
   }
 
-
   if (!is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
 
   echo("<tr class=list-large style=\"background-color: $row_colour; padding: 5px;\">

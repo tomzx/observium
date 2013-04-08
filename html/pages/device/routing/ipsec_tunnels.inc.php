@@ -46,7 +46,6 @@ foreach ($graph_types as $type => $descr)
   $type_sep = " | ";
 }
 
-
 print_optionbar_end();
 
 echo("<div style='margin: 5px;'><table border=0 cellspacing=0 cellpadding=0 width=100%>");

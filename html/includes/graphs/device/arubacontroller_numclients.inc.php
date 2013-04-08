@@ -21,6 +21,4 @@ if ($rrd_list)
   include("includes/graphs/generic_multi_line.inc.php");
 }
 
-
-
 ?>

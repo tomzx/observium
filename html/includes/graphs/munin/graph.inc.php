@@ -53,12 +53,12 @@ foreach ($dbq as $ds)
 
     if ($ds['ds_draw'] == "AREASTACK")
     {
-      if($i==0) {$ds['ds_draw'] = "AREA";}
+      if ($i==0) {$ds['ds_draw'] = "AREA";}
       else $ds['ds_draw'] = "STACK";
     }
     elseif (preg_match("/^LINESTACK([0-9\.]*)/", $ds['ds_draw'], $m))
     {
-      if($i==0) {$data['ds_draw'] = "LINE$m[1]";}
+      if ($i==0) {$data['ds_draw'] = "LINE$m[1]";}
       else $ds['ds_draw'] = "STACK";
     }
     $cmd_graph .= ' '.$ds['ds_draw'].':'.$ds_name.'#'.$colour.':"'.$descr.'"';

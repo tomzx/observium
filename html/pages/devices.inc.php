@@ -45,7 +45,6 @@ $pagetitle[] = "Devices";
 
 echo('<div class="well" style="padding: 10px;">');
 
-
 if($vars['searchbar'] != "hide")
 {
 
@@ -270,9 +269,9 @@ list($format, $subformat) = explode("_", $vars['format']);
 
 $devices = dbFetchRows($query, $sql_param);
 
-if(count($devices)) {
-
-  if(file_exists('pages/devices/'.$format.'.inc.php'))
+if(count($devices))
+{
+  if (file_exists('pages/devices/'.$format.'.inc.php'))
   {
     include('pages/devices/'.$format.'.inc.php');
   } else {

@@ -236,7 +236,6 @@ echo('<div style="float: right;">');
 echo('</div>
   </div>');
 
-
 $param = array();
 
 if(!isset($vars['ignore']))   { $vars['ignore'] = "0"; }
@@ -271,7 +270,7 @@ foreach ($vars as $var => $value)
         $param[] = $value;
         break;
       case 'ifAlias':
-        foreach(explode(",", $value) as $val)
+        foreach (explode(",", $value) as $val)
         {
           $param[] = "%".$val."%";
           $cond[] = "`$var` LIKE ?";
@@ -281,7 +280,7 @@ foreach ($vars as $var => $value)
         $where .= ")";
         break;
       case 'port_descr_type':
-        foreach(explode(",", $value) as $val)
+        foreach (explode(",", $value) as $val)
         {
           $param[] = $val;
           $cond[] = "`$var` LIKE ?";
@@ -314,7 +313,6 @@ foreach ($vars as $var => $value)
     }
   }
 }
-
 
 $sql  = "SELECT *, `ports`.`port_id` as `port_id`";
 $sql .= " FROM  `ports`";

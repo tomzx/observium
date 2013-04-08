@@ -9,7 +9,6 @@ $graph_types = array("bits"   => "Bits",
                      "reqs"   => "Requests",
                      "hitmiss" => "Hit/Miss");
 
-
 echo("<table class='table table-striped table-condensed table-bordered' style=\"margin-top: 10px;\">");
 echo("  <thead>");
 echo("    <tr>");
@@ -28,9 +27,9 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
 
   if ($vsvr['vsvr_state'] == "up") { $vsvr_class="green"; } else { $vsvr_class="red"; }
 
-  if($vsvr['vsvr_port'] != "0") {
-    if($vsvr['vsvr_ip']   != "0.0.0.0") { $vsvr['addrs'][] = $vsvr['vsvr_ip'].":".$vsvr['vsvr_port']; }
-    if($vsvr['vsvr_ipv6'] != "0:0:0:0:0:0:0:0") { $vsvr['addrs'][] = "[".Net_IPv6::compress($vsvr['vsvr_ipv6'])."]:".$vsvr['vsvr_port']; }
+  if ($vsvr['vsvr_port'] != "0") {
+    if ($vsvr['vsvr_ip']   != "0.0.0.0") { $vsvr['addrs'][] = $vsvr['vsvr_ip'].":".$vsvr['vsvr_port']; }
+    if ($vsvr['vsvr_ipv6'] != "0:0:0:0:0:0:0:0") { $vsvr['addrs'][] = "[".Net_IPv6::compress($vsvr['vsvr_ipv6'])."]:".$vsvr['vsvr_port']; }
   }
 
   echo("<tr>");
@@ -44,7 +43,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
 
   $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.device_id = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name'], $device['device_id']));
 
-  if(count($svcs))
+  if (count($svcs))
   {
     echo('<tr><td colspan="5">');
     echo("<table class=\"table table-striped table-condensed table-bordered\" style=\"margin-top: 10px;\">");
@@ -104,7 +103,9 @@ $graph_array['nototal'] = "yes";
 $graph_array['legend'] = "no";
 $graph_array['type']   = $graph_type;
 echo('<h5>Aggregate</h5>');
+
 include("includes/print-graphrow.inc.php");
+
 unset($graph_array);
 
 $menu_options = array('basic' => 'Basic',
@@ -158,9 +159,9 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
 
   if ($vsvr['vsvr_state'] == "up") { $vsvr_class="green"; } else { $vsvr_class="red"; }
 
-  if($vsvr['vsvr_port'] != "0") {
-    if($vsvr['vsvr_ip']   != "0.0.0.0") { $vsvr['addrs'][] = $vsvr['vsvr_ip'].":".$vsvr['vsvr_port']; }
-    if($vsvr['vsvr_ipv6'] != "0:0:0:0:0:0:0:0") { $vsvr['addrs'][] = "[".Net_IPv6::compress($vsvr['vsvr_ipv6'])."]:".$vsvr['vsvr_port']; }
+  if ($vsvr['vsvr_port'] != "0") {
+    if ($vsvr['vsvr_ip']   != "0.0.0.0") { $vsvr['addrs'][] = $vsvr['vsvr_ip'].":".$vsvr['vsvr_port']; }
+    if ($vsvr['vsvr_ipv6'] != "0:0:0:0:0:0:0:0") { $vsvr['addrs'][] = "[".Net_IPv6::compress($vsvr['vsvr_ipv6'])."]:".$vsvr['vsvr_port']; }
   }
 
   echo("<tr>");
@@ -175,7 +176,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
   {
    $svcs = dbFetchRows("SELECT * FROM `netscaler_services_vservers` AS SV, `netscaler_services` AS S WHERE SV.device_id = ? AND SV.vsvr_name = ? AND S.svc_name = SV.svc_name", array($device['device_id'], $vsvr['vsvr_name']));
    echo('<tr><td colspan="5">');
-   if(count($svcs))
+   if (count($svcs))
    {
     echo('<table class="table table-striped table-condensed">');
     echo("  <thead>");

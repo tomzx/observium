@@ -22,6 +22,7 @@ if ($ports['down']) { $ports_colour = $warn_colour_a; } else { $ports_colour = $
 <?php include("overview/information.inc.php"); ?>
 
 <?php
+
 include("overview/ports.inc.php");
 
 if ($services['total'])

@@ -4,7 +4,7 @@ global $config;
 
 if($_SESSION['widescreen'])
 {
-  if($_SESSION['big_graphs'])
+  if ($_SESSION['big_graphs'])
   {
     if (!$graph_array['height']) { $graph_array['height'] = "110"; }
     if (!$graph_array['width']) { $graph_array['width']  = "353"; }
@@ -15,7 +15,7 @@ if($_SESSION['widescreen'])
     $periods = array('sixhour', 'day', 'week', 'month', 'year', 'twoyear');
   }
 } else {
-  if($_SESSION['big_graphs'])
+  if ($_SESSION['big_graphs'])
   {
     if (!$graph_array['height']) { $graph_array['height'] = "100"; }
     if (!$graph_array['width']) { $graph_array['width']  = "305"; }

@@ -1,6 +1,5 @@
 <?php
 
-
 echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
 echo("  <thead>\n");
 echo("    <tr>\n");
@@ -31,10 +30,6 @@ foreach (dbFetchRows("SELECT * FROM `vlans_fdb` WHERE port_id = ?", array($port[
   if ($fdb_host['device_id'] == $device['device_id']) { $fdb_name = "Localhost"; }
   if ($fdb_host['port_id'] == $fdb['port_id']) { $fdb_if = "Local Port"; }
 
-
-
-
-
   echo("
   <tr bgcolor=$bg_colour>
     <td width=160>VLAN".$fdb['vlan_id']."</td>
@@ -42,7 +37,7 @@ foreach (dbFetchRows("SELECT * FROM `vlans_fdb` WHERE port_id = ?", array($port[
     <td width=280>$fdb_name</td>
     <td><strong>$fdb_if</strong></td>
     <td width=160>");
-  foreach(dbFetchRows("SELECT ip_address FROM ip_mac WHERE mac_address = ? GROUP BY ip_address", array($fdb['mac_address'])) as $ip)
+  foreach (dbFetchRows("SELECT ip_address FROM ip_mac WHERE mac_address = ? GROUP BY ip_address", array($fdb['mac_address'])) as $ip)
   {
     echo($ip['ip_address']."<br />");
   }
