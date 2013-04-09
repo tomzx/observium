@@ -70,9 +70,9 @@ foreach ($rrd_list as $i => $rrd)
   }
 
   if (in_array("lst", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":LAST:%6.1lf%s"; }
+  if (in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":AVERAGE:%6.1lf%s"; }
   if (in_array("min", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."min:MIN:%6.1lf%s"; }
   if (in_array("max", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%6.1lf%s"; }
-  if (in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":AVERAGE:%6.1lf%s"; }
 
   $rrd_optionsb .= " COMMENT:'\\l'";
   $iter++;
