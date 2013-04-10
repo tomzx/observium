@@ -28,7 +28,7 @@ $avai_perc = round(($device_state['ucd_mem']['mem_avail'] / $device_state['ucd_m
     $link = generate_url($link_array);
 
     $graph_array['width']  = "210";
-    $overlib_content = generate_overlib_content($graph_array, $device['hostname'] . " - Device Traffic");
+    $overlib_content = generate_overlib_content($graph_array, $device['hostname'] . " - Memory Usage");
 
     echo(overlib_link($link, $graph, $overlib_content, NULL));
 
