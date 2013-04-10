@@ -1,11 +1,14 @@
 <?php
 
-$oid = $mempool['mempool_index'];
+$index = $mempool['mempool_index'];
 
-$pool_data = snmp_get_multi($device, "ciscoMemoryPoolUsed.$oid ciscoMemoryPoolFree.$oid ciscoMemoryPoolLargestFree.$oid", '-OQUs', 'CISCO-MEMORY-POOL-MIB', mib_dirs('cisco'));
-$mempool['used'] = $pool_data[$oid]['ciscoMemoryPoolUsed'];
-$mempool['free'] = $pool_data[$oid]['ciscoMemoryPoolFree'];
-$mempool['largestfree'] = $pool_data[$oid]['ciscoMemoryPoolLargestFree'];
+foreach (array('ciscoMemoryPoolUsed', 'ciscoMemoryPoolFree', 'ciscoMemoryPoolLargestFree') as $oid)
+{
+  $pool_data = snmpwalk_cache_multi_oid($device, $oid, $pool_data, 'CISCO-MEMORY-POOL-MIB', mib_dirs('cisco'));
+}
+$mempool['used'] = $pool_data[$index]['ciscoMemoryPoolUsed'];
+$mempool['free'] = $pool_data[$index]['ciscoMemoryPoolFree'];
+$mempool['largestfree'] = $pool_data[$index]['ciscoMemoryPoolLargestFree'];
 
 $mempool['total'] = $mempool['used'] + $mempool['free'];
 
