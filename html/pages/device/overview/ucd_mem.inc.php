@@ -43,14 +43,16 @@ $percentage_bar['bars'][1] = array('percent' => $cach_perc, 'colour' => '#f0e0a0
 $percentage_bar['bars'][2] = array('percent' => $buff_perc, 'colour' => '#ff1a00', 'text' => '');
 $percentage_bar['bars'][3] = array('percent' => $shar_perc, 'colour' => '#008fea', 'text' => '');
 
-echo('<div><span style="tablehead">RAM</span><div style="width: 90%; float: right;">');
-echo (percentage_bar($percentage_bar));
-echo('</div></div>');
+echo('<table width="100%" class="table-striped table-condensed-more">');
+echo('  <tr>');
+echo('    <td class="tablehead">RAM</td>');
+echo('    <td colspan=8>');
+echo(percentage_bar($percentage_bar));
+echo('    </td>');
+echo('  </tr>');
 
 
 ?>
-
-<table width=100% style="margin-top: 5px;">
   <tr class="syslog">
     <td><i style="font-size: 7px; line-height: 7px; background-color: #E25A00; border: 1px #aaa solid;">&nbsp;&nbsp;&nbsp;</i> Used</td>
     <td><?php echo(formatStorage($mem_used * 1024).' ('.$used_perc.'%)'); ?></td>
@@ -62,11 +64,7 @@ echo('</div></div>');
     <td><?php echo(formatStorage($device_state['ucd_mem']['mem_shared'] * 1024).' ('.$shar_perc.'%)'); ?></td>
 
   </tr>
-</table>
 
-
-
-<div style="margin-top: 10px;">
 <?php
 
 $swap_used = $device_state['ucd_mem']['swap_total'] - $device_state['ucd_mem']['swap_avail'];
@@ -83,13 +81,15 @@ $percentage_bar['text']    = $swap_free_perc."%";
 $percentage_bar['text_c']  = "#356AA0";
 $percentage_bar['bars'][0] = array('percent' => $swap_perc, 'colour' => '#356AA0', 'text' => $swap_perc.'%');
 
-echo('<div><span style="tablehead">SWAP</span><div style="width: 90%; float: right;">');
-echo (percentage_bar($percentage_bar));
-echo('</div></div>');
+echo('  <tr>');
+echo('    <td class="tablehead">Swap</td>');
+echo('    <td colspan=8>');
+echo(percentage_bar($percentage_bar));
+echo('    </td>');
+echo('  </tr>');
 
 ?>
 
-<table width=100% style="margin-top: 5px;">
   <tr class="syslog">
     <td><i style="font-size: 7px; line-height: 7px; background-color: #356AA0; border: 1px #aaa solid;">&nbsp;&nbsp;&nbsp;</i> Used</td>
     <td><?php echo(formatStorage($swap_used * 1024).' ('.$swap_perc.'%)'); ?></td>
@@ -97,9 +97,10 @@ echo('</div></div>');
     <td><?php echo(formatStorage($device_state['ucd_mem']['swap_avail'] * 1024).' ('.$swap_free_perc.'%)'); ?></td>
     <td><i style="font-size: 7px; line-height: 7px; background-color: #ddd; border: 1px #fff solid;">&nbsp;&nbsp;&nbsp;</i> Total</td>
     <td><?php echo(formatStorage($device_state['ucd_mem']['swap_total'] * 1024)); ?></td>
+    <td></td>
+    <td></td>
   </tr>
 </table>
 
-</div>
     </div>
   </div>

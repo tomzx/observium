@@ -83,7 +83,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['apps'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'apps')).'">
-      <i class="oicon-application-oicon-large"></i> Apps
+      <i class="oicon-application-icon-large"></i> Apps
     </a>
   </li>');
     }
