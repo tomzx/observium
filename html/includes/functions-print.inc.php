@@ -479,7 +479,6 @@ function print_arptable($vars)
   }
   $string .= '  <tbody>' . PHP_EOL;
 
-  $i = 0;
   foreach ($entries as $entry)
   {
     if (port_permitted($entry['port_id']))
