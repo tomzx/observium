@@ -178,7 +178,7 @@ if(count($ma_array))
       $rrdupdate = array($b_in, $b_out, $p_in, $p_out);
       rrdtool_update($rrdfile, $rrdupdate);
 
-      print_r($ma['update']);
+      if ($debug) { print_r($ma['update']); }
 
       if (is_array($ma['update']))
       { // Do Updates
