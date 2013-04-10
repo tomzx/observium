@@ -418,7 +418,7 @@ function isPingable($hostname)
   }
   $sleep = floor(1000000 / $retries); // interval between retries, max 1 sec
 
-  $ping_debug = TRUE; $file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time()); /// Uncomment this line for DEBUG isPingable()
+  //$ping_debug = TRUE; $file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time()); /// Uncomment this line for DEBUG isPingable()
 
   // First try IPv4
   $ip = gethostbyname($hostname);
