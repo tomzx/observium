@@ -35,6 +35,32 @@ function snmp_dewrap32bit($value)
  }
 }
 
+// Translate OID string to numeric:
+// 'BGP4-V2-MIB-JUNIPER::jnxBgpM2PeerRemoteAs' -> '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.13'
+function snmp_translate($oid, $mib = NULL, $mibdir = NULL)
+{
+  global $config, $debug;
+
+  $oid = ($mib) ? "$mib::$oid" : $oid;
+
+  $cmd  = $config['snmptranslate'];
+  if ($options) { $cmd .= ' ' . $options; } else { $cmd .= ' -On'; }
+  if ($mib) { $cmd .= ' -m ' . $mib; }
+  if ($mibdir) { $cmd .= ' -M ' . $mibdir; } else { $cmd .= ' -M ' . mib_dirs(); }
+  $cmd .= ' ' . $oid;
+  if (!$debug) { $cmd .= ' 2>/dev/null'; }
+
+  $data = trim(external_exec($cmd));
+
+  if ($debug) { echo("OID: $oid TRANSLATED: $data\n"); }
+  if ($data && !strstr($data, 'Unknown'))
+  {
+    return $data;
+  } else {
+    return '';
+  }
+}
+
 // Take -OXsq output and parse it into an array. Fancy.
 function parse_oid2($string)
 {
@@ -550,6 +576,41 @@ function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NU
       list($oid,$value) = explode("=", $entry);
       $oid = trim($oid); $value = trim($value);
       list($oid, $index) = explode(".", $oid, 2);
+      if (!strstr($value, "at this OID") && isset($oid) && isset($index))
+      {
+        $array[$index][$oid] = $value;
+      }
+    }
+    if ($set_cache)
+    {
+      $cache['snmp'][$device['device_id']][$oid] = $array;
+    } else {
+      return $array;
+    }
+  }
+  return $cache['snmp'][$device['device_id']][$oid];
+}
+
+// just like snmpwalk_cache_oid_num (it returns the numerical oid as the index),
+// but use snmptranslate for cut mib part from index
+/// FIXME. maybe override function snmpwalk_cache_oid_num()?
+function snmpwalk_cache_oid_num2($device, $oid, $array, $mib = NULL, $mibdir = NULL, $set_cache = FALSE)
+{
+  global $cache;
+   
+  if (!(is_array($cache['snmp'][$device['device_id']]) && array_key_exists($oid,$cache['snmp'][$device['device_id']])))
+  {
+    $data = snmp_walk($device, $oid, '-OQUn', $mib, $mibdir);
+
+    $translate = snmp_translate($oid, $mib, $mibdir);
+    $pattern = '/^' . str_replace('.', '\.', $translate) . '\./';
+
+    foreach (explode("\n", $data) as $entry)
+    {
+      list($oid_num, $value) = explode("=", $entry);
+      $oid_num = trim($oid_num); $value = trim($value);
+      $index = preg_replace($pattern, '', $oid_num);
+      
       if (!strstr($value, "at this OID") && isset($oid) && isset($index))
       {
         $array[$index][$oid] = $value;

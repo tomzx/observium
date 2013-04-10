@@ -36,6 +36,7 @@ $config['fping6']         = "/usr/bin/fping6";
 $config['snmpwalk']       = "/usr/bin/snmpwalk";
 $config['snmpget']        = "/usr/bin/snmpget";
 $config['snmpbulkwalk']   = "/usr/bin/snmpbulkwalk";
+$config['snmptranslate']  = "/usr/bin/snmptranslate";
 $config['whois']          = "/usr/bin/whois";
 $config['mtr']            = "/usr/bin/mtr";
 $config['nmap']           = "/usr/bin/nmap";
