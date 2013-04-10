@@ -126,19 +126,19 @@ if ($config['enable_bgp'])
       if (!isset($vendor_peers))
       {
         // Fetch BGP counters for some vendors
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        //$vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        //$vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerState, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerAdminStatus, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerInUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerOutUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerInTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerOutTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerFsmEstablishedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerInUpdateElapsedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerState, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerAdminStatus, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerFsmEstablishedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdateElapsedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
         // rewrite to pretty array.
         foreach ($vendor_bgp as $entry)
         {

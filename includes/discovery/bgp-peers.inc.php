@@ -101,10 +101,11 @@ if ($config['enable_bgp'])
 
     if ($use_vendor)
     {
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAs, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAs, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+
       if ($debug) { echo("$vendor_mib Peers: \n"); }
       foreach ($vendor_bgp as $entry)
       {
@@ -137,10 +138,10 @@ if ($config['enable_bgp'])
     // Walk vendor oids
     if ($use_vendor)
     {
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAs, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAs, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
       $vendor_counters = snmpwalk_cache_oid($device, $vendor_PrefixCountersSafi, array(), $vendor_mib, $vendor_mib_dir);
     }
 
