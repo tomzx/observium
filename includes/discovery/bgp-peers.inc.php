@@ -4,85 +4,161 @@ global $debug;
 
 if ($config['enable_bgp'])
 {
+  $vendor_oids = array(// Juniper BGP4-V2 MIB
+                       'junos' => array('vendor_mib'                => 'BGP4-V2-MIB-JUNIPER',
+                                        'vendor_mib_dir'            => mib_dirs('junos'),
+                                        'vendor_PeerTable'          => 'jnxBgpM2PeerTable',
+                                        'vendor_PeerRemoteAs'       => 'jnxBgpM2PeerRemoteAs',
+                                        'vendor_PeerRemoteAddr'     => 'jnxBgpM2PeerRemoteAddr',
+                                        'vendor_PeerLocalAddr'      => 'jnxBgpM2PeerLocalAddr',
+                                        'vendor_PeerIdentifier'     => 'jnxBgpM2PeerIdentifier',
+                                        'vendor_PeerIndex'          => 'jnxBgpM2PeerIndex',
+                                        'vendor_PeerRemoteAddrType' => 'jnxBgpM2PeerRemoteAddrType',
+                                        'vendor_PrefixCountersSafi' => 'jnxBgpM2PrefixCountersSafi'),
+                       'junose' => array('vendor_mib'               => 'BGP4-V2-MIB-JUNIPER',
+                                        'vendor_mib_dir'            => mib_dirs('junose'),
+                                        'vendor_PeerTable'          => 'jnxBgpM2PeerTable',
+                                        'vendor_PeerRemoteAs'       => 'jnxBgpM2PeerRemoteAs',
+                                        'vendor_PeerRemoteAddr'     => 'jnxBgpM2PeerRemoteAddr',
+                                        'vendor_PeerLocalAddr'      => 'jnxBgpM2PeerLocalAddr',
+                                        'vendor_PeerIdentifier'     => 'jnxBgpM2PeerIdentifier',
+                                        'vendor_PeerIndex'          => 'jnxBgpM2PeerIndex',
+                                        'vendor_PeerRemoteAddrType' => 'jnxBgpM2PeerRemoteAddrType',
+                                        'vendor_PrefixCountersSafi' => 'jnxBgpM2PrefixCountersSafi'),
+                       // Force10 BGP4-V2 MIB
+                       'ftos'  => array('vendor_mib'                => 'FORCE10-BGP4-V2-MIB',
+                                        'vendor_mib_dir'            => mib_dirs('force10'),
+                                        'vendor_PeerTable'          => 'f10BgpM2PeerTable',
+                                        'vendor_PeerRemoteAs'       => 'f10BgpM2PeerRemoteAs',
+                                        'vendor_PeerRemoteAddr'     => 'f10BgpM2PeerRemoteAddr',
+                                        'vendor_PeerLocalAddr'      => 'f10BgpM2PeerLocalAddr',
+                                        'vendor_PeerIdentifier'     => 'f10BgpM2PeerIdentifier',
+                                        'vendor_PeerIndex'          => 'f10BgpM2PeerIndex',
+                                        'vendor_PeerRemoteAddrType' => 'f10BgpM2PeerRemoteAddrType',
+                                        'vendor_PrefixCountersSafi' => 'f10BgpM2PrefixCountersSafi')
+                       );
+  if (isset($vendor_oids[$device['os']]))
+  {
+    foreach($vendor_oids[$device['os']] as $v => $val) { $$v = $val; }
+    $use_vendor = TRUE;
+  } else {
+    $use_vendor = FALSE;
+  }
+
   // Discover BGP peers
 
-  echo("BGP Sessions : ");
+  /// NOTE. PeerIdentifier != PeerRemoteAddr
+  
+  echo("BGP Sessions: ");
 
-  $bgpLocalAs = trim(snmp_walk($device, ".1.3.6.1.2.1.15.2", "-Oqvn", "BGP4-MIB", $config['mibdir']));
-
+  $bgpLocalAs = snmp_get($device, 'bgpLocalAs.0', '-Oqvn', 'BGP4-MIB', mib_dirs());
+  if ($device['os'] == 'junos' && $bgpLocalAs == '0')
+  {
+    // On JunOS BGP4-MIB::bgpLocalAs.0 is always '0'.
+    $j_bgpLocalAs = trim(snmp_walk($device, 'jnxBgpM2PeerLocalAs', '-Oqvn', 'BGP4-V2-MIB-JUNIPER', mib_dirs('junos')));
+    list($bgpLocalAs) = explode("\n", $j_bgpLocalAs);
+  }
+  
   if (is_numeric($bgpLocalAs))
   {
     echo("AS$bgpLocalAs ");
 
     if ($bgpLocalAs != $device['bgpLocalAs'])
     {
-      mysql_query("UPDATE devices SET bgpLocalAs = '$bgpLocalAs' WHERE device_id = '".$device['device_id']."'"); echo("Updated AS ");
+      if (!$device['bgpLocalAs'])
+      {
+        log_event('BGP Local ASN added: AS' . $bgpLocalAs, $device, 'bgp');
+      }
+      elseif (!$bgpLocalAs)
+      {
+        log_event('BGP Local ASN removed: AS' . $device['bgpLocalAs'], $device, 'bgp');
+      }
+      else
+      {
+        log_event('BGP ASN changed: AS' . $device['bgpLocalAs'] . ' -> AS' . $bgpLocalAs, $device, 'bgp');
+      }
+      dbUpdate(array('bgpLocalAs' => $bgpLocalAs) , 'devices', 'device_id = ?', array($device['device_id']));
+      echo('Updated ASN (from '.$device['bgpLocalAs']." -> $bgpLocalAs)\n");
     }
 
-    $peers_data = snmp_walk($device, "BGP4-MIB::bgpPeerRemoteAs", "-Oq", "BGP4-MIB", $config['mibdir']);
-    if ($debug) { echo("Peers : $peers_data \n"); }
-    $peers = trim(str_replace("BGP4-MIB::bgpPeerRemoteAs.", "", $peers_data));
-
-    foreach (explode("\n", $peers) as $peer)
+    $peers_data = snmpwalk_cache_oid($device, 'bgpPeerRemoteAs', array(), 'BGP4-MIB', mib_dirs());
+    $peers_data = snmpwalk_cache_oid($device, 'bgpPeerRemoteAddr', $peers_data, 'BGP4-MIB', mib_dirs());
+    $peers_data = snmpwalk_cache_oid($device, 'bgpPeerLocalAddr', $peers_data, 'BGP4-MIB', mib_dirs());
+    $peers_data = snmpwalk_cache_oid($device, 'bgpPeerIdentifier', $peers_data, 'BGP4-MIB', mib_dirs());
+    if ($debug) { echo("BGP4-MIB Peers: \n");}
+    foreach ($peers_data as $peer)
     {
-      list($peer_ip, $peer_as) = explode(" ",  $peer);
-
-      if ($peer && $peer_ip != "0.0.0.0")
+      $peer_as = $peer['bgpPeerRemoteAs'];
+      $peer_ip = $peer['bgpPeerRemoteAddr'];
+      $local_ip = $peer['bgpPeerLocalAddr'];
+      if (!isset($p_list[$peer_ip][$peer_as]) && $peer_ip != '0.0.0.0')
       {
-        if ($debug) { echo("Found peer $peer_ip (AS$peer_as)\n"); }
-        $peerlist[] = array('ip' => $peer_ip, 'as' => $peer_as);
+        if ($debug) { echo("Found peer IP: $peer_ip (AS$peer_as, LocalIP: $local_ip)\n"); }
+        $peerlist[] = array('id' => $peer['bgpPeerIdentifier'], 'local_ip' => $local_ip, 'ip' => $peer_ip, 'as' => $peer_as);
+        $p_list[$peer_ip][$peer_as] = 1;
       }
-    } # Foreach
+    }
 
-    if ($device['os'] == "junos")
+    if ($use_vendor)
     {
-      // Juniper BGP4-V2 MIB
-
-      // FIXME: needs a big cleanup! also see below.
-
-      // FIXME: is .0.ipv6 the only possible value here?
-      $result = snmp_walk($device, "jnxBgpM2PeerRemoteAs.0.ipv6", "-Onq", "BGP4-V2-MIB-JUNIPER", $config['install_dir']."/mibs/junos");
-      $peers = trim(str_replace(".1.3.6.1.4.1.2636.5.1.1.2.1.1.1.13.0.","", $result));
-      foreach (explode("\n", $peers) as $peer)
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAs, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      if ($debug) { echo("$vendor_mib Peers: \n"); }
+      foreach ($vendor_bgp as $entry)
       {
-        list($peer_ip_snmp, $peer_as) = explode(" ",  $peer);
-
-        # Magic! Basically, takes SNMP form and finds peer IPs from the walk OIDs.
-        $peer_ip = Net_IPv6::compress(snmp2ipv6(implode('.',array_slice(explode('.',$peer_ip_snmp),count(explode('.',$peer_ip_snmp))-16))));
-
-        if ($peer)
+        $peer_ip = hex2ip($entry[$vendor_PeerRemoteAddr]);
+        $local_ip = hex2ip($entry[$vendor_PeerLocalAddr]);
+        $peer_as = $entry[$vendor_PeerRemoteAs];
+        if (!isset($p_list[$peer_ip][$peer_as]) && $peer_ip != '0.0.0.0')
         {
-          if ($debug) echo("Found peer $peer_ip (AS$peer_as)\n");
-          $peerlist[] = array('ip' => $peer_ip, 'as' => $peer_as);
+          $p_list[$peer_ip][$peer_as] = 1;
+          $peerlist[] = array('id' => $entry[$vendor_PeerIdentifier], 'local_ip' => $local_ip, 'ip' => $peer_ip, 'as' => $peer_as);
+          if ($debug) { echo("Found peer IP: $peer_ip (AS$peer_as, LocalIP: $local_ip)\n"); }
         }
-      } # Foreach
-    } # OS junos
+      }
+    } # Vendors
+    
   } else {
     echo("No BGP on host");
     if ($device['bgpLocalAs'])
     {
-     mysql_query("UPDATE devices SET bgpLocalAs = NULL WHERE device_id = '".$device['device_id']."'"); echo(" (Removed ASN) ");
+      log_event('BGP ASN removed: AS' . $device['bgpLocalAs'], $device, 'bgp');
+      dbUpdate(array('bgpLocalAs' => 'NULL') , 'devices', 'device_id = ?', array($device['device_id']));
+      echo('Removed ASN ('.$device['bgpLocalAs']."\n");
     } # End if
   } # End if
 
-  // Process disovered peers
+  // Process discovered peers
 
   if (isset($peerlist))
   {
+    // Walk vendor oids
+    if ($use_vendor)
+    {
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAs, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_counters = snmpwalk_cache_oid($device, $vendor_PrefixCountersSafi, array(), $vendor_mib, $vendor_mib_dir);
+    }
+
     foreach ($peerlist as $peer)
     {
       $astext = get_astext($peer['as']);
 
-      if (mysql_result(mysql_query("SELECT COUNT(*) FROM `bgpPeers` WHERE `device_id` = '".$device['device_id']."' AND bgpPeerIdentifier = '".$peer['ip']."'"),0) < '1')
+      if (dbFetchCell('SELECT COUNT(*) FROM `bgpPeers` WHERE `device_id` = ? AND bgpPeerRemoteAddr = ?', array($device['device_id'], $peer['ip'])) < '1')
       {
-        $add = mysql_query("INSERT INTO bgpPeers (`device_id`, `bgpPeerIdentifier`, `bgpPeerRemoteAS`, `astext`) VALUES ('".$device['device_id']."','".$peer['ip']."','".$peer['as']."','".mres($astext)."')");
-        echo("+");
+        $params = array('device_id' => $device['device_id'], 'bgpPeerIdentifier' => $peer['id'], 'bgpPeerRemoteAddr' => $peer['ip'], 'bgpPeerLocalAddr' => $peer['local_ip'], 'bgpPeerRemoteAS' => $peer['as'], 'astext' => mres($astext));
+        dbInsert($params, 'bgpPeers');
+        echo('+');
       } else {
-        $update = mysql_query("UPDATE `bgpPeers` SET bgpPeerRemoteAs = " . $peer['as'] . ", astext = '" . mres($astext) . "' WHERE `device_id` = '".$device['device_id']."' AND bgpPeerIdentifier = '".$peer['ip']."'");
-        echo(".");
+        dbUpdate(array('bgpPeerRemoteAs' => $peer['as'], 'astext' => mres($astext), 'bgpPeerLocalAddr' => $peer['local_ip'], 'bgpPeerIdentifier' => $peer['id']) , 'bgpPeers', 'device_id = ? AND bgpPeerRemoteAddr = ?', array($device['device_id'], $peer['ip']));
+        echo('.');
       }
 
-      if ($device['os_group'] == "cisco" || $device['os'] == "junos")
+      if ($device['os_group'] == "cisco" || $use_vendor)
       {
 
         if ($device['os_group'] == "cisco")
@@ -90,123 +166,118 @@ if ($config['enable_bgp'])
           // Get afi/safi and populate cbgp on cisco ios (xe/xr)
           unset($af_list);
 
-          $af_data = snmp_walk($device, "cbgpPeerAddrFamilyName." . $peer['ip'], "-OsQ", "CISCO-BGP4-MIB", $config['mibdir']);
-          if ($debug) { echo("afi data :: $af_data \n"); }
-
-          $afs = trim(str_replace("cbgpPeerAddrFamilyName.".$peer['ip'].".", "", $af_data));
-          foreach (explode("\n", $afs) as $af)
+          $af_data = snmpwalk_cache_multi_oid($device, 'cbgpPeerAddrFamilyName', $cbgp, 'CISCO-BGP4-MIB', mib_dirs('cisco'));
+          
+          foreach ($af_data as $af => $entry)
           {
-            if ($debug) { echo("AFISAFI = $af\n"); }
-            list($afisafi, $text) = explode(" = ", $af);
-            list($afi, $safi) = explode(".", $afisafi);
+            $afisafi = explode('.', $af);
+            $c = count($afisafi);
+            $afi = $afisafi[$c - 2];
+            $safi = $afisafi[$c - 1];
+            if ($debug) { echo("AS: $peer_as, IP: $peer_ip, AFI: $afi, SAFI: $safi\n"); }
+            $text = $entity['cbgpPeerAddrFamilyName'];
             if ($afi && $safi)
             {
-              $af_list[$afi][$safi] = 1;
-              if (mysql_result(mysql_query("SELECT COUNT(*) FROM `bgpPeers_cbgp` WHERE `device_id` = '".$device['device_id']."' AND bgpPeerIdentifier = '".$peer['ip']."' AND afi = '$afi' AND safi = '$safi'"),0) == 0)
+              if (dbFetchCell('SELECT COUNT(*) FROM `bgpPeers_cbgp` WHERE `device_id` = ? AND bgpPeerRemoteAddr = ? AND afi = ? AND safi = ?', array($device['device_id'], $peer['ip'], $afi, $safi)) == 0)
               {
-                mysql_query("INSERT INTO `bgpPeers_cbgp` (device_id,bgpPeerIdentifier, afi, safi) VALUES ('".$device['device_id']."','".$peer['ip']."','$afi','$safi')");
+                $params = array('device_id' => $device['device_id'], 'bgpPeerRemoteAddr' => $peer['ip'], 'bgpPeerIndex' => $index, 'afi' => $afi, 'safi' => $safi);
+                dbInsert($params, 'bgpPeers_cbgp');
               }
             }
           }
         } # os_group=cisco
 
-        if ($device['os'] == "junos")
+        if ($use_vendor)
         {
-          $safis[1] = "unicast";
-          $safis[2] = "multicast";
+          // See posible AFI/SAFI here: https://www.juniper.net/techpubs/en_US/junos12.3/topics/topic-map/bgp-multiprotocol.html
+          $afis['ipv4'] = '1';
+          $afis['ipv6'] = '2';
+          $safis = array(1 => 'unicast',
+                         2 => 'multicast',
+                         128 => 'vpn');
 
-          if (!isset($j_peerIndexes))
+          foreach ($vendor_bgp as $entry)
           {
-            $j_bgp = snmpwalk_cache_multi_oid($device, "jnxBgpM2PeerTable", $jbgp, "BGP4-V2-MIB-JUNIPER", $config['install_dir']."/mibs/junos");
-
-            foreach ($j_bgp as $index => $entry)
+            $peer_ip = hex2ip($entry[$vendor_PeerRemoteAddr]);
+            $peer_as = $entry[$vendor_PeerRemoteAs];
+            if ($peer['ip'] == $peer_ip && $peer['as'] == $peer_as)
             {
-              switch ($entry['jnxBgpM2PeerRemoteAddrType'])
+              $index = $entry[$vendor_PeerIndex];
+              $afi = $entry[$vendor_PeerRemoteAddrType];
+              
+              foreach ($safis as $i => $safi)
               {
-                case 'ipv4':
-                  $ip = long2ip(hexdec($entry['jnxBgpM2PeerRemoteAddr']));
-                  if ($debug) { echo("peerindex for ipv4 $ip is " . $entry['jnxBgpM2PeerIndex'] . "\n"); }
-                  $j_peerIndexes[$ip] = $entry['jnxBgpM2PeerIndex'];
-                  break;
-                case 'ipv6':
-                  $ip6 = trim(str_replace(' ','',$entry['jnxBgpM2PeerRemoteAddr']),'"');
-                  $ip6 = substr($ip6,0,4) . ':' . substr($ip6,4,4) . ':' . substr($ip6,8,4) . ':' . substr($ip6,12,4) . ':' . substr($ip6,16,4) . ':' . substr($ip6,20,4) . ':' . substr($ip6,24,4) . ':' . substr($ip6,28,4);
-                  $ip6 = Net_IPv6::compress($ip6);
-                  if ($debug) { echo("peerindex for ipv6 $ip6 is " . $entry['jnxBgpM2PeerIndex'] . "\n"); }
-                  $j_peerIndexes[$ip6] = $entry['jnxBgpM2PeerIndex'];
-                  break;
-                default:
-                  echo("HALP? Don't know RemoteAddrType " . $entry['jnxBgpM2PeerRemoteAddrType'] . "!\n");
-                  break;
+                if (isset($vendor_counters[$index.'.'.$afi.".$i"]) || isset($vendor_counters[$index.'.'.$afis[$afi].".$i"]))
+                {
+                  if (is_numeric($afi)) { $afi = $afis[$afi]; }
+                  if ($debug) { echo ("INDEX: $index, AS: $peer_as, IP: $peer_ip, AFI: $afi, SAFI: $safi\n"); }
+                  if (dbFetchCell('SELECT COUNT(*) FROM `bgpPeers_cbgp` WHERE `device_id` = ? AND bgpPeerRemoteAddr = ? AND afi = ? AND safi = ?', array($device['device_id'], $peer['ip'], $afi, $safi)) == 0)
+                  {
+                    $params = array('device_id' => $device['device_id'], 'bgpPeerRemoteAddr' => $peer['ip'], 'bgpPeerIndex' => $index, 'afi' => $afi, 'safi' => $safi);
+                    dbInsert($params, 'bgpPeers_cbgp');
+                  } elseif ($index >= 0) {
+                    // Update Index
+                    $params = array('device_id' => $device['device_id'], 'bgpPeerRemoteAddr' => $peer['ip'], 'afi' => $afi, 'safi' => $safi);
+                    dbUpdate(array('bgpPeerIndex' => $index), 'bgpPeers_cbgp', 'device_id = ? AND bgpPeerRemoteAddr = ? AND afi = ? AND safi = ?', array($device['device_id'], $peer['ip'], $afi, $safi));
+                  }
+                }
               }
+              break;
             }
           }
+        } # Vendors
 
-          if (!isset($j_afisafi))
-          {
-            $j_prefixes = snmpwalk_cache_multi_oid($device, "jnxBgpM2PrefixCountersTable", $jbgp, "BGP4-V2-MIB-JUNIPER", $config['install_dir']."/mibs/junos");
-            foreach (array_keys($j_prefixes) as $key)
-            {
-              list($index,$afisafi) = explode('.',$key,2);
-              $j_afisafi[$index][] = $afisafi;
-            }
-          }
-
-          foreach ($j_afisafi[$j_peerIndexes[$peer['ip']]] as $afisafi)
-          {
-            list ($afi,$safi) = explode('.',$afisafi); $safi = $safis[$safi];
-            $af_list[$afi][$safi] = 1;
-            if (mysql_result(mysql_query("SELECT COUNT(*) FROM `bgpPeers_cbgp` WHERE `device_id` = '".$device['device_id']."' AND bgpPeerIdentifier = '".$peer['ip']."' AND afi = '$afi' AND safi = '$safi'"),0) == 0)
-            {
-              mysql_query("INSERT INTO `bgpPeers_cbgp` (device_id,bgpPeerIdentifier, afi, safi) VALUES ('".$device['device_id']."','".$peer['ip']."','$afi','$safi')");
-            }
-          }
-        } # os=junos
-
-        $af_query = mysql_query("SELECT * FROM bgpPeers_cbgp WHERE `device_id` = '".$device['device_id']."' AND bgpPeerIdentifier = '".$peer['ip']."'");
-        while ($entry = mysql_fetch_assoc($af_query))
+        $query = 'SELECT * FROM bgpPeers_cbgp WHERE `device_id` = ? AND bgpPeerRemoteAddr = ?';
+        foreach (dbFetchRows($query, array($device['device_id'], $peer['ip'])) as $entry)
         {
-          $afi = $entry['afi'];
-          $safi = $entry['safi'];
-          if (!$af_list[$afi][$safi])
+          if ($afi != $entry['afi'] && $safi != $entry['safi'])
           {
-            mysql_query("DELETE FROM `bgpPeers_cbgp` WHERE `device_id` = '".$device['device_id']."' AND bgpPeerIdentifier = '".$peer['ip']."' AND afi = '$afi' AND safi = '$safi'");
+            dbDelete('bgpPeers_cbgp', '`device_id` = ? AND bgpPeerRemoteAddr = ? AND afi = ? AND safi = ?', array($device['device_id'], $peer['ip'], $afi, $safi));
           }
         } # AF list
-      } # os=cisco|junos
+      } # os=cisco|some vendors
     } # Foreach
-
-    unset($j_afisafi);
-    unset($j_prefixes);
-    unset($j_bgp);
-    unset($j_peerIndexes);
+        
+    unset($afi, $safi, $index);
   } # isset
 
+  
+  
   // Delete removed peers
 
-  $sql = "SELECT * FROM bgpPeers AS B, devices AS D WHERE B.device_id = D.device_id AND D.device_id = '".$device['device_id']."'";
-  $query = mysql_query($sql);
-
-  while ($entry = mysql_fetch_assoc($query))
+  $query = 'SELECT * FROM bgpPeers WHERE device_id = ?';
+  foreach (dbFetchRows($query, array($device['device_id'])) as $entry)
   {
-    unset($exists);
-    $i = 0;
+    $exists = FALSE;
 
-    while ($i < count($peerlist) && !isset($exists))
+    foreach ($peerlist as $peer)
     {
-      if ($peerlist[$i]['ip'] == $entry['bgpPeerIdentifier']) { $exists = 1; }
-      $i++;
+      if ($peer['ip'] == $entry['bgpPeerRemoteAddr'])
+      {
+        $exists = TRUE;
+        break;
+      }
     }
 
-    if (!isset($exists))
+    if (!$exists && ($device['os_group'] == "cisco" || isset($vendor_oids[$device['os']])))
     {
-      mysql_query("DELETE FROM bgpPeers WHERE bgpPeer_id = '" . $entry['bgpPeer_id'] . "'");
-      mysql_query("DELETE FROM bgpPeers_cbgp WHERE bgpPeer_id = '" . $entry['bgpPeer_id'] . "'");
+      $query = 'SELECT cbgp_id FROM bgpPeers_cbgp WHERE device_id = ? AND bgpPeerRemoteAddr = ?';
+      foreach (dbFetchRows($query, array($device['device_id'], $peer['ip'])) as $cbgp_id)
+      {
+        dbDelete('bgpPeers_cbgp', '`cbgp_id` = ?', array($cbgp_id));
+        dbDelete('bgpPeers_cbgp-state', '`cbgp_id` = ?', array($cbgp_id));
+      }
+    }
+    
+    if (!$exists)
+    {
+      dbDelete('bgpPeers', '`bgpPeer_id` = ?', array($entry['bgpPeer_id']));
+      dbDelete('bgpPeers-state', '`bgpPeer_id` = ?', array($entry['bgpPeer_id']));
       echo("-");
     }
   }
 
-  unset($peerlist);
+  unset($p_list, $peerlist);
 
   echo("\n");
 }

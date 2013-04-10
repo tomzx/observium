@@ -298,11 +298,7 @@ function print_addresses($vars)
   $query_count = 'SELECT COUNT('.$address_type.'_address_id) ' . $query;
   $query =  'SELECT * ' . $query;
   $query .= ' ORDER BY A.'.$address_type.'_address';
-  if ($address_search) {
-    $pagination = FALSE;
-  } else {
-    $query .= " LIMIT $start,$pagesize";
-  }
+  $query .= " LIMIT $start,$pagesize";
 
   // Query addresses
   $entries = dbFetchRows($query, $param);
@@ -338,6 +334,7 @@ function print_addresses($vars)
       } else {
         $address_show = Net_IPv6::isInNetmask($entry[$address_type.'_address'], $addr, $mask);
       }
+      if (!$address_show) { $address_show = strstr($entry[$address_type.'_address'], $addr); }
     }
 
     if ($address_show)
@@ -394,8 +391,6 @@ function print_arptable($vars)
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
 
-  $address_search = FALSE;
-
   $param = array();
   $where = ' WHERE 1 ';
   foreach ($vars as $var => $value)
@@ -419,7 +414,6 @@ function print_arptable($vars)
           $param[] = $value;
           break;
         case 'address':
-          $address_search = TRUE;
           if (isset($vars['searchby']) && $vars['searchby'] == 'ip')
           {
             $where .= ' AND `ip_address` LIKE ?';
@@ -458,11 +452,7 @@ function print_arptable($vars)
   $query_count = 'SELECT COUNT(mac_id) ' . $query;
   $query =  'SELECT * ' . $query;
   $query .= ' ORDER BY M.mac_address';
-  if ($address_search) {
-    $pagination = FALSE;
-  } else {
-    $query .= " LIMIT $start,$pagesize";
-  }
+  $query .= " LIMIT $start,$pagesize";
 
   // Query ARP/NDP table addresses
   $entries = dbFetchRows($query, $param);
@@ -489,6 +479,7 @@ function print_arptable($vars)
   }
   $string .= '  <tbody>' . PHP_EOL;
 
+  $i = 0;
   foreach ($entries as $entry)
   {
     if (port_permitted($entry['port_id']))
@@ -1048,16 +1039,17 @@ function print_status($status)
       $query = 'SELECT * FROM `devices` AS D ';
       $query .= 'LEFT JOIN bgpPeers AS B ON B.device_id = D.device_id ';
       $query .= $query_perms;
-      $query .= "WHERE bgpPeerAdminStatus = 'start' AND bgpPeerState != 'established' " . $query_device . $query_user;
+      $query .= "WHERE (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established' " . $query_device . $query_user;
       $query .= 'ORDER BY D.hostname ASC';
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $peer)
       {
+        $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
         $string .= '  <tr>' . PHP_EOL;
-        $string .= '    <td class="list-bold">' . generate_device_link($peer, shorthost($peer['hostname'])) . '</td>' . PHP_EOL;
+        $string .= '    <td class="list-bold">' . generate_device_link($peer, shorthost($peer['hostname']), array('tab' => 'routing', 'proto' => 'bgp')) . '</td>' . PHP_EOL;
         $string .= '    <td><span class="badge badge-warning">BGP</span></td>' . PHP_EOL;
         $string .= '    <td><span class="label label-important" title="' . $bgpstates . '">BGP ' . strtoupper($peer['bgpPeerState']) . '</span></td>' . PHP_EOL;
-        $string .= '    <td nowrap>' . $peer['bgpPeerIdentifier'] . '</td>' . PHP_EOL;
+        $string .= '    <td nowrap>' . $peer_ip . '</td>' . PHP_EOL;
         $string .= '    <td nowrap>' . substr($peer['location'], 0, 30) . '</td>' . PHP_EOL;
         $string .= '    <td><strong>AS' . $peer['bgpPeerRemoteAs'] . ' :</strong> ' . $peer['astext'] . '</td>' . PHP_EOL;
         $string .= '  </tr>' . PHP_EOL;

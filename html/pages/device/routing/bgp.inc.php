@@ -75,62 +75,30 @@ echo('<table class="table table-hover '.$table_class.' table-bordered table-cond
 echo('<thead>');
 echo('<tr><th></th><th></th><th>Peer address</th><th>Type</th><th>AFI.SAFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
 echo('</thead>');
-$sql  = "SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id";
-$sql .= " FROM  `bgpPeers`";
-$sql .= " LEFT JOIN  `bgpPeers-state` ON  `bgpPeers`.bgpPeer_id =  `bgpPeers-state`.bgpPeer_id";
-$sql .= " WHERE `device_id` = ?";
-$sql .= " ORDER BY `bgpPeerRemoteAs`, `bgpPeerIdentifier`";
 
+$sql = 'SELECT * FROM `bgpPeers` AS B
+        LEFT JOIN `bgpPeers-state` AS S ON B.bgpPeer_id = S.bgpPeer_id
+        WHERE `device_id` = ?
+        ORDER BY `bgpPeerRemoteAs`, `bgpPeerRemoteAddr`';
 foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 {
 
   humanize_bgp($peer);
 
   $has_macaccounting = dbFetchCell("SELECT COUNT(*) FROM mac_accounting AS M
-                                   LEFT JOIN `ipv4_mac` AS I ON M.mac = I.mac_address
-                                   WHERE I.ip_address = ?", array($peer['bgpPeerIdentifier']));
+                                   LEFT JOIN `ip_mac` AS I ON M.mac = I.mac_address
+                                   WHERE I.ip_address = ?", array($peer['bgpPeerRemoteAddr']));
   unset ($peerhost, $peername);
 
-  $query = "SELECT * FROM ipv4_addresses AS A, ports AS I, devices AS D WHERE ";
-  $query .= "(A.ipv4_address = ? AND I.port_id = A.port_id)";
-  $query .= " AND D.device_id = I.device_id";
-  $ipv4_host = dbFetchRow($query,array($peer['bgpPeerIdentifier']));
+  $ip_version = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? 'ipv6' : 'ipv4';
+  $peerhost = dbFetchRow('SELECT * FROM '.$ip_version.'_addresses AS A
+                         LEFT JOIN ports AS I ON A.port_id = I.port_id
+                         LEFT JOIN devices AS D ON I.device_id = D.device_id
+                         WHERE A.'.$ip_version.'_address = ?', array($peer['bgpPeerRemoteAddr']));
+  if ($peerhost) { $peername = generate_device_link($peerhost, shorthost($peerhost['hostname']), array('tab' => 'routing', 'proto' => 'bgp')); } else { unset($peername); }
 
-  $query = "SELECT * FROM ipv6_addresses AS A, ports AS I, devices AS D WHERE ";
-  $query .= "(A.ipv6_address = ? AND I.port_id = A.port_id)";
-  $query .= " AND D.device_id = I.device_id";
-  $ipv6_host = dbFetchRow($query,array($peer['bgpPeerIdentifier']));
-
-  if ($ipv4_host)
-  {
-    $peerhost = $ipv4_host;
-  } elseif ($ipv6_host) {
-    $peerhost = $ipv6_host;
-  } else {
-    unset($peerhost);
-  }
-
-  if (is_array($peerhost))
-  {
-    #$peername = generate_device_link($peerhost);
-    $peername = generate_device_link($peerhost) ." ". generate_port_link($peerhost);
-    $peer_url         = "device/device=" . $peer['device_id'] . "/tab=routing/proto=bgp/view=updates/";
-  }
-  else
-  {
-    #$peername = gethostbyaddr($peer['bgpPeerIdentifier']); // FFffuuu DNS // Cache this in discovery?
-#    if ($peername == $peer['bgpPeerIdentifier'])
-#    {
-#      unset($peername);
-#    } else {
-#      $peername = "<i>".$peername."<i>";
-#    }
-  }
-
-  unset($peer_af);
   unset($sep);
-
-  foreach (dbFetchRows("SELECT * FROM `bgpPeers_cbgp` WHERE `device_id` = ? AND bgpPeerIdentifier = ?", array($device['device_id'], $peer['bgpPeerIdentifier'])) as $afisafi)
+  foreach (dbFetchRows("SELECT * FROM `bgpPeers_cbgp` WHERE `device_id` = ? AND bgpPeerRemoteAddr = ?", array($device['device_id'], $peer['bgpPeerRemoteAddr'])) as $afisafi)
   {
     $afi = $afisafi['afi'];
     $safi = $afisafi['safi'];
@@ -140,18 +108,17 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
     $peer['afisafi'][$this_afisafi] = 1; // Build a list of valid AFI/SAFI for this peer
   }
 
-  unset($sep);
-
   $graph_type       = "bgp_updates";
   $peer_daily_url   = "graph.php?id=" . $peer['bgpPeer_id'] . "&amp;type=" . $graph_type . "&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=500&amp;height=150";
-  $peeraddresslink  = "<span class=list-large><a onmouseover=\"return overlib('<img src=\'$peer_daily_url\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer['bgpPeerIdentifier'] . "</a></span>";
+  $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
+  $peeraddresslink  = "<span class=list-large><a onmouseover=\"return overlib('<img src=\'$peer_daily_url\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer_ip . "</a></span>";
 
   echo('<tr class="'.$peer['html_row_class'].'">');
   echo('
          <td style="width: 1px; background-color: '.$peer['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
          <td style="width: 1px;"></td>');
 
-  echo("   <td>" . $peeraddresslink . "<br />".$peername."</td>
+  echo("   <td>" . $peeraddresslink . "<br />" . $peername . "</td>
            <td>".$peer['peer_type']."</td>
            <td style='font-size: 10px; font-weight: bold; line-height: 10px;'>" . (isset($peer['afi']) ? $peer['afi'] : '') . "</td>
            <td><strong>AS" . $peer['bgpPeerRemoteAs'] . "</strong><br />" . $peer['astext'] . "</td>
@@ -183,10 +150,10 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
     case 'macaccounting_bits':
     case 'macaccounting_pkts':
       $acc = dbFetchRow("SELECT * FROM `mac_accounting` AS M
-                        LEFT JOIN `ipv4_mac` AS I ON M.mac = I.mac_address
+                        LEFT JOIN `ip_mac`   AS I ON M.mac = I.mac_address
                         LEFT JOIN `ports`    AS P ON P.port_id = M.port_id
                         LEFT JOIN `devices`  AS D ON D.device_id = P.device_id
-                        WHERE I.ip_address = ?", array($peer['bgpPeerIdentifier']));
+                        WHERE I.ip_address = ?", array($peer['bgpPeerRemoteAddr']));
       $database = $config['rrd_dir'] . "/" . $device['hostname'] . "/cip-" . $acc['ifIndex'] . "-" . $acc['mac'] . ".rrd";
       if (is_array($acc) && is_file($database))
       {

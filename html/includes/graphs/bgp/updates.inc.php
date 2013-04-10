@@ -2,7 +2,7 @@
 
 $scale_min = "0";
 
-$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("bgp-" . $data['bgpPeerIdentifier'] . ".rrd");
+$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("bgp-" . $data['bgpPeerRemoteAddr'] . ".rrd");
 
 $ds_in = "bgpPeerInUpdates";
 $ds_out = "bgpPeerOutUpdates";
