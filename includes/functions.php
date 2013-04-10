@@ -418,7 +418,7 @@ function isPingable($hostname)
   }
   $sleep = floor(1000000 / $retries); // interval between retries, max 1 sec
 
-  //$ping_debug = TRUE; $file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time()); /// Uncomment this line for DEBUG isPingable()
+  $ping_debug = TRUE; $file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time()); /// Uncomment this line for DEBUG isPingable()
 
   // First try IPv4
   $ip = gethostbyname($hostname);
@@ -579,6 +579,38 @@ function hex2ip($ip_snmp)
   }
   return $ip;
 }
+
+// Convert IP string to HEX value:
+// IPv4 "193.156.90.38" => "C1 9C 5A 26"
+// IPv6 "2001:07f8:0012:0001:0000:0000:0005:0272" => "20 01 07 f8 00 12 00 01 00 00 00 00 00 05 02 72"
+// IPv6 "2001:7f8:12:1::5:0272" => "20 01 07 f8 00 12 00 01 00 00 00 00 00 05 02 72"
+/// Note. Return lowercase string.
+function ip2hex($ip, $separator = ' ')
+{
+  $ip = trim($ip);
+  $ip_hex = '';
+  if (strstr($ip, ':'))
+  {
+    //IPv6
+    $ip_hex = str_replace(':', '', Net_IPv6::uncompress($ip, TRUE));
+    $ip_hex = preg_replace('/([a-f\d]{2})/i', "$1$separator", $ip_hex);
+  } else {
+    //IPv4
+    foreach (explode('.', $ip) as $dec)
+    {
+      $ip_hex .= zeropad(dechex($dec)) . $separator;
+    }
+  }
+
+  $ip_hex = substr(strtolower($ip_hex), 0, -1);
+  if ($ip_hex)
+  {
+    return $ip_hex;
+  } else {
+    return $ip;
+  }
+}
+
 
 function snmp2ipv6($ipv6_snmp)
 {
