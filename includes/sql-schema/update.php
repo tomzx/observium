@@ -126,6 +126,7 @@ foreach ($filelist as $file)
           fputs($fd,"Error: " . $error['error'] . "\n\n");
         }
         fclose($fd);
+        unset($errors);
       }
       else
       {
