@@ -104,6 +104,7 @@ foreach ($filelist as $file)
             if (!$update)
             {
               $err++;
+              $errors[] = array('query' => $line, 'error' => mysql_error());
               if ($debug) { echo(mysql_error() . "\n"); }
             }
           }
@@ -117,6 +118,14 @@ foreach ($filelist as $file)
       elseif($err)
       {
         echo(" done ($err errors).\n");
+        $fd = fopen($config['install_dir'] . '/sql-schema-errors.log','a+');
+        fputs($fd,"====== Schema update " . sprintf("%03d",$db_rev) . " -> " . sprintf("%03d",$filename) . " ==============\n");
+        foreach ($errors as $error)
+        {
+          fputs($fd,"Query: " . $error['query'] . "\n");
+          fputs($fd,"Error: " . $error['error'] . "\n\n");
+        }
+        fclose($fd);
       }
       else
       {
