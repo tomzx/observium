@@ -202,20 +202,24 @@ if ($device['os'] == "apc")
     if ($debug) { echo($oids."\n"); }
     if ($oids)
     {
-      echo(" Voltage In ");
       list($oid,$current) = explode(" ",$oids);
-      $divisor = 1;
-      $type = "apc";
-      $index = "1";
-      $descr = "Input";
+      if ($current != -1)
+      {
+        echo(" Voltage In ");
+        $divisor = 1;
+        $type = "apc";
+        $index = "1";
+        $descr = "Input";
 
-      discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+      }
     }
 
     $oids = snmp_walk($device, "rPDU2PhaseStatusVoltage", "-OsqnU", "PowerNet-MIB");
     if ($debug) { echo($oids."\n"); }
     if ($oids)
     {
+      # FIXME need to create a sensor per phase
       echo(" Voltage In ");
       list($oid,$current) = explode(" ",$oids);
       $divisor = 1;
