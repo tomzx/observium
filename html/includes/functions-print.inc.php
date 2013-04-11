@@ -937,13 +937,13 @@ function print_status($status)
   }
 
   // Ports Down
-  if ($status['ports'])
+  if ($status['ports'] || $status['links'])
   {
     /// FIXME Mike: This will be deleted in future
     /// because $config['warn']['ifdown'] - deprecated.
     if (isset($config['warn']['ifdown']) && !$config['warn']['ifdown'])
     {
-  echo('
+      echo('
   <div class="alert">
      <button type="button" class="close" data-dismiss="alert">&times;</button>
      <p><i class="oicon-bell"></i> <strong>Config option obsolete</strong></p>
@@ -953,9 +953,12 @@ function print_status($status)
     }
 
     $query = 'SELECT * FROM `ports` AS I ';
+    if ($status['links'] && !$status['ports']) { $query .= 'INNER JOIN links as L ON I.port_id = L.local_port_id '; }
     $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
     $query .= $query_perms;
-    $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0" . $query_device . $query_user;
+    $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 ";
+    if ($status['links'] && !$status['ports']) { $query .= ' AND L.active = 1 '; }
+    $query .= $query_device . $query_user;
     $query .= 'ORDER BY D.hostname ASC, I.ifDescr * 1 ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
@@ -967,7 +970,9 @@ function print_status($status)
       $string .= '    <td><span class="label label-important">Port Down</span></td>' . PHP_EOL;
       $string .= '    <td class="list-bold">' . generate_port_link($port, makeshortif($port['label'])) . '</td>' . PHP_EOL;
       $string .= '    <td nowrap>' . substr($port['location'], 0, 30) . '</td>' . PHP_EOL;
-      $string .= '    <td nowrap>Down for ' . formatUptime($config['time']['now'] - strtotime($port['ifLastChange']), 'short') . '</td>' . PHP_EOL; // This is like deviceUptime()
+      $string .= '    <td nowrap>Down for ' . formatUptime($config['time']['now'] - strtotime($port['ifLastChange']), 'short'); // This is like deviceUptime()
+      if ($status['links'] && !$status['ports']) { $string .= ' ('.strtoupper($port['protocol']).': ' .$port['remote_hostname'].' / ' .$port['remote_port'] .')'; }
+      $string .= '</td>' . PHP_EOL;
       $string .= '  </tr>' . PHP_EOL;
     }
   }
