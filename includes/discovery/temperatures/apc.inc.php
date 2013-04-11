@@ -35,6 +35,23 @@ if ($device['os'] == "apc")
     discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, $sensorType, $descr, '1', '1', $low_limit, $low_warn_limit, $high_warn_limit, $high_limit , $current);
   }
 
+  # Environmental monitoring on rPDU2
+  $apc_env_data = snmpwalk_cache_oid($device, "rPDU2SensorTempHumidityConfigTable", array(), "PowerNet-MIB");
+  $apc_env_data = snmpwalk_cache_oid($device, "rPDU2SensorTempHumidityStatusTable", $apc_env_data, "PowerNet-MIB");
+
+  foreach (array_keys($apc_env_data) as $index)
+  {
+    $descr           = $apc_env_data[$index]['rPDU2SensorTempHumidityStatusName'];
+    $current         = $apc_env_data[$index]['rPDU2SensorTempHumidityStatusTempC'];
+    $divisor = 10;
+    $sensorType      = 'apc';
+    $oid             = ' .1.3.6.1.4.1.318.1.1.26.10.2.2.1.8.' . $index;
+    $high_warn_limit = ($apc_env_data[$index]['rPDU2SensorTempHumidityConfigTemperatureAlarmEnable'] != 'disabled' ? $apc_env_data[$index]['rPDU2SensorTempHumidityConfigTempHighThreshC'] : NULL);
+    $high_limit      = ($apc_env_data[$index]['rPDU2SensorTempHumidityConfigTemperatureAlarmEnable']  != 'disabled' ? $apc_env_data[$index]['rPDU2SensorTempHumidityConfigTempMaxThreshC'] : NULL);
+
+    discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, $sensorType, $descr, $divisor, '1', NULL, NULL, $high_warn_limit, $high_limit , $current);
+  }
+
 /*
             [iemConfigProbeHighHumidThreshold] => -1
             [iemConfigProbeLowHumidThreshold] => -1
