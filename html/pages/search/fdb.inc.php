@@ -51,9 +51,10 @@ echo('<thead><tr>
         <th>VLAN ID</th>
         <th>VLAN Name</th>
       </tr></thead>');
+
 foreach (dbFetchRows($query, $param) as $entry)
 {
-  if (!$ignore)
+  if (port_permitted($entry['port_id']))
   {
     //why are they here for?
     //$speed = humanspeed($entry['ifSpeed']);
@@ -78,8 +79,6 @@ foreach (dbFetchRows($query, $param) as $entry)
         <td class="list-bold">'.$entry['vlan_name'].'</td>
             </tr>');
   }
-
-  unset($ignore);
 }
 
 echo("</table>");
