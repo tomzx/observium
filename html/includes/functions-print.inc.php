@@ -235,7 +235,6 @@ function print_addresses($vars)
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
 
-  $address_search = FALSE;
   switch($vars['search'])
   {
     case '6':
@@ -264,11 +263,30 @@ function print_addresses($vars)
           $where .= ' AND I.ifDescr LIKE ?';
           $param[] = $value;
           break;
+        case 'network':
+          $where .= ' AND N.ip_network_id = ?';
+          $param[] = $value;
+          break;
         case 'address':
-          $address_search = TRUE;
           list($addr, $mask) = explode('/', $value);
-          if (!$mask) {
-            $mask = ($address_type === 'ipv4') ? '32' : '128';
+          if (is_numeric(stripos($addr, ':abcdef'))) { $address_type = 'ipv6'; }
+          switch ($address_type)
+          {
+            case 'ipv6':
+              $ip_valid = Net_IPv6::checkIPv6($addr);
+              break;
+            case 'ipv4':
+              $ip_valid = Net_IPv4::validateIP($addr);
+              break;
+          }
+          if ($ip_valid)
+          {
+            // If address valid -> seek occurrence in network
+            if (!$mask) { $mask = ($address_type === 'ipv4') ? '32' : '128'; }
+          } else {
+            // If address not valid -> seek LIKE
+            $where .= ' AND A.ip_address LIKE ?';
+            $param[] = '%'.$addr.'%';
           }
           break;
       }
@@ -289,16 +307,24 @@ function print_addresses($vars)
   $query_device = ' AND D.ignore = 0 ';
   if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
 
-  $query = 'FROM `'.$address_type.'_addresses` AS A ';
+  $query = 'FROM `ip_addresses` AS A ';
   $query .= 'LEFT JOIN `ports`   AS I ON I.port_id   = A.port_id ';
   $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
-  $query .= 'LEFT JOIN `'.$address_type.'_networks` AS N ON N.'.$address_type.'_network_id = A.'.$address_type.'_network_id ';
+  $query .= 'LEFT JOIN `ip_networks` AS N ON N.ip_network_id = A.ip_network_id ';
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
-  $query_count = 'SELECT COUNT('.$address_type.'_address_id) ' . $query;
+  $query_count = 'SELECT COUNT(ip_address_id) ' . $query;
   $query =  'SELECT * ' . $query;
-  $query .= ' ORDER BY A.'.$address_type.'_address';
-  $query .= " LIMIT $start,$pagesize";
+  $query .= ' ORDER BY A.ip_address';
+  if ($ip_valid)
+  {
+    $pagination = FALSE;
+  } else {
+    $query .= " LIMIT $start,$pagesize";
+  }
+  // Override by address type
+  $query = str_replace(array('ip_address', 'ip_network'), array($address_type.'_address', $address_type.'_network'), $query);
+  $query_count = str_replace(array('ip_address', 'ip_network'), array($address_type.'_address', $address_type.'_network'), $query_count);
 
   // Query addresses
   $entries = dbFetchRows($query, $param);
@@ -325,7 +351,7 @@ function print_addresses($vars)
   foreach ($entries as $entry)
   {
     $address_show = TRUE;
-    if ($address_search)
+    if ($ip_valid)
     {
       // If address not in specified network, don't show entry.
       if ($address_type === 'ipv4')
@@ -334,7 +360,6 @@ function print_addresses($vars)
       } else {
         $address_show = Net_IPv6::isInNetmask($entry[$address_type.'_address'], $addr, $mask);
       }
-      if (!$address_show) { $address_show = strstr($entry[$address_type.'_address'], $addr); }
     }
 
     if ($address_show)
@@ -939,8 +964,7 @@ function print_status($status)
   // Ports Down
   if ($status['ports'] || $status['links'])
   {
-    /// FIXME Mike: This will be deleted in future
-    /// because $config['warn']['ifdown'] - deprecated.
+    // warning about deprecated option: $config['warn']['ifdown']
     if (isset($config['warn']['ifdown']) && !$config['warn']['ifdown'])
     {
       echo('
@@ -959,10 +983,21 @@ function print_status($status)
     $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 ";
     if ($status['links'] && !$status['ports']) { $query .= ' AND L.active = 1 '; }
     $query .= $query_device . $query_user;
-    $query .= 'ORDER BY D.hostname ASC, I.ifDescr * 1 ASC';
+    $query .= ' AND I.ifLastChange >= DATE_SUB(NOW(), INTERVAL 24 HOUR) ';
+    $query .= 'ORDER BY I.ifLastChange DESC, D.hostname ASC, I.ifDescr * 1 ASC ';
     $entries = dbFetchRows($query, $param);
+    //$count = count($entries);
+    $i = 1;
     foreach ($entries as $port)
     {
+      if ($i > 200)
+      {
+        // Limit to 200 ports on overview page
+        $string .= '  <tr><td></td><td><span class="badge badge-info">Port</span></td>';
+        $string .= '<td><span class="label label-important">Port Down</span></td>';
+        $string .= '<td colspan=3>Too many ports down. See <strong><a href="'.generate_url(array('page'=>'ports'), array('state'=>'down')).'">All DOWN ports</a></strong>.</td></tr>' . PHP_EOL;
+        break;
+      }
       $port = humanize_port($port, $port);
       $string .= '  <tr>' . PHP_EOL;
       $string .= '    <td class="list-bold">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
@@ -974,6 +1009,7 @@ function print_status($status)
       if ($status['links'] && !$status['ports']) { $string .= ' ('.strtoupper($port['protocol']).': ' .$port['remote_hostname'].' / ' .$port['remote_port'] .')'; }
       $string .= '</td>' . PHP_EOL;
       $string .= '  </tr>' . PHP_EOL;
+      $i++;
     }
   }
 

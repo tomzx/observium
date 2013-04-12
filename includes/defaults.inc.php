@@ -231,7 +231,7 @@ $config['frontpage']['map']['realworld']           = false;        // Enable/Dis
 $config['frontpage']['device_status']['show']      = true;         // Enable/Disable the status view
 // Show the status messages you want
 $config['frontpage']['device_status']['devices']   = true;         // Show the down devices
-$config['frontpage']['device_status']['ports']     = true;         // Show the down ports
+$config['frontpage']['device_status']['ports']     = true;         // Show the down ports (Last 24 hours)
 $config['frontpage']['device_status']['links']     = true;         // Show the down inter-device links (with CDP/LLDP linked devices)
 $config['frontpage']['device_status']['errors']    = false;        // Show the ports with interface errors
 $config['frontpage']['device_status']['services']  = true;         // Show the down services
