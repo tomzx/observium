@@ -8,23 +8,24 @@ $active['edit']    = (($vars['page'] == "edituser") ? "active" : "");
 $active['log']     = (($vars['page'] == "authlog") ? "active" : "");
 $isUserlist        = (isset($vars['user_id']) ? true : false);
 
-echo("
-      <div class=\"navbar\" style=\"margin-top: 10px;\">
-        <div class=\"navbar-inner\">
-          <a class=\"brand\">Users:</a>
-          <ul class=\"nav\">
-            <li class=\"".$active['add']." first\"><a href=\"".$links['add']."\"><i class=\"icon-plus-sign\"></i> Add User</a></li>
-            <li class=\"".$active['edit']."\"><a href=\"".$links['edit']."\"><i class=\"icon-edit\"></i> Edit Users</a></li>
-            <li class=\"".$active['log']."\"><a href=\"".$links['log']."\"><i class=\"icon-calendar\"></i> Authlog</a></li>
-          </ul>");
+echo('
+      <div class="navbar navbar-narrow" style="margin-top: 10px;">
+        <div class="navbar-inner">
+          <a class="brand">Users:</a>
+          <ul class="nav">
+            <li class="'.$active['add'].' first"><a href="'.$links['add'].'"><i class="oicon-user--plus"></i> Add User</a></li>
+            <li class="'.$active['edit'].'"><a href="'.$links['edit'].'"><i class="oicon-user--pencil"></i> Edit Users</a></li>
+            <li class="'.$active['log'].'"><a href="'.$links['log'].'"><i class="oicon-clipboard-eye"></i> Authlog</a></li>
+          </ul>');
+
 if ($isUserlist) {
-  echo("
-          <ul class=\"nav pull-right\">
-            <li class=\"first\"><a href=\"".$links['edit']."\"><i class=\"icon-chevron-left\"></i> <strong>Back to userlist</strong></a></li>
-          </ul>");
+  echo('
+          <ul class="nav pull-right">
+            <li class="first"><a href="'.$links['edit'].'"><i class="icon-chevron-left"></i> <strong>Back to userlist</strong></a></li>
+          </ul>');
 }
-echo("
+echo('
         </div>
-      </div>");
+      </div>');
 
 ?>

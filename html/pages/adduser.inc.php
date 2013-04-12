@@ -30,10 +30,10 @@ if ($_SESSION['userlevel'] == '10') {
     }
 
 ?>
-<div class="tabBox">
-  <ul class="nav-tabs tabs" id="addBillTab">
+<!--  <ul class="nav nav-tabs" id="addBillTab">
     <li class="active"><a href="#properties" data-toggle="tab">User Properties</a></li>
-  </ul>
+  </ul> -->
+
   <div class="tabcontent tab-content" id="addUserTabContent" style="min-height: 50px; padding-bottom: 18px;">
     <div class="tab-pane fade active in" id="properties">
       <form name="form1" method="post" action="adduser/" class="form-horizontal">
@@ -88,7 +88,7 @@ if ($_SESSION['userlevel'] == '10') {
           </div>
         </fieldset>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary"><i class="oicon-ok-sign oicon-white"></i> <strong>Add User</strong></button>
+          <button type="submit" class="btn btn-primary"><i class="icon-ok-sign icon-white"></i> <strong>Add User</strong></button>
         </div>
       </form>
     </div>

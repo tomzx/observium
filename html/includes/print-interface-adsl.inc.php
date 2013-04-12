@@ -9,8 +9,6 @@ $if_id = $port['port_id'];
 
 $port = humanize_port($port);
 
-if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
-
 if ($port['ifInErrors_delta'] > 0 || $port['ifOutErrors_delta'] > 0)
 {
   $error_img = generate_port_link($port,"<img src='images/16/chart_curve_error.png' alt='Interface Errors' border=0>","port_errors");
@@ -18,7 +16,7 @@ if ($port['ifInErrors_delta'] > 0 || $port['ifOutErrors_delta'] > 0)
   $error_img = "";
 }
 
-echo("<tr style=\"background-color: $row_colour; padding: 5px;\" valign=top onmouseover=\"this.style.backgroundColor='$list_highlight';\" onmouseout=\"this.style.backgroundColor='$row_colour';\"
+echo("<tr valign=top onmouseover=\"this.style.backgroundColor='$list_highlight';\" onmouseout=\"this.style.backgroundColor='$row_colour';\"
 onclick=\"location.href='device/".$device['device_id']."/port/".$port['port_id']."/'\" style='cursor: pointer;'>
  <td valign=top width=350>");
 echo("        <span class=list-large>

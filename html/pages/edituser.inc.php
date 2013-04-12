@@ -4,19 +4,25 @@
 include("usermenu.inc.php");
 include("includes/javascript-interfacepicker.inc.php");
 
-echo("<div style='margin: 10px;'>");
-
 $pagetitle[] = "Edit user";
 
 if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php"); } else
 {
+?>
 
-  print_optionbar_start();
+<form method="post" action="" class="form form-inline">
+<div class="navbar navbar-narrow">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand">Edit User</a>
+      <ul class="nav">
+
+<?php
 
   $user_list = get_userlist();
 
-  echo('<form method="post" action="" class="form form-inline">
-          <span style="font-weight: bold;">Edit User</span> &#187;
+  echo('
+         <li>
           <input type="hidden" value="edituser" name="page">
           <select name="user_id" onchange="location.href=\'/edituser/user_id=\' + this.options[this.selectedIndex].value + \'/\';">');
   if (!isset($vars['user_id'])) { echo('<option value="">Select User</option>'); }
@@ -29,7 +35,8 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
     echo(">" . $user_entry['username'] . "</option>");
   }
 
-  echo('</select>');
+  echo('</select>
+      </li>');
 
   if ($vars['user_id'])
   {
@@ -37,17 +44,21 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
     $user_data = dbFetchRow("SELECT * FROM users WHERE user_id = ?", array($vars['user_id']));
 
     // Become the selected user. Dirty.
-    echo(" | <a href='edituser/action=becomeuser/user_id=".$vars['user_id']."/'>Become User</a>");
+    echo("<li><a href='edituser/action=becomeuser/user_id=".$vars['user_id']."/'>Become User</a></li>");
 
     // Delete the selected user.
-    echo(" | <a href='edituser/action=deleteuser/user_id=".$vars['user_id']."/'>Delete User</a>");
+    echo("<li><a href='edituser/action=deleteuser/user_id=".$vars['user_id']."/'>Delete User</a></li>");
 
   }
+?>
 
-  echo('</form>');
+      </ul>
+    </div>
+  </div>
+</div>
+</form>
 
-  print_optionbar_end();
-
+<?
   if ($vars['user_id'])
   {
    if ($vars['action'] == "deleteuser")
@@ -125,7 +136,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
 
     if (passwordscanchange($vars['user_id'])) // FIXME user_id? function takes username as a parameter, so this can't work!
     {
-      echo("<div style='width: 330px;'><div style='background-color: #e5e5e5; border: solid #e5e5e5 10px; margin-bottom:10px;'>
+      echo("<div class='well'>
               <div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>
         <form method='post' action='edituser/user_id=".$vars['user_id']."'>
         <input type=hidden name='action' value='changepass'>
@@ -133,7 +144,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
         <table width='100%'>
         <tr><td>New Password</td><td align='right'><input type=password name=new_pass autocomplete='off'></input></td></tr>
         <tr><td>Retype Password</td><td align='right'><input type=password name=new_pass2 autocomplete='off'></input></td></tr>
-        <tr><td></td><td align='right'><input type=submit class=submit></td></tr></table></form></div></div>");
+        <tr><td></td><td align='right'><input type=submit class=submit></td></tr></table></form></div>");
         // Change pass
     }
 
@@ -254,7 +265,5 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
   }
 
 }
-
-echo("</div>");
 
 ?>
