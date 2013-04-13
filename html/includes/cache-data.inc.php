@@ -1,8 +1,8 @@
 <?php
 
+// Devices
 foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 {
-
   if (device_permitted($device))
   {
 
@@ -26,6 +26,7 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
   }
 }
 
+// Ports
 foreach (dbFetchRows("SELECT port_id, ifAdminStatus, ifOperStatus FROM `ports`") as $port)
 {
   if (port_permitted($port))
@@ -39,5 +40,40 @@ foreach (dbFetchRows("SELECT port_id, ifAdminStatus, ifOperStatus FROM `ports`")
     }
   }
 }
+
+// Routing
+// BGP
+if (isset($config['enable_bgp']) && $config['enable_bgp'])
+{
+  $routing['bgp']['last_seen'] = $config['time']['now'];
+  foreach (dbFetchRows('SELECT `device_id`,`bgpPeerState`,`bgpPeerAdminStatus`,`bgpPeerRemoteAs` FROM bgpPeers') as $bgp)
+  {
+    if (!$config['web_show_disabled'])
+    {
+      if ($cache['devices']['id'][$bgp['device_id']]['disabled']) { continue; }
+    }
+    if (device_permitted($bgp))
+    {
+      $routing['bgp']['all']++;
+      if ($bgp['bgpPeerAdminStatus'] == 'start' || $bgp['bgpPeerAdminStatus'] == 'running')
+      {
+        $routing['bgp']['up']++;
+        if ($bgp['bgpPeerState'] != 'established') { $routing['bgp']['alerted']++; }
+      } else {
+        $routing['bgp']['down']++;
+      }
+      if ($cache['devices']['id'][$bgp['device_id']]['bgpLocalAs'] == $bgp['bgpPeerRemoteAs'])
+      {
+        $routing['bgp']['internal']++;
+      } else {
+        $routing['bgp']['external']++;
+      }
+    }
+  }
+}
+
+$routing['ospf']['all'] = dbFetchCell("SELECT COUNT(ospf_instance_id) FROM `ospf_instances` WHERE `ospfAdminStat` = 'enabled'");
+$routing['cef']['all']  = dbFetchCell("SELECT COUNT(cef_switching_id) from `cef_switching`");
+$routing['vrf']['all']  = dbFetchCell("SELECT COUNT(vrf_id) from `vrfs`");
 
 ?>

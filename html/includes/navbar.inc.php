@@ -301,29 +301,24 @@ if ($_SESSION['userlevel'] >= '5' && ($app_count) > "0")
 <?php
 }
 
-$routing_count['bgp']  = dbFetchCell("SELECT COUNT(bgpPeer_id) from `bgpPeers`");
-$routing_count['ospf'] = dbFetchCell("SELECT COUNT(ospf_instance_id) FROM `ospf_instances` WHERE `ospfAdminStat` = 'enabled'");
-$routing_count['cef']  = dbFetchCell("SELECT COUNT(cef_switching_id) from `cef_switching`");
-$routing_count['vrf']  = dbFetchCell("SELECT COUNT(vrf_id) from `vrfs`");
-
-if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf']+$routing_count['cef']+$routing_count['vrf']) > "0")
+if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['all']+$routing['ospf']['all']+$routing['cef']['all']+$routing['vrf']['all']) > 0)
 {
 ?>
      <li class="divider-vertical" style="margin:0;"></li>
      <li class="dropdown">
        <a href="<?php echo(generate_url(array('page'=>'routing'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-arrow-branch-000-left"></i> Routing <b class="caret"></b></a>
-       <ul class="dropdown-menu">
+       <ul class="dropdown-menu" style="width:200px;">
 
 <?php
   $separator = 0;
 
-  if ($_SESSION['userlevel'] >= '5' && $routing_count['vrf'])
+  if ($_SESSION['userlevel'] >= '5' && $routing['vrf']['all'])
   {
     echo('<li><a href="routing/protocol=vrf/"><i class="oicon-arrow-branch-byr"></i> VRFs</a></li>');
     $separator++;
   }
 
-  if ($_SESSION['userlevel'] >= '5' && $routing_count['ospf'])
+  if ($_SESSION['userlevel'] >= '5' && $routing['ospf']['all'])
   {
     if ($separator)
     {
@@ -335,7 +330,7 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
     $separator++;
   }
   // BGP Sessions
-  if ($_SESSION['userlevel'] >= '5' && $routing_count['bgp'])
+  if ($_SESSION['userlevel'] >= '5' && $routing['bgp']['all'])
   {
     if ($separator)
     {
@@ -343,18 +338,18 @@ if ($_SESSION['userlevel'] >= '5' && ($routing_count['bgp']+$routing_count['ospf
       $separator = 0;
     }
     echo('
-        <li><a href="routing/protocol=bgp/type=all/graph=NULL/"><img src="images/16/link.png" border="0" align="absmiddle" /> BGP All Sessions </a></li>
+        <li><a href="routing/protocol=bgp/type=all/graph=NULL/"><img src="images/16/link.png" border="0" align="absmiddle" /> BGP All Sessions&nbsp;<span class="right">(' . $routing['bgp']['all'] . ')</span></a></li>
 
         <li><a href="routing/protocol=bgp/type=external/graph=NULL/"><img src="images/16/world_link.png" border="0" align="absmiddle" /> BGP External</a></li>
         <li><a href="routing/protocol=bgp/type=internal/graph=NULL/"><img src="images/16/brick_link.png" border="0" align="absmiddle" /> BGP Internal</a></li>');
   }
 
   // Do Alerts at the bottom
-  if ($bgp_alerts)
+  if ($routing['bgp']['alerted'])
   {
     echo('
         <li class="divider"></li>
-        <li><a href="routing/protocol=bgp/adminstatus=start/state=down/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> Alerted BGP (' . $bgp_alerts . ')</a></li>
+        <li><a href="routing/protocol=bgp/adminstatus=start/state=down/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> Alerted BGP&nbsp;<span class="right">(' . $routing['bgp']['alerted'] . ')</span></a></li>
    ');
   }
 
