@@ -747,7 +747,7 @@ function percentage_bar($args)
   {
     $output .= '<div class="bar-text" style="width:'.$bar['percent'].'%; padding-left: 4px;">'.$bar['text'].'</div>';
   }
-  if($left > '0') { $output .= '<div class="bar-text" style="float: right; text-align: right; width:'.$left.'%;'.$style_b.'">'.$args['text'].'</div>'; }
+  if($left > '0') { $output .= '<div class="bar-text" style="margin-left: -100px; float: right; text-align: right; '.$style_b.'">'.$args['text'].'</div>'; }
 
   $output .= '</div>';
 
