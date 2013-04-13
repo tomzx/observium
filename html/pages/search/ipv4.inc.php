@@ -37,7 +37,7 @@ $search[] = array('type'    => 'text',
                   'id'      => 'address',
                   'value'   => $vars['address']);
 
-print_search_simple($search);
+print_search_simple($search, 'IPv4');
 
 // Pagination
 $vars['pagination'] = TRUE;

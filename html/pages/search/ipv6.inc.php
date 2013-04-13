@@ -37,7 +37,7 @@ $search[] = array('type'    => 'text',
                   'id'      => 'address',
                   'value'   => $vars['address']);
 
-print_search_simple($search);
+print_search_simple($search, 'IPv6');
 
 // Pagination
 $vars['pagination'] = TRUE;
@@ -47,7 +47,7 @@ if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 // Print addresses
 print_addresses($vars);
 
-$pagetitle[] = "IPv6 Addresses";
+$pagetitle[] = "IPv6 address search";
 
 ?>
 

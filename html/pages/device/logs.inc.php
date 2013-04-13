@@ -2,23 +2,23 @@
 
 if(!isset($vars['section'])) { $vars['section'] = 'eventlog'; }
 
-print_optionbar_start();
+$sections = array('eventlog', 'syslog');
 
-echo('<strong>Logging</strong>  &#187; ');
+$navbar['brand'] = "Logging";
+$navbar['class'] = "navbar-narrow";
 
-$tmp_pageno = $vars['pageno'];
-unset($vars['pageno']);
+foreach ($sections as $section)
+{
+  $type = strtolower($section);
+  if (!isset($vars['section'])) { $vars['section'] = $section; }
 
-if ($vars['section'] == 'eventlog') { echo('<span class="pagemenu-selected">'); }
-echo(generate_link('Event Log' , $vars, array('section'=>'eventlog')));
-if ($vars['section'] == 'eventlog') { echo('</span>'); }
+  if ($vars['section'] == $section) { $navbar['options'][$section]['class'] = "active"; }
+  $navbar['options'][$section]['url'] = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'logs',  'section' => $section));
+  $navbar['options'][$section]['text'] = nicecase($section);
+}
 
-echo(' | ');
+print_navbar($navbar);
 
-if ($vars['section'] == 'syslog')
-{ echo('<span class="pagemenu-selected">'); }
-echo(generate_link('Syslog' , $vars, array('section'=>'syslog')));
-if ($vars['section'] == 'syslog') { echo('</span>'); }
 
 $vars['pageno'] = $tmp_pageno;
 
@@ -29,7 +29,6 @@ switch ($vars['section'])
     include('pages/device/logs/'.$vars['section'].'.inc.php');
     break;
   default:
-    print_optionbar_end();
     echo('<h2>Error. No section '.$vars['section'].'.<br /> Please report this to observium developers.</h2>');
     break;
 }

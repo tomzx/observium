@@ -4,31 +4,20 @@ $pagetitle[] = "Search";
 
 $sections = array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'MAC Tables');
 
-if (!isset($vars['search'])) { $vars['search'] = "ipv4"; }
+$navbar['brand'] = "Search";
+$navbar['class'] = "navbar-narrow";
 
-print_optionbar_start('', '');
-
- echo('<span style="font-weight: bold;">Search</span> &#187; ');
-
-unset($sep);
-foreach ($sections as $type => $texttype)
+foreach ($sections as $section => $text)
 {
-  echo($sep);
-  if ($vars['search'] == $type)
-  {
-    echo("<span class='pagemenu-selected'>");
-  }
+  $type = strtolower($section);
+  if (!isset($vars['search'])) { $vars['search'] = $section; }
 
-#  echo('<a href="search/' . $type . ($_GET['optb'] ? '/' . $_GET['optb'] : ''). '/">' . $texttype .'</a>');
-  echo(generate_link($texttype, array('page'=>'search','search'=>$type)));
-
-  if ($vars['search'] == $type) { echo("</span>"); }
-
-  $sep = ' | ';
+  if ($vars['search'] == $section) { $navbar['options'][$section]['class'] = "active"; }
+  $navbar['options'][$section]['url'] = generate_url(array('page' => 'search', 'search' => $section));
+  $navbar['options'][$section]['text'] = $text;
 }
-unset ($sep);
 
-print_optionbar_end('', '');
+print_navbar($navbar);
 
 /// Little switch to provide some sanity checking.
 switch ($vars['search'])

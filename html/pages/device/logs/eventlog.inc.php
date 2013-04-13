@@ -1,5 +1,3 @@
-<hr />
-
 <?php
 unset($search, $types);
 
@@ -23,7 +21,7 @@ $search[] = array('type'    => 'select',
                   'value'   => $vars['type'],
                   'values'  => $types);
 
-print_search_simple($search);
+print_search_simple($search, 'Eventlog');
 
 /// Pagination
 $vars['pagination'] = TRUE;

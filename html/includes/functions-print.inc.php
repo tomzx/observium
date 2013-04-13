@@ -165,17 +165,18 @@ function print_search_simple($data, $title = '')
 {
   // Form header
   $string = PHP_EOL . '<!-- START search form -->' . PHP_EOL;
-  $string .= '<div class="well well-shaded">' . PHP_EOL;
   $string .= '<form method="POST" action="" class="form form-inline">' . PHP_EOL;
-  $string .= '  <table width="100%">' . PHP_EOL . '    <tr>' . PHP_EOL;
-  if ($title) { $string .= '  <td><span style="font-weight: bold;">' . $title . '</span>&nbsp;&#187;</td>' . PHP_EOL; }
+  $string .= '<div class="navbar">' . PHP_EOL;
+  $string .= '<div class="navbar-inner">';
+  $string .= '<div class="container">';
+  if ($title) { $string .= '  <a class="brand">' . $title . '</a>' . PHP_EOL; }
+
+  $string .= '<div class="nav" style="margin-top: 5px;">';
 
   // Main
-  $string .= '    <td>' . PHP_EOL;
   foreach ($data as $item)
   {
     if (!isset($item['value'])) { $item['value'] = ''; }
-
     $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
     if (!$item['name']) { $item['name'] = '&bull;'; }
     $string .= '    <span class="add-on">'.$item['name'].'</span>' . PHP_EOL;
@@ -202,15 +203,15 @@ function print_search_simple($data, $title = '')
     }
     $string .= '  </div>' . PHP_EOL;
   }
-  $string .= '    </td>' . PHP_EOL;
+
+  $string .= '</div>';
 
   // Form footer
-  $string .= '    <td width="90px" align="center">' . PHP_EOL;
+  $string .= '    <ul class="nav pull-right"><li>' . PHP_EOL;
   $string .= '      <input type="hidden" name="pageno" value="1">' . PHP_EOL;
   $string .= '      <button type="submit" class="btn"><i class="icon-search"></i> Search</button>' . PHP_EOL;
-  $string .= '    </td>' . PHP_EOL;
-  $string .= '  </table>' . PHP_EOL . '    </tr>' . PHP_EOL;
-  $string .= '</form>' . PHP_EOL . '</div>' . PHP_EOL;
+  $string .= '    </li></ul>' . PHP_EOL;
+  $string .= '</div></div></div></form>' . PHP_EOL;
   $string .= '<!-- END search form -->' . PHP_EOL . PHP_EOL;
 
   // Print search form

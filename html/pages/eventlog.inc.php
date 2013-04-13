@@ -46,7 +46,7 @@ $search[] = array('type'    => 'select',
                   'value'   => $vars['device_id'],
                   'values'  => $devices);
 
-print_search_simple($search, 'Event log');
+print_search_simple($search, 'Eventlog');
 
 // Pagination
 $vars['pagination'] = TRUE;

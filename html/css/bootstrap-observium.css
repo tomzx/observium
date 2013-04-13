@@ -81,9 +81,9 @@ label, input, button, select, textarea {
   width: auto;
   height: 20px;
   min-width: 16px;
-  padding: 4px 5px;
-  font-size: 13px;
-  font-weight: bold;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: normal;
   line-height: 20px;
   text-align: center;
   text-shadow: 0 1px 0 white;
@@ -456,6 +456,11 @@ legend {
   padding: 10px 10px 10px;
 }
 
+.navbar .brand {
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .navbar-narrow {
   margin-bottom: 10px;
 }
@@ -500,6 +505,21 @@ legend {
   height: 24px;
   padding: 0px;
   margin-top: 3px; 
+}
+
+.navbar-narrow .btn
+{
+  margin-top 3px;
+}
+
+.navbar-narrow .add-on
+{
+  line-height: 15px;
+  height: 22px;
+  margin-top: 3px;
+  padding: 0 5px;
+  padding-top: 2px;
+  vertical-align: middle;
 }
 
 .navbar .brand-observium
