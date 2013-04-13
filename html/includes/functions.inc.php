@@ -389,8 +389,7 @@ function pagination($vars, $total, $per_page = 10)
 
 function generate_url($vars, $new_vars = array())
 {
-
-  $vars = array_merge($vars, $new_vars);
+  $vars = ($vars) ? array_merge($vars, $new_vars) : $new_vars;
 
   $url = $vars['page']."/";
   unset($vars['page']);
@@ -927,6 +926,7 @@ function devclass($device)
 
 function getlocations()
 {
+  $locations = array();
   # Fetch override locations, not through get_dev_attrib, this would be a huge number of queries
   $rows = dbFetchRows("SELECT attrib_type,attrib_value,device_id FROM devices_attribs WHERE attrib_type LIKE 'override_sysLocation%' ORDER BY attrib_type");
   foreach ($rows as $row)

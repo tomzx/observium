@@ -91,6 +91,7 @@ function print_navbar($navbar)
   foreach (array('options', 'options_right') as $array_name)
   {
     if ($array_name == "options_right") {
+      if (!$navbar[$array_name]) { break; }
       echo('<ul class="nav pull-right">');
     } else {
       echo('<ul class="nav">');

@@ -200,7 +200,7 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
     }
   }
 
-  if ($port_details)
+  if ($port_details && $int_links)
   {
          foreach ($int_links as $int_link)
          {
