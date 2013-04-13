@@ -22,7 +22,9 @@ function utime()
 
 $start = utime();
 
-include_once("Net/IPv4.php");
+include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
+include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
+include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
 
 if (isset($_GET['debug']))
 {
