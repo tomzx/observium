@@ -22,10 +22,6 @@ function utime()
 
 $start = utime();
 
-include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
-include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
-include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
-
 if (isset($_GET['debug']))
 {
   $debug = TRUE;
@@ -52,6 +48,10 @@ include_once("../includes/rewrites.php");
 include_once("includes/functions.inc.php");
 include_once("../includes/rrdtool.inc.php");
 include_once("includes/authenticate.inc.php");
+
+include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
+include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
+include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
 
 include("includes/graphs/graph.inc.php");
 
