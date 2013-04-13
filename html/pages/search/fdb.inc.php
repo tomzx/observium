@@ -1,41 +1,38 @@
-<?php print_optionbar_start(28); ?>
+<div class="row">
+<div class="span12">
 
-  <form method="post" action="" class="form-inline">
-      <span style="font-weight: bold;">FDB MAC Search</span> &#187;
-      <div class="input-prepend" style="margin-right: 3px;">
-        <span class="add-on">Device</span>
-        <select name="device_id" id="device_id">
-          <option value="">All Devices</option>
 <?php
+unset($search, $devices);
+
+$devices[''] = 'All Devices';
+
+foreach (dbFetchRows("SELECT D.device_id AS device_id, `hostname` FROM `vlans_fdb` AS V, `devices` AS D WHERE V.device_id = D.device_id GROUP BY `device_id` ORDER BY `hostname`;") as $data)
+{
+  if ($data['disabled'] && !$config['web_show_disabled']) { continue; }
+  $devices[$data['device_id']] = $data['hostname'];
+}
+
+//Device field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Device',
+                  'id'      => 'device_id',
+                  'value'   => $vars['device_id'],
+                  'values'  => $devices);
+
+$search[] = array('type'    => 'text',
+                  'name'    => 'IP Address',
+                  'id'      => 'string',
+                  'value'   => $vars['address']);
+
+print_search_simple($search, 'FDB Table');
 
 $pagetitle[] = "FDB Search";
 
-// Select the devices only with ARP tables
-foreach (dbFetchRows("SELECT D.device_id AS device_id, `hostname` FROM `vlans_fdb` AS V, `devices` AS D WHERE V.device_id = D.device_id GROUP BY `device_id` ORDER BY `hostname`;") as $data)
-{
-  echo('<option value="'.$data['device_id'].'"');
-  if ($data['device_id'] == $_POST['device_id']) { echo("selected"); }
-  echo(">".$data['hostname']."</option>");
-}
-?>
-        </select>
-      </div>
-     <div class="input-prepend" style="margin-right: 3px;">
-       <span class="add-on">String</span>
-       <input type="text" name="address" id="address" size=40 value="<?php echo($_POST['address']); ?>" />
-     </div>
-    <button type="submit" class="btn"><i class="oicon-search"></i> Search</button>
-  </form>
-
-<?php
-
-print_optionbar_end();
-
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo('<table class="table table-striped table-condensed table-rounded table-bordered">');
 
 $query = "SELECT * FROM `vlans_fdb` AS F, `vlans` as V, `ports` AS P, `devices` AS D WHERE V.vlan_vlan = F.vlan_id AND V.device_id = F.device_id AND P.port_id = F.port_id and D.device_id = F.device_id ";
 $query .= " AND F.`mac_address` LIKE ?";
-$param = array("%".str_replace(array(':', ' ', '-', '.', '0x'),'',mres($_POST['address']))."%");
+$param = array("%".str_replace(array(':', ' ', '-', '.', '0x'),'',mres($_POST['string']))."%");
 
 if (is_numeric($_POST['device_id']))
 {
