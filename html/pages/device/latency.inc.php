@@ -1,37 +1,25 @@
 <?php
 
-print_optionbar_start();
+$link_array = array('page'    => 'device',
+                    'device'  => $device['device_id'],
+                    'tab' => 'latency');
 
-echo("<span style='font-weight: bold;'>Latency</span> &#187; ");
+$navbar['brand'] = "Latency";
+$navbar['class'] = "navbar-narrow";
 
-if(count($smokeping_files['in'][$device['hostname']]))
-      $menu_options['incoming'] = 'Incoming';
-
-if(count($smokeping_files['out'][$device['hostname']]))
-      $menu_options['outgoing'] = 'Outgoing';
-
-$sep = "";
-foreach ($menu_options as $option => $text)
+foreach (array('incoming', 'outgoing') as $view)
 {
-  if (!$vars['view']) { $vars['view'] = $option; }
-  echo($sep);
-  if ($vars['view'] == $option)
-  {
-    echo("<span class='pagemenu-selected'>");
-  }
-  echo(generate_link($text,$vars,array('view'=>$option)));
-  if ($vars['view'] == $option)
-  {
-    echo("</span>");
-  }
-  $sep = " | ";
+  if(!strlen($vars['view'])) { $vars['view'] = $view; }
+
+  if ($vars['view'] == $view) { $navbar['options'][$view]['class'] = "active"; }
+  $navbar['options'][$view]['url'] = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'latency', 'view' => $view));
+  $navbar['options'][$view]['text'] = ucwords($view);
 }
 
-unset($sep);
+print_navbar($navbar);
 
-print_optionbar_end();
 
-echo('<table>');
+echo('<table class="table table-striped">');
 
 if($vars['view'] == "incoming")
 {

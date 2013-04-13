@@ -40,12 +40,10 @@ $config['os'][$os]['type']              = "server";
 $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "Linux";
 $config['os'][$os]['ifXmcbc']           = 1;
-$config['os'][$os]['over'][0]['graph']  = "device_processor";
-$config['os'][$os]['over'][0]['text']   = "Processor Usage";
-$config['os'][$os]['over'][1]['graph']  = "device_ucd_memory";
-$config['os'][$os]['over'][1]['text']   = "Memory Usage";
-$config['os'][$os]['over'][2]['graph']  = "device_storage";
-$config['os'][$os]['over'][2]['text']   = "Storage Usage";
+$config['os']['linux']['over']['0'] = array('text' => 'CPU Load',      'graph' =>  "device_processor");
+$config['os']['linux']['over']['1'] = array('text' => 'Memory Usage',  'graph' =>  "device_ucd_memory");
+$config['os']['linux']['over']['2'] = array('text' => 'Storage Usage', 'graph' =>  "device_storage");
+$config['os']['linux']['over']['3'] = array('text' => 'Network Usage', 'graph' =>  "device_bits");
 
 $os = "qnap";
 $config['os'][$os]['type']              = "storage";

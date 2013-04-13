@@ -280,7 +280,7 @@ if ($_SESSION['userlevel'] >= '5' && ($app_count) > "0")
 ?>
             <li class="divider-vertical" style="margin:0;"></li>
     <li class="dropdown">
-      <a href="<?php echo(generate_url(array('page'=>'apps'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-application-oicon-large"></i> Apps <b class="caret"></b></a>
+      <a href="<?php echo(generate_url(array('page'=>'apps'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-application-icon-large"></i> Apps <b class="caret"></b></a>
       <ul class="dropdown-menu">
 <?php
 

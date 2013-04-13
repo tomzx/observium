@@ -55,9 +55,9 @@ $config['svn']            = "/usr/bin/svn";
 // Or if one had a very fast I/O subsystem with no performance worries.
 
 $config['rrd_rra']  = " RRA:AVERAGE:0.5:1:2016 RRA:AVERAGE:0.5:6:1440 RRA:AVERAGE:0.5:24:1440 RRA:AVERAGE:0.5:288:1440 ";
-$config['rrd_rra'] .= " RRA:MIN:0.5:1:720 RRA:MIN:0.5:6:1440     RRA:MIN:0.5:24:775     RRA:MIN:0.5:288:797 ";
-$config['rrd_rra'] .= " RRA:MAX:0.5:1:720 RRA:MAX:0.5:6:1440     RRA:MAX:0.5:24:775     RRA:MAX:0.5:288:797 ";
-$config['rrd_rra'] .= " RRA:LAST:0.5:1:1440 ";
+$config['rrd_rra'] .= "                        RRA:MIN:0.5:6:1440     RRA:MIN:0.5:96:360      RRA:MIN:0.5:288:1440 ";
+$config['rrd_rra'] .= "                        RRA:MAX:0.5:6:1440     RRA:MAX:0.5:96:360      RRA:MAX:0.5:288:1440 ";
+$config['rrd_rra'] .= " RRA:LAST:0.5:1:1       RRA:LAST:0.5:6:1       RRA:LAST:0.5:24:1       RRA:LAST:0.5:288:1";
 
 // RRDCacheD - Make sure it can write to your RRD dir!
 
