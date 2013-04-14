@@ -812,7 +812,7 @@ function generate_port_link_header($port)
   if (!isset($port['humanized'])) { $port = humanize_port($port); }
 
   $contents = '
-      <table class="table table-striped table-bordered table-rounded table-condensed">
+      <table style="margin-top: 10px; margin-bottom: 10px;" class="table table-striped table-bordered table-rounded table-condensed">
         <tr class="'.$port['row_class'].'" style="font-size: 10pt;">
           <td style="width: 10px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
           <td style="width: 10px;"></td>
@@ -841,8 +841,6 @@ function generate_port_link($port, $text = NULL, $type = NULL)
   $content = generate_device_link_header($port);
   $content .= generate_port_link_header($port);
 
-  $content .= "<div class=list-large>".$port['hostname']." - " . fixifName($port['label']) . "</div>";
-  if ($port['ifAlias']) { $content .= $port['ifAlias']."<br />"; }
   $content .= '<div style="width: 700px">';
   $graph_array['type']     = $port['graph_type'];
   $graph_array['legend']   = "yes";
