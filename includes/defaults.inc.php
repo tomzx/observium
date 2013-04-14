@@ -194,20 +194,19 @@ $warn_colour_b = "#ffcccc";
 #$config['graph_colours'] = array("002233","004466","006699","0088CC","0099FF");          // Sky-Blue
 #$config['graph_colours'] = array("110022","330066","440088","6600AA","8800FF");          // Purple
 #$config['graph_colours'] = array("002200","004400","006600","008800","00AA00","00AA00","00CC00"); // Forest Greens
-#$config['graph_colours']['greens']  = array("112200","224400","336600","448800","66AA00","88FF00");          // Grass Greens
-#$config['graph_colours']['greens']  = array("95FFA7","4EFF97","33FF66","336600","224400","112200");
-#$config['graph_colours']['greens'] = array("B7d6A9","8fcb73","50b91d","3ab419","0a8612","034f11");
-#$config['graph_colours']['blues']   = array("b5d7ff","6eb7ff","0064ff","0082ff","0019d5","0016cb","00007d"); // Cold Blues
 
 $config['graph_colours']['mixed']   = array('CC0000','008C00','4096EE','73880A','F03F5C','36393D','FF0084');
-$config['graph_colours']['oranges'] = array('FFC344', 'FCB53D', 'F9A836', 'F69A2F', 'F48D28', 'F17F22', 'EE721B', 'EC6414', 'E9570D', 'E64906', 'E43C00');
-#array('FFA700', 'FC9C00', 'F99100', 'F68600', 'F47C00', 'F17100', 'EE6600', 'EC5C00', 'E95100', 'E64600', 'E43C00');
-$config['graph_colours']['greens']  = array('B6D14B', 'A4C445', '92B73F', '80AA39', '6E9D33', '5C902E', '4A8328', '387622', '26691C', '145C16', '034F11');
 
-$config['graph_colours']['reds']    = array("220000","440000","660000","880000","AA0000","CC0000"); // Red
-$config['graph_colours']['pinks']   = array('D0558F','B34773','943A57','792C38','5C1F1E','401F10');
+$config['graph_colours']['oranges'] = array('FFC344', 'FCB53D', 'F9A836', 'F69A2F', 'F48D28', 'F17F22', 'EE721B', 'EC6414', 'E9570D', 'E64906', 'E43C00');
+$config['graph_colours']['greens']  = array('B6D14B', 'A4C445', '92B73F', '80AA39', '6E9D33', '5C902E', '4A8328', '387622', '26691C', '145C16', '034F11');
+$config['graph_colours']['reds']    = array('FF7373', 'F66767', 'ED5C5C', 'E45050', 'DB4545', 'D23939', 'C92E2E', 'C02222', 'B71616', 'AE0B0B', 'A60000');
+$config['graph_colours']['pinks']   = array('E881B1', 'DE76A7', 'D46C9D', 'CA6293', 'C15889', 'B74E7F', 'AD4475', 'A43A6B', '9A3061', '902657', '871C4E');
 $config['graph_colours']['blues']   = array('A0A0E5', '9090D3', '8080C1', '7070AF', '60609D', '50508C', '40407A', '303068', '1F1F56', '0F0F44', '000033');
 $config['graph_colours']['purples'] = array('CC7CCC', 'BD6FBD', 'AF63AF', 'A156A1', '934A93', '853E85', '773177', '692569', '5B185B', '4D0C4D', '3F003F');
+$config['graph_colours']['peach']   = array('FC998C', 'F38E81', 'EA8476', 'E1796B', 'D86F61', 'CF6456', 'C65A4B', 'BD4F41', 'B44536', 'AB3A2B', 'A23021');
+$config['graph_colours']['yellow']  = array('FFD683', 'FACF79', 'F5C970', 'F0C267', 'EBBC5D', 'E6B554', 'E1AF4B', 'DCA841', 'D7A238', 'D29B2F', 'CD9526');
+$config['graph_colours']['red2']    = array('FD627A', 'F05870', 'E34E66', 'D7455C', 'CA3B52', 'BE3248', 'B1283E', 'A41E34', '98152A', '8B0B20', '7F0216');
+
 $config['graph_colours']['default'] = $config['graph_colours']['blues'];
 $config['graph_colours']['juniperive']   = array('F7C729','52A6EF');
 

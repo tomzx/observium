@@ -177,7 +177,7 @@ function show_map($config)
 		echo("<div class=\"row-fluid\">");
 		echo("    <div class=\"span12 \">");
 		echo("        <h3 class=\"bill\">Overall Transit &amp; Peering Traffic This Month</h3>");
-		echo("        <a href=\"".$links['peer_trans']."\"><img src=\"graph.php?type=multiport_bits_duo&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
+		echo("        <a href=\"".$links['peer_trans']."\"><img src=\"graph.php?type=multiport_bits_duo_separate&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
 		echo("    </div>");
 		echo("</div>");
 		unset($links);

@@ -29,8 +29,8 @@ foreach ($rrd_list as $rrd)
 {
   if (!$config['graph_colours'][$colours_in][$iter] || !$config['graph_colours'][$colours_out][$iter]) { $iter = 0; }
 
-  $colour_in=$config['graph_colours'][$colours_in][$iter];
-  $colour_out=$config['graph_colours'][$colours_out][$iter];
+  if(strlen($rrd['colour_in']))  { $colour_in  = $rrd['colour_in'];  } else { $colour_in  = $config['graph_colours'][$colours_in][$iter]; }
+  if(strlen($rrd['colour_out'])) { $colour_out = $rrd['colour_out']; } else { $colour_out = $config['graph_colours'][$colours_out][$iter]; }
 
   if (isset($rrd['descr_in']))
   {
