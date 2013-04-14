@@ -86,6 +86,8 @@ function humanize_bgp (&$peer)
          }
     }
 
+#print_r($peer);
+
     if ($peer['bgpPeerRemoteAs'] == $peer['bgpLocalAs'])                                    { $peer['peer_type'] = "<span style='color: #00f;'>iBGP</span>"; }
     elseif ($peer['bgpPeerRemoteAS'] >= '64512' && $peer['bgpPeerRemoteAS'] <= '65535')     { $peer['peer_type'] = "<span style='color: #f00;'>Priv eBGP</span>"; }
     else                                                                                    { $peer['peer_type'] = "<span style='color: #0a0;'>eBGP</span>"; }

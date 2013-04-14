@@ -1,5 +1,7 @@
 <?php
 
+### FIXME -- some examples would be nice, so we know what the fuck these things do.
+
 # PDU
 $serial = trim(snmp_get($device, "1.3.6.1.4.1.318.1.1.12.1.6.0", "-OQv", "", ""),'"');
 
@@ -79,7 +81,8 @@ if ($AOSrev == '')
 }
 else
 {
-  $version = "AOS $AOSrev / App $APPrev";
+  $version  = "$AOSrev";
+  $features = "App $APPrev";
 }
 
 ?>

@@ -245,7 +245,7 @@ function show_map($config)
 	    echo("<div class=\"row-fluid\">");
 	    echo("    <div class=\"span12\">");
 	    echo("        <h3 class=\"bill\">Device Alerts</h3>");
-	    
+
 	    print_status($config['frontpage']['device_status']);
 
 	    echo("    </div>");
@@ -261,9 +261,7 @@ function show_map($config)
 	    $show_syslog .= "    <div class=\"span12 \">";
 	    $show_syslog .= "        <h3 class=\"bill\">Recent Syslog Messages</h3>";
 	    echo $show_syslog;
-	    
 	    print_syslogs(array('pagesize' => $config['frontpage']['syslog']['items']));
-	    
 	    $show_syslog = "    </div>";
 	    $show_syslog .= "</div>";
 	    echo $show_syslog;

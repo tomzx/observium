@@ -820,7 +820,7 @@ $config['os'][$os]['type']              = "power";
 $config['os'][$os]['icon']              = "mge";
 
 $os = "apc";
-$config['os'][$os]['text']              = "APC Management Module";
+$config['os'][$os]['text']              = "APC OS";
 $config['os'][$os]['type']              = "power";
 $config['os'][$os]['over'][0]['graph']  = "device_current";
 $config['os'][$os]['over'][0]['text']   = "Current";

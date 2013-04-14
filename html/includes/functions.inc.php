@@ -219,6 +219,14 @@ function nicecase($item)
 {
   switch ($item)
   {
+    case "ipsec_tunnels":
+      return "IPSEC Tunnels";
+    case "vrf":
+      return "VRFs";
+    case "isis":
+      return "IS-IS";
+    case "cef":
+      return "CEF";
     case "eigrp":
       return "EIGRP";
     case "ospf":

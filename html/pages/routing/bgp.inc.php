@@ -167,7 +167,7 @@ else
   {
     $where .= " AND (B.bgpPeerState != 'established')";
   }
-  
+
   if (!$config['web_show_disabled']) { $where .= ' AND D.disabled = 0 '; }
 
   $peer_query = 'SELECT * FROM `bgpPeers` AS B
@@ -175,6 +175,7 @@ else
                  LEFT JOIN `devices` AS D ON B.device_id = D.device_id
                  WHERE 1 ' . $where .
                  ' ORDER BY D.hostname, B.bgpPeerRemoteAs, B.bgpPeerRemoteAddr';
+
   foreach (dbFetchRows($peer_query) as $peer)
   {
 

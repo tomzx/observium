@@ -55,6 +55,7 @@ function snmp_translate($oid, $mib = NULL, $mibdir = NULL)
   if ($debug) { echo("OID: $oid TRANSLATED: $data\n"); }
   if ($data && !strstr($data, 'Unknown'))
   {
+    echo("TRANSLATE:[".$data."]");
     return $data;
   } else {
     return '';

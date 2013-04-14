@@ -28,7 +28,7 @@
     </div>
 
     <div class="form-actions">
-      <button id="deleteBtn" type="submit" class="btn btn-danger" name="delete" disabled="disabled"><i class="oicon-remove oicon-white"></i> Delete device</button>
+      <button id="deleteBtn" type="submit" class="btn btn-danger" name="delete" disabled="disabled"><i class="icon-remove icon-white"></i> Delete device</button>
     </div>
   </fieldset>
 </form>
