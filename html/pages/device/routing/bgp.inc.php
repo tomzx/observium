@@ -83,6 +83,7 @@ $sql = 'SELECT * FROM `bgpPeers` AS B
 foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 {
 
+  $peer['bgpLocalAs'] = $device['bgpLocalAs'];
   humanize_bgp($peer);
 
   $has_macaccounting = dbFetchCell("SELECT COUNT(*) FROM mac_accounting AS M
