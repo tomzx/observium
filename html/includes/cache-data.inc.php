@@ -75,5 +75,19 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
 $routing['ospf']['all'] = dbFetchCell("SELECT COUNT(ospf_instance_id) FROM `ospf_instances` WHERE `ospfAdminStat` = 'enabled'");
 $routing['cef']['all']  = dbFetchCell("SELECT COUNT(cef_switching_id) from `cef_switching`");
 $routing['vrf']['all']  = dbFetchCell("SELECT COUNT(vrf_id) from `vrfs`");
+$routing['cef']['all']  = dbFetchCell("SELECT COUNT(cef_switching_id) from `cef_switching`");
+
+if (isset($config['enable_bgp']) && $config['enable_bgp'])
+{
+  $routing['bgp']['alerts'] = dbFetchCell("SELECT COUNT(bgpPeer_id) FROM bgpPeers AS B where (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established'");
+  $bgp_alerts = $routing['bgp']['alerts'];
+}
+
+
+$routing_count['bgp']  = $routing['bgp']['all'];
+$routing_count['ospf'] = $routing['ospf']['all'];
+$routing_count['cef']  = $routing['cef']['all'];
+$routing_count['vrf']  = $routing['vrf']['all'];
+
 
 ?>

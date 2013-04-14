@@ -19,7 +19,7 @@ foreach ($routing_count as $type => $value)
     if ($vars['protocol'] == $type) { $navbar['options'][$type]['class'] = "active"; }
 
     $navbar['options'][$type]['url']  = generate_url(array('page' => 'routing', 'protocol' => $type));
-    $navbar['options'][$type]['text'] = $config['routing_types'][$type]['text'].' ('.$routing_count[$type].')';
+    $navbar['options'][$type]['text'] = nicecase($type).' ('.$routing_count[$type].')';
   }
 }
 print_navbar($navbar);
