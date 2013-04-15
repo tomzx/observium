@@ -682,7 +682,8 @@ function print_events($vars)
     {
       if ($entry['type'] == 'interface')
       {
-        $this_if = humanize_port(getifbyid($entry['reference']), $entry);
+        $this_if = getifbyid($entry['reference']);
+        humanize_port($this_if, $this_if);
         $entry['link'] = '<span class="list-bold">' . generate_port_link($this_if, makeshortif($this_if['label'])) . '</span>';
       } else {
         $entry['link'] = 'System';

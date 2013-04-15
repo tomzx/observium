@@ -23,6 +23,7 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
     $cache['devices']['timers']['discovery'] += $device['last_discovered_timetaken'];
 
     $cache['device_types'][$device['type']]++;
+    $cache['device_locations'][$device['location']]++;
   }
 }
 

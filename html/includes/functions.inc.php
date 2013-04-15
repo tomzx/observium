@@ -61,7 +61,12 @@ function humanize_device(&$device)
 
   // Set location if it's overridden
   /// FIXME - put this in poller, for fuck sake!
-  if (get_dev_attrib($device,'override_sysLocation_bool')) {  $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }
+  //$query = "SELECT S.attrib_value AS location FROM `devices_attribs` AS S
+  //          LEFT JOIN `devices_attribs` AS B ON B.device_id = S.device_id
+  //          WHERE B.attrib_type = 'override_sysLocation_bool' AND B.attrib_value = 1 AND S.attrib_type = 'override_sysLocation_string' AND S.device_id = ?";
+  //$override_location = dbFetchCell($query, array($device['device_id']));
+  //if ($override_location) { $device['location'] = $override_location; }
+  if (get_dev_attrib($device,'override_sysLocation_bool')) { $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }
 
   // Set the name we print for the OS
   $device['os_text'] = $config['os'][$device['os']]['text'];
@@ -533,7 +538,7 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
 }
 
 /// Generate overlib links from URL, link text, contents and a class.
-function overlib_link($url, $text, $contents, $class)
+function overlib_link($url, $text, $contents, $class = NULL)
 {
   global $config, $link_iter;
 
@@ -932,39 +937,13 @@ function devclass($device)
 
 function getlocations()
 {
+  global $cache;
+  
   $locations = array();
-  # Fetch override locations, not through get_dev_attrib, this would be a huge number of queries
-  $rows = dbFetchRows("SELECT attrib_type,attrib_value,device_id FROM devices_attribs WHERE attrib_type LIKE 'override_sysLocation%' ORDER BY attrib_type");
-  foreach ($rows as $row)
+  foreach ($cache['device_locations'] as $location => $count)
   {
-    if ($row['attrib_type'] == 'override_sysLocation_bool' && $row['attrib_value'] == 1)
-    {
-      $ignore_dev_location[$row['device_id']] = 1;
-    }
-    # We can do this because of the ORDER BY, "bool" will be handled before "string"
-    elseif ($row['attrib_type'] == 'override_sysLocation_string' && $ignore_dev_location[$row['device_id']] == 1)
-    {
-      if (!in_array($row['attrib_value'],$locations)) { $locations[] = $row['attrib_value']; }
-    }
+    $locations[] = $location;
   }
-
-  # Fetch regular locations
-  if ($_SESSION['userlevel'] >= '5')
-  {
-    $rows = dbFetchRows("SELECT D.device_id,location FROM devices AS D GROUP BY location ORDER BY location");
-  } else {
-    $rows = dbFetchRows("SELECT D.device_id,location FROM devices AS D, devices_perms AS P WHERE D.device_id = P.device_id AND P.user_id = ? GROUP BY location ORDER BY location", array($_SESSION['user_id']));
-  }
-
-  foreach ($rows as $row)
-  {
-    # Only add it as a location if it wasn't overridden (and not already there)
-    if ($row['location'] != '' && !$ignore_dev_location[$row['device_id']])
-    {
-      if (!in_array($row['location'],$locations)) { $locations[] = $row['location']; }
-    }
-  }
-
   sort($locations);
   return $locations;
 }
