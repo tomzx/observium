@@ -111,8 +111,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 
   $graph_type       = "bgp_updates";
   $peer_daily_url   = "graph.php?id=" . $peer['bgpPeer_id'] . "&amp;type=" . $graph_type . "&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=500&amp;height=150";
-  $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
-  $peeraddresslink  = "<span class=list-large><a onmouseover=\"return overlib('<img src=\'$peer_daily_url\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer_ip . "</a></span>";
+  $peeraddresslink  = "<span class=list-large><a onmouseover=\"return overlib('<img src=\'$peer_daily_url\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer['human_remoteip'] . "</a></span>";
 
   echo('<tr class="'.$peer['html_row_class'].'">');
   echo('
@@ -120,7 +119,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
          <td style="width: 1px;"></td>');
 
   echo("   <td>" . $peeraddresslink . "<br />" . $peername . "</td>
-           <td>".$peer['peer_type']."</td>
+           <td><strong>".$peer['peer_type']."</strong></td>
            <td style='font-size: 10px; font-weight: bold; line-height: 10px;'>" . (isset($peer['afi']) ? $peer['afi'] : '') . "</td>
            <td><strong>AS" . $peer['bgpPeerRemoteAs'] . "</strong><br />" . $peer['astext'] . "</td>
            <td><strong><span class='".$peer['admin_class']."'>" . $peer['bgpPeerAdminStatus'] . "<span><br /><span class='".$peer['state_class']."'>" . $peer['bgpPeerState'] . "</span></strong></td>

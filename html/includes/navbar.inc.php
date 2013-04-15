@@ -3,18 +3,6 @@
 // FIXME - this could do with some performance improvements, i think. possible rearranging some tables and setting flags at poller time (nothing changes outside of then anyways)
 
 $service_alerts = dbFetchCell("SELECT COUNT(*) FROM services WHERE service_status = '0'");
-$interface_alerts = dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `ifOperStatus` = 'down' AND `ifAdminStatus` = 'up' AND `ignore` = '0'");
-
-if (isset($config['enable_bgp']) && $config['enable_bgp'])
-{
-  $bgp_alerts = dbFetchCell("SELECT COUNT(*) FROM bgpPeers AS B where (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established'");
-}
-
-// Custom menubar entries.
-#if(is_file("includes/print-menubar-custom.inc.php"))
-#{
-#  include("includes/print-menubar-custom.inc.php");
-#}
 
 ?>
 <div class="navbar navbar-fixed-top">
@@ -37,7 +25,7 @@ if (isset($config['enable_bgp']) && $config['enable_bgp'])
                 <li class="divider"></li>
 
 <?php
-// Custom menubar entries.
+// Custom navbar entries.
 if(is_file("includes/navbar-custom.inc.php"))
 {
  include("includes/navbar-custom.inc.php");
@@ -132,20 +120,10 @@ foreach ($config['device_types'] as $devtype)
             <li class="dropdown">
               <a href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-network-ethernet"></i> Ports <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="<?php echo(generate_url(array('page'=>'ports'))); ?>"><i class="oicon-network-ethernet"></i> All Ports</b></a></li>
+                <li><a href="<?php echo(generate_url(array('page'=>'ports'))); ?>"><i class="oicon-network-ethernet"></i> All Ports&nbsp;<span class="right">(<?php echo($ports['count']); ?>)</span></a></li>
                 <li class="divider"></li>
 
 <?php
-
-if ($ports['errored'])
-{
-  echo('<li><a href="ports/errors=1/"><img src="images/16/chart_curve_error.png" border="0" align="absmiddle" /> Errored ('.$ports['errored'].')</a></li>');
-}
-
-if ($ports['ignored'])
-{
-  echo('<li><a href="ports/ignore=1/"><img src="images/16/chart_curve_link.png" border="0" align="absmiddle" /> Ignored ('.$ports['ignored'].')</a></li>');
-}
 
 if ($config['enable_billing']) { echo('<li><a href="bills/"><i class="oicon-money-coin"></i> Traffic Bills</a></li>'); $ifbreak = 1; }
 
@@ -169,25 +147,33 @@ if ($_SESSION['userlevel'] >= '5')
 
 if ($ifbreak) { echo('<li class="divider"></li>'); }
 
-if (isset($interface_alerts))
+/// FIXME. Make Down/Ignored/Disabled ports as submenu. --mike
+if (isset($ports['alerts']))
 {
-  echo('<li><a href="ports/alerted=yes/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> Alerts&nbsp;<span class="right">('.$interface_alerts.')</span></a></li>');
+  echo('<li><a href="ports/alerted=yes/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> Alerts&nbsp;<span class="right">('.$ports['alerts'].')</span></a></li>');
 }
 
-$deleted_ports = 0;
-foreach (dbFetchRows("SELECT * FROM `ports` AS P, `devices` as D WHERE P.`deleted` = '1' AND D.device_id = P.device_id") as $interface)
+if ($ports['errored'])
 {
-  if (port_permitted($interface['port_id'], $interface['device_id']))
-  {
-    $deleted_ports++;
-  }
+  echo('<li><a href="ports/errors=1/"><img src="images/16/chart_curve_error.png" border="0" align="absmiddle" /> Errored&nbsp;<span class="right">('.$ports['errored'].')</span></a></li>');
 }
-?>
 
-<li><a href="ports/state=down/"><i class="oicon-network-status-busy"></i> Down</a></li>
-<li><a href="ports/state=admindown/"><i class="oicon-network-status-offline"></i> Disabled</a></li>
-<?php
-if ($deleted_ports) { echo('<li><a href="deleted-ports/"><i class="oicon-badge-square-minus"></i> Deleted&nbsp;<span class="right">('.$deleted_ports.')</span></a></li>'); }
+if ($ports['down'])
+{
+  echo('<li><a href="ports/state=down/"><i class="oicon-network-status-busy"></i> Down</a></li>'); // &nbsp;<span class="right">('.$ports['down'].')</span></a></li>');
+}
+
+if ($ports['ignored'])
+{
+  echo('<li><a href="ports/ignore=1/"><img src="images/16/chart_curve_link.png" border="0" align="absmiddle" /> Ignored</a></li>'); // &nbsp;<span class="right">('.$ports['ignored'].')</span></a></li>');
+}
+
+if ($ports['disabled'])
+{
+  echo('<li><a href="ports/state=admindown/"><i class="oicon-network-status-offline"></i> Disabled</a></li>'); // &nbsp;<span class="right">('.$ports['disabled'].')</span></a></li>');
+}
+
+if ($ports['deleted']) { echo('<li><a href="deleted-ports/"><i class="oicon-badge-square-minus"></i> Deleted&nbsp;<span class="right">('.$ports['deleted'].')</span></a></li>'); }
 ?>
 
               </ul>
@@ -301,7 +287,7 @@ if ($_SESSION['userlevel'] >= '5' && ($app_count) > "0")
 <?php
 }
 
-if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['all']+$routing['ospf']['all']+$routing['cef']['all']+$routing['vrf']['all']) > 0)
+if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['count']+$routing['ospf']['count']+$routing['cef']['count']+$routing['vrf']['count']) > 0)
 {
 ?>
      <li class="divider-vertical" style="margin:0;"></li>
@@ -312,13 +298,13 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['all']+$routing['ospf']['a
 <?php
   $separator = 0;
 
-  if ($_SESSION['userlevel'] >= '5' && $routing['vrf']['all'])
+  if ($_SESSION['userlevel'] >= '5' && $routing['vrf']['count'])
   {
-    echo('<li><a href="routing/protocol=vrf/"><i class="oicon-arrow-branch-byr"></i> VRFs</a></li>');
+    echo('<li><a href="routing/protocol=vrf/"><i class="oicon-arrow-branch-byr"></i> VRFs&nbsp;<span class="right">(' . $routing['vrf']['count'] . ')</span></a></li>');
     $separator++;
   }
 
-  if ($_SESSION['userlevel'] >= '5' && $routing['ospf']['all'])
+  if ($_SESSION['userlevel'] >= '5' && $routing['ospf']['count'])
   {
     if ($separator)
     {
@@ -326,11 +312,11 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['all']+$routing['ospf']['a
       $separator = 0;
     }
     echo('
-        <li><a href="routing/protocol=ospf/"><img src="images/16/text_letter_omega.png" border="0" align="absmiddle" /> OSPF Devices </a></li>');
+        <li><a href="routing/protocol=ospf/"><img src="images/16/text_letter_omega.png" border="0" align="absmiddle" /> OSPF Instances&nbsp;<span class="right">(' . $routing['ospf']['count'] . ')</span></a></li>');
     $separator++;
   }
   // BGP Sessions
-  if ($_SESSION['userlevel'] >= '5' && $routing['bgp']['all'])
+  if ($_SESSION['userlevel'] >= '5' && $routing['bgp']['count'])
   {
     if ($separator)
     {
@@ -338,18 +324,18 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['all']+$routing['ospf']['a
       $separator = 0;
     }
     echo('
-        <li><a href="routing/protocol=bgp/type=all/graph=NULL/"><img src="images/16/link.png" border="0" align="absmiddle" /> BGP All Sessions&nbsp;<span class="right">(' . $routing['bgp']['all'] . ')</span></a></li>
+        <li><a href="routing/protocol=bgp/type=all/graph=NULL/"><img src="images/16/link.png" border="0" align="absmiddle" /> BGP All Sessions&nbsp;<span class="right">(' . $routing['bgp']['count'] . ')</span></a></li>
 
         <li><a href="routing/protocol=bgp/type=external/graph=NULL/"><img src="images/16/world_link.png" border="0" align="absmiddle" /> BGP External</a></li>
         <li><a href="routing/protocol=bgp/type=internal/graph=NULL/"><img src="images/16/brick_link.png" border="0" align="absmiddle" /> BGP Internal</a></li>');
   }
 
   // Do Alerts at the bottom
-  if ($routing['bgp']['alerted'])
+  if ($routing['bgp']['alerts'])
   {
     echo('
         <li class="divider"></li>
-        <li><a href="routing/protocol=bgp/adminstatus=start/state=down/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> Alerted BGP&nbsp;<span class="right">(' . $routing['bgp']['alerted'] . ')</span></a></li>
+        <li><a href="routing/protocol=bgp/adminstatus=start/state=down/"><img src="images/16/link_error.png" border="0" align="absmiddle" /> BGP Alerts&nbsp;<span class="right">(' . $routing['bgp']['alerts'] . ')</span></a></li>
    ');
   }
 

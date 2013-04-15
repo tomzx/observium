@@ -71,26 +71,27 @@ function rewrite_entity_descr ($descr)
 
 function humanize_bgp (&$peer)
 {
-    // Peer is disabled, set all things grey.
-    if ($peer['bgpPeerAdminStatus'] == "stop")
-    {
-         $peer['table_tab_colour'] = "#aaaaaa"; $peer['html_row_class'] = "warning"; $peer['state_class'] = "muted"; $peer['admin_class'] = "muted"; $peer['alert']=0; $peer['disabled']=1;
-    } elseif ($peer['bgpPeerAdminStatus'] == "start" || $peer['bgpPeerAdminStatus'] == "running" ) {
-         // Peer is enabled, set state green and check other things
-         $peer['admin_class'] = "text-success";
-         if ($peer['bgpPeerState'] == "established")
-         {
-           $peer['state_class'] = "text-success"; $peer['table_tab_colour'] = "#194B7F"; $peer['html_row_class'] = "";
-         } else {
-           $peer['state_class'] = "text-error"; $peer['table_tab_colour'] = "#cc0000"; $peer['html_row_class'] = "error";
-         }
-    }
+  // Peer is disabled, set all things grey.
+  if ($peer['bgpPeerAdminStatus'] == "stop")
+  {
+       $peer['table_tab_colour'] = "#aaaaaa"; $peer['html_row_class'] = "warning"; $peer['state_class'] = "muted"; $peer['admin_class'] = "muted"; $peer['alert']=0; $peer['disabled']=1;
+  } elseif ($peer['bgpPeerAdminStatus'] == "start" || $peer['bgpPeerAdminStatus'] == "running" ) {
+       // Peer is enabled, set state green and check other things
+       $peer['admin_class'] = "text-success";
+       if ($peer['bgpPeerState'] == "established")
+       {
+         $peer['state_class'] = "text-success"; $peer['table_tab_colour'] = "#194B7F"; $peer['html_row_class'] = "";
+       } else {
+         $peer['state_class'] = "text-error"; $peer['table_tab_colour'] = "#cc0000"; $peer['html_row_class'] = "error";
+       }
+  }
 
-#print_r($peer);
-
-    if ($peer['bgpPeerRemoteAs'] == $peer['bgpLocalAs'])                                    { $peer['peer_type'] = "<span style='color: #00f;'>iBGP</span>"; }
-    elseif ($peer['bgpPeerRemoteAS'] >= '64512' && $peer['bgpPeerRemoteAS'] <= '65535')     { $peer['peer_type'] = "<span style='color: #f00;'>Priv eBGP</span>"; }
-    else                                                                                    { $peer['peer_type'] = "<span style='color: #0a0;'>eBGP</span>"; }
+  if ($peer['bgpPeerRemoteAs'] == $peer['bgpLocalAs'])                                    { $peer['peer_type'] = "<span style='color: #00f;'>iBGP</span>"; }
+  elseif ($peer['bgpPeerRemoteAS'] >= '64512' && $peer['bgpPeerRemoteAS'] <= '65535')     { $peer['peer_type'] = "<span style='color: #f00;'>Priv eBGP</span>"; }
+  else                                                                                    { $peer['peer_type'] = "<span style='color: #0a0;'>eBGP</span>"; }
+  
+  $peer['human_localip']  = (strstr($peer['bgpPeerLocalAddr'],  ':')) ? Net_IPv6::compress($peer['bgpPeerLocalAddr'])  : $peer['bgpPeerLocalAddr'];
+  $peer['human_remoteip'] = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
 }
 
 

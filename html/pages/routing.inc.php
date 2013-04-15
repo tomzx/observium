@@ -6,20 +6,20 @@ if ($_GET['optb'] == "graphs" || $_GET['optc'] == "graphs") { $graphs = "graphs"
 
 #$datas[] = 'overview';
 
-// $routing_count is populated by print-menubar.inc.php
+// $routing is populated by cache-data.inc.php
 
 $navbar['brand'] = "Routing";
 $navbar['class'] = "navbar-narrow";
 
-foreach ($routing_count as $type => $value)
+foreach ($routing as $type => $value)
 {
-  if ($value > 0)
+  if ($value['count'] > 0)
   {
     if (!$vars['protocol']) { $vars['protocol'] = $type; }
     if ($vars['protocol'] == $type) { $navbar['options'][$type]['class'] = "active"; }
 
     $navbar['options'][$type]['url']  = generate_url(array('page' => 'routing', 'protocol' => $type));
-    $navbar['options'][$type]['text'] = nicecase($type).' ('.$routing_count[$type].')';
+    $navbar['options'][$type]['text'] = nicecase($type).' ('.$value['count'].')';
   }
 }
 print_navbar($navbar);
