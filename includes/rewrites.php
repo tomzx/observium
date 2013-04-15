@@ -1023,6 +1023,56 @@ $rewrite_ironware_hardware = array(
   'snFastIronStackFCXAdvRouter' => 'FCX Advanced Premium Router (BGP)',
 );
 
+// rewrite oids used for snmp_translate()
+$rewrite_oids = array(
+  // JunOS/JunOSe BGP4 V2
+  'BGP4-V2-MIB-JUNIPER' => array(
+    'jnxBgpM2PeerTable'                 => '.1.3.6.1.4.1.2636.5.1.1.2.1.1',
+    'jnxBgpM2PeerState'                 => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.2',
+    'jnxBgpM2PeerStatus'                => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.3',
+    'jnxBgpM2PeerInUpdates'             => '.1.3.6.1.4.1.2636.5.1.1.2.6.1.1.1',
+    'jnxBgpM2PeerOutUpdates'            => '.1.3.6.1.4.1.2636.5.1.1.2.6.1.1.2',
+    'jnxBgpM2PeerInTotalMessages'       => '.1.3.6.1.4.1.2636.5.1.1.2.6.1.1.3',
+    'jnxBgpM2PeerOutTotalMessages'      => '.1.3.6.1.4.1.2636.5.1.1.2.6.1.1.4',
+    'jnxBgpM2PeerFsmEstablishedTime'    => '.1.3.6.1.4.1.2636.5.1.1.2.4.1.1.1',
+    'jnxBgpM2PeerInUpdatesElapsedTime'  => '.1.3.6.1.4.1.2636.5.1.1.2.4.1.1.2',
+    'jnxBgpM2PeerLocalAddr'             => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.7',
+    'jnxBgpM2PeerIdentifier'            => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.1',
+    'jnxBgpM2PeerRemoteAs'              => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.13',
+    'jnxBgpM2PeerRemoteAddr'            => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.11',
+    'jnxBgpM2PeerRemoteAddrType'        => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.10',
+    'jnxBgpM2PeerIndex'                 => '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.14',
+    'jnxBgpM2PrefixInPrefixesAccepted'  => '.1.3.6.1.4.1.2636.5.1.1.2.6.2.1.8',
+    'jnxBgpM2PrefixInPrefixesRejected'  => '.1.3.6.1.4.1.2636.5.1.1.2.6.2.1.9',
+    'jnxBgpM2PrefixOutPrefixes'         => '.1.3.6.1.4.1.2636.5.1.1.2.6.2.1.10',
+    'jnxBgpM2PrefixCountersSafi'        => '.1.3.6.1.4.1.2636.5.1.1.2.6.2.1.2',
+    'jnxBgpM2CfgPeerAdminStatus'        => '.1.3.6.1.4.1.2636.5.1.1.2.8.1.1.1',
+  ),
+  // Force10 BGP4 V2
+  'FORCE10-BGP4-V2-MIB' => array(
+    'f10BgpM2PeerTable'                 => '.1.3.6.1.4.1.6027.20.1.2.1.1',
+    'f10BgpM2PeerState'                 => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.3',
+    'f10BgpM2PeerStatus'                => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.4',
+    'f10BgpM2PeerInUpdates'             => '.1.3.6.1.4.1.6027.20.1.2.6.1.1.1',
+    'f10BgpM2PeerOutUpdates'            => '.1.3.6.1.4.1.6027.20.1.2.6.1.1.2',
+    'f10BgpM2PeerInTotalMessages'       => '.1.3.6.1.4.1.6027.20.1.2.6.1.1.3',
+    'f10BgpM2PeerOutTotalMessages'      => '.1.3.6.1.4.1.6027.20.1.2.6.1.1.4',
+    'f10BgpM2PeerFsmEstablishedTime'    => '.1.3.6.1.4.1.6027.20.1.2.3.1.1.1',
+    'f10BgpM2PeerInUpdatesElapsedTime'  => '.1.3.6.1.4.1.6027.20.1.2.3.1.1.2',
+    'f10BgpM2PeerLocalAddr'             => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.8',
+    'f10BgpM2PeerIdentifier'            => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.2',
+    'f10BgpM2PeerRemoteAs'              => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.14',
+    'f10BgpM2PeerRemoteAddr'            => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.12',
+    'f10BgpM2PeerRemoteAddrType'        => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.11',
+    'f10BgpM2PeerIndex'                 => '.1.3.6.1.4.1.6027.20.1.2.1.1.1.15',
+    'f10BgpM2PrefixInPrefixesAccepted'  => '.1.3.6.1.4.1.6027.20.1.2.6.2.1.8',
+    'f10BgpM2PrefixInPrefixesRejected'  => '.1.3.6.1.4.1.6027.20.1.2.6.2.1.9',
+    'f10BgpM2PrefixOutPrefixes'         => '.1.3.6.1.4.1.6027.20.1.2.6.2.1.10',
+    'f10BgpM2PrefixCountersSafi'        => '.1.3.6.1.4.1.6027.20.1.2.6.2.1.2',
+    'f10BgpM2CfgPeerAdminStatus'        => '.1.3.6.1.4.1.6027.20.1.2.8.1.1.1'
+  )
+);
+
 $rewrite_ios_features = array(
   'PK9S' => 'IP w/SSH LAN Only',
   'LANBASEK9' => 'Lan Base Crypto',

@@ -39,9 +39,18 @@ function snmp_dewrap32bit($value)
 // 'BGP4-V2-MIB-JUNIPER::jnxBgpM2PeerRemoteAs' -> '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.13'
 function snmp_translate($oid, $mib = NULL, $mibdir = NULL)
 {
-  global $config, $debug;
+  // $rewrite_oids set in rewrites.php
+  global $rewrite_oids, $config, $debug;
 
-  $oid = ($mib) ? "$mib::$oid" : $oid;
+  if ($mib)
+  {
+    // If $mib::$oid known in $rewrite_oids use this value instead shell command snmptranslate.
+    if (isset($rewrite_oids[$mib][$oid])) {
+      if ($debug) { echo("TRANSLATE (REWRITE):[".$rewrite_oids[$mib][$oid]."]\n"); }
+      return $rewrite_oids[$mib][$oid];
+    }
+    $oid = "$mib::$oid";
+  }
 
   $cmd  = $config['snmptranslate'];
   if ($options) { $cmd .= ' ' . $options; } else { $cmd .= ' -On'; }
@@ -52,10 +61,9 @@ function snmp_translate($oid, $mib = NULL, $mibdir = NULL)
 
   $data = trim(external_exec($cmd));
 
-  if ($debug) { echo("OID: $oid TRANSLATED: $data\n"); }
   if ($data && !strstr($data, 'Unknown'))
   {
-    echo("TRANSLATE:[".$data."]");
+    if ($debug) { echo("TRANSLATE (CMD): $oid [".$data."]"); }
     return $data;
   } else {
     return '';
