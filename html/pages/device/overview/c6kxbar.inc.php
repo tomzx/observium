@@ -77,14 +77,14 @@ foreach ($entity_state['group']['c6kxbar'] as $index => $entry)
 
       echo("<tr class=device-overview>
           <td width=10></td>
-          <td width=200><strong>Fabric ".$subindex."</strong></td>
+          <td width=150><strong>Fabric ".$subindex."</strong></td>
           <td><span style='font-weight: bold;' class=".$fabric['mode_class'].">".
 
       $fabric['cc6kxbarModuleChannelFabStatus']."</span></td>
           <td>".formatRates($fabric['cc6kxbarModuleChannelSpeed']*1000000)."</td>
           <td>".overlib_link($link, $minigraph, $overlib_content)."</td>
-          <td>".print_percentage_bar (125, 20, $percent_in, "Ingress", "ffffff", $background['left'], $percent_in . "%", "ffffff", $background['right'])."</td>
-          <td>".print_percentage_bar (125, 20, $percent_out, "Egress", "ffffff", $background['left'], $percent_out . "%", "ffffff", $background['right'])."</td>
+          <td width=125>".print_percentage_bar (125, 20, $percent_in, "Ingress", "ffffff", $background['left'], $percent_in . "%", "ffffff", $background['right'])."</td>
+          <td width=125>".print_percentage_bar (125, 20, $percent_out, "Egress", "ffffff", $background['left'], $percent_out . "%", "ffffff", $background['right'])."</td>
           </tr>");
     }
   }
