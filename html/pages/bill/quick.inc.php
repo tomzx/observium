@@ -11,11 +11,13 @@ $active['previous'] = (($vars['tab'] == "previous") ? "active" : "");
 if (empty($active['billing']) && empty($active['24hour']) && empty($active['monthly']) && empty($active['previous'])) { $active['billing'] = "active"; }
 $graph              = "";
 
+## FIXME - this code is duplicated
+
 if ($bill_data['bill_type'] == "quota") {
   $quota      = $bill_data['bill_quota'];
   $percent    = round(($total_data) / $quota * 100, 2);
   $used       = format_bytes_billing($total_data);
-  $allowed    = format_si($quota)."bps";
+  $allowed    = format_si($quota)."B";
   $overuse    = $total_data - $quota;
   $overuse    = (($overuse <= 0) ? "<span class=\"badge badge-success\">-</span>" : "<span class=\"badge badge-important\">".format_bytes_billing($overuse)."</span>");
   $type       = "Quota";
