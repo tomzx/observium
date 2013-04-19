@@ -58,7 +58,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
 </div>
 </form>
 
-<?
+<?php
   if ($vars['user_id'])
   {
    if ($vars['action'] == "deleteuser")
