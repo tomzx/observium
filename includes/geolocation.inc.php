@@ -4,12 +4,26 @@ function get_geolocation($address)
 {
   global $config;
   $url = "http://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=".urlencode($address);
+  $url = "http://open.mapquestapi.com/nominatim/v1/search.php?format=json&addressdetails=1&limit=1&q=".urlencode($address);
+
 
   if($address != "Unknown")
   {
     $mapresponse = file_get_contents($url);
     $data = json_decode($mapresponse, true);
     $data = $data[0];
+    if(!count($data)) 
+    {
+      // We seem to have hit a snag. Lets drop the first element and see if we get anything better!
+      $csvArray = explode(",", $address);
+      array_shift($csvArray);
+      $address = implode(",", $csvArray);
+      $url = "http://open.mapquestapi.com/nominatim/v1/search.php?format=json&addressdetails=1&limit=1&q=".urlencode($address);
+      $mapresponse = file_get_contents($url);
+      $data = json_decode($mapresponse, true);
+      $data = $data[0];
+    }
+
 
 # print_r($data);
 
