@@ -31,15 +31,17 @@ foreach ($vars as $var => $value)
       case 'status':
       case 'ignore':
       case 'disabled':
+      case 'location_country':
+      case 'location_state':
+      case 'location_county':
+      case 'location_city':
+      case 'location':
         $where .= ' AND `'.$var.'` = ?';
         $sql_param[] = $value;
         break;
     }
   }
 }
-
-if ($vars['location'] == "Unset") { $location_filter = ''; }
-if ($vars['location']) { $location_filter = $vars['location']; }
 
 $pagetitle[] = "Devices";
 
@@ -295,8 +297,7 @@ if(count($devices))
     {
       if (device_permitted($device['device_id']))
       {
-        if (!$location_filter || ((get_dev_attrib($device,'override_sysLocation_bool') && get_dev_attrib($device,'override_sysLocation_string') == $location_filter)
-          || $device['location'] == $location_filter))
+        if (!$location_filter || $device['location'] == $location_filter)
         {
           if ($subformat == "detail")
           {

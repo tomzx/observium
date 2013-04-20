@@ -24,6 +24,7 @@ include_once($config['install_dir'] . "/includes/snmp.inc.php");
 include_once($config['install_dir'] . "/includes/services.inc.php");
 include_once($config['install_dir'] . "/includes/dbFacile.php");
 include_once($config['install_dir'] . "/includes/console_colour.php");
+include_once($config['install_dir'] . "/includes/geolocation.inc.php");
 
 // Include from PEAR
 include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");

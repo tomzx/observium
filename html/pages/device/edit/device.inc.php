@@ -18,7 +18,8 @@ if ($_POST['editing'])
     if ($override_sysLocation_bool) { set_dev_attrib($device, 'override_sysLocation_bool', '1'); } else { del_dev_attrib($device, 'override_sysLocation_bool'); }
     if (isset($override_sysLocation_string)) { set_dev_attrib($device, 'override_sysLocation_string', $override_sysLocation_string); };
 
-    #FIXME needs more sanity checking! and better feedback
+    # FIXME needs more sanity checking! and better feedback
+    # FIXME -- update location too? Need to trigger geolocation!
 
     $param = array('purpose' => $_POST['descr'], 'type' => $_POST['type'], 'ignore' => $_POST['ignore'], 'disabled' => $_POST['disabled']);
 
@@ -122,7 +123,7 @@ if ($unknown) { echo('          <option value="other">Other</option>'); }
   </fieldset>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="oicon-ok oicon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
   </div>
 
 </form>

@@ -25,9 +25,11 @@ echo("<table class=\"table table-condensed table-striped\">
 function get_entity_list($type, $subtype = "*", $device_id = "*", $entry)
 {
   if ($type == "storage") { $table = $type; } else { $table = $type.'s'; }
-  if ($type == "port")    { $deleted = "deleted"; } else { $deleted = $type.'_deleted'; }
+  if ($type == "port")    { $deleted = "deleted"; } else { $deleted_d = $type.'_deleted'; }
 
-  $query = 'SELECT '.$type.'_id AS id, '.$deleted.' FROM '.$table.' WHERE 1';
+  $query = 'SELECT '.$type.'_id AS id';
+  if($deleted) { $query .= ', '.$deleted; }
+  $query .= ' FROM '.$table.' WHERE 1';
   $args  = array();
 
   if (is_numeric($device_id))
@@ -41,6 +43,8 @@ function get_entity_list($type, $subtype = "*", $device_id = "*", $entry)
     $query .= " AND ".$type."_id = ?";
     $args[] = $entry['entity'];
   }
+
+#  echo("$query");
 
   $entities_db = dbFetchRows($query, $args);
 

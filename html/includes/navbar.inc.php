@@ -87,15 +87,54 @@ foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC
 
                   <li class="dropdown-submenu">
                     <a tabindex="-1" href="#"><i class="menu-icon oicon-building"></i> Locations</a>
-                    <ul class="dropdown-menu">
 
 <?php
-foreach (getlocations() as $location)
+
+
+function location_menu($array)
 {
-  echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon oicon-building"></i> ' . $location . ' </a></li>');
+
+  ksort($array['entries']);
+
+  echo('<ul class="dropdown-menu" style="min-width: 250px;">');
+
+  if(count($array['entries']) > "3")
+  {
+    foreach($array['entries'] as $entry => $entry_data)
+    {
+      echo('<li class="dropdown-submenu"><a style="" href="' . generate_url(array('page'=>'devices',$entry_data['level'] => urlencode($entry))) . '/">
+            <i class="menu-icon oicon-building"></i> ' . $entry . '('.$entry_data['count'].')</a>');
+
+      location_menu($entry_data);
+      echo('</li>');
+    }
+  } else {
+    $new_entry_array = array();
+
+    foreach($array['entries'] as $new_entry => $new_entry_data)
+    {
+      echo('<li class="nav-header">'.$new_entry.'</li>');
+      foreach($new_entry_data['entries'] as $sub_entry => $sub_entry_data)
+      {
+        if(is_array($sub_entry_data['entries']))
+        {
+
+          echo('<li class="dropdown-submenu"><a style="" href="' . generate_url(array('page'=>'devices',$sub_entry_data['level']=> urlencode($sub_entry))) . '/">
+                <i class="menu-icon oicon-building"></i> ' . $sub_entry . '('.$sub_entry_data['count'].')</a>');
+          location_menu($sub_entry_data);
+        } else {
+          echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($sub_entry))) . '/"><i class="menu-icon oicon-building"></i> ' . $sub_entry . ' </a></li>');
+        }
+        echo('</li>');
+      }
+    }
+  }
+  echo('</ul>');
 }
+
+location_menu($cache['locations']);
+
 ?>
-                  </ul>
                 </li>
 
                 <li class="divider"></li>

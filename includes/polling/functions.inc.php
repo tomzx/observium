@@ -160,6 +160,8 @@ function poll_device($device, $options)
   }
   echo("\n");
 
+
+
   unset($poll_update); unset($poll_update_query); unset($poll_separator);
   $poll_update_array = array();
 

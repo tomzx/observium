@@ -59,15 +59,6 @@ function humanize_device(&$device)
 
   $device['icon'] = getImage($device);
 
-  // Set location if it's overridden
-  /// FIXME - put this in poller, for fuck sake!
-  //$query = "SELECT S.attrib_value AS location FROM `devices_attribs` AS S
-  //          LEFT JOIN `devices_attribs` AS B ON B.device_id = S.device_id
-  //          WHERE B.attrib_type = 'override_sysLocation_bool' AND B.attrib_value = 1 AND S.attrib_type = 'override_sysLocation_string' AND S.device_id = ?";
-  //$override_location = dbFetchCell($query, array($device['device_id']));
-  //if ($override_location) { $device['location'] = $override_location; }
-  if (get_dev_attrib($device,'override_sysLocation_bool')) { $device['location'] = get_dev_attrib($device,'override_sysLocation_string'); }
-
   // Set the name we print for the OS
   $device['os_text'] = $config['os'][$device['os']]['text'];
 
@@ -796,6 +787,19 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
 
   switch($type)
   {
+    case "mempool":
+      if (empty($text)) { $text = $entity['mempool_descr']; }
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
+      break;
+    case "processor":
+      if (empty($text)) { $text = $entity['processor_descr']; }
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
+      break;
+
+    case "sensor":
+      if (empty($text)) { $text = $entity['sensor_descr']; }
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
+      break;
     case "port":
       $link = generate_port_link($entity, $text, $graph_type);
       break;
@@ -938,7 +942,7 @@ function devclass($device)
 function getlocations()
 {
   global $cache;
-  
+
   $locations = array();
   foreach ($cache['device_locations'] as $location => $count)
   {

@@ -123,13 +123,22 @@
     log_event("sysDescr -> ".$poll_device['sysDescr'], $device, 'system');
   }
 
+  // Allow override of sysLocation.
+
+  if($attribs['override_sysLocation_bool'])
+  {
+    $poll_device['sysLocation'] = $attribs['override_sysLocation_string'];
+  }
+
   if ($poll_device['sysLocation'] && $device['location'] != $poll_device['sysLocation'])
   {
-      if (!get_dev_attrib($device,'override_sysLocation_bool'))
-      {
-        $update_array['location'] = $poll_device['sysLocation'];
-        log_event("Location -> ".$poll_device['sysLocation'], $device, 'system');
-      }
+    $update_array['location'] = $poll_device['sysLocation'];
+    log_event("Location -> ".$poll_device['sysLocation'], $device, 'system');
+  }
+
+  if (TRUE || ($poll_device['sysLocation'] && $device['location'] != $poll_device['sysLocation']) || !$device['location_lat'] || !$device['location_lon'])
+  {
+    $update_array = array_merge($update_array, get_geolocation($poll_device['sysLocation']));
   }
 
 ?>

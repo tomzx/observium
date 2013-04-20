@@ -169,6 +169,12 @@ $config['alerts']['port_util_perc']  = 85;       // %age above which to alert
 
 $config['uptime_warning']                  = "84600"; // Time in seconds to display a "Device Rebooted" Alert. 0 to disable warnings.
 
+// Geocoding Configuration
+
+$config['geocoding']['enable']	           = TRUE;                  // Enable Geocoding
+$config['geocoding']['default']['lat']     =  "37.7463058";         // Default latitude
+$config['geocoding']['default']['lon']     =  "-25.6668573";        // Default longitude
+
 // Cosmetics
 
 $config['rrdgraph_def_text']  = "-c BACK#EEEEEE00 -c SHADEA#EEEEEE00 -c SHADEB#EEEEEE00 -c FONT#000000 -c CANVAS#FFFFFF00 -c GRID#a5a5a5";

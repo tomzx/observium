@@ -2,22 +2,6 @@
 
 // FIXME queries such as the one below should probably go into index.php?
 
-foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
-{
-  if (get_dev_attrib($device,'override_sysLocation_bool'))
-  {
-    $device['real_location'] = $device['location'];
-    $device['location'] = get_dev_attrib($device,'override_sysLocation_string');
-  }
-
-  $devices['count']++;
-
-  $cache['devices']['hostname'][$device['hostname']] = $device['device_id'];
-  $cache['devices']['id'][$device['device_id']] = $device;
-
-  $cache['device_types'][$device['type']]++;
-}
-
 if($_SESSION['userlevel'] >= 5)
 {
   $devices['up']        = dbFetchCell("SELECT COUNT(*) FROM devices  WHERE status = '1' AND `ignore` = '0'  AND `disabled` = '0'");

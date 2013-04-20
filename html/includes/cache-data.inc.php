@@ -24,8 +24,27 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 
     $cache['device_types'][$device['type']]++;
     $cache['device_locations'][$device['location']]++;
+
+    $cache['locations']['entries'][$device['location_country']]['count']++;
+    $cache['locations']['entries'][$device['location_country']]['level'] = 'location_country';
+
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['count']++;
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['level'] = 'location_state';
+
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['entries'][$device['location_county']]['count']++;
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['entries'][$device['location_county']]['level'] = 'location_county';
+
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['entries'][$device['location_county']]['entries'][$device['location_city']]['count']++;
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['entries'][$device['location_county']]['entries'][$device['location_city']]['level'] = 'location_city';
+
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['entries'][$device['location_county']]['entries'][$device['location_city']]['entries'][$device['location']]['count']++;
+    $cache['locations']['entries'][$device['location_country']]['entries'][$device['location_state']]['entries'][$device['location_county']]['entries'][$device['location_city']]['entries'][$device['location']]['level'] = 'location';
+
   }
 }
+#echo("<pre>");
+#print_r($cache['locations']);
+#echo("</pre>");
 
 // Ports
 foreach (dbFetchRows("SELECT device_id, port_id, ifAdminStatus, ifOperStatus, `deleted`, `ignore` FROM `ports`") as $port)
