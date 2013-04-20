@@ -136,7 +136,7 @@
     log_event("Location -> ".$poll_device['sysLocation'], $device, 'system');
   }
 
-  if (TRUE || ($poll_device['sysLocation'] && $device['location'] != $poll_device['sysLocation']) || !$device['location_lat'] || !$device['location_lon'])
+  if (($poll_device['sysLocation'] && $device['location'] != $poll_device['sysLocation']) || !$device['location_lat'] || !$device['location_lon'])
   {
     $update_array = array_merge($update_array, get_geolocation($poll_device['sysLocation']));
   }
