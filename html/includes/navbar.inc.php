@@ -91,7 +91,7 @@ if($config['location_menu_geocoded'])
 {
 ?>
                  <li class="dropdown-submenu">
-                    <a tabindex="-1" href="#"><i class="menu-icon oicon-building"></i> Locations</a>
+                    <a tabindex="-1" href="#"><i class="menu-icon oicon-building-hedge"></i> Locations</a>
 
 <?php
 
