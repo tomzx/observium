@@ -85,7 +85,12 @@ foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC
                 <li><a href="<?php echo(generate_url(array('page'=>'devices'))); ?>"><i class="oicon-servers"></i> All Devices</a></li>
                 <li class="divider"></li>
 
-                  <li class="dropdown-submenu">
+<?php
+
+if($config['location_menu_geocoded'])
+{
+?>
+                 <li class="dropdown-submenu">
                     <a tabindex="-1" href="#"><i class="menu-icon oicon-building"></i> Locations</a>
 
 <?php
@@ -150,6 +155,29 @@ location_menu($cache['locations']);
 
 ?>
                 </li>
+<?php
+}
+
+if($config['location_menu_geocoded'] == FALSE)
+{
+?>
+                  <li class="dropdown-submenu">
+                    <a tabindex="-1" href="#"><i class="menu-icon oicon-building"></i> Locations</a>
+                    <ul class="dropdown-menu">
+
+
+<?php
+    foreach (getlocations() as $location)
+    {
+      echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon oicon-building"></i> ' . $location . ' </a></li>');
+    }
+?>
+                  </ul>
+                </li>
+<?php
+}
+
+?>
 
                 <li class="divider"></li>
 
