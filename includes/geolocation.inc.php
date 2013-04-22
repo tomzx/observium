@@ -13,7 +13,7 @@ function get_geolocation($address)
   $url = "http://open.mapquestapi.com/nominatim/v1/search.php?format=json&addressdetails=1&limit=1&q=".urlencode($address);
 
 
-  if($address != "Unknown")
+  if($address != "Unknown" && $config['geocoding']['enable'] == TRUE)
   {
     $mapresponse = file_get_contents($url);
     $data = json_decode($mapresponse, true);
