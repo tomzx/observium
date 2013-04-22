@@ -1387,12 +1387,12 @@ $config['sensor_classes'] = array('current' => 'A',
 
 // FIXME - different icons for power/volt/current
 
-$config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'oicon-lightning');
-$config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'oicon-lightning');
+$config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'oicon-current');
+$config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'oicon-frequency');
 $config['sensor_types']['humidity']    = array( 'symbol' => '%',   'text' => 'Percent', 'icon' => 'oicon-water');
 $config['sensor_types']['fanspeed']    = array( 'symbol' => 'RPM', 'text' => 'RPM',     'icon' => 'oicon-weather-wind');
-$config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Watts',   'icon' => 'oicon-lightning');
-$config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'oicon-lightning');
+$config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Watts',   'icon' => 'oicon-power');
+$config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'oicon-voltage');
 $config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'oicon-thermometer-high');
 $config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'oicon-arrow-incident-red');
 
