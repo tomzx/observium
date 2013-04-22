@@ -95,10 +95,10 @@ if($config['location_menu_geocoded'])
 
 <?php
 
-
 function location_menu($array)
 {
   global $config;
+
   ksort($array['entries']);
 
   echo('<ul style="" class="dropdown-menu" style="min-width: 250px;">');
@@ -169,7 +169,10 @@ if($config['location_menu_geocoded'] == FALSE)
 <?php
     foreach (getlocations() as $location)
     {
-      echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon oicon-building"></i> ' . $location . ' </a></li>');
+      if ($location != "")
+      {
+        echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($location))) . '/"><i class="menu-icon oicon-building"></i> ' . $location . ' </a></li>');
+      }
     }
 ?>
                   </ul>
