@@ -107,18 +107,19 @@ function location_menu($array)
   {
     foreach($array['entries'] as $entry => $entry_data)
     {
-
       if ($entry_data['level'] == "location_country")
       {
+         $code = $entry;
+         $entry = country_from_code($entry);
+
  #       echo($config['html_dir'] . "/images/icons/flags/" . $entry . ".png");
-        if(file_exists($config['html_dir'] . "/images/icons/flags/" . $entry . ".png"))
-        {
-          $image = '<img style="margin-top: -2px;" src="'.$config['base_url'] . '/images/icons/flags/' . $entry . '.png" />';
-        } else {
-          $image = '<i class="menu-icon oicon-building"></i>';
-        }
+#        if(file_exists($config['html_dir'] . "/images/icons/flags/" . $entry . ".png"))
+#        {
+#          $image = '<img style="margin-top: -2px;" src="'.$config['base_url'] . '/images/icons/flags/' . $entry . '.png" />';
+#        } else {
+          $image = '<i class="flag flag-'.$code.'" alt="'.$entry.'"></i>';
+#        }
 #        echo("$entry");
-        $entry = country_from_code($entry);
       }
 
       echo('<li class="dropdown-submenu"><a href="' . generate_url(array('page'=>'devices',$entry_data['level'] => urlencode($entry))) . '/">
