@@ -2,6 +2,8 @@
 
 // Push $_GET into $vars to be compatible with web interface naming
 
+$total_start = utime();
+
 foreach ($_GET as $name => $value)
 {
   $vars[$name] = $value;
@@ -157,9 +159,14 @@ if ($error_msg) {
     echo("<p style='font-size: 16px; font-weight: bold;'>RRDTool Command</p>");
     echo("rrdtool graph $graphfile $rrd_options");
     echo("</span>");
+    $graph_start = utime();
     $return = rrdtool_graph($graphfile, $rrd_options);
+    $graph_end = utime(); $graph_run = $graph_end - $graph_start; $graph_time = substr($graph_run, 0, 5);
+    $total_end = utime(); $total_run = $total_end - $total_start; $total_time = substr($total_run, 0, 5);
+
     echo("<br /><br />");
     echo("<p style='font-size: 16px; font-weight: bold;'>RRDTool Output</p>$return");
+    echo("<p>Total time: ".$total_time." | RRDtool time: ".$graph_time."s</p>");
     unlink($graphfile);
     echo("</div>");
   } else {

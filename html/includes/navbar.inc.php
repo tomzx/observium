@@ -93,17 +93,31 @@ foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC
 
 function location_menu($array)
 {
-
+  global $config;
   ksort($array['entries']);
 
-  echo('<ul class="dropdown-menu" style="min-width: 250px;">');
+  echo('<ul style="" class="dropdown-menu" style="min-width: 250px;">');
 
   if(count($array['entries']) > "3")
   {
     foreach($array['entries'] as $entry => $entry_data)
     {
-      echo('<li class="dropdown-submenu"><a style="" href="' . generate_url(array('page'=>'devices',$entry_data['level'] => urlencode($entry))) . '/">
-            <i class="menu-icon oicon-building"></i> ' . $entry . '('.$entry_data['count'].')</a>');
+
+      if ($entry_data['level'] == "location_country")
+      {
+ #       echo($config['html_dir'] . "/images/icons/flags/" . $entry . ".png");
+        if(file_exists($config['html_dir'] . "/images/icons/flags/" . $entry . ".png"))
+        {
+          $image = '<img style="margin-top: -2px;" src="'.$config['base_url'] . '/images/icons/flags/' . $entry . '.png" />';
+        } else {
+          $image = '<i class="menu-icon oicon-building"></i>';
+        }
+#        echo("$entry");
+        $entry = country_from_code($entry);
+      }
+
+      echo('<li class="dropdown-submenu"><a href="' . generate_url(array('page'=>'devices',$entry_data['level'] => urlencode($entry))) . '/">
+            '. $image .' ' . $entry . '('.$entry_data['count'].')</a>');
 
       location_menu($entry_data);
       echo('</li>');
@@ -123,7 +137,7 @@ function location_menu($array)
                 <i class="menu-icon oicon-building"></i> ' . $sub_entry . '('.$sub_entry_data['count'].')</a>');
           location_menu($sub_entry_data);
         } else {
-          echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($sub_entry))) . '/"><i class="menu-icon oicon-building"></i> ' . $sub_entry . ' </a></li>');
+          echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($sub_entry))) . '/"><i class="menu-icon oicon-building"></i> ' . $sub_entry . ' ('.$sub_entry_data['count'].')</a></li>');
         }
         echo('</li>');
       }

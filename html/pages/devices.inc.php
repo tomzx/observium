@@ -2,7 +2,7 @@
 
 // Set Defaults here
 
-if(!isset($vars['format'])) { $vars['format'] = "list_detail"; }
+if(!isset($vars['format'])) { $vars['format'] = "detail"; }
 if (!$config['web_show_disabled'] && !isset($vars['disabled'])) { $vars['disabled'] = '0'; }
 
 /// FIXME - new style of searching here
@@ -187,18 +187,19 @@ foreach (dbFetch('SELECT `type` FROM `devices` AS D WHERE 1 '.$where_form.' GROU
 echo('<span style="font-weight: bold;">Lists</span> &#187; ');
 
 $menu_options = array('basic'      => 'Basic',
-                      'detail'     => 'Detail');
+                      'detail'     => 'Detail',
+                      'status'     => 'Status');
 
 $sep = "";
 foreach ($menu_options as $option => $text)
 {
   echo($sep);
-  if ($vars['format'] == "list_".$option)
+  if ($vars['format'] == $option)
   {
     echo("<span class='pagemenu-selected'>");
   }
-  echo('<a href="' . generate_url($vars, array('format' => "list_".$option)) . '">' . $text . '</a>');
-  if ($vars['format'] == "list_".$option)
+  echo('<a href="' . generate_url($vars, array('format' => $option)) . '">' . $text . '</a>');
+  if ($vars['format'] == $option)
   {
     echo("</span>");
   }
@@ -277,39 +278,16 @@ if(count($devices))
   {
     include('pages/devices/'.$format.'.inc.php');
   } else {
-    echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="margin-top: 10px;">');
-    if ($subformat == "detail")
-    {
-    echo("  <thead>\n");
-    echo("    <tr>\n");
-    echo("      <th></th>\n");
-    echo("      <th></th>\n");
-    echo("      <th>Device/Location</th>\n");
-    echo("      <th></th>\n");
-    echo("      <th>Platform</th>\n");
-    echo("      <th>Operating System</th>\n");
-    echo("      <th>Uptime/sysName</th>\n");
-    echo("    </tr>\n");
-    echo("  </thead>\n");
-    }
+?>
 
-    foreach ($devices as $device)
-    {
-      if (device_permitted($device['device_id']))
-      {
-        if (!$location_filter || $device['location'] == $location_filter)
-        {
-          if ($subformat == "detail")
-          {
-            include("includes/hostbox.inc.php");
-          } else {
-            include("includes/hostbox-basic.inc.php");
-          }
-        }
-      }
-    }
-    echo("</table>");
+<div class="alert alert-error">
+  <h4>Error</h4>
+  This should not happen. Please ensure you are on the latest release and then report this to the Observium developers if it continues.
+</div>
+
+<?php
   }
+
 } else {
 
 ?>
@@ -320,5 +298,3 @@ if(count($devices))
 
 <?php
 }
-
-?>

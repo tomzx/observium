@@ -1872,4 +1872,22 @@ function country_from_code($code) {
     return "Unknown";
 }
 
+function flag_from_code($code)
+{
+  global $config;
+
+  $code = strtolower($code);
+
+  if ($device['icon'] && file_exists($config['html_dir'] . "/images/icons/flags/" . $code . ".png"))
+  {
+    $image = '<img src="' . $config['base_url'] . '/images/icons/flags/' . $code . '.png" />';
+  } else {
+    $image = '<img src="' . $config['base_url'] . '/images/icons/flags/europeanunion.png" />';
+  }
+
+  return $image;
+}
+
+
+
 ?>

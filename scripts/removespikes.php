@@ -65,7 +65,7 @@ if ($using_cacti) {
 	$outliers = read_config_option("spikekill_outliers");
 }else{
 	$method   = 1; // Standard Deviation
-	$numspike = 10;
+	$numspike = 100;
 	$stddev   = 10;
 	$percent  = 500;
 	$outliers = 5;
