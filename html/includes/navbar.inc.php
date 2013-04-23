@@ -109,17 +109,14 @@ function location_menu($array)
     {
       if ($entry_data['level'] == "location_country")
       {
-         $code = $entry;
-         $entry = country_from_code($entry);
-
- #       echo($config['html_dir'] . "/images/icons/flags/" . $entry . ".png");
-#        if(file_exists($config['html_dir'] . "/images/icons/flags/" . $entry . ".png"))
-#        {
-#          $image = '<img style="margin-top: -2px;" src="'.$config['base_url'] . '/images/icons/flags/' . $entry . '.png" />';
-#        } else {
-          $image = '<i class="flag flag-'.$code.'" alt="'.$entry.'"></i>';
-#        }
-#        echo("$entry");
+        $code = $entry;
+        $entry = country_from_code($entry);
+        $image = '<i class="flag flag-'.$code.'" alt="'.$entry.'"></i>';
+      }
+      elseif ($entry_data['level'] == "location")
+      {
+        echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($entry))) . '/"><i class="menu-icon oicon-building"></i> ' . $entry . ' ('.$entry_data['count'].')</a></li>');
+        continue;
       }
 
       echo('<li class="dropdown-submenu"><a href="' . generate_url(array('page'=>'devices',$entry_data['level'] => urlencode($entry))) . '/">
@@ -133,13 +130,24 @@ function location_menu($array)
 
     foreach($array['entries'] as $new_entry => $new_entry_data)
     {
-      echo('<li class="nav-header">'.$new_entry.'</li>');
+      if ($new_entry_data['level'] == "location_country")
+      {
+        $code = $new_entry;
+        $new_entry = country_from_code($new_entry);
+        $image = '<i class="flag flag-'.$code.'" alt="'.$new_entry.'"></i> ';
+      }
+      elseif ($new_entry_data['level'] == "location")
+      {
+        echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($new_entry))) . '/"><i class="menu-icon oicon-building"></i> ' . $new_entry . ' ('.$new_entry_data['count'].')</a></li>');
+        continue;
+      }
+
+      echo('<li class="nav-header">'.$image.$new_entry.'</li>');
       foreach($new_entry_data['entries'] as $sub_entry => $sub_entry_data)
       {
         if(is_array($sub_entry_data['entries']))
         {
-
-          echo('<li class="dropdown-submenu"><a style="" href="' . generate_url(array('page'=>'devices',$sub_entry_data['level']=> urlencode($sub_entry))) . '/">
+            echo('<li class="dropdown-submenu"><a style="" href="' . generate_url(array('page'=>'devices',$sub_entry_data['level']=> urlencode($sub_entry))) . '/">
                 <i class="menu-icon oicon-building"></i> ' . $sub_entry . '('.$sub_entry_data['count'].')</a>');
           location_menu($sub_entry_data);
         } else {
