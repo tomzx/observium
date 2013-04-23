@@ -172,6 +172,7 @@ $config['uptime_warning']                  = "84600"; // Time in seconds to disp
 // Geocoding Configuration
 
 $config['geocoding']['enable']	           = TRUE;                  // Enable Geocoding
+$config['geocoding']['api']                = 'mapquest';            // Which GEO API use ('mapquest', 'google')
 $config['geocoding']['default']['lat']     =  "37.7463058";         // Default latitude
 $config['geocoding']['default']['lon']     =  "-25.6668573";        // Default longitude
 
