@@ -29,14 +29,14 @@ if(is_numeric($vars['device']))
 #$height   = $vars['height'];
 #$title    = $vars['title'];
 #$vertical = $vars['vertical'];
-#$from     = (isset($vars['from']) ? $vars['from'] : time() - 60*60*24);
-#$to       = (isset($vars['to']) ? $vars['to'] : time());
+$from     = (isset($vars['from']) ? $vars['from'] : time() - 60*60*24);
+$to       = (isset($vars['to']) ? $vars['to'] : time());
 
-#if ($from < 0) { $from = $to + $from; }
+if ($from < 0) { $from = $to + $from; }
 
-#$period = $to - $from;
+$period = $to - $from;
 
-#$prev_from = $from - $period;
+$prev_from = $from - $period;
 
 $graphfile = $config['temp_dir'] . "/"  . strgen() . ".png";
 
