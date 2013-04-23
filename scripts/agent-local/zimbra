@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Observium Zimbra statistics script
+# (c) 2013, Tom Laermans for Observium
+#
+# Tested on Zimbra 8.0.1 Network Edition on Ubuntu
+
+for f in /opt/zimbra/zmstat/*.csv
+do
+  FILENAME=$(basename $f .csv)
+  echo "<<<zimbra-$FILENAME>>>"
+  head -n1 $f
+  tail -n1 $f
+done
