@@ -92,6 +92,7 @@ if (!$auth)
 
   print_optionbar_end();
 
+
   // css and js for datetimepicker
   echo("
     <link type='text/css' href='css/ui-lightness/jquery-ui-1.8.18.custom.css' rel='stylesheet' />
@@ -189,6 +190,10 @@ if (!$auth)
     </style>
   ");
 
+  // Start form for the custom range.
+  echo('<form id="customrange" action="test">');
+
+
   print_optionbar_start();
 
   $thumb_array = array('sixhour' => '6 Hours', 'day' => '24 Hours', 'twoday' => '48 Hours', 'week' => 'One Week', 'twoweek' => 'Two Weeks',
@@ -224,10 +229,6 @@ if (!$auth)
   echo("<hr />");
 
   // datetime range picker
-  echo("
-    <form id='customrange' action=\"test\">
-    <p>
-  ");
   echo("<input type=hidden id='selfaction' value='" . $_SERVER['REQUEST_URI'] . "'>");
 
   $preset_array = array("today", "yesterday", "tweek", "lweek", "tmonth", "lmonth", "tyear", "lyear");
@@ -294,44 +295,51 @@ if (!$auth)
     </select>
     <strong>From:</strong> <input type='text' id='dtpickerfrom' maxlength=16 value='" . date('Y-m-d H:i', $graph_array['from']) . "'>
     <strong>To:</strong> <input type='text' id='dtpickerto' maxlength=16 value='" . date('Y-m-d H:i', $graph_array['to']) . "'>
-    <input type='submit' id='submit' value='Update' onclick='javascript:submitCustomRange(this.form);'>
-    </p>
-    </form>
+    <input class='btn' type='submit' id='submit' value='Update' onclick='javascript:submitCustomRange(this.form);'>
   ");
 
-  echo("<hr />");
-
-  if ($vars['legend'] == "no")
-  {
-    echo(generate_link("Show Legend",$vars, array('page' => "graphs", 'legend' => NULL)));
-  } else {
-    echo(generate_link("Hide Legend",$vars, array('page' => "graphs", 'legend' => "no")));
-  }
-
-  // FIXME : do this properly
-#  if ($type == "port" && $subtype == "bits")
-#  {
-    echo(' | ');
-    if ($vars['previous'] == "yes")
-    {
-      echo(generate_link("Hide Previous",$vars, array('page' => "graphs", 'previous' => NULL)));
-    } else {
-      echo(generate_link("Show Previous",$vars, array('page' => "graphs", 'previous' => "yes")));
-    }
-#  }
-
-  echo('<div style="float: right;">');
-
-  if ($vars['showcommand'] == "yes")
-  {
-    echo(generate_link("Hide RRD Command",$vars, array('page' => "graphs", 'showcommand' => NULL)));
-  } else {
-    echo(generate_link("Show RRD Command",$vars, array('page' => "graphs", 'showcommand' => "yes")));
-  }
-
-  echo('</div>');
-
   print_optionbar_end();
+
+  echo('</form>');
+
+/// Print options navbar
+
+$navbar = array();
+$navbar['brand'] = "Options";
+$navbar['class'] = "navbar-narrow";
+
+$navbar['options']['legend']   =  array('text' => 'Show Legend', 'inverse' => TRUE);
+$navbar['options']['previous'] =  array('text' => 'Graph Previous');
+$navbar['options']['max']      =  array('text' => 'Graph Maximum');
+
+$navbar['options_right']['showcommand'] =  array('text' => 'RRD Command');
+
+foreach($navbar['options'] AS $option => $array)
+{
+  if($array['inverse'] == TRUE)
+  {
+    if($vars[$option] == "no")
+    {
+      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => NULL));
+    } else {
+      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => 'no'));
+      $navbar['options'][$option]['class'] .= " active";
+    }
+  } else {
+    if($vars[$option] == "yes")
+    {
+      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => NULL));
+      $navbar['options'][$option]['class'] .= " active";
+    } else {
+      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => 'yes'));
+    }
+  }
+}
+
+print_navbar($navbar);
+unset($navbar);
+
+/// End options navbar
 
   echo generate_graph_js_state($graph_array);
 

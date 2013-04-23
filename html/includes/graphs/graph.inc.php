@@ -13,6 +13,9 @@ preg_match('/^(?P<type>[a-z0-9A-Z-]+)_(?P<subtype>.+)/', $vars['type'], $graphty
 
 if($debug) print_r($graphtype);
 
+$type = $graphtype['type'];
+$subtype = $graphtype['subtype'];
+
 if(is_numeric($vars['device']))
 {
   $device = device_by_id_cache($vars['device']);
@@ -22,25 +25,23 @@ if(is_numeric($vars['device']))
 
 // FIXME -- remove these
 
-$width    = $vars['width'];
-$height   = $vars['height'];
-$title    = $vars['title'];
-$vertical = $vars['vertical'];
-$legend   = $vars['legend'];
+#$width    = $vars['width'];
+#$height   = $vars['height'];
+#$title    = $vars['title'];
+#$vertical = $vars['vertical'];
+#$from     = (isset($vars['from']) ? $vars['from'] : time() - 60*60*24);
+#$to       = (isset($vars['to']) ? $vars['to'] : time());
 
-$from     = (isset($vars['from']) ? $vars['from'] : time() - 60*60*24);
-$to       = (isset($vars['to']) ? $vars['to'] : time());
+#if ($from < 0) { $from = $to + $from; }
 
-if ($from < 0) { $from = $to + $from; }
+#$period = $to - $from;
 
-$period = $to - $from;
-
-$prev_from = $from - $period;
+#$prev_from = $from - $period;
 
 $graphfile = $config['temp_dir'] . "/"  . strgen() . ".png";
 
-$type = $graphtype['type'];
-$subtype = $graphtype['subtype'];
+#$type = $graphtype['type'];
+#$subtype = $graphtype['subtype'];
 
 if (is_file($config['html_dir'] . "/includes/graphs/$type/$subtype.inc.php"))
 {

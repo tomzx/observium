@@ -78,12 +78,16 @@ function print_navbar($navbar)
 
   $id = strgen();
 
-  echo '<div class="navbar '.$navbar['class'].'">
+  ?>
+
+  <div class="navbar <?php echo $navbar['class']; ?>">
     <div class="navbar-inner">
       <div class="container">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#nav-'.$id.'">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#nav-<?php echo $id; ?>">
           <span class="oicon-bar"></span>
-        </button>';
+        </button>
+
+  <?php
 
   if (isset($navbar['brand'])) { echo ' <a class="brand">'.$navbar['brand'].'</a>'; }
   echo('<div class="nav-collapse" id="nav-'.$id.'">');
@@ -132,7 +136,13 @@ function print_navbar($navbar)
     echo('</ul>');
   }
 
-  echo '</div></div></div></div>';
+  ?>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <?php
 
 }
 
