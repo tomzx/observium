@@ -59,10 +59,13 @@ function get_geolocation($address)
     {
       if ($data['status'] == 'OK')
       {
-        // Use google data only with good status response, else return null
+        // Use google data only with good status response
         $data = $data['results'][0];
-      } else {
-        return NULL;
+      }
+      elseif ($data['status'] == 'OVER_QUERY_LIMIT')
+      {
+        // Return empty array for overquery limit (for later recheck)
+        return array();
       }
     }
     elseif (!isset($location['location_lat']))
