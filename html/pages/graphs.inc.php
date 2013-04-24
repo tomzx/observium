@@ -314,28 +314,30 @@ $navbar['options']['max']      =  array('text' => 'Graph Maximum');
 
 $navbar['options_right']['showcommand'] =  array('text' => 'RRD Command');
 
-foreach($navbar['options'] AS $option => $array)
+foreach(array('options' => $navbar['options'], 'options_right' => $navbar['options_right'] ) as $side => $options)
 {
-  if($array['inverse'] == TRUE)
+  foreach($options AS $option => $array)
   {
-    if($vars[$option] == "no")
+    if($array['inverse'] == TRUE)
     {
-      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => NULL));
+      if($vars[$option] == "no")
+      {
+        $navbar[$side][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => NULL));
+      } else {
+        $navbar[$side][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => 'no'));
+        $navbar[$side][$option]['class'] .= " active";
+      }
     } else {
-      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => 'no'));
-      $navbar['options'][$option]['class'] .= " active";
-    }
-  } else {
-    if($vars[$option] == "yes")
-    {
-      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => NULL));
-      $navbar['options'][$option]['class'] .= " active";
-    } else {
-      $navbar['options'][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => 'yes'));
+      if($vars[$option] == "yes")
+      {
+        $navbar[$side][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => NULL));
+        $navbar[$side][$option]['class'] .= " active";
+      } else {
+        $navbar[$side][$option]['url'] = generate_url($vars, array('page' => "graphs", $option => 'yes'));
+      }
     }
   }
 }
-
 print_navbar($navbar);
 unset($navbar);
 
