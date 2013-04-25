@@ -53,7 +53,9 @@ function show_map($config)
 	    google.setOnLoadCallback(drawRegionsMap);
 	    function drawRegionsMap() {
 		var data = new google.visualization.DataTable();
-		data.addColumn('string', 'Site');
+		data.addColumn('number', 'Latitude');
+                data.addColumn('number', 'Longitude');
+                data.addColumn('string', 'Location');
 		data.addColumn('number', 'Status');
 		data.addColumn('number', 'Devices');
 		data.addColumn({type: 'string', role: 'tooltip'});
@@ -63,7 +65,7 @@ function show_map($config)
 		    $locations_down = array();
 		    $devicesArray = array();
 		    foreach (dbFetchRows("SELECT * FROM devices") as $device) {
-			$devicesArray[] = array("device_id" => $device['device_id'], "hostname" => $device['hostname'], "location" => $device['location'], "status" => $device['status'], "ignore" => $device['ignore'], "disabled" => $device['disabled']);
+			$devicesArray[] = array("device_id" => $device['device_id'], "hostname" => $device['hostname'], "location" => $device['location'], "status" => $device['status'], "ignore" => $device['ignore'], "disabled" => $device['disabled'], "location_lat" =>  $device['location_lat'], "location_lon" =>  $device['location_lon']);
 		    }
 		    foreach (getlocations() as $location) {
 			$location = addslashes($location);
@@ -77,14 +79,14 @@ function show_map($config)
 				$devices[] = $device['hostname'];
 				$count++;
 				if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname']; 
-                                } elseif ($device['status'] == "1") { $devices_up[] = $device['hostname']; }
+                                } elseif ($device['status'] == "1") { $devices_up[] = $device['hostname']; $lat = $device['location_lat']; $lon = $device['location_lon']; }
 			    }
 			}
 			$count = (($count < 100) ? $count : "100");
 			if ($down > 0) {
-			    $locations_down[]   = "['".$location."', ".$down.", ".$count*$down.", '".count($devices_up). " Devices OK, " . count($devices_down). " Devices DOWN: (". implode(", ", $devices_down).")']";
+			    $locations_down[]   = "[".$lat.", ".$lon.", '".$location."', ".$down.", ".$count*$down.", '".count($devices_up). " Devices OK, " . count($devices_down). " Devices DOWN: (". implode(", ", $devices_down).")']";
 			} else {
-			    $locations_up[] = "['".$location."', 0, ".$count.", '".count($devices_up). " Devices UP: (". implode(", ", $devices_up).")']";
+			    $locations_up[] = "[".$lat.", ".$lon.", '".$location."', 0, ".$count.", '".count($devices_up). " Devices UP: (". implode(", ", $devices_up).")']";
 			}
 		    }
 		    unset($devicesArray);
