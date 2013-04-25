@@ -37,8 +37,13 @@ elif [ "${OS}" = "Linux" ] ; then
     PSEUDONAME=`cat /etc/mandrake-release | sed s/.*\(// | sed s/\)//`
     REV=`cat /etc/mandrake-release | sed s/.*release\ // | sed s/\ .*//`
   elif [ -f /etc/debian_version ] ; then
-    DIST="Debian `cat /etc/debian_version`"
-    REV=""
+    if [ -f /etc/mailcleaner/etc/mailcleaner/version.def ] ; then
+      DIST="MailCleaner"
+      REV=`cat /etc/mailcleaner/etc/mailcleaner/version.def`
+    else
+      DIST="Debian `cat /etc/debian_version`"
+      REV=""
+    fi
   fi
 
   if [ -f /etc/UnitedLinux-release ] ; then

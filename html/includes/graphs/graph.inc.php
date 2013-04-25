@@ -93,7 +93,7 @@ if (is_file($config['html_dir'] . "/includes/graphs/$type/$subtype.inc.php"))
 }
 else
 {
-  graph_error("$type*$subtype ");//Graph Template Missing");
+  graph_error($type.'_'.$subtype); //Graph Template Missing");
 }
 
 function graph_error($string)
