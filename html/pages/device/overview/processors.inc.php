@@ -13,7 +13,8 @@ if (count($processors))
 {
 ?>
 <div class="well info_box">
-    <div id="title"><i class="oicon-processor"></i> Processors</div>
+    <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'processor'))); ?>">
+       <i class="oicon-processor"></i> Processors</a></div>
     <div id="content">
 
 <?php
