@@ -48,7 +48,7 @@ if ($config['enable_bgp'])
   // Discover BGP peers
 
   /// NOTE. PeerIdentifier != PeerRemoteAddr
-  
+
   echo("BGP Sessions: ");
 
   $bgpLocalAs = snmp_get($device, 'bgpLocalAs.0', '-Oqvn', 'BGP4-MIB', mib_dirs());
@@ -58,7 +58,7 @@ if ($config['enable_bgp'])
     $j_bgpLocalAs = trim(snmp_walk($device, 'jnxBgpM2PeerLocalAs', '-Oqvn', 'BGP4-V2-MIB-JUNIPER', mib_dirs('junos')));
     list($bgpLocalAs) = explode("\n", $j_bgpLocalAs);
   }
-  
+
   if (is_numeric($bgpLocalAs))
   {
     echo("AS$bgpLocalAs ");
@@ -91,7 +91,7 @@ if ($config['enable_bgp'])
         $use_cisco_v2 = TRUE;
         $cisco_peers = snmpwalk_cache_oid($device, 'cbgpPeer2LocalAddr', $cisco_peers, 'CISCO-BGP4-MIB', mib_dirs('cisco'));
         $cisco_peers = snmpwalk_cache_oid($device, 'cbgpPeer2RemoteIdentifier', $cisco_peers, 'CISCO-BGP4-MIB', mib_dirs('cisco'));
-        
+
         if ($debug) { echo("CISCO-BGP4-MIB Peers: \n"); }
         foreach ($cisco_peers as $peer_ip => $entry)
         {
@@ -108,7 +108,7 @@ if ($config['enable_bgp'])
         }
       }
     }
-    
+
     if (!$use_cisco_v2)
     {
       $peers_data = snmpwalk_cache_oid($device, 'bgpPeerRemoteAs', array(), 'BGP4-MIB', mib_dirs());
@@ -129,7 +129,7 @@ if ($config['enable_bgp'])
         }
       }
     }
-    
+
     if ($use_vendor)
     {
       $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAs, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
@@ -151,7 +151,7 @@ if ($config['enable_bgp'])
         }
       }
     } # Vendors
-    
+
   } else {
     echo("No BGP on host");
     if ($device['bgpLocalAs'])
@@ -195,7 +195,7 @@ if ($config['enable_bgp'])
     if ($device['os_group'] == "cisco" || $use_vendor)
     {
       unset($af_list);
-      
+
       if ($device['os_group'] == "cisco")
       {
         // Get afi/safi and populate cbgp on cisco ios (xe/xr)
@@ -206,7 +206,7 @@ if ($config['enable_bgp'])
         } else {
           $af_data = snmpwalk_cache_oid($device, 'cbgpPeerAddrFamilyName', $cbgp, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
         }
-        
+
         foreach ($af_data as $af => $entry)
         {
           if ($use_cisco_v2) {
@@ -248,7 +248,7 @@ if ($config['enable_bgp'])
           $peer_as = $entry[$vendor_PeerRemoteAs];
           $index = $entry[$vendor_PeerIndex];
           $afi = $entry[$vendor_PeerRemoteAddrType];
-            
+
           foreach ($safis as $i => $safi)
           {
             if (isset($vendor_counters[$index.'.'.$afi.".$i"]) || isset($vendor_counters[$index.'.'.$afis[$afi].".$i"]))
@@ -286,9 +286,9 @@ if ($config['enable_bgp'])
         }
       } # AF list
     } # os=cisco|some vendors
-      
+
   } # isset
-  
+
   // Delete removed peers
   unset($peer_ip, $peer_as);
   $query = 'SELECT * FROM bgpPeers WHERE device_id = ?';
@@ -310,4 +310,4 @@ if ($config['enable_bgp'])
   echo("\n");
 }
 
-?>
+// end includes/discovery/bgp-peers.inc.php

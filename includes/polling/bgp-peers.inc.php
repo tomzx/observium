@@ -107,7 +107,7 @@ if ($config['enable_bgp'])
       $use_cisco_v2 = TRUE;
     }
   }
-  
+
   $sql  = 'SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id ';
   $sql .= 'FROM `bgpPeers` ';
   $sql .= 'LEFT JOIN `bgpPeers-state` ON `bgpPeers`.bgpPeer_id = `bgpPeers-state`.bgpPeer_id ';
@@ -119,9 +119,9 @@ if ($config['enable_bgp'])
 
     $peer_ip = $peer['bgpPeerRemoteAddr'];
     $remote_ip = (strstr($peer_ip, ':')) ? Net_IPv6::compress($peer_ip) : $peer_ip; // Compact IPv6. Use only for notify and log.
-    
+
     echo("Checking BGP peer: ".$peer_ip." ");
-    
+
     if (!strstr($peer_ip, ':') && !$use_cisco_v2)
     {
       // Common IPv4 BGP4 MIB
@@ -331,4 +331,4 @@ if ($config['enable_bgp'])
   } // End While loop on peers
 } // End check for BGP support
 
-?>
+// end includes/polling/bgp-peers.inc.php
