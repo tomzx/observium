@@ -16,12 +16,21 @@ echo('    <tr>');
 echo('      <th width="250">Device</th>');
 echo('      <th>Memory</th>');
 echo('      <th width="100"></th>');
-echo('      <th width="280">Usage</th>');
+echo('      <th width="280"><a href="'. generate_url($vars, array('sort' => 'usage')).'">Usage</a></th>');
 echo('      <th width="50">Used</th>');
 echo('    </tr>');
 echo('  </thead>');
 
-foreach (dbFetchRows($sql) as $storage)
+$storage_array = dbFetchRows($sql);
+
+switch($vars['sort'])
+{
+  case 'usage':
+    $storage_array = array_sort($storage_array, 'storage_perc', SORT_DESC);
+    break;
+}
+
+foreach ($storage_array as $storage)
 {
   if (isset($cache['devices']['id'][$storage['device_id']]))
   {
