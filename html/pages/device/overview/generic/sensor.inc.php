@@ -12,7 +12,8 @@ if (count($sensors))
 ?>
 
 <div class="well info_box">
-    <div id="title"><i class="<?php echo($config['sensor_types'][strtolower($sensor_type)]['icon']); ?>"></i> <?php echo($sensor_type) ?></div>
+    <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => strtolower($sensor_type)))); ?>">
+      <i class="<?php echo($config['sensor_types'][strtolower($sensor_type)]['icon']); ?>"></i> <?php echo($sensor_type) ?></a></div>
     <div id="content">
 
 <?php

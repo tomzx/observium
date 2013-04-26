@@ -14,7 +14,8 @@ if (count($drives))
 ?>
 
    <div class="well info_box">
-      <div id="title"><i class="oicon-drive"></i> Storage</div>
+      <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'storage'))); ?>">
+        <i class="oicon-drive"></i> Storage</a></div>
       <div id="content">
 
 <?php

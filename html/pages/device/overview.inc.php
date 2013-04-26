@@ -85,7 +85,7 @@ echo('<div class="span6">');
 
 // Right Pane
 include("overview/processors.inc.php");
-if(is_array($device_state['ucd_mem']))
+if (is_array($device_state['ucd_mem']))
 {
   include("overview/ucd_mem.inc.php");
 } else {
@@ -94,7 +94,7 @@ if(is_array($device_state['ucd_mem']))
 
 include("overview/storage.inc.php");
 
-if(is_array($entity_state['group']['c6kxbar'])) { include("overview/c6kxbar.inc.php"); }
+if (is_array($entity_state['group']['c6kxbar'])) { include("overview/c6kxbar.inc.php"); }
 
 include("overview/toner.inc.php");
 include("overview/sensors/temperatures.inc.php");
@@ -109,7 +109,8 @@ include("overview/sensors/frequencies.inc.php");
 // Start events
 ?>
    <div class="well info_box">
-      <div id="title"><i class="oicon-clipboard-audit"></i> Events</div>
+      <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'logs', 'section' => 'eventlog'))); ?>">
+        <i class="oicon-clipboard-audit"></i> Events</a></div>
       <div id="content">
 <?php
       print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' => TRUE));

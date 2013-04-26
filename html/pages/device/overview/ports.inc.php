@@ -5,7 +5,8 @@ if ($ports['total'])
 ?>
 
 <div class="well info_box">
-    <div id="title"><i class="oicon-network-ethernet"></i> Ports</div>
+    <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'ports'))); ?>">
+      <i class="oicon-network-ethernet"></i> Ports</a></div>
     <div id="content">
 
 <?php

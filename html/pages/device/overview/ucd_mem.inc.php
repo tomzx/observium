@@ -1,5 +1,6 @@
   <div class="well info_box">
-    <div id="title"><i class="oicon-memory"></i> Memory Usage</div>
+    <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'graphs', 'group' => 'system'))); ?>">
+      <i class="oicon-memory"></i> Memory Usage</a></div>
     <div id="content">
 
 <?php
