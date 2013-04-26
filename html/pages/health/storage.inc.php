@@ -23,8 +23,12 @@ echo('  </thead>');
 
 foreach (dbFetchRows($sql) as $storage)
 {
-  if (device_permitted($storage['device_id']))
+  if (isset($cache['devices']['id'][$storage['device_id']]))
   {
+    if (!$config['web_show_disabled'])
+    {
+      if ($cache['devices']['id'][$storage['device_id']]['disabled']) { continue; }
+    }
 
     $graph_array           = array();
     $graph_array['to']     = $config['time']['now'];
@@ -45,7 +49,7 @@ foreach (dbFetchRows($sql) as $storage)
     $graph_array['from'] = $config['time']['day'];
     $mini_graph =  generate_graph_tag($graph_array);
 
-    $total = formatStorage($storage['storage_total']);
+    $total = formatStorage($storage['storage_size']);
     $used = formatStorage($storage['storage_used']);
     $free = formatStorage($storage['storage_free']);
 

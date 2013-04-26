@@ -22,8 +22,13 @@ $sql .= " ORDER BY `devices`.`hostname`, `processors`.`processor_descr`";
 
 foreach (dbFetchRows($sql) as $proc)
 {
-  if (device_permitted($proc['device_id']))
+  if (isset($cache['devices']['id'][$proc['device_id']]))
   {
+    if (!$config['web_show_disabled'])
+    {
+      if ($cache['devices']['id'][$proc['device_id']]['disabled']) { continue; }
+    }
+
     $device = $proc;
 
     // FIXME should that really be done here? :-)

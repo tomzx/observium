@@ -22,8 +22,12 @@ $sql .= " ORDER BY `devices`.`hostname`";
 
 foreach (dbFetchRows($sql) as $mempool)
 {
-  if (device_permitted($mempool['device_id']))
+  if (isset($cache['devices']['id'][$mempool['device_id']]))
   {
+    if (!$config['web_show_disabled'])
+    {
+      if ($cache['devices']['id'][$mempool['device_id']]['disabled']) { continue; }
+    }
 
     $graph_array           = array();
     $graph_array['to']     = $config['time']['now'];

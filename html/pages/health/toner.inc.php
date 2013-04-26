@@ -15,8 +15,13 @@ echo("<tr class=tablehead>
 
 foreach (dbFetchRows("SELECT * FROM `toner` AS S, `devices` AS D WHERE S.device_id = D.device_id ORDER BY D.hostname, S.toner_descr") as $toner)
 {
-  if (device_permitted($toner['device_id']))
+  if (isset($cache['devices']['id'][$toner['device_id']]))
   {
+    if (!$config['web_show_disabled'])
+    {
+      if ($cache['devices']['id'][$toner['device_id']]['disabled']) { continue; }
+    }
+
     $total = $toner['toner_capacity'];
     $perc = $toner['toner_current'];
 

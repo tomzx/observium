@@ -25,17 +25,20 @@ echo('  <tbody>');
 
 foreach (dbFetchRows($sql, $param) as $sensor)
 {
-
- if (device_permitted($sensor['device_id']))
- {
-
-  $alert = "";
-  if (!is_numeric($sensor['sensor_value']))
+  if (isset($cache['devices']['id'][$sensor['device_id']]))
   {
-    $sensor['sensor_value'] = "NaN";
-  } else {
-    if ($sensor['sensor_value'] >= $sensor['sensor_limit']) { $alert = '<img src="images/16/flag_red.png" alt="alert" />'; }
-  }
+    if (!$config['web_show_disabled'])
+    {
+      if ($cache['devices']['id'][$sensor['device_id']]['disabled']) { continue; }
+    }
+
+    $alert = "";
+    if (!is_numeric($sensor['sensor_value']))
+    {
+      $sensor['sensor_value'] = "NaN";
+    } else {
+      if ($sensor['sensor_value'] >= $sensor['sensor_limit']) { $alert = '<img src="images/16/flag_red.png" alt="alert" />'; }
+    }
 
     // FIXME - make this "four graphs in popup" a function/include and "small graph" a function.
     // FIXME - So now we need to clean this up and move it into a function. Isn't it just "print-graphrow"?
