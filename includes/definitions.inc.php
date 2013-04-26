@@ -1507,4 +1507,4 @@ $config['ipmi_unit']['discrete']  = '';
 // INCLUDE THE VMWARE DEFINITION FILE.
 require_once("vmware_guestid.inc.php");
 
-?>
+// End includes/definitions.inc.php

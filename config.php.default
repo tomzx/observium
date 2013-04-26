@@ -21,4 +21,4 @@ $config['snmp']['community'] = array("public");
 // Authentication Model
 $config['auth_mechanism'] = "mysql";    // default, other options: ldap, http-auth, please see documentation for config help
 
-?>
+// End config.php

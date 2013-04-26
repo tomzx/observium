@@ -592,4 +592,4 @@ $config['api']['encryption']['key']                = "I_Need_To_Change_This_Key"
 
 $config['shorthost']['length'] = 12; // Alter shorthost() target length, changing this is not officially supported!
 
-?>
+// End includes/defaults.inc.php
