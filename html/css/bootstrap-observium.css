@@ -399,6 +399,11 @@ legend {
 
 }
 
+.info_box #title a {
+    color: #555;
+    text-decoration: none;
+}
+
 .info_box #content {
   margin-top: -10px;
 }
