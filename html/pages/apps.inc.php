@@ -1,6 +1,6 @@
 <?php
 
-/// FIXME should come from somewhere else; these are also kind of duplicated more eloquently in device/apps
+/// FIXME this list should come from somewhere else; these are also kind of duplicated more eloquently in device/apps
 $graphs['apache']            = array('bits', 'hits', 'scoreboard', 'cpu');
 $graphs['drbd']              = array('disk_bits', 'network_bits', 'queue', 'unsynced');
 $graphs['mysql']             = array('network_traffic', 'connections', 'command_counters', 'select_types');
@@ -15,6 +15,7 @@ $graphs['unbound']           = array('queries', 'queue', 'memory', 'qtype');
 $graphs['freeradius']        = array('access');
 $graphs['powerdns-recursor'] = array('queries', 'timeouts', 'cache', 'latency');
 $graphs['exim-mailqueue']    = array('total');
+$graphs['zimbra']            = array('threads','mtaqueue'); # FIXME 2 more!
 
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],

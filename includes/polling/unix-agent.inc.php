@@ -40,7 +40,7 @@ if ($device['os_group'] == "unix")
     foreach (explode("<<<", $agent_raw) as $section)
     {
       list($section, $data) = explode(">>>", $section);
-      list($sa, $sb) = explode("-", $section, 2);
+      list($sa, $sb, $sc) = explode("-", $section, 3);
 
       ## Compatibility with versions of scripts with and without app-
       ## Disabled for DRBD because it falsely detects the check_mk output
@@ -48,14 +48,24 @@ if ($device['os_group'] == "unix")
       if ($section == "apache") { $sa = "app"; $sb = "apache"; }
       if ($section == "mysql")  { $sa = "app"; $sb = "mysql"; }
       if ($section == "nginx")  { $sa = "app"; $sb = "nginx"; }
+
+      # FIXME why is this here? New application scripts should just return app-$foo
       if ($section == "freeradius")  { $sa = "app"; $sb = "freeradius"; }
       if ($section == "postfix_qshape")  { $sa = "app"; $sb = "postfix_qshape"; }
       if ($section == "postfix_mailgraph")  { $sa = "app"; $sb = "postfix_mailgraph"; }
 #      if ($section == "drbd")   { $sa = "app"; $sb = "drbd"; }
+      
+      # Workaround for older script where we didn't split into 3 possible parts yet
+      if ($section == "app-powerdns-recursor") { $sa = "app"; $sb = "powerdns-recursor"; $sc = ""; }
 
       if (!empty($sa) && !empty($sb))
       {
-        $agent_data[$sa][$sb] = trim($data);
+        if (!empty($sc))
+        {
+          $agent_data[$sa][$sb][$sc] = trim($data);
+        } else {
+          $agent_data[$sa][$sb] = trim($data);
+        }
       } else {
         $agent_data[$section] = trim($data);
       }

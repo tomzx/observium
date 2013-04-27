@@ -897,4 +897,46 @@ function is_port_valid($port, $device)
   return $valid;
 }
 
+# Parse CSV files with or without header, and return a multidimensional array
+function parse_csv($content, $has_header = 1, $separator = ",")
+{
+  $lines = explode("\n", $content);
+  $result = array();
+
+  # If the CSV file has a header, load up the titles into $headers
+  if ($has_header)
+  {
+    $headcount = 1;
+    $header = array_shift($lines);
+    foreach (explode($separator,$header) as $heading)
+    {
+      $headers[$headcount] = trim($heading);
+      $headcount++;
+    }
+  }
+
+  # Process every line
+  foreach ($lines as $line)
+  {
+    $entrycount = 1;
+    foreach (explode($separator,$line) as $entry)
+    {
+      # If we use header, place the value inside the named array entry
+      # Otherwise, just stuff it in numbered fields in the array
+      if ($has_header)
+      {
+        $line_array[$headers[$entrycount]] = trim($entry);
+      } else {
+        $line_array[] = trim($entry);
+      }
+      $entrycount++;
+    }
+
+    # Add resulting line array to final result
+    $result[] = $line_array; unset($line_array);
+  }
+
+  return $result;
+}
+
 ?>
