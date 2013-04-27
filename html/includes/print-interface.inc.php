@@ -146,7 +146,7 @@ echo("</td>");
 echo("<td width=375 valign=top class=interface-desc>");
 if (strpos($port['label'], "oopback") === false && !$graph_type)
 {
-  foreach (dbFetchRows("SELECT * FROM `links` AS L, `ports` AS I, `devices` AS D WHERE L.local_port_id = ? AND L.remote_port_id = I.port_id AND I.device_id = D.device_id", array($if_id)) as $link)
+  foreach (dbFetchRows("SELECT * FROM `links` AS L, `ports` AS I, `devices` AS D WHERE L.local_port_id = ? AND L.remote_port_id = I.port_id AND I.device_id = D.device_id", array($port['port_id'])) as $link)
   {
 #         echo("<img src='images/16/connect.png' align=absmiddle alt='Directly Connected' /> " . generate_port_link($link, makeshortif($link['label'])) . " on " . generate_device_link($link, shorthost($link['hostname'])) . "</a><br />");
 #         $br = "<br />";
