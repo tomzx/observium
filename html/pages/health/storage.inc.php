@@ -13,11 +13,13 @@ if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $
 echo('<table class="table '.$stripe_class.' table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
 echo('    <tr>');
-echo('      <th width="250">Device</th>');
-echo('      <th>Memory</th>');
-echo('      <th width="100"></th>');
-echo('      <th width="280"><a href="'. generate_url($vars, array('sort' => 'usage')).'">Usage</a></th>');
-echo('      <th width="50">Used</th>');
+echo('      <th width="250"><a href="'. generate_url($vars, array('sort' => 'hostname')).'">Device</a></th>');
+echo('      <th><a href="'. generate_url($vars, array('sort' => 'mountpoint')).'">Mountpoint</a></th>');
+echo('      <th><a href="'. generate_url($vars, array('sort' => 'size')).'">Size</a></th>');
+echo('      <th><a href="'. generate_url($vars, array('sort' => 'used')).'">Used</a></th>');
+echo('      <th><a href="'. generate_url($vars, array('sort' => 'free')).'">Free</a></th>');
+echo('      <th></th>');
+echo('      <th width="280"><a href="'. generate_url($vars, array('sort' => 'usage')).'">Usage %</a></th>');
 echo('    </tr>');
 echo('  </thead>');
 
@@ -27,6 +29,17 @@ switch($vars['sort'])
 {
   case 'usage':
     $storage_array = array_sort($storage_array, 'storage_perc', SORT_DESC);
+    break;
+  case 'mountpoint':
+    $storage_array = array_sort($storage_array, 'storage_descr', SORT_DESC);
+    break;
+  case 'size':
+  case 'free':
+  case 'used':
+    $storage_array = array_sort($storage_array, 'storage_'.$vars['sort'], SORT_DESC);
+    break;
+  case 'hostname':
+    $storage_array = array_sort($storage_array, 'hostname', SORT_ASC);
     break;
 }
 
@@ -67,12 +80,14 @@ foreach ($storage_array as $storage)
     echo('<tr>
           <td class=list-bold>' . generate_device_link($storage) . '</td>
           <td>'.overlib_link($link, $storage['storage_descr'],$overlib_content).'</td>
+          <td>'.$total.'</td>
+          <td>'.$used.'</td>
+          <td>'.$free.'</td>
           <td>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
           <td><a href="'.$proc_url.'" '.$proc_popup.'>
-            '.print_percentage_bar (400, 20, $storage['storage_perc'], $used.' / '.$total, "ffffff", $background['left'], $free , "ffffff", $background['right']).'
+            '.print_percentage_bar (400, 20, $storage['storage_perc'], $storage['storage_perc'].'%', "ffffff", $background['left'], 100-$storage['storage_perc']."%" , "ffffff", $background['right']).'
             </a>
           </td>
-          <td>'.$storage['storage_perc'].'%</td>
         </tr>
      ');
 

@@ -44,11 +44,11 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
     <div id="title"><i class="oicon-user-detective"></i> Development Team</div>
     <div id="content">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
-          <dt style="text-align: left;"><img src="images/icons/flags/gb.png"> Adam Armstrong</dt><dd>Project Leader</dd>
-          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Tom Laermans</dt><dd>Committer & Developer</dd>
-          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Geert Hauwaerts</dt><dd>Developer</dd>
-          <dt style="text-align: left;"><img src="images/icons/flags/be.png"> Dennis de Houx</dt><dd>Developer</dd>
-          <dt style="text-align: left;"><img src="images/icons/flags/ru.png"> Mike Stupalov</dt><dd>Developer</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Adam Armstrong</dt><dd>Project Leader</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Tom Laermans</dt><dd>Committer & Developer</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Geert Hauwaerts</dt><dd>Developer</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Dennis de Houx</dt><dd>Developer</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Mike Stupalov</dt><dd>Developer</dd>
         </dl>
     </div>
   </div>
@@ -57,16 +57,17 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
     <div id="title"><i class="oicon-users"></i> Acknowledgements</div>
     <div id="content">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
-          <dt style="text-align: left;"><i class="oicon-user"></i> Twitter</dt><dd>Bootstrap CSS Framework</dd>
-          <dt style="text-align: left;  width:200px;"><i class="oicon-user"></i> Yusuke Kamiyamane (p@yusukekamiyamane.com)</dt><dd>Fugue Iconset</dd>
-          <dt style="text-align: left;"><i class="oicon-user"></i> Stu Nicholls</dt><dd>Dropdown menu CSS code.</dd>
-          <dt style="text-align: left;"><i class="oicon-user"></i> Mark James</dt><dd>Silk Iconset.</dd>
-          <dt style="text-align: left;"><i class="oicon-user"></i> Erik Bosrup</dt><dd>Overlib Library.</dd>
-          <dt style="text-align: left; width:200px;"><i class="oicon-user"></i> Jonathan De Graeve</dt><dd>SNMP code improvements.</dd>
-          <dt style="text-align: left;"><i class="oicon-user"></i> Xiaochi Jin</dt><dd>Logo design.</dd>
-          <dt style="text-align: left;"><i class="oicon-user"></i> Bruno Pramont</dt><dd>Collectd code.</dd>
-          <dt style="text-align: left;"><i class="oicon-user"></i> David Farrell (DavidPFarrell@gmail.com)</dt><dd>Help with parsing net-SNMP output in PHP.</dd>
-          <dt style="text-align: left;"><i class="oicon-user"></i> Job Snijders</dt><dd>Python-based multi-instance poller wrapper.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Twitter</dt><dd>Bootstrap CSS Framework</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> <a href="mailto:p@yusukekamiyamane.com" alt="p@yusukekamiyamane.com">Yusuke Kamiyamane</a></dt><dd>Fugue Iconset</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Stu Nicholls</dt><dd>Dropdown menu CSS code.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Mark James</dt><dd>Silk Iconset.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Erik Bosrup</dt><dd>Overlib Library.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Jonathan De Graeve</dt><dd>SNMP code improvements.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Xiaochi Jin</dt><dd>Logo design.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Akichi Ren</dt><dd>Post-steampunk observational hamster</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Bruno Pramont</dt><dd>Collectd code.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> <a href="mailto:DavidPFarrell@gmail.com" alt="DavidPFarrell@gmail.com">David Farrell</a></dt><dd>Help with parsing net-SNMP output in PHP.</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Job Snijders</dt><dd>Python-based multi-instance poller wrapper.</dd>
         </dl>
         </div>
       </div>
