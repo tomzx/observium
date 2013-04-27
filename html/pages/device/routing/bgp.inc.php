@@ -17,6 +17,27 @@ print_optionbar_start();
 
 echo("<span style='font-weight: bold;'>BGP</span> &#187; ");
 
+  if (!$vars['type']) { $vars['type'] = "all"; }
+
+  if ($vars['type'] == "all") { echo("<span class='pagemenu-selected'>"); }
+  echo(generate_link("All",$vars, array('type' => 'all')));
+  if ($vars['type'] == "all") { echo("</span>"); }
+
+  echo(" | ");
+
+  if ($vars['type'] == "internal") { echo("<span class='pagemenu-selected'>"); }
+  echo(generate_link("iBGP",$vars, array('type' => 'internal')));
+  if ($vars['type'] == "internal") { echo("</span>"); }
+
+  echo(" | ");
+
+  if ($vars['type'] == "external") { echo("<span class='pagemenu-selected'>"); }
+  echo(generate_link("eBGP",$vars, array('type' => 'external')));
+  if ($vars['type'] == "external") { echo("</span>"); }
+
+  echo(" | ");
+
+
 if ($vars['view'] == "basic") { echo("<span class='pagemenu-selected'>"); }
 echo(generate_link("Basic", $link_array,array('view'=>'basic')));
 if ($vars['view'] == "basic") { echo("</span>"); }
@@ -76,10 +97,19 @@ echo('<thead>');
 echo('<tr><th></th><th></th><th>Peer address</th><th>Type</th><th>AFI.SAFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
 echo('</thead>');
 
+  if ($vars['type'] == "external")
+  {
+    $where = " AND bgpPeerRemoteAs != '".$device['bgpLocalAs']."'";
+  } elseif ($vars['type'] == "internal") {
+    $where = " AND bgpPeerRemoteAs = '".$device['bgpLocalAs']."'";
+  }
+
+
 $sql = 'SELECT * FROM `bgpPeers` AS B
         LEFT JOIN `bgpPeers-state` AS S ON B.bgpPeer_id = S.bgpPeer_id
-        WHERE `device_id` = ?
+        WHERE `device_id` = ? '.$where.'
         ORDER BY `bgpPeerRemoteAs`, `bgpPeerRemoteAddr`';
+
 foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 {
 
