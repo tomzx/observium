@@ -208,8 +208,8 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
 
                echo("$br");
 
-               if ($int_links_phys[$int_link]) { echo("<img align=absmiddle src='images/16/connect.png'> "); } else {
-                                                                                 echo("<img align=absmiddle src='images/16/bullet_go.png'> "); }
+               if ($int_links_phys[$int_link]) { echo('<a alt="Directly connected" class="oicon-connect"><a> '); } else {
+                                                                                 echo('<a alt="Same subnet" class="oicon-arrow_right"><a> '); }
 
                echo("<b>" . generate_port_link($link_if, makeshortif($link_if['label'])) . " on " . generate_device_link($link_if, shorthost($link_if['hostname'])));
 
@@ -252,7 +252,7 @@ if ($port_details)
          if ($higher_if['port_id_high'])
          {
                $this_port = get_port_by_index_cache($device['device_id'], $higher_if['port_id_high']);
-               echo("$br<img src='images/16/arrow_divide.png' align=absmiddle> <strong>" . generate_port_link($this_port) . "</strong>");
+               echo($br.'<i class="oicon-arrow-split"></i> <strong>' . generate_port_link($this_port) . '</strong>');
                $br = "<br />";
          }
        }
@@ -262,7 +262,7 @@ if ($port_details)
          if ($lower_if['port_id_low'])
          {
                $this_port = get_port_by_index_cache($device['device_id'], $lower_if['port_id_low']);
-               echo("$br<img src='images/16/arrow_join.png' align=absmiddle> <strong>" . generate_port_link($this_port) . "</strong>");
+               echo($br.'<i class="oicon-arrow-join"></i> <strong>' . generate_port_link($this_port) . "</strong>");
                $br = "<br />";
          }
        }

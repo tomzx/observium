@@ -1,13 +1,13 @@
 <html>
 <head>
   <link rel="stylesheet" href="css/bootstrap.css" />
-  <link rel="stylesheet" href="css/sprites.css" />
+  <link rel="stylesheet" href="css/sprite.css" />
 </head>
 <body>
 <?php
 
 $icons = '';
-foreach (new SplFileObject('css/sprites.css') as $line)
+foreach (new SplFileObject('css/sprite.css') as $line)
 {
   if (preg_match('/\.(oicon[\w\-]+)\s*{/', $line, $matches)) { $icons .= $matches[1] . ' '; }
 }
