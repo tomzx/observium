@@ -1,5 +1,17 @@
 <?php
 
+// Strip out the ports the user isn't allowed to see, if they don't have global rights
+if ($_SESSION['userlevel'] < '7')
+{
+  foreach ($ports as $key => $port)
+  {
+    if (!port_permitted($port['port_id'], $port['device_id']))
+    {
+      unset($ports[$key]);
+    }
+  }
+}
+
 /// Pagination
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 if(!$vars['pageno']) { $vars['pageno'] = "1"; }
@@ -47,8 +59,8 @@ echo("      </tr></thead>");
 $ports_disabled = 0; $ports_down = 0; $ports_up = 0; $ports_total = 0;
 foreach ($ports as $port)
 {
-  if (port_permitted($port['port_id'], $port['device_id']))
-  {
+#  if (port_permitted($port['port_id'], $port['device_id']))
+#  {
 
     if ($port['ifAdminStatus'] == "down") { $ports_disabled++; $table_tab_colour = "#aaaaaa";
     } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down") { $ports_down++; $table_tab_colour = "#cc0000";
@@ -86,7 +98,7 @@ foreach ($ports as $port)
           <td>".$port['human_speed']."<br />".$port['ifMtu']."</td>
           <td >".$port['human_type']."<br />".$port['human_mac']."</td>
         </tr>\n");
-  }
+#  }
 }
 
 echo('</td></tr></table>');

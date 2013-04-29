@@ -248,7 +248,7 @@ if (isset($ports['alerts']))
 
 if ($ports['errored'])
 {
-  echo('<li><a href="ports/errors=1/"><img src="images/16/chart_curve_error.png" border="0" align="absmiddle" /> Errored&nbsp;<span class="right">('.$ports['errored'].')</span></a></li>');
+  echo('<li><a href="ports/errors=yes/"><img src="images/16/chart_curve_error.png" border="0" align="absmiddle" /> Errored&nbsp;<span class="right">('.$ports['errored'].')</span></a></li>');
 }
 
 if ($ports['down'])

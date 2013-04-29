@@ -22,9 +22,12 @@ if($vars['searchbar'] != "hide")
 
 foreach (dbFetchRows("SELECT `device_id`,`hostname` FROM `devices` GROUP BY `hostname` ORDER BY `hostname`") as $data)
 {
-  echo('        <option value="'.$data['device_id'].'"');
-  if ($data['device_id'] == $vars['device_id']) { echo("selected"); }
-  echo(">".$data['hostname']."</option>");
+  if(device_permitted($data['device_id']))
+  {
+    echo('        <option value="'.$data['device_id'].'"');
+    if ($data['device_id'] == $vars['device_id']) { echo("selected"); }
+    echo(">".$data['hostname']."</option>");
+  }
 }
 ?>
       </select>
