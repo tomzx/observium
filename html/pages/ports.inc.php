@@ -295,6 +295,14 @@ foreach ($vars as $var => $value)
           $where .= " AND (`ifInErrors_delta` > '0' OR `ifOutErrors_delta` > '0')";
         }
         break;
+      case 'alerted':
+        if ($value == "yes")
+        {
+          $where .= "AND `ifAdminStatus` = ? AND ( `ifOperStatus` = ? OR `ifOperStatus` = ? )";
+          $param[] = "up";
+          $param[] = "LowerLayerDown";
+          $param[] = "down";
+        }
       case 'state':
         if ($value == "down")
         {
