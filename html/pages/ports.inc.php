@@ -290,7 +290,7 @@ foreach ($vars as $var => $value)
         $where .= ")";
         break;
       case 'errors':
-        if ($value == 1)
+        if ($value == 1 || $value == "yes")
         {
           $where .= " AND (`ifInErrors_delta` > '0' OR `ifOutErrors_delta` > '0')";
         }

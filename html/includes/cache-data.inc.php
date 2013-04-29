@@ -46,8 +46,10 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 #print_r($cache['locations']);
 #echo("</pre>");
 
+echo("<hr style='height: 100px;'>");
+
 // Ports
-foreach (dbFetchRows("SELECT device_id, port_id, ifAdminStatus, ifOperStatus, `deleted`, `ignore` FROM `ports`") as $port)
+foreach (dbFetchRows("SELECT device_id, ports.port_id, ifAdminStatus, ifOperStatus, `deleted`, `ignore`, `ifOutErrors_delta`, `ifInErrors_delta` FROM `ports` LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`") as $port)
 {
   if (!$config['web_show_disabled'])
   {
@@ -68,6 +70,7 @@ foreach (dbFetchRows("SELECT device_id, port_id, ifAdminStatus, ifOperStatus, `d
     }
     if ($port['ignore']) { $ports['ignored']++; }
     if ($port['deleted']) { $ports['deleted']++; }
+    if ($port['ifOutErrors_delta'] || $port['ifInErrors_delta']) { $ports['errored']++; }
   }
 }
 
