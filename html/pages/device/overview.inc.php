@@ -67,7 +67,8 @@ if ($config['enable_syslog'])
   { ?>
 
     <div class="well info_box">
-      <div id="title"><i class="oicon-clipboard-eye"></i> Syslog</div>
+      <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'logs', 'section' => 'syslog'))); ?>">
+        <i class="oicon-clipboard-eye"></i> Syslog</a></div>
       <div id="content">
 
     <?php
