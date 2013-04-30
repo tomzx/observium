@@ -477,7 +477,7 @@ $config['enable_libvirt'] = 0; // Enable Libvirt VM support
 $config['libvirt_protocols']    = array("qemu+ssh","xen+ssh"); // Mechanisms used, add or remove if not using this on any of your machines.
 
 // Unix Agent settings
-$config['unix-agent']['port'] = 6556; // Default agent port
+$config['unix-agent']['port'] = 36602; // Default agent port
 
 // Hardcoded ASN descriptions
 $config['astext'][65332] = "Cymru FullBogon Feed";

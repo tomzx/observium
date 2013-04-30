@@ -11,15 +11,29 @@ if ($device['os_group'] == "unix")
   // FIXME - this should be overridable in database
   $agent_port = $config['unix-agent']['port'];
 
+  // Try Official port
   $agent_start = utime();
   $agent_socket = "tcp://".$device['hostname'].":".$agent_port;
-#  $agent = @stream_socket_client($device['hostname'], $agent_port, $errno, $errstr, 10);
   $agent = @stream_socket_client($agent_socket, $errno, $errstr, 10);
 
-  if (!$agent)
+  if(!$agent)
   {
     echo("Connection to UNIX agent on ".$agent_socket." failed. ERROR: ".$errno." ".$errstr."\n");
     logfile("Connection to UNIX agent on ".$agent_socket." failed. ERROR: ".$errno." ".$errstr);
+
+    /// Try check_mk port if the official one doesn't work.
+    $agent_port = "6556";
+    $agent_start = utime();
+    $agent_socket = "tcp://".$device['hostname'].":".$agent_port;
+    $agent = @stream_socket_client($agent_socket, $errno, $errstr, 10);
+
+    if (!$agent)
+    {
+      echo("Connection to UNIX agent on ".$agent_socket." failed. ERROR: ".$errno." ".$errstr."\n");
+      logfile("Connection to UNIX agent on ".$agent_socket." failed. ERROR: ".$errno." ".$errstr);
+    } else {
+      $agent_raw = stream_get_contents($agent);
+    }
   } else {
     $agent_raw = stream_get_contents($agent);
   }

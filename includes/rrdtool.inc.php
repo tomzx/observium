@@ -29,9 +29,9 @@ function rrdtool_pipe_open(&$rrd_process, &$rrd_pipes)
   $command = $config['rrdtool'] . " -";
 
   $descriptorspec = array(
-     0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
-     1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
-     2 => array("pipe", "w")   // stderr is a pipe that the child will write to
+     0 => array("pipe", "r"),  // stdin
+     1 => array("pipe", "w"),  // stdout
+     2 => array("pipe", "w")   // stderr
   );
 
   $cwd = $config['rrd_dir'];
@@ -47,7 +47,7 @@ function rrdtool_pipe_open(&$rrd_process, &$rrd_pipes)
     // $pipes now looks like this:
     // 0 => writeable handle connected to child stdin
     // 1 => readable handle connected to child stdout
-    // Any error output will be appended to /tmp/error-output.txt
+    // 2 => readable handle connected to child stderr
     return TRUE;
   }
 }
@@ -166,14 +166,21 @@ function rrdtool($command, $filename, $options)
     print Console_Color::convert("[%rRRD Disabled%n]");
   } else {
     fwrite($rrd_pipes[0], $cmd."\n");
+    usleep(1000);
   }
+  $std_out = trim(stream_get_contents($rrd_pipes[1]));
+  $std_err = trim(stream_get_contents($rrd_pipes[2]));
+
+  // Check rrdtool's output for the command.
+  if ( strstr($std_out, "ERROR") ) {
+#    log_event($std_out , '', 'rrdtool');
+  }
+
   if ($debug)
   {
-    echo stream_get_contents($rrd_pipes[1]);
-    echo stream_get_contents($rrd_pipes[2]);
-    print Console_Color::convert("RRD[%g".$cmd."%n] ");
-  } else {
-    $tmp  = stream_get_contents($rrd_pipes[1]).stream_get_contents($rrd_pipes[2]);
+    print Console_Color::convert('RRD[cmd[%g'.$cmd.'%n] ');
+    print Console_Color::convert('stdout[%g'.$std_out.'%n] ');
+    print Console_Color::convert('stderr[%g'.$std_err.'%n]]');
   }
 
 }

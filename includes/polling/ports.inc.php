@@ -249,6 +249,8 @@ foreach ($ports as $port)
       }
     }
 
+    
+
     // Parse description (usually ifAlias) if config option set
     if (isset($config['port_descr_parser']) && is_file($config['install_dir'] . "/" . $config['port_descr_parser']))
     {
@@ -277,7 +279,7 @@ foreach ($ports as $port)
         $oid_diff = $this_port[$oid] - $port[$oid];
         $oid_rate  = $oid_diff / $polled_period;
         if ($oid_rate < 0) { $oid_rate = "0"; echo("negative $oid"); }
-        $port['stats'][$oid.'_rate'] = $oid_rate;
+        $port['stats'][$oid.'_rate'] = $oid_rate; $port['alert_array'][$oid.'_rate'] = $oid_rate;
         $port['stats'][$oid.'_diff'] = $oid_diff;
         $port['state'][$oid.'_rate'] = $oid_rate;
         $port['state'][$oid.'_delta'] = $oid_diff;
@@ -309,15 +311,27 @@ foreach ($ports as $port)
       file_put_contents($debug_file, $debug_temp, FILE_APPEND);
     }
 
+    // Put ifMtu into alert array
+    if (is_numeric($this_port['ifMtu']))
+    {
+      $port['alert_array']['ifMtu'] = $this_port['ifMtu'];
+    }
+
     // If we have a valid ifSpeed we should populate the percentage stats for checking.
     if (is_numeric($this_port['ifSpeed']))
     {
       $port['stats']['ifInBits_perc'] = round($port['stats']['ifInBits_rate'] / $this_port['ifSpeed'] * 100);
       $port['stats']['ifOutBits_perc'] = round($port['stats']['ifOutBits_rate'] / $this_port['ifSpeed'] * 100);
+      $port['alert_array']['ifSpeed'] = $this_port['ifSpeed'];
+
     }
 
     $port['state']['ifInOctets_perc'] = $port['stats']['ifInBits_perc'];
     $port['state']['ifOutOctets_perc'] = $port['stats']['ifOutBits_perc'];
+
+    $port['alert_array']['ifInOctets_perc'] = $port['stats']['ifInBits_perc'];
+    $port['alert_array']['ifOutOctets_perc'] = $port['stats']['ifOutBits_perc'];
+
 
     echo('bps('.formatRates($port['stats']['ifInBits_rate']).'/'.formatRates($port['stats']['ifOutBits_rate']).')');
     echo('bytes('.formatStorage($port['stats']['ifInOctets_diff']).'/'.formatStorage($port['stats']['ifOutOctets_diff']).')');
@@ -343,6 +357,7 @@ foreach ($ports as $port)
           echo(" *EXCEEDED*");
       }
     }
+
 
     // Update RRDs
     $rrdfile = get_port_rrdfilename($device, $port);
@@ -398,6 +413,9 @@ foreach ($ports as $port)
 
     // Do PoE MIBs
     if ($config['enable_ports_poe']) { include("port-poe.inc.php"); }
+
+  print_r($port['alert_array']);
+
 
 #    // Do Alcatel Detailed Stats
 #    if ($device['os'] == "aos") { include("port-alcatel.inc.php"); }

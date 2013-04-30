@@ -617,8 +617,8 @@ function snmp2ipv6($ipv6_snmp)
 {
   $ipv6 = explode('.',$ipv6_snmp);
 
-  # Workaround stupid Microsoft bug in Windows 2008 -- this is fixed length!
-  # < fenestro> "because whoever implemented this mib for Microsoft was ignorant of RFC 2578 section 7.7 (2)"
+  // Workaround stupid Microsoft bug in Windows 2008 -- this is fixed length!
+  // < fenestro> "because whoever implemented this mib for Microsoft was ignorant of RFC 2578 section 7.7 (2)"
   if (count($ipv6) == 17 && $ipv6[0] == 16)
   {
     array_shift($ipv6);
@@ -668,7 +668,7 @@ function get_astext($asn)
   }
 }
 
-# Use this function to write to the eventlog table
+// Use this function to write to the eventlog table
 function log_event($text, $device = NULL, $type = NULL, $reference = NULL)
 {
   global $debug;
@@ -797,7 +797,10 @@ function notify($device,$title,$message)
   }
 }
 
-# from http://ditio.net/2008/11/04/php-string-to-hex-and-hex-to-string-functions/
+// By Greg Winiarski of ditio.net
+// http://ditio.net/2008/11/04/php-string-to-hex-and-hex-to-string-functions/
+// We claim no copyright over this function and assume that it is free to use.
+
 function hex2str($hex)
 {
   $string='';
@@ -810,19 +813,19 @@ function hex2str($hex)
   return $string;
 }
 
-# Convert an SNMP hex string to regular string
+// Convert an SNMP hex string to regular string
 function snmp_hexstring($hex)
 {
   return hex2str(str_replace(' ','',str_replace(' 00','',$hex)));
 }
 
-# Check if the supplied string is an SNMP hex string
+// Check if the supplied string is an SNMP hex string
 function isHexString($str)
 {
   return preg_match("/^[a-f0-9][a-f0-9]( [a-f0-9][a-f0-9])*$/is",trim($str));
 }
 
-# Include all .inc.php files in $dir
+// Include all .inc.php files in $dir
 function include_dir($dir, $regex = "")
 {
   global $device, $config, $debug, $valid;

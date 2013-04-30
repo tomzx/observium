@@ -634,14 +634,14 @@ function print_events($vars)
   }
 
   // Don't show ignored and disabled devices
-  $query_device = ' AND D.ignore = 0 ';
-  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+#  $query_device = ' AND D.ignore = 0 ';
+#  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
 
   $query = 'FROM `eventlog` AS E ';
-  $query .= 'LEFT JOIN `devices` AS D ON E.device_id = D.device_id ';
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
   $query_count = 'SELECT COUNT(event_id) '.$query;
+
   /// FIXME Mike: bad table column `type` they intersect with table `devices`
   $query = 'SELECT STRAIGHT_JOIN E.device_id, E.timestamp, E.message, E.type, E.reference '.$query;
   $query .= ' ORDER BY `timestamp` DESC ';
@@ -649,6 +649,7 @@ function print_events($vars)
 
   // Query events
   $entries = dbFetchRows($query, $param);
+
   // Query events count
   if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
 

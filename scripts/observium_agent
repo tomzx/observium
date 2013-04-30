@@ -1,21 +1,13 @@
 #!/bin/bash
+#                _                         _
+#           ___ | |__  ___  ___ _ ____   _(_)_   _ _ __ ___
+#          / _ \| '_ \/ __|/ _ \ '__\ \ / / | | | | '_ ` _ \
+#         | (_) | |_) \__ \  __/ |   \ V /| | |_| | | | | | |
+#          \___/|_.__/|___/\___|_|    \_/ |_|\__,_|_| |_| |_|
+#                                                 Linux Agent
+#  Copyright Adam Armstrong 2013
 #
-# +------------------------------------------------------------------+
-# |              _                         _                         |
-# |         ___ | |__  ___  ___ _ ____   _(_)_   _ _ __ ___          |
-# |        / _ \| '_ \/ __|/ _ \ '__\ \ / / | | | | '_ ` _ \         |
-# |       | (_) | |_) \__ \  __/ |   \ V /| | |_| | | | | | |        |
-# |        \___/|_.__/|___/\___|_|    \_/ |_|\__,_|_| |_| |_|        |
-# |                                                                  |
-# | Copyright Adam Armstrong 2012                adama@observium.org |
-# +------------------------------------------------------------------+
-#
-# +------------------------------------------------------------------+
-# | Copyright Mathias Kettner 2012             mk@mathias-kettner.de |
-# +------------------------------------------------------------------+
-#
-# This file was originally part of Check_MK.
-# The official homepage is at http://mathias-kettner.de/check_mk.
+#  Based on Check_MK from Mathias Kettner <mk@mathias-kettner.de>
 #
 # check_mk is free software;  you can redistribute it and/or modify it
 # under the  terms of the  GNU General Public License  as published by
@@ -32,8 +24,8 @@
 export LC_ALL=C
 unset LANG
 
-export MK_LIBDIR="/usr/lib/check_mk_agent"
-export MK_CONFDIR="/etc/check_mk"
+export AGENT_LIBDIR="/usr/lib/observium_agent"
+export AGENT_CONFDIR="/etc/observium"
 
 # Make sure, locally installed binaries are found
 PATH=$PATH:/usr/local/bin
@@ -41,12 +33,12 @@ PATH=$PATH:/usr/local/bin
 # All executables in PLUGINSDIR will simply be executed and their
 # ouput appended to the output of the agent. Plugins define their own
 # sections and must output headers with '<<<' and '>>>'
-PLUGINSDIR=$MK_LIBDIR/plugins
+PLUGINSDIR=$AGENT_LIBDIR/plugins
 
 # All executables in LOCALDIR will by executabled and their
 # output inserted into the section <<<local>>>. Please
 # refer to online documentation for details about local checks.
-LOCALDIR=$MK_LIBDIR/local
+LOCALDIR=$AGENT_LIBDIR/local
 
 
 # close standard input (for security reasons) and stderr
@@ -57,24 +49,22 @@ else
     exec <&- 2>/dev/null
 fi
 
-echo '<<<check_mk>>>'
-echo Version: 1.2.0b1
+echo '<<<Observium>>>'
+echo Version: 1.0
 echo AgentOS: linux
 echo PluginsDirectory: $PLUGINSDIR
 echo LocalDirectory: $LOCALDIR
-echo AgentDirectory: $MK_CONFDIR
+echo AgentDirectory: $AGENT_CONFDIR
 
 # If we are called via xinetd, try to find only_from configuration
 if [ -n "$REMOTE_HOST" ]
 then
     echo -n 'OnlyFrom: '
-    echo $(sed -n '/^service[[:space:]]*check_mk/,/}/s/^[[:space:]]*only_from[[:space:]]*=[[:space:]]*\(.*\)/\1/p' /etc/xinetd.d/* | head -n1)
+    echo $(sed -n '/^service[[:space:]]*observium_agent/,/}/s/^[[:space:]]*only_from[[:space:]]*=[[:space:]]*\(.*\)/\1/p' /etc/xinetd.d/* | head -n1)
 fi
 
-# Partitionen (-P verhindert Zeilenumbruch bei langen Mountpunkten)
-# Achtung: NFS-Mounts werden grundsaetzlich ausgeblendet, um
-# Haenger zu vermeiden. Diese sollten ohnehin besser auf dem
-# Server, als auf dem Client ueberwacht werden.
+# Show filesystems. -P Prevents wrapping long mount points
+# Hide NFS mounts to prevent hanging
 echo '<<<df>>>'
 df -PTlk -x smbfs -x tmpfs -x cifs -x iso9660 -x udf -x nfsv4 | sed 1d
 # VMWare shows its own filesystems with 'vdf'. Just one
@@ -116,13 +106,14 @@ echo '<<<ps>>>'
 ps ax -o user,vsz,rss,pcpu,command --columns 10000 | sed -e 1d -e 's/ *\([^ ]*\) *\([^ ]*\) *\([^ ]*\) *\([^ ]*\) */(\1,\2,\3,\4) /'
 
 
-# Speicherauslastung
+# Memory Usage
 echo '<<<mem>>>'
 egrep -v '^Swap:|^Mem:|total:' < /proc/meminfo
 
-# Load und Anzahl Prozesse
+# Load and active processes.
 echo '<<<cpu>>>'
 echo "$(cat /proc/loadavg) $(grep -E '^CPU|^processor' < /proc/cpuinfo | wc -l)"
+
 
 # Uptime
 echo '<<<uptime>>>'
@@ -155,13 +146,13 @@ fi
 echo '<<<tcp_conn_stats>>>'
 netstat -nt | awk ' /^tcp/ { c[$6]++; } END { for (x in c) { print x, c[x]; } }'
 
-# Platten- und RAID-Status von LSI-Controlleren, falls vorhanden
+# Disk and RAID status of LSI Controllers, if available
 if which cfggen > /dev/null ; then
    echo '<<<lsi>>>'
    cfggen 0 DISPLAY | egrep '(Target ID|State|Volume ID|Status of volume)[[:space:]]*:' | sed -e 's/ *//g' -e 's/:/ /'
 fi
 
-# Multipathgeraete
+# Multipath devices.
 if which multipath >/dev/null ; then
     echo '<<<multipath>>>'
     multipath -l
@@ -171,34 +162,34 @@ fi
 echo '<<<md>>>'
 cat /proc/mdstat
 
-# Performancecounter Platten
+# Disk performance counters
 echo '<<<diskstat>>>'
 date +%s
 egrep ' (x?[shv]d[a-z]*|cciss/c[0-9]+d[0-9]+) ' < /proc/diskstats
 
-# Performancecounter Kernel
+# Kernel performance counters
 echo '<<<kernel>>>'
 date +%s
 cat /proc/vmstat /proc/stat
 
-# Statistik der Netzwerkgeraete (Pakete, Kollisionen, etc)
+# Network performance counters (Packets, collisions, etc)
 echo '<<<netctr>>>'
-# Genauen Zeitstempel einfuegen, da Counter von Zeit abhaengen
+# Exact timestamp because counters depend upon the time
 date +%s
 sed -e 1,2d -e 's/:/ /g' < /proc/net/dev
 
 
-if which ipmitool >/dev/null 
+if which ipmitool >/dev/null
 then
     echo '<<<ipmi>>>'
-    IPMI_FILE=$MK_CONFDIR/ipmitool_sensors.cache
-    if [ ! -d $MK_CONFDIR ]; then
-        mkdir -p $MK_CONFDIR
+    IPMI_FILE=$AGENT_CONFDIR/ipmitool_sensors.cache
+    if [ ! -d $AGENT_CONFDIR ]; then
+        mkdir -p $AGENT_CONFDIR
     fi
 
     # Do not use cache file after 20 minutes
     IPMI_MAXAGE=1200
-    
+
     # Check if file exists and is recent enough
     if [ -s $IPMI_FILE ]
     then
@@ -208,7 +199,7 @@ then
             USE_IPMI_FILE=1
         fi
     fi
-    
+
     if [ -s "$IPMI_FILE" ]
     then
         grep -v 'command failed' "$IPMI_FILE" \
@@ -216,7 +207,7 @@ then
         | egrep -v '^[^ ]+ na ' \
         | grep -v ' discrete '
     fi
-    
+
     if [ -z "$USE_IPMI_FILE" -a ! -e "$IPMI_FILE.new" ]
     then
         setsid bash -c "set -o noclobber ; ipmitool sensor list > $IPMI_FILE.new && mv $IPMI_FILE.new $IPMI_FILE || rm -f $IPMI_FILE*" &
@@ -321,7 +312,7 @@ if which ntpq > /dev/null 2>&1 ; then
    waitmax 2 ntpq -p | sed -e 1,2d -e 's/^\(.\)/\1 /' -e 's/^ /%/'
 fi
 
-if which nvidia-settings >/dev/null && [ -S /tmp/.X11-unix/X0 ] 
+if which nvidia-settings >/dev/null && [ -S /tmp/.X11-unix/X0 ]
 then
     echo '<<<nvidia>>>'
     for var in GPUErrors GPUCoreTemp
@@ -418,10 +409,10 @@ then
 fi
 
 # MK's Remote Plugin Executor
-if [ -e "$MK_CONFDIR/mrpe.cfg" ]
+if [ -e "$AGENT_CONFDIR/mrpe.cfg" ]
 then
     echo '<<<mrpe>>>'
-    grep -Ev '^[[:space:]]*($|#)' "$MK_CONFDIR/mrpe.cfg" | \
+    grep -Ev '^[[:space:]]*($|#)' "$AGENT_CONFDIR/mrpe.cfg" | \
     while read descr cmdline
     do
         PLUGIN=${cmdline%% *}
