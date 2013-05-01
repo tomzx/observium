@@ -2,7 +2,7 @@
 
 include("includes/graphs/common.inc.php");
 
-if($width > "500")
+if ($width > "500")
 {
   $descr_len=24;
 } else {
@@ -12,14 +12,16 @@ if($width > "500")
 
 if ($nototal) { $descrlen += "2"; $unitlen += "2";}
 
-if($width > "500")
+if (!$noheader)
 {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
-  if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
-  $rrd_options .= " COMMENT:'\l'";
-} else {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
-
+  if ($width > "500")
+  {
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
+    if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
+    $rrd_options .= " COMMENT:'\l'";
+  } else {
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."Now      Min      Max     Avg\l'";
+  }
 }
 
 $i = 0;

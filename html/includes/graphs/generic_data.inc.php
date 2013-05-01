@@ -18,7 +18,11 @@ if($format == "octets" || $format == "bytes")
 
 $i = 0;
 $units_descr = rrdtool_escape($units_descr, 9);
-$rrd_options .= " COMMENT:'$units_descr  Now      Ave      Max     95th \\n'";
+
+if (!$noheader)
+{
+  $rrd_options .= " COMMENT:'$units_descr  Now      Ave      Max     95th \\n'";
+}
 
 if ($rrd_filename) { $rrd_filename_out = $rrd_filename; $rrd_filename_in = $rrd_filename; }
 if ($inverse) { $in = 'out'; $out = 'in'; } else { $in = 'in'; $out = 'out'; }
@@ -40,7 +44,7 @@ if ($multiplier)
   $rrd_options .= " DEF:".$in."octets_max=".$rrd_filename_in.":".$ds_in.":MAX";
 }
 
-if($_GET['previous'] == "yes")
+if ($_GET['previous'] == "yes")
 {
   if ($multiplier)
   {
@@ -97,7 +101,7 @@ $rrd_options .= " VDEF:95thin=inbits,95,PERCENT";
 $rrd_options .= " VDEF:95thout=outbits,95,PERCENT";
 $rrd_options .= " VDEF:d95thout=doutbits,5,PERCENT";
 
-if($format == "octets" || $format == "bytes")
+if ($format == "octets" || $format == "bytes")
 {
   $units = "Bytes/sec";
   $format = "octets";
@@ -133,7 +137,7 @@ $rrd_options .= " GPRINT:totout:'Out %6.2lf%s)\\\\l'";
 $rrd_options .= " LINE1:95thin#aa0000";
 $rrd_options .= " LINE1:d95thout#aa0000";
 
-if($_GET['previous'] == "yes")
+if ($_GET['previous'] == "yes")
 {
   $rrd_options .= " LINE1.25:in".$format."X#009900:'Prev In \\\\n'";
   $rrd_options .= " LINE1.25:dout".$format."X#000099:'Prev Out'";

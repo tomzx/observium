@@ -3,7 +3,7 @@
 include("includes/graphs/common.inc.php");
 
 $i = 0;
-if($width > "500")
+if ($width > "500")
 {
   $descr_len=18;
 } else {
@@ -13,24 +13,26 @@ if($width > "500")
 
 $unit_text = "Bits/sec";
 
-if($width > "500")
+if (!$noheader)
 {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."    Current      Average     Maximum      '";
-  if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
-  $rrd_options .= " COMMENT:'\l'";
-} else {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."     Now         Ave          Max\l'";
-
+  if ($width > "500")
+  {
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."    Current      Average     Maximum      '";
+    if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
+    $rrd_options .= " COMMENT:'\l'";
+  } else {
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."     Now         Ave          Max\l'";
+  }
 }
 
-if(!isset($multiplier)) { $multiplier = "8"; }
+if (!isset($multiplier)) { $multiplier = "8"; }
 
 foreach ($rrd_list as $rrd)
 {
   if (!$config['graph_colours'][$colours_in][$iter] || !$config['graph_colours'][$colours_out][$iter]) { $iter = 0; }
 
-  if(strlen($rrd['colour_in']))  { $colour_in  = $rrd['colour_in'];  } else { $colour_in  = $config['graph_colours'][$colours_in][$iter]; }
-  if(strlen($rrd['colour_out'])) { $colour_out = $rrd['colour_out']; } else { $colour_out = $config['graph_colours'][$colours_out][$iter]; }
+  if (strlen($rrd['colour_in']))  { $colour_in  = $rrd['colour_in'];  } else { $colour_in  = $config['graph_colours'][$colours_in][$iter]; }
+  if (strlen($rrd['colour_out'])) { $colour_out = $rrd['colour_out']; } else { $colour_out = $config['graph_colours'][$colours_out][$iter]; }
 
   if (isset($rrd['descr_in']))
   {

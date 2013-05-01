@@ -2,7 +2,7 @@
 
 include("includes/graphs/common.inc.php");
 
-if($format == "octets" || $format == "bytes")
+if ($format == "octets" || $format == "bytes")
 {
   $units = "Bps";
   $format = "bytes";
@@ -15,9 +15,13 @@ if($format == "octets" || $format == "bytes")
 
 $i = 0;
 $units_descr = rrdtool_escape($units_descr, 18);
-$rrd_options .= " COMMENT:'$units_descr Current  Average  Maximum'";
-if (!$nototal) { $rrd_options .= " COMMENT:'Total'"; }
-$rrd_options .= " COMMENT:'\\n'";
+
+if (!$noheader)
+{
+  $rrd_options .= " COMMENT:'$units_descr Current  Average  Maximum'";
+  if (!$nototal) { $rrd_options .= " COMMENT:'Total'"; }
+  $rrd_options .= " COMMENT:'\\n'";
+}
 
 foreach ($rrd_list as $rrd)
 {

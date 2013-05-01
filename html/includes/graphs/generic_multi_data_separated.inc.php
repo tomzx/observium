@@ -3,7 +3,7 @@
 include("includes/graphs/common.inc.php");
 
 $i = 0;
-if($width > "500")
+if ($width > "500")
 {
   $descr_len=18;
 } else {
@@ -13,17 +13,19 @@ if($width > "500")
 
 $unit_text = "Bits/sec";
 
-if($width > "500")
+if (!$noheader)
 {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."    Current      Average     Maximum      '";
-  if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
-  $rrd_options .= " COMMENT:'\l'";
-} else {
-  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."     Now         Ave          Max\l'";
-
+  if ($width > "500")
+  {
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."    Current      Average     Maximum      '";
+    if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
+    $rrd_options .= " COMMENT:'\l'";
+  } else {
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."     Now         Ave          Max\l'";
+  }
 }
 
-if(!isset($multiplier)) { $multiplier = "8"; }
+if (!isset($multiplier)) { $multiplier = "8"; }
 
 foreach ($rrd_list as $rrd)
 {
@@ -86,7 +88,7 @@ foreach ($rrd_list as $rrd)
 
 if ($custom_graph) { $rrd_options .= $custom_graph; }
 
-if(!$nototal)
+if (!$nototal)
 {
   $rrd_options .= " CDEF:".$in."octets=" . $in_thing . $pluses;
   $rrd_options .= " CDEF:".$out."octets=" . $out_thing . $pluses;

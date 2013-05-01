@@ -4,10 +4,10 @@ include("includes/graphs/common.inc.php");
 
 // Here we scale the number of numerical columns shown to make sure we keep the text.
 
-if($width > "400") {
+if ($width > "400") {
   $data_len  = "33";
   $data_show = array('lst', 'avg', 'min', 'max');
-} elseif($width > "300") {
+} elseif ($width > "300") {
   $data_len  = "24";
   $data_show = array('lst', 'avg', 'max');
 } else {
@@ -17,29 +17,42 @@ if($width > "400") {
 
 // Here we scale the length of the description to make sure we keep the numbers
 
-if($width > "800")
+if ($width > "1000")
 {
-  $descr_len = "82";
-} elseif($width > "300") {
-  $descr_len = round(($width + 0) / 7) - $data_len;
+  $descr_len = 36;
+}
+else if ($width > "500")
+{
+  $descr_len = 24;   
 } else {
-  $descr_len = round(($width + 16) / 6) - $data_len;
+  $descr_len = 12;
+  $descr_len += round(($width - 250) / 8);
 }
 
 // Build the legend headers using the length values previously calculated
 
-$rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+2),0,$descr_len+2)."'";
-if(in_array("lst", $data_show)) { $rrd_options .= " COMMENT:' Last  '"; }
-if(in_array("avg", $data_show)) { $rrd_options .= " COMMENT:'  Avg  '"; }
-if(in_array("min", $data_show)) { $rrd_options .= " COMMENT:'  Min  '"; }
-if(in_array("max", $data_show)) { $rrd_options .= " COMMENT:'  Max  '"; }
-$rrd_options .= " COMMENT:'\\l'";
-$iter = 0;
+if (!$noheader)
+{
+  $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+2),0,$descr_len+2)."'";
+  if (in_array("lst", $data_show)) { $rrd_options .= " COMMENT:' Last  '"; }
+  if (in_array("avg", $data_show)) { $rrd_options .= " COMMENT:'  Avg  '"; }
+  if (in_array("min", $data_show)) { $rrd_options .= " COMMENT:'  Min  '"; }
+  if (in_array("max", $data_show)) { $rrd_options .= " COMMENT:'  Max  '"; }
+  $rrd_options .= " COMMENT:'\\l'";
+}
+
+$colour_iter = 0;
 
 foreach ($rrd_list as $i => $rrd)
 {
-  if (!$config['graph_colours'][$colours][$iter]) { $iter = 0; }
-  $colour=$config['graph_colours'][$colours][$iter];
+  if ($rrd['colour'])
+  {
+    $colour = $rrd['colour'];
+  } else {
+    if (!$config['graph_colours'][$colours][$colour_iter]) { $colour_iter = 0; }
+    $colour = $config['graph_colours'][$colours][$colour_iter];
+    $colour_iter++;
+  }
 
   $ds = $rrd['ds'];
   $filename = $rrd['filename'];
@@ -75,7 +88,7 @@ foreach ($rrd_list as $i => $rrd)
   if (in_array("max", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%6.1lf%s"; }
 
   $rrd_optionsb .= " COMMENT:'\\l'";
-  $iter++;
+  $colour_iter++;
 
 }
 

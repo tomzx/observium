@@ -41,7 +41,7 @@ if ($graph_max)
   $rrd_options .= " AREA:dout_max#".$colour_area_out_max.":";
 }
 
-if($_GET['previous'] == "yes")
+if ($_GET['previous'] == "yes")
 {
   $rrd_options .= " DEF:".$out."X=".$rrd_filename.":".$ds_out.":AVERAGE:start=".$prev_from.":end=".$from;
   $rrd_options .= " DEF:".$in."X=".$rrd_filename.":".$ds_in.":AVERAGE:start=".$prev_from.":end=".$from;
@@ -119,7 +119,7 @@ if ($percentile)
   $rrd_options .= " LINE1:dpercentile_out#aa0000";
 }
 
-if($_GET['previous'] == "yes")
+if ($_GET['previous'] == "yes")
 {
   $rrd_options .= " LINE1.25:in".$format."X#666666:'Prev In \\\\n'";
   $rrd_options .= " AREA:in".$format."X#99999966:";

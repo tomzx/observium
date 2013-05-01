@@ -1,6 +1,6 @@
 <?php
 
-if($config['old_graphs'])
+if ($config['old_graphs'])
 {
   include("includes/graphs/old_generic_simplex.inc.php");
 } else {
@@ -37,7 +37,7 @@ if ($percentile)
   $rrd_options .= " VDEF:".$ds."_percentile=".$ds.",".$percentile.",PERCENT";
 }
 
-if($_GET['previous'] == "yes")
+if ($_GET['previous'] == "yes")
 {
   if ($multiplier)
   {
@@ -67,7 +67,7 @@ if($_GET['previous'] == "yes")
 #  }
 }
 
-if($colour_minmax)
+if ($colour_minmax)
 {
   $rrd_options .= " AREA:".$ds."_max#c5c5c5";
   $rrd_options .= " AREA:".$ds."_min#ffffffff";
@@ -110,7 +110,7 @@ if ($percentile)
   $rrd_options .= " LINE1:".$ds."_percentile#aa0000";
 }
 
-if($_GET['previous'] == "yes")
+if ($_GET['previous'] == "yes")
 {
   $rrd_options .= " LINE1.25:".$ds."X#666666:'Prev \\\\n'";
   $rrd_options .= " AREA:".$ds."X#99999966:";
