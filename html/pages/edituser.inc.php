@@ -24,14 +24,14 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
   echo('
          <li>
           <input type="hidden" value="edituser" name="page">
-          <select name="user_id" onchange="location.href=\'/edituser/user_id=\' + this.options[this.selectedIndex].value + \'/\';">');
+          <select name="user_id" onchange="location.href=\'edituser/user_id=\' + this.options[this.selectedIndex].value + \'/\';">');
   if (!isset($vars['user_id'])) { echo('<option value="">Select User</option>'); }
 
   foreach ($user_list as $user_entry)
   {
     echo("<option value='" . $user_entry['user_id']  . "'");
     if ($user_entry['user_id'] == $vars['user_id']) { echo(' selected '); }
-    #echo(" onchange=\"location.href='/edituser/user_id=' + this.options[this.selectedIndex].value + '/';\" ");
+    #echo(" onchange=\"location.href='edituser/user_id=' + this.options[this.selectedIndex].value + '/';\" ");
     echo(">" . $user_entry['username'] . "</option>");
   }
 
