@@ -20,14 +20,14 @@ if ($width > "500")
 {
   if (!$noheader)
   {
-    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."  Now      Min       Max      Avg'";
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."  Now     Min      Max     Avg'";
     if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
     $rrd_options .= " COMMENT:'\l'";
   }
 } else {
   if (!$noheader)
   {
-    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."  Now      Min       Max      Avg\l'";
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."  Now     Min      Max     Avg\l'";
   }
   $nototal = 1;
 }
@@ -101,10 +101,10 @@ foreach ($rrd_list as $i => $rrd)
 
   $rrd_options .= " AREA:".$g_defname.$i."#".$colour.":'".rrdtool_escape($rrd['descr'], $descr_len)."':$stack";
 
-  $rrd_options .= " GPRINT:".$t_defname.$i.":LAST:%6.1lf%s GPRINT:".$t_defname.$i."min:MIN:%6.1lf%s";
-  $rrd_options .= " GPRINT:".$t_defname.$i."max:MAX:%6.1lf%s GPRINT:".$t_defname.$i.":AVERAGE:%6.1lf%s";
+  $rrd_options .= " GPRINT:".$t_defname.$i.":LAST:%5.1lf%s GPRINT:".$t_defname.$i."min:MIN:%5.1lf%s";
+  $rrd_options .= " GPRINT:".$t_defname.$i."max:MAX:%5.1lf%s GPRINT:".$t_defname.$i.":AVERAGE:%5.1lf%s";
 
-  if (!$nototal) { $rrd_options .= " GPRINT:tot".$rrd['ds'].$i.":%6.2lf%s".rrdtool_escape($total_units).""; }
+  if (!$nototal) { $rrd_options .= " GPRINT:tot".$rrd['ds'].$i.":%5.2lf%s".rrdtool_escape($total_units).""; }
 
   $rrd_options .= "'\\n' COMMENT:'\\n'";
 }

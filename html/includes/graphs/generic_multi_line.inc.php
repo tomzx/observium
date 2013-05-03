@@ -82,10 +82,10 @@ foreach ($rrd_list as $i => $rrd)
     if (!empty($rrd['areacolour'])) { $rrd_optionsb .= " AREA:".$id."#" . $rrd['areacolour']; }
   }
 
-  if (in_array("lst", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":LAST:%6.1lf%s"; }
-  if (in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":AVERAGE:%6.1lf%s"; }
-  if (in_array("min", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."min:MIN:%6.1lf%s"; }
-  if (in_array("max", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%6.1lf%s"; }
+  if (in_array("lst", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":LAST:%5.1lf%s"; }
+  if (in_array("avg", $data_show)) { $rrd_optionsb .= " GPRINT:".$id.":AVERAGE:%5.1lf%s"; }
+  if (in_array("min", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."min:MIN:%5.1lf%s"; }
+  if (in_array("max", $data_show)) { $rrd_optionsb .= " GPRINT:".$id."max:MAX:%5.1lf%s"; }
 
   $rrd_optionsb .= " COMMENT:'\\l'";
   $colour_iter++;
