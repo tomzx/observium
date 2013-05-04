@@ -500,7 +500,7 @@ function print_arptable($vars)
   if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'search') { $list['device'] = TRUE; }
   if (!isset($vars['port']) || empty($vars['port']) || $vars['page'] == 'search') { $list['port'] = TRUE; }
 
-  $string = '<table class="table table-bordered table-striped table-hover table-condensed table-rounded">' . PHP_EOL;
+  $string = '<table class="table table-striped table-hover table-condensed">' . PHP_EOL;
   if (!$short)
   {
     $string .= '  <thead>' . PHP_EOL;
