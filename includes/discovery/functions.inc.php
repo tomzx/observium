@@ -453,7 +453,7 @@ function discover_storage(&$valid, $device, $index, $type, $mib, $descr, $size, 
     }
     else
     {
-      $updated = dbUpdate(array('storage_descr' => $descr, 'storage_type' => $type, 'storage_units' => $units, 'storage_size' => $size), 'storage', '`device_id` = ? AND `storage_index` = ? AND `storage_mib` = ?', array($device['device_id'], $index, $mib));
+      $updated = dbUpdate(array('storage_descr' => $descr, 'storage_type' => $type, '`device_id` = ? AND `storage_index` = ? AND `storage_mib` = ?', array($device['device_id'], $index, $mib));
       if ($updated) { echo("U"); } else { echo("."); }
     }
     $valid[$mib][$index] = 1;
