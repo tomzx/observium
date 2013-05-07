@@ -27,7 +27,7 @@ if (!$os)
     elseif (is_numeric(trim(snmp_get($device,"roomTemp.0", "-OqvU", "CAREL-ug40cdz-MIB")))) { $os = "pcoweb"; }
     elseif (strpos(trim(snmp_get($device, "hrSystemInitialLoadParameters.0", "-Osqnv")), "syno_hw_version") !== FALSE) { $os = "dsm"; }
     elseif (strpos(trim(snmp_get($device, "dot11manufacturerName.5", "-Osqnv", "IEEE802dot11-MIB")), "Ubiquiti") !== FALSE) { $os = "airos"; }
-    elseif (preg_match("/^SecurePlatform/", snmp_get($device, "1.3.6.1.4.1.2620.1.6.5.1.0", "-Oqv"))) { $os = "splat"; }
+    elseif (strpos(snmp_get($device, "1.3.6.1.4.1.2620.1.6.5.1.0", "-Oqv"), "SecurePlatform") !== FALSE) { $os = "splat"; }
   }
 }
 
