@@ -137,23 +137,25 @@ function show_map($config)
 
     function show_traffic($config) {
 	// Show Traffic
+        // FIXME - This is not how we do port types.
+
 	if ($config['frontpage']['overall_traffic']) {
 	    if ($_SESSION['userlevel'] >= '5') {
-		$sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Transit: %' AND I.device_id = D.device_id ORDER BY I.ifAlias";
+		$sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Transit:%' AND I.device_id = D.device_id ORDER BY I.ifAlias";
 		$query = mysql_query($sql);
 		unset ($seperator);
 		while ($interface = mysql_fetch_assoc($query)) {
 		    $ports['transit'] .= $seperator . $interface['port_id'];
 		    $seperator = ",";
 		}
-		$sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Peering: %' AND I.device_id = D.device_id ORDER BY I.ifAlias";
+		$sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Peering:%' AND I.device_id = D.device_id ORDER BY I.ifAlias";
 		$query = mysql_query($sql);
 		unset ($seperator);
 		while ($interface = mysql_fetch_assoc($query)) {
 		    $ports['peering'] .= $seperator . $interface['port_id'];
 		    $seperator = ",";
 		}
-		$sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Core: %' AND I.device_id = D.device_id ORDER BY I.ifAlias";
+		$sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Core:%' AND I.device_id = D.device_id ORDER BY I.ifAlias";
 		$query = mysql_query($sql);
 		unset ($seperator);
 		while ($interface = mysql_fetch_assoc($query)) {
