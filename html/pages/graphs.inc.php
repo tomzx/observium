@@ -310,6 +310,7 @@ $navbar['class'] = "navbar-narrow";
 
 $navbar['options']['legend']   =  array('text' => 'Show Legend', 'inverse' => TRUE);
 $navbar['options']['previous'] =  array('text' => 'Graph Previous');
+$navbar['options']['trend'] =  array('text' => 'Graph Trend');
 $navbar['options']['max']      =  array('text' => 'Graph Maximum');
 
 $navbar['options_right']['showcommand'] =  array('text' => 'RRD Command');
