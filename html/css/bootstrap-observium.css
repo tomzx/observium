@@ -160,6 +160,10 @@ legend + .control-group {
   animation: spin 2s infinite linear;
 }
 
+.dropdown-menu {
+  z-index: 1;
+}
+
 .btn-group > .btn, .btn-group > .dropdown-menu {
   font-size: 13px;
 }
