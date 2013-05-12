@@ -236,6 +236,11 @@ if ($_SESSION['userlevel'] >= '5')
   if ($config['int_peering']) { echo('<li><a href="iftype/type=peering/"><img src="images/16/bug_link.png" border="0" align="absmiddle" /> Peering</a></li>'); $ifbreak = 1; }
   if ($config['int_peering'] && $config['int_transit']) { echo('<li><a href="iftype/type=peering,transit/"><img src="images/16/world_link.png" border="0" align="absmiddle" /> Peering & Transit</a></li>'); $ifbreak = 1; }
   if ($config['int_core']) { echo('<li><a href="iftype/type=core/"><img src="images/16/brick_link.png" border="0" align="absmiddle" /> Core</a></li>'); $ifbreak = 1; }
+  // Custom interface groups can be set - see Interface Description Parsing
+  foreach ($config['int_groups'] as $int_type)
+  {
+         echo('<li><a href="iftype/type=' . $int_type . '/"><img src="images/16/brick_link.png" border="0" align="absmiddle" /> ' . $int_type .'</a></li>'); $ifbreak = 1;
+  }
 }
 
 if ($ifbreak) { echo('<li class="divider"></li>'); }
