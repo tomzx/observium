@@ -121,7 +121,7 @@ function show_map($config)
 		    var selection = chart.getSelection();
 		    var item = selection[0];
 		    var url = '<?php echo generate_url(array("page" => "devices")); ?>';
-		    var location = data.getValue(item.row, 0);
+		    var location = data.getValue(item.row, 2);
 		    url = url+'location='+location+'/';
 		    window.location = url;
 		}
