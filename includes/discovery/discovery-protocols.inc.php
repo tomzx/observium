@@ -146,15 +146,19 @@ if ($lldp_array)
         if ($remote_device_id)
         {
           $if = $lldp['lldpRemPortDesc']; $id = $lldp['lldpRemPortId'];
-          $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE (`ifDescr`= ? OR `ifName`= ?) AND `device_id` = ?",array($id,$id,$remote_device_id));
+          $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE `ifIndex`= ? AND `device_id` = ?",array($id,$remote_device_id));
           if (!$remote_port_id)
           {
-            $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE (`ifDescr`= ? OR `ifName`= ?) AND `device_id` = ?",array($if,$if,$remote_device_id));
+            $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE (`ifDescr`= ? OR `ifName`= ?) AND `device_id` = ?",array($id,$id,$remote_device_id));
             if (!$remote_port_id)
             {
-              if ($lldp['lldpRemChassisIdSubtype'] == 'macAddress')
-              { // Find the port by MAC address, still matches multiple ports sometimes, we use the first one and hope we're lucky
-                $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE `ifPhysAddress` = ? AND `device_id` = ?", array(str_replace(' ','',$lldp['lldpRemChassisId']),$remote_device_id));
+              $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE (`ifDescr`= ? OR `ifName`= ?) AND `device_id` = ?",array($if,$if,$remote_device_id));
+              if (!$remote_port_id)
+              {
+                if ($lldp['lldpRemChassisIdSubtype'] == 'macAddress')
+                { // Find the port by MAC address, still matches multiple ports sometimes, we use the first one and hope we're lucky
+                  $remote_port_id = dbFetchCell("SELECT port_id FROM `ports` WHERE `ifPhysAddress` = ? AND `device_id` = ?", array(str_replace(' ','',$lldp['lldpRemChassisId']),$remote_device_id));
+                }
               }
             }
           }
