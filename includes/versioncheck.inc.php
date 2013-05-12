@@ -24,20 +24,28 @@ $stats['vminfo']         = dbFetchCell("SELECT count(*) FROM vminfo");
 $stats['users']          = dbFetchCell("SELECT count(*) FROM users");
 
 // sysObjectID for Generic devices
-foreach (dbFetch("SELECT sysObjectID, COUNT( * ) as count FROM  `devices` WHERE `os` = 'generic' GROUP BY `sysObjectID`") as $gendata)
+foreach (dbFetch("SELECT sysObjectID, COUNT( * ) as count FROM  `devices` WHERE `os` = 'generic' GROUP BY `sysObjectID`") as $data)
 {
-  $stats['generics'][$gendata['sysObjectID']] = $gendata['count'];
+  $stats['generics'][$data['sysObjectID']] = $data['count'];
 }
 
 // Per-OS counts
-foreach (dbFetch("SELECT COUNT(*) AS count,os from devices group by `os`") as $dt_data)
+foreach (dbFetch("SELECT COUNT(*) AS count,os from devices group by `os`") as $data)
 {
-  $stats['devicetypes'][$dt_data['os']] = $dt_data['count'];
+  $stats['devicetypes'][$data['os']] = $data['count'];
 }
 
-$stat_serial = base64_encode(serialize($stats));
+// Per-type counts
+foreach (dbFetch("SELECT COUNT(*) AS `count`, `type` FROM `devices` GROUP BY `type`") as $data)
+{
+  $stats['types'][$data['type']] = $data['count'];
+}
 
-$url = "http://update.observium.org/latest.php?i=".$stats['ports']."&d=".$stats['devices']."&stats=".$stat_serial."&v=".$config['version']."&gen_serial=".$gen_serial;
+// Serialize and base64 encode stats array for transportation
+$stat_serial = serialize($stats);
+$stat_base64 = base64_encode($stat_serial);
+
+$url = "http://update.observium.org/latest.php?i=".$stats['ports']."&d=".$stats['devices']."&v=".$config['version']."&stats=".$stat_base64;
 $dataHandle = fopen($url, r);
 
 if ($dataHandle)
