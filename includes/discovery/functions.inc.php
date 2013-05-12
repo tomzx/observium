@@ -36,11 +36,11 @@ function discover_new_device_ip($host)
   }
 }
 
-function discover_new_device($hostname)
+function discover_new_device($hostname, $source = 'xdp')
 {
   global $config, $debug;
 
-  if ($config['autodiscovery']['xdp'])
+  if ($config['autodiscovery'][$source])
   {
     echo("Discovering new host $hostname\n");
     if (!empty($config['mydomain']) && isDomainResolves($hostname . "." . $config['mydomain']) )
@@ -67,7 +67,7 @@ function discover_new_device($hostname)
       }
     }
   } else {
-    if ($debug) { echo("xdp autodiscovery disabled"); }
+    if ($debug) { echo("$source autodiscovery disabled"); }
     return FALSE;
   }
 }
@@ -396,7 +396,7 @@ function discover_juniAtmVp(&$valid, $port_id, $vp_id, $vp_descr)
   {
      $inserted = dbInsert(array('port_id' => $port_id,'vp_id' => $vp_id,'vp_descr' => $vp_descr), 'juniAtmVp');
      if ($debug) { echo("( $inserted inserted )\n"); }
-     #FIXME vv no $device!
+     #FIXME vv no $device in front of 'juniAtmVp' - will not log correctly!
      log_event("Juniper ATM VP Added: port ".mres($port_id)." vp ".mres($vp_id)." descr". mres($vp_descr), 'juniAtmVp', mysql_insert_id());
   }
   else
@@ -503,6 +503,7 @@ function discover_mempool(&$valid, $device, $index, $type, $descr, $precision = 
   {
     if (mysql_result(mysql_query("SELECT count(mempool_id) FROM `mempools` WHERE `mempool_index` = '$index' AND `device_id` = '".$device['device_id']."' AND `mempool_type` = '$type'"),0) == '0')
     {
+      # FIXME dbFacile
       $query = "INSERT INTO mempools (`entPhysicalIndex`, `hrDeviceIndex`, `device_id`, `mempool_descr`, `mempool_index`, `mempool_type`, `mempool_precision`)
                       values ('$entPhysicalIndex', '$hrDeviceIndex', '".$device['device_id']."', '$descr', '$index', '$type','$precision')";
       mysql_query($query);
@@ -531,6 +532,7 @@ function discover_toner(&$valid, $device, $oid, $index, $type, $descr, $capacity
 
   if (mysql_result(mysql_query("SELECT count(toner_id) FROM `toner` WHERE device_id = '".$device['device_id']."' AND toner_type = '$type' AND `toner_index` = '$index' AND `toner_capacity_oid` = '$capacity_oid'"),0) == '0')
   {
+      # FIXME dbFacile
     $query = "INSERT INTO toner (`device_id`, `toner_oid`, `toner_capacity_oid`, `toner_index`, `toner_type`, `toner_descr`, `toner_capacity`, `toner_current`) ";
     $query .= " VALUES ('".$device['device_id']."', '$oid', '$capacity_oid', '$index', '$type', '$descr', '$capacity', '$current')";
     mysql_query($query);
@@ -566,6 +568,7 @@ function discover_process_ipv6(&$valid, $ifIndex,$ipv6_address,$ipv6_prefixlen,$
     return;
   }
 
+      # FIXME dbFacile
   if (mysql_result(mysql_query("SELECT count(*) FROM `ports`
         WHERE device_id = '".$device['device_id']."' AND `ifIndex` = '$ifIndex'"), 0) != '0' && $ipv6_prefixlen > '0' && $ipv6_prefixlen < '129' && $ipv6_compressed != '::1')
   {

@@ -83,6 +83,7 @@ if ($config['enable_libvirt'] == '1' && $device['os'] == "linux" )
                 '" . $dom_id . "', '" . mres($vmwVmDisplayName) . "', '" . mres($vmwVmGuestOS) . "', '" . $vmwVmMemSize . "', '" . $vmwVmCpus . "', '" . mres($vmwVmState) . "')");
             echo("+");
             log_event("Virtual Machine added: $vmwVmDisplayName ($vmwVmMemSize MB)", $device, 'vm', mysql_insert_id());
+            if (is_valid_hostname($vmwVmDisplayName)) { discover_new_device($vmwVmDisplayName, 'libvirt'); }
           } else {
             $row = mysql_fetch_assoc($result);
             if ($row['vmwVmState'] != $vmwVmState
@@ -91,10 +92,11 @@ if ($config['enable_libvirt'] == '1' && $device['os'] == "linux" )
              || $row['vmwVmGuestOS'] != $vmwVmGuestOS
              || $row['vmwVmMemSize'] != $vmwVmMemSize)
             {
+              /// FIXME dbFacile
               mysql_query("UPDATE vminfo SET vmwVmState='" . mres($vmwVmState) . "', vmwVmGuestOS='" . mres($vmwVmGuestOS) . "', vmwVmDisplayName='". mres($vmwVmDisplayName) . "',
                   vmwVmMemSize='" . mres($vmwVmMemSize) . "', vmwVmCpus='" . mres($vmwVmCpus) . "' WHERE device_id='" . $device["device_id"] . "' AND vm_type='libvirt' AND vmwVmVMID='" . $dom_id . "'");
               echo("U");
-              // FIXME eventlog
+              /// FIXME eventlog changed fields
             }
             else
             {
