@@ -2,7 +2,12 @@
 
 $storage_cache = array();
 
-foreach (dbFetchRows("SELECT * FROM storage WHERE device_id = ?", array($device['device_id'])) as $storage)
+$sql  = "SELECT `storage`.*, `storage-state`.storage_polled";
+$sql .= " FROM  `storage`";
+$sql .= " LEFT JOIN `storage-state` ON `storage`.storage_id = `storage-state`.storage_id";
+$sql .= " WHERE `device_id` = ?";
+
+foreach (dbFetchRows($sql, array($device['device_id'])) as $storage)
 {
   echo("Storage ".$storage['storage_descr'] . ": ");
 
