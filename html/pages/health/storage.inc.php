@@ -19,7 +19,7 @@ echo('      <th><a href="'. generate_url($vars, array('sort' => 'size')).'">Size
 echo('      <th><a href="'. generate_url($vars, array('sort' => 'used')).'">Used</a></th>');
 echo('      <th><a href="'. generate_url($vars, array('sort' => 'free')).'">Free</a></th>');
 echo('      <th></th>');
-echo('      <th width="280"><a href="'. generate_url($vars, array('sort' => 'usage')).'">Usage %</a></th>');
+echo('      <th width="200"><a href="'. generate_url($vars, array('sort' => 'usage')).'">Usage %</a></th>');
 echo('    </tr>');
 echo('  </thead>');
 
