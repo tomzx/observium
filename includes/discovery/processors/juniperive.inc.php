@@ -10,6 +10,8 @@ if ($device['os'] == "juniperive")
     discover_processor($valid['processor'], $device, ".1.3.6.1.4.1.12532.10.0", "1", "juniperive", "CPU Utilization", "1", $percent, NULL, NULL);
   }
 
+  unset($percent);
+
 }
 
 ?>
