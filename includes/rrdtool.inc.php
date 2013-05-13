@@ -163,11 +163,12 @@ function rrdtool($command, $filename, $options)
 
   if ($config['norrd'])
   {
-    print Console_Color::convert("[%rRRD Disabled%n]");
+    print Console_Color::convert("[%rRRD Disabled - $cmd%n]");
   } else {
     fwrite($rrd_pipes[0], $cmd."\n");
     usleep(1000);
   }
+
   $std_out = trim(stream_get_contents($rrd_pipes[1]));
   $std_err = trim(stream_get_contents($rrd_pipes[2]));
 
