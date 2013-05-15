@@ -27,14 +27,15 @@ include_once($config['install_dir'] . "/includes/console_colour.php");
 include_once($config['install_dir'] . "/includes/geolocation.inc.php");
 
 // Include from PEAR
+set_include_path(get_include_path() . PATH_SEPARATOR . $config['install_dir'] . "/includes/pear");
 include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
 include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
 include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
 
 if ($config['alerts']['email']['enable'])
 {
-  include_once($config['install_dir'] . "/includes/phpmailer/class.phpmailer.php");
-  include_once($config['install_dir'] . "/includes/phpmailer/class.smtp.php");
+  // Use Pear::Mail
+  include_once("Mail/Mail.php");
 }
 
 function array_sort($array, $on, $order=SORT_ASC)
@@ -710,7 +711,8 @@ function parse_email($emails)
 
 function notify($device,$title,$message)
 {
-  global $config;
+  /// NOTE. Need full rewrite to universal function with message queues and multi-protocol (email,jabber,twitter)
+  global $config, $debug;
 
   if ($config['alerts']['email']['enable'] && !$device['ignore'])
   {
@@ -732,66 +734,73 @@ function notify($device,$title,$message)
         }
       }
       $emails = parse_email($email);
+      
       if ($emails)
       {
-        $message_header = $config['page_title_prefix']."\n\n";
-        $message_footer = "\n\nE-mail sent to: ";
-        $i = 0;
-        $count = count($emails);
-        foreach ($emails as $email => $email_name)
-        {
-          $i++;
-          $message_footer .= $email;
-          if ($i < $count)
-          {
-            $message_footer .= ", ";
-          } else {
-            $message_footer .= "\n";
-          }
-        }
-        $message_footer .= "E-mail sent at: " . date($config['timestamp_format']) . "\n";
-        $mail = new PHPMailer();
-        $mail->Hostname = php_uname('n');
-        if (empty($config['email_from']))
-        {
-          $config['email_from'] = '"Observium" <observium@'.php_uname('n').'>'; // Default "From:"
-        }
-        foreach (parse_email($config['email_from']) as $from => $from_name)
-        {
-          $mail->SetFrom($from, $from_name); // From:
-        }
-        foreach ($emails as $email => $email_name) { $mail->AddAddress($email, $email_name); } // To:
-        $mail->Subject = $title; // Subject:
-        $mail->XMailer = 'Observium ' . $config['version']; // X-Mailer:
-        $mail->CharSet = 'utf-8';
-        $mail->WordWrap = 76;
-        $mail->Body = $message_header . $message . $message_footer;
-        switch (strtolower(trim($config['email_backend']))) {
+        // Mail backend params
+        $params = array('localhost' => php_uname('n'));
+        $backend = strtolower(trim($config['email_backend']));
+        switch ($backend) {
           case 'sendmail':
-            $mail->Mailer = 'sendmail';
-            $mail->Sendmail = $config['email_sendmail_path'];
+            $params['sendmail_path'] = $config['email_sendmail_path'];
             break;
           case 'smtp':
-            $mail->IsSMTP();
-            $mail->Host       = $config['email_smtp_host'];
-            $mail->Timeout    = $config['email_smtp_timeout'];
-            $mail->SMTPAuth   = $config['email_smtp_auth'];
-            $mail->SMTPSecure = $config['email_smtp_secure'];
-            if ($config['email_smtp_secure'] == "ssl" && $config['email_smtp_port'] == 25)
+            $params['host']     = $config['email_smtp_host'];
+            $params['port']     = $config['email_smtp_port'];
+            if ($config['email_smtp_secure'] == 'ssl')
             {
-              $mail->Port     = 465; // Default port for SSL
+              $params['host']   = 'ssl://'.$config['email_smtp_host'];
+              if ($config['email_smtp_port'] == 25) {
+                $params['port'] = 465; // Default port for SSL
+              }
             }
-            $mail->Port       = $config['email_smtp_port'];
-            $mail->Username   = $config['email_smtp_username'];
-            $mail->Password   = $config['email_smtp_password'];
-            $mail->SMTPDebug  = false;
+            $params['timeout']  = $config['email_smtp_timeout'];
+            $params['auth']     = $config['email_smtp_auth'];
+            $params['username'] = $config['email_smtp_username'];
+            $params['password'] = $config['email_smtp_password'];
+            if ($debug) { $params['debug'] = TRUE; }
             break;
           default:
-            $mail->Mailer = 'mail';
-            break;
+            $backend = 'mail'; // Default mailer backend
         }
+
+        // Mail headers
+        $headers = array();
+        if (empty($config['email_from']))
+        {
+          $headers['From']   = '"Observium" <observium@'.$params['localhost'].'>'; // Default "From:"
+        } else {
+          foreach (parse_email($config['email_from']) as $from => $from_name)
+          {
+            $headers['From'] = (empty($from_name)) ? $from : '"'.$from_name.'" <'.$from.'>'; // From:
+          }
+        }
+        $rcpts_full = '';
+        $rcpts = '';
+        foreach ($emails as $to => $to_name)
+        {
+          $rcpts_full .= (empty($to_name)) ? $to.', ' : '"'.$to_name.'" <'.$to.'>, ';
+          $rcpts .= $to.', ';
+        }
+        $rcpts_full = substr($rcpts_full, 0, -2); // To:
+        $rcpts = substr($rcpts, 0, -2);
+        $headers['Subject']  = $title; // Subject:
+        $headers['X-Priority'] = 3; // Mail priority
+        $headers['X-Mailer'] = 'Observium ' . $config['version']; // X-Mailer:
+        $headers['Message-ID'] = '<' . md5(uniqid(time())) . '@' . $params['localhost'] . '>';
+        $headers['Date'] = date('r', time());
+
+        // Mail body
+        $message_header = $config['page_title_prefix']."\n\n";
+        $message_footer = "\n\nE-mail sent to: ".$rcpts."\n";
+        $message_footer .= "E-mail sent at: " . date($config['timestamp_format']) . "\n";
+        $body = $message_header . $message . $message_footer;
+
+        // Create mailer instance
+        $mail =& Mail::factory($backend, $params);
         // Sending email
-        if (!$mail->Send()) { echo "Mailer Error: " . $mail->ErrorInfo . "\n"; }
+        $status = $mail->send($rcpts_full, $headers, $body);
+        if (PEAR::isError($status)) { echo 'Mailer Error: ' . $status->getMessage() . PHP_EOL; }
       }
     }
   }
