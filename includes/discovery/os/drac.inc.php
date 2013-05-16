@@ -2,7 +2,7 @@
 
 if (!$os)
 {
-  if (strstr($sysDescr, "Dell Out-of-band SNMP Agent for Remote Access Controller")) { $os = "drac"; }
+  if (strstr($sysObjectId, ".1.3.6.1.4.1.674.10892.2")) { $os = "drac"; }
 }
 
 ?>
