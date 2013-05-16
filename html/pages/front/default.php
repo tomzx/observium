@@ -13,13 +13,17 @@
  *
  */
 
-    foreach ($config['frontpage']['order'] as $item=>$value) {
-	switch ($value) {
+    foreach ($config['frontpage']['order'] as $module) {
+	switch ($module) {
             case "status_summary":
                 include("includes/status-summary.inc.php");
+                break;
 	    case "map":
 		show_map($config);
 		break;
+            case "device_status_boxes":
+                show_status_boxes($config);
+                break;
 	    case "device_status":
 		show_status($config);
 		break;
@@ -253,6 +257,21 @@ function show_map($config)
 	    echo("</div>");
 	}
     }
+
+    function show_status_boxes($config) {
+        // Show Status
+        if ($config['frontpage']['device_status']['show']) {
+#            echo("<div class=\"row-fluid\">");
+#            echo("    <div class=\"span12\">");
+#            echo("        <h3 class=\"bill\">Device Alerts</h3>");
+
+            print_status_boxes($config['frontpage']['device_status']);
+
+#            echo("    </div>");
+#            echo("</div>");
+        }
+    }
+
 
 
     function show_syslog($config) {

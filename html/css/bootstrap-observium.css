@@ -412,10 +412,9 @@ legend {
   margin-top: -10px;
 }
 
-
 .table {
     color: #777;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
 }
 .table thead {
   background-color: #fafafa;
@@ -748,3 +747,27 @@ background-size:100px 100px;
   background-size: 100px 100px;
   background-color: #EC173A;
 }
+
+.statusbox {
+  margin: 2px;
+  float: left;
+  margin: 2px;
+  padding: 3px;
+  width: 116px;
+  height: 85px;
+  line-height:130%;
+  display: table;
+}
+
+.statusbox p {
+  vertical-align: middle;
+  text-align: center;
+  display: table-row;
+}
+
+.statusbox h4 {
+  vertical-align: middle;
+  text-align: center;
+  display: table-cell;
+}
+

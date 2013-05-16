@@ -274,7 +274,7 @@ function popUp(URL)
 // End -->
   </script>
 
-<body style="padding-top: 50px;">
+<body style="padding-top: 55px;">
   <div class="container">
 
 <?php
