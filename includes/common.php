@@ -20,7 +20,7 @@ function deviceUptime($device, $format="long")
 {
   if ($device['status'] == 0) {
     $since = time() - strtotime( $device['last_polled'] );
-    return "Down for " . formatUptime( $since, $format );
+    return "Down " . formatUptime( $since, $format );
   } else {
     return formatUptime($device['uptime'], $format);
   }
@@ -40,7 +40,7 @@ function formatUptime($diff, $format="long")
 
   $uptime = "";
 
-  if ($format == "shorter")
+  if ($format == "short-2" || format == "shorter")
   {
     if ($yearsDiff > '0') { $u['y'] = $yearsDiff; }
     if ($daysDiff > '0')  { $u['d'] = $daysDiff; }
@@ -52,6 +52,22 @@ function formatUptime($diff, $format="long")
     foreach ($u as $period => $value)
     {
       if ($count == "2") { break; }
+      $uptime .= $value.$period.' ';
+      $count++;
+    }
+  }
+  elseif ($format == "short-3")
+  {
+    if ($yearsDiff > '0') { $u['y'] = $yearsDiff; }
+    if ($daysDiff > '0')  { $u['d'] = $daysDiff; }
+    if ($hrsDiff > '0')   { $u['h'] = $hrsDiff; }
+    if ($minsDiff > '0')  { $u['m'] = $minsDiff; }
+    if ($secsDiff > '0')  { $u['s'] = $secsDiff; }
+
+    $count = 0; $uptime = '';
+    foreach ($u as $period => $value)
+    {
+      if ($count == "3") { break; }
       $uptime .= $value.$period.' ';
       $count++;
     }

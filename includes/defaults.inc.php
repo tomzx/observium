@@ -258,7 +258,7 @@ $config['frontpage']['minigraphs']['ids']          = "";           // Comma and 
 $config['frontpage']['minigraphs']['legend']       = false;        // Enable/Disable the legend on custom mini graph view
 
 // Frontpage order you can use: status_summary, map, device_status, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
-$config['frontpage']['order']           = array('status_summary', 'map', 'device_status', 'eventlog');
+$config['frontpage']['order']           = array('status_summary', 'device_status', 'eventlog');
 
 // Device page options
 
@@ -538,6 +538,7 @@ $config['poller_modules']['arista-software-ip-forwarding']= 1;
 $config['poller_modules']['cipsec-tunnels']               = 1;
 $config['poller_modules']['cisco-ace-loadbalancer']       = 1;
 $config['poller_modules']['cisco-ace-serverfarms']        = 1;
+$config['poller_modules']['cisco-cbqos']                  = 1;
 $config['poller_modules']['cisco-eigrp']	          = 1;
 $config['poller_modules']['netscaler-vsvr']               = 1;
 $config['poller_modules']['aruba-controller']             = 1;
