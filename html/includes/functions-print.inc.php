@@ -1394,8 +1394,7 @@ function get_status_array($status)
         $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
 
         $boxes[] = array('sev' => 50, 'class' => 'BGP Peer', 'event' => 'Down', 'device_link' => generate_device_link($peer, shorthost($peer['hostname'])),
-#                         'entity_link' => $peer['bgpPeerRemoteAddr'],
-                        'entity_link' => "192.168.0.1",
+                         'entity_link' => $peer['bgpPeerRemoteAddr'],
                          'time' => formatUptime($config['time']['now'] - strtotime($service['service_changed']), 'short'), 'location' => $device['location']);
 
       }
