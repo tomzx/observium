@@ -977,6 +977,38 @@ function foldersize($path)
   return array($total_size, $total_files);
 }
 
+// return the filename of the device RANCID config file
+function get_rancid_filename($hostname)
+{
+  global $config;
+
+  if (!is_array($config['rancid_configs'])) { $config['rancid_configs'] = array($config['rancid_configs']); }
+
+  $hostnames = array($hostname);
+  // Also check non-FQDN hostname.
+  list($shortname) = explode('.', $hostname);
+  if ($shortname != $hostname)
+  {
+    $hostnames[] = $shortname;
+  }
+  // Addition of a domain suffix for non-FQDN device names.
+  if (isset($config['rancid_suffix']) && $config['rancid_suffix'] !== '')
+  {
+    $hostnames[] = $hostname . '.' . trim($config['rancid_suffix'], ' .');
+  }
+
+  foreach ($config['rancid_configs'] as $config_path)
+  {
+    if ($config_path[strlen($config_path)-1] != '/') { $config_path .= '/'; }
+
+    foreach ($hostnames as $host)
+    {
+      if (is_file($config_path . $host)) { return $config_path . $host; }
+    }
+  }
+  return FALSE;
+}
+
 function generate_ap_link($args, $text = NULL, $type = NULL)
 {
   global $config;

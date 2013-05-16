@@ -332,19 +332,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
     if ($_SESSION['userlevel'] >= 7)
     {
-      if (!is_array($config['rancid_configs'])) { $config['rancid_configs'] = array($config['rancid_configs']); }
-      foreach ($config['rancid_configs'] as $configfile)
-      {
-        if ($configfile[strlen($configfile)-1] != '/')
-        {
-          $configfile .= '/' . $device['hostname'];
-        } else {
-          $configfile = $configfile . $device['hostname'];
-        }
-        // Addition of a domain suffix for non-FQDN device names.
-        if (isset($config['rancid_suffix']) && $config['rancid_suffix'] !== '') { $configfile .= '.' . trim($config['rancid_suffix'], ' .'); }
-        if (is_file($configfile)) { $device_config_file = $configfile; }
-      }
+      $device_config_file = get_rancid_filename($device['hostname']);
     }
 
     if ($device_config_file)
