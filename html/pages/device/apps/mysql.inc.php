@@ -9,6 +9,7 @@ include("app_navbar.inc.php");
 
 $graphs['system'] = array(
                 'mysql_connections' => 'Connections',
+                'mysql_status' => 'Process List',
                 'mysql_files_tables' => 'Files and Tables',
                 'mysql_myisam_indexes' => 'MyISAM Indexes',
                 'mysql_network_traffic' => 'Network Traffic',
