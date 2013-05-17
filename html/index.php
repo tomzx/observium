@@ -159,7 +159,7 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
       $(this).qtip({
         content: $(selector),
         style: {
-          classes: 'qtip-bootstrap',
+                classes: 'qtip-bootstrap',
         },
         position: {
                 target: 'mouse',
@@ -171,24 +171,22 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
       });
     });
 
-  $('.tooltip-from-data').qtip({
-        content: {
-                attr: 'data-tooltip'
-        },
-        style: {
-          classes: 'qtip-bootstrap',
-        },
-        position: {
-                target: 'mouse',
-                adjust: {
-                        x: 2,
-                        y: 2
-                }
-        }
-  })
-
+    $('.tooltip-from-data').qtip({
+      content: {
+              attr: 'data-tooltip'
+      },
+      style: {
+              classes: 'qtip-bootstrap',
+      },
+      position: {
+              target: 'mouse',
+              adjust: {
+                      x: 2,
+                      y: 2
+              }
+      }
+    })
   });
-
   </script>
 
   <script src="js/jquery.switch.js"></script>
@@ -202,66 +200,6 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
   -->
-  <script type="text/javascript">
-    <!--
-
-    $(function () {
-        $('.bubbleInfo').each(function () {
-            var distance = 10;
-            var time = 250;
-            var hideDelay = 500;
-
-            var hideDelayTimer = null;
-
-            var beingShown = false;
-            var shown = false;
-            var trigger = $('.trigger', this);
-            var info = $('.popup', this).css('opacity', 0);
-
-            $([trigger.get(0), info.get(0)]).mouseover(function () {
-                if (hideDelayTimer) clearTimeout(hideDelayTimer);
-                if (beingShown || shown) {
-                    // don't trigger the animation again
-                    return;
-                } else {
-                    // reset position of info box
-                    beingShown = true;
-
-                    info.css({
-                        top: -90,
-                        left: -33,
-                        display: 'block'
-                    }).animate({
-                        top: '-=' + distance + 'px',
-                        opacity: 1
-                    }, time, 'swing', function() {
-                        beingShown = false;
-                        shown = true;
-                    });
-                }
-
-                return false;
-            }).mouseout(function () {
-                if (hideDelayTimer) clearTimeout(hideDelayTimer);
-                hideDelayTimer = setTimeout(function () {
-                    hideDelayTimer = null;
-                    info.animate({
-                        top: '-=' + distance + 'px',
-                        opacity: 0
-                    }, time, 'swing', function () {
-                        shown = false;
-                        info.css('display', 'none');
-                    });
-
-                }, hideDelay);
-
-                return false;
-            });
-        });
-    });
-
-    //-->
-    </script>
   <script type="text/javascript">
 
 <!-- Begin
@@ -414,16 +352,16 @@ if (is_array($pagetitle))
 
     <script type="text/javascript">
 
-#  $(document).ready(function()
-#  {
-#    $('#poller_status').load('ajax_poller_status.php');
-#  });
-
-#  var auto_refresh = setInterval(
-#    function ()
-#    {
-#      $('#poller_status').load('ajax_poller_status.php');
-#    }, 10000); // refresh every 10000 milliseconds
+//  $(document).ready(function()
+//  {
+//    $('#poller_status').load('ajax_poller_status.php');
+//  });
+//
+//  var auto_refresh = setInterval(
+//    function ()
+//    {
+//      $('#poller_status').load('ajax_poller_status.php');
+//    }, 10000); // refresh every 10000 milliseconds
 
     </script>
   </body>

@@ -1206,17 +1206,6 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   text-decoration: none;
 }
 
-/* Tooltip */
-
-.bubbleInfo {
-  position: relative;
-}
-
-.popup {
-  position: absolute;
-  display: none; /* keeps the popup hidden if no JS available */
-}
-
 .div-normal {
 }
 .div-alert {
