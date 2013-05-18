@@ -71,7 +71,7 @@ if (!$auth)
 
   echo('<div style="float: right;">');
   ?>
-  <form action="">
+  <form action="" style="margin-top: -5px;">
   <select name='type' id='type'
     onchange="window.open(this.options[this.selectedIndex].value,'_top')" >
           <?php
@@ -191,7 +191,7 @@ if (!$auth)
   ");
 
   // Start form for the custom range.
-  echo('<form id="customrange" action="test">');
+  echo('<form id="customrange" action="test" class="form form-inline">');
 
 
   print_optionbar_start();
@@ -199,7 +199,7 @@ if (!$auth)
   $thumb_array = array('sixhour' => '6 Hours', 'day' => '24 Hours', 'twoday' => '48 Hours', 'week' => 'One Week', 'twoweek' => 'Two Weeks',
                        'month' => 'One Month', 'twomonth' => 'Two Months','year' => 'One Year', 'twoyear' => 'Two Years');
 
-  echo('<table width=100%><tr>');
+  echo('<table width=100% style="background: transparent;"><tr>');
 
   foreach ($thumb_array as $period => $text)
   {

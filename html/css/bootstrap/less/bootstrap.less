@@ -19,7 +19,6 @@
 @import "scaffolding.less";
 @import "grid.less";
 @import "layouts.less";
-@import "responsive.less";
 
 // Base CSS
 @import "type.less";
@@ -62,3 +61,21 @@
 
 // Utility classes
 @import "utilities.less"; // Has to be last to override when necessary
+
+// Responsive
+@import "responsive.less";
+
+// Observium Hacks
+
+.pagemenu-selected {
+  background: @grayLighter;
+  font-weight: bold;
+  padding:3px 8px 4px 8px;
+.buttonBackground(@btnBackground, @btnBackgroundHighlight, @grayDark, 0 1px 1px rgba(255,255,255,.75));
+  border: 1px solid @btnBorder;
+  *border: 0; // Remove the border to prevent IE7's black border on input:focus
+  border-bottom-color: darken(@btnBorder, 10%);
+  .border-radius(@baseBorderRadius);
+  .ie7-restore-left-whitespace(); // Give IE7 some love
+  .box-shadow(~"inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)");
+  }

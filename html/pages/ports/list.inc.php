@@ -31,13 +31,13 @@ echo('<tr class="entity">');
 echo("      <th style='width: 1px'></th>\n");
 echo("      <th style='width: 1px'></th>\n");
 
-$cols = array(array('head' => 'Device', 'sort' => 'device', 'width' => '200'),
-              array('head' => 'Port', 'sort' => 'port', 'width' => '200'),
-              array('head' => 'Traffic', 'sort' => 'traffic', 'width' => '200'),
-              array('head' => 'Traffic %', 'sort' => 'traffic_perc', 'width' => '200'),
-              array('head' => 'Packets', 'sort' => 'packets', 'width' => '200'),
-              array('head' => 'Speed', 'sort' => 'speed', 'width' => '200'),
-              array('head' => 'MAC Address', 'sort' => 'mac', 'width' => '200')
+$cols = array(array('head' => 'Device', 'sort' => 'device', 'width' => 250),
+              array('head' => 'Port', 'sort' => 'port', 'width' => '350'),
+              array('head' => 'Traffic', 'sort' => 'traffic', 'width' => '100'),
+              array('head' => 'Traffic %', 'sort' => 'traffic_perc', 'width' => '90'),
+              array('head' => 'Packets', 'sort' => 'packets', 'width' => '90'),
+              array('head' => 'Speed', 'sort' => 'speed', 'width' => '90'),
+              array('head' => 'MAC Address', 'sort' => 'mac', 'width' => '150')
               );
 
 foreach ($cols as $col)
@@ -84,9 +84,11 @@ foreach ($ports as $port)
     echo("<tr class='ports'>
           <td style='background-color: ".$table_tab_colour.";'></td>
           <td></td>
-          <td class=strong>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
-          <td><span class=strong>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
-                                        ".$port['ifAlias']."</td>
+          <td><span class=entity>".generate_device_link($port, shorthost($port['hostname'], "20"))."</span><br />
+              <span class=em>".truncate($port['location'],32,"")."</span></td>
+
+          <td><span class=entity>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
+              <span class=em>".truncate($port['ifAlias'], 50, '')."</span></td>
           <td><span class=green>&darr; ".$port['bps_in']."<br />
                         <span class=blue>&uarr; ".$port['bps_out']."<br />
 
