@@ -32,6 +32,7 @@
 
 // Place the caret
 .dropdown .caret {
+  display: hidden;
   margin-top: 8px;
   margin-left: 2px;
 }
@@ -47,14 +48,14 @@
   float: left;
   min-width: 160px;
   padding: 5px 0;
-  margin: 2px 0 0; // override default ul
+  margin: 0px -1px 0; // override default ul
   list-style: none;
   background-color: @dropdownBackground;
   border: 1px solid #ccc; // Fallback for IE7-8
   border: 1px solid @dropdownBorder;
   *border-right-width: 2px;
   *border-bottom-width: 2px;
-  .border-radius(6px);
+  //.border-radius(6px);
   .box-shadow(0 5px 10px rgba(0,0,0,.2));
   -webkit-background-clip: padding-box;
      -moz-background-clip: padding;
