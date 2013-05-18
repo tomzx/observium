@@ -69,7 +69,7 @@ if($_GET['optb'] == "all" ) {
   {
     if ($i % 2) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
     echo("<tr valign=top bgcolor='$bg_colour'>");
-    echo("<td width=240><a class=list-large href='routing/vrf/".$vrf['mplsVpnVrfRouteDistinguisher']."/".$_GET['optc']."/'>" . $vrf['vrf_name'] . "</a><br /><span class=box-desc>" . $vrf['mplsVpnVrfDescription'] . "</span></td>");
+    echo("<td width=240><a class=entity-title href='routing/vrf/".$vrf['mplsVpnVrfRouteDistinguisher']."/".$_GET['optc']."/'>" . $vrf['vrf_name'] . "</a><br /><span class=box-desc>" . $vrf['mplsVpnVrfDescription'] . "</span></td>");
     echo("<td width=100 class=box-desc>" . $vrf['mplsVpnVrfRouteDistinguisher'] . "</td>");
     #echo("<td width=200 class=box-desc>" . $vrf['mplsVpnVrfDescription'] . "</td>");
     echo("<td><table border=0 cellspacing=0 cellpadding=5 width=100%>");
@@ -84,7 +84,7 @@ if($_GET['optb'] == "all" ) {
       }
       echo("<tr bgcolor='$dev_colour'><td width=150>".generate_device_link($device, shorthost($device['hostname'])));
 
-      if ($device['vrf_name'] != $vrf['vrf_name']) { echo("<a href='#' onmouseover=\" return overlib('Expected Name : ".$vrf['vrf_name']."<br />Configured : ".$device['vrf_name']."', CAPTION, '<span class=list-large>VRF Inconsistency</span>' ,FGCOLOR,'#e5e5e5', BGCOLOR, '#c0c0c0', BORDER, 5, CELLPAD, 4, CAPCOLOR, '#050505');\" onmouseout=\"return nd();\"> <img align=absmiddle src=images/16/exclamation.png></a>"); }
+      if ($device['vrf_name'] != $vrf['vrf_name']) { echo("<a href='#' onmouseover=\" return overlib('Expected Name : ".$vrf['vrf_name']."<br />Configured : ".$device['vrf_name']."', CAPTION, '<span class=entity-title>VRF Inconsistency</span>' ,FGCOLOR,'#e5e5e5', BGCOLOR, '#c0c0c0', BORDER, 5, CELLPAD, 4, CAPCOLOR, '#050505');\" onmouseout=\"return nd();\"> <img align=absmiddle src=images/16/exclamation.png></a>"); }
       echo("</td><td>");
       unset($seperator);
 
@@ -133,7 +133,7 @@ if($_GET['optb'] == "all" ) {
   echo("<div style='background: $list_colour_a; padding: 10px;'><table border=0 cellspacing=0 cellpadding=5 width=100%>");
   $vrf = dbFetchRow("SELECT * FROM `vrfs` WHERE mplsVpnVrfRouteDistinguisher = ?", array($_GET['optb']));
   echo("<tr valign=top bgcolor='$bg_colour'>");
-  echo("<td width=200 class=list-large><a href='routing/vrf/".$vrf['mplsVpnVrfRouteDistinguisher']."/".$_GET['optc']."/'>" . $vrf['vrf_name'] . "</a></td>");
+  echo("<td width=200 class=entity-title><a href='routing/vrf/".$vrf['mplsVpnVrfRouteDistinguisher']."/".$_GET['optc']."/'>" . $vrf['vrf_name'] . "</a></td>");
   echo("<td width=100 class=box-desc>" . $vrf['mplsVpnVrfRouteDistinguisher'] . "</td>");
   echo("<td width=200 class=box-desc>" . $vrf['mplsVpnVrfDescription'] . "</td>");
   echo("</table></div>");

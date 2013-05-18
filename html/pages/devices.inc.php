@@ -53,7 +53,7 @@ if($vars['searchbar'] != "hide")
 ?>
 
 <form method="post" action="" style="margin-bottom: 0;">
-  <table width="100%">
+  <table style="width: 100%" class="table-transparent">
     <tr>
       <td width="290">
         <div class="input-prepend" style="margin-right: 3px; margin-bottom: 10px;">

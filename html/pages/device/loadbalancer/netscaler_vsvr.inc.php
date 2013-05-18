@@ -72,7 +72,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   foreach ($graph_types as $graph_type => $graph_text)
   {
     $i++;
-    echo('<tr class="list-bold">');
+    echo('<tr class="entity">');
     echo('<td colspan="5">');
     $graph_type = "netscalervsvr_" . $graph_type;
     $graph_array['to']     = $config['time']['now'];
@@ -205,7 +205,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
   }
   if ($vars['view'] == "graphs")
   {
-    echo('<tr class="list-bold" bgcolor="'.$bg_colour.'">');
+    echo('<tr class="entity" bgcolor="'.$bg_colour.'">');
     echo('<td colspan="5">');
     $graph_type = "netscalervsvr_" . $vars['graph'];
     $graph_array['to']     = $config['time']['now'];

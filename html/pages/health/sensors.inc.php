@@ -67,7 +67,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
 
     if ($class == "frequency") {
       echo('<tr>
-          <td class=list-bold>' . generate_device_link($sensor) . '</td>
+          <td class=strong>' . generate_device_link($sensor) . '</td>
           <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
           <td>'.$alert.'</td>
           <td>'.overlib_link($link_graph, $sensor_minigraph, $overlib_content).'</td>
@@ -77,7 +77,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
       ');
     } else{
       echo('<tr>
-          <td class=list-bold>' . generate_device_link($sensor) . '</td>
+          <td class=strong>' . generate_device_link($sensor) . '</td>
           <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
           <td>'.$alert.'</td>
           <td>'.overlib_link($link_graph, $sensor_minigraph, $overlib_content).'</td>

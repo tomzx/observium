@@ -453,9 +453,9 @@ function print_addresses($vars)
         $string .= '  <tr>' . PHP_EOL;
         if ($list['device'])
         {
-          $string .= '    <td class="list-bold" nowrap>' . generate_device_link($entry) . '</td>' . PHP_EOL;
+          $string .= '    <td class="entity" nowrap>' . generate_device_link($entry) . '</td>' . PHP_EOL;
         }
-        $string .= '    <td class="list-bold">' . generate_port_link($entry, makeshortif($entry['label'])) . ' ' . $port_error . '</td>' . PHP_EOL;
+        $string .= '    <td class="entity">' . generate_port_link($entry, makeshortif($entry['label'])) . ' ' . $port_error . '</td>' . PHP_EOL;
         if ($address_type === 'ipv6') { $entry[$address_type.'_address'] = Net_IPv6::compress($entry[$address_type.'_address']); }
         $string .= '    <td>' . $entry[$address_type.'_address'] . '/' . $length . '</td>' . PHP_EOL;
         $string .= '    <td>' . $entry['ifAlias'] . '</td>' . PHP_EOL;
@@ -601,7 +601,7 @@ function print_arptable($vars)
       $string .= '    <td width="140">' . $ip_address . '</td>' . PHP_EOL;
       if ($list['device'])
       {
-        $string .= '    <td class="list-bold" nowrap>' . generate_device_link($entry) . '</td>' . PHP_EOL;
+        $string .= '    <td class="entity" nowrap>' . generate_device_link($entry) . '</td>' . PHP_EOL;
       }
       if ($list['port'])
       {
@@ -609,10 +609,10 @@ function print_arptable($vars)
         {
           $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
         }
-        $string .= '    <td class="list-bold">' . generate_port_link($entry, makeshortif($entry['label'])) . ' ' . $port_error . '</td>' . PHP_EOL;
+        $string .= '    <td class="entity">' . generate_port_link($entry, makeshortif($entry['label'])) . ' ' . $port_error . '</td>' . PHP_EOL;
       }
-      $string .= '    <td class="list-bold" width="200">' . $arp_name . '</td>' . PHP_EOL;
-      $string .= '    <td class="list-bold">' . $arp_if . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity" width="200">' . $arp_name . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . $arp_if . '</td>' . PHP_EOL;
       $string .= '  </tr>' . PHP_EOL;
     }
   }
@@ -751,7 +751,7 @@ function print_events($vars)
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['device_id']);
-      $string .= '    <td class="list-bold">' . generate_device_link($dev, shorthost($dev['hostname'])) . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname'])) . '</td>' . PHP_EOL;
     }
     if ($list['port'])
     {
@@ -759,7 +759,7 @@ function print_events($vars)
       {
         $this_if = getifbyid($entry['reference']);
         humanize_port($this_if, $this_if);
-        $entry['link'] = '<span class="list-bold">' . generate_port_link($this_if, makeshortif($this_if['label'])) . '</span>';
+        $entry['link'] = '<span class="entity">' . generate_port_link($this_if, makeshortif($this_if['label'])) . '</span>';
       } else {
         $entry['link'] = 'System';
       }
@@ -920,7 +920,7 @@ function print_syslogs($vars)
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['device_id']);
-      $string .= '    <td class="list-bold">' . generate_device_link($dev, shorthost($dev['hostname'])) . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname'])) . '</td>' . PHP_EOL;
     }
     if ($list['priority'])
     {
@@ -1005,7 +1005,7 @@ function print_status($status)
     foreach ($entries as $device)
     {
       $string .= '  <tr>' . PHP_EOL;
-      $string .= '    <td class="list-bold">' . generate_device_link($device, shorthost($device['hostname'])) . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . generate_device_link($device, shorthost($device['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge badge-inverse">Device</span></td>' . PHP_EOL;
       $string .= '    <td><span class="label label-important">Device Down</span></td>' . PHP_EOL;
       $string .= '    <td>-</td>' . PHP_EOL;
@@ -1028,7 +1028,7 @@ function print_status($status)
       foreach ($entries as $device)
       {
         $string .= '  <tr>' . PHP_EOL;
-        $string .= '    <td class="list-bold">' . generate_device_link($device, shorthost($device['hostname'])) . '</td>' . PHP_EOL;
+        $string .= '    <td class="entity">' . generate_device_link($device, shorthost($device['hostname'])) . '</td>' . PHP_EOL;
         $string .= '    <td><span class="badge badge-inverse">Device</span></td>' . PHP_EOL;
         $string .= '    <td><span class="label label-success">Device Rebooted</span></td>' . PHP_EOL;
         $string .= '    <td>-</td>' . PHP_EOL;
@@ -1078,10 +1078,10 @@ function print_status($status)
       }
       $port = humanize_port($port, $port);
       $string .= '  <tr>' . PHP_EOL;
-      $string .= '    <td class="list-bold">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge badge-info">Port</span></td>' . PHP_EOL;
       $string .= '    <td><span class="label label-important">Port Down</span></td>' . PHP_EOL;
-      $string .= '    <td class="list-bold">' . generate_port_link($port, makeshortif($port['label'])) . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . generate_port_link($port, makeshortif($port['label'])) . '</td>' . PHP_EOL;
       $string .= '    <td nowrap>' . substr($port['location'], 0, 30) . '</td>' . PHP_EOL;
       $string .= '    <td nowrap>Down for ' . formatUptime($config['time']['now'] - strtotime($port['ifLastChange']), 'short'); // This is like deviceUptime()
       if ($status['links'] && !$status['ports']) { $string .= ' ('.strtoupper($port['protocol']).': ' .$port['remote_hostname'].' / ' .$port['remote_port'] .')'; }
@@ -1105,10 +1105,10 @@ function print_status($status)
     {
       $port = humanize_port($port, $port);
       $string .= '  <tr>' . PHP_EOL;
-      $string .= '    <td class="list-bold">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge badge-info">Port</span></td>' . PHP_EOL;
       $string .= '    <td><span class="label label-important">Port Errors</span></td>' . PHP_EOL;
-      $string .= '    <td class="list-bold">'.generate_port_link($port, makeshortif($port['label']), 'port_errors') . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">'.generate_port_link($port, makeshortif($port['label']), 'port_errors') . '</td>' . PHP_EOL;
       $string .= '    <td nowrap>' . substr($port['location'], 0, 30) . '</td>' . PHP_EOL;
       $string .= '    <td>Errors ';
       if ($port['ifInErrors_delta']) { $string .= 'In: ' . $port['ifInErrors_delta']; }
@@ -1131,7 +1131,7 @@ function print_status($status)
     foreach ($entries as $service)
     {
       $string .= '  <tr>' . PHP_EOL;
-      $string .= '    <td class="list-bold">' . generate_device_link($service, shorthost($service['hostname'])) . '</td>' . PHP_EOL;
+      $string .= '    <td class="entity">' . generate_device_link($service, shorthost($service['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge">Service</span></td>' . PHP_EOL;
       $string .= '    <td><span class="label label-important">Service Down</span></td>' . PHP_EOL;
       $string .= '    <td>' . $service['service_type'] . '</td>' . PHP_EOL;
@@ -1164,7 +1164,7 @@ function print_status($status)
       {
         $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
         $string .= '  <tr>' . PHP_EOL;
-        $string .= '    <td class="list-bold">' . generate_device_link($peer, shorthost($peer['hostname']), array('tab' => 'routing', 'proto' => 'bgp')) . '</td>' . PHP_EOL;
+        $string .= '    <td class="entity">' . generate_device_link($peer, shorthost($peer['hostname']), array('tab' => 'routing', 'proto' => 'bgp')) . '</td>' . PHP_EOL;
         $string .= '    <td><span class="badge badge-warning">BGP</span></td>' . PHP_EOL;
         $string .= '    <td><span class="label label-important" title="' . $bgpstates . '">BGP ' . strtoupper($peer['bgpPeerState']) . '</span></td>' . PHP_EOL;
         $string .= '    <td nowrap>' . $peer_ip . '</td>' . PHP_EOL;

@@ -26,7 +26,7 @@ foreach (dbFetchRows("SELECT * FROM `ospf_instances` WHERE `device_id` = ?", arr
 
   echo('<tr><th>Router Id</th><th>Status</th><th>ABR</th><th>ASBR</th><th>Areas</th><th>Ports</th><th>Neighbours</th></tr>');
   echo('<tr bgcolor="'.$instance_bg.'">');
-  echo('  <td class="list-large">'.$instance['ospfRouterId'] . '</td>');
+  echo('  <td class="entity-title">'.$instance['ospfRouterId'] . '</td>');
   echo('  <td>' . $enabled . '</td>');
   echo('  <td>' . $abr . '</td>');
   echo('  <td>' . $asbr . '</td>');
@@ -51,7 +51,7 @@ foreach (dbFetchRows("SELECT * FROM `ospf_instances` WHERE `device_id` = ?", arr
 
     echo('<tr bgcolor="'.$area_bg.'">');
     echo('  <td width=5></td>');
-    echo('  <td class="list-large">'.$area['ospfAreaId'] . '</td>');
+    echo('  <td class="entity-title">'.$area['ospfAreaId'] . '</td>');
     echo('  <td>' . $enabled . '</td>');
     echo('  <td>' . $area_port_count . '('.$area_port_count_enabled.')</td>');
     echo('</tr>');
@@ -113,7 +113,7 @@ foreach (dbFetchRows("SELECT * FROM `ospf_instances` WHERE `device_id` = ?", arr
 
     echo('<tr bgcolor="'.$nbr_bg.'">');
     echo('  <td width=5></td>');
-    echo('  <td><span class="list-large">' . $nbr['ospfNbrRtrId'] . '</span></td>');
+    echo('  <td><span class="entity-title">' . $nbr['ospfNbrRtrId'] . '</span></td>');
     echo('  <td>' . $rtr_id . '</td>');
     echo('  <td>' . $nbr['ospfNbrIpAddr'] . '</td>');
     echo('  <td>');

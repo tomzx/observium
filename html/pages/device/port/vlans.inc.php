@@ -13,7 +13,7 @@ foreach ($vlans as $vlan)
   if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
   echo('<tr bgcolor="'.$row_colour.'">');
 
-  echo("<td width=100 class=list-large> Vlan " . $vlan['vlan'] . "</td>");
+  echo("<td width=100 class=entity-title> Vlan " . $vlan['vlan'] . "</td>");
   echo("<td width=200 class=box-desc>" . $vlan['vlan_descr'] . "</td>");
 
   if ($vlan['state'] == "blocking") { $class="red"; } elseif ($vlan['state'] == "forwarding" ) { $class="green"; } else { $class = "none"; }

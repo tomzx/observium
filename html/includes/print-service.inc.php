@@ -25,7 +25,7 @@ if ($service['service_checked'])
 
 $mini_url = "graph.php?id=".$service['service_id']."&amp;type=service_availability&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=80&amp;height=20&amp;bg=efefef";
 
-$popup  = "onmouseover=\"return overlib('<div class=list-large>".$device['hostname']." - ".$service['service_type'];
+$popup  = "onmouseover=\"return overlib('<div class=entity-title>".$device['hostname']." - ".$service['service_type'];
 $popup .= "</div><img src=\'graph.php?id=" . $service['service_id'] . "&amp;type=service_availability&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";
 $popup .= "', RIGHT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\"";
 
@@ -43,7 +43,7 @@ if ($device_id)
 }
 
 echo("
-         <td valign=top class=list-bold>
+         <td valign=top class=strong>
            $status
          </td>
          <td valign=top><a $popup><img src='$mini_url'></a></td>

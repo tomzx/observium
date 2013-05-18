@@ -55,7 +55,7 @@ foreach (getlocations() as $location)
   if ($location != "")
   {
     echo('      <tr class="locations">
-             <td class="interface" width="300"><a class="list-bold" href="devices/location=' . urlencode($location) . '/">' . $location . '</a></td>
+             <td class="interface" width="300"><a class="entity" href="devices/location=' . urlencode($location) . '/">' . $location . '</a></td>
              <td width="100">' . $alert . '</td>
              <td width="100">' . $num . ' devices</td>
              <td width="100">' . $net . ' network</td>

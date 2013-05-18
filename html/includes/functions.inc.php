@@ -556,7 +556,7 @@ function generate_graph_popup($graph_array)
   $original_from = $graph_array['from'];
 
   $graph = generate_graph_tag($graph_array);
-  $content = "<div class=list-large>".$graph_array['popup_title']."</div>";
+  $content = "<div class=entity-title>".$graph_array['popup_title']."</div>";
   $content .= '<div style="width: 850px">';
   $graph_array['legend']   = "yes";
   $graph_array['height']   = "100";
@@ -928,13 +928,13 @@ function humanmedia($media)
 
 function devclass($device)
 {
-  if (isset($device['status']) && $device['status'] == '0') { $class = "list-device-down"; } else { $class = "list-device"; }
+  if (isset($device['status']) && $device['status'] == '0') { $class = "red"; } else { $class = ""; }
   if (isset($device['ignore']) && $device['ignore'] == '1')
   {
-     $class = "list-device-ignored";
-     if (isset($device['status']) && $device['status'] == '1') { $class = "list-device-ignored-up"; }
+     $class = "grey";
+     if (isset($device['status']) && $device['status'] == '1') { $class = "green"; }
   }
-  if (isset($device['disabled']) && $device['disabled'] == '1') { $class = "list-device-disabled"; }
+  if (isset($device['disabled']) && $device['disabled'] == '1') { $class = "grey"; }
 
   return $class;
 }
@@ -1020,7 +1020,7 @@ function generate_ap_link($args, $text = NULL, $type = NULL)
 
   if (!isset($args['hostname'])) { $args = array_merge($args, device_by_id_cache($args['device_id'])); }
 
-  $content = "<div class=list-large>".$args['text']." - " . fixifName($args['label']) . "</div>";
+  $content = "<div class=entity-title>".$args['text']." - " . fixifName($args['label']) . "</div>";
   if ($args['ifAlias']) { $content .= $args['ifAlias']."<br />"; }
   $content .= "<div style=\'width: 850px\'>";
   $graph_array['type']     = $args['graph_type'];

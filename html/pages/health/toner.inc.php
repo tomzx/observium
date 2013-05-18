@@ -5,7 +5,7 @@ $graph_type = "toner_usage";
 echo("<div style='padding: 5px;'>
         <table width=100% cellspacing=0 cellpadding=6 class='sortable'>");
 
-echo("<tr class=tablehead>
+echo("<tr class=strong>
         <th width=280>Device</th>
         <th>Toner</th>
         <th width=100></th>
@@ -39,7 +39,7 @@ foreach (dbFetchRows("SELECT * FROM `toner` AS S, `devices` AS D WHERE S.device_
 
     $background = get_percentage_colours(100 - $perc);
 
-    echo("<tr class='health'><td>" . generate_device_link($toner) . "</td><td class=tablehead>" . $toner['toner_descr'] . "</td>
+    echo("<tr class='health'><td>" . generate_device_link($toner) . "</td><td class=strong>" . $toner['toner_descr'] . "</td>
          <td>$mini_graph</td>
          <td>
           <a href='#' $store_popup>".print_percentage_bar (400, 20, $perc, "$perc%", "ffffff", $background['left'], $free, "ffffff", $background['right'])."</a>

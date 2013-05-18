@@ -1,24 +1,27 @@
 <?php
 
-if ($bg == $list_colour_b) { $bg = $list_colour_a; } else { $bg = $list_colour_b; }
+// FIXME - This view seems almost pointless. What should we do?
+
+unset($row_class);
 
 if ($device['status'] == '0')
 {
-  $class = "list-device-down";
+  $class = "entity-title red";
+  $row_class = "error";
 } else {
-  $class = "list-device";
+  $class = "entity-title";
 }
 if ($device['ignore'] == '1')
 {
-  $class = "list-device-ignored";
+  $class = "entity-title gray";
   if ($device['status'] == '1')
   {
-    $class = "list-device-ignored-up";
+    $class = "entity-title green";
   }
 }
 if ($device['disabled'] == '1')
 {
-  $class = "list-device-disabled";
+  $class = "entity-title";
 }
 
 $type = strtolower($device['os']);
@@ -26,9 +29,9 @@ $type = strtolower($device['os']);
 if ($device['os'] == "ios") { formatCiscoHardware($device, true); }
 $device['os_text'] = $config['os'][$device['os']]['text'];
 
-echo('  <tr class="'.$class.'" bgcolor="' . $bg . '" onmouseover="this.style.backgroundColor=\'#fdd\';" onmouseout="this.style.backgroundColor=\'' . $bg . '\';"
+echo('  <tr class="'.$row_class.'" bgcolor="' . $bg . '" onmouseover="this.style.backgroundColor=\'#fdd\';" onmouseout="this.style.backgroundColor=\'' . $bg . '\';"
           onclick="location.href=\'device/'.$device['device_id'].'/\'" style="cursor: pointer;">
-          <td width="300"><span style="font-size: 15px;">' . generate_device_link($device) . '</span></td>'
+          <td width="300"><span class="'.$class.'">' . generate_device_link($device) . '</span></td>'
         );
 
 echo('    <td>' . $device['hardware'] . ' ' . $device['features'] . '</td>');

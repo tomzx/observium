@@ -23,7 +23,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $proc)
 
   $text_descr = rewrite_entity_descr($text_descr);
 
-  $proc_popup  = "onmouseover=\"return overlib('<div class=list-large>".$device['hostname']." - ".$text_descr;
+  $proc_popup  = "onmouseover=\"return overlib('<div class=entity-title>".$device['hostname']." - ".$text_descr;
   $proc_popup .= "</div><img src=\'graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";
   $proc_popup .= "', RIGHT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\"";
 
@@ -32,7 +32,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $proc)
   $background = get_percentage_colours($percent);
 
   echo("<tr>
-         <td class=tablehead><a href='".$proc_url."' $proc_popup>" . $text_descr . "</a></td>
+         <td class=strong><a href='".$proc_url."' $proc_popup>" . $text_descr . "</a></td>
          <td width=90><a href='".$proc_url."'  $proc_popup><img src='$mini_url'></a></td>
          <td width=200><a href='".$proc_url."' $proc_popup>
          ".print_percentage_bar (400, 20, $percent, $percent."%", "ffffff", $background['left'], (100 - $percent)."%" , "ffffff", $background['right'])."

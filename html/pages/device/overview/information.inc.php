@@ -20,20 +20,20 @@ echo('<table class="table table-condensed-more table-striped">');
 if ($device['hardware'])
 {
   echo('<tr>
-        <td class="list-bold">Hardware</td>
+        <td class="entity">Hardware</td>
         <td>' . $device['hardware']. '</td>
       </tr>');
 }
 
 echo('<tr>
-        <td class="list-bold">Operating System</td>
+        <td class="entity">Operating System</td>
         <td>' . $device['os_text'] . ' ' . $device['version'] . ' ' . $device['features'] . ' </td>
       </tr>');
 
 if ($device['serial'])
 {
   echo('<tr>
-        <td class="list-bold">Serial</td>
+        <td class="entity">Serial</td>
         <td>' . $device['serial']. '</td>
       </tr>');
 }
@@ -41,14 +41,14 @@ if ($device['serial'])
 if ($device['sysContact'])
 {
   echo('<tr>
-        <td class="list-bold">Contact</td>');
+        <td class="entity">Contact</td>');
   if (get_dev_attrib($device,'override_sysContact_bool'))
   {
     echo('
         <td>' . htmlspecialchars(get_dev_attrib($device,'override_sysContact_string')) . '</td>
       </tr>
       <tr>
-        <td class="list-bold">SNMP Contact</td>');
+        <td class="entity">SNMP Contact</td>');
   }
   echo('
         <td>' . htmlspecialchars($device['sysContact']). '</td>
@@ -58,13 +58,13 @@ if ($device['sysContact'])
 if ($device['location'])
 {
   echo('<tr>
-        <td class="list-bold">Location</td>
+        <td class="entity">Location</td>
         <td>' . $device['location']. '</td>
       </tr>');
   if (get_dev_attrib($device,'override_sysLocation_bool') && !empty($device['real_location']))
   {
     echo('<tr>
-        <td class="list-bold">SNMP Location</td>
+        <td class="entity">SNMP Location</td>
         <td>' . $device['real_location']. '</td>
       </tr>');
   }
@@ -73,7 +73,7 @@ if ($device['location'])
 if ($uptime)
 {
   echo('<tr>
-        <td class="list-bold">Uptime</td>
+        <td class="entity">Uptime</td>
         <td>' . deviceUptime($device) . '</td>
       </tr>');
 }

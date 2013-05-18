@@ -1,27 +1,3 @@
-html {
-  background: #fff;
-}
-
-body {
-  font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
-  margin: 0px;
-  padding: 0px;
-  background: #fff; /* Old browsers */
-  color: #555;
-  font-size: 14px;
-  line-height: 20px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-@media (min-width: 768px) and (max-width: 979px) {
-  body { padding-top: 50px; }
-}
-
-@media (max-width: 767px) {
-  body { padding-top:0px; }
-}
-
 h1,
 h2,
 h3,
@@ -536,22 +512,6 @@ legend {
   padding: 0 5px;
   padding-top: 2px;
   vertical-align: middle;
-}
-
-.navbar .brand-observium
-{
-  background:url(../images/observium-mini-logo.png) no-repeat;
-  display: inline-block;
-  width: 149px;
-  height: 30px;
-  padding: 0;
-  margin: 5px;/* 10px 0 0;*/
-}
-
-.nav-tabs
-{
-  margin-bottom: 10px;
-  /*border-bottom: 4px solid #194b7f;*/
 }
 
 .nav-tabs > li:first-child {

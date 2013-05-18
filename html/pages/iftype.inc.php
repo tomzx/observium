@@ -27,7 +27,7 @@ for ($i = 0; $i < count($types_array);$i++) $types_array[$i] = ucfirst($types_ar
 $types = implode(' + ',$types_array);
 
 echo("<tr class='iftype'>
-             <td><span class=list-large>Total Graph for ports of type : ".$types."</span><br />");
+             <td><span class=entity-title>Total Graph for ports of type : ".$types."</span><br />");
 
 if ($if_list)
 {
@@ -47,7 +47,7 @@ if ($if_list)
     $ifclass = ifclass($port['ifOperStatus'], $port['ifAdminStatus']);
     if ($bg == "#ffffff") { $bg = "#e5e5e5"; } else { $bg = "#ffffff"; }
     echo("<tr class='iftype'>
-             <td><span class=list-large>" . generate_port_link($port,$port['port_descr_descr']) . "</span><br />
+             <td><span class=entity-title>" . generate_port_link($port,$port['port_descr_descr']) . "</span><br />
             <span class=interface-desc style='float: left;'>".generate_device_link($port)." ".generate_port_link($port)." </span>");
 
     if (dbFetchCell("SELECT count(*) FROM mac_accounting WHERE port_id = ?", array($port['port_id'])))

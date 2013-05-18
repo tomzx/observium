@@ -8,7 +8,7 @@ if (is_integer($g_i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $
 
 echo('<tr><td>');
 
-echo('<div style="padding:4px 0px 0px 8px;" class=graphhead>'.$graph_title.'</div>');
+echo('<h4>'.$graph_title.'</h4>');
 
 include("includes/print-graphrow.inc.php");
 

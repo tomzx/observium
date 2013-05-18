@@ -21,8 +21,8 @@ function cache_conditions_global() {
   $cache = array();
   foreach (dbFetchRows("SELECT * FROM `alert_conditions_global`") as $entry)
   {
-    $cache[$entry['type']][$entry['subtype']][$entry['metric']][] = array('operator' => $entry['operator'], 'value' => $entry['value'],
-                                                                          'severity' => $entry['severity'], 'alerter' => $entry['alerter'], 'enable' => $entry['enable']);
+    $cache[$entry['type']][$entry['subtype']][$entry['metric']][] = array('operator' => $entry['operator'], 'value' => $entry['value'], 'count' => $entry['count'],
+                                                                          'severity' => $entry['severity'], 'alerter' => $entry['alerter'], 'enable' => $entry['enable'], 'descr_regex' => $entry['descr_regex']);
   }
   return $cache;
 }

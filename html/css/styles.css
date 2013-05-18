@@ -399,49 +399,6 @@ A.purple:visited, a.purple, .purple { color: #740074; }
   font-weight: bold;
 }
 
-tr.device-overview:nth-child(odd) {
-  background: #ffffff;
-}
-
-tr.device-overview:nth-child(even) {
-  background: #eeeeee;
-}
-
-a.list-device, a.list-device-ignored, a.list-device-down, a.list-device-ignored-up, a.list-device-disabled {
-  font-weight: bold;
-}
-
-tr.list-device, tr.list-device-ignored, tr.list-device-down, tr.list-device-ignored-up, tr.list-device-disabled {
-}
-
-tr.list-device:nth-child(even) {
-  background: #ffffff;
-}
-
-tr.list-device:nth-child(odd) {
-  background: #eeeeee;
-}
-
-tr.list-device-down {
-  border: 2px solid #cc0000;
-}
-
-tr.list-device-disabled {
-  border: 2px solid #aaaaaa;
-}
-
-tr.list-device-ignored {
-  border: 2px dashed #cc0000;
-}
-
-tr.list-device-ignored-up {
-  border: 2px dashed #aaaaaa;
-}
-
-.device-head, a.list-device {
-  color: #194b7f;
-}
-
 a.list-device-down, a.list-device-down, a.list-device-down:visited {
   color: #cc0000;
 }
@@ -1304,28 +1261,6 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
 .devicetable {
   border-collapse: collapse;
 }
-
-tr.devicetable:nth-child(odd)   { background: #e5e5e5; }
-tr.devicetable:nth-child(even)  { background: #ffffff; }
-tr.iftype:nth-child(odd)        { background: #e5e5e5; }
-tr.iftype:nth-child(even)       { background: #ffffff; }
-tr.health:nth-child(odd)        { background: #ffffff; }
-tr.health:nth-child(even)       { background: #eeeeee; }
-tr.ports:nth-child(even)        { background: #ffffff; }
-tr.ports:nth-child(odd)         { background: #eeeeee; }
-tr.bgp:nth-child(even)          { background: #ffffff; }
-tr.locations:nth-child(even)    { background: #e5e5e5; }
-tr.locations:nth-child(odd)     { background: #ffffff; }
-tr.inventory:nth-child(even)    { background: #e5e5e5; }
-tr.inventory:nth-child(odd)     { background: #ffffff; }
-tr.list:nth-child(odd)          { background: #e5e5e5; }
-tr.list:nth-child(even)         { background: #ffffff; }
-tr.eventlog:nth-child(even)     { background: #e5e5e5; }
-tr.eventlog:nth-child(odd)      { background: #ffffff; }
-tr.syslog:nth-child(even)       { background: #e5e5e5; }
-tr.syslog:nth-child(odd)        { background: #ffffff; }
-tr.search:nth-child(even)       { background: #e5e5e5; }
-tr.search:nth-child(odd)        { background: #ffffff; }
 
 .paddedcell {
   padding: 7px;

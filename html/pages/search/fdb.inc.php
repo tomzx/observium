@@ -70,10 +70,10 @@ foreach (dbFetchRows($query, $param) as $entry)
 
     echo('<tr>
         <td width="160">' . formatMac($entry['mac_address']) . '</td>
-        <td width="200" class="list-bold">' . generate_device_link($entry) . '</td>
-        <td class="list-bold">' . generate_port_link($entry, makeshortif(fixifname($entry['ifDescr']))) . ' ' . $error_img . '</td>
-        <td class="list-bold">VLAN'.$entry['vlan_vlan'].'</td>
-        <td class="list-bold">'.$entry['vlan_name'].'</td>
+        <td width="200" class="entity">' . generate_device_link($entry) . '</td>
+        <td class="entity">' . generate_port_link($entry, makeshortif(fixifname($entry['ifDescr']))) . ' ' . $error_img . '</td>
+        <td class="entity">VLAN'.$entry['vlan_vlan'].'</td>
+        <td class="entity">'.$entry['vlan_name'].'</td>
             </tr>');
   }
 }

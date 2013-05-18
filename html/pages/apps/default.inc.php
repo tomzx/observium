@@ -9,7 +9,7 @@ $graph_array_zoom['height'] = "150";
 $graph_array_zoom['width']  = "400";
 $graph_array['legend']      = "no";
 
-echo('<h2>'.nicecase($vars['app']).'</h2>');
+echo('<h4>'.nicecase($vars['app']).'</h4>');
 echo('<table style="table table-striped-two table-hover"');
 $app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WHERE D.device_id = A.device_id AND A.app_type = ? ORDER BY hostname", array($vars['app']));
 
@@ -21,7 +21,7 @@ foreach ($app_devices as $app_device)
   echo('<td width=100px>'.$app_device['app_status'].'</td>');
   echo('<td></td>');
   echo('</tr>');
-  echo('<tr class="list-device">');
+  echo('<tr>');
   echo('<td colspan=4>');
 
   foreach ($graphs[$vars['app']] as $graph_type)

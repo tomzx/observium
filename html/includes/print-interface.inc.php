@@ -33,6 +33,11 @@ if($port['deleted'] == '1')
   $port['tags'] .= '<a href="'.generate_url(array('page' => 'deleted-ports')).'"><span class="label label-important">Deleted</span></a>';
 }
 
+if (dbFetchCell("SELECT COUNT(*) FROM `ports_cbqos` WHERE `port_id` = ?", array($port['port_id'])))
+{
+  $port['tags'] .= '<a href="' . generate_port_url($port, array('view' => 'cbqos')) . '"><span class="label label-info">CBQoS</span></a>';
+}
+
 if (dbFetchCell("SELECT COUNT(*) FROM `mac_accounting` WHERE `port_id` = ?", array($port['port_id'])))
 {
   $port['tags'] .= '<a href="' . generate_port_url($port, array('view' => 'macaccounting')) . '"><span class="label label-info">MAC</span></a>';
@@ -43,7 +48,7 @@ echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" .
          <td style="width: 1px;"></td>
          <td valign="top" width="350">');
 
-echo("        <span class=list-large>
+echo("        <span class=entity-title>
               " . generate_port_link($port, $port['ifIndex_FIXME'] . "".$port['label']) . " ".$port['tags']."
            </span><br /><span class=interface-desc>".$port['ifAlias']."</span>");
 

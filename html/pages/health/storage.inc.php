@@ -78,7 +78,7 @@ foreach ($storage_array as $storage)
     $background = get_percentage_colours($storage['storage_perc']);
 
     echo('<tr>
-          <td class=list-bold>' . generate_device_link($storage) . '</td>
+          <td class=strong>' . generate_device_link($storage) . '</td>
           <td>'.overlib_link($link, $storage['storage_descr'],$overlib_content).'</td>
           <td>'.$total.'</td>
           <td>'.$used.'</td>
@@ -93,7 +93,7 @@ foreach ($storage_array as $storage)
 
     if ($vars['view'] == "graphs")
     {
-      echo("<tr><td colspan=5>");
+      echo("<tr><td colspan=7>");
 
       unset($graph_array['height'], $graph_array['width'], $graph_array['legend']);
       $graph_array['to']     = $config['time']['now'];

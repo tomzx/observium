@@ -55,7 +55,7 @@ foreach (dbFetchRows($sql) as $mempool)
     $background = get_percentage_colours($mempool['mempool_perc']);
 
     echo('<tr>
-          <td class=list-bold>' . generate_device_link($mempool) . '</td>
+          <td class=strong>' . generate_device_link($mempool) . '</td>
           <td>'.overlib_link($link, $mempool['mempool_descr'],$overlib_content).'</td>
           <td>'.overlib_link($link_graph, $mini_graph, $overlib_content).'</td>
           <td><a href="'.$proc_url.'" '.$proc_popup.'>

@@ -12,7 +12,7 @@ if($vars['searchbar'] != "hide")
 {
 
 ?>
-<table style="text-align: left;" cellpadding=0 cellspacing=5 class=devicetable width=100%>
+<table style="text-align: left; width: 100%;" class="table-transparent">
   <tr style='padding: 0px;'>
   <form method='post' action=''>
     <td width='200'>

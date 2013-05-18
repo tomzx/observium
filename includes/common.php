@@ -468,10 +468,10 @@ function get_device_id_by_app_id($app_id)
 function ifclass($ifOperStatus, $ifAdminStatus)
 {
   $ifclass = "interface-upup";
-  if ($ifAdminStatus == "down") { $ifclass = "interface-admindown"; }
-  if ($ifAdminStatus == "up" && $ifOperStatus== "down") { $ifclass = "interface-updown"; }
-  if ($ifAdminStatus == "up" && $ifOperStatus== "lowerLayerDown") { $ifclass = "interface-lldown"; }
-  if ($ifAdminStatus == "up" && $ifOperStatus== "up") { $ifclass = "interface-upup"; }
+  if ($ifAdminStatus == "down") { $ifclass = "gray"; }
+  if ($ifAdminStatus == "up" && $ifOperStatus== "down") { $ifclass = "red"; }
+  if ($ifAdminStatus == "up" && $ifOperStatus== "lowerLayerDown") { $ifclass = "orange"; }
+  if ($ifAdminStatus == "up" && $ifOperStatus== "up") { $ifclass = ""; }
 
   return $ifclass;
 }

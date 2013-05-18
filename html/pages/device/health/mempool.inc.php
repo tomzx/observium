@@ -21,7 +21,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
   $mempool_url   = "device/".$device['device_id']."/health/mempool/";
   $mini_url = "graph.php?id=".$mempool['mempool_id']."&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=80&amp;height=20&amp;bg=f4f4f4";
 
-  $mempool_popup  = "onmouseover=\"return overlib('<div class=list-large>".$device['hostname']." - ".$text_descr;
+  $mempool_popup  = "onmouseover=\"return overlib('<div class=entity-title>".$device['hostname']." - ".$text_descr;
   $mempool_popup .= "</div><img src=\'graph.php?id=" . $mempool['mempool_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";
   $mempool_popup .= "', RIGHT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\"";
 
@@ -35,7 +35,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
   $right_background = $background['right'];
   $left_background  = $background['left'];
 
-  echo("<tr><td class=tablehead><a href='".$mempool_url."' $mempool_popup>" . $text_descr . "</a></td>
+  echo("<tr><td class=strong><a href='".$mempool_url."' $mempool_popup>" . $text_descr . "</a></td>
            <td width=90><a href='".$mempool_url."'  $mempool_popup><img src='$mini_url'></a></td>
            <td width=200><a href='".$mempool_url."' $mempool_popup>
            ".print_percentage_bar (400, 20, $perc, "$used / $total", "ffffff", $left_background, $free , "ffffff", $right_background)."

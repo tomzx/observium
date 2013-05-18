@@ -3,7 +3,7 @@
 $sql  = "SELECT *, `sensors`.`sensor_id` AS `sensor_id`";
 $sql .= " FROM  `sensors`";
 $sql .= " LEFT JOIN  `sensors-state` ON  `sensors`.sensor_id =  `sensors-state`.sensor_id";
-$sql .= " WHERE `sensor_class` = ? AND `device_id` = ? ORDER BY `sensor_index`";
+$sql .= " WHERE `sensor_class` = ? AND `device_id` = ? ORDER BY `sensor_descr`";
 
 $sensors = dbFetchRows($sql, array($sensor_class, $device['device_id']));
 
@@ -54,15 +54,15 @@ if (count($sensors))
 
     if (strtolower($sensor_type) == "frequency") {
       echo("<tr class=device-overview>
-           <td class=tablehead style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
-           <td width=80 align=right class=tablehead>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
-           <td width=80 align=right class=tablehead>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . format_si($sensor['sensor_value']) . $sensor_unit . "</span>", $overlib_content)."</td>
+           <td class=strong style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
+           <td width=80 align=right class=strong>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
+           <td width=80 align=right class=strong>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . format_si($sensor['sensor_value']) . $sensor_unit . "</span>", $overlib_content)."</td>
           </tr>");
     } else {
       echo("<tr class=device-overview>
-           <td class=tablehead style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
-           <td width=80 align=right class=tablehead>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
-           <td width=80 align=right class=tablehead>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . $sensor['sensor_value'] . $sensor_unit . "</span>", $overlib_content)."</td>
+           <td class=strong style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
+           <td width=80 align=right class=strong>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
+           <td width=80 align=right class=strong>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . $sensor['sensor_value'] . $sensor_unit . "</span>", $overlib_content)."</td>
           </tr>");
     }
   }

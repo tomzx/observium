@@ -31,7 +31,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $drive)
 
   $fs_url   = "device/device=".$device['device_id']."/tab=health/metric=storage/";
 
-  $fs_popup  = "onmouseover=\"return overlib('<div class=list-large>".$device['hostname']." - ".$drive['storage_descr'];
+  $fs_popup  = "onmouseover=\"return overlib('<div class=entity-title>".$device['hostname']." - ".$drive['storage_descr'];
   $fs_popup .= "</div><img src=\'graph.php?id=" . $drive['storage_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";
   $fs_popup .= "', RIGHT, FGCOLOR, '#e5e5e5');\" onmouseout=\"return nd();\"";
 

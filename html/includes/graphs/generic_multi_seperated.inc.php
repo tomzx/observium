@@ -153,6 +153,20 @@ if (!$args['nototal'])
   $rrd_options .= " GPRINT:bits:MAX:%6.2lf%s";
   $rrd_options .= " GPRINT:tot:%6.2lf%s$total_units";
   $rrd_options .= " COMMENT:'\\n'";
+
+  if ($_GET['trend'])
+  {
+    $rrd_options .= " CDEF:smooth_in=inbits,1800,TREND";
+    $rrd_options .= " CDEF:predict_in=586400,-7,1800,inbits,PREDICT";
+    $rrd_options .= " LINE2:predict_in#FF00FF::dashes=5";
+
+    $rrd_options .= " CDEF:smooth_out=doutbits,1800,TREND";
+    $rrd_options .= " CDEF:predict_out=586400,-7,1800,doutbits,PREDICT";
+    $rrd_options .= " LINE2:predict_out#FF00FF::dashes=5";
+
+  }
+
+
 }
 
 if (!$args['nototal'] && $_GET['previous'] == "yes")
@@ -183,6 +197,8 @@ if (!$args['nototal'] && $_GET['previous'] == "yes")
   $rrd_options .= " GPRINT:totX:%6.2lf%s$total_units";
   $rrd_options .= " COMMENT:'\\n'";
 }
+
+
 
 $rrd_options .= $rrd_optionsb;
 $rrd_options .= " HRULE:0#999999";

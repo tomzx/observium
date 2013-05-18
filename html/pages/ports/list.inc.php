@@ -27,7 +27,7 @@ if($vars['pageno'])
 echo('<table class="table table-striped table-bordered table-rounded table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
 
-echo('<tr class="tablehead">');
+echo('<tr class="entity">');
 echo("      <th style='width: 1px'></th>\n");
 echo("      <th style='width: 1px'></th>\n");
 
@@ -84,8 +84,8 @@ foreach ($ports as $port)
     echo("<tr class='ports'>
           <td style='background-color: ".$table_tab_colour.";'></td>
           <td></td>
-          <td class=list-bold>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
-          <td><span class=list-bold>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
+          <td class=strong>".generate_device_link($port, shorthost($port['hostname'], "20"))."</td>
+          <td><span class=strong>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
                                         ".$port['ifAlias']."</td>
           <td><span class=green>&darr; ".$port['bps_in']."<br />
                         <span class=blue>&uarr; ".$port['bps_out']."<br />

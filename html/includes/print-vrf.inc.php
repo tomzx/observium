@@ -6,11 +6,11 @@ if (is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list
 
 echo("<tr bgcolor='$bg_colour'>");
 
-echo("<td width=200 class=list-large><a href='routing/vrf/".$vrf['mplsVpnVrfRouteDistinguisher']."/'>" . $vrf['vrf_name'] . "</a></td>");
+echo("<td width=200 class=entity-title><a href='routing/vrf/".$vrf['mplsVpnVrfRouteDistinguisher']."/'>" . $vrf['vrf_name'] . "</a></td>");
 echo("<td width=150 class=box-desc>" . $vrf['mplsVpnVrfDescription'] . "</td>");
 echo("<td width=100 class=box-desc>" . $vrf['mplsVpnVrfRouteDistinguisher'] . "</td>");
 
-echo('<td class="list-bold">');
+echo('<td class="entity">');
 foreach (dbFetchRows("SELECT * FROM ports WHERE `device_id` = ? AND `ifVrf` = ?", array($device['device_id'], $vrf['vrf_id'])) as $port)
 {
   if ($vars['view'] == "graphs")

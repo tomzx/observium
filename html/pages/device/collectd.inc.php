@@ -84,14 +84,14 @@ echo('<table class="table table-condensed table-striped table-hover">');
        if (!is_integer($i/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
 
        echo('<tr><td>');
-       echo('<div style="padding:4px 0px 0px 8px;" class=graphhead>'.$graph_title);
+       echo('<h4>'.$graph_title);
 
        if ($tinst) {
        echo($vars['plugin']." $instance - $type - $tinst");
        } else {
         echo($vars['plugin']." $instance - $type");
        }
-       echo('</div>');
+       echo('</h4>');
 
        $graph_array['type']                    = "device_collectd";
        $graph_array['device']                      = $device['device_id'];

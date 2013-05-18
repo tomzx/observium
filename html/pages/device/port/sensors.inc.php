@@ -32,7 +32,7 @@ foreach (dbFetchRows($sql, array($port['port_id'], $device['device_id'])) as $se
 
   if (!is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
 
-  echo("<tr class=list-large style=\"background-color: $row_colour; padding: 5px;\">
+  echo("<tr class=entity-title style=\"background-color: $row_colour; padding: 5px;\">
           <td width=500>" . $sensor['sensor_descr'] . "</td>
           <td>" . $sensor['sensor_type'] . "</td>
           <td width=50>" . format_si($sensor['sensor_value']) .$unit. "</td>

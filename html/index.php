@@ -128,10 +128,9 @@ if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title'
 if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$config['page_refresh'].'" />' . "\n"); }
 ?>
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
-  <link href="<?php echo($config['stylesheet']);  ?>" rel="stylesheet" type="text/css" />
+  <link href="css/styles.css-s" rel="stylesheet" type="text/css" />
   <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
   <link href="css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
-  <link href="css/bootstrap-observium.css" rel="stylesheet" type="text/css" />
   <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
   <link href="css/bootstrap-switch.css"  rel="stylesheet" type="text/css" />
   <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
@@ -212,7 +211,7 @@ function popUp(URL)
 // End -->
   </script>
 
-<body style="padding-top: 55px;">
+<body>
   <div class="container">
 
 <?php

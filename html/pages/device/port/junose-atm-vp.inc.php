@@ -11,7 +11,7 @@ foreach (dbFetchRows("SELECT * FROM juniAtmVp WHERE port_id = ?", array($interfa
 {
   if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
   echo('<tr bgcolor="'.$row_colour.'">');
-  echo('<td><span class=list-bold>'.$row.'. VP'.$vp['vp_id'].' '.$vp['vp_descr'].'</span></td>');
+  echo('<td><span class=strong>'.$row.'. VP'.$vp['vp_id'].' '.$vp['vp_descr'].'</span></td>');
   echo('</tr>');
 
   $graph_array['height'] = "100";

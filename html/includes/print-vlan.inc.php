@@ -4,9 +4,9 @@ if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $lis
 
 echo("<tr bgcolor='$bg_colour'>");
 
-echo("<td width=100 class=list-large> Vlan " . $vlan['vlan_vlan'] . "</td>");
+echo("<td width=100 class=entity-title> Vlan " . $vlan['vlan_vlan'] . "</td>");
 echo("<td width=200 class=box-desc>" . $vlan['vlan_name'] . "</td>");
-echo("<td class=list-bold>");
+echo("<td class=strong>");
 
   $vlan_ports = array();
   $otherports = dbFetchRows("SELECT * FROM `ports_vlans` AS V, `ports` as P WHERE V.`device_id` = ? AND V.`vlan` = ? AND P.port_id = V.port_id", array($device['device_id'], $vlan['vlan_vlan']));

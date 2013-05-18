@@ -46,7 +46,7 @@ $percentage_bar['bars'][3] = array('percent' => $shar_perc, 'colour' => '#008fea
 
 echo('<table width="100%" class="table-striped table-condensed-more">');
 echo('  <tr>');
-echo('    <td class="tablehead">RAM</td>');
+echo('    <td class="entity">RAM</td>');
 echo('    <td colspan=8>');
 echo(percentage_bar($percentage_bar));
 echo('    </td>');
@@ -83,7 +83,7 @@ $percentage_bar['text_c']  = "#356AA0";
 $percentage_bar['bars'][0] = array('percent' => $swap_perc, 'colour' => '#356AA0', 'text' => $swap_perc.'%');
 
 echo('  <tr>');
-echo('    <td class="tablehead">Swap</td>');
+echo('    <td class="entity">Swap</td>');
 echo('    <td colspan=8>');
 echo(percentage_bar($percentage_bar));
 echo('    </td>');
