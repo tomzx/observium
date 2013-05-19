@@ -151,6 +151,13 @@ $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "Sun Solaris";
 $config['os'][$os]['type']              = "server";
 
+$os = "aix";
+$config['os'][$os]['group']             = "unix";
+$config['os'][$os]['text']              = "AIX";
+$config['os'][$os]['type']              = "server";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+
 $os = "adva";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['text']              = "Adva Optical";
