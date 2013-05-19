@@ -261,14 +261,14 @@ function show_map($config)
     function show_status_boxes($config) {
         // Show Status
         if ($config['frontpage']['device_status']['show']) {
-#            echo("<div class=\"row-fluid\">");
-#            echo("    <div class=\"span12\">");
+            echo("<div class=\"row-fluid\">");
+            echo("    <div class=\"span12\">");
 #            echo("        <h3 class=\"bill\">Device Alerts</h3>");
 
             print_status_boxes($config['frontpage']['device_status']);
 
-#            echo("    </div>");
-#            echo("</div>");
+            echo("    </div>");
+            echo("</div>");
         }
     }
 
