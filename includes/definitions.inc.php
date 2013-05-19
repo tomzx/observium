@@ -653,6 +653,8 @@ $os = "axisdocserver";
 $config['os'][$os]['text']              = "AXIS Network Document Server";
 $config['os'][$os]['icon']              = "axis";
 
+// Gamatronic
+
 $os = "gamatronicups";
 $config['os'][$os]['text']              = "Gamatronic UPS Stack";
 $config['os'][$os]['type']              = "power";
@@ -670,10 +672,14 @@ $config['os'][$os]['over'][1]['text']   = "Current";
 $config['os'][$os]['over'][2]['graph']  = "device_frequency";
 $config['os'][$os]['over'][2]['text']   = "Freq";
 
+// Delta
+
 $os = "deltaups";
 $config['os'][$os]['text']              = "Delta UPS";
 $config['os'][$os]['type']              = "power";
 $config['os'][$os]['icon']              = "delta";
+
+// Liebert
 
 $os = "liebert";
 $config['os'][$os]['text']              = "Liebert";
@@ -685,15 +691,21 @@ $config['os'][$os]['type']              = "wireless";
 $config['os'][$os]['text']              = "EnGenius Access Point";
 $config['os'][$os]['icon']              = "engenius";
 
+// Apple
+
 $os = "airport";
 $config['os'][$os]['type']              = "wireless";
 $config['os'][$os]['text']              = "Apple AirPort";
 $config['os'][$os]['icon']              = "apple";
 
+// Microsoft
+
 $os = "windows";
 $config['os'][$os]['text']              = "Microsoft Windows";
 $config['os'][$os]['ifname']            = 1;
 $config['os'][$os]['processor_stacked'] = 1;
+
+// Blade Network Technologies
 
 $os = "bnt";
 $config['os'][$os]['text']              = "Blade Network Technologies";
@@ -701,8 +713,6 @@ $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "bnt";
 
 // NetAPP
-
-/// FIXME - NetApp can have some ace graphs once they're done :)
 
 $os = "netapp";
 $config['os'][$os]['text']              = "NetApp";
@@ -715,7 +725,12 @@ $config['os'][$os]['over'][1]['text']   = "Operations";
 $config['os'][$os]['over'][2]['graph']  = "device_netapp_disk_io";
 $config['os'][$os]['over'][2]['text']   = "Disk I/O";
 
+// Arris
 
+$os = "arris-d5";
+$config['os'][$os]['text']              = "Arris D5";
+$config['os'][$os]['type']              = "video";
+$config['os'][$os]['icon']              = "arris";
 
 // HP / 3Com
 
@@ -1360,6 +1375,11 @@ $i++;
 $config['device_types'][$i]['text'] = 'Load Balancers';
 $config['device_types'][$i]['type'] = 'loadbalancer';
 $config['device_types'][$i]['icon'] = 'oicon-arrow-split';
+
+$i++;
+$config['device_types'][$i]['text'] = 'Video';
+$config['device_types'][$i]['type'] = 'video';
+$config['device_types'][$i]['icon'] = 'oicon-video';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Storage';
