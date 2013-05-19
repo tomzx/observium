@@ -1,65 +1,48 @@
 <?php
 
-$pagetitle[] = "Ports";
+$pagetitle[] = 'Ports';
 
 // Set Defaults here
 
-if(!isset($vars['format'])) { $vars['format'] = "list_basic"; }
+if(!isset($vars['format'])) { $vars['format'] = 'list_basic'; }
 
 echo('<div class="well" style="padding: 10px;">');
 
-if($vars['searchbar'] != "hide")
+if($vars['searchbar'] != 'hide')
 {
 
 ?>
-<table style="text-align: left; width: 100%;" class="table-transparent">
-  <tr style='padding: 0px;'>
-  <form method='post' action=''>
-    <td width='200'>
-      <select name='device_id' id='device_id' style='width: 180px;'>
-        <option value=''>All Devices</option>
+<form method="post" action="" style="margin-bottom: none;">
+<table style="width: 100%;" class="table-transparent">
+ <tbody>
+  <tr>
+    <td>
+      <select name="device_id" id="device_id">
+        <option value="">All Devices</option>
 <?php
 
-foreach (dbFetchRows("SELECT `device_id`,`hostname` FROM `devices` GROUP BY `hostname` ORDER BY `hostname`") as $data)
+foreach (dbFetchRows('SELECT `device_id`, `hostname` FROM `devices` GROUP BY `hostname` ORDER BY `hostname`') as $data)
 {
   if(device_permitted($data['device_id']))
   {
     echo('        <option value="'.$data['device_id'].'"');
-    if ($data['device_id'] == $vars['device_id']) { echo("selected"); }
-    echo(">".$data['hostname']."</option>");
+    if ($data['device_id'] == $vars['device_id']) { echo('selected'); }
+    echo('>'.$data['hostname'].'</option>');
   }
 }
 ?>
       </select>
-      <br />
-      <input type="text" name="hostname" id="hostname" title="Hostname" style="width: 180px;" <?php if (strlen($vars['hostname'])) {echo('value="'.$vars['hostname'].'"');} ?> />
     </td>
-    <td width="120">
-      <select name="state" id="state" style="width: 100px;">
+    <td>
+      <select name="state" id="state">
         <option value="">All States</option>
         <option value="up" <?php if ($vars['state'] == "up") { echo("selected"); } ?>>Up</option>
         <option value="down"<?php if ($vars['state'] == "down") { echo("selected"); } ?>>Down</option>
         <option value="admindown" <?php if ($vars['state'] == "admindown") { echo("selected"); } ?>>Shutdown</option>
       </select>
-      <br />
-
-      <select name="ifSpeed" id="ifSpeed" style="width: 100px;">
-      <option value="">All Speeds</option>
-<?php
-foreach (dbFetchRows("SELECT `ifSpeed` FROM `ports` GROUP BY `ifSpeed` ORDER BY `ifSpeed`") as $data)
-{
-  if ($data['ifSpeed'])
-  {
-    echo("<option value='".$data['ifSpeed']."'");
-    if ($data['ifSpeed'] == $vars['ifSpeed']) { echo("selected"); }
-    echo(">".humanspeed($data['ifSpeed'])."</option>");
-  }
-}
-?>
-       </select>
     </td>
-    <td width=170>
-      <select name="ifType" id="ifType" style="width: 150px;">
+    <td>
+      <select name="ifType" id="ifType">
         <option value="">All Media</option>
 <?php
 foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `ifType`") as $data)
@@ -73,48 +56,12 @@ foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `i
 }
 ?>
        </select>
-<br />
-      <select name="port_descr_type" id="port_descr_type" style="width: 150px;">
-        <option value="">All Port Types</option>
-<?php
-$ports = dbFetchRows("SELECT `port_descr_type` FROM `ports` GROUP BY `port_descr_type` ORDER BY `port_descr_type`");
-$total = count($ports);
-echo("Total: $total");
-foreach ($ports as $data)
-{
-  if ($data['port_descr_type'])
-  {
-    echo('        <option value="'.$data['port_descr_type'].'"');
-    if ($data['port_descr_type'] == $vars['port_descr_type']) { echo("selected"); }
-    echo(">".ucfirst($data['port_descr_type'])."</option>");
-  }
-}
-?>
-         </select>
        </td>
        <td>
-       </td>
-       <td width="220">
-        <input style="width: 200px;" title="Port Description" type="text" name="ifAlias" id="ifAlias" <?php if (strlen($vars['ifAlias'])) {echo('value="'.$vars['ifAlias'].'"');} ?> />
-        <select style="width: 200px;" name="location" id="location">
-          <option value="">All Locations</option>
-          <?php
-           // fix me function?
-
-           foreach (getlocations() as $location) // FIXME function name sucks maybe get_locations ?
-           {
-             if ($location)
-             {
-               echo('<option value="'.$location.'"');
-               if ($location == $vars['location']) { echo(" selected"); }
-               echo(">".$location."</option>");
-             }
-           }
-         ?>
-        </select>
+        <input title="Port Description" type="text" name="ifAlias" id="ifAlias" <?php if (strlen($vars['ifAlias'])) {echo('value="'.$vars['ifAlias'].'"');} ?> />
       </td>
 
-      <td width=80>
+      <td width=80 rowspan=2>
         <label for="ignore">
         <input type=checkbox id="ignore" name="ignore" value=1 <?php if ($vars['ignore']) { echo("checked"); } ?> ></input> Ignored
         </label>
@@ -125,7 +72,7 @@ foreach ($ports as $data)
         <input type=checkbox id="deleted" name="deleted" value=1 <?php if ($vars['deleted']) { echo("checked"); } ?> > Deleted</input>
         </label>
         </td>
-        <td width=120>
+        <td rowspan=2>
         <select name="sort" id="sort" style="width: 110px;">
 <?php
 $sorts = array('device' => 'Device',
@@ -153,14 +100,76 @@ foreach ($sorts as $sort => $sort_text)
 
         </select>
         </td>
-        <td style="text-align: center;" width=90>
+        <td style="text-align: center;" rowspan=2>
         <button type="submit" class="btn btn-large"><i class="icon-search"></i> Search</button>
         <br />
         <a href="<?php echo(generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare']))); ?>" title="Reset critera to default." >Reset</a>
       </td>
-    </form>
   </tr>
+  <tr>
+    <td>
+      <input type="text" name="hostname" id="hostname" title="Hostname" <?php if (strlen($vars['hostname'])) {echo('value="'.$vars['hostname'].'"');} ?> />
+    </td>
+    <td>
+      <select name="ifSpeed" id="ifSpeed">
+      <option value="">All Speeds</option>
+<?php
+foreach (dbFetchRows("SELECT `ifSpeed` FROM `ports` GROUP BY `ifSpeed` ORDER BY `ifSpeed`") as $data)
+{
+  if ($data['ifSpeed'])
+  {
+    echo("<option value='".$data['ifSpeed']."'");
+    if ($data['ifSpeed'] == $vars['ifSpeed']) { echo("selected"); }
+    echo(">".humanspeed($data['ifSpeed'])."</option>");
+  }
+}
+?>
+       </select>
+
+    </td>
+    <td>
+      <select name="port_descr_type" id="port_descr_type">
+        <option value="">All Port Types</option>
+<?php
+$ports = dbFetchRows("SELECT `port_descr_type` FROM `ports` GROUP BY `port_descr_type` ORDER BY `port_descr_type`");
+$total = count($ports);
+echo("Total: $total");
+foreach ($ports as $data)
+{
+  if ($data['port_descr_type'])
+  {
+    echo('        <option value="'.$data['port_descr_type'].'"');
+    if ($data['port_descr_type'] == $vars['port_descr_type']) { echo("selected"); }
+    echo(">".ucfirst($data['port_descr_type'])."</option>");
+  }
+}
+?>
+         </select>
+
+    </td>
+    <td>
+        <select name="location" id="location">
+          <option value="">All Locations</option>
+          <?php
+           // fix me function?
+
+           foreach (getlocations() as $location) // FIXME function name sucks maybe get_locations ?
+           {
+             if ($location)
+             {
+               echo('<option value="'.$location.'"');
+               if ($location == $vars['location']) { echo(" selected"); }
+               echo(">".$location."</option>");
+             }
+           }
+         ?>
+        </select>
+    </td>
+  </tr>
+ </tbody>
 </table>
+</form>
+
 <hr />
 
 <?php }
