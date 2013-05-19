@@ -155,6 +155,7 @@ $os = "aix";
 $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "AIX";
 $config['os'][$os]['type']              = "server";
+$config['os'][$os]['ifAliasSemicolon']  = TRUE;             // Split on semicolon and take the first element.
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Traffic";
 

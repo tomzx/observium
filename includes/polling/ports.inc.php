@@ -234,6 +234,9 @@ foreach ($ports as $port)
 
     echo("VLAN == ".$this_port['ifVlan']);
 
+    // Process ifAlias if needed
+    if($config['os'][$device['os']]['ifAliasSemicolon'] == TRUE) { list($this_port['ifDescr']) = explode(';', $this_port['ifDescr']); }
+
     // Update IF-MIB data
     foreach ($data_oids as $oid)
     {
@@ -248,8 +251,6 @@ foreach ($ports as $port)
         if ($debug) { echo($oid . ": ".$port[$oid]." -> " . $this_port[$oid]." "); } else { echo($oid . " "); }
       }
     }
-
-    
 
     // Parse description (usually ifAlias) if config option set
     if (isset($config['port_descr_parser']) && is_file($config['install_dir'] . "/" . $config['port_descr_parser']))
