@@ -359,6 +359,16 @@ $config['os'][$os]['text']              = "ZTE ZXR10";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "zte";
 
+// Korenix
+
+$os = "korenix-jetnet";
+$config['os'][$os]['text']              = "Korenix Jetnet";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "korenix";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+
+
 // Supermicro Switch
 
 $os = "supermicro-switch";
