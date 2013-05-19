@@ -750,6 +750,12 @@ $config['os'][$os]['text']              = "Arris D5";
 $config['os'][$os]['type']              = "video";
 $config['os'][$os]['icon']              = "arris";
 
+$os = "arris-c3";
+$config['os'][$os]['text']              = "Arris C3";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "arris";
+
+
 // HP / 3Com
 
 $os = "3com";
