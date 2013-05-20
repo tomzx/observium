@@ -59,6 +59,58 @@ function rewrite_entity_descr ($descr)
 }
 
 /**
+ * Humanize Device
+ *
+ *   Process the $device array to add/modify elements.
+ *
+ * @param array $device
+ * @return none
+ */
+
+function humanize_device(&$device)
+{
+  global $config;
+
+  // Set the HTML class and Tab color for the device based on status
+  if ($device['status'] == '0')
+  {
+    $device['html_row_class'] = "error";
+    $device['html_tab_colour'] = "#cc0000";
+  } else {
+    $device['html_row_class'] = "";
+    /// This one looks too bright and out of place - adama
+    #$device['html_tab_colour'] = "#194BBF";
+    /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
+    $device['html_tab_colour'] = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
+                                            // Your mum's a semicolon - adama
+  }
+  if ($device['ignore'] == '1')
+  {
+    $device['html_row_class'] = "warning";
+    $device['html_tab_colour'] = "#aaaaaa";
+    if ($device['status'] == '1')
+    {
+      $device['html_row_class'] = "";
+      $device['html_tab_colour'] = "#009900"; // Why green for ignore? Confusing!
+    }
+  }
+  if ($device['disabled'] == '1')
+  {
+    $device['html_row_class'] = "warning";
+    $device['html_tab_colour'] = "#aaaaaa";
+  }
+
+  $device['icon'] = getImage($device);
+
+  // Set the name we print for the OS
+  $device['os_text'] = $config['os'][$device['os']]['text'];
+
+  // Mark this device as being humanized
+  $device['humanized_device'] = TRUE;
+}
+
+
+/**
  * Humanize BGP Peer
  *
  * Returns a the $peer array with processed information:
