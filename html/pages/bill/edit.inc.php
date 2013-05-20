@@ -28,13 +28,10 @@ if ($bill_data['bill_type'] == "cdr") {
 
 ?>
 
-<div class="tabBox">
-  <ul class="nav-tabs tabs" id="editBillTab">
-    <li class="active first"><a href="#properties" data-toggle="tab">Bill properties</a></li>
-    <li><a href="#ports" data-toggle="tab">Billed ports</a></li>
-  </ul>
-  <div class="tabcontent tab-content" id="editBillTabContent" style="min-height: 50px; padding-bottom: 18px;">
-    <div class="tab-pane fade active in" id="properties">
+<div class="row-fluid">
+  <div class="span6 well info_box">
+    <div id="title"><i class="oicon-wrench"></i> Bill Properties</div>
+    <div id="content">
       <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
         <input type="hidden" name="action" value="update_bill">
         <script type="text/javascript">
@@ -44,7 +41,6 @@ if ($bill_data['bill_type'] == "cdr") {
           }
         </script>
         <fieldset>
-          <legend>Bill Properties</legend>
           <div class="control-group">
             <label class="control-label" for="bill_name"><strong>Description</strong></label>
             <div class="controls">
@@ -122,49 +118,51 @@ for ($x=1;$x<32;$x++) {
         </div>
       </form>
     </div>
+  </div>
 
-  <div class="tab-pane fade in" id="ports">
+  <div class="span6 well info_box">
+    <div id="title"><i class="oicon-network-ethernet"></i> Bill Ports</div>
+    <div id="content">
+
     <form class="form-horizontal">
       <fieldset>
-        <legend>Currently Billed Ports</legend>
         <div class="control-group">
 <?php
 
-$ports = dbFetchRows("SELECT * FROM `bill_ports` AS B, `ports` AS P, `devices` AS D
-                      WHERE B.bill_id = ? AND P.port_id = B.port_id
-                      AND D.device_id = P.device_id", array($bill_data['bill_id']));
+
+$port_ids = dbFetchRows("SELECT `port_id` FROM `bill_ports` WHERE bill_id = ?", array($bill_id));
+
 if (is_array($ports))
 {
-  foreach ($ports as $port)
-  {
-    $emptyCheck = true;
-    $devicebtn = str_replace("list-device", "btn btn-mini", generate_device_link($port));
-    $devicebtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $devicebtn);
-    $devicebtn = str_replace("<div>',;", "</div></div>',", $devicebtn);
-    $portbtn = str_replace("interface-upup", "btn btn-mini", generate_port_link($port));
-    $portbtn = str_replace("interface-updown", "btn btn-mini btn-warning", $portbtn);
-    $portbtn = str_replace("interface-downdown", "btn btn-mini btn-warning", $portbtn);
-    $portbtn = str_replace("interface-admindown", "btn btn-mini btn-warning disabled", $portbtn);
-    $portbtn = str_replace("overlib('", "overlib('<div style=\'border: 5px solid #e5e5e5; background: #fff; padding: 10px;\'>", $portbtn);
-    $portbtn = str_replace("<div>',;", "</div></div>',", $portbtn);
-    $portalias = (empty($port['ifAlias']) ? "" : " - ".$port['ifAlias']."");
-    $devicebtn = str_replace("\">".$port['hostname'], "\" style=\"color: #000;\"><i class=\"icon-hdd\"></i> ".$port['hostname'], $devicebtn);
-    $portbtn = str_replace("\">".strtolower($port['ifName']), "\" style=\"color: #000;\"><i class=\"icon-random\"></i> ".$port['ifName']."".$portalias, $portbtn);
+  foreach ($port_ids AS $port_entry) {
+
+  $emptyCheck = true;
+
+  $port   = get_port_by_id($port_entry['port_id']);
+  $device = device_by_id_cache($port['device_id']);
+
+
+    $devicebtn = '<button class="btn"><i class="oicon-servers"></i> '.generate_device_link($device).'</button>';
+    if (empty($port['ifAlias'])) { $portalias = ""; } else { $portalias = " - ".$port['ifAlias'].""; }
+    $portbtn = '<button class="btn">'.generate_port_link($port, '<i class="oicon-network-ethernet"></i> '.$port['label'].$portalias).'</button>';
+
     $delete  = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'edit', 'action' => 'delete_bill_port', 'port_id' => $port['port_id']));
+
 //    echo("          <form action=\"\" method=\"post\" name=\"delete".$port['port_id']."\" style=\"display: none;\">\n");
     echo("          <form action=\"".$url."\" method=\"get\" name=\"delete".$port['port_id']."\">\n");
     echo("            <input type=\"hidden\" name=\"action\" value=\"delete_bill_port\" />\n");
     echo("            <input type=\"hidden\" name=\"port_id\" value=\"".$port['port_id']."\" />\n");
 //    echo("          </form>\n");
     echo("          <div class=\"btn-toolbar\">\n");
-    echo("            <div class=\"btn-group\">\n");
+//    echo("            <div class=\"btn-group\">\n");
 //    echo("              <a class=\"btn btn-danger\" href=\"javascript:;\" onclick=\"document.delete".$port['port_id'].".submit();\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></a>\n");
 //    echo("              <a class=\"btn btn-danger\" href=\"".$delete."\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></a>\n");
-    echo("              <button type=\"submit\" class=\"btn btn-mini btn-danger\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></button>\n");
-    echo("            </div>\n");
+//    echo("              <button type=\"submit\" class=\"btn btn-mini btn-danger\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> <strong>Remove Interface</strong></button>\n");
+//    echo("            </div>\n");
     echo("            <div class=\"btn-group\">\n");
     //echo("            <div class=\"btn-group\" style=\"width: 600px;\">\n");
-    //echo("              <a class=\"btn btn-danger\" href=\"javascript:;\" onclick=\"document.delete".$port['port_id'].".submit();\" style=\"color: #fff;\"><i class=\"icon-trash icon-white\"></i></a>\n");
+#    echo('              <a class="btn btn-danger" href="'.$delete.'" style="color: #fff;"><i class="icon-trash icon-white"></i> Delete</a>'.PHP_EOL);
+    echo("              <button type=\"submit\" class=\"btn btn-danger\" style=\"color: #fff;\"><i class=\"icon-minus-sign icon-white\"></i> Delete</button>\n");
     echo("              ".$devicebtn."\n");
     echo("              ".$portbtn."\n");
     echo("            </div>\n");
@@ -221,5 +219,4 @@ foreach ($devices as $device)
       </div>
     </form>
   </div>
-</div>
 </div>

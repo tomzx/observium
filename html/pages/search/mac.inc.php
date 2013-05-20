@@ -70,7 +70,7 @@ foreach (dbFetchRows($query, $param) as $entry)
 
     if (port_permitted($entry['port_id']))
     {
-      $interface = humanize_port ($interface, $interface);
+      humanize_port($interface);
 
       echo('<tr class="search">
           <td class="entity">' . generate_device_link($entry) . '</td>

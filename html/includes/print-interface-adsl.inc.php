@@ -7,7 +7,7 @@ $port['hostname'] = $device['hostname'];
 
 $if_id = $port['port_id'];
 
-$port = humanize_port($port);
+humanize_port($port);
 
 if ($port['ifInErrors_delta'] > 0 || $port['ifOutErrors_delta'] > 0)
 {

@@ -7,7 +7,6 @@
  *
  * @package    observium
  * @subpackage functions
- * @author     Adam Armstrong <adama@memetic.org>
  * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
@@ -63,7 +62,7 @@ function humanize_device(&$device)
   $device['os_text'] = $config['os'][$device['os']]['text'];
 
   // Mark this device as being humanized
-  $device['humanized'] = TRUE;
+  $device['humanized_device'] = TRUE;
 }
 
 
@@ -281,18 +280,18 @@ function pagination($vars, $total, $per_page = 10)
 
   $page = ($page == 0 ? 1 : $page);
   $start = ($page - 1) * $per_page;
-  
+
   $prev = $page - 1;
   $next = $page + 1;
   $lastpage = ceil($total/$per_page);
   $lpm1 = $lastpage - 1;
- 
+
   $pagination = "";
 
   if ($lastpage > 1)
   {
     $pagination .= '<form action="">';
-    $pagination .= '<div class="pagination pagination-centered"><ul>';   
+    $pagination .= '<div class="pagination pagination-centered"><ul>';
 
     if ($prev)
     {
@@ -324,7 +323,7 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }  
+        }
 
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
@@ -342,8 +341,8 @@ function pagination($vars, $total, $per_page = 10)
           } else {
             $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $counter))."'>$counter</a></li>";
           }
-        }  
-           
+        }
+
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lpm1))."'>$lpm1</a></li>";
         $pagination.= "<li><a href='".generate_url($vars, array('pageno' => $lastpage))."'>$lastpage</a></li>";
       } else {
@@ -451,9 +450,11 @@ function generate_device_link_header($device, $vars=array())
 {
   global $config;
 
-  if (!$device['humanized']) { humanize_device($device); }
+  if (isset($device['humanized_device']) == FALSE) { humanize_device($device); }
 
   if ($device['os'] == "ios") { formatCiscoHardware($device, true); }
+
+#  print_r($device);
 
   $contents = '
       <table class="table table-striped table-bordered table-rounded table-condensed">
@@ -818,7 +819,7 @@ function generate_port_link_header($port)
   global $config;
 
   // Push through processing function to set attributes
-  if (!isset($port['humanized'])) { $port = humanize_port($port); }
+  if (!isset($port['humanized'])) { humanize_port($port); }
 
   $contents = '
       <table style="margin-top: 10px; margin-bottom: 10px;" class="table table-striped table-bordered table-rounded table-condensed">
@@ -838,7 +839,7 @@ function generate_port_link($port, $text = NULL, $type = NULL)
 {
   global $config;
 
-  $port = humanize_port($port);
+  if(isset($port['humanized']) == FALSE) { humanize_port($port); }
   if (!$text) { $text = fixIfName($port['label']); }
   if ($type) { $port['graph_type'] = $type; }
   if (!isset($port['graph_type'])) { $port['graph_type'] = 'port_bits'; }
@@ -1013,7 +1014,7 @@ function generate_ap_link($args, $text = NULL, $type = NULL)
 {
   global $config;
 
-  $args = humanize_port($args);
+  if(isset($args['humanized']) == false) { humanize_port($args); }
   if (!$text) { $text = fixIfName($args['label']); }
   if ($type) { $args['graph_type'] = $type; }
   if (!isset($args['graph_type'])) { $args['graph_type'] = 'port_bits'; }
@@ -1053,5 +1054,3 @@ function generate_ap_url($ap, $vars=array())
   return generate_url(array('page' => 'device', 'device' => $ap['device_id'], 'tab' => 'accesspoint', 'ap' => $ap['accesspoint_id']), $vars);
 }
 
-
-?>

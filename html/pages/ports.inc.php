@@ -345,6 +345,23 @@ $row = 1;
 list($format, $subformat) = explode("_", $vars['format']);
 $ports = dbFetchRows($sql, $param);
 
+function port_permitted_array(&$ports)
+{
+  // Strip out the ports the user isn't allowed to see, if they don't have global rights
+  if ($_SESSION['userlevel'] < '7')
+  {
+    foreach ($ports as $key => $port)
+    {
+      if (!port_permitted($port['port_id'], $port['device_id']))
+      {
+        unset($ports[$key]);
+      }
+    }
+  }
+}
+
+port_permitted_array($ports);
+
 include("includes/port-sort.inc.php");
 
 if(file_exists('pages/ports/'.$format.'.inc.php'))

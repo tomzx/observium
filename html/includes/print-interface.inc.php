@@ -44,7 +44,7 @@ if (dbFetchCell("SELECT COUNT(*) FROM `mac_accounting` WHERE `port_id` = ?", arr
 }
 
 echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" . generate_port_url($port) . "/\'" style="cursor: pointer;">
-         <td style="width: 1px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
+         <td style="width: 1px; background-color: '.$port['table_tab_colour'].'; margin: 0px; padding: 0px; width: 10px;"></td>
          <td style="width: 1px;"></td>
          <td valign="top" width="350">');
 
@@ -234,7 +234,7 @@ if ($port_details)
          $pw_peer_dev = dbFetchRow("SELECT * FROM `devices` WHERE `device_id` = ?", array($pseudowire['peer_device_id']));
          $pw_peer_int = dbFetchRow("SELECT * FROM `ports` AS I, pseudowires AS P WHERE I.device_id = ? AND P.cpwVcID = ? AND P.port_id = I.port_id", array($pseudowire['peer_device_id'], $pseudowire['cpwVcID']));
 
-         $pw_peer_int = humanize_port($pw_peer_int);
+         humanize_port($pw_peer_int);
          echo("$br<img src='images/16/arrow_switch.png' align=absmiddle><b> " . generate_port_link($pw_peer_int, makeshortif($pw_peer_int['label'])) ." on ". generate_device_link($pw_peer_dev, shorthost($pw_peer_dev['hostname'])) . "</b>");
          $br = "<br />";
        }

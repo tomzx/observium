@@ -444,7 +444,7 @@ function print_addresses($vars)
 
       if (port_permitted($entry['port_id']))
       {
-        $entry = humanize_port ($entry, $entry);
+        humanize_port ($entry);
         if ($entry['ifInErrors_delta'] > 0 || $entry['ifOutErrors_delta'] > 0)
         {
           $port_error = generate_port_link($entry, '<span class="label label-important">Errors</span>', 'port_errors');
@@ -584,7 +584,7 @@ function print_arptable($vars)
   {
     if (port_permitted($entry['port_id']))
     {
-      $entry = humanize_port ($entry, $entry);
+      humanize_port ($entry);
       $ip_version = $entry['ip_version'];
       $ip_address = ($ip_version == 6) ? Net_IPv6::compress($entry['ip_address']) : $entry['ip_address'];
       $arp_host = dbFetchRow('SELECT * FROM ipv'.$ip_version.'_addresses AS A
@@ -758,7 +758,7 @@ function print_events($vars)
       if ($entry['type'] == 'interface')
       {
         $this_if = getifbyid($entry['reference']);
-        humanize_port($this_if, $this_if);
+        humanize_port($this_if);
         $entry['link'] = '<span class="entity">' . generate_port_link($this_if, makeshortif($this_if['label'])) . '</span>';
       } else {
         $entry['link'] = 'System';
@@ -1076,7 +1076,7 @@ function print_status($status)
         $string .= '<td colspan=3>Too many ports down. See <strong><a href="'.generate_url(array('page'=>'ports'), array('state'=>'down')).'">All DOWN ports</a></strong>.</td></tr>' . PHP_EOL;
         break;
       }
-      $port = humanize_port($port, $port);
+      humanize_port($port);
       $string .= '  <tr>' . PHP_EOL;
       $string .= '    <td class="entity">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge badge-info">Port</span></td>' . PHP_EOL;
@@ -1103,7 +1103,7 @@ function print_status($status)
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
     {
-      $port = humanize_port($port, $port);
+      humanize_port($port);
       $string .= '  <tr>' . PHP_EOL;
       $string .= '    <td class="entity">' . generate_device_link($port, shorthost($port['hostname'])) . '</td>' . PHP_EOL;
       $string .= '    <td><span class="badge badge-info">Port</span></td>' . PHP_EOL;
@@ -1317,7 +1317,7 @@ function get_status_array($status)
         $string .= '<td colspan=3>Too many ports down. See <strong><a href="'.generate_url(array('page'=>'ports'), array('state'=>'down')).'">All DOWN ports</a></strong>.</td></tr>' . PHP_EOL;
         break;
       }
-      $port = humanize_port($port, $port);
+      humanize_port($port);
       $boxes[] = array('sev' => 50, 'class' => 'Port', 'event' => 'Down', 'device_link' => generate_device_link($port, shorthost($port['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
                        'time' => formatUptime($config['time']['now'] - strtotime($port['ifLastChange'])), 'location' => $device['location']);
@@ -1340,7 +1340,7 @@ function get_status_array($status)
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
     {
-      $port = humanize_port($port, $port);
+      humanize_port($port);
       $boxes[] = array('sev' => 50, 'class' => 'Port', 'event' => 'Errors', 'device_link' => generate_device_link($port, shorthost($port['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
                        'time' => formatUptime($config['time']['now'] - strtotime($port['ifLastChange'])), 'location' => $device['location']);
@@ -1395,7 +1395,7 @@ function get_status_array($status)
 
         $boxes[] = array('sev' => 50, 'class' => 'BGP Peer', 'event' => 'Down', 'device_link' => generate_device_link($peer, shorthost($peer['hostname'])),
                          'entity_link' => $peer['bgpPeerRemoteAddr'],
-                         'time' => formatUptime($config['time']['now'] - strtotime($service['service_changed']), 'short'), 'location' => $device['location']);
+                         'time' => formatUptime($peer['bgpPeerFsmEstablishedTime'], 'shorter'), 'location' => $device['location']);
 
       }
     }

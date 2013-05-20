@@ -7,7 +7,7 @@ $links['bills']   = generate_url(array('page' => 'bills'));
 ?>
 
 <div class="tabBox">
-  <ul class="nav-tabs tabs" id="addBillTab">
+  <ul class="nav nav-tabs" id="addBillTab">
     <li class="active"><a href="#properties" data-toggle="tab">Bill Properties</a></li>
 <?php
 

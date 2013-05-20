@@ -3,26 +3,29 @@
 $res   = "";
 $count = 0;
 $speed = 0;
-$ports = dbFetchRows("SELECT * FROM `bill_ports` AS B, `ports` AS P, `devices` AS D
-                      WHERE B.bill_id = ? AND P.port_id = B.port_id
-                      AND D.device_id = P.device_id", array($bill_id));
+$port_ids = dbFetchRows("SELECT `port_id` FROM `bill_ports` WHERE bill_id = ?", array($bill_id));
 
-foreach ($ports as $port) {
+foreach ($port_ids AS $port_entry) {
+
+  $port   = get_port_by_id($port_entry['port_id']);
+  $device = device_by_id_cache($port['device_id']);
+
   $emptyCheck = true;
   $count++;
   $speed += $port['ifSpeed'];
 
   /// FIXME - clean this up, it's horrible.
 
-  $devicebtn = str_replace("list-device", "btn btn-mini", generate_device_link($port, ""));
-  $devicebtn = str_replace("\">".$port['hostname'], "\" style=\"color: #000;\"><i class=\"icon-hdd\"></i> ".$port['hostname'], $devicebtn);
+  $devicebtn = '<button class="btn"><i class="oicon-servers"></i> '.generate_device_link($device).'</button>';
 
   if (empty($port['ifAlias'])) { $portalias = ""; } else { $portalias = " - ".$port['ifAlias'].""; }
 
-  $portbtn = str_replace("interface-upup", "btn btn-mini", generate_port_link($port, "<i class='icon-random'></i> ".$port['ifName'].$portalias));
-  $portbtn = str_replace("interface-updown", "btn btn-mini btn-danger", $portbtn);
-  $portbtn = str_replace("interface-downdown", "btn btn-mini btn-danger", $portbtn);
-  $portbtn = str_replace("interface-admindown", "btn btn-mini btn-warning disabled", $portbtn);
+  $portbtn = '<button class="btn">'.generate_port_link($port, '<i class="oicon-network-ethernet"></i> '.$port['label'].$portalias).'</button>';
+
+#  $portbtn = str_replace("interface-upup", "btn btn-mini", generate_port_link($port, "<i class='icon-random'></i> ".$port['label'].$portalias));
+#  $portbtn = str_replace("interface-updown", "btn btn-mini btn-danger", $portbtn);
+#  $portbtn = str_replace("interface-downdown", "btn btn-mini btn-danger", $portbtn);
+#  $portbtn = str_replace("interface-admindown", "btn btn-mini btn-warning disabled", $portbtn);
 
   $res    .= "          <div class=\"btn-toolbar\">\n";
   $res    .= "            <div class=\"btn-group\">\n";
@@ -43,8 +46,10 @@ $ports_info = array("ports" => $count, "capacity" => $speed);
 ?>
 
 <div class="row-fluid">
-  <div class="span12 well">
-    <h3 class="bill"><i class="icon-random"></i> Billed ports</h3>
-    <?php echo($res); ?>
+  <div class="span12 well info_box">
+    <div id="title"><i class="oicon-network-ethernet"></i> Billed Ports</div>
+    <div id="content">
+      <?php echo($res); ?>
+    </div>
   </div>
 </div>

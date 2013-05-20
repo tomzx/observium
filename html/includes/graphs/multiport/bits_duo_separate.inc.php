@@ -21,7 +21,7 @@ foreach($groups as $group_id => $group)
     $rrdfile = get_port_rrdfilename($port, $port);
     if (is_file($rrdfile))
     {
-      $port = humanize_port($port);
+      humanize_port($port);
       $rrd_list[$i]['filename'] = $rrdfile;
       $rrd_list[$i]['descr'] = $port['hostname'] . " " . $port['ifDescr'];
       $rrd_list[$i]['descr_in'] = $port['hostname'];

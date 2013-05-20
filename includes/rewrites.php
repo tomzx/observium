@@ -89,7 +89,7 @@ function humanize_bgp (&$peer)
   if ($peer['bgpPeerRemoteAs'] == $peer['bgpLocalAs'])                                    { $peer['peer_type'] = "<span style='color: #00f;'>iBGP</span>"; }
   elseif ($peer['bgpPeerRemoteAS'] >= '64512' && $peer['bgpPeerRemoteAS'] <= '65535')     { $peer['peer_type'] = "<span style='color: #f00;'>Priv eBGP</span>"; }
   else                                                                                    { $peer['peer_type'] = "<span style='color: #0a0;'>eBGP</span>"; }
-  
+
   $peer['human_localip']  = (strstr($peer['bgpPeerLocalAddr'],  ':')) ? Net_IPv6::compress($peer['bgpPeerLocalAddr'])  : $peer['bgpPeerLocalAddr'];
   $peer['human_remoteip'] = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
 }
@@ -107,21 +107,19 @@ function humanize_bgp (&$peer)
  *
  */
 
-function humanize_port(&$port, $device = NULL)
+function humanize_port(&$port)
 {
   global $config;
 
   // Process port data to make it pretty for printing. EVOLUTION, BITCHES.
   // Lots of hacky shit will end up here with if (os);
 
-  if (!$device) { $device = device_by_id_cache($port['device_id']); }
+  $device = device_by_id_cache($port['device_id']);
 
   $port['human_speed'] = humanspeed($port['ifSpeed']);
   $port['human_type']  = fixiftype($port['ifType']);
   $port['html_class']  = ifclass($port['ifOperStatus'], $port['ifAdminStatus']);
   $port['human_mac']   = formatMac($port['ifPhysAddress']);
-
-  $os = strtolower($device['os']);
 
   if (isset($config['os'][$os]['ifname']))
   {
@@ -157,7 +155,6 @@ function humanize_port(&$port, $device = NULL)
 
   $port['humanized'] = TRUE; /// Set this so we can check it later.
 
-  return $port;
 }
 
 $rewrite_entSensorType = array (

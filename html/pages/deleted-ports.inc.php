@@ -24,7 +24,7 @@ echo("<tr><td></td><td></td><td></td><td><a href='deleted-ports/purge=all/'><img
 
 foreach (dbFetchRows("SELECT * FROM `ports` AS P, `devices` as D WHERE P.`deleted` = '1' AND D.device_id = P.device_id") as $interface)
 {
-  $interface = humanize_port($interface, $interface);
+  humanize_port($interface);
   if (port_permitted($interface['port_id'], $interface['device_id']))
   {
     echo("<tr class=list>");

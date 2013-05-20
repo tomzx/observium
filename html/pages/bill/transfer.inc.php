@@ -227,7 +227,7 @@ elseif ($active['previous'] == "active") { $graph = $li; }
 </div>
 
 <div class="tabBox">
-  <ul class="nav-tabs tabs" id="transferBillTab">
+  <ul class="nav nav-tabs" id="transferBillTab">
     <li class="<?php echo($active['billing']); ?> first"><a href="<?php echo($links['billing']); ?>">Billing view</a></li>
     <li class="<?php echo($active['24hour']); ?>"><a href="<?php echo($links['24hour']); ?>">Rolling 24 Hour view</a></li>
     <li class="<?php echo($active['monthly']); ?>"><a href="<?php echo($links['monthly']); ?>">Rolling Monthly view</a></li>

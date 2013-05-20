@@ -15,9 +15,7 @@ foreach ($ports as $port)
     $error_img = generate_port_link($port,"<img src='images/16/chart_curve_error.png' alt='Interface Errors' border=0>",errors);
   } else { $error_img = ""; }
 
-  if (port_permitted($port['port_id'], $port['device_id']))
-  {
-    $port = humanize_port($port, $device);
+    humanize_port($port);
 
     $graph_type = "port_" . $subformat;
 
@@ -82,6 +80,5 @@ foreach ($ports as $port)
 #    "<img src='graph.php?type=$graph_type&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=315&amp;height=110&amp;legend=no&amp;title=yes'>
 #    </a>
 #    </div>");
-  }
 }
 ?>

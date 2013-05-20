@@ -8,17 +8,22 @@
   $img['his'] .= "&amp;x=1050&amp;y=250";
   $img['his'] .= "\" style=\"margin: 15px 5px 25px 5px;\" />";
 
-  echo("<div class=\"row-fluid\">");
-  echo("  <div class=\"span12 well\">");
-  echo("    <h3 class=\"bill\"><i class=\"icon-calendar\"></i> Historical usage overview</h3>");
-  echo("    <table class=\"table table-striped table-bordered\">");
-  echo("      <tr>");
-  echo("        <td style=\"background: #fff; text-align: center;\">");
-  echo($img['his']);
-  echo("        </td>");
-  echo("      </tr>");
-  echo("    </table>");
+?>
 
+<div class="row-fluid">
+ <div class="span12 well info_box">
+  <div id="title"><i class="oicon-information"></i> Historical Usage Overview</div>
+  <div id="content">
+
+      <table class="table table-striped table-bordered">
+        <tr>
+          <td style="background: #fff; text-align: center;">
+  <?php echo($img['his']); ?>
+          </td>
+        </tr>
+      </table>
+
+<?php
   function showDetails($bill_id, $imgtype, $from, $to, $bittype = "Quota")
   {
     if ($imgtype == "bitrate") {
@@ -108,6 +113,8 @@
       $perc['width']  = (($percent <= "100") ? $percent : "100");
       $url            = generate_url($vars, array('detail' => $history['bill_hist_id']));
 
+      $background = get_percentage_colours($percent);
+
       echo("
                 <tr>
                   <td><i class=\"icon-calendar\"></i> <strong>".strftime("%F", strtotime($datefrom))." to ".strftime("%F", strtotime($dateto))."</strong></td>
@@ -118,7 +125,9 @@
                   <td>$total_data</td>
                   <td>$rate_95th</td>
                   <td style=\"text-align: center;\">$overuse</td>
-                  <td width=\"225\"><div class=\"progress progress-".$perc['BG']."  active\" style=\"margin-bottom: 0px;\"><div class=\"bar\" style=\"width: ".$perc['width']."%; text-align: center;\">".$percent."%</div></div></td>
+                  <td width=\"225\">
+                    ".print_percentage_bar (400, 20, $percent, $percent.'%', "ffffff", $background['left'], 100-$percent."%" , "ffffff", $background['right'])."
+                  </td>
                   <td>
                     <div class=\"btn-toolbar\" style=\"margin: 0px auto 0px auto;\">
                       <div class=\"btn-group\">

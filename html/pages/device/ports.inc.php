@@ -102,7 +102,9 @@ if ($vars['view'] == 'minigraphs')
   if ($vars['view'] == "details") { $port_details = 1; }
 
 if($vars['view'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
-echo('<table class="table table-hover table-condensed '.$table_class.'">');
+echo('<table class="table table-hover table-bordered table-condensed table-rounded '.$table_class.'"
+             style="vertical-align: middle; margin-top: 5px; margin-bottom: 10px;">');
+
 echo('  <thead>');
 
 echo('<tr>');

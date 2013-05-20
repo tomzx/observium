@@ -16,7 +16,7 @@ if ($device['os'] == "ironware")
     foreach (array_keys($fdp_array) as $key)
     {
       /// FIXME dbFacile
-      $interface = mysql_fetch_assoc(mysql_query("SELECT * FROM `ports` WHERE device_id = '".$device['device_id']."' AND `ifIndex` = '".$key."'"));
+      $port = mysql_fetch_assoc(mysql_query("SELECT * FROM `ports` WHERE device_id = '".$device['device_id']."' AND `ifIndex` = '".$key."'"));
       $fdp_if_array = $fdp_array[$key];
       foreach (array_keys($fdp_if_array) as $entry_key)
       {
@@ -31,8 +31,8 @@ if ($device['os'] == "ironware")
           $remote_device_id = discover_new_device($fdp['snFdpCacheDeviceId']);
           if ($remote_device_id)
           {
-            $int = humanize_port($interface);
-            log_event("Device autodiscovered through FDP on " . $device['hostname'] . " (port " . $int['label'] . ")", $remote_device_id, 'interface', $int['port_id']);
+            humanize_port($port);
+            log_event("Device autodiscovered through FDP on " . $device['hostname'] . " (port " . $port['label'] . ")", $remote_device_id, 'interface', $port['port_id']);
           }
         }
 
@@ -45,7 +45,7 @@ if ($device['os'] == "ironware")
           $remote_port_id = "0";
         }
 
-        discover_link($interface['port_id'], $fdp['snFdpCacheVendorId'], $remote_port_id, $fdp['snFdpCacheDeviceId'], $fdp['snFdpCacheDevicePort'], $fdp['snFdpCachePlatform'], $fdp['snFdpCacheVersion']);
+        discover_link($port['port_id'], $fdp['snFdpCacheVendorId'], $remote_port_id, $fdp['snFdpCacheDeviceId'], $fdp['snFdpCacheDevicePort'], $fdp['snFdpCachePlatform'], $fdp['snFdpCacheVersion']);
       }
     }
   }
@@ -59,7 +59,7 @@ if ($cdp_array)
   unset($cdp_links);
   foreach (array_keys($cdp_array) as $key)
   {
-    $interface = dbFetchRow("SELECT * FROM `ports` WHERE device_id = ? AND `ifIndex` = ?", array($device['device_id'], $key));
+    $port = dbFetchRow("SELECT * FROM `ports` WHERE device_id = ? AND `ifIndex` = ?", array($device['device_id'], $key));
     $cdp_if_array = $cdp_array[$key];
     foreach (array_keys($cdp_if_array) as $entry_key)
     {
@@ -75,8 +75,8 @@ if ($cdp_array)
           $remote_device_id = discover_new_device($cdp['cdpCacheDeviceId']);
           if ($remote_device_id)
           {
-            $int = humanize_port($interface);
-            log_event("Device autodiscovered through CDP on " . $device['hostname'] . " (port " . $int['label'] . ")", $remote_device_id, 'interface', $int['port_id']);
+            humanize_port($port);
+            log_event("Device autodiscovered through CDP on " . $device['hostname'] . " (port " . $port['label'] . ")", $remote_device_id, 'interface', $port['port_id']);
           }
         }
 
@@ -88,9 +88,9 @@ if ($cdp_array)
           $remote_port_id = "0";
         }
 
-        if ($interface['port_id'] && $cdp['cdpCacheDeviceId'] && $cdp['cdpCacheDevicePort'])
+        if ($port['port_id'] && $cdp['cdpCacheDeviceId'] && $cdp['cdpCacheDevicePort'])
         {
-          discover_link($interface['port_id'], 'cdp', $remote_port_id, $cdp['cdpCacheDeviceId'], $cdp['cdpCacheDevicePort'], $cdp['cdpCachePlatform'], $cdp['cdpCacheVersion']);
+          discover_link($port['port_id'], 'cdp', $remote_port_id, $cdp['cdpCacheDeviceId'], $cdp['cdpCacheDevicePort'], $cdp['cdpCachePlatform'], $cdp['cdpCacheVersion']);
         }
       }
       else
@@ -122,7 +122,7 @@ if ($lldp_array)
         $ifIndex = $entry_key;
       }
 
-      $interface = dbFetchRow("SELECT * FROM `ports` WHERE device_id = ? AND `ifIndex` = ?", array($device['device_id'], $ifIndex));
+      $port = dbFetchRow("SELECT * FROM `ports` WHERE device_id = ? AND `ifIndex` = ?", array($device['device_id'], $ifIndex));
       $lldp_instance = $lldp_if_array[$entry_key];
       foreach (array_keys($lldp_instance) as $entry_instance)
       {
@@ -138,8 +138,8 @@ if ($lldp_array)
           $remote_device_id = discover_new_device($lldp['lldpRemSysName']);
           if ($remote_device_id)
           {
-            $int = humanize_port($interface);
-            log_event("Device autodiscovered through LLDP on " . $device['hostname'] . " (port " . $int['label'] . ")", $remote_device_id, 'interface', $int['port_id']);
+            humanize_port($port);
+            log_event("Device autodiscovered through LLDP on " . $device['hostname'] . " (port " . $port['label'] . ")", $remote_device_id, 'interface', $port['port_id']);
           }
         }
 
@@ -166,9 +166,9 @@ if ($lldp_array)
           $remote_port_id = "0";
         }
 
-        if (is_numeric($interface['port_id']) && isset($lldp['lldpRemSysName']) && isset($lldp['lldpRemPortId']))
+        if (is_numeric($port['port_id']) && isset($lldp['lldpRemSysName']) && isset($lldp['lldpRemPortId']))
         {
-          discover_link($interface['port_id'], 'lldp', $remote_port_id, $lldp['lldpRemSysName'], $lldp['lldpRemPortId'], NULL, $lldp['lldpRemSysDesc']);
+          discover_link($port['port_id'], 'lldp', $remote_port_id, $lldp['lldpRemSysName'], $lldp['lldpRemPortId'], NULL, $lldp['lldpRemSysDesc']);
         }
       }
     }

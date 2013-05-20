@@ -1,17 +1,5 @@
 <?php
 
-// Strip out the ports the user isn't allowed to see, if they don't have global rights
-if ($_SESSION['userlevel'] < '7')
-{
-  foreach ($ports as $key => $port)
-  {
-    if (!port_permitted($port['port_id'], $port['device_id']))
-    {
-      unset($ports[$key]);
-    }
-  }
-}
-
 /// Pagination
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 if(!$vars['pageno']) { $vars['pageno'] = "1"; }
@@ -68,7 +56,7 @@ foreach ($ports as $port)
     } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up") { $ports_up++; $table_tab_colour = "#194B7F"; }
     $ports_total++;
 
-    $port = humanize_port($port);
+    humanize_port($port);
 
     if ($port['in_errors'] > 0 || $port['out_errors'] > 0)
     {

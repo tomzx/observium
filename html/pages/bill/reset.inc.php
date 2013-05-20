@@ -5,7 +5,7 @@ $url    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 
 ?>
 
 <div class="tabBox">
-  <ul class="nav-tabs tabs" id="resetBillTab">
+  <ul class="nav nav-tabs" id="resetBillTab">
     <li class="active first"><a href="#reset" data-toggle="tab">Reset bill</a></li>
   </ul>
   <div class="tabcontent tab-content" id="resetBillTabContent" style="min-height: 50px; padding-bottom: 18px;">

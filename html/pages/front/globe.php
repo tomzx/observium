@@ -106,7 +106,7 @@ if ($config['frontpage']['device_status']['ports'])
   {
     if (!$interface['deleted'])
     {
-     $interface = humanize_port($interface);
+     humanize_port($interface);
      generate_front_box("#ffdd99", "<center><strong>".generate_device_link($interface, shorthost($interface['hostname']))."</strong><br />
       <span style='font-size: 14px; font-weight: bold; margin: 5px; color: #c00;'>Port Down</span><br />
 <!--      <img src='graph.php?type=bits&amp;if=".$interface['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=32' /> -->

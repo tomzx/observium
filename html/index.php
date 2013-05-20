@@ -141,61 +141,6 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 ?>
 </head>
 
-  <script type="text/javascript" src="js/mktree.js"></script>
-  <script type="text/javascript" src="js/sorttable.js"></script>
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/jquery-checkbox.js"></script>
-  <script type="text/javascript" src="js/google-code-prettify.js"></script>
-
-  <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
-  <script type="text/javascript">
-  jQuery(document).ready(function($) {
-    $(".tooltip-from-element").each(function() {
-      var selector = '#' + $(this).data('tooltip-id');
-      $(this).qtip({
-        content: $(selector),
-        style: {
-                classes: 'qtip-bootstrap',
-        },
-        position: {
-                target: 'mouse',
-                adjust: {
-                        x: 2,
-                        y: 2
-                }
-        }
-      });
-    });
-
-    $('.tooltip-from-data').qtip({
-      content: {
-              attr: 'data-tooltip'
-      },
-      style: {
-              classes: 'qtip-bootstrap',
-      },
-      position: {
-              target: 'mouse',
-              adjust: {
-                      x: 2,
-                      y: 2
-              }
-      }
-    })
-  });
-  </script>
-
-  <script src="js/jquery.switch.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
-
-  <?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
-  <!--[if IE]><script src="js/html5.js"></script><![endif]-->
-  <!--  <script language="javascript" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.min.css" />
-  <script type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-  <script type="text/javascript" src="js/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
-  -->
   <script type="text/javascript">
 
 <!-- Begin
@@ -360,5 +305,62 @@ if (is_array($pagetitle))
 //    }, 10000); // refresh every 10000 milliseconds
 
     </script>
+
+  <script type="text/javascript" src="js/mktree.js"></script>
+  <script type="text/javascript" src="js/sorttable.js"></script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery-checkbox.js"></script>
+  <script type="text/javascript" src="js/google-code-prettify.js"></script>
+  <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
+  <script type="text/javascript">
+  jQuery(document).ready(function($) {
+    $(".tooltip-from-element").each(function() {
+      var selector = '#' + $(this).data('tooltip-id');
+      $(this).qtip({
+        content: $(selector),
+        style: {
+                classes: 'qtip-bootstrap',
+        },
+        position: {
+                target: 'mouse',
+                adjust: {
+                        x: 2,
+                        y: 2
+                }
+        }
+      });
+    });
+
+    $('.tooltip-from-data').qtip({
+      content: {
+              attr: 'data-tooltip'
+      },
+      style: {
+              classes: 'qtip-bootstrap',
+      },
+      position: {
+              target: 'mouse',
+              adjust: {
+                      x: 2,
+                      y: 2
+              }
+      }
+    })
+  });
+  </script>
+
+  <script src="js/jquery.switch.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
+
+  <?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
+  <!--[if IE]><script src="js/html5.js"></script><![endif]-->
+  <!--  <script language="javascript" type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.min.css" />
+  <script type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+  <script type="text/javascript" src="js/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+  -->
+
+
   </body>
 </html>

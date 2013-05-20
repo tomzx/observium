@@ -133,10 +133,12 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
 
             if ($anon) { $dst = md5($dst); $src = md5($src);}
 
-            $sif = humanize_port(dbFetchRow("SELECT * FROM ports WHERE `port_id` = ?", array($link['local_port_id'])),$device);
+            $sif = dbFetchRow("SELECT * FROM ports WHERE `port_id` = ?", array($link['local_port_id']));
+            humanize_port($sif);
             if ($remote_port_id)
             {
-              $dif = humanize_port(dbFetchRow("SELECT * FROM ports WHERE `port_id` = ?", array($link['remote_port_id'])));
+              $dif = dbFetchRow("SELECT * FROM ports WHERE `port_id` = ?", array($link['remote_port_id']));
+              humanize_port($dif);
             } else {
               $dif['label'] = $link['remote_port'];
               $dif['port_id'] = $link['remote_hostname'] . '/' . $link['remote_port'];

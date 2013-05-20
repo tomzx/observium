@@ -30,7 +30,9 @@ $i = 1;
 $inf = fixifName($ifname);
 $show_all = 1;
 
-echo("<table width=100% cellpadding=10 cellspacing=0>");
+  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded"
+               style="vertical-align: middle; margin-top: 5px; margin-bottom: 10px;">');
+
 
 include("includes/print-interface.inc.php");
 

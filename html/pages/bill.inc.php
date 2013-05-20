@@ -75,16 +75,19 @@ if ($isUser) {
     case "quick":
       include("pages/bill/navbar.inc.php");
       include("pages/bill/ports.inc.php");
+      include("pages/bill/infoboxes.inc.php");
       include("pages/bill/quick.inc.php");
       break;
     case "accurate":
       include("pages/bill/navbar.inc.php");
       include("pages/bill/ports.inc.php");
+      include("pages/bill/infoboxes.inc.php");
       include("pages/bill/accurate.inc.php");
       break;
     case "transfer":
       include("pages/bill/navbar.inc.php");
       include("pages/bill/ports.inc.php");
+      /// include("pages/bill/infoboxes.inc.php"); /// FIXME - this can't share code. BOO.
       include("pages/bill/transfer.inc.php");
       break;
     case "history":
@@ -92,6 +95,7 @@ if ($isUser) {
       include("pages/bill/ports.inc.php");
       include("pages/bill/history.inc.php");
       break;
+
     case "edit":
       include("pages/bill/navbar.inc.php");
 
