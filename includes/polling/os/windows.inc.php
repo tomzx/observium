@@ -27,6 +27,7 @@ if($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.1") { // Workstation
   if (strstr($poll_device['sysDescr'], "Build 6002"))         { $version = "Vista SP2 (NT 6.0)"; }
   if (strstr($poll_device['sysDescr'], "Build 7600"))         { $version = "7 (NT 6.1)"; }
   if (strstr($poll_device['sysDescr'], "Build 7601"))         { $version = "7 SP1 (NT 6.1)"; }
+  $windows_type = "workstation";
 
 } elseif ($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.2") { // Server
 
@@ -38,6 +39,7 @@ if($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.1") { // Workstation
   if (strstr($poll_device['sysDescr'], "Build 6002"))         { $version = "Server 2008 SP2 (NT 6.0)"; }
   if (strstr($poll_device['sysDescr'], "Build 7600"))         { $version = "Server 2008 R2 (NT 6.1)"; }
   if (strstr($poll_device['sysDescr'], "Build 7601"))         { $version = "Server 2008 R2 SP1 (NT 6.1)"; }
+  $windows_type = "server";
 
 } elseif ($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.3") { // Datacentre Server
 
@@ -49,8 +51,21 @@ if($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.1") { // Workstation
   if (strstr($poll_device['sysDescr'], "Build 6002"))         { $version = "Server 2008 Datacenter SP2 (NT 6.0)"; }
   if (strstr($poll_device['sysDescr'], "Build 7600"))         { $version = "Server 2008 Datacenter R2 (NT 6.1)"; }
   if (strstr($poll_device['sysDescr'], "Build 7601"))         { $version = "Server 2008 Datacenter R2 SP1 (NT 6.1)"; }
+  $windows_type = "server";
 
 }
+
+// Set type to a predefined type for the OS if it's not already set
+
+if ($device['type'] == "unknown" || $device['type'] == "")
+{
+  if (isset($windows_type))
+  {
+    $update_array['type'] = $windows_type;
+    log_event("type -> ".$windows_type, $device, 'system');
+  }
+}
+
 
 if (strstr($poll_device['sysDescr'], "Uniprocessor"))   { $features = "Uniprocessor"; }
 if (strstr($poll_device['sysDescr'], "Multiprocessor")) { $features = "Multiprocessor"; }
@@ -64,5 +79,7 @@ if ($hw) { $hardware = "Dell " . $hw; }
 
 $serial = snmp_get($device, ".1.3.6.1.4.1.674.10892.1.300.10.1.11.1", "-Oqv", "MIB-Dell-10892");
 $serial = trim(str_replace("\"", "", $serial));
+
+unset($windows_type);
 
 ?>
