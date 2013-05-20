@@ -8,7 +8,7 @@
  * @package    observium
  * @subpackage web
  * @copyright  (C) 2006 - 2013 Adam Armstrong
- * @version    1.0.8
+ * @version    1.0.10
  *
  */
 
@@ -229,6 +229,16 @@ function print_navbar($navbar)
  *                    'id'    => 'address',
  *                    'width' => '120px',
  *                    'value' => $vars['address']);
+ *  - array for 'datetime' item type
+ *  $search[] = array('type'  => 'datetime',
+ *                    'id'    => 'timestamp',
+ *                    'presets' => TRUE,                  // (optional) Show select field with timerange presets
+ *                    'min'   => dbFetchCell('SELECT MIN(`timestamp`) FROM `syslog`'), // (optional) Minimum allowed date/time
+ *                    'max'   => dbFetchCell('SELECT MAX(`timestamp`) FROM `syslog`'), // (optional) Maximum allowed date/time
+ *                    'from'  => $vars['timestamp_from'], // (optional) Current 'from' value
+ *                    'to'    => $vars['timestamp_to']);  // (optional) Current 'to' value
+ *  - array for 'newline' item pseudo type
+ *  $search[] = array('type' => 'newline')
  *  print_search_simple($search, 'Title here');
  *
  * @param array $data, string $title
@@ -246,12 +256,119 @@ function print_search_simple($data, $title = '')
   $string .= '<div class="container">';
   if ($title) { $string .= '  <a class="brand">' . $title . '</a>' . PHP_EOL; }
 
-  $string .= '<div class="nav" style="margin-top: 5px;">';
+  $string .= '<div class="nav" style="margin: 5px 0 5px 0;">';
 
   // Main
   foreach ($data as $item)
   {
     if (!isset($item['value'])) { $item['value'] = ''; }
+    if ($item['type'] == 'newline')
+    {
+      $string .= '<div class="clearfix" id="'.$item['id'].'"><hr /></div>' . PHP_EOL;
+      continue;
+    } elseif ($item['type'] == 'datetime') // Begin datetime
+    {
+      $id_from = $item['id'].'_from';
+      $id_to = $item['id'].'_to';
+      // Presets
+      if ($item['presets'])
+      {
+        $presets = array('today'     => 'Today',
+                         'yesterday' => 'Yesterday',
+                         'tweek'     => 'This week',
+                         'lweek'     => 'Last week',
+                         'tmonth'    => 'This month',
+                         'lmonth'    => 'Last month',
+                         'tyear'     => 'This year',
+                         'lyear'     => 'Last year');
+        $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
+        $string .= '    <span class="add-on">Date/Time</span>' . PHP_EOL;
+        $string .= '    <select style="width: 130px;" id="'.$item['id'].'">' . PHP_EOL . '      ';
+        $string .= '<option value="" selected>Select preset</option>';
+        foreach ($presets as $k => $v)
+        {
+          $string .= '<option value="'.$k.'">'.$v.'</option> ';
+        }
+        $string .= PHP_EOL . '    </select>' . PHP_EOL;
+        $string .= '  </div>' . PHP_EOL;
+      }
+      // Date/Time input fields
+      $string .= '  <div class="input-prepend" id="'.$id_from.'">' . PHP_EOL;
+      $string .= '    <span class="add-on">From <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>' . PHP_EOL;
+      $string .= '    <input type="text" style="width: 130px;" data-format="yyyy-MM-dd hh:mm:ss" ';
+      $string .= 'name="'.$id_from.'" id="'.$id_from.'" class="input" value="'.$item['from'].'"/>' . PHP_EOL;
+      $string .= '  </div>' . PHP_EOL;
+      $string .= '  <div class="input-prepend" id="'.$id_to.'">' . PHP_EOL;
+      $string .= '    <span class="add-on">To <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>' . PHP_EOL;
+      $string .= '    <input type="text" style="width: 130px;" data-format="yyyy-MM-dd hh:mm:ss" ';
+      $string .= 'name="'.$id_to.'" id="'.$id_to.'" class="input" value="'.$item['to'].'"/>' . PHP_EOL;
+      $string .= '  </div>' . PHP_EOL;
+      // JS
+      $min = '-Infinity';
+      $max = 'Infinity';
+      $pattern = '/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/';
+      if (!empty($item['min']))
+      {
+        if (preg_match($pattern, $item['min'], $matches))
+        {
+          $matches[2] = $matches[2] - 1;
+          array_shift($matches);
+          $min = 'new Date(' . implode(',', $matches) . ')';
+        }
+      } 
+      if (!empty($item['max']))
+      {
+        if (preg_match($pattern, $item['max'], $matches))
+        {
+          $matches[2] = $matches[2] - 1;
+          array_shift($matches);
+          $max = 'new Date(' . implode(',', $matches) . ')';
+        }
+      } 
+      $string .= '
+    <script type="text/javascript">
+      var startDate = '.$min.';
+      var endDate   = '.$max.';
+      $(document).ready(function() {
+	$(\'#'.$id_from.'\').datetimepicker({
+          //pickSeconds: false,
+          weekStart: 1,
+          startDate: startDate,
+          endDate: endDate
+        });
+	$(\'#'.$id_to.'\').datetimepicker({
+          //pickSeconds: false,
+          weekStart: 1,
+          startDate: startDate,
+          endDate: endDate
+        });
+      });' . PHP_EOL;
+      if ($item['presets'])
+      {
+        $string .= '
+      $(\'select#'.$item['id'].'\').change(function() {
+        var input_from = $(\'input#'.$id_from.'\');
+        var input_to   = $(\'input#'.$id_to.'\');
+        switch ($(this).val()) {' . PHP_EOL;
+        foreach ($presets as $k => $v)
+        {
+          $preset = datetime_preset($k);
+          $string .= "          case '$k':\n";
+          $string .= "            input_from.val('".$preset['from']."');\n";
+          $string .= "            input_to.val('".$preset['to']."');\n";
+          $string .= "            break;\n";
+        }
+        $string .= '
+          default:
+            input_from.val("");
+            input_to.val("");
+            break;
+        }
+      });' . PHP_EOL;
+      }
+      $string .= '</script>' . PHP_EOL;
+      continue;
+    } // End datetime
     $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
     if (!$item['name']) { $item['name'] = '&bull;'; }
     $string .= '    <span class="add-on">'.$item['name'].'</span>' . PHP_EOL;
@@ -683,6 +800,14 @@ function print_events($vars)
           $where .= implode(' OR ', $cond);
           $where .= ')';
           break;
+        case 'timestamp_from':
+          $where .= ' AND `timestamp` > ?';
+          $param[] = $value;
+          break;
+        case 'timestamp_to':
+          $where .= ' AND `timestamp` < ?';
+          $param[] = $value;
+          break;
       }
     }
   }
@@ -857,6 +982,14 @@ function print_syslogs($vars)
           $where .= implode(' OR ', $cond);
           $where .= ')';
           break;
+        case 'timestamp_from':
+          $where .= ' AND `timestamp` > ?';
+          $param[] = $value;
+          break;
+        case 'timestamp_to':
+          $where .= ' AND `timestamp` < ?';
+          $param[] = $value;
+          break;
       }
     }
   }
@@ -943,7 +1076,7 @@ function print_syslogs($vars)
   // Print pagination header
   if ($pagination && !$short) { echo pagination($vars, $count); }
 
-  // Print events
+  // Print syslog
   echo($string);
 }
 

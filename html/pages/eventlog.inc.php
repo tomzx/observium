@@ -45,6 +45,14 @@ $search[] = array('type'    => 'select',
                   'width'   => '140px',
                   'value'   => $vars['device_id'],
                   'values'  => $devices);
+$search[] = array('type'    => 'newline');
+$search[] = array('type'    => 'datetime',
+                  'id'      => 'timestamp',
+                  'presets' => TRUE,
+                  'min'     => dbFetchCell('SELECT MIN(`timestamp`) FROM `eventlog`'),
+                  'max'     => dbFetchCell('SELECT MAX(`timestamp`) FROM `eventlog`'),
+                  'from'    => $vars['timestamp_from'],
+                  'to'      => $vars['timestamp_to']);
 
 print_search_simple($search, 'Eventlog');
 

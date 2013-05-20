@@ -188,6 +188,47 @@ function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdCol
 // return sprintf('#%02x%02x%02x', $r, $b, $b);
 //}
 
+function datetime_preset($preset) {
+  $begin_fmt = 'Y-m-d 00:00:00';
+  $end_fmt   = 'Y-m-d 23:59:59';
+  switch($preset) {
+    case 'today':
+      $from = date($begin_fmt);
+      $to   = date($end_fmt);
+      break;
+    case 'yesterday':
+      $from = date($begin_fmt, strtotime('-1 day'));
+      $to   = date($end_fmt,   strtotime('-1 day'));
+      break;
+    case 'tweek':
+      $from = (date('l') == 'Monday') ? date($begin_fmt) : date($begin_fmt, strtotime('last Monday'));
+      $to   = (date('l') == 'Sunday') ? date($end_fmt)   : date($end_fmt,   strtotime('next Sunday'));
+      break;
+    case 'lweek':
+      $from = date($begin_fmt, strtotime('-6 days'));
+      $to   = date($end_fmt);
+      break;
+    case 'tmonth':
+      $tmonth = date('Y-m');
+      $from = $tmonth.'-01 00:00:00';
+      $to   = date($end_fmt, strtotime($tmonth.' next month - 1 hour'));
+      break;
+    case 'lmonth':
+      $from = date($begin_fmt, strtotime('previous month + 1 day'));
+      $to   = date($end_fmt);
+      break;
+    case 'tyear':
+      $from = date('Y-01-01 00:00:00');
+      $to   = date('Y-12-31 23:59:59');
+      break;
+    case 'lyear':
+      $from = date($begin_fmt, strtotime('previous year + 1 day'));
+      $to   = date($end_fmt);
+      break;
+  }
+  return array('from' => $from, 'to' => $to);
+}
+
 function bug()
 {
 

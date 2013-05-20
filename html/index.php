@@ -141,18 +141,9 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 ?>
 </head>
 
-  <script type="text/javascript">
-
-<!-- Begin
-function popUp(URL)
-{
-  day = new Date();
-  id = day.getTime();
-  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,        menubar=0,resizable=1,width=550,height=600');");
-}
-// End -->
-  </script>
-
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/google-code-prettify.js"></script>
+  
 <body>
   <div class="container">
 
@@ -291,8 +282,7 @@ if (is_array($pagetitle))
 }
 ?>
 
-    <script type="text/javascript">
-
+  <script type="text/javascript">
 //  $(document).ready(function()
 //  {
 //    $('#poller_status').load('ajax_poller_status.php');
@@ -303,14 +293,26 @@ if (is_array($pagetitle))
 //    {
 //      $('#poller_status').load('ajax_poller_status.php');
 //    }, 10000); // refresh every 10000 milliseconds
+  </script>
 
-    </script>
+  <script type="text/javascript">
+  <!-- Begin
+  function popUp(URL)
+  {
+    day = new Date();
+    id = day.getTime();
+    eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,        menubar=0,resizable=1,width=550,height=600');");
+  }
+  // End -->
+  </script>
 
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
+  <script src="js/bootstrap-datetimepicker.min.js"></script>
   <script type="text/javascript" src="js/mktree.js"></script>
   <script type="text/javascript" src="js/sorttable.js"></script>
-  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery.switch.js"></script>
   <script type="text/javascript" src="js/jquery-checkbox.js"></script>
-  <script type="text/javascript" src="js/google-code-prettify.js"></script>
   <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
   <script type="text/javascript">
   jQuery(document).ready(function($) {
@@ -348,10 +350,6 @@ if (is_array($pagetitle))
     })
   });
   </script>
-
-  <script src="js/jquery.switch.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
 
   <?php /* html5.js below from http://html5shim.googlecode.com/svn/trunk/html5.js */ ?>
   <!--[if IE]><script src="js/html5.js"></script><![endif]-->
