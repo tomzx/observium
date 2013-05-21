@@ -42,12 +42,14 @@ if (is_file($rrd_filename))
   $rrd_options .= " 'CDEF:cdeftot=availreal,shared,buffered,usedreal,cached,usedswap,+,+,+,+,+'";
   $rrd_options .= " 'COMMENT:Bytes         Current   Average   Maximum\\n'";
 
-  $rrd_options .= " 'LINE1:usedreal#d0b080:'";
-  $rrd_options .= " 'AREA:usedreal#f0e0a0:RAM Used '";
+  $rrd_options .= " 'LINE1:usedreal#ffaa66:'";
+  $rrd_options .= " 'AREA:usedreal#ffaa66:RAM Used '";
+
   $rrd_options .= " 'GPRINT:usedreal:LAST:%6.2lf%sB'";
   $rrd_options .= " 'GPRINT:usedreal:AVERAGE:%6.2lf%sB'";
   $rrd_options .= " 'GPRINT:usedreal:MAX:%6.2lf%sB'";
   $rrd_options .= " 'GPRINT:real_perc:LAST:%3.0lf%%\\n'";
+
 
   $rrd_options .= " 'COMMENT:  -Sh,Bu,Ca'";
   $rrd_options .= " 'GPRINT:trueused:LAST:%6.2lf%sB'";
@@ -68,18 +70,34 @@ if (is_file($rrd_filename))
   $rrd_options .= " 'GPRINT:usedswap:MAX:%6.2lf%sB'";
   $rrd_options .= " 'GPRINT:swap_perc:LAST:%3.0lf%%\\n'";
 
-  $rrd_options .= " 'COMMENT:%age of RAM                               '";
+#  $rrd_options .= " 'COMMENT:%age of RAM                               '";
+  $rrd_options .= " 'LINE1.25:usedswap#356AA0:%age of RAM                             '";
+
   $rrd_options .= " 'GPRINT:swrl_perc:LAST:%3.0lf%%\\n'";
 
   $rrd_options .= " 'COMMENT: \\n'";
 
-  $rrd_options .= " 'LINE1:usedreal#d0b080:'";
+#  $rrd_options .= " 'LINE1:usedreal#d0b080:'";
+
+  $rrd_options .= " 'AREA:trueused#ffaa66:'";
+
+#  $rrd_options .= " 'AREA:shared#afeced::STACK'";
+#  $rrd_options .= " 'AREA:buffered#cc0000::STACK'";
+
+  $rrd_options .= " 'AREA:cached#f0e0a0:Cached   :STACK'";
+  $rrd_options .= " 'GPRINT:cached:LAST:%6.2lf%sB'";
+  $rrd_options .= " 'GPRINT:cached:AVERAGE:%6.2lf%sB'";
+  $rrd_options .= " 'GPRINT:cached:MAX:%6.2lf%sB'";
+  $rrd_options .= " 'GPRINT:cached_perc:LAST:%3.0lf%%\\n'";
 
   $rrd_options .= " 'AREA:shared#afeced::'";
   $rrd_options .= " 'AREA:buffered#cc0000::STACK'";
-  $rrd_options .= " 'AREA:cached#ffaa66::STACK'";
 
-  $rrd_options .= " 'LINE1.25:shared#008fea:Shared   '";
+  $rrd_options .= " 'LINE1:trueused#ea8f00:'";
+  $rrd_options .= " 'LINE1.25:cached#d0b080::STACK'";
+
+
+  $rrd_options .= " 'LINE1.25:shared#008fea:Shared   :'";
   $rrd_options .= " 'GPRINT:shared:LAST:%6.2lf%sB'";
   $rrd_options .= " 'GPRINT:shared:AVERAGE:%6.2lf%sB'";
   $rrd_options .= " 'GPRINT:shared:MAX:%6.2lf%sB'";
@@ -91,15 +109,14 @@ if (is_file($rrd_filename))
   $rrd_options .= " 'GPRINT:buffered:MAX:%6.2lf%sB'";
   $rrd_options .= " 'GPRINT:buffered_perc:LAST:%3.0lf%%\\n'";
 
-  $rrd_options .= " 'LINE1.25:cached#ea8f00:Cached   :STACK'";
-  $rrd_options .= " 'GPRINT:cached:LAST:%6.2lf%sB'";
-  $rrd_options .= " 'GPRINT:cached:AVERAGE:%6.2lf%sB'";
-  $rrd_options .= " 'GPRINT:cached:MAX:%6.2lf%sB'";
-  $rrd_options .= " 'GPRINT:cached_perc:LAST:%3.0lf%%\\n'";
-
   $rrd_options .= " 'LINE1:totalreal#050505:'";
   $rrd_options .= " 'LINE1:totalreal#050505:Total'";
   $rrd_options .= " 'GPRINT:totalreal:AVERAGE:  %6.2lf%sB\\n'";
+
+  $rrd_options .= " 'LINE1.25:usedswap#356AA0:'";
+
+  $rrd_option .= " 'HRULE:0:#00000'";
+
 } else {
   // Failback to mempools for UNIXes.
   include('includes/graphs/device/mempool.inc.php');

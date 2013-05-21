@@ -34,14 +34,15 @@ $avai_perc = round(($device_state['ucd_mem']['mem_avail'] / $device_state['ucd_m
     echo(overlib_link($link, $graph, $overlib_content, NULL));
 
 $percentage_bar            = array();
+$percentage_bar['border']  = "#EA8F00";
 $percentage_bar['border']  = "#E25A00";
 $percentage_bar['bg']      = "#f0f0f0";
 $percentage_bar['width']   = "100%";
 $percentage_bar['text']    = $avai_perc."%";
 $percentage_bar['text_c']  = "#E25A00";
-$percentage_bar['bars'][0] = array('percent' => $used_perc, 'colour' => '#E25A00', 'text' => $used_perc.'%');
+$percentage_bar['bars'][0] = array('percent' => $used_perc, 'colour' => '#FFAA66', 'text' => $used_perc.'%');
 $percentage_bar['bars'][1] = array('percent' => $cach_perc, 'colour' => '#f0e0a0', 'text' => '');
-$percentage_bar['bars'][2] = array('percent' => $buff_perc, 'colour' => '#ff1a00', 'text' => '');
+$percentage_bar['bars'][2] = array('percent' => $buff_perc, 'colour' => '#cc0000', 'text' => '');
 $percentage_bar['bars'][3] = array('percent' => $shar_perc, 'colour' => '#008fea', 'text' => '');
 
 echo('<table width="100%" class="table-striped table-condensed-more">');
@@ -54,7 +55,7 @@ echo('  </tr>');
 
 
 ?>
-  <tr class="syslog">
+  <tr class="small">
     <td><i style="font-size: 7px; line-height: 7px; background-color: #E25A00; border: 1px #aaa solid;">&nbsp;&nbsp;&nbsp;</i> Used</td>
     <td><?php echo(formatStorage($mem_used * 1024).' ('.$used_perc.'%)'); ?></td>
     <td><i style="font-size: 7px; line-height: 7px; background-color: #f0e0a0; border: 1px #aaa solid;">&nbsp;&nbsp;&nbsp;</i> Cached</td>
@@ -91,7 +92,7 @@ echo('  </tr>');
 
 ?>
 
-  <tr class="syslog">
+  <tr class="small">
     <td><i style="font-size: 7px; line-height: 7px; background-color: #356AA0; border: 1px #aaa solid;">&nbsp;&nbsp;&nbsp;</i> Used</td>
     <td><?php echo(formatStorage($swap_used * 1024).' ('.$swap_perc.'%)'); ?></td>
     <td><i style="font-size: 7px; line-height: 7px; background-color: #ddd; border: 1px #aaa solid;">&nbsp;&nbsp;&nbsp;</i> Free</td>
