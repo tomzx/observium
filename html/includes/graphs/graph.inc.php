@@ -29,8 +29,21 @@ if(is_numeric($vars['device']))
 #$height   = $vars['height'];
 #$title    = $vars['title'];
 #$vertical = $vars['vertical'];
-$from     = (isset($vars['from']) ? $vars['from'] : time() - 60*60*24);
-$to       = (isset($vars['to']) ? $vars['to'] : time());
+
+// $from, $to - unixtime (or rrdgraph time interval, i.e. '-1d', '-6w')
+// $timestamp_from, $timestamp_to - timestamps formatted as 'Y-m-d H:i:s'
+$timestamp_pattern = '/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/';
+if (isset($vars['timestamp_from']) && preg_match($timestamp_pattern, $vars['timestamp_from']))
+{
+  $vars['from'] = strtotime($vars['timestamp_from']);
+}
+if (isset($vars['timestamp_to']) && preg_match($timestamp_pattern, $vars['timestamp_to']))
+{
+  $vars['to'] = strtotime($vars['timestamp_to']);
+}
+
+$from     = (isset($vars['from'])) ? $vars['from'] : time() - 86400;
+$to       = (isset($vars['to'])) ? $vars['to'] : time();
 
 if ($from < 0) { $from = $to + $from; }
 

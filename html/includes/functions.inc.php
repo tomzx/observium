@@ -140,6 +140,10 @@ function datetime_preset($preset) {
   $begin_fmt = 'Y-m-d 00:00:00';
   $end_fmt   = 'Y-m-d 23:59:59';
   switch($preset) {
+    case 'sixhours':
+      $from = date('Y-m-d H:i:00', strtotime('-6 hours'));
+      $to   = date('Y-m-d H:i:59');
+      break;
     case 'today':
       $from = date($begin_fmt);
       $to   = date($end_fmt);

@@ -12,6 +12,15 @@ if(isset($_SESSION['widescreen']))
   $thumb_width=113;
 }
 
+$timestamp_pattern = '/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/';
+if (isset($vars['timestamp_from']) && preg_match($timestamp_pattern, $vars['timestamp_from']))
+{
+  $vars['from'] = strtotime($vars['timestamp_from']);
+}
+if (isset($vars['timestamp_to']) && preg_match($timestamp_pattern, $vars['timestamp_to']))
+{
+  $vars['to'] = strtotime($vars['timestamp_to']);
+}
 if (!is_numeric($vars['from'])) { $vars['from'] = $config['time']['day']; }
 if (!is_numeric($vars['to']))   { $vars['to']   = $config['time']['now']; }
 
@@ -69,12 +78,11 @@ if (!$auth)
   print_optionbar_start();
   echo($title);
 
-  echo('<div style="float: right;">');
+  echo('<div class="pull-right">');
   ?>
   <form action="" style="margin-top: -5px;">
-  <select name='type' id='type'
-    onchange="window.open(this.options[this.selectedIndex].value,'_top')" >
-          <?php
+  <select name='type' id='type' onchange="window.open(this.options[this.selectedIndex].value,'_top')" >
+  <?php
 
   sort($types);
 
@@ -92,112 +100,20 @@ if (!$auth)
 
   print_optionbar_end();
 
-
-  // css and js for datetimepicker
-  echo("
-    <link type='text/css' href='css/ui-lightness/jquery-ui-1.8.18.custom.css' rel='stylesheet' />
-    <script type='text/javascript' src='js/jquery-ui.min.js'></script>
-    <script type='text/javascript' src='js/jquery-ui-timepicker-addon.js'></script>
-    <script type='text/javascript' src='js/jquery-ui-sliderAccess.js'></script>
-    <script type='text/javascript'>
-      $(function()
-      {
-        $('#dtpickerfrom').datetimepicker({
-          showOn: 'button',
-          buttonImage: 'images/16/date.png',
-          buttonImageOnly: true,
-          dateFormat: 'yy-mm-dd',
-          hourGrid: 4,
-          minuteGrid: 10,
-          onClose: function(dateText, inst) {
-            var toDateTextBox = $('#dtpickerto');
-            if (toDateTextBox.val() != '') {
-              var testStartDate = new Date(dateText);
-              var testEndDate = new Date(toDateTextBox.val());
-              if (testStartDate > testEndDate)
-                toDateTextBox.val(dateText);
-            }
-            else {
-              toDateTextBox.val(dateText);
-            }
-          },
-          onSelect: function (selectedDateTime) {
-            var toDateTextBox = $('#dtpickerto');
-            var toValue = toDateTextBox.val();
-            var start = $(this).datetimepicker('getDate');
-            toDateTextBox.datetimepicker('option', 'minDate', new Date(start.getTime()));
-            // we do this so the above datetimepicker call doesn't strip the time from the pre-set value in the text box.
-            toDateTextBox.val(toValue);
-          }
-        });
-        $('#dtpickerto').datetimepicker({
-          showOn: 'button',
-          buttonImage: 'images/16/date.png',
-          buttonImageOnly: true,
-          dateFormat: 'yy-mm-dd',
-          hourGrid: 4,
-          minuteGrid: 10,
-          maxDate: 0,
-          onClose: function(dateText, inst) {
-            var startDateTextBox = $('#dtpickerfrom');
-            if (startDateTextBox.val() != '') {
-              var testStartDate = new Date(startDateTextBox.val());
-              var testEndDate = new Date(dateText);
-                if (testStartDate > testEndDate)
-                  startDateTextBox.val(dateText);
-            }
-            else {
-              startDateTextBox.val(dateText);
-            }
-          },
-          onSelect: function (selectedDateTime) {
-            var fromDateTextBox = $('#dtpickerfrom');
-            var fromValue = fromDateTextBox.val();
-            var end = $(this).datetimepicker('getDate');
-            fromDateTextBox.datetimepicker('option', 'maxDate', new Date(end.getTime()) );
-            // we do this so the above datetimepicker call doesn't strip the time from the pre-set value in the text box.
-            fromDateTextBox.val(fromValue);
-          }
-        });
-      });
-
-      function submitCustomRange(frmdata) {
-        var reto = /to=([0-9])+/g;
-        var refrom = /from=([0-9])+/g;
-        var tsto = new Date(frmdata.dtpickerto.value.replace(' ','T'));
-        var tsfrom = new Date(frmdata.dtpickerfrom.value.replace(' ','T'));
-        tsto = tsto.getTimezoneOffset() * 60 + tsto.getTime() / 1000;
-        tsfrom = tsfrom.getTimezoneOffset() * 60 + tsfrom.getTime() / 1000;
-        frmdata.selfaction.value = frmdata.selfaction.value.replace(reto, 'to=' + tsto);
-        frmdata.selfaction.value = frmdata.selfaction.value.replace(refrom, 'from=' + tsfrom);
-        frmdata.action = frmdata.selfaction.value
-        return true;
-      }
-
-      function applyPreset(frmdata) {
-        var link = frmdata.preset.value;
-        document.location = link;
-      }
-    </script>
-    <style type='text/css'>
-      /* css for timepicker */
-      .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-      .ui-timepicker-div dl { text-align: left; }
-      .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
-      .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
-      .ui-timepicker-div td { font-size: 90%; }
-      .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-    </style>
-  ");
-
   // Start form for the custom range.
-  echo('<form id="customrange" action="test" class="form form-inline">');
-
 
   print_optionbar_start();
 
-  $thumb_array = array('sixhour' => '6 Hours', 'day' => '24 Hours', 'twoday' => '48 Hours', 'week' => 'One Week', 'twoweek' => 'Two Weeks',
-                       'month' => 'One Month', 'twomonth' => 'Two Months','year' => 'One Year', 'twoyear' => 'Two Years');
+  $thumb_array = array('sixhour' => '6 Hours',
+                       'day' => '24 Hours',
+                       'twoday' => '48 Hours',
+                       'week' => 'One Week',
+                       //'twoweek' => 'Two Weeks',
+                       'month' => 'One Month',
+                       //'twomonth' => 'Two Months',
+                       'year' => 'One Year',
+                       'twoyear' => 'Two Years'
+                      );
 
   echo('<table width=100% style="background: transparent;"><tr>');
 
@@ -226,81 +142,18 @@ if (!$auth)
   $graph_array['height'] = "300";
   $graph_array['width']  = $graph_width;
 
-  echo("<hr />");
-
-  // datetime range picker
-  echo("<input type=hidden id='selfaction' value='" . $_SERVER['REQUEST_URI'] . "'>");
-
-  $preset_array = array("today", "yesterday", "tweek", "lweek", "tmonth", "lmonth", "tyear", "lyear");
-  function presetDate($preset) {
-    switch($preset) {
-      case 'today':
-        $tsto = mktime(23, 59 ,59, date("m"), date("d"), date("Y"));
-        $tsfrom = mktime(0, 0 ,0, date("m"), date("d"), date("Y"));
-        $text = "Today";
-        break;
-      case 'yesterday':
-        $tsto = mktime(23, 59 ,59, date("m"), date("d")-1, date("Y"));
-        $tsfrom = mktime(0, 0 ,0, date("m"), date("d")-1, date("Y"));
-        $text = "Yesterday";
-        break;
-      case 'tweek':
-        $tsto = strtotime(date("Y-m-d 23:59", strtotime("next week")));
-        $tsfrom = strtotime(date("Y-m-d 00:00", strtotime("this week")));
-        $text = "This week";
-        break;
-      case 'lweek':
-        $tsto = strtotime(date("Y-m-d 23:59", strtotime("this week")));
-        $tsfrom = strtotime(date("Y-m-d 00:00", strtotime("last week")));
-        $text = "Last week";
-        break;
-      case 'tmonth':
-        $tsto = mktime(23, 59 ,59, date("m")+1, 0, date("Y"));
-        $tsfrom = mktime(0, 0 ,0, date("m"), 1, date("Y"));
-        $text = "This month";
-        break;
-      case 'lmonth':
-        $tsto = mktime(23, 59 ,59, date("m"), 0, date("Y"));
-        $tsfrom = mktime(0, 0 ,0, date("m")-1, 1, date("Y"));
-        $text = "Last month";
-        break;
-      case 'tyear':
-        $tsto = mktime(23, 59 ,59, 13, 0, date("Y"));
-        $tsfrom = mktime(0, 0 ,0, 1, 1, date("Y"));
-        $text = "This year";
-        break;
-      case 'lyear':
-        $tsto = mktime(23, 59 ,59, 13, 0, date("Y")-1);
-        $tsfrom = mktime(0, 0 ,0, 1, 1, date("Y")-1);
-        $text = "Last year";
-        break;
-    }
-    $res = array("from" => $tsfrom, "to" => $tsto, "desc" => $text);
-    return $res;
-  }
-  echo("
-    <strong>Presets:</strong>
-    <select name=\"preset\" onchange=\"applyPreset(this.form);\">
-      <option value=\"\">Select preset</option>");
-  foreach ($preset_array as $item=>$value) {
-    $preset = presetDate($value);
-    $link_array = $vars;
-    $link_array['from'] = $preset['from'];
-    $link_array['to'] = $preset['to'];
-    $link_array['page'] = "graphs";
-    $link = generate_url($link_array);
-    echo("<option value=\"".$link."\">".$preset['desc']."</option>");
-  }
-  echo("
-    </select>
-    <strong>From:</strong> <input type='text' id='dtpickerfrom' maxlength=16 value='" . date('Y-m-d H:i', $graph_array['from']) . "'>
-    <strong>To:</strong> <input type='text' id='dtpickerto' maxlength=16 value='" . date('Y-m-d H:i', $graph_array['to']) . "'>
-    <input class='btn' type='submit' id='submit' value='Update' onclick='javascript:submitCustomRange(this.form);'>
-  ");
-
   print_optionbar_end();
 
-  echo('</form>');
+  $search = array();
+  $search[] = array('type'    => 'datetime',
+                    'id'      => 'timestamp',
+                    'presets' => TRUE,
+                    'min'     => '2007-04-03 16:06:59',  // Hehe, who will guess what this date/time means? --mike
+                    'max'     => date('Y-m-d 23:59:59'), // Today
+                    'from'    => $vars['timestamp_from'],
+                    'to'      => $vars['timestamp_to']);
+  print_search_simple($search, '', 'update');
+  unset($search);
 
 /// Print options navbar
 

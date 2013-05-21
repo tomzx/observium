@@ -246,7 +246,7 @@ function print_navbar($navbar)
  *
  */
 
-function print_search_simple($data, $title = '')
+function print_search_simple($data, $title = '', $button = 'search')
 {
   // Form header
   $string = PHP_EOL . '<!-- START search form -->' . PHP_EOL;
@@ -273,7 +273,8 @@ function print_search_simple($data, $title = '')
       // Presets
       if ($item['presets'])
       {
-        $presets = array('today'     => 'Today',
+        $presets = array('sixhours'  => 'Last 6 hours',
+                         'today'     => 'Today',
                          'yesterday' => 'Yesterday',
                          'tweek'     => 'This week',
                          'lweek'     => 'Last week',
@@ -283,7 +284,7 @@ function print_search_simple($data, $title = '')
                          'lyear'     => 'Last year');
         $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
         $string .= '    <span class="add-on">Date/Time</span>' . PHP_EOL;
-        $string .= '    <select style="width: 130px;" id="'.$item['id'].'">' . PHP_EOL . '      ';
+        $string .= '    <select class="span2" id="'.$item['id'].'">' . PHP_EOL . '      ';
         $string .= '<option value="" selected>Select preset</option>';
         foreach ($presets as $k => $v)
         {
@@ -295,13 +296,13 @@ function print_search_simple($data, $title = '')
       // Date/Time input fields
       $string .= '  <div class="input-prepend" id="'.$id_from.'">' . PHP_EOL;
       $string .= '    <span class="add-on">From <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>' . PHP_EOL;
-      $string .= '    <input type="text" style="width: 130px;" data-format="yyyy-MM-dd hh:mm:ss" ';
-      $string .= 'name="'.$id_from.'" id="'.$id_from.'" class="input" value="'.$item['from'].'"/>' . PHP_EOL;
+      $string .= '    <input type="text" class="input-medium" data-format="yyyy-MM-dd hh:mm:ss" ';
+      $string .= 'name="'.$id_from.'" id="'.$id_from.'" value="'.$item['from'].'"/>' . PHP_EOL;
       $string .= '  </div>' . PHP_EOL;
       $string .= '  <div class="input-prepend" id="'.$id_to.'">' . PHP_EOL;
       $string .= '    <span class="add-on">To <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>' . PHP_EOL;
-      $string .= '    <input type="text" style="width: 130px;" data-format="yyyy-MM-dd hh:mm:ss" ';
-      $string .= 'name="'.$id_to.'" id="'.$id_to.'" class="input" value="'.$item['to'].'"/>' . PHP_EOL;
+      $string .= '    <input type="text" class="input-medium" data-format="yyyy-MM-dd hh:mm:ss" ';
+      $string .= 'name="'.$id_to.'" id="'.$id_to.'" value="'.$item['to'].'"/>' . PHP_EOL;
       $string .= '  </div>' . PHP_EOL;
       // JS
       $min = '-Infinity';
@@ -401,7 +402,14 @@ function print_search_simple($data, $title = '')
   // Form footer
   $string .= '    <ul class="nav pull-right"><li>' . PHP_EOL;
   $string .= '      <input type="hidden" name="pageno" value="1">' . PHP_EOL;
-  $string .= '      <button type="submit" class="btn"><i class="icon-search"></i> Search</button>' . PHP_EOL;
+  switch($button)
+  {
+    case 'update':
+      $string .= '      <button type="submit" class="btn"><i class="icon-repeat"></i> Update</button>' . PHP_EOL;
+      break;
+    default:
+      $string .= '      <button type="submit" class="btn"><i class="icon-search"></i> Search</button>' . PHP_EOL;
+  }
   $string .= '    </li></ul>' . PHP_EOL;
   $string .= '</div></div></div></form>' . PHP_EOL;
   $string .= '<!-- END search form -->' . PHP_EOL . PHP_EOL;
