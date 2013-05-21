@@ -47,7 +47,6 @@
 
 function show_map($config)
 {
-	if ($config['frontpage']['map']['show']) {
 ?>
 <div class="row-fluid">
     <div class="span12" style="padding: 0px 0px 0px 0px;">
@@ -135,15 +134,15 @@ function show_map($config)
     </div>
 </div>
 <?php
-	}
+
     }
+    // End show_map
 
 
     function show_traffic($config) {
 	// Show Traffic
         // FIXME - This is not how we do port types.
 
-	if ($config['frontpage']['overall_traffic']) {
 	    if ($_SESSION['userlevel'] >= '5') {
 		$sql  = "select * from ports as I, devices as D WHERE `ifAlias` like 'Transit:%' AND I.device_id = D.device_id ORDER BY I.ifAlias";
 		$query = mysql_query($sql);
@@ -187,13 +186,12 @@ function show_map($config)
 		echo("</div>");
 		unset($links);
 	    }
-	}
     }
+    // End show_traffic
 
 
     function show_customtraffic($config) {
 	// Show Custom Traffic
-	if ($config['frontpage']['custom_traffic']['show']) {
 	    if ($_SESSION['userlevel'] >= '5') {
 		$config['frontpage']['custom_traffic']['title'] = (empty($config['frontpage']['custom_traffic']['title']) ? "Custom Traffic" : $config['frontpage']['custom_traffic']['title']);
 		echo("<div class=\"row-fluid\">");
@@ -213,96 +211,83 @@ function show_map($config)
 		echo("    </div>");
 		echo("</div>");
 	    }
-	}
-    }
+    }  // End show_customtraffic
 
 
-    function show_minigraphs($config) {
-	// Show Custom MiniGraphs
-	if ($config['frontpage']['minigraphs']['show']) {
-	    if ($_SESSION['userlevel'] >= '5') {
-		$minigraphs = explode(";", $config['frontpage']['minigraphs']['ids']);
-		$legend = (($config['frontpage']['minigraphs']['legend'] == false) ? "no" : "yes");
-		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span12 \">");
-		echo("        <h3 class=\"bill\">Mini Graphs Overview</h3>");
-		foreach($minigraphs as $graph) {
-		    list($device, $type, $header) = explode(",", $graph, 3);
-		    if (strpos($type, "device") === false) {
-			$links = generate_url(array("page" => "graphs", "type" => $type, "id" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
-			echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
-		    } else {
-			$links = generate_url(array("page" => "graphs", "type" => $type, "device" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
-			echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
-		    }
-		}
-		unset($links);
-		echo("    </div>");
-		echo("</div>");
-	    }
-	}
-    }
-
-
-    function show_status($config) {
-	// Show Status
-	if ($config['frontpage']['device_status']['show']) {
-	    echo("<div class=\"row-fluid\">");
-	    echo("    <div class=\"span12\">");
-	    echo("        <h3 class=\"bill\">Device Alerts</h3>");
-
-	    print_status($config['frontpage']['device_status']);
-
-	    echo("    </div>");
-	    echo("</div>");
-	}
-    }
-
-    function show_status_boxes($config) {
-        // Show Status
-        if ($config['frontpage']['device_status']['show']) {
-            echo("<div class=\"row-fluid\">");
-            echo("    <div class=\"span12\">");
-#            echo("        <h3 class=\"bill\">Device Alerts</h3>");
-
-            print_status_boxes($config['frontpage']['device_status']);
-
-            echo("    </div>");
-            echo("</div>");
+    function show_minigraphs($config)
+    {
+      // Show Custom MiniGraphs
+      if ($_SESSION['userlevel'] >= '5')
+      {
+        $minigraphs = explode(";", $config['frontpage']['minigraphs']['ids']);
+        $legend = (($config['frontpage']['minigraphs']['legend'] == false) ? "no" : "yes");
+        echo("<div class=\"row-fluid\">");
+        echo("    <div class=\"span12 \">");
+        echo("        <h3 class=\"bill\">Mini Graphs Overview</h3>");
+        foreach($minigraphs as $graph) {
+          list($device, $type, $header) = explode(",", $graph, 3);
+          if (strpos($type, "device") === false)
+          {
+            $links = generate_url(array("page" => "graphs", "type" => $type, "id" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
+            echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
+          } else {
+            $links = generate_url(array("page" => "graphs", "type" => $type, "device" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
+            echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
+          }
         }
-    }
+        unset($links);
+        echo("    </div>");
+        echo("</div>");
+      }
+    } // End show_minigraphs
+
+
+    function show_status($config)
+    {
+      // Show Status
+      echo("<div class=\"row-fluid\">");
+      echo("    <div class=\"span12\">");
+      echo("        <h3 class=\"bill\">Device Alerts</h3>");
+      print_status($config['frontpage']['device_status']);
+      echo("    </div>");
+      echo("</div>");
+    } // End show_status
+
+    function show_status_boxes($config)
+    {
+      // Show Status Boxes
+      echo("<div class=\"row-fluid\">");
+      echo("    <div class=\"span12\">");
+      print_status_boxes($config['frontpage']['device_status']);
+      echo("    </div>");
+      echo("</div>");
+    } // End show_status_boxes
 
 
 
     function show_syslog($config) {
-	// Show Syslog
-	if ($config['frontpage']['syslog']['show']) {
-	    $show_syslog = "<div class=\"row-fluid\">";
-	    $show_syslog .= "    <div class=\"span12 \">";
-	    $show_syslog .= "        <h3 class=\"bill\">Recent Syslog Messages</h3>";
-	    echo $show_syslog;
-	    print_syslogs(array('pagesize' => $config['frontpage']['syslog']['items']));
-	    $show_syslog = "    </div>";
-	    $show_syslog .= "</div>";
-	    echo $show_syslog;
-	}
-    }
+      // Show syslog
+      $show_syslog = "<div class=\"row-fluid\">";
+      $show_syslog .= "    <div class=\"span12 \">";
+      $show_syslog .= "        <h3 class=\"bill\">Recent Syslog Messages</h3>";
+      echo $show_syslog;
+      print_syslogs(array('pagesize' => $config['frontpage']['syslog']['items']));
+      $show_syslog = "    </div>";
+      $show_syslog .= "</div>";
+      echo $show_syslog;
+    } // end show_syslog
 
 
     function show_eventlog($config) {
-	// Show eventlog
-	if ($config['frontpage']['eventlog']['show']) {
-	    $show_event = "<div class=\"row-fluid\">";
-	    $show_event .= "    <div class=\"span12 \">";
-	    $show_event .= "        <h3 class=\"bill\">Recent Eventlog Entries</h3>";
-	    echo $show_event;
-
-	    print_events(array('pagesize' => $config['frontpage']['eventlog']['items']));
-
-	    $show_event = "    </div>";
-	    $show_event .= "</div>";
-	    echo $show_event;
-	}
-    }
+      // Show eventlog
+      $show_event = "<div class=\"row-fluid\">";
+      $show_event .= "    <div class=\"span12 \">";
+      $show_event .= "        <h3 class=\"bill\">Recent Eventlog Entries</h3>";
+      echo $show_event;
+      print_events(array('pagesize' => $config['frontpage']['eventlog']['items']));
+      $show_event = "    </div>";
+      $show_event .= "</div>";
+      echo $show_event;
+    } // End show_eventlog
 
 ?>

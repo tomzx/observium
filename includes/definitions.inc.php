@@ -156,8 +156,11 @@ $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "AIX";
 $config['os'][$os]['type']              = "server";
 $config['os'][$os]['ifAliasSemicolon']  = TRUE;             // Split on semicolon and take the first element.
-$config['os'][$os]['over'][0]['graph']  = "device_bits";
-$config['os'][$os]['over'][0]['text']   = "Traffic";
+$config['os'][$os]['over']['0'] = array('text' => 'CPU Load',      'graph' =>  "device_processor");
+$config['os'][$os]['over']['1'] = array('text' => 'Memory',  'graph' =>  "device_ucd_memory");
+$config['os'][$os]['over']['2'] = array('text' => 'Storage', 'graph' =>  "device_storage");
+$config['os'][$os]['over']['3'] = array('text' => 'Traffic', 'graph' =>  "device_bits");
+
 
 $os = "adva";
 $config['os'][$os]['type']              = "network";
@@ -500,10 +503,10 @@ $config['os'][$os]['group']             = "extremeware";
 $config['os'][$os]['icon']              = "extreme";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Traffic";
-$config['os'][$os]['over'][1]['graph']  = "device_processor";
-$config['os'][$os]['over'][1]['text']   = "CPU Usage";
-$config['os'][$os]['over'][2]['graph']  = "device_mempool";
-$config['os'][$os]['over'][2]['text']   = "Memory";
+#$config['os'][$os]['over'][1]['graph']  = "device_processor";
+#$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+#$config['os'][$os]['over'][2]['graph']  = "device_mempool";
+#$config['os'][$os]['over'][2]['text']   = "Memory";
 
 $os = "extremeware";
 $config['os'][$os]['text']              = "Extremeware";

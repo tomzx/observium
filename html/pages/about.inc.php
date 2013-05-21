@@ -30,7 +30,7 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
   <div style="margin-bottom: 20px; margin-top: -10px;">
   <table width=100%>
     <tr>
-      <td><a class="btn btn-small" href="http://www.observium.org"><i class="icon oicon-globe"></i> Website</a></td>
+      <td><a class="btn btn-small" href="http://www.observium.org"><i class="icon oicon-globe"></i> Web</a></td>
       <td><a class="btn btn-small" href="http://jira.observium.org/"><i class="icon oicon-fire"></i> Bugtracker</a></td>
       <td><a class="btn btn-small" href="http://www.observium.org/wiki/Mailing_Lists"><i class="icon oicon-mail"></i> Mailing List</a></td>
       <td><a class="btn btn-small" href="http://twitter.com/observium"><i class="icon oicon-globe"></i> Twitter</a></td>
