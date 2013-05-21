@@ -282,7 +282,7 @@ function print_search_simple($data, $title = '', $button = 'search')
                          'lmonth'    => 'Last month',
                          'tyear'     => 'This year',
                          'lyear'     => 'Last year');
-        $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
+        $string .= '  <div class="input-prepend">' . PHP_EOL;
         $string .= '    <span class="add-on">Date/Time</span>' . PHP_EOL;
         $string .= '    <select class="span2" id="'.$item['id'].'">' . PHP_EOL . '      ';
         $string .= '<option value="" selected>Select preset</option>';
@@ -295,12 +295,12 @@ function print_search_simple($data, $title = '', $button = 'search')
       }
       // Date/Time input fields
       $string .= '  <div class="input-prepend" id="'.$id_from.'">' . PHP_EOL;
-      $string .= '    <span class="add-on">From <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>' . PHP_EOL;
+      $string .= '    <span class="add-on btn"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i> From</span>' . PHP_EOL;
       $string .= '    <input type="text" class="input-medium" data-format="yyyy-MM-dd hh:mm:ss" ';
       $string .= 'name="'.$id_from.'" id="'.$id_from.'" value="'.$item['from'].'"/>' . PHP_EOL;
       $string .= '  </div>' . PHP_EOL;
       $string .= '  <div class="input-prepend" id="'.$id_to.'">' . PHP_EOL;
-      $string .= '    <span class="add-on">To <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>' . PHP_EOL;
+      $string .= '    <span class="add-on btn"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i> To</span>' . PHP_EOL;
       $string .= '    <input type="text" class="input-medium" data-format="yyyy-MM-dd hh:mm:ss" ';
       $string .= 'name="'.$id_to.'" id="'.$id_to.'" value="'.$item['to'].'"/>' . PHP_EOL;
       $string .= '  </div>' . PHP_EOL;
