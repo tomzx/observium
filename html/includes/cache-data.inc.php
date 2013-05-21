@@ -68,7 +68,11 @@ foreach (dbFetchRows("SELECT device_id, ports.port_id, ifAdminStatus, ifOperStat
     }
     if ($port['ignore']) { $ports['ignored']++; }
     if ($port['deleted']) { $ports['deleted']++; }
-    if ($port['ifOutErrors_delta'] >0 || $port['ifInErrors_delta'] >0 ) { $ports['errored']++; }
+    if ($port['ifOutErrors_delta'] > 0 || $port['ifInErrors_delta'] > 0 )
+    {
+       $ports['errored']++;
+       $cache['ports_errored'][] = $port['port_id'];
+    }
   }
 }
 

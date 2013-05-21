@@ -364,7 +364,7 @@ function get_port_by_id($port_id)
 {
   if (is_numeric($port_id))
   {
-    $port = dbFetchRow("SELECT * FROM `ports` WHERE `port_id` = ?", array($port_id));
+    $port = dbFetchRow("SELECT * FROM `ports` LEFT JOIN `ports-state` ON `ports`.`port_id` = `ports-state`.`port_id`  WHERE `ports`.`port_id` = ?", array($port_id));
   }
   if (is_array($port))
   {

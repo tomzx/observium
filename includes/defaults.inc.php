@@ -224,41 +224,35 @@ $config['graph_colours']['juniperive']   = array('F7C729','52A6EF');
 
 // General settings
 $config['frontpage']['overall_traffic']            = true;         // Enable/Disable the overall traffic view (transit, peering, transit+peering)
-$config['frontpage']['eventlog']['show']           = true;         // Enable/Disable the eventlog view
 $config['frontpage']['eventlog']['items']          = 15;           // Only show the last XX items of the eventlog view
-$config['frontpage']['syslog']['show']             = true;         // Enable/Disable the syslog view
 $config['frontpage']['syslog']['items']            = 25;           // Only show the last XX items of the syslog view
 
 // Map overview settings
-$config['frontpage']['map']['show']                = true;         // Enable/Disable the map view
 $config['frontpage']['map']['region']              = "world";      // See https://developers.google.com/chart/interactive/docs/gallery/geochart for region settings
 $config['frontpage']['map']['resolution']          = "countries";  // Some region types such as US States (US-NY) require this to be changed to "provinces"
 $config['frontpage']['map']['dotsize']             = 10;           // Set the dotsize you want
 $config['frontpage']['map']['realworld']           = false;        // Enable/Disable the realworld view (blue/green), if disabled default map view
 
 // Device status settings
-$config['frontpage']['device_status']['show']      = true;         // Enable/Disable the status view
 // Show the status messages you want
 $config['frontpage']['device_status']['devices']   = true;         // Show the down devices
 $config['frontpage']['device_status']['ports']     = true;         // Show the down ports (Last 24 hours)
 $config['frontpage']['device_status']['links']     = true;         // Show the down inter-device links (with CDP/LLDP linked devices)
-$config['frontpage']['device_status']['errors']    = false;        // Show the ports with interface errors
+$config['frontpage']['device_status']['errors']    = true;        // Show the ports with interface errors
 $config['frontpage']['device_status']['services']  = true;         // Show the down services
 $config['frontpage']['device_status']['bgp']       = true;         // Show the bgp status
 $config['frontpage']['device_status']['uptime']    = true;         // Show the uptime status
 
 // Custom traffic graphs
-$config['frontpage']['custom_traffic']['show']     = false;        // Enable/Disable the custom traffic view
 $config['frontpage']['custom_traffic']['ids']      = "";           // COMMA SEPERATED PORT ID FOR EXAMPLE: "1,2,3,4,5"
 $config['frontpage']['custom_traffic']['title']    = "";           // Your own title for the custom traffic graphs
 
 // Custom mini graphs
-$config['frontpage']['minigraphs']['show']         = false;        // Enable/Disable the custom mini graph view
 $config['frontpage']['minigraphs']['ids']          = "";           // Comma and semicolon seperated array list, first the device id or graph id followed by the image type and the text header you want (example: "2,device_processor,CPU Usage;10,diskio_bits,IOPS")
 $config['frontpage']['minigraphs']['legend']       = false;        // Enable/Disable the legend on custom mini graph view
 
-// Frontpage order you can use: status_summary, map, device_status, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
-$config['frontpage']['order']           = array('status_summary', 'device_status', 'eventlog');
+// Frontpage order you can use: status_summary, map, device_status_boxes, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
+$config['frontpage']['order']           = array('status_summary', 'map', 'device_status_boxes', 'device_status', 'eventlog');
 
 // Device page options
 

@@ -59,7 +59,7 @@ if ($services['down']) { $services['class'] = "error"; } else { $services['class
 ?>
 
 <div class="row-fluid">
-<div class="span8">
+<div class="span6">
 <table class="table table-bordered table-condensed-more table-rounded table-striped">
   <thead>
     <tr>
@@ -92,11 +92,9 @@ if ($services['down']) { $services['class'] = "error"; } else { $services['class
 </table>
 </div>
 
-<?php
+<!--
 
-/**
-
-<div class="span4">
+<div class="span6">
   <table class="table table-bordered table-condensed-more table-rounded table-striped">
   <thead>
     <tr>
@@ -124,6 +122,5 @@ if ($services['down']) { $services['class'] = "error"; } else { $services['class
 </div>
 </div>
 
-**/
+-->
 
-?>

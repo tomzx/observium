@@ -49,7 +49,7 @@ function show_map($config)
 {
 ?>
 <div class="row-fluid">
-    <div class="span12" style="padding: 0px 0px 0px 0px;">
+    <div class="span12" style="padding: 10px;">
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 	    google.load('visualization', '1.1', {'packages': ['geochart']});
@@ -101,8 +101,8 @@ function show_map($config)
 		    resolution: '<?php echo $config['frontpage']['map']['resolution']; ?>',
 		    displayMode: 'markers',
 		    keepAspectRatio: 0,
-		    width: 1198,
-		    height: 500,
+		    width: 1160,
+		    height: 480,
 		    is3D: true,
 		    legend: 'none',
                     enableRegionInteractivity: true,

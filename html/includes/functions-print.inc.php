@@ -1348,14 +1348,15 @@ function print_status_boxes($status)
   foreach($status_array AS $entry)
   {
 
-    if($entry['sev'] > 49) { $class="alert-danger"; } elseif ($entry['sev'] > 20) { $class="alert-warn"; } else { $class="alert-info"; }
+    if($entry['sev'] > 51) { $class="alert-danger"; } elseif ($entry['sev'] > 20) { $class="alert-warn"; } else { $class="alert-info"; }
+    if($entry['wide']) { $class .= ' statusbox-wide'; }
 
     echo('<div class="alert statusbox '.$class.'">');
     echo('<h4>'.$entry['device_link'].'</h4>');
     echo('<p>');
     echo($entry['class'] .' '.$entry['event'].'<br />');
-    echo('<small>'.$entry['entity_link'].'<br />');
-    echo(''.$entry['time'].'</small>');
+    echo('<span class="entity">'.$entry['entity_link'].'</span><br />');
+    echo('<small>'.$entry['time'].'</small><br />');
     echo('</p>');
     echo('</div>');
 
@@ -1372,6 +1373,7 @@ function get_status_array($status)
 {
   // Mike: I know that there are duplicated variables, but later will remove global
   global $config;
+  global $cache;
 
   $param = array();
   if ($_SESSION['userlevel'] >= 5)
@@ -1472,25 +1474,24 @@ function get_status_array($status)
   // Ports Errors (only deltas)
   if ($status['errors'])
   {
-    $query = 'SELECT * FROM `ports` AS I ';
-    $query .= 'LEFT JOIN `ports-state` AS E ON I.port_id = E.port_id ';
-    $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
-    $query .= $query_perms;
-    $query .= "WHERE I.ifOperStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 AND (E.ifInErrors_delta > 0 OR E.ifOutErrors_delta > 0)" . $query_device . $query_user;
-    $query .= 'ORDER BY D.hostname ASC, I.ifDescr * 1 ASC';
-    $entries = dbFetchRows($query, $param);
-    foreach ($entries as $port)
+
+    foreach ($cache['ports_errored'] as $port_id)
     {
-      humanize_port($port);
-      $boxes[] = array('sev' => 50, 'class' => 'Port', 'event' => 'Errors', 'device_link' => generate_device_link($port, shorthost($port['hostname'])),
+      $port = get_port_by_id($port_id);
+      if(port_permitted($port))
+      {
+        $device = device_by_id_cache($port['device_id']);
+        humanize_port($port);
+
+        if ($port['ifInErrors_delta']) { $port['string'] .= 'Rx: ' . $port['ifInErrors_delta']; }
+        if ($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $port['string'] .= ', '; }
+        if ($port['ifOutErrors_delta']) { $port['string'] .= 'Tx: ' . $port['ifOutErrors_delta']; }
+
+        $boxes[] = array('sev' => 75, 'class' => 'Port', 'event' => 'Errors', 'device_link' => generate_device_link($device, shorthost($device['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
-                       'time' => formatUptime($config['time']['now'] - strtotime($port['ifLastChange'])), 'location' => $device['location']);
+                       'time' => $port['string'], 'location' => $device['location']);
 
-      // FIXME -- unused
-      if ($port['ifInErrors_delta']) { $string .= 'In: ' . $port['ifInErrors_delta']; }
-      if ($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $string .= ', '; }
-      if ($port['ifOutErrors_delta']) { $string .= 'Out: ' . $port['ifOutErrors_delta']; }
-
+      }
     }
   }
 
@@ -1533,9 +1534,10 @@ function get_status_array($status)
       foreach ($entries as $peer)
       {
         $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
+        if (strstr($peer['bgpPeerRemoteAddr'], ':')) { $peer['wide'] = TRUE;  }
 
-        $boxes[] = array('sev' => 50, 'class' => 'BGP Peer', 'event' => 'Down', 'device_link' => generate_device_link($peer, shorthost($peer['hostname'])),
-                         'entity_link' => $peer['bgpPeerRemoteAddr'],
+        $boxes[] = array('sev' => 75, 'class' => 'BGP Peer', 'event' => 'Down', 'device_link' => generate_device_link($peer, shorthost($peer['hostname'])),
+                         'entity_link' => $peer_ip, 'wide' => $peer['wide'],
                          'time' => formatUptime($peer['bgpPeerFsmEstablishedTime'], 'shorter'), 'location' => $device['location']);
 
       }
