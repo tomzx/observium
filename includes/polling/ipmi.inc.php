@@ -31,12 +31,12 @@ if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
 
 if ($debug)
 {
-  print_r($valid);
+  print_r($ipmi_sensors);
 }
 
 foreach ($config['ipmi_unit'] as $type)
 {
-  check_valid_sensors($device, $type, $valid['sensor'], 'ipmi');
+  check_valid_sensors($device, $type, $ipmi_sensors, 'ipmi');
 }
 
 echo("\n");
