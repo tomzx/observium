@@ -2,6 +2,8 @@
 
 global $debug, $ipmi_sensors;
 
+include_once("includes/polling/functions.inc.php");
+/// FIXME. From this uses only check_valid_sensors(), maybe need move to global functions or copy to polling. --mike
 include_once("includes/discovery/functions.inc.php");
 
 echo("IPMI: ");
