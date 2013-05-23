@@ -10,18 +10,19 @@ $stats['ports']          = dbFetchCell("SELECT count(*) FROM ports");
 $stats['devices']        = dbFetchCell("SELECT count(*) FROM devices");
 
 // Per-feature statistics
-$stats['sensors']        = dbFetchCell("SELECT count(*) FROM sensors");
-$stats['services']       = dbFetchCell("SELECT count(*) FROM services");
-$stats['applications']   = dbFetchCell("SELECT count(*) FROM applications");
-$stats['bgp']            = dbFetchCell("SELECT count(*) FROM bgpPeers");
-$stats['ospf']           = dbFetchCell("SELECT count(*) FROM ospf_ports");
-$stats['eigrp']          = dbFetchCell("SELECT count(*) FROM eigrp_ports");
-$stats['ipsec_tunnels']  = dbFetchCell("SELECT count(*) FROM ipsec_tunnels");
-$stats['munin_plugins']  = dbFetchCell("SELECT count(*) FROM munin_plugins");
-$stats['pseudowires']    = dbFetchCell("SELECT count(*) FROM pseudowires");
-$stats['vrfs']           = dbFetchCell("SELECT count(*) FROM vrfs");
-$stats['vminfo']         = dbFetchCell("SELECT count(*) FROM vminfo");
-$stats['users']          = dbFetchCell("SELECT count(*) FROM users");
+$stats['sensors']        = dbFetchCell("SELECT count(*) FROM `sensors`");
+$stats['services']       = dbFetchCell("SELECT count(*) FROM `services`");
+$stats['applications']   = dbFetchCell("SELECT count(*) FROM `applications`");
+$stats['bgp']            = dbFetchCell("SELECT count(*) FROM `bgpPeers`");
+$stats['ospf']           = dbFetchCell("SELECT count(*) FROM `ospf_ports`");
+$stats['eigrp']          = dbFetchCell("SELECT count(*) FROM `eigrp_ports`");
+$stats['ipsec_tunnels']  = dbFetchCell("SELECT count(*) FROM `ipsec_tunnels`");
+$stats['munin_plugins']  = dbFetchCell("SELECT count(*) FROM `munin_plugins`");
+$stats['pseudowires']    = dbFetchCell("SELECT count(*) FROM `pseudowires`");
+$stats['vrfs']           = dbFetchCell("SELECT count(*) FROM `vrfs`");
+$stats['vminfo']         = dbFetchCell("SELECT count(*) FROM `vminfo`");
+$stats['users']          = dbFetchCell("SELECT count(*) FROM `users`");
+$stats['poller_time']    = dbFetchCell("SELECT SUM(`last_polled_timetaken`) FROM devices");
 
 // sysObjectID for Generic devices
 foreach (dbFetch("SELECT sysObjectID, COUNT( * ) as count FROM  `devices` WHERE `os` = 'generic' GROUP BY `sysObjectID`") as $data)
