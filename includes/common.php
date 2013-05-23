@@ -1,4 +1,8 @@
 <?php
+
+# needed for print_error()
+include_once($config['install_dir'] . "/includes/console_colour.php");
+
 // Common Functions
 
 // Fix this shit, it's pretty uglytarded.

@@ -1522,9 +1522,9 @@ if (is_ssl())
 $observium_link = mysql_pconnect($config['db_host'], $config['db_user'], $config['db_pass']);
 if (!$observium_link)
 {
-        echo("<h2>Observer MySQL Error</h2>");
-        echo(mysql_error());
-        die;
+  include_once("includes/common.php");
+  print_error("MySQL Error: " . mysql_error());
+  die;
 }
 $observium_db = mysql_select_db($config['db_name'], $observium_link);
 
