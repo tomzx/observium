@@ -1,5 +1,15 @@
 <?php
 
+$active['billing']  = (($vars['tab'] == "billing") ? "active" : "");
+$active['24hour']  = (($vars['tab'] == "24hour") ? "active" : "");
+$active['monthly']  = (($vars['tab'] == "monthly") ? "active" : "");
+$active['previous']  = (($vars['tab'] == "previous") ? "active" : "");
+
+$links['billing']   = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'accurate', 'tab' => 'billing'));
+$links['24hour']    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'accurate', 'tab' => '24hour'));
+$links['monthly']   = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'accurate', 'tab' => 'monthly'));
+$links['previous']  = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'accurate', 'tab' => 'previous'));
+
 $bi           = "<img src='billing-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
 $bi          .= "&amp;from=" . $unixfrom .  "&amp;to=" . $unixto;
 $bi          .= "&amp;x=1050&amp;y=300";
@@ -16,7 +26,7 @@ $di          .= "&amp;x=1050&amp;y=300";
 $di          .= "$imgtype'>";
 
 $mi           = "<img src='billing-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
-$mi          .= "&amp;from=" . $lastmonth .  "&amp;to=" . $rightnow;
+$mi          .= "&amp;from=" . $lastmonth_unix .  "&amp;to=" . $rightnow_unix;
 $mi          .= "&amp;x=1050&amp;y=300";
 $mi          .= "$imgtype'>";
 

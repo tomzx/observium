@@ -32,6 +32,8 @@ if ($isUser) {
     $yesterday    = str_replace("-", "", dbFetchCell("SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY)"));
     $tomorrow     = str_replace("-", "", dbFetchCell("SELECT DATE_ADD(CURDATE(), INTERVAL 1 DAY)"));
     $last_month   = str_replace("-", "", dbFetchCell("SELECT DATE_SUB(CURDATE(), INTERVAL 1 MONTH)"));
+    $lastmonth_unix   = dbFetchCell("SELECT UNIX_TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))");
+    $rightnow_unix   = dbFetchCell("SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP())");
 
     $rightnow     = $today . date(His);
     $before       = $yesterday . date(His);
