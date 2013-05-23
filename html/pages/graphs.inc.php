@@ -262,7 +262,7 @@ unset($navbar);
     </div>
   </div>
 
-<?
+<?php
 
   }
 }
