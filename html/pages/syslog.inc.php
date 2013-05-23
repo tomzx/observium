@@ -19,34 +19,36 @@ $search[] = array('type'    => 'text',
                   'width'   => '130px',
                   'value'   => $vars['message']);
 //Priority field
-$priorities[''] = 'All Priorities';
+//$priorities[''] = 'All Priorities';
 foreach (syslog_priorities() as $p => $priority)
 {
   if ($p > 7) { continue; }
-  $priorities[$p] = '(' . $p . ') ' . ucfirst($priority['name']);
+  $priorities[$p] = ucfirst($priority['name']);
 }
-$search[] = array('type'    => 'select',
-                  //'name'    => 'Priority',
+$search[] = array('type'    => 'multiselect',
+                  'name'    => 'Priorities',
                   'id'      => 'priority',
-                  'width'   => '130px',
+                  'width'   => '150px',
+                  'subtext' => TRUE,
                   'value'   => $vars['priority'],
                   'values'  => $priorities);
 //Program field
-$programs[''] = 'All Programs';
+//$programs[''] = 'All Programs';
 $where = ($vars['device_id']) ? 'WHERE `device_id` = ' . $vars['device_id'] : '';
 foreach (dbFetchRows('SELECT `program` FROM `syslog` ' . $where . ' GROUP BY `program` ORDER BY `program`') as $data)
 {
   $program = ($data['program']) ? $data['program'] : '[[EMPTY]]';
   $programs[$program] = $program;
 }
-$search[] = array('type'    => 'select',
-                  //'name'    => 'Program',
+$search[] = array('type'    => 'multiselect',
+                  'name'    => 'Programs',
                   'id'      => 'program',
-                  'width'   => '130px',
+                  'width'   => '150px',
+                  'size'    => '15',
                   'value'   => $vars['program'],
                   'values'  => $programs);
 //Device field
-$devices[''] = 'All Devices';
+//$devices[''] = 'All Devices';
 // Show devices only with syslog messages
 foreach (dbFetchRows('SELECT S.`device_id` AS `device_id`, hostname FROM `syslog` AS S
                       LEFT JOIN `devices` AS D ON S.device_id = D.device_id
@@ -61,9 +63,9 @@ foreach (dbFetchRows('SELECT S.`device_id` AS `device_id`, hostname FROM `syslog
   }
 }
 $search[] = array('type'    => 'select',
-                  'name'    => 'Device',
+                  'name'    => 'Devices',
                   'id'      => 'device_id',
-                  'width'   => '140px',
+                  'width'   => '150px',
                   'value'   => $vars['device_id'],
                   'values'  => $devices);
 $search[] = array('type'    => 'newline');

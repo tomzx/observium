@@ -1,0 +1,185 @@
+/**
+ * bootstrap-select
+ * https://github.com/silviomoreto/bootstrap-select
+ *
+ * Copyright (C) 2013 bootstrap-select
+ * Licensed under the MIT license.
+ *
+ */
+.bootstrap-select.btn-group {
+    .dropdown-menu {
+        min-width:100%;
+        -moz-box-sizing:border-box;
+        -webkit-box-sizing:border-box;
+        box-sizing:border-box;
+        dt {
+            display:block;
+            padding:3px 20px;
+            cursor:default;
+        }
+        li {
+            a {
+                i.check-mark {
+                    display: none;
+                }
+            }
+            & > dt {
+                small {
+                    font-weight:normal;
+                    font-weight:normal;
+                }
+            }
+            & > a.opt {
+                padding-left:35px;
+            }
+            small {
+                padding-left:0.5em;
+            }
+            & > a {
+                min-height:20px;
+                cursor: pointer;
+            }
+        }
+    }
+    .btn {
+        .filter-option {
+            overflow:hidden;
+            position:absolute;
+            left:12px;
+            right:25px;
+            text-align:left;
+        }
+        .caret {
+            position:absolute;
+            right:12px;
+        }
+    }
+    .div-contain {
+        overflow:hidden;
+    }
+}
+.bootstrap-select {
+    width: 220px\9;
+    .btn:focus {
+        outline: thin dotted #333333 !important;
+        outline: 5px auto -webkit-focus-ring-color !important;
+        outline-offset: -2px;
+    }
+    .btn {
+        line-height: 20px;
+        width: 100%;
+    }
+}
+.input-append {
+    .bootstrap-select.btn-group {
+        margin-left: -1px;
+    }
+}
+.bootstrap-select.btn-group[class*="span"] {
+    .btn {
+        width:100%;
+    }
+}
+.bootstrap-select.show-menu-arrow.open {
+    .btn {
+        z-index:1001;
+    }
+}
+.bootstrap-select.show-menu-arrow.open &>.dropdown-toggle:before,.bootstrap-select.show-menu-arrow.open &>.dropdown-toggle:after {
+    display: block;
+}
+.bootstrap-select.show-menu-arrow.pull-right {
+    .dropdown-toggle:before {
+        right: 12px;
+        left: auto;
+    }
+    .dropdown-toggle:after {
+        right: 13px;
+        left: auto;
+    }
+}
+.bootstrap-select.btn-group &>.disabled,.bootstrap-select.btn-group .dropdown-menu li.disabled &>a {
+    cursor: not-allowed;
+}
+.bootstrap-select:not([class*="span"]) {
+    width: 220px;
+}
+.bootstrap-select.show-menu-arrow {
+    .dropdown-toggle:before {
+        content: '';
+        display: inline-block;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #CCC;
+        border-bottom-color: rgba(0, 0, 0, 0.2);
+        position: absolute;
+        bottom: -4px;
+        left: 9px;
+        display: none;
+    }
+    .dropdown-toggle:after {
+        content: '';
+        display: inline-block;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid white;
+        position: absolute;
+        bottom: -4px;
+        left: 10px;
+        display: none;
+    }
+}
+.bootstrap-select.btn-group.pull-right,.bootstrap-select.btn-group[class*="span"].pull-right,.row-fluid .bootstrap-select.btn-group[class*="span"].pull-right {
+    float:right;
+}
+.bootstrap-select.show-menu-arrow.dropup {
+    .dropdown-toggle:before {
+        bottom: auto;
+        top: -3px;
+        border-top: 7px solid #ccc;
+        border-bottom: 0;
+        border-top-color: rgba(0, 0, 0, 0.2);
+    }
+    .dropdown-toggle:after {
+        bottom: auto;
+        top: -3px;
+        border-top: 6px solid #ffffff;
+        border-bottom: 0;
+    }
+}
+.input-prepend {
+    .bootstrap-select.btn-group {
+        margin-right: -1px;
+    }
+}
+.bootstrap-select.btn-group .dropdown-menu li:not(.disabled) &>a:hover small,.bootstrap-select.btn-group .dropdown-menu li:not(.disabled) &>a:focus small {
+    color: #64b1d8;
+    color:rgba(255,255,255,0.4);
+}
+.bootstrap-select.btn-group.show-tick {
+    .dropdown-menu {
+        li.selected {
+            a {
+                i.check-mark {
+                    display:inline-block;
+                    position: absolute;
+                    right: 15px;
+                    margin-top: 2.5px;
+                }
+            }
+        }
+        li {
+            a {
+                span.text {
+                    margin-right: 34px;
+                }
+            }
+        }
+    }
+}
+.bootstrap-select.btn-group,.bootstrap-select.btn-group[class*="span"] {
+    float:none;
+    display: inline-block;
+    margin: 0 0 0 0 !important;
+}
+

@@ -14,29 +14,30 @@ if ($timestamp_min)
                     'width'   => '130px',
                     'value'   => $vars['message']);
   //Priority field
-  $priorities[''] = 'All Priorities';
+  //$priorities[''] = 'All Priorities';
   foreach (syslog_priorities() as $p => $priority)
   {
     if ($p > 7) { continue; }
-    $priorities[$p] = '(' . $p . ') ' . ucfirst($priority['name']);
+    $priorities[$p] = ucfirst($priority['name']);
   }
-  $search[] = array('type'    => 'select',
-                    'name'    => 'Priority',
+  $search[] = array('type'    => 'multiselect',
+                    'name'    => 'Priorities',
                     'id'      => 'priority',
-                    'width'   => '130px',
+                    'width'   => '160px',
+                    'subtext' => TRUE,
                     'value'   => $vars['priority'],
                     'values'  => $priorities);
   //Program field
-  $programs[''] = 'All Programs';
+  //$programs[''] = 'All Programs';
   foreach (dbFetchRows('SELECT `program` FROM `syslog` WHERE `device_id` = ? GROUP BY `program` ORDER BY `program`', array($vars['device'])) as $data)
   {
     $program = ($data['program']) ? $data['program'] : '[[EMPTY]]';
     $programs[$program] = $program;
   }
-  $search[] = array('type'    => 'select',
-                    'name'    => 'Program',
+  $search[] = array('type'    => 'multiselect',
+                    'name'    => 'Programs',
                     'id'      => 'program',
-                    'width'   => '130px',
+                    'width'   => '160px',
                     'value'   => $vars['program'],
                     'values'  => $programs);
   $search[] = array('type'    => 'newline');

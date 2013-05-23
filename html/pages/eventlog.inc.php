@@ -18,7 +18,7 @@ $search[] = array('type'    => 'text',
                   'id'      => 'message',
                   'value'   => $vars['message']);
 //Type field
-$types[''] = 'All Types';
+//$types[''] = 'All Types';
 $types['system'] = 'System';
 $where = ($vars['device_id']) ? 'WHERE `device_id` = ' . $vars['device_id'] : '';
 foreach (dbFetchRows('SELECT `type` FROM `eventlog` ' . $where . ' GROUP BY `type` ORDER BY `type`') as $data)
@@ -26,23 +26,23 @@ foreach (dbFetchRows('SELECT `type` FROM `eventlog` ' . $where . ' GROUP BY `typ
   $type = $data['type'];
   $types[$type] = ucfirst($type);
 }
-$search[] = array('type'    => 'select',
-                  //'name'    => 'Type',
+$search[] = array('type'    => 'multiselect',
+                  'name'    => 'Types',
                   'id'      => 'type',
-                  'width'   => '130px',
+                  'width'   => '160px',
                   'value'   => $vars['type'],
                   'values'  => $types);
 //Device field
-$devices[''] = 'All Devices';
+//$devices[''] = 'All Devices';
 foreach ($cache['devices']['hostname'] as $hostname => $device_id)
 {
   if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
   $devices[$device_id] = $hostname;
 }
 $search[] = array('type'    => 'select',
-                  'name'    => 'Device',
+                  'name'    => 'Devices',
                   'id'      => 'device_id',
-                  'width'   => '140px',
+                  'width'   => '160px',
                   'value'   => $vars['device_id'],
                   'values'  => $devices);
 $search[] = array('type'    => 'newline');
