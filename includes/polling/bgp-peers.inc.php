@@ -7,6 +7,8 @@ global $debug;
 if ($config['enable_bgp'])
 {
 
+  echo("BGP Peers: ");
+
   $bgp_oids  = array('bgpPeerState', 'bgpPeerAdminStatus', 'bgpPeerInUpdates', 'bgpPeerOutUpdates',
                      'bgpPeerInTotalMessages', 'bgpPeerOutTotalMessages', 'bgpPeerFsmEstablishedTime',
                      'bgpPeerInUpdateElapsedTime', 'bgpPeerLocalAddr', 'bgpPeerIdentifier');
@@ -96,7 +98,7 @@ if ($config['enable_bgp'])
     $vendor_counters = snmpwalk_cache_oid($device, $vendor_PeerDeniedPrefixes, $vendor_counters, $vendor_mib, $vendor_mib_dir);
     $vendor_counters = snmpwalk_cache_oid($device, $vendor_PeerAdvertisedPrefixes, $vendor_counters, $vendor_mib, $vendor_mib_dir);
   }
-  
+
   $use_cisco_v2 = FALSE;
   if ($device['os_group'] == 'cisco')
   {
@@ -107,6 +109,39 @@ if ($config['enable_bgp'])
       $use_cisco_v2 = TRUE;
     }
   }
+
+  // Cache data
+  echo("caching: ");
+  if (!strstr($peer_ip, ':') && $use_cisco_v2 != TRUE)
+  {
+    foreach ($bgp_oids as $bgp_oid)
+    {
+      echo("$bgp_oid ");
+      $bgp_peers = snmpwalk_cache_multi_oid($device, $bgp_oid, $bgp_peers, 'BGP4-MIB', mib_dirs());
+    }
+  }
+  elseif ($use_cisco_v2)
+  {
+    foreach ($bgp_oids as $bgp_oid)
+    {
+      $c_oid = str_replace(array('bgpPeer', 'Identifier'), array('cbgpPeer2', 'RemoteIdentifier'), $bgp_oid);
+      echo("$c_oid ");
+      $cisco_peers = snmpwalk_cache_oid($device, $c_oid, $cisco_peers, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
+      if ($bgp_oid == 'bgpPeerLocalAddr') { $cisco_peers[$c_index][$c_oid] = hex2ip($cisco_peers[$c_index][$c_oid]);}
+    }
+  }
+
+  if ($device['os_group'] == "cisco")
+  {
+    foreach ($cbgp_oids as $cbgp_oid)
+    {
+      $c_oid = ($use_cisco_v2) ? str_replace('cbgpPeer', 'cbgpPeer2', $cbgp_oid) : $cbgp_oid;
+      echo("$c_oid ");
+      $c_prefixes = snmpwalk_cache_oid($device, $c_oid, $c_prefixes, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
+    }
+  }
+
+  #print_r($bgp_peers);
 
   $sql  = 'SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id ';
   $sql .= 'FROM `bgpPeers` ';
@@ -127,7 +162,7 @@ if ($config['enable_bgp'])
       // Common IPv4 BGP4 MIB
       foreach ($bgp_oids as $bgp_oid)
       {
-        $bgp_peers = snmpwalk_cache_multi_oid($device, $bgp_oid, $bgp, 'BGP4-MIB', mib_dirs());
+#        $bgp_peers = snmpwalk_cache_multi_oid($device, $bgp_oid, $bgp, 'BGP4-MIB', mib_dirs());
         $$bgp_oid = $bgp_peers[$peer_ip][$bgp_oid];
       }
     }
@@ -138,8 +173,8 @@ if ($config['enable_bgp'])
       foreach ($bgp_oids as $bgp_oid)
       {
         $c_oid = str_replace(array('bgpPeer', 'Identifier'), array('cbgpPeer2', 'RemoteIdentifier'), $bgp_oid);
-        $cisco_peers = snmpwalk_cache_oid($device, $c_oid, $cisco_peers, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
-        if ($bgp_oid == 'bgpPeerLocalAddr') { $cisco_peers[$c_index][$c_oid] = hex2ip($cisco_peers[$c_index][$c_oid]);}
+#        $cisco_peers = snmpwalk_cache_oid($device, $c_oid, $cisco_peers, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
+#        if ($bgp_oid == 'bgpPeerLocalAddr') { $cisco_peers[$c_index][$c_oid] = hex2ip($cisco_peers[$c_index][$c_oid]);}
         $$bgp_oid = $cisco_peers[$c_index][$c_oid];
       }
     }
@@ -273,7 +308,7 @@ if ($config['enable_bgp'])
           foreach ($cbgp_oids as $cbgp_oid)
           {
             $c_oid = ($use_cisco_v2) ? str_replace('cbgpPeer', 'cbgpPeer2', $cbgp_oid) : $cbgp_oid;
-            $c_prefixes = snmpwalk_cache_oid($device, $c_oid, $c_prefixes, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
+#            $c_prefixes = snmpwalk_cache_oid($device, $c_oid, $c_prefixes, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
             $$cbgp_oid = $c_prefixes[$c_index][$c_oid];
           }
         }

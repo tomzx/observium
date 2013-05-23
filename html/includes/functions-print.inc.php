@@ -370,7 +370,7 @@ function print_search_simple($data, $title = '', $button = 'search')
       $string .= '</script>' . PHP_EOL;
       continue;
     } // End datetime
-    $string .= '  <div class="input-prepend" style="margin-right: 3px;">' . PHP_EOL;
+    $string .= '  <div class="input-prepend">' . PHP_EOL;
     if (!$item['name']) { $item['name'] = '&bull;'; }
     $string .= '    <span class="add-on">'.$item['name'].'</span>' . PHP_EOL;
     switch($item['type'])
