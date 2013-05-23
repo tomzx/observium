@@ -33,6 +33,8 @@ $avai_perc = round(($device_state['ucd_mem']['mem_avail'] / $device_state['ucd_m
 
     echo(overlib_link($link, $graph, $overlib_content, NULL));
 
+$used_abs = $used_perc - $buff_perc - $shar_perc;
+
 $percentage_bar            = array();
 $percentage_bar['border']  = "#EA8F00";
 $percentage_bar['border']  = "#E25A00";
@@ -40,10 +42,10 @@ $percentage_bar['bg']      = "#f0f0f0";
 $percentage_bar['width']   = "100%";
 $percentage_bar['text']    = $avai_perc."%";
 $percentage_bar['text_c']  = "#E25A00";
-$percentage_bar['bars'][0] = array('percent' => $used_perc, 'colour' => '#FFAA66', 'text' => $used_perc.'%');
-$percentage_bar['bars'][1] = array('percent' => $cach_perc, 'colour' => '#f0e0a0', 'text' => '');
-$percentage_bar['bars'][2] = array('percent' => $buff_perc, 'colour' => '#cc0000', 'text' => '');
-$percentage_bar['bars'][3] = array('percent' => $shar_perc, 'colour' => '#008fea', 'text' => '');
+$percentage_bar['bars'][0] = array('percent' => $buff_perc, 'colour' => '#cc0000', 'text' => '');
+$percentage_bar['bars'][1] = array('percent' => $shar_perc, 'colour' => '#008fea', 'text' => '');
+$percentage_bar['bars'][2] = array('percent' => $used_abs, 'colour' => '#FFAA66', 'text' => $used_perc.'%');
+$percentage_bar['bars'][3] = array('percent' => $cach_perc, 'colour' => '#f0e0a0', 'text' => '');
 
 echo('<table width="100%" class="table-striped table-condensed-more">');
 echo('  <tr>');
@@ -52,7 +54,6 @@ echo('    <td colspan=8>');
 echo(percentage_bar($percentage_bar));
 echo('    </td>');
 echo('  </tr>');
-
 
 ?>
   <tr class="small">
