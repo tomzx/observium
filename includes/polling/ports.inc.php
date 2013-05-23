@@ -415,8 +415,7 @@ foreach ($ports as $port)
     // Do PoE MIBs
     if ($config['enable_ports_poe']) { include("port-poe.inc.php"); }
 
-  print_r($port['alert_array']);
-
+    if ($debug) { print_r($port['alert_array']); }
 
 #    // Do Alcatel Detailed Stats
 #    if ($device['os'] == "aos") { include("port-alcatel.inc.php"); }
