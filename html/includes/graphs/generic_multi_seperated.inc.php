@@ -2,6 +2,11 @@
 
 include("includes/graphs/common.inc.php");
 
+$graph_return['valid_options'][] = "previous";
+$graph_return['valid_options'][] = "total";
+$graph_return['valid_options'][] = "trend";
+
+
 if ($format == "octets" || $format == "bytes")
 {
   $units = "Bps";
@@ -26,6 +31,8 @@ if (!$noheader)
 foreach ($rrd_list as $rrd)
 {
   if (!$config['graph_colours'][$colours_in][$iter] || !$config['graph_colours'][$colours_out][$iter]) { $iter = 0; }
+
+  $graph_return['rrds'][] = $rrd['filename'];
 
   $colour_in=$config['graph_colours'][$colours_in][$iter];
   $colour_out=$config['graph_colours'][$colours_out][$iter];

@@ -25,4 +25,6 @@ if ($_GET['previous'] == 'yes')
   $rrd_options .= " GPRINT:sensorX:MAX:%5.2lfA\\\\l";
 }
 
+$graph_return = array('rrds' => array($rrd_filename), 'descr' => 'Current sensor measured in Amperes.', 'valid_options' => array('previous'));
+
 ?>

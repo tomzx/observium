@@ -117,6 +117,8 @@ if (is_file($rrd_filename))
 
   $rrd_option .= " 'HRULE:0:#00000'";
 
+  $graph_return   = array('descr' => 'This graph shows memory and swap usage for UNIX-like hosts.', 'rrds' => array($rrd_filename));
+
 } else {
   // Failback to mempools for UNIXes.
   include('includes/graphs/device/mempool.inc.php');

@@ -5,6 +5,9 @@
 $ds_in  = "INOCTETS";
 $ds_out = "OUTOCTETS";
 
+$graph_return = array('descr' => 'Device total traffic in bits/sec.');
+
+
 foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ?", array($device['device_id'])) as $port)
 {
   $ignore = 0;

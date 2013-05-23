@@ -22,4 +22,6 @@ $rrd_options .= " GPRINT:sensor_max:MAX:%4.1lf%%\\\\l";
 if (is_numeric($sensor['sensor_limit'])) $rrd_options .= " HRULE:".$sensor['sensor_limit']."#999999::dashes";
 if (is_numeric($sensor['sensor_limit_low'])) $rrd_options .= " HRULE:".$sensor['sensor_limit_low']."#999999::dashes";
 
+$graph_return = array('rrds' => array($rrd_filename), 'descr' => 'Humidity sensor measured in percent.', 'valid_options');
+
 ?>

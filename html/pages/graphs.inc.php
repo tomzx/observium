@@ -155,6 +155,12 @@ if (!$auth)
   print_search_simple($search, '', 'update');
   unset($search);
 
+/// Run the graph to get data array out of it
+
+$_GET = $graph_array;
+$command_only = 1;
+include("includes/graphs/graph.inc.php");
+
 /// Print options navbar
 
 $navbar = array();
@@ -163,7 +169,7 @@ $navbar['class'] = "navbar-narrow";
 
 $navbar['options']['legend']   =  array('text' => 'Show Legend', 'inverse' => TRUE);
 $navbar['options']['previous'] =  array('text' => 'Graph Previous');
-$navbar['options']['trend'] =  array('text' => 'Graph Trend');
+$navbar['options']['trend']    =  array('text' => 'Graph Trend');
 $navbar['options']['max']      =  array('text' => 'Graph Maximum');
 
 $navbar['options_right']['showcommand'] =  array('text' => 'RRD Command');
@@ -203,7 +209,7 @@ unset($navbar);
   echo(generate_graph_tag($graph_array));
   echo("</div>");
 
-  if (isset($config['graph_descr'][$vars['type']]))
+  if (isset($graph_return['descr']))
   {
 
     print_optionbar_start();
@@ -212,16 +218,52 @@ unset($navbar);
             <img valign=absmiddle src="images/16/information.png" />
           </div>
           </div>');
-    echo($config['graph_descr'][$vars['type']]);
+    echo($graph_return['descr']);
     print_optionbar_end();
   }
 
+#print_r($graph_return);
+
   if (isset($vars['showcommand']))
   {
-    $_GET = $graph_array;
-    $command_only = 1;
+?>
 
-    include("includes/graphs/graph.inc.php");
+  <div class="well info_box">
+    <div id="title"><a href="device/device=12/tab=ports/">
+      <i class="oicon-clock"></i> Performance & Output</a>
+    </div>
+    <div id="content">
+      <?php echo("RRDTool Output: ".$return."<br />"); ?>
+      <?php echo("<p>Total time: ".$graph_return['total_time']." | RRDtool time: ".$graph_return['rrdtool_time']."s</p>"); ?>
+    </div>
+  </div>
+
+
+  <div class="well info_box">
+    <div id="title"><a href="device/device=12/tab=ports/">
+      <i class="oicon-application-terminal"></i> RRDTool Command</a>
+    </div>
+    <div id="content">
+      <?php echo($graph_return['cmd']); ?>
+    </div>
+  </div>
+
+  <div class="well info_box">
+    <div id="title"><a href="device/device=12/tab=ports/">
+      <i class="oicon-database"></i> RRDTool Files Used</a>
+    </div>
+    <div id="content">
+      <?php
+        foreach($graph_return['rrds'] as $rrd)
+        {
+          echo("$rrd <br />");
+        }
+      ?>
+    </div>
+  </div>
+
+<?
+
   }
 }
 

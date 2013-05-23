@@ -22,4 +22,6 @@ $rrd_options .= " GPRINT:sensor:MAX:%6.2lfV\\\\l";
 if (is_numeric($sensor['sensor_limit'])) $rrd_options .= " HRULE:".$sensor['sensor_limit']."#999999::dashes";
 if (is_numeric($sensor['sensor_limit_low'])) $rrd_options .= " HRULE:".$sensor['sensor_limit_low']."#999999::dashes";
 
+$graph_return = array('rrds' => array($rrd_filename), 'descr' => 'Potential sensor measured in volts.', 'valid_options');
+
 ?>
