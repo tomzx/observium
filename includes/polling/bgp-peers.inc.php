@@ -111,23 +111,55 @@ if ($config['enable_bgp'])
   }
 
   // Cache data
-  echo("caching: ");
-  if (!strstr($peer_ip, ':') && $use_cisco_v2 != TRUE)
+  echo("Caching: ");
+  if ($use_cisco_v2 != TRUE)
   {
+    echo("(BGP4-MIB) ");
     foreach ($bgp_oids as $bgp_oid)
     {
       echo("$bgp_oid ");
       $bgp_peers = snmpwalk_cache_multi_oid($device, $bgp_oid, $bgp_peers, 'BGP4-MIB', mib_dirs());
     }
   }
-  elseif ($use_cisco_v2)
+  if ($use_cisco_v2)
   {
+    echo("(CISCO-BGP4-MIB) ");
     foreach ($bgp_oids as $bgp_oid)
     {
       $c_oid = str_replace(array('bgpPeer', 'Identifier'), array('cbgpPeer2', 'RemoteIdentifier'), $bgp_oid);
       echo("$c_oid ");
       $cisco_peers = snmpwalk_cache_oid($device, $c_oid, $cisco_peers, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
       if ($bgp_oid == 'bgpPeerLocalAddr') { $cisco_peers[$c_index][$c_oid] = hex2ip($cisco_peers[$c_index][$c_oid]);}
+    }
+  }
+  if ($use_vendor)
+  {
+    echo("(".$vendor_mib.") ");
+    // Vendor specific IPv4/IPv6 BGP4 MIB
+    if (!isset($vendor_peers))
+    {
+      // Fetch BGP counters for some vendors
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerState, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerAdminStatus, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerFsmEstablishedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdateElapsedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      // rewrite to pretty array.
+      foreach ($vendor_bgp as $entry)
+      {
+        $v_ip = hex2ip($entry[$vendor_PeerRemoteAddr]);
+        $entry[$vendor_PeerLocalAddr] = hex2ip($entry[$vendor_PeerLocalAddr]);
+        print_r($entry);
+        $vendor_peers[$v_ip] = $entry;
+      }
     }
   }
 
@@ -181,30 +213,30 @@ if ($config['enable_bgp'])
     elseif ($use_vendor)
     {
       // Vendor specific IPv4/IPv6 BGP4 MIB
-      if (!isset($vendor_peers))
-      {
-        // Fetch BGP counters for some vendors
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerState, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerAdminStatus, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerFsmEstablishedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdateElapsedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
-        // rewrite to pretty array.
-        foreach ($vendor_bgp as $entry)
-        {
-          $v_ip = hex2ip($entry[$vendor_PeerRemoteAddr]);
-          $entry[$vendor_PeerLocalAddr] = hex2ip($entry[$vendor_PeerLocalAddr]);
-          $vendor_peers[$v_ip] = $entry;
-        }
-      }
+      #if (!isset($vendor_peers))
+      #{
+      #  // Fetch BGP counters for some vendors
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIdentifier, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerRemoteAddrType, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerLocalAddr, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  //$vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerIndex, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerState, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerAdminStatus, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutUpdates, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerOutTotalMessages, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerFsmEstablishedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  $vendor_bgp = snmpwalk_cache_oid_num2($device, $vendor_PeerInUpdateElapsedTime, $vendor_bgp, $vendor_mib, $vendor_mib_dir, TRUE);
+      #  // rewrite to pretty array.
+      #  foreach ($vendor_bgp as $entry)
+      #  {
+      #    $v_ip = hex2ip($entry[$vendor_PeerRemoteAddr]);
+      #    $entry[$vendor_PeerLocalAddr] = hex2ip($entry[$vendor_PeerLocalAddr]);
+      #    $vendor_peers[$v_ip] = $entry;
+      #  }
+      #}
 
       foreach ($bgp_oids as $bgp_oid)
       {
