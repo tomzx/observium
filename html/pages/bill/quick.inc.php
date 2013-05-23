@@ -1,5 +1,10 @@
 <?php
 
+$links['billing']   = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => 'billing'));
+$links['24hour']    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => '24hour'));
+$links['monthly']   = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => 'monthly'));
+$links['previous']  = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'quick', 'tab' => 'previous'));
+
 $bi           = "<img src='graph.php?type=bill_bits&amp;id=" . $bill_id;
 $bi          .= "&amp;from=" . $unixfrom .  "&amp;to=" . $unixto;
 $bi          .= "&amp;width=1050&amp;height=300&amp;total=1'>";
