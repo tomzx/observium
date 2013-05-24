@@ -19,9 +19,6 @@ foreach ($sections as $section)
 
 print_navbar($navbar);
 
-
-$vars['pageno'] = $tmp_pageno;
-
 switch ($vars['section'])
 {
   case 'syslog':
