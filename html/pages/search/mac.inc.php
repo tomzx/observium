@@ -1,89 +1,50 @@
-<?php print_optionbar_start(28); ?>
-
-<table cellpadding="0" cellspacing="0" class="devicetable" width="100%">
-  <tr>
-  <form method="post" action="">
-    <td width="200" style="padding: 1px;">
-      <select name="device_id" id="device_id">
-      <option value="">All Devices</option>
-<?php
-foreach (dbFetchRows("SELECT `device_id`,`hostname` FROM `devices` GROUP BY `hostname` ORDER BY `hostname`") as $data)
-{
-  echo('<option value="'.$data['device_id'].'"');
-  if ($data['device_id'] == $_POST['device_id']) { echo("selected"); }
-  echo(">".$data['hostname']."</option>");
-}
-?>
-      </select>
-    </td>
-    <td width="200" style="padding: 1px;">
-      <select name="interface" id="interface">
-      <option value="">All Interfaces</option>
-      <option value="Loopback%" <?php if ($_POST['interface'] == "Loopback%") { echo("selected"); } ?> >Loopbacks</option>
-      <option value="Vlan%" <?php if ($_POST['interface'] == "Vlan%") { echo("selected"); } ?> >VLANs</option>
-      </select>
-    </td>
-    <td>
-    </td>
-    <td width=400>
-     <input type="text" name="address" id="address" size=40 value="<?php echo($_POST['address']); ?>" />
-     <input style="align:right;" type=submit class=submit value=Search></div>
-    </td>
-  </form>
-  </tr>
-</table>
+<div class="row">
+<div class="span12">
 
 <?php
+unset($search, $devices);
 
-print_optionbar_end();
-
-echo('<table width="100%" cellspacing="0" cellpadding="5">');
-
-$query = "SELECT * FROM `ports` AS P, `devices` AS D WHERE P.device_id = D.device_id ";
-$query .= "AND `ifPhysAddress` LIKE ?";
-$param = array("%".str_replace(array(':', ' ', '-', '.', '0x'),'',mres($_POST['address']))."%");
-
-if (is_numeric($_POST['device_id']))
+$devices[''] = 'All Devices';
+foreach ($cache['devices']['hostname'] as $hostname => $device_id)
 {
-  $query  .= " AND P.device_id = ?";
-  $param[] = $_POST['device_id'];
+  if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
+  $devices[$device_id] = $hostname;
 }
-if ($_POST['interface'])
-{
-  $query .= " AND P.ifDescr LIKE ?";
-  $param[] = $_POST['interface'];
-}
-$query .= " ORDER BY P.ifPhysAddress";
+//Device field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Devices',
+                  'id'      => 'device_id',
+                  'width'   => '160px',
+                  'value'   => $vars['device_id'],
+                  'values'  => $devices);
+//Interface field
+$search[] = array('type'    => 'select',
+                  'name'    => 'Interface',
+                  'id'      => 'interface',
+                  'width'   => '160px',
+                  'value'   => $vars['interface'],
+                  'values'  => array('' => 'All Interfaces', 'Loopback%' => 'Loopbacks', 'Vlan%' => 'Vlans'));
+//MAC address field
+$search[] = array('type'    => 'text',
+                  'name'    => 'MAC Address',
+                  'id'      => 'address',
+                  'width'   => '160px',
+                  'value'   => $vars['address']);
 
-echo('<tr class="entity"><th>Device</a></th><th>Interface</th><th>MAC Address</th><th>Description</th></tr>');
-foreach (dbFetchRows($query, $param) as $entry)
-{
-  if (!$ignore)
-  {
-    $speed = humanspeed($entry['ifSpeed']);
-    $type = humanmedia($entry['ifType']);
+print_search_simple($search, 'MAC Addresses');
 
-    if ($entry['in_errors'] > 0 || $entry['out_errors'] > 0)
-    {
-      $error_img = generate_port_link($entry,"<img src='images/16/chart_curve_error.png' alt='Interface Errors' border=0>",errors);
-    } else { $error_img = ""; }
+// Pagination
+$vars['pagination'] = TRUE;
+if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
+if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 
-    if (port_permitted($entry['port_id']))
-    {
-      humanize_port($interface);
+// Print MAC addresses
+print_mac_addresses($vars);
 
-      echo('<tr class="search">
-          <td class="entity">' . generate_device_link($entry) . '</td>
-          <td class="entity">' . generate_port_link($entry, makeshortif(fixifname($entry['ifDescr']))) . ' ' . $error_img . '</td>
-          <td>' . formatMac($entry['ifPhysAddress']) . '</td>
-          <td>' . $entry['ifAlias'] . "</td>
-        </tr>\n");
-    }
-  }
-
-  unset($ignore);
-}
-
-echo("</table>");
+$pagetitle[] = 'MAC addresses';
 
 ?>
+
+  </div> <!-- span12 -->
+
+</div> <!-- row -->
