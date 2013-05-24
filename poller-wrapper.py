@@ -45,6 +45,37 @@ except:
     print "On FreeBSD: cd /usr/ports/*/py-MySQLdb && make install clean"
     sys.exit(2)
 
+
+"""
+    Parse Arguments
+    Attempt to use argparse module.  Probably want to use this moving forward
+    especially as more features want to be added to this wrapper.
+    and
+    Take the amount of threads we want to run in parallel from the commandline
+    if None are given or the argument was garbage, fall back to default of 16 
+"""
+try:
+    import argparse
+    parser = argparse.ArgumentParser(description='Poller Wrapper for Observium')
+    parser.add_argument('workers', nargs='?', type=int, default=16, help='Number of workers to spawn.')
+    parser.add_argument('--host', help='Poll hostname wildcard.')
+    args = parser.parse_args()
+    amount_of_workers = int(args.workers)
+except ImportError:
+    print "WARNING: missing the argparse python module:"
+    print "On ubuntu: apt-get install libpython2.7-stdlib"
+    print "On debian: apt-get install python-argparse"
+    print "Continuing with basic argument support."
+    try:
+        amount_of_workers = int(sys.argv[1])
+    except:
+        amount_of_workers = 16
+
+if amount_of_workers == 0:
+    print "ERROR: 0 threads is not a valid value"
+    sys.exit(2)
+
+
 """
     Fetch configuration details from the config_to_json.php script
 """
@@ -83,18 +114,6 @@ s_time = time.time()
 real_duration = 0
 per_device_duration = {}
 
-"""
-    Take the amount of threads we want to run in parallel from the commandline
-    if None are given or the argument was garbage, fall back to default of 16 
-"""
-try:
-    amount_of_workers = int(sys.argv[1])
-    if amount_of_workers == 0:
-        print "ERROR: 0 threads is not a valid value"
-        sys.exit(2)
-except:
-    amount_of_workers = 16
-
 devices_list = []
 
 try:
@@ -104,15 +123,30 @@ except:
     print "ERROR: Could not connect to MySQL database!"
     sys.exit(2)
 
+
 """ 
-    This query specificly orders the results depending on the last_polled_timetaken variable
+    This query specifically orders the results depending on the last_polled_timetaken variable
     Because this way, we put the devices likely to be slow, in the top of the queue
     thus greatening our chances of completing _all_ the work in exactly the time it takes to 
     poll the slowest device! cool stuff he
+    Additionally, if a hostname wildcard is passed, add it to the where clause.  This is
+    important in cases where you have pollers distributed geographically and want to limit
+    pollers to polling hosts matching their geographic naming scheme.
 """
-query = "select device_id from devices where disabled = 0 order by last_polled_timetaken desc"
 
-cursor.execute(query)
+query = """SELECT   device_id
+           FROM     devices
+           WHERE    disabled = 0"""
+order =  " ORDER BY last_polled_timetaken desc"
+
+try:
+    host_wildcard = args.host.replace('*', '%')
+    wc_query = query + " AND hostname LIKE %s " + order
+    cursor.execute(wc_query, host_wildcard)
+except:
+    query = query + order
+    cursor.execute(query)
+
 devices = cursor.fetchall()
 for row in devices:
     devices_list.append(int(row[0]))
