@@ -1003,6 +1003,32 @@ function get_rancid_filename($hostname)
   return FALSE;
 }
 
+// return the filename of the device NFSEN rrd file
+function get_nfsen_filename($hostname)
+{
+  global $config;
+
+  if (!is_array($config['nfsen_rrds'])) { $config['nfsen_rrds'] = array($config['nfsen_rrds']); }
+  foreach ($config['nfsen_rrds'] as $nfsenrrd)
+  {
+    if ($configs[strlen($nfsenrrd)-1] != '/') { $nfsenrrd .= '/'; }
+    $basefilename_underscored = preg_replace('/\./', $config['nfsen_split_char'], $hostname);
+    if ($config['nfsen_suffix']) 
+    {
+      $nfsen_filename = (strstr($basefilename_underscored, $config['nfsen_suffix'], TRUE));
+    } else {
+      $nfsen_filename = $basefilename_underscored;
+    }
+    $nfsen_rrd_file = $nfsenrrd . $basefilename_underscored . '.rrd';
+    if (is_file($nfsen_rrd_file))
+    {
+      return $nfsen_rrd_file;
+    }
+  }
+  
+  return FALSE;
+}
+
 function generate_ap_link($args, $text = NULL, $type = NULL)
 {
   global $config;
