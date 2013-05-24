@@ -135,15 +135,14 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link href="css/sprite.css" rel="stylesheet" type="text/css" />
   <link href="css/flags.css" rel="stylesheet" type="text/css" />
 
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/google-code-prettify.js"></script>
 
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
 ?>
 </head>
 
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/google-code-prettify.js"></script>
-  
 <body>
   <div class="container">
 
@@ -309,6 +308,8 @@ if (is_array($pagetitle))
   <script src="js/bootstrap.min.js"></script>
   <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
   <script src="js/bootstrap-datetimepicker.min.js"></script>
+  <script src="js/bootstrap-select.min.js"></script>
+  <script type="text/javascript">$('.selectpicker').selectpicker();</script>
   <script type="text/javascript" src="js/mktree.js"></script>
   <script type="text/javascript" src="js/sorttable.js"></script>
   <script type="text/javascript" src="js/jquery.switch.js"></script>
