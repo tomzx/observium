@@ -383,7 +383,7 @@ function pagination($vars, $total, $per_page = 10)
        <select name="type" id="type" class="span1"
        onchange="window.open(this.options[this.selectedIndex].value,\'_top\')">';
 
-    foreach (array('10','20','50','100','500','1000') as $pagesize)
+    foreach (array('10','20','50','100','500','1000', '10000', '100000') as $pagesize)
     {
       $pagination .= "<option value='".generate_url($vars, array('pagesize' => $pagesize))."'";
       if ($pagesize == $vars['pagesize']) { $pagination .= (" selected"); }
