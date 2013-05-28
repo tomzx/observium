@@ -551,7 +551,9 @@ function collectd_draw_rrd($host, $plugin, $pinst = null, $type, $tinst = null, 
 	}
 
 	#$rrd_cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height'], '-t', $rrdfile);
-        $rrd_cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+        #$rrd_cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+        $rrd_cmd = array('-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+
         if($config['rrd_width'] <= "300") {
           $small_opts = array ('--font', "LEGEND:7:mono", '--font', "AXIS:6:mono", "--font-render-mode", "normal");
           $rrd_cmd = array_merge($rrd_cmd, $small_opts);
@@ -559,7 +561,7 @@ function collectd_draw_rrd($host, $plugin, $pinst = null, $type, $tinst = null, 
 
 	$rrd_cmd = array_merge($rrd_cmd, $config['rrd_opts_array'], $opts['rrd_opts'], $graph);
 
-	$cmd = RRDTOOL;
+	$cmd = RRDTOOL; $cmd = '';
 	for ($i = 1; $i < count($rrd_cmd); $i++)
 		$cmd .= ' '.escapeshellarg($rrd_cmd[$i]);
 
@@ -592,6 +594,7 @@ function collectd_draw_generic($timespan, $host, $plugin, $pinst = null, $type, 
 	$rrd_file = sprintf('%s/%s%s%s/%s%s%s', $host, $plugin, is_null($pinst) ? '' : '-', $pinst, $type, is_null($tinst) ? '' : '-', $tinst);
 	#$rrd_cmd  = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height'], '-t', $rrd_file);
         $rrd_cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+        $rrd_cmd = array('-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
 
         if($config['rrd_width'] <= "300") {
           $small_opts = array ('--font', 'LEGEND:7:mono', '--font', 'AXIS:6:mono', '--font-render-mode', 'normal');
@@ -610,7 +613,7 @@ function collectd_draw_generic($timespan, $host, $plugin, $pinst = null, $type, 
 		$rrd_args = str_replace('{file}', $file, $rrd_args);
 
 		$rrdgraph = array_merge($rrd_cmd, $rrd_args);
-		$cmd = RRDTOOL;
+		$cmd = RRDTOOL; $cmd = '';
 		for ($i = 1; $i < count($rrdgraph); $i++)
 			$cmd .= ' '.escapeshellarg($rrdgraph[$i]);
 
@@ -647,6 +650,9 @@ function collectd_draw_meta_stack(&$opts, &$sources) {
 #                    '-t', $opts['title']);
 
         $cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+
+        $cmd = array('-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+
 
         if($config['rrd_width'] <= "300") {
           $small_opts = array ('--font', 'LEGEND:7:mono', '--font', 'AXIS:6:mono', '--font-render-mode', 'normal');
@@ -745,6 +751,7 @@ function collectd_draw_meta_line(&$opts, &$sources) {
 #	$cmd = array_merge($cmd, $config['rrd_opts_array'], $opts['rrd_opts']);
 
         $cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+        $cmd = array('-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
 
         if($config['rrd_width'] <= "300") {
           $small_opts = array ('--font', 'LEGEND:7:mono', '--font', 'AXIS:6:mono', '--font-render-mode', 'normal');

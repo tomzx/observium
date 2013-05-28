@@ -205,11 +205,8 @@ if(isset($rrd_cmd))
 
 if ($_GET['legend'] == "no")  { $rrd_cmd .= " -g "; }
 
-$height = $_GET['height'];
-$height = $_GET['width'];
-
-if ($height < "99")  { $rrd_cmd .= " --only-graph "; }
-if ($width <= "300") { $rrd_cmd .= " --font LEGEND:7:" . $config['mono_font'] . " --font AXIS:6:" . $config['mono_font'] . " "; }
+if ($_GET['height'] < "99")  { $rrd_cmd .= " --only-graph "; }
+if ($_GET['width'] <= "300") { $rrd_cmd .= " --font LEGEND:7:" . $config['mono_font'] . " --font AXIS:6:" . $config['mono_font'] . " "; }
 else {                 $rrd_cmd .= " --font LEGEND:8:" . $config['mono_font'] . " --font AXIS:7:" . $config['mono_font'] . " "; }
 
 if (isset($_GET['debug'])) {
@@ -217,15 +214,16 @@ if (isset($_GET['debug'])) {
   printf("Would have executed:\n%s\n", $rrd_cmd);
   return 0;
 } else if ($rrd_cmd) {
-  header('Content-Type: image/png');
-  header('Cache-Control: max-age=60');
+#  header('Content-Type: image/png');
+#  header('Cache-Control: max-age=60');
   $rt = 0;
-  passthru($rrd_cmd, $rt);
-  if ($rt != 0)
-    return error500($graph_identifier, "RRD failed to generate the graph: ".$rt);
-  return $rt;
+  $rrd_options = $rrd_cmd;
+#  passthru($rrd_cmd, $rt);
+#  if ($rt != 0)
+#    return error500($graph_identifier, "RRD failed to generate the graph: ".$rt);
+#  return $rt;
 } else {
-  return error500($graph_identifier, "Failed to tell RRD how to generate the graph");
+#  return error500($graph_identifier, "Failed to tell RRD how to generate the graph");
 }
 
 ?>
