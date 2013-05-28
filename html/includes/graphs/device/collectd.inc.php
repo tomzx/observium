@@ -45,7 +45,7 @@ function makeTextBlock($text, $fontfile, $fontsize, $width) {
  * @title Title for fake RRD graph
  * @msg Complete error message to display in place of graph content
  */
-function error($code, $code_msg, $title, $msg) {
+function error_collectd($code, $code_msg, $title, $msg) {
   global $config;
 
   header(sprintf("HTTP/1.0 %d %s", $code, $code_msg));
@@ -101,18 +101,18 @@ function error($code, $code_msg, $title, $msg) {
  * No RRD files found that could match request
  */
 function error404($title, $msg) {
-  return error(404, "Not found", $title, $msg);
+  return error_collectd(404, "Not found", $title, $msg);
 }
 
 function error500($title, $msg) {
-  return error(500, "Not found", $title, $msg);
+  return error_collectd(500, "Not found", $title, $msg);
 }
 
 /**
  * Incomplete / invalid request
  */
 function error400($title, $msg) {
-  return error(400, "Bad request", $title, $msg);
+  return error_collectd(400, "Bad request", $title, $msg);
 }
 
 // Process input arguments
@@ -204,6 +204,9 @@ if(isset($rrd_cmd))
 }
 
 if ($_GET['legend'] == "no")  { $rrd_cmd .= " -g "; }
+
+$height = $_GET['height'];
+$height = $_GET['width'];
 
 if ($height < "99")  { $rrd_cmd .= " --only-graph "; }
 if ($width <= "300") { $rrd_cmd .= " --font LEGEND:7:" . $config['mono_font'] . " --font AXIS:6:" . $config['mono_font'] . " "; }
