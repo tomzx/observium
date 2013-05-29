@@ -1,0 +1,2476 @@
+-- Mib files packaged on  Fri Oct 26 06:02:55 EDT 2012 for Storage Array Firmware V6.0.2 (R287892)
+
+--  These are from draft-ietf-ops-rfc2851-update-00.txt  
+--  You will have to work out the details with your own  
+EQLNAS-MIB DEFINITIONS  ::= BEGIN   
+IMPORTS  
+    MODULE-IDENTITY, OBJECT-TYPE, Unsigned32, Counter64, Integer32,TimeTicks,  enterprises, IpAddress, Counter32, Counter64, Gauge32
+            FROM SNMPv2-SMI  
+	 DateAndTime, RowPointer       
+				FROM SNMPv2-TC
+    TruthValue, RowStatus, DisplayString    
+            FROM SNMPv2-TC
+    InetAddressType, InetAddress
+            FROM INET-ADDRESS-MIB       -- RFC2851
+    equalLogic
+            FROM EQUALLOGIC-SMI
+--     UTFString
+--            FROM EQLGROUP-MIB
+    eqlApplianceIndex 
+	    FROM EQLAPPLIANCE-MIB
+    StatusDisabledDefault, SiteIndex, eqliscsiVolumeReplSiteIndex
+       FROM EQLVOLUME-MIB;
+
+eqlNASModule MODULE-IDENTITY      
+	LAST-UPDATED "201210261002Z"
+    ORGANIZATION  "EqualLogic Inc."
+    CONTACT-INFO      
+        "Contact: Customer Support
+         Postal:  Dell Inc
+                  300 Innovative Way, Suite 301, Nashua, NH 03062
+         Tel:     +1 603-579-9762
+         E-mail:  US-NH-CS-TechnicalSupport@dell.com
+         WEB:     www.equallogic.com"
+
+    DESCRIPTION          
+        "Appliances information.
+
+        Copyright (c) 2004-2011 by Dell, Inc. 
+        
+        All rights reserved.  This software may not be copied, disclosed, 
+        transferred, or used except in accordance with a license granted 
+        by Dell, Inc.  This software embodies proprietary information 
+        and trade secrets of Dell, Inc. 
+        "
+
+    -- Revision history, in reverse chronological order
+    REVISION    "200907130000Z"         -- 02-Sep-06
+    DESCRIPTION "Initial revision"    
+    ::= { enterprises equalLogic(12740) 18 }     
+
+eqlNASObjects OBJECT IDENTIFIER ::= { eqlNASModule 1 }
+
+--***********************************************************************************
+-- Textual conventions
+
+UNIXPermissions ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "o"
+    STATUS       current
+    DESCRIPTION
+            "This textual convention defines a format to display file and directory permissions in UNIX"
+    SYNTAX       Unsigned32
+
+
+SiteIndexOrZero ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d"
+    STATUS       current
+    DESCRIPTION
+            "This textual convention is an extension of the
+            SiteIndex convention.  The latter defines a greater
+            than zero value used to identify an external group
+            operating autonomously from the local group. This extension permits the
+            additional value of zero.  the value zero is object-specific
+            and must therefore be defined as part of the description of
+            any object which uses this syntax.  Examples of the usage of
+            zero might include situations where the site is unknown or not 
+            relevant"
+    SYNTAX       Integer32 (0..2147483647)
+
+
+--***********************************************************************************
+
+
+eqlNASApplianceTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASApplianceEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Persistent Appliance Table.
+                     This table contains a list of NAS pools that this group is managing.
+                     TimeoutAll:60"
+    ::=    { eqlNASObjects 1 }     
+
+eqlNASApplianceEntry OBJECT-TYPE      
+    SYNTAX          EqlNASApplianceEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing NAS Container info."
+    INDEX           { eqlApplianceIndex }
+
+    ::=   { eqlNASApplianceTable 1}     
+
+EqlNASApplianceEntry ::= 
+    SEQUENCE { 
+        eqlNASApplianceRowStatus        RowStatus,
+        eqlNASAppliancePoolSize         Unsigned32,
+        eqlNASApplianceEQLPoolIndex     Unsigned32,
+        eqlNASApplianceReplRemoteUserName     OCTET STRING
+    }
+
+eqlNASApplianceRowStatus OBJECT-TYPE      
+    SYNTAX          RowStatus    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "This field is used indicate the status of this entry."  
+    ::= { eqlNASApplianceEntry 1 }  
+
+eqlNASAppliancePoolSize OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "This field is used indicate the size of the NAS Container in MB."  
+    ::= { eqlNASApplianceEntry 2 }  
+
+eqlNASApplianceEQLPoolIndex OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "This field is used to indicate the EQL pool used by the NAS appliance."  
+    ::= { eqlNASApplianceEntry 3 }  
+
+eqlNASApplianceReplRemoteUserName OBJECT-TYPE
+    SYNTAX        OCTET STRING  (SIZE (0..32))
+    MAX-ACCESS    read-write
+    STATUS        current
+    DESCRIPTION
+        "This field is used to indicate the Username EQL will use for NAS replication for all partners."
+    ::= { eqlNASApplianceEntry 4 }  
+-----------------------------------------------------------------------------------------------
+eqlNASContainerTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASContainerEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic Appliance Table.
+                     This table contains a list of NAS Appliance configurations for containers the group is managing.
+                     TimeoutAll:60"
+    ::=    { eqlNASObjects 3 }     
+
+eqlNASContainerEntry OBJECT-TYPE      
+    SYNTAX          EqlNASContainerEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing NAS Container info."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex }
+
+    ::=   { eqlNASContainerTable 1}     
+
+EqlNASContainerEntry ::= 
+    SEQUENCE { 
+        eqlNASContainerIndex                     Unsigned32,
+	eqlNASContainerRowStatus                 RowStatus,
+	eqlNASContainerName                      OCTET STRING,
+	eqlNASContainerCapacity                  Unsigned32,
+	eqlNASContainerUsedSpaceAlert            Unsigned32,
+	eqlNASContainerSnapshotHardQuota         Unsigned32,
+	eqlNASContainerSnapshotUsedSpaceAlert    Unsigned32,
+	eqlNASContainerUnixFilePermissions       UNIXPermissions,
+	eqlNASContainerUnixDirPermissions        UNIXPermissions,
+	eqlNASContainerQuotaEnabled              TruthValue,
+	eqlNASContainerFileAccessSecurity        INTEGER,
+        eqlNASContainerAccessTimeManagementGranularity       INTEGER,
+        eqlNASContainerOptimizationEnabled       TruthValue,
+        eqlNASContainerDedupMethodType           INTEGER,
+        eqlNASContainerCompressionEnabled        TruthValue,
+        eqlNASContainerModificationTimeFilter    INTEGER,
+        eqlNASContainerAccessTimeFilter          INTEGER,
+        eqlNASContainerExcludeFilesByNamePattern OCTET STRING,
+        eqlNASContainerAction                    INTEGER
+    }
+
+eqlNASContainerIndex OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "Unique Identifier used to create and manage NAS Containers. When creating NAS Containers, value must be retrieved using eqlApplianceUniqueIDValue with eqlApplianceUniqueIDType set to fsid."  
+    ::= { eqlNASContainerEntry 1 }  
+
+eqlNASContainerRowStatus OBJECT-TYPE      
+    SYNTAX          RowStatus    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Row status variable used to manage this row."  
+    ::= { eqlNASContainerEntry 2 }  
+
+eqlNASContainerName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..230))    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Name used to identify NAS Container. Contains only letters, digits and underscores. Must begin with either letter or an underscore. "
+    ::=  {  eqlNASContainerEntry 3 }  
+
+eqlNASContainerCapacity OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS           "MB"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Size of NAS Container in MB."  
+    ::= { eqlNASContainerEntry 4 }  
+
+eqlNASContainerUsedSpaceAlert OBJECT-TYPE      
+    SYNTAX          Unsigned32
+    UNITS           "%"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Alert user when NAS container used space reaches certain % value of NAS container size.Default value is choosen from eqlNASApplianceConfigUsedSpaceAlert"  
+    ::= { eqlNASContainerEntry 5 }  
+
+eqlNASContainerSnapshotHardQuota OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS           "%"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "This threshold, represented as a % of NAS container size, triggers auto-deletion of snapshots. The oldest snapshots are deleted first. Default value is choosen from eqlNASApplianceConfigSnapHardQuota"  
+    ::= { eqlNASContainerEntry 6 }  
+
+eqlNASContainerSnapshotUsedSpaceAlert OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Alert user when NAS container snapshot used space reaches certain % value of NAS container snapshot size.Default value is choosen from eqlNASApplianceConfigSnapSpaceAlert "  
+    ::= { eqlNASContainerEntry 7 }  
+
+eqlNASContainerUnixFilePermissions OBJECT-TYPE      
+    SYNTAX          UNIXPermissions    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     " This field is applicable only when Security style is set to NFS"  
+    ::= { eqlNASContainerEntry 8 }  
+
+eqlNASContainerUnixDirPermissions OBJECT-TYPE      
+    SYNTAX          UNIXPermissions    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     " This field is applicable only when Security style is set to NFS"  
+    ::= { eqlNASContainerEntry 9 }  
+
+eqlNASContainerQuotaEnabled OBJECT-TYPE      
+    SYNTAX          TruthValue    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     ""  
+    ::= { eqlNASContainerEntry 10 }  
+
+eqlNASContainerFileAccessSecurity OBJECT-TYPE      
+    SYNTAX          INTEGER     {
+                    mixed(1),
+                    ntfs(2),
+                    unix(3)
+    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     ""  
+    DEFVAL          {ntfs}
+    ::= { eqlNASContainerEntry 11 }  
+
+eqlNASContainerAccessTimeManagementGranularity OBJECT-TYPE      
+    SYNTAX          INTEGER    {
+                    disabled(0),
+                    always(1),
+                    everyFiveMinutes(2),
+                    hourly(3),
+                    daily(4),
+                    weekly(5)
+                    }    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Access time management granularity."  
+    DEFVAL          {daily}
+    ::= { eqlNASContainerEntry 12 }  
+
+eqlNASContainerOptimizationEnabled OBJECT-TYPE      
+    SYNTAX          TruthValue    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Enable or disable optimization"  
+    DEFVAL          {false}
+    ::= { eqlNASContainerEntry 13 }  
+
+eqlNASContainerDedupMethodType OBJECT-TYPE      
+    SYNTAX          INTEGER     {
+                    variable-chunk(1),
+                    object(2)
+    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Dedup method to use on this file system when optimization is enabled"  
+    DEFVAL          {variable-chunk}
+    ::= { eqlNASContainerEntry 14 }  
+
+eqlNASContainerCompressionEnabled OBJECT-TYPE      
+    SYNTAX          TruthValue    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "enable or disable compression. Restricted by the type of license"  
+    DEFVAL          {false}
+    ::= { eqlNASContainerEntry 15 }  
+
+eqlNASContainerModificationTimeFilter OBJECT-TYPE      
+    SYNTAX          INTEGER (0..1000)    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Exclude files modified less than the specified number of days before, 0 value means disregard the modification time. 0 to 1000 days"  
+    DEFVAL          {30}
+    ::= { eqlNASContainerEntry 16 }  
+
+eqlNASContainerAccessTimeFilter OBJECT-TYPE      
+    SYNTAX          INTEGER (0..1000)    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Exclude files accessed less than the specified number of days before, 0 value means disable the access time. 0 to 1000 days"  
+    DEFVAL          {30}
+    ::= { eqlNASContainerEntry 17 }  
+
+eqlNASContainerExcludeFilesByNamePattern OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..256))    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Regular expression identifying the file name pattern to exclude from optimization. Empty string means no exclusion."
+    DEFVAL          {""}
+    ::=  {  eqlNASContainerEntry 18 }  
+
+eqlNASContainerAction OBJECT-TYPE
+    SYNTAX          INTEGER     {
+                    none(0),
+                    delete-host-access-cfg(1)
+    }
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Use this column to perform actions on this container."
+    DEFVAL          {none}
+::= { eqlNASContainerEntry 19 }
+
+----------------------------------------
+eqlNASContainerUniqueIDTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASContainerUniqueIDEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic Unique ID table.
+                     This table is used to retrieve Unique ID values when creating new objects.
+                     TimeoutAll:60"
+    ::=    {  eqlNASContainerTable  2 }     
+
+eqlNASContainerUniqueIDEntry OBJECT-TYPE      
+    SYNTAX          EqlNASContainerUniqueIDEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing unique ID information."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex, eqlNASContainerUniqueIDType }
+
+    ::=   { eqlNASContainerUniqueIDTable 1}     
+
+EqlNASContainerUniqueIDEntry ::= 
+    SEQUENCE { 
+	eqlNASContainerUniqueIDType         INTEGER,
+	eqlNASContainerUniqueIDValueLen     Unsigned32,
+	eqlNASContainerUniqueIDValue        OCTET STRING
+    }
+
+eqlNASContainerUniqueIDType OBJECT-TYPE      
+    SYNTAX          INTEGER {
+                    snapshot(1),
+                    quota(2)
+    }
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "Indicates the type of the id. For now only Snapshot and quota Ids are needed for at the container scope"  
+    ::= {eqlNASContainerUniqueIDEntry  1 }  
+
+eqlNASContainerUniqueIDValueLen OBJECT-TYPE      
+    SYNTAX          Unsigned32
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Length of the value represented by column eqlNASContainerUniqueIDValue"  
+    ::= {eqlNASContainerUniqueIDEntry  2 }  
+
+eqlNASContainerUniqueIDValue OBJECT-TYPE      
+    SYNTAX          OCTET STRING(SIZE(255))
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Value of eqlNASContainerUniqueIDType represented in network byte order."  
+    ::= {eqlNASContainerUniqueIDEntry  3 }  
+
+
+---***************************************************************
+
+eqlNASApplianceDefaultCfgTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASApplianceDefaultCfgEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic (semi) Appliance Table.
+                     This table contains a list of NAS Appliance default configurations for containers the group is managing.
+                     TimeoutAll:60"
+    ::=    { eqlNASObjects 4 }     
+
+eqlNASApplianceDefaultCfgEntry OBJECT-TYPE      
+    SYNTAX          EqlNASApplianceDefaultCfgEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing NAS Container Status info."
+    INDEX           { eqlApplianceIndex }
+
+    ::=   { eqlNASApplianceDefaultCfgTable 1}     
+
+EqlNASApplianceDefaultCfgEntry ::= 
+    SEQUENCE { 
+        eqlNASApplianceConfigUsedSpaceAlert     Unsigned32,
+        eqlNASApplianceConfigSnapSpaceAlert     Unsigned32,
+    	eqlNASApplianceConfigSnapHardQuota      Unsigned32,
+    	eqlNASApplianceContainerUnixFilePerms   UNIXPermissions,
+    	eqlNASApplianceContainerUnixDirPerms    UNIXPermissions,
+    	eqlNASApplianceContainerFileSecurity    INTEGER,
+    	eqlNASApplianceDefaultUserQuota         Unsigned32,
+    	eqlNASApplianceDefaultUserQuotaAlert    Unsigned32,
+    	eqlNASApplianceDefaultGroupQuota        Unsigned32,
+    	eqlNASApplianceDefaultGroupQuotaAlert   Unsigned32,
+    	eqlNASApplianceDefaultCIFSAllowGuestAccess     TruthValue,
+    	eqlNASApplianceCIFSAuthenticationMode   INTEGER,
+    	eqlNASApplianceDefaultCIFSLockEnforcement      INTEGER,
+    	eqlNASApplianceNFSExportReadWrite       INTEGER,
+    	eqlNASApplianceNFSExportTrustedUsers    INTEGER,
+        eqlNASApplianceAccessTimeManagementGranularity       INTEGER,
+        eqlNASApplianceOptimizationEnabled       TruthValue,
+        eqlNASApplianceDedupMethodType           INTEGER,
+        eqlNASApplianceCompressionEnabled        TruthValue,
+        eqlNASApplianceModificationTimeFilter    INTEGER,
+        eqlNASApplianceAccessTimeFilter          INTEGER,
+        eqlNASApplianceExcludeFilesByNamePattern            OCTET STRING,
+        eqlNASApplianceDefaultCIFSAntivirusEnabled          StatusDisabledDefault,
+        eqlNASApplianceDefaultCIFSAntivirusPolicy           INTEGER,
+        eqlNASApplianceDefaultCIFSAntivirusExtensions       OCTET STRING,
+        eqlNASApplianceDefaultCIFSAntivirusExtensionsPolicy INTEGER,
+        eqlNASApplianceDefaultCIFSAntivirusExcludeDirPaths  OCTET STRING 
+    }
+
+eqlNASApplianceConfigUsedSpaceAlert OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS            "%"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Specified as a percentage of NAS container size as a default for containers in this nas-group.
+                     This is the amount of used space that triggers user alerts"  
+    DEFVAL { 80 } --- EXANET has this at 100% aka no alert
+    ::= { eqlNASApplianceDefaultCfgEntry 1 }  
+
+eqlNASApplianceConfigSnapSpaceAlert OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS            "%"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Specified as a percentage of NAS container size as a default for containers in this nas-group.
+                     The is the amount of space consumed by snapshots at which user alerts are triggered"
+    DEFVAL { 80} ---EXANET has this at 100% 
+    ::= { eqlNASApplianceDefaultCfgEntry 2 }  
+
+eqlNASApplianceConfigSnapHardQuota OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS           "%"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Specified as a percentage of NAS container size as a default for containers in this nas-group.
+                     This is the threshold that triggers auto-deletion of snapshots. Oldest first."  
+    DEFVAL { 50}
+    ::= { eqlNASApplianceDefaultCfgEntry 3 }  
+
+eqlNASApplianceContainerUnixFilePerms OBJECT-TYPE      
+    SYNTAX          UNIXPermissions    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Define the default UNIX permissions of new files created from Windows clients. Default value is 0744"  
+    DEFVAL { 484}
+    ::= { eqlNASApplianceDefaultCfgEntry 4 }  
+
+eqlNASApplianceContainerUnixDirPerms OBJECT-TYPE      
+    SYNTAX          UNIXPermissions    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     " Define the default UNIX permissions of new directories created from Windows clients. Default value is 0755"
+    DEFVAL { 493}
+    ::= { eqlNASApplianceDefaultCfgEntry 5 }  
+
+eqlNASApplianceContainerFileSecurity OBJECT-TYPE      
+    SYNTAX          INTEGER     {
+                    mixed(1),
+                    ntfs(2),
+                    unix(3)
+    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Used to define how the system will maintain and verify file access security."  
+    DEFVAL          {ntfs}
+    ::= { eqlNASApplianceDefaultCfgEntry 6 }  
+
+eqlNASApplianceDefaultUserQuota OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Default quota per user when quotas are enabled on NAS Containers."  
+    DEFVAL { 0 } --- EXANET Says Unlimited
+    ::= { eqlNASApplianceDefaultCfgEntry 7 }  
+
+eqlNASApplianceDefaultUserQuotaAlert OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS            "%"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Specified as a percentage of default group quota as a default for containers in this nas-group.
+                     This is the amount of used space that triggers user alerts"  
+    DEFVAL { 0 } --- 0 aka no alert
+    ::= { eqlNASApplianceDefaultCfgEntry 8 }  
+
+
+eqlNASApplianceDefaultGroupQuota OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Default quota per group when quotas are enabled on NAS Containers."  
+    DEFVAL { 0 } --- EXANET Says Unlimited
+    ::= { eqlNASApplianceDefaultCfgEntry 9 }  
+
+
+eqlNASApplianceDefaultGroupQuotaAlert OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS            "%"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Specified as a percentage of default group quota as a default for containers in this nas-group.
+                     This is the amount of used space that triggers user alerts"  
+    DEFVAL { 0 } --- 0 aka no alert
+    ::= { eqlNASApplianceDefaultCfgEntry 10 }  
+
+eqlNASApplianceDefaultCIFSAllowGuestAccess OBJECT-TYPE      
+    SYNTAX          TruthValue   
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Choose whether to allow unknown users to access the share as guests. "  
+    DEFVAL { false}
+    ::= { eqlNASApplianceDefaultCfgEntry 11 }  
+
+eqlNASApplianceCIFSAuthenticationMode OBJECT-TYPE      
+    SYNTAX          INTEGER{
+                    allow-everyone(1),
+                    active-directory(2),
+                    local-users(3)
+    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     ""  
+    DEFVAL          {allow-everyone}
+    ::= { eqlNASApplianceDefaultCfgEntry 12 }  
+
+eqlNASApplianceDefaultCIFSLockEnforcement OBJECT-TYPE      
+    SYNTAX          INTEGER{
+		all-locks(0),
+		share-locks-op-locks(1),
+		only-share-locks(2)
+}   
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     " Define the types of locks that the system will enforce, in addition to share locks which are always enforced.  Byte range locks allow applications to ensure data integrity.  Opportunistic locks (oplocks) increase the efficiency of client machine caching and improve performance. NOTE: This software release does not support changing the locking enforcement policy. Only the default option (all-locks) is supported."
+    DEFVAL{all-locks}
+    ::= { eqlNASApplianceDefaultCfgEntry 13 }  
+
+eqlNASApplianceNFSExportReadWrite OBJECT-TYPE      
+    SYNTAX          INTEGER {
+		read-write(1),
+		read-only(2)
+}
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Define the access rights for the NFS export. If the access rights for the NFS export are stricter than those defined for a specific file, the file's access rights will be overridden by those of the NFS export. "  
+    DEFVAL { read-write}
+    ::= { eqlNASApplianceDefaultCfgEntry 14 }  
+
+eqlNASApplianceNFSExportTrustedUsers OBJECT-TYPE      
+    SYNTAX          INTEGER{
+		all-except-root(1),
+                none(2),
+		all(3)
+}  
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     " Define which users are trusted. Other users will be identified as guests. "  
+    DEFVAL {all-except-root}
+    ::= { eqlNASApplianceDefaultCfgEntry 15 }  
+
+eqlNASApplianceAccessTimeManagementGranularity OBJECT-TYPE      
+    SYNTAX          INTEGER    {
+                    disabled(0),
+                    always(1),
+                    everyFiveMinutes(2),
+                    hourly(3),
+                    daily(4),
+                    weekly(5)
+                    }    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Access time management granularity."  
+    DEFVAL          {daily}
+    ::= { eqlNASApplianceDefaultCfgEntry 16 }  
+
+eqlNASApplianceOptimizationEnabled OBJECT-TYPE      
+    SYNTAX          TruthValue    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Enable or disable optimization"  
+    DEFVAL          {false}
+    ::= { eqlNASApplianceDefaultCfgEntry 17 }  
+
+eqlNASApplianceDedupMethodType OBJECT-TYPE      
+    SYNTAX          INTEGER     {
+                    variable-chunk(1),
+                    object(2)
+    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Dedup method to use on this file system when optimization is enabled"  
+    DEFVAL          {variable-chunk}
+    ::= { eqlNASApplianceDefaultCfgEntry 18 }  
+
+eqlNASApplianceCompressionEnabled OBJECT-TYPE      
+    SYNTAX          TruthValue    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "enable or disable compression. Restricted by the type of license"  
+    DEFVAL          {false}
+    ::= { eqlNASApplianceDefaultCfgEntry 19 }  
+
+eqlNASApplianceModificationTimeFilter OBJECT-TYPE      
+    SYNTAX          INTEGER (0..1000)    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Exclude files modified less than the specified number of days before, 0 value means disregard the modification time. 0 to 1000 days."  
+    DEFVAL          {30}
+    ::= { eqlNASApplianceDefaultCfgEntry 20 }  
+
+eqlNASApplianceAccessTimeFilter OBJECT-TYPE      
+    SYNTAX          INTEGER (0..1000)    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Exclude files accessed less than the specified number of days before, 0 value means disregard the modification time. 0 to 1000 days."  
+    DEFVAL          {30}
+    ::= { eqlNASApplianceDefaultCfgEntry 21 }  
+
+eqlNASApplianceExcludeFilesByNamePattern OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..256))    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Regular expression identifying the file name pattern to exclude from optimization. Empty string means no exclusion."
+    DEFVAL          {""}
+    ::=  {  eqlNASApplianceDefaultCfgEntry 22 }  
+
+eqlNASApplianceDefaultCIFSAntivirusEnabled OBJECT-TYPE
+    SYNTAX          StatusDisabledDefault
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Default which determines whether the antivirus service is disabled or enabled for a CIFS share at the time of creation."
+    DEFVAL      { disabled }
+    ::= { eqlNASApplianceDefaultCfgEntry 23 }
+                        
+eqlNASApplianceDefaultCIFSAntivirusPolicy OBJECT-TYPE
+    SYNTAX          INTEGER {
+                            quarantine(0),
+                            do-nothing(1),
+                            remove(2)
+                            }
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Default which determines the action to be taken on a virus-infected file." 
+    DEFVAL      { quarantine }
+    ::= { eqlNASApplianceDefaultCfgEntry 24 }
+                                                                                                
+eqlNASApplianceDefaultCIFSAntivirusExtensions OBJECT-TYPE
+    SYNTAX          OCTET STRING (SIZE (0..255)) 
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Default which determines which files should be / should not be scanned for viruses. This is a comma-separated list. The value of the next field determines if the files with the corresponding extensions will be scanned or not for viruses. Cannot contain wild characters * and ?. Extensions are case-insensitive."
+    DEFVAL          {""}
+    ::= { eqlNASApplianceDefaultCfgEntry 25 }
+    
+eqlNASApplianceDefaultCIFSAntivirusExtensionsPolicy OBJECT-TYPE
+    SYNTAX          INTEGER {
+                            exclude(0),
+                            include(1)
+                            }
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Default which determines whether the files whose extensions match with those specified in the field above should be scanned OR should not be scanned for viruses. If the value of this field is include, then the files with the corresponding extensions will be scanned for viruses.  If the value of this field is exclude, then the files with the corresponding extensions will not be scanned for viruses." 
+    DEFVAL      { exclude }
+    ::= { eqlNASApplianceDefaultCfgEntry 26 }
+    
+eqlNASApplianceDefaultCIFSAntivirusExcludeDirPaths OBJECT-TYPE
+    SYNTAX          OCTET STRING (SIZE (0..512)) 
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Default which determines the list of the directory paths which should not be scanned for viruses. It is a comma-separated list. Paths can contain wildcards * and ?. NOTE: * will not match several path components. "
+    DEFVAL          {""}
+    ::= { eqlNASApplianceDefaultCfgEntry 27 }
+
+--------------------------------------------------------------------------------------------
+eqlNASContainerStatusTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASContainerStatusEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic NAS Container Table.
+                     This table contains a list of NAS Appliance configurations for containers the group is managing.
+                     TimeoutAll:60"
+    ::=    { eqlNASObjects 5 }     
+
+eqlNASContainerStatusEntry OBJECT-TYPE      
+    SYNTAX          EqlNASContainerStatusEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing NAS Container Status info."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex }
+
+    ::=   { eqlNASContainerStatusTable 1}     
+
+EqlNASContainerStatusEntry ::= 
+    SEQUENCE { 
+	eqlNASContainerStatusConnections         Unsigned32,
+	eqlNASContainerStatusUsedSpace           Unsigned32,
+	eqlNASContainerStatusSnapshotSpace       Unsigned32,
+	eqlNASContainerStatusNumNFSExports       Unsigned32,
+	eqlNASContainerStatusNumCIFSShares       Unsigned32,
+	eqlNASContainerStatusAllocatedSpace      Unsigned32,
+	eqlNASContainerStatusFreeSpace           Unsigned32,
+	eqlNASContainerStatusNumOfSnapshots      Unsigned32,
+	eqlNASContainerStatusOptimizationSpaceSavings      Unsigned32,
+	eqlNASContainerStatusOptimized      TruthValue,
+	eqlNASContainerStatusReplState           INTEGER
+    }
+
+eqlNASContainerStatusConnections OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     ""  
+    ::= { eqlNASContainerStatusEntry 1 }  
+
+
+eqlNASContainerStatusUsedSpace OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Space used by NAS Containers including both snapshot space and filesystem usage)"  
+    ::= { eqlNASContainerStatusEntry 2 }  
+
+
+eqlNASContainerStatusSnapshotSpace OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Amount of used space in MB used by NAS Containers for storage of snapshot data. This is not snapshot reserve but rather snapshot reserve space currently in use. Initially this value would be 0."  
+    ::= { eqlNASContainerStatusEntry 3 }  
+
+
+eqlNASContainerStatusNumNFSExports OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     ""  
+    ::= { eqlNASContainerStatusEntry 4 }  
+
+
+eqlNASContainerStatusNumCIFSShares OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     ""  
+    ::= { eqlNASContainerStatusEntry 5 }  
+
+eqlNASContainerStatusAllocatedSpace OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Amount of space in MB allocated by NAS Containers"  
+    ::= { eqlNASContainerStatusEntry 6 }  
+
+eqlNASContainerStatusFreeSpace OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Amount of total free space in MB including both snapshot and filesystem"  
+    ::= { eqlNASContainerStatusEntry 7 }  
+
+eqlNASContainerStatusNumOfSnapshots OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Number of snapshots"  
+    ::= { eqlNASContainerStatusEntry 8 }  
+
+eqlNASContainerStatusOptimizationSpaceSavings OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "Amount of space saved in MB due to applying optimization"  
+    ::= { eqlNASContainerStatusEntry 9 }  
+
+eqlNASContainerStatusOptimized OBJECT-TYPE      
+    SYNTAX          TruthValue    
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "True if optimization was enabled once, false otherwise"  
+    ::= { eqlNASContainerStatusEntry 10 }  
+
+eqlNASContainerStatusReplState OBJECT-TYPE
+    SYNTAX          INTEGER {
+                             standalone(0),
+                             source(1),
+                             destination(2),
+                             promoted(3),
+							 not-available(4)
+                            }
+    MAX-ACCESS      read-only
+    STATUS          current      
+    DESCRIPTION     "This column gives information about the replication
+                     status of this FileSystem. Standalone means the filesystem 
+                     is not being replicated. Source means this filesystem is a 
+                     source to a remote filesystem. Destination means this 
+                     filesystem is destination for a source filesystem. 
+                     Promoted means this filesystem used to be a destination 
+                     but is right now promoted."  
+    ::= { eqlNASContainerStatusEntry 11 }  
+
+
+--------------------------------------------------------------------------------------------
+eqlNASApplianceNFSExportsTable OBJECT-TYPE
+    SYNTAX	    SEQUENCE OF EqlNASApplianceNFSExportsEntry
+    MAX-ACCESS	    not-accessible
+    STATUS	    current
+    DESCRIPTION	    "Equallogic-Dynamic NAS NFS Exports Table.
+		    This table contains a list of NFS exports configuration entry.
+                    TimeoutAll:60"
+    ::= { eqlNASObjects 6 }
+
+eqlNASApplianceNFSExportsEntry OBJECT-TYPE
+    SYNTAX	    EqlNASApplianceNFSExportsEntry
+    MAX-ACCESS	    not-accessible
+    STATUS	    current
+    DESCRIPTION	    "An entry (row) containing NFS exports configuration."
+    INDEX	    { eqlApplianceIndex, eqlNASContainerIndex, eqlNASApplianceNFSExportName }
+    ::= { eqlNASApplianceNFSExportsTable 1 }
+
+EqlNASApplianceNFSExportsEntry ::=
+    SEQUENCE {
+	eqlNASApplianceNFSExportName			OCTET STRING,
+	eqlNASApplianceNFSExportsRowStatus		RowStatus,
+	eqlNASApplianceNFSExportDirectory		OCTET STRING,
+	eqlNASApplianceNFSAccess		        INTEGER,
+	eqlNASApplianceNFSLimitReportedSize		Unsigned32,
+	eqlNASApplianceNFSAccessClientIPType		InetAddressType,
+	eqlNASApplianceNFSAccessClientIP		InetAddress,
+	eqlNASApplianceNFSAccessClientNetmaskType	InetAddressType,
+	eqlNASApplianceNFSAccessClientNetmask		InetAddress,
+	eqlNASApplianceNFSTrustUsers			INTEGER
+    }
+
+eqlNASApplianceNFSExportName OBJECT-TYPE
+    SYNTAX          OCTET STRING (SIZE (1..64))    
+    MAX-ACCESS      not-accessible     
+    STATUS          current      
+    DESCRIPTION     "Contains only letters, digits and underscores. Must begin with a letter."  
+    ::= { eqlNASApplianceNFSExportsEntry 1 }  
+
+
+eqlNASApplianceNFSExportsRowStatus OBJECT-TYPE      
+    SYNTAX          RowStatus    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Rowstatus variable used to manage this conceptual row."  
+    ::= { eqlNASApplianceNFSExportsEntry 2 }  
+
+eqlNASApplianceNFSExportDirectory OBJECT-TYPE
+    SYNTAX          OCTET STRING (SIZE (1..512)) -- Restricting to 512 characters since eqlNASContainerDirectoryName has a limit of 512 characters. Also, increasing this to 1024 means increasing kRCC_MAX_CMD_LEN to greater than 1024. 
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Full path to the Directory to be exported."  
+    ::= { eqlNASApplianceNFSExportsEntry 3 }  
+
+eqlNASApplianceNFSAccess OBJECT-TYPE
+    SYNTAX          INTEGER {
+			read-write(1),
+			read-only(2)
+		    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     ""  
+    DEFVAL	    { read-write }
+    ::= { eqlNASApplianceNFSExportsEntry 4 }  
+
+eqlNASApplianceNFSLimitReportedSize OBJECT-TYPE
+    SYNTAX          Unsigned32
+    UNITS           "MB"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Default value is zero and it means the actual size of NFS export will be returned. When the value is non-zeo, this value will be used instead of actual NFS Export size."  
+    DEFVAL          {0}
+    ::= { eqlNASApplianceNFSExportsEntry 5 }  
+
+eqlNASApplianceNFSAccessClientIPType OBJECT-TYPE
+    SYNTAX          InetAddressType
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Type of eqlNASApplianceNFSAccessClientIP field."  
+    ::= { eqlNASApplianceNFSExportsEntry 6 }  
+
+eqlNASApplianceNFSAccessClientIP OBJECT-TYPE
+    SYNTAX          InetAddress
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Value of this column along with eqlNASApplianceNFSAccessClientNetmask will determine access policy for clients"  
+    ::= { eqlNASApplianceNFSExportsEntry 7 }  
+
+eqlNASApplianceNFSAccessClientNetmaskType OBJECT-TYPE
+    SYNTAX          InetAddressType
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Type of eqlNASApplianceNFSAccessClientNetmask field. This value must match with eqlNASApplianceNFSAccessClientIPType field."  
+    ::= { eqlNASApplianceNFSExportsEntry 8 }  
+
+eqlNASApplianceNFSAccessClientNetmask OBJECT-TYPE
+    SYNTAX          InetAddress
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Value of this column along with eqlNASApplianceNFSAccessClientIP will determine access policy for clients"  
+    ::= { eqlNASApplianceNFSExportsEntry 9 }  
+
+eqlNASApplianceNFSTrustUsers OBJECT-TYPE
+    SYNTAX          INTEGER {
+			all-except-root(1),
+			none(2),
+			all(3)
+		    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     " Trusted users who can access the NFS Export"  
+    DEFVAL	    { all-except-root }
+    ::= { eqlNASApplianceNFSExportsEntry 10 }  
+
+
+--------------------------------------------------------------------------------------------
+--
+-- *** SW: Not yet supported by Exanet ***
+--
+-- eqlNASApplianceNFSConnectionTable OBJECT-TYPE
+--     SYNTAX	    SEQUENCE OF EqlNASApplianceNFSConnectionEntry
+--     MAX-ACCESS	    not-accessible
+--     STATUS	    current
+--     DESCRIPTION	    "Equallogic-Dynamic NAS NFS Connection Table.
+-- 		    This table contains a list of NFS connection entries.
+--                  TimeoutAll:60"
+--     ::= { eqlNASObjects 7 }
+-- 
+-- eqlNASApplianceNFSConnectionEntry OBJECT-TYPE
+--     SYNTAX	    EqlNASApplianceNFSConnectionEntry
+--     MAX-ACCESS	    not-accessible
+--     STATUS	    current
+--     DESCRIPTION	    "An entry (row) containing NFS connection entry."
+--     INDEX	    { eqlApplianceIndex, eqlNASContainerIndex, eqlNASApplianceNFSExportName,
+-- 		      eqlNASApplianceNFSSourceIpAddressType, eqlNASApplianceNFSSourceIpAddress,
+-- 		      eqlNASApplianceNFSClientSourcePort }
+--     ::= { eqlNASApplianceNFSConnectionTable 1 }
+-- 
+-- EqlNASApplianceNFSConnectionEntry ::=
+--     SEQUENCE {
+-- 	eqlNASApplianceNFSSourceIpAddressType		InetAddressType,
+-- 	eqlNASApplianceNFSSourceIpAddress		InetAddress,
+-- 	eqlNASApplianceNFSClientSourcePort		Unsigned32,
+-- 	eqlNASApplianceSpartanMemberIndex		Unsigned32,
+-- 	eqlNASApplianceNFSClientVIPaddressType		InetAddressType,
+-- 	eqlNASApplianceNFSClientVIPaddress		InetAddress
+--     }
+-- 
+-- eqlNASApplianceNFSSourceIpAddressType OBJECT-TYPE
+--     SYNTAX	    InetAddressType
+--     MAX-ACCESS	    not-accessible
+--     STATUS	    current
+--     DESCRIPTION	    ""
+--     ::= { eqlNASApplianceNFSConnectionEntry 1 }
+-- 
+-- eqlNASApplianceNFSSourceIpAddress OBJECT-TYPE
+--     SYNTAX	    InetAddress
+--     MAX-ACCESS	    not-accessible
+--     STATUS	    current
+--     DESCRIPTION	    ""
+--     ::= { eqlNASApplianceNFSConnectionEntry 2 }
+-- 
+-- eqlNASApplianceNFSClientSourcePort OBJECT-TYPE
+--     SYNTAX	    Unsigned32(1..65535) 
+--     MAX-ACCESS	    not-accessible
+--     STATUS	    current
+--     DESCRIPTION	    ""
+--     ::= { eqlNASApplianceNFSConnectionEntry 3 }
+-- 
+-- eqlNASApplianceSpartanMemberIndex OBJECT-TYPE
+--     SYNTAX	    Unsigned32
+--     MAX-ACCESS	    read-only
+--     STATUS	    current
+--     DESCRIPTION	    ""
+--     ::= { eqlNASApplianceNFSConnectionEntry 4 }
+-- 
+-- eqlNASApplianceNFSClientVIPaddressType OBJECT-TYPE
+--     SYNTAX	    InetAddressType
+--     MAX-ACCESS	    read-only
+--     STATUS	    current
+--     DESCRIPTION	    ""
+--     ::= { eqlNASApplianceNFSConnectionEntry 5 }
+-- 
+-- eqlNASApplianceNFSClientVIPaddress OBJECT-TYPE
+--     SYNTAX	    InetAddress
+--     MAX-ACCESS	    read-only
+--     STATUS	    current
+--     DESCRIPTION	    ""
+--     ::= { eqlNASApplianceNFSConnectionEntry 6 }
+-- 
+
+--------------------------------------------------------------------------------------------
+eqlNASApplianceCIFSTable OBJECT-TYPE
+    SYNTAX	    SEQUENCE OF EqlNASApplianceCIFSEntry
+    MAX-ACCESS	    not-accessible
+    STATUS	    current
+    DESCRIPTION	    "Equallogic-Dynamic NAS CIFS Table.
+		    This table contains a list of CIFS configuration entry.
+                    TimeoutAll:60"
+    ::= { eqlNASObjects 8 }
+
+eqlNASApplianceCIFSEntry OBJECT-TYPE
+    SYNTAX	    EqlNASApplianceCIFSEntry
+    MAX-ACCESS	    not-accessible
+    STATUS	    current
+    DESCRIPTION	    "An entry (row) containing CIFS configuration."
+    INDEX	    { eqlApplianceIndex, eqlNASContainerIndex, eqlNASApplianceCIFSShareName }
+    ::= { eqlNASApplianceCIFSTable 1 }
+
+EqlNASApplianceCIFSEntry ::=
+    SEQUENCE {
+	eqlNASApplianceCIFSShareName			OCTET STRING,
+	eqlNASApplianceCIFSRowStatus			RowStatus,
+	eqlNASApplianceCIFSExportedDirectory		OCTET STRING,
+	eqlNASApplianceCIFSAllowGuestAccess		TruthValue,
+	eqlNASApplianceCIFSLockEnforcement		INTEGER,
+        eqlNASApplianceCIFSAntivirusEnabled             StatusDisabledDefault,
+        eqlNASApplianceCIFSAntivirusPolicy              INTEGER,
+        eqlNASApplianceCIFSAntivirusExtensions          OCTET STRING,
+        eqlNASApplianceCIFSAntivirusExtensionsPolicy    INTEGER,
+        eqlNASApplianceCIFSAntivirusExcludeDirPaths     OCTET STRING
+    }
+
+eqlNASApplianceCIFSShareName OBJECT-TYPE
+    SYNTAX	    OCTET STRING (SIZE (1..64))
+    MAX-ACCESS	    not-accessible
+    STATUS	    current
+    DESCRIPTION	    "Contains only letters, digits and underscores."
+    ::= { eqlNASApplianceCIFSEntry 1 }
+
+
+eqlNASApplianceCIFSRowStatus OBJECT-TYPE
+    SYNTAX	    RowStatus
+    MAX-ACCESS	    read-create
+    STATUS	    current
+    DESCRIPTION	    " Rowstatus variable used to manage this conceptual row."
+    ::= { eqlNASApplianceCIFSEntry 2 }
+
+eqlNASApplianceCIFSExportedDirectory OBJECT-TYPE
+    SYNTAX	    OCTET STRING (SIZE (1..512)) -- Restricting to 512 characters since eqlNASContainerDirectoryName has a limit of 512 characters. Also, increasing this to 1024 means increasing kRCC_MAX_CMD_LEN to greater than 1024.
+    MAX-ACCESS	    read-create
+    STATUS	    current
+    DESCRIPTION	    "Full Path to the directory to be exported."
+    ::= { eqlNASApplianceCIFSEntry 3 }
+
+eqlNASApplianceCIFSAllowGuestAccess OBJECT-TYPE
+    SYNTAX	    TruthValue
+    MAX-ACCESS	    read-create
+    STATUS	    current
+    DESCRIPTION	    "When set to true, guests will be allowed to access this share."
+    DEFVAL	    { true }
+    ::= { eqlNASApplianceCIFSEntry 4 }
+
+eqlNASApplianceCIFSLockEnforcement OBJECT-TYPE
+    SYNTAX	    INTEGER {
+			all-locks(0),
+			no-byte-range-locks(1),
+			only-share-locks(2)
+		    }
+    MAX-ACCESS	    read-create
+    STATUS	    current
+    DESCRIPTION	    "Locking enforcement policy for this CIFS Share. This software release does not support changing the locking enforcement policy. Only the default option (all-locks) is supported."
+    DEFVAL	    { all-locks }
+    ::= { eqlNASApplianceCIFSEntry 5 }
+
+eqlNASApplianceCIFSAntivirusEnabled OBJECT-TYPE
+    SYNTAX          StatusDisabledDefault
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "When set to enabled, antivirus service will be enabled for this share. Else it will be disabled."
+    DEFVAL      { disabled }
+    ::= { eqlNASApplianceCIFSEntry 6 }
+                        
+eqlNASApplianceCIFSAntivirusPolicy OBJECT-TYPE
+    SYNTAX          INTEGER {
+                            quarantine(0),
+                            do-nothing(1),
+                            remove(2)
+                            }
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Determines the action to take when a file is found to be infected by a virus." 
+    DEFVAL      { quarantine }
+    ::= { eqlNASApplianceCIFSEntry 7 }
+                                                                                                
+eqlNASApplianceCIFSAntivirusExtensions OBJECT-TYPE
+    SYNTAX          OCTET STRING (SIZE (0..255)) 
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Comma-separated list of the file extensions which should / should not be virus-scanned. The value of the next field i.e. eqlNASApplianceCIFSAntivirusExtensionsPolicy determines if the files with the corresponding extensions will be scanned or not for viruses. Cannot contain wild characters * and ?. Extensions are case-insensitive."
+    ::= { eqlNASApplianceCIFSEntry 8 }
+    
+eqlNASApplianceCIFSAntivirusExtensionsPolicy OBJECT-TYPE
+    SYNTAX          INTEGER {
+                            exclude(0),
+                            include(1)
+                            }
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Determines whether the files whose extensions match with those specified in the field above i.e. eqlNASApplianceCIFSAntivirusExtensions, should be scanned OR should not be scanned for viruses. If the value of this field is include, then the files with the corresponding extensions will be scanned for viruses.  If the value of this field is exclude, then the files with the corresponding extensions will not be scanned for viruses." 
+    DEFVAL      { exclude }
+    ::= { eqlNASApplianceCIFSEntry 9 }
+    
+eqlNASApplianceCIFSAntivirusExcludeDirPaths OBJECT-TYPE
+    SYNTAX          OCTET STRING (SIZE (0..512)) 
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Comma-separated list of the directory paths which should not be scanned for viruses. Paths can contain wildcards * and ?. NOTE: * will not match several path components. "
+    ::= { eqlNASApplianceCIFSEntry 10 }
+
+
+--------------------------------------------------------------------------------------------
+eqlNASContainerDirectoryOpsTable OBJECT-TYPE
+    SYNTAX	    SEQUENCE OF EqlNASContainerDirectoryOpsEntry
+    MAX-ACCESS	    not-accessible
+    STATUS	    current
+    DESCRIPTION	    "Equallogic-Dynamic NAS Container Directory Operations Table. This table is used for directory operations.
+                     TimeoutAll:60"
+    ::= { eqlNASObjects 9 }
+
+eqlNASContainerDirectoryOpsEntry OBJECT-TYPE
+    SYNTAX	    EqlNASContainerDirectoryOpsEntry
+    MAX-ACCESS	    not-accessible
+    STATUS	    current
+    DESCRIPTION	    "An entry for directory operations."
+    INDEX	    { eqlApplianceIndex, eqlNASContainerIndex, eqlNASContainerDirectoryOpsIndex}
+    ::= { eqlNASContainerDirectoryOpsTable 1 }
+
+EqlNASContainerDirectoryOpsEntry ::=
+    SEQUENCE {
+    eqlNASContainerDirectoryOpsIndex        Unsigned32,
+    eqlNASContainerDirectoryRowStatus	    RowStatus,
+    eqlNASContainerDirectoryName			OCTET STRING 
+    }
+
+eqlNASContainerDirectoryOpsIndex OBJECT-TYPE      
+    SYNTAX          Unsigned32     
+    MAX-ACCESS      not-accessible     
+    STATUS          current      
+    DESCRIPTION     "This field specifies a unique index for identifying a NAS container directory ops entry."  
+    ::=   { eqlNASContainerDirectoryOpsEntry 1 }   
+
+eqlNASContainerDirectoryRowStatus OBJECT-TYPE
+    SYNTAX	    RowStatus
+    MAX-ACCESS	    read-create
+    STATUS	    current
+    DESCRIPTION	    " Rowstatus variable used to manage directories. Operations supported will be create and delete. Get and Getnext operations on this table will return error."
+    ::= { eqlNASContainerDirectoryOpsEntry 2 }
+
+
+eqlNASContainerDirectoryName OBJECT-TYPE
+    SYNTAX	    OCTET STRING (SIZE (1..512)) -- Increasing this to 1024 will require increasing kRCC_MAX_CMD_LEN to greater than 1024. This increase is being avoided intentionally to reduce memory consumption by netmgtd. 
+    MAX-ACCESS	    read-create
+    STATUS	    current
+    DESCRIPTION	    "Full Path to the directory to be created or deleted. Ex: /home/user1. Create directory will fail if parent directory does not exist."
+    ::= { eqlNASContainerDirectoryOpsEntry 3 }
+
+
+--************************************************************      
+
+eqlNASSnapshotTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASSnapshotEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic snapshot Table
+                     This table contains a list of snapshots associated with the associated container.
+                     TimeoutAll:60"
+    ::=  {  eqlNASContainerTable 3 }    
+
+eqlNASSnapshotEntry OBJECT-TYPE      
+    SYNTAX          EqlNASSnapshotEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing snap shot info."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex, eqlNASSnapshotIndex }    
+    ::=    { eqlNASSnapshotTable 1 }
+
+EqlNASSnapshotEntry ::= 
+    SEQUENCE {     
+        eqlNASSnapshotIndex           Unsigned32,  
+        eqlNASSnapshotRowStatus       RowStatus,       
+        eqlNASSnapshotName            OCTET STRING,
+        eqlNASSnapshotSize            Integer32,        -- does exanet return this or do we have to ask for it on each snapshot?(like in the gui)
+                                                        -- if its not provided by default do we want to even show it? since its prob the delta size
+        eqlNASSnapshotTimestamp       Counter32,
+        eqlNASSnapshotRollBack        TruthValue,
+	eqlNASSnapshotPolicyIdx       Integer32
+    }
+
+eqlNASSnapshotIndex  OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "This field specifies a unique index which identifies a NAScontainer SnapShot."  
+    ::=  {  eqlNASSnapshotEntry 1 }
+ 
+eqlNASSnapshotRowStatus OBJECT-TYPE      
+    SYNTAX          RowStatus    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "The rowstatus...."  
+    ::= {   eqlNASSnapshotEntry 2 } 
+
+
+eqlNASSnapshotName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..230))    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "This field specifies the friendly name used to identify a SnapShot.
+                     The name is auto-generated based on the NAScontainer name, optionally it can be
+                     provided or changed after the fact by the administrator."  
+    ::= {   eqlNASSnapshotEntry 3}  
+
+eqlNASSnapshotSize OBJECT-TYPE      
+    SYNTAX          Integer32   
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "This field specifies the amount of space in MB a SnapShot consumes.
+                     Note: Deleting the SnapShot is not guaranteed to return the space specified,
+                     since a single block can be associated with multiple SnapShots. This value is xxxxc."
+    ::= {   eqlNASSnapshotEntry 4 }  
+
+eqlNASSnapshotTimestamp OBJECT-TYPE      
+    SYNTAX          Counter32  
+    MAX-ACCESS      read-only     
+    STATUS          current      
+    DESCRIPTION     "EQL-SECONDARY-KEY
+                     This field specifies the creation date/time for snapshot.
+                     Time is represented as the time in seconds since 00:00:00 UTC, 1970-01-01." 
+    ::= {   eqlNASSnapshotEntry 5 }
+
+eqlNASSnapshotRollBack OBJECT-TYPE      
+    SYNTAX          TruthValue    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "True indicates the NASContainer is to be resotred to the state of this Snapshot."
+    DEFVAL          { false } 
+    ::= {   eqlNASSnapshotEntry 6 }
+
+eqlNASSnapshotPolicyIdx  OBJECT-TYPE      
+    SYNTAX          Integer32    
+    MAX-ACCESS      read-only
+    STATUS          current      
+    DESCRIPTION     "This value identifies the snapshot policy for this snapshot."
+    DEFVAL          { 0 } 
+    ::=  {  eqlNASSnapshotEntry 7 }
+
+
+---*********************************************************************
+
+eqlNASSnapshotPolicyTable OBJECT-TYPE      
+    SYNTAX  SEQUENCE OF EqlNASSnapshotPolicyEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Persistent NAS SnapSnot Policy Table.
+                     TimeoutAll:60"
+    ::=  {  eqlNASContainerTable 4 }    
+
+eqlNASSnapshotPolicyEntry OBJECT-TYPE      
+    SYNTAX          EqlNASSnapshotPolicyEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing NAS snapshot scheduling policy 
+                     information.The policy determines when to create 
+                     snapshot(s) of a appliance container."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex, eqlNASSnapshotPolicyIndex }    
+::=    { eqlNASSnapshotPolicyTable 1 }
+
+    
+EqlNASSnapshotPolicyEntry ::= 
+    SEQUENCE {     
+        eqlNASSnapshotPolicyIndex               Integer32,  
+        eqlNASSnapshotPolicyRowStatus           RowStatus,
+        eqlNASSnapshotPolicyName                OCTET STRING,
+        eqlNASSnapshotPolicyMaxKeep             Integer32,
+        eqlNASSnapshotPolicyType                INTEGER,
+        eqlNASSnapshotPolicyRepeatFactor        Integer32,
+        eqlNASSnapshotPolicyStartTime           Integer32,
+        eqlNASSnapshotPolicyEndTime             Integer32,
+        eqlNASSnapshotPolicyTimeFrequency       Integer32,
+        eqlNASSnapshotPolicyStartDate           Integer32,
+        eqlNASSnapshotPolicyEndDate             Integer32,
+        eqlNASSnapshotPolicyWeekMask            Integer32,
+        eqlNASSnapshotPolicyMonthMask           Integer32,
+        eqlNASSnapshotPolicyOccurence           Integer32,
+        eqlNASSnapshotPolicyReplication         SiteIndexOrZero,
+        eqlNASSnapshotPolicyAdminStatus         INTEGER,
+        eqlNASSnapshotPolicyCategory            INTEGER
+    }
+
+eqlNASSnapshotPolicyIndex  OBJECT-TYPE      
+    SYNTAX          Integer32    
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     
+          "This value uniquely identifies the snapshot policies for a container."
+
+    ::=  {  eqlNASSnapshotPolicyEntry 1 }
+
+eqlNASSnapshotPolicyRowStatus OBJECT-TYPE      
+    SYNTAX          RowStatus    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          "This value is used to manage the conceptual row."
+
+    ::=  {  eqlNASSnapshotPolicyEntry 2 }
+
+
+eqlNASSnapshotPolicyName  OBJECT-TYPE   
+    SYNTAX          OCTET STRING (SIZE (1..64))    
+    MAX-ACCESS      read-create     
+    STATUS          current      
+    DESCRIPTION     
+          "This value specifies user friendly name for the policy. 
+           It is unique within the context of a volume. Spaces are not allowed."
+                     
+    ::=   { eqlNASSnapshotPolicyEntry 3}
+
+eqlNASSnapshotPolicyMaxKeep  OBJECT-TYPE      
+    SYNTAX          Integer32 (1..2147483647)
+    UNITS           "snapshots"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          "
+           The value of this object determines the maximum no of snapshots
+           created by this policy that can exist at a given time. When number
+           of snapshots created by this policy reaches this value, for creating
+           a new snapshot oldest snapshot created using this policy will be 
+           deleted.
+           In a set operation, if the new value of this object is less than
+           the old value, required number of oldest snapshots created by this
+           policy will be deleted. 
+          "
+    DEFVAL          { 10 }
+    ::=  {  eqlNASSnapshotPolicyEntry 6 }
+
+eqlNASSnapshotPolicyType  OBJECT-TYPE      
+    SYNTAX          INTEGER     {
+                      once    (1),
+                      daily   (2),
+                      weekly  (3),
+                      monthly (4),
+                      hourly  (5)
+    }
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          "
+           The value of this object determines the basic type of this policy.
+           Except when set to once, the effective repetition period of the 
+           policy is determined using the value of this object along with
+           the value of eqlNASSnapshotPolicyRepeatFactor. 
+           (See description of eqlNASSnapshotPolicyRepeatFactor 
+            for more information.)
+          "
+
+    DEFVAL          { daily }
+    ::=  {  eqlNASSnapshotPolicyEntry 7 }
+
+eqlNASSnapshotPolicyRepeatFactor  OBJECT-TYPE      
+    SYNTAX          Integer32 (1..2147483647)
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          "The value of this object along with eqlNASSnapshotPolicyType
+           determines the effective repetition interval for this policy.
+           The valid values are
+
+              PolicyType            RepeatFactor  
+                 once                    1
+                 hourly                  1
+                 daily                  1-2147483647
+                 weekly                 1-2147483647
+                 monthly                1-2147483647
+
+           If the policy type is daily and the value of this object is 2,
+           snapshots will be taken once in every 2 days.
+          "
+    ::=  {  eqlNASSnapshotPolicyEntry 8 }
+
+
+eqlNASSnapshotPolicyStartTime  OBJECT-TYPE      
+    SYNTAX          Integer32 (0..1439)
+    UNITS           "minutes"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          " 
+            The value of this object represents the time to start creating
+            snapshot(s) within a day expressed as number of minutes 
+            from 12:00AM. The maximum value for this column is 24*60-1 which 
+            represents 11:59PM.
+          "
+
+    DEFVAL          { 0 }
+    ::=  {  eqlNASSnapshotPolicyEntry 9 }
+
+eqlNASSnapshotPolicyEndTime  OBJECT-TYPE      
+    SYNTAX          Integer32 (0..1439)
+    UNITS           "minutes"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION      
+          " 
+            The value of this object represents the time to stop creating
+            snapshot(s) within a day expressed as number of minutes 
+            from 12:00AM. The maximum value for this column is 24*60-1 which 
+            represents 11:59PM. 
+ 
+            If eqlNASSnapshotPolicyType is once, the value of
+            this column doesn't have any significance. 
+
+            If the value of this column is greater than start time, it 
+            represents end-time on the same day as start time. If the value 
+            is less than or equal to start time, it represents end-time on the
+            next day of start time.
+            This value doesnt have significance when frequency is set to zero.
+            Endtime is exclusive when calculating no of snapshots.
+
+            Example:
+                     StartTime      EndTime    Frequency    NoofSnapshots
+                       1320(10pm)   1380(11pm)    30mins        2
+                       1320(10pm)   240(4am)      60mins        6
+                       1320(10pm)   1320(10pm)    60mins        24
+                       1320(10pm)   1319(9:59pm)  60mins        24
+                       1320(10pm)     -            0mins         1
+          "
+    ::=  {  eqlNASSnapshotPolicyEntry 10 }
+
+eqlNASSnapshotPolicyTimeFrequency  OBJECT-TYPE      
+    SYNTAX          Integer32 (0..1439)
+    UNITS           "minutes"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          "The value of this object determines how frequent snapshots must be 
+           taken between start time and end time. This value doesn't have 
+           significance when policy type is set to once. For other policytypes,
+           the value of end time is exclusive. 
+           For example if starttime is 180 (3:00AM) and endtime is 
+           240(4:00AM), when frequency is set to 30, snapshots will be 
+           created at 3:00AM, 3:30AM.
+           If the value is zero, it represents invalid frequency and
+           in such case, end time doesnt have significance.
+          "
+
+    ::=  {  eqlNASSnapshotPolicyEntry 11 }
+
+eqlNASSnapshotPolicyStartDate  OBJECT-TYPE      
+    SYNTAX          Integer32 (0..2147483647)
+    UNITS           "days"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          " The value of this object determines the date from which the policy
+            will be active. By default, this is the policy creation date.
+            The value is expressed as number of days since epoch.
+          "  
+
+    ::=  {  eqlNASSnapshotPolicyEntry 12 }
+
+eqlNASSnapshotPolicyEndDate  OBJECT-TYPE      
+    SYNTAX          Integer32 (0..2147483647)
+    UNITS           "days"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          " The value of this object determines the date after which the policy
+            will be inactive.It doesnt have significance when policy type
+            is once. Default value is the mamixum value allowed. When set to maximum
+            value, the policy will be active until it gets deleted.
+            The value is expressed as number of days since epoch.
+          "  
+    DEFVAL          { 2147483647 }
+
+    ::=  {  eqlNASSnapshotPolicyEntry 13 }
+
+
+eqlNASSnapshotPolicyWeekMask  OBJECT-TYPE      
+    SYNTAX          Integer32
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          " The value of this column is significant only if policytype is
+            set to weekly or monthly.  When the value is 0x7fffffff, it 
+            represents a special meaning to the value of occurence. See
+            the description for occurence below.
+            The LSB to LSB+6 bits of the mask are significant.
+            Each bit represents a day in the week with LSB being Mon and LSB+6
+            being Sun.
+            If mask is 0x00000041 - snapshots will be created on Monday and 
+            Sunday. If mask is 0x0000007f - snapshots will be created on all
+            weekdays which is effectively a daily policy. If mask is 0x0000001f,
+            it represents week days.If mask is 0x00000060, it represents
+            weekend days.
+          "
+ 
+    ::=  {  eqlNASSnapshotPolicyEntry 14 }
+
+eqlNASSnapshotPolicyMonthMask  OBJECT-TYPE      
+    SYNTAX          Integer32
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          " The value of this column is currently not being used."
+ 
+    ::=  {  eqlNASSnapshotPolicyEntry 15 }
+
+eqlNASSnapshotPolicyOccurence  OBJECT-TYPE      
+    SYNTAX          Integer32
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     
+          "
+           The value of this column is significant only if the policy type is
+           set to monthly.
+
+           If weekmask is set to 0x7fffffff, the value of this column represents
+           the occurence of a day with in a month. Example:If the value of this 
+           column is 5, it represents 5th day of the month. When the week mask
+           is set to a value other than 0x7fffffff, the value of this column
+           defines the occurence of a day as defined by weekmask. Example: When
+            weekmask is set to 0x00000001 (Monday) and value of this column
+           represents the following.
+ 
+                        Value            Meaning
+
+                          0x1               First monday of the month
+                          0x2               Second monday of the month
+                          0x3               Third monday of the month
+                          0x4               Fourth monday of the month
+                          0x7fffffff        Last monday of the month
+          "
+
+    DEFVAL  {0}
+    ::=  {  eqlNASSnapshotPolicyEntry 17 }
+
+eqlNASSnapshotPolicyReplication    OBJECT-TYPE
+   SYNTAX            SiteIndexOrZero
+   MAX-ACCESS        read-create
+   STATUS            current
+   DESCRIPTION       "When a row is created with this object set to a non-zero value, and
+                     a replication relationship has been configured for the base
+                     volume, the snapshots created will be queued to be replicated to the
+                     remote location as defined by the corresponding entry in the site table.
+                     The value for this object cannot be changed once the schedule
+                     is created."
+   ::=   { eqlNASSnapshotPolicyEntry 18 }
+
+
+eqlNASSnapshotPolicyAdminStatus    OBJECT-TYPE
+   SYNTAX            INTEGER {
+                        enable(0),
+                        disable(1)
+   }
+   MAX-ACCESS        read-create
+   STATUS            current
+   DESCRIPTION       "When disabled, the schedule will stop creating snapshots until re-enabled."
+   DEFVAL            {enable}
+   ::=   { eqlNASSnapshotPolicyEntry 19 }
+
+eqlNASSnapshotPolicyCategory    OBJECT-TYPE
+   SYNTAX            INTEGER {
+                        snapshot-replication-policy(0),
+                        optimization-policy(1)
+   }
+   MAX-ACCESS        read-create
+   STATUS            current
+   DESCRIPTION       "Set to opimization-policy, if the schedule is for optimization or rehydration."
+   DEFVAL            {snapshot-replication-policy}
+   ::=   { eqlNASSnapshotPolicyEntry 20 }
+
+
+---*********************************************************************
+
+eqlNASSnapshotPolicyStatusTable OBJECT-TYPE      
+    SYNTAX  SEQUENCE OF EqlNASSnapshotPolicyStatusEntry
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic NAS SnapSnot Policy Table.
+                     TimeoutAll:60"
+    ::=  {  eqlNASContainerTable 5 }    
+
+eqlNASSnapshotPolicyStatusEntry OBJECT-TYPE      
+    SYNTAX          EqlNASSnapshotPolicyStatusEntry     
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry containing NAS snapshot scheduling policy 
+                     information."
+    AUGMENTS        { eqlNASSnapshotPolicyEntry }
+::=    { eqlNASSnapshotPolicyStatusTable 1 }
+
+EqlNASSnapshotPolicyStatusEntry ::= 
+    SEQUENCE {     
+        eqlNASSnapshotPolicyStatusNextCreate          Counter32,
+        eqlNASSnapshotPolicyStatusOperStatus          INTEGER
+    }
+
+eqlNASSnapshotPolicyStatusNextCreate  OBJECT-TYPE      
+    SYNTAX          Counter32 
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     
+          "
+           The value of this column represents number of seconds since epoch
+           at which the next snapshot by this policy is going to be created.
+          "
+    ::=  {  eqlNASSnapshotPolicyStatusEntry 1 }
+
+eqlNASSnapshotPolicyStatusOperStatus  OBJECT-TYPE      
+    SYNTAX          INTEGER {
+                    enabled(0),
+                    disabled(1),
+                    expired(2),
+                    active(3)
+    }
+
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     
+          "
+           The value of this column represents the current operational status of this policy.
+           The policy status is set to expired after end date. The policy status is set to active
+           for optimization policies which are currently running.
+          "
+
+    ::=  {  eqlNASSnapshotPolicyStatusEntry 2 }
+
+
+---************************************************************      
+
+eqlNASQuotaTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASQuotaEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic quota Table
+                     This table contains a list of quotas associated with the associated container.
+                     TimeoutAll:60"
+    ::=  {  eqlNASContainerTable 6 }    
+
+eqlNASQuotaEntry OBJECT-TYPE      
+    SYNTAX          EqlNASQuotaEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry (row) containing quota info."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex, eqlNASQuotaTargetType, eqlNASQuotaTargetName }    
+    ::=    { eqlNASQuotaTable 1 }
+
+EqlNASQuotaEntry ::= 
+    SEQUENCE {     
+        eqlNASQuotaRowStatus       RowStatus,
+        eqlNASQuotaTargetType      INTEGER,       
+        eqlNASQuotaTargetName      OCTET STRING,
+        eqlNASQuotaWarnLimit       Integer32,
+        eqlNASQuotaHardLimit       Unsigned32,
+        eqlNASQuotaUsage        Integer32
+    }
+
+eqlNASQuotaRowStatus OBJECT-TYPE      
+    SYNTAX          RowStatus    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "The rowstatus...."  
+    ::= { eqlNASQuotaEntry 1 }
+
+eqlNASQuotaTargetType OBJECT-TYPE
+    SYNTAX	    INTEGER {
+            unused(0),
+		    allofgroup(1),
+			anyuseringroup(2),
+			user(3),
+            defaultuser(4),
+            defaultgroup(5),
+            allquotas(6)                   -- used by gui to request all quotas with no filtering for type
+		    }
+    MAX-ACCESS	    read-create
+    STATUS	    current
+    DESCRIPTION	    "Type of target for this quota definition row"
+    ::= { eqlNASQuotaEntry 2 }
+
+eqlNASQuotaTargetName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..129))    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "The name of the user or group as indicated by the target type. AD groups can be 129 bytes "
+    ::= {   eqlNASQuotaEntry 3 }  
+
+eqlNASQuotaWarnLimit OBJECT-TYPE      
+    SYNTAX          Integer32   
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "This field specifies the amount of space in MB at which an alert is generated."
+    ::= {   eqlNASQuotaEntry 4 }
+
+eqlNASQuotaHardLimit OBJECT-TYPE      
+    SYNTAX          Unsigned32    
+    UNITS           "MB"
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "This field specifies the amount of space in MB at which writes are disallowed."
+    ::= {   eqlNASQuotaEntry 5 }
+
+
+eqlNASQuotaUsage OBJECT-TYPE      
+    SYNTAX          Integer32   
+    MAX-ACCESS      read-only      
+    STATUS          current      
+    DESCRIPTION     "This field specifies the amount of space in MB currently in use by targetname."
+    ::= {   eqlNASQuotaEntry 6 }
+
+
+---************************************************************      
+
+
+eqlNASReplSiteTable OBJECT-TYPE
+    SYNTAX        SEQUENCE OF EqlNASReplSiteEntry
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+     "EqualLogic-Persistent
+      TimeoutAll:60"
+::= { eqlNASObjects 10 }
+
+eqlNASReplSiteEntry OBJECT-TYPE
+    SYNTAX        EqlNASReplSiteEntry 
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+      ""
+    INDEX           { eqlApplianceIndex, eqlNASReplSitePartnershipId }
+::= { eqlNASReplSiteTable 1 }
+
+EqlNASReplSiteEntry ::= SEQUENCE {
+   eqlNASReplSitePartnershipId       Unsigned32,
+   eqlNASReplSiteRowStatus           RowStatus,
+   eqlNASReplSiteVolumeReplSiteIndex SiteIndex,
+   eqlNASReplSiteLocalClusterInetAddrType  InetAddressType,
+   eqlNASReplSiteLocalClusterInetAddr      InetAddress,
+   eqlNASReplSiteRemoteClusterInetAddrType InetAddressType,
+   eqlNASReplSiteRemoteClusterInetAddr     InetAddress,
+   eqlNASReplSitePartnershipState    INTEGER,
+   eqlNASReplSiteUserName            OCTET STRING,
+   eqlNASReplSitePassword            OCTET STRING,
+   eqlNASReplSiteRemoteClusterName   OCTET STRING,
+   eqlNASReplSiteAction              INTEGER,
+   eqlNASReplSiteRemoteUserName            OCTET STRING,
+   eqlNASReplSiteRemotePassword            OCTET STRING
+}
+
+eqlNASReplSitePartnershipId OBJECT-TYPE              
+   SYNTAX        Unsigned32
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION
+      "This is the partnership Id used by Exastore to identify the partnership in the XML API"
+::= { eqlNASReplSiteEntry 1 }
+
+eqlNASReplSiteRowStatus OBJECT-TYPE           
+   SYNTAX RowStatus
+   MAX-ACCESS    read-create
+   STATUS        current
+   DESCRIPTION
+      "The status of the row"
+::= { eqlNASReplSiteEntry 2 }
+
+eqlNASReplSiteVolumeReplSiteIndex    OBJECT-TYPE
+   SYNTAX        SiteIndex 
+   MAX-ACCESS    read-create
+   STATUS        current
+   DESCRIPTION
+      "The value of eqliscsiVolumeReplSiteIndex to index into eqliscsiVolumeReplSiteTable."
+::= { eqlNASReplSiteEntry 3 }
+
+eqlNASReplSiteLocalClusterInetAddrType OBJECT-TYPE              
+   SYNTAX        InetAddressType
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION
+      "The IP address type for the LocalCluster SAN VIP"
+::= { eqlNASReplSiteEntry 4 }
+
+eqlNASReplSiteLocalClusterInetAddr OBJECT-TYPE              
+   SYNTAX        InetAddress
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION
+      "The IP address for the LocalCluster SAN VIP"
+::= { eqlNASReplSiteEntry 5 }
+
+eqlNASReplSiteRemoteClusterInetAddrType OBJECT-TYPE              
+   SYNTAX        InetAddressType
+   MAX-ACCESS    read-write
+   STATUS        current
+   DESCRIPTION
+      "The IP address type for the RemoteCluster SAN VIP"
+::= { eqlNASReplSiteEntry 6 }
+
+
+eqlNASReplSiteRemoteClusterInetAddr OBJECT-TYPE              
+   SYNTAX        InetAddress
+   MAX-ACCESS    read-write
+   STATUS        current
+   DESCRIPTION
+      "The IP address for the RemoteCluster SAN VIP"
+::= { eqlNASReplSiteEntry 7 }
+
+eqlNASReplSitePartnershipState OBJECT-TYPE              
+   SYNTAX        INTEGER {
+                 none(0),
+                 enabled(1),
+                 configured(2)
+   }
+   MAX-ACCESS    read-write
+   STATUS        current
+   DESCRIPTION
+      "This field gives the state of the partnership. enabled 
+       means the user has enabled NAS replication for this 
+       partnership. congiured means that we have configured 
+       this partnership with exastore. The state will always 
+       start with enabled, and then convert to configured 
+       once we push the partnership down to exastore."
+::= { eqlNASReplSiteEntry 8 }
+
+eqlNASReplSiteUserName OBJECT-TYPE
+    SYNTAX        OCTET STRING  (SIZE (0..255))
+    MAX-ACCESS    read-write
+    STATUS        current
+    DESCRIPTION
+        "The replication username for the remote site. This
+         is only used for senind messages to spartan agent."
+::= { eqlNASReplSiteEntry 9 }
+
+eqlNASReplSitePassword OBJECT-TYPE
+    SYNTAX        OCTET STRING  (SIZE (0..255))
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+        "The replication usernames password for the remote site.
+         This is only used for senind messages to spartan agent."
+::= { eqlNASReplSiteEntry 10 }
+
+eqlNASReplSiteRemoteClusterName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..64))
+    MAX-ACCESS      read-write
+    STATUS          current
+    DESCRIPTION     "This field specifies the partners cluster name, which is the remote eqlApplianceName."
+::= { eqlNASReplSiteEntry 11 }
+
+eqlNASReplSiteAction OBJECT-TYPE              
+   SYNTAX        INTEGER {
+                 none(0),
+                 configure(1),
+                 delete(2)
+   }
+   MAX-ACCESS    read-write
+   STATUS        current
+   DESCRIPTION
+      "This column will be used to perform actions on this partnership.
+       The configure action will be used to configure the partnership 
+       with Exastore. The delete action will be used to delete partnership at Exastore"
+::= { eqlNASReplSiteEntry 12 }
+
+eqlNASReplSiteRemoteUserName OBJECT-TYPE
+    SYNTAX        OCTET STRING  (SIZE (0..32))
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+        "The replication username at the remote site. This
+         is only used for senind messages to spartan agent. This is same as eqlNASApplianceReplRemoteUserName. "
+::= { eqlNASReplSiteEntry 13 }
+
+eqlNASReplSiteRemotePassword OBJECT-TYPE
+    SYNTAX        OCTET STRING  (SIZE (0..255))
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+        "The replication usernames password at the remote site.
+         This is only used for senind messages to spartan agent."
+::= { eqlNASReplSiteEntry 14 }
+
+---************************************************************      
+
+eqlNASReplicationTable OBJECT-TYPE
+    SYNTAX        SEQUENCE OF EqlNASReplicationEntry
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+     "EqualLogic-Dynamic
+     TimeoutAll:60"
+::= { eqlNASObjects 11 }
+
+eqlNASReplicationEntry OBJECT-TYPE
+    SYNTAX        EqlNASReplicationEntry 
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+      ""
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex, eqlNASReplSitePartnershipId, eqlNASReplicationId }
+::= { eqlNASReplicationTable 1 }
+
+EqlNASReplicationStatus ::= INTEGER {
+                       unknown(0),
+                       idle(1),
+                       active(2),
+                       waitingretry(3),
+                       failed(4),
+                       paused(5),
+                       cancelled(6),
+                       resuming(7),
+                       deleting(8),
+                       pausing(9),
+                       finished(10),
+                       cancelling(11),
+                       promoted(12),
+                       promoting(13)
+    }
+
+EqlNASReplicationEntry ::= SEQUENCE {
+   eqlNASReplicationId               Unsigned32,
+   eqlNASReplicationRowStatus        RowStatus,
+   eqlNASReplicationLastRecoveryTime Counter32,
+   eqlNASReplicationNextRecoveryTime Counter32,
+   eqlNASReplicationSourceClusterName OCTET STRING,
+   eqlNASReplicationSourceFSId       Unsigned32,
+   eqlNASReplicationSourceFSName     OCTET STRING,
+   eqlNASReplicationDestClusterName OCTET STRING,
+   eqlNASReplicationDestFSId         Unsigned32,
+   eqlNASReplicationDestFSName       OCTET STRING,
+   eqlNASReplicationStatus           EqlNASReplicationStatus,
+   eqlNASReplicationMinToComplete    Unsigned32,
+   eqlNASReplicationTransferredPer   Unsigned32,
+   eqlNASReplicationAction           INTEGER
+}
+
+eqlNASReplicationId OBJECT-TYPE              
+   SYNTAX        Unsigned32
+   MAX-ACCESS    read-create
+   STATUS        current
+   DESCRIPTION
+      "This is the replication Id used by Exastore to identify the replication in the XML API"
+::= { eqlNASReplicationEntry 1 }
+
+eqlNASReplicationRowStatus OBJECT-TYPE           
+   SYNTAX RowStatus
+   MAX-ACCESS    read-create
+   STATUS        current
+   DESCRIPTION
+      "The status of the row"
+::= { eqlNASReplicationEntry 2 }
+
+eqlNASReplicationLastRecoveryTime OBJECT-TYPE      
+    SYNTAX          Counter32  
+    MAX-ACCESS      read-only     
+    STATUS          current      
+    DESCRIPTION     "This field specifies the date/time of the last recovery snapshot
+                     that has been copied. Time is represented as the time in seconds 
+                     since 00:00:00 UTC, 1970-01-01." 
+::= { eqlNASReplicationEntry 3 }
+
+eqlNASReplicationNextRecoveryTime OBJECT-TYPE      
+    SYNTAX          Counter32  
+    MAX-ACCESS      read-only     
+    STATUS          current      
+    DESCRIPTION     "This field specifies the date/time of the next recovery snapshot
+                     that will be copied. Time is represented as the time in seconds 
+                     since 00:00:00 UTC, 1970-01-01." 
+::= { eqlNASReplicationEntry 4 }
+
+eqlNASReplicationSourceClusterName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..64))
+    MAX-ACCESS      read-only
+    STATUS          current
+    DESCRIPTION     "This field specifies the source cluster name, which is the 
+                     eqlApplianceName of the cluster hosting the source FS."
+::= { eqlNASReplicationEntry 5 }
+
+eqlNASReplicationSourceFSId       OBJECT-TYPE
+    SYNTAX          Unsigned32
+    MAX-ACCESS      read-only
+    STATUS          current
+    DESCRIPTION     "Unique Identifier for the source FileSystem. This is the FSid."
+::= { eqlNASReplicationEntry 6 }
+
+eqlNASReplicationSourceFSName     OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..230))    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Name used to identify the source NAS Container. Contains only 
+                     letters, digits and underscores. Must begin with either letter 
+                     or an underscore. "
+::= { eqlNASReplicationEntry 7 }
+
+eqlNASReplicationDestClusterName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..64))
+    MAX-ACCESS      read-only
+    STATUS          current
+    DESCRIPTION     "This field specifies the destination cluster name, which is the 
+                     eqlApplianceName of the cluster hosting the destination FS."
+::= { eqlNASReplicationEntry 8 }
+
+eqlNASReplicationDestFSId         OBJECT-TYPE
+    SYNTAX          Unsigned32
+    MAX-ACCESS      read-only
+    STATUS          current
+    DESCRIPTION     "Unique Identifier for the destination FileSystem. This is the FSid."
+::= { eqlNASReplicationEntry 9 }
+
+eqlNASReplicationDestFSName       OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..230))    
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Name used to identify the destination NAS Container. Contains 
+                     only letters, digits and underscores. Must begin with either 
+                     letter or an underscore. "
+::= { eqlNASReplicationEntry 10 }
+
+eqlNASReplicationStatus OBJECT-TYPE
+    SYNTAX EqlNASReplicationStatus
+    MAX-ACCESS      read-only
+    STATUS          current
+    DESCRIPTION     "The status of this replication relationship."
+::= { eqlNASReplicationEntry 11 }
+
+eqlNASReplicationMinToComplete    OBJECT-TYPE      
+    SYNTAX          Unsigned32
+    MAX-ACCESS      read-only 
+    STATUS          current      
+    DESCRIPTION     "Minutes left in completion of the current replication process."  
+::= {eqlNASReplicationEntry 12 }
+
+eqlNASReplicationTransferredPer   OBJECT-TYPE      
+    SYNTAX          Unsigned32
+    UNITS            "%"
+    MAX-ACCESS      read-only 
+    STATUS          current      
+    DESCRIPTION     "Provides a percent transferred for the current replication process."  
+::= {eqlNASReplicationEntry 13 }
+
+eqlNASReplicationAction           OBJECT-TYPE
+    SYNTAX          INTEGER     {
+                       none(0),
+                      -- following actions will be used by ApplExec/netmgtd to send Action to Libspartan
+                       replicate(1),
+                       pause(2),
+                       resume(3),
+                       cancel(4),
+                       demote(5),
+                    
+                     -- Following actions will be used by ApplExec to send action to libspartan
+                       promote(6),
+                       force-promote(7),
+                       delete(8),
+                       force-delete(9),
+		   -- following Actions are used only by netmgtd to send user action to ApplExec
+		       outbound-delete (100),
+		       outbound-force-delete (101),
+		       inbound-delete (102),
+		       inbound-promote (103),
+		       inbound-promote-restore-cfg (104),
+		       inbound-promote-keep-demote (105),
+		       inbound-promote-keep-demote-restore-cfg (106),
+		       inbound-delete-failback(107),	
+		       inbound-delete-failback-restore-cfg(108),	
+		       restore-cfg(109)	
+    }
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Use this column to perform actions on this replication relationship."
+::= { eqlNASReplicationEntry 14 }
+
+---************************************************************      
+
+eqlNASReplPartnerInfoMapTable OBJECT-TYPE
+    SYNTAX        SEQUENCE OF EqlNASReplPartnerInfoMapEntry
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+     "EqualLogic-Dynamic
+      This table is used to get the NAS cluster name for the replsite provided."
+::= { eqlNASObjects 12 }
+
+eqlNASReplPartnerInfoMapEntry OBJECT-TYPE
+    SYNTAX        EqlNASReplPartnerInfoMapEntry 
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+      ""
+    INDEX           { eqlApplianceIndex, eqliscsiVolumeReplSiteIndex }
+::= { eqlNASReplPartnerInfoMapTable 1 }
+
+EqlNASReplPartnerInfoMapEntry ::= SEQUENCE {
+   eqlNASReplPartnerInfoMapRowStatus         RowStatus,
+   eqlNASReplPartnerInfoMapClusterName       OCTET STRING,
+	eqlNASReplPartnerInfoMapClusterSanVIPType InetAddressType,
+	eqlNASReplPartnerInfoMapClusterSanVIP     InetAddress
+}
+
+eqlNASReplPartnerInfoMapRowStatus OBJECT-TYPE           
+   SYNTAX RowStatus
+   MAX-ACCESS    read-create
+   STATUS        current
+   DESCRIPTION
+      "The status of the row"
+::= { eqlNASReplPartnerInfoMapEntry 1 }
+
+eqlNASReplPartnerInfoMapClusterName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..64))
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "This field specifies the partners cluster name, which is the remotes eqlApplianceName."
+::= { eqlNASReplPartnerInfoMapEntry 2 }
+
+eqlNASReplPartnerInfoMapClusterSanVIPType OBJECT-TYPE
+    SYNTAX          InetAddressType
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Type of eqlNASReplPartnerInfoMapClusterSanVIP field."  
+    ::= { eqlNASReplPartnerInfoMapEntry 3 }  
+
+eqlNASReplPartnerInfoMapClusterSanVIP OBJECT-TYPE
+    SYNTAX          InetAddress
+    MAX-ACCESS      read-create      
+    STATUS          current      
+    DESCRIPTION     "Value of this column holds the SAN VIP of the remote cluster"  
+    ::= { eqlNASReplPartnerInfoMapEntry 4 }  
+
+---************************************************************      
+
+eqlNASReplPartnerIdMapTable OBJECT-TYPE
+    SYNTAX        SEQUENCE OF EqlNASReplPartnerIdMapEntry
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+     "EqualLogic-Dynamic
+      This table is used to get the NAS partnership Id for the given remote NAS cluster name."
+::= { eqlNASObjects 13 }
+
+eqlNASReplPartnerIdMapEntry OBJECT-TYPE
+    SYNTAX        EqlNASReplPartnerIdMapEntry 
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+      ""
+    INDEX           { eqlApplianceIndex, eqlNASReplPartnerInfoMapClusterName }
+::= { eqlNASReplPartnerIdMapTable 1 }
+
+EqlNASReplPartnerIdMapEntry ::= SEQUENCE {
+   eqlNASReplPartnerIdMapRowStatus        RowStatus,
+   eqlNASReplPartnerIdMapPartnershipId    Unsigned32
+}
+
+eqlNASReplPartnerIdMapRowStatus OBJECT-TYPE           
+   SYNTAX RowStatus
+   MAX-ACCESS    read-create
+   STATUS        current
+   DESCRIPTION
+      "The status of the row"
+::= { eqlNASReplPartnerIdMapEntry 1 }
+
+eqlNASReplPartnerIdMapPartnershipId OBJECT-TYPE              
+   SYNTAX        Unsigned32
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION
+      "This is the partnership Id used by Exastore for the given eqlNASReplPartnerInfoMapClusterName."
+::= { eqlNASReplPartnerIdMapEntry 2 }
+
+---************************************************************      
+
+eqlNASContainerCfgTable OBJECT-TYPE
+    SYNTAX        SEQUENCE OF EqlNASContainerCfgEntry
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+     "EqualLogic-Dynamic
+      This table is used to restore NAS file system configuration on given filesystem (a.k.a. container)."
+::= { eqlNASObjects 14 }
+
+eqlNASContainerCfgEntry OBJECT-TYPE
+    SYNTAX        EqlNASContainerCfgEntry 
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+      "The index is composed of:
+       * eqlApplianceIndex    - appliance index of the cluster hosting the target FS, 
+       * eqlNASContainerIndex - container index of the target FS,
+       * eqlNASContainerCfgIndex - unique identifer for the configuration applicable 
+                                   to the filesystem."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex, eqlNASContainerCfgIndex}    
+::= { eqlNASContainerCfgTable 1 }
+
+EqlNASContainerCfgEntry ::= SEQUENCE {
+   eqlNASContainerCfgIndex             Unsigned32,
+   eqlNASContainerCfgRowStatus         RowStatus,
+   eqlNASContainerCfgSourceClusterName OCTET STRING,
+   eqlNASContainerCfgSourceFSName      OCTET STRING,
+   eqlNASContainerCfgModules           BITS
+}
+
+eqlNASContainerCfgIndex         OBJECT-TYPE
+    SYNTAX          Unsigned32
+    MAX-ACCESS      not-accessible
+    STATUS          current
+    DESCRIPTION     "Unique identifier of the configuration items set."
+::= { eqlNASContainerCfgEntry 1 }
+
+eqlNASContainerCfgRowStatus OBJECT-TYPE           
+   SYNTAX RowStatus
+   MAX-ACCESS    read-create
+   STATUS        current
+   DESCRIPTION
+      "The status of the row"
+::= { eqlNASContainerCfgEntry 2 }
+
+eqlNASContainerCfgSourceClusterName OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..64))
+    MAX-ACCESS      read-write
+    STATUS          current
+    DESCRIPTION     "This field specifies the source cluster name, which is the 
+                     eqlApplianceName of the cluster hosting the source FS."
+::= { eqlNASContainerCfgEntry 3 }
+
+eqlNASContainerCfgSourceFSName     OBJECT-TYPE      
+    SYNTAX          OCTET STRING (SIZE (1..230))    
+    MAX-ACCESS  read-write
+    STATUS          current      
+    DESCRIPTION     "Name used to identify the source NAS Container. Contains only 
+                     letters, digits and underscores. Must begin with either letter 
+                     or an underscore. "
+   ::= { eqlNASContainerCfgEntry 4 }
+
+eqlNASContainerCfgModules OBJECT-TYPE
+   SYNTAX BITS {
+      nfsExport(0),
+      cifsShare(1),
+      quotaRule(2),
+      snapshotScheduler(3),   
+      volumeParameters(4),
+      -- The following configuration modules are currently not supported. 
+      volumeName(5),
+      volumeSize(6)
+   }
+   MAX-ACCESS  read-write
+   STATUS      current
+   DESCRIPTION
+       "Bitmap of filesystem configuration modules to be restored. Identifies which filesystem configuration modules to apply to the filesystem."
+   ::= { eqlNASContainerCfgEntry 5 }
+
+--------------------------------------------------------------------------------------------
+
+eqlNASFSScanTable OBJECT-TYPE
+    SYNTAX        SEQUENCE OF EqlNASFSScanEntry
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+     "EqualLogic-Dynamic
+      This table is used to control the FS-Scan throttling on Spartan appliances."
+::= { eqlNASObjects 15 }
+
+eqlNASFSScanEntry OBJECT-TYPE
+    SYNTAX        EqlNASFSScanEntry 
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+      "The index is composed of:
+       eqlApplianceIndex    - appliance index of the cluster hosting the target FS "
+    INDEX           { eqlApplianceIndex }    
+::= { eqlNASFSScanTable 1 }
+
+EqlNASFSScanEntry ::= SEQUENCE {
+        eqlNASFSScanRate          INTEGER
+}
+
+eqlNASFSScanRate OBJECT-TYPE
+    SYNTAX          INTEGER {
+                    low(0),
+                    normal(1),
+                    high(2),
+                    unlimited(3)
+    }
+    MAX-ACCESS      read-write
+    STATUS          current
+    DESCRIPTION     "This field specifies the rate of FS Scan throttling to apply to a Spartan node."
+    DEFVAL          {low}
+    ::=  { eqlNASFSScanEntry 1 }
+
+-----------------------------------------------------------------------------------------------
+eqlNASReplicationHistoryTable OBJECT-TYPE
+    SYNTAX        SEQUENCE OF EqlNASReplicationHistoryEntry
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+     "EqualLogic-Dynamic
+      TImeoutAll:60"
+::= { eqlNASObjects 16 }
+
+eqlNASReplicationHistoryEntry OBJECT-TYPE
+    SYNTAX        EqlNASReplicationHistoryEntry 
+    MAX-ACCESS    not-accessible
+    STATUS        current
+    DESCRIPTION
+      "NAS Replication Historical data."
+    INDEX           { eqlApplianceIndex, eqlNASContainerIndex, eqlNASReplSitePartnershipId, eqlNASReplicationId, eqlNASReplicationHistorySampleIndex }
+::= { eqlNASReplicationHistoryTable 1 }
+
+EqlNASReplicationHistoryEntry ::= SEQUENCE {
+   eqlNASReplicationHistorySampleIndex      Unsigned32,
+   eqlNASReplicationHistoryStartTime        Integer32,
+   eqlNASReplicationHistoryEndTime          Integer32,
+   eqlNASReplicationHistoryTransferredMb    Unsigned32,
+   eqlNASReplicationHistoryStatus           EqlNASReplicationStatus,
+   eqlNASReplicationHistorySrcContainer     OCTET STRING,
+   eqlNASReplicationHistoryDestContainer    OCTET STRING
+}
+
+eqlNASReplicationHistorySampleIndex OBJECT-TYPE              
+   SYNTAX        Unsigned32
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION "Index into list of replication history data"
+::= { eqlNASReplicationHistoryEntry 1 }
+
+eqlNASReplicationHistoryStartTime OBJECT-TYPE              
+   SYNTAX        Integer32
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION "32 bit binary start time for transfer in seconds from start of Unix epoch"
+::= { eqlNASReplicationHistoryEntry 2 }
+
+eqlNASReplicationHistoryEndTime OBJECT-TYPE              
+   SYNTAX        Integer32
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION "32 bit binary end time for transfer in seconds from start of Unix epoch"
+::= { eqlNASReplicationHistoryEntry 3 }
+
+eqlNASReplicationHistoryTransferredMb OBJECT-TYPE              
+   SYNTAX        Unsigned32
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION "Megabytes transferred"
+::= { eqlNASReplicationHistoryEntry 4 }
+
+eqlNASReplicationHistoryStatus OBJECT-TYPE              
+   SYNTAX        EqlNASReplicationStatus
+   MAX-ACCESS    read-only
+   STATUS        current
+   DESCRIPTION "transfer status"
+::= { eqlNASReplicationHistoryEntry 5 }
+
+
+eqlNASReplicationHistorySrcContainer OBJECT-TYPE
+    SYNTAX        OCTET STRING  (SIZE (1..230))
+    MAX-ACCESS    read-only
+    STATUS        current
+    DESCRIPTION "Name of replication source container (alias 'file system')"
+    ::= { eqlNASReplicationHistoryEntry 6 }
+
+eqlNASReplicationHistoryDestContainer OBJECT-TYPE
+    SYNTAX        OCTET STRING  (SIZE (1..230))
+    MAX-ACCESS    read-only
+    STATUS        current
+    DESCRIPTION "Name of replication destination container (alias 'file system')"
+    ::= { eqlNASReplicationHistoryEntry 7 }
+
+-----------------------------------------------------------------------------------------------
+
+eqlNASApplianceAntivirusHostTable OBJECT-TYPE      
+    SYNTAX          SEQUENCE OF EqlNASApplianceAntivirusHostEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "EqualLogic-Dynamic table used to store information of the antivirus hosts for a
+NAS appliance.
+                     TimeoutAll:60"
+    ::=    { eqlNASObjects 17 }
+
+eqlNASApplianceAntivirusHostEntry OBJECT-TYPE      
+    SYNTAX          EqlNASApplianceAntivirusHostEntry      
+    MAX-ACCESS      not-accessible      
+    STATUS          current      
+    DESCRIPTION     "An entry contains the antivirus host information for a NAS appliance."
+    INDEX          { eqlApplianceIndex, eqlNASApplianceAntivirusHostIndex }
+    ::=   { eqlNASApplianceAntivirusHostTable 1}
+
+EqlNASApplianceAntivirusHostEntry ::=
+    SEQUENCE {
+        eqlNASApplianceAntivirusHostIndex               Unsigned32,
+        eqlNASApplianceAntivirusHostRowStatus           RowStatus,
+        eqlNASApplianceAntivirusHostName                OCTET STRING,
+        eqlNASApplianceAntivirusHostPortNumber          Unsigned32,
+        eqlNASApplianceAntivirusHostTransactionState    INTEGER  
+    }
+
+eqlNASApplianceAntivirusHostIndex  OBJECT-TYPE
+    SYNTAX          Unsigned32
+    MAX-ACCESS      not-accessible
+    STATUS          current
+    DESCRIPTION     "This field specifies an index that uniquely identifies the antivirus host
+entry."
+    ::=  {  eqlNASApplianceAntivirusHostEntry 1 }
+
+eqlNASApplianceAntivirusHostRowStatus OBJECT-TYPE
+    SYNTAX          RowStatus
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "This field is used to manage the conceptual row entry."
+    ::= { eqlNASApplianceAntivirusHostEntry  2 }
+
+eqlNASApplianceAntivirusHostName OBJECT-TYPE
+    SYNTAX          OCTET STRING(SIZE(1..256))
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Hostname/ip address of the antivirus host. "
+    ::= { eqlNASApplianceAntivirusHostEntry  3 }
+
+eqlNASApplianceAntivirusHostPortNumber OBJECT-TYPE
+    SYNTAX          Unsigned32(1..65535)
+    MAX-ACCESS      read-create
+    STATUS          current
+    DESCRIPTION     "Port number to be used for the antivirus service on the antivirus host. "
+    DEFVAL        { 1344 }
+    ::= { eqlNASApplianceAntivirusHostEntry  4 }
+
+eqlNASApplianceAntivirusHostTransactionState OBJECT-TYPE      
+    SYNTAX          INTEGER     {
+                    configStart(0),
+                    configInProgress (1),
+                    configCommit  (2),
+		    configStartCommit (3)
+    }
+    MAX-ACCESS      read-create
+    STATUS          current 
+    DESCRIPTION     "This field denotes the transaction state of the operations on the eqlNASApplianceAntivirusHostTable."
+    DEFVAL          {configStart}
+    ::=  {  eqlNASApplianceAntivirusHostEntry 5 }
+
+
+-----------------------------------------------------------------------------------------------
+
+END
