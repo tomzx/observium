@@ -1374,6 +1374,11 @@ $config['device_types'][$i]['type'] = 'server';
 $config['device_types'][$i]['icon'] = 'oicon-server';
 
 $i++;
+$config['device_types'][$i]['text'] = 'Workstations';
+$config['device_types'][$i]['type'] = 'workstation';
+$config['device_types'][$i]['icon'] = 'oicon-computer';
+
+$i++;
 $config['device_types'][$i]['text'] = 'Network';
 $config['device_types'][$i]['type'] = 'network';
 $config['device_types'][$i]['icon'] = 'oicon-network-hub';
