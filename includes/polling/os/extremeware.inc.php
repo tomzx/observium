@@ -33,9 +33,16 @@ else
   list($a,$b,$c,$d,$e,$f,$g,$h,$i,$j,$k,$l,$m) = explode(" ", str_replace("ExtremeWare XOS", "ExtremeXOS", $poll_device['sysDescr']));
   if ($b == "version")
   {
+#    $version = snmp_get($device, "RMON2-MIB::probeSoftwareRev.0", "-Osqv", "RMON2-MIB", mib_dirs(array("extreme")));
     $version = $c;
     $features = $d . " ".$i." ".$j." ".$m;
+  } elseif ($c == "version")
+  {
+#    $version = snmp_get($device, "RMON2-MIB::probeSoftwareRev.0", "-Osqv", "RMON2-MIB", mib_dirs(array("extreme")));
+    $version = $d;
+    $features = $e . " ".$j." ".$k." ".$n;
   }
+
 }
 
 $hardware = rewrite_extreme_hardware($poll_device['sysObjectID']);
