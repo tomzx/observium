@@ -44,7 +44,7 @@ function poll_sensor($device, $class, $unit)
 
     if ($sensor['poller_type'] == "snmp")
     {
-#      if ($class == "temperature" && $device['os'] == "papouch-tme")
+#      if ($class == "temperature" && $device['os'] == "papouch")
       if ($class == "temperature")
       {
         for ($i = 0;$i < 5;$i++) # Try 5 times to get a valid temp reading
