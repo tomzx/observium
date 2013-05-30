@@ -186,6 +186,7 @@ $config['os'][$os]['text']              = "NexentaOS";
 $os = "equallogic";
 $config['os'][$os]['type']              = "storage";
 $config['os'][$os]['group']             = "unix";
+$config['os'][$os]['icon']              = "dell";
 $config['os'][$os]['text']              = "Storage Array Firmware";
 
 // Alcatel

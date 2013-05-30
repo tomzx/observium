@@ -1,7 +1,6 @@
 <div class="well info_box">
     <div id="title"><i class="oicon-server"></i> Device Information</div>
     <div id="content">
-
 <?php
 
 if ($config['overview_show_sysDescr'])
@@ -15,7 +14,7 @@ if ($device['os'] == "ios") { formatCiscoHardware($device); }
 if ($device['features']) { $device['features'] = "(".$device['features'].")"; }
 $device['os_text'] = $config['os'][$device['os']]['text'];
 
-echo('<table class="table table-condensed-more table-striped">');
+echo('<table class="table table-condensed-more table-striped table-bordered">');
 
 if ($device['hardware'])
 {

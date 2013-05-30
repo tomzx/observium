@@ -136,8 +136,8 @@ except:
 
 query = """SELECT   device_id
            FROM     devices
-           WHERE    disabled = 0"""
-order =  " ORDER BY last_polled_timetaken desc"
+           WHERE    disabled != '1'"""
+order =  " ORDER BY last_polled_timetaken DESC"
 
 try:
     host_wildcard = args.host.replace('*', '%')
