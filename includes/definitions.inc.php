@@ -936,8 +936,8 @@ $config['os'][$os]['type']              = "environment";
 $config['os'][$os]['over'][0]['graph']  = "device_temperature";
 $config['os'][$os]['over'][0]['text']   = "temperature";
 
-$os = "papouch-tme";
-$config['os'][$os]['text']              = "Papouch TME";
+$os = "papouch";
+$config['os'][$os]['text']              = "Papouch Probe";
 $config['os'][$os]['type']              = "environment";
 $config['os'][$os]['over'][0]['graph']  = "device_temperature";
 $config['os'][$os]['over'][0]['text']   = "temperature";
