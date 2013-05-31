@@ -51,7 +51,7 @@ echo("
            $since
          </td>
          <td valign=top>
-           <span class=box-desc>$message</span>
+           <span class=small>$message</span>
          </td>
        </tr>");
 

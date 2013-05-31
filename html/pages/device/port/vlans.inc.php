@@ -14,7 +14,7 @@ foreach ($vlans as $vlan)
   echo('<tr bgcolor="'.$row_colour.'">');
 
   echo("<td width=100 class=entity-title> Vlan " . $vlan['vlan'] . "</td>");
-  echo("<td width=200 class=box-desc>" . $vlan['vlan_descr'] . "</td>");
+  echo("<td width=200 class=small>" . $vlan['vlan_descr'] . "</td>");
 
   if ($vlan['state'] == "blocking") { $class="red"; } elseif ($vlan['state'] == "forwarding" ) { $class="green"; } else { $class = "none"; }
 

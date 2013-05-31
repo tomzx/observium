@@ -29,8 +29,8 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GRO
 
     if ($device['os'] == "ios")
     {
-      if ($port['ifTrunk']) { $vlan = "<span class=box-desc><span class=red>" . $port['ifTrunk'] . "</span></span>"; }
-      elseif ($port['ifVlan']) { $vlan = "<span class=box-desc><span class=blue>VLAN " . $port['ifVlan'] . "</span></span>"; }
+      if ($port['ifTrunk']) { $vlan = "<span class=small><span class=red>" . $port['ifTrunk'] . "</span></span>"; }
+      elseif ($port['ifVlan']) { $vlan = "<span class=small><span class=blue>VLAN " . $port['ifVlan'] . "</span></span>"; }
       else { $vlan = ""; }
     }
 

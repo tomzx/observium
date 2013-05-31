@@ -21,7 +21,7 @@ onclick=\"location.href='device/".$device['device_id']."/port/".$port['port_id']
  <td valign=top width=350>");
 echo("        <span class=entity-title>
               " . generate_port_link($port, $port['ifIndex'] . ". ".$port['label']) . "
-           </span><br /><span class=interface-desc>".$port['ifAlias']."</span>");
+           </span><br /><span class=small>".$port['ifAlias']."</span>");
 
 if ($port['ifAlias']) { echo("<br />"); }
 
@@ -30,12 +30,12 @@ if ($port_details)
 {
   foreach (dbFetchRows("SELECT * FROM `ipv4_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip)
   {
-    echo("$break <a class=interface-desc href=\"javascript:popUp('netcmd.php?cmd=whois&amp;query=".$ip['ipv4_address']."')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
+    echo("$break <a class=small href=\"javascript:popUp('netcmd.php?cmd=whois&amp;query=".$ip['ipv4_address']."')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
     $break = ",";
   }
   foreach (dbFetchRows("SELECT * FROM `ipv6_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip6);
   {
-    echo("$break <a class=interface-desc href=\"javascript:popUp('netcmd.php?cmd=whois&amp;query=".$ip6['ipv6_address']."')\">".Net_IPv6::compress($ip6['ipv6_address'])."/".$ip6['ipv6_prefixlen']."</a>");
+    echo("$break <a class=small href=\"javascript:popUp('netcmd.php?cmd=whois&amp;query=".$ip6['ipv6_address']."')\">".Net_IPv6::compress($ip6['ipv6_address'])."/".$ip6['ipv6_prefixlen']."</a>");
     $break = ",";
   }
 }
@@ -86,7 +86,7 @@ $port['graph_type'] = "port_adsl_power";
 echo(generate_port_link($port, "<img src='graph.php?type=".$port['graph_type']."&amp;id=".$port['port_id']."&amp;from=".$from."&amp;to=".$config['time']['now']."&amp;width=".$width."&amp;height=".$height."&amp;legend=no&amp;bg=".
 str_replace("#","", $row_colour)."'>", $port['graph_type']));
 
-#  if ($port[ifDuplex] != unknown) { echo("<span class=box-desc>Duplex " . $port['ifDuplex'] . "</span>"); } else { echo("-"); }
+#  if ($port[ifDuplex] != unknown) { echo("<span class=small>Duplex " . $port['ifDuplex'] . "</span>"); } else { echo("-"); }
 
 #    echo("</td><td width=150>");
 #    echo($port_adsl['adslLineCoding']."/".$port_adsl['adslLineType']);

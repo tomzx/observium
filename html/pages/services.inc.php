@@ -31,7 +31,7 @@ if ($_GET['status'] == '0') { $where = " AND service_status = '0'"; } else { uns
 if ($vars['view'] == "details") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
 
 echo('<table class="table table-condensed '.$stripe_class.'" style="margin-top: 10px;">');
-//echo("<tr class=interface-desc bgcolor='#e5e5e5'><td>Device</td><td>Service</td><td>Status</td><td>Changed</td><td>Checked</td><td>Message</td></tr>");
+//echo("<tr class=small bgcolor='#e5e5e5'><td>Device</td><td>Service</td><td>Status</td><td>Changed</td><td>Checked</td><td>Message</td></tr>");
 
 if ($_SESSION['userlevel'] >= '5')
 {

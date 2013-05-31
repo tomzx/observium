@@ -53,7 +53,7 @@ function printEntPhysical($ent, $level, $class)
       echo(" (".$ent['entSensorValue'] ." ". $ent['entSensorType'].")");
     }
 
-    echo("<br /><div class='interface-desc' style='margin-left: 20px;'>" . $ent['entPhysicalDescr']);
+    echo("<br /><div class='small' style='margin-left: 20px;'>" . $ent['entPhysicalDescr']);
 
     if ($link) { echo("</a>"); }
 

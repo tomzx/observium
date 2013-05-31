@@ -5,7 +5,7 @@ if (!is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $lis
 echo("<tr bgcolor='$bg_colour'>");
 
 echo("<td width=100 class=entity-title> Vlan " . $vlan['vlan_vlan'] . "</td>");
-echo("<td width=200 class=box-desc>" . $vlan['vlan_name'] . "</td>");
+echo("<td width=200 class=small>" . $vlan['vlan_name'] . "</td>");
 echo("<td class=strong>");
 
   $vlan_ports = array();

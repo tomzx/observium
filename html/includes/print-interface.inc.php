@@ -50,7 +50,7 @@ echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" .
 
 echo("        <span class=entity-title>
               " . generate_port_link($port, $port['ifIndex_FIXME'] . "".$port['label']) . " ".$port['tags']."
-           </span><br /><span class=interface-desc>".$port['ifAlias']."</span>");
+           </span><br /><span class=small>".$port['ifAlias']."</span>");
 
 if ($port['ifAlias']) { echo("<br />"); }
 
@@ -60,12 +60,12 @@ if ($port_details)
 {
   foreach (dbFetchRows("SELECT * FROM `ipv4_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip)
   {
-    echo($break ."<a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=".$ip['ipv4_address']."')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
+    echo($break ."<a class=small href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=".$ip['ipv4_address']."')\">".$ip['ipv4_address']."/".$ip['ipv4_prefixlen']."</a>");
     $break = "<br />";
   }
   foreach (dbFetchRows("SELECT * FROM `ipv6_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $ip6)
   {
-    echo($break ."<a class=interface-desc href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=".$ip6['ipv6_address']."')\">".Net_IPv6::compress($ip6['ipv6_address'])."/".$ip6['ipv6_prefixlen']."</a>");
+    echo($break ."<a class=small href=\"javascript:popUp('/netcmd.php?cmd=whois&amp;query=".$ip6['ipv6_address']."')\">".Net_IPv6::compress($ip6['ipv6_address'])."/".$ip6['ipv6_prefixlen']."</a>");
     $break = "<br />";
   }
 }
@@ -84,7 +84,7 @@ if ($port_details)
   echo(generate_port_link($port, "<img src='graph.php?type=port_errors&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no'>"));
 }
 
-echo('</td><td width=120 class="interface-desc">');
+echo('</td><td width=120 class="small">');
 
 if ($port['ifOperStatus'] == "up")
 {
@@ -99,16 +99,16 @@ if ($port['ifOperStatus'] == "up")
 }
 
 echo("</td><td width=75>");
-if ($port['ifSpeed']) { echo("<span class=box-desc>".humanspeed($port['ifSpeed'])."</span>"); }
+if ($port['ifSpeed']) { echo("<span class=small>".humanspeed($port['ifSpeed'])."</span>"); }
 echo("<br />");
 
-if ($port[ifDuplex] != "unknown") { echo("<span class=box-desc>" . $port['ifDuplex'] . "</span>"); } else { echo("-"); }
+if ($port[ifDuplex] != "unknown") { echo("<span class=small>" . $port['ifDuplex'] . "</span>"); } else { echo("-"); }
 
 if ($device['os'] == "ios" || $device['os'] == "iosxe")
 {
   if ($port['ifTrunk']) {
 
-    echo('<p class=box-desc><span class=purple><a title="');
+    echo('<p class=small><span class=purple><a title="');
     $vlans = dbFetchRows("SELECT * FROM `ports_vlans` AS PV, vlans AS V WHERE PV.`port_id` ='".$port['port_id']."' and PV.`device_id` = '".$device['device_id']."' AND V.`vlan_vlan` = PV.vlan AND V.device_id = PV.device_id");
     foreach ($vlans as $vlan)
     {
@@ -117,7 +117,7 @@ if ($device['os'] == "ios" || $device['os'] == "iosxe")
     }
     echo('">'.$port['ifTrunk'].'</a></span></p>');
   } elseif ($port['ifVlan']) {
-    echo("<p class=box-desc><span class=blue>VLAN " . $port['ifVlan'] . "</span></p>");
+    echo("<p class=small><span class=blue>VLAN " . $port['ifVlan'] . "</span></p>");
   } elseif ($port['ifVrf']) {
     $vrf = dbFetchRow("SELECT * FROM vrfs WHERE vrf_id = ?", array($port['ifVrf']));
     echo("<p style='color: green;'>" . $vrf['vrf_name'] . "</p>");
@@ -138,17 +138,17 @@ if ($port_adsl['adslLineCoding'])
   echo("SNR:".$port_adsl['adslAtucCurrSnrMgn'] . "dB/". $port_adsl['adslAturCurrSnrMgn']. "dB");
 } else {
   echo("</td><td width=150>");
-  if ($port['ifType'] && $port['ifType'] != "") { echo("<span class=box-desc>" . fixiftype($port['ifType']) . "</span>"); } else { echo("-"); }
+  if ($port['ifType'] && $port['ifType'] != "") { echo("<span class=small>" . fixiftype($port['ifType']) . "</span>"); } else { echo("-"); }
   echo("<br />");
-  if ($ifHardType && $ifHardType != "") { echo("<span class=box-desc>" . $ifHardType . "</span>"); } else { echo("-"); }
+  if ($ifHardType && $ifHardType != "") { echo("<span class=small>" . $ifHardType . "</span>"); } else { echo("-"); }
   echo("</td><td width=150>");
-  if ($port['ifPhysAddress'] && $port['ifPhysAddress'] != "") { echo("<span class=box-desc>" . formatMac($port['ifPhysAddress']) . "</span>"); } else { echo("-"); }
+  if ($port['ifPhysAddress'] && $port['ifPhysAddress'] != "") { echo("<span class=small>" . formatMac($port['ifPhysAddress']) . "</span>"); } else { echo("-"); }
   echo("<br />");
-  if ($port['ifMtu'] && $port['ifMtu'] != "") { echo("<span class=box-desc>MTU " . $port['ifMtu'] . "</span>"); } else { echo("-"); }
+  if ($port['ifMtu'] && $port['ifMtu'] != "") { echo("<span class=small>MTU " . $port['ifMtu'] . "</span>"); } else { echo("-"); }
 }
 
 echo("</td>");
-echo("<td width=375 valign=top class=interface-desc>");
+echo("<td width=375 valign=top class=small>");
 if (strpos($port['label'], "oopback") === false && !$graph_type)
 {
   foreach (dbFetchRows("SELECT * FROM `links` AS L, `ports` AS I, `devices` AS D WHERE L.local_port_id = ? AND L.remote_port_id = I.port_id AND I.device_id = D.device_id", array($port['port_id'])) as $link)

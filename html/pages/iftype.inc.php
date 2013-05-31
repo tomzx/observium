@@ -48,7 +48,7 @@ if ($if_list)
     if ($bg == "#ffffff") { $bg = "#e5e5e5"; } else { $bg = "#ffffff"; }
     echo("<tr class='iftype'>
              <td><span class=entity-title>" . generate_port_link($port,$port['port_descr_descr']) . "</span><br />
-            <span class=interface-desc style='float: left;'>".generate_device_link($port)." ".generate_port_link($port)." </span>");
+            <span class=small style='float: left;'>".generate_device_link($port)." ".generate_port_link($port)." </span>");
 
     if (dbFetchCell("SELECT count(*) FROM mac_accounting WHERE port_id = ?", array($port['port_id'])))
     {

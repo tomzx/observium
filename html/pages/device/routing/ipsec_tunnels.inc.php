@@ -59,7 +59,7 @@ if($tunnel['tunnel_status'] == "active") { $tunnel_class="green"; } else { $tunn
 
 echo("<tr bgcolor='$bg_colour'>");
 echo("<td width=320 class=entity-title>" . $tunnel['local_addr'] . "  &#187;  " . $tunnel['peer_addr'] . "</a></td>");
-echo("<td width=150 class=box-desc>" . $tunnel['tunnel_name'] . "</td>");
+echo("<td width=150 class=small>" . $tunnel['tunnel_name'] . "</td>");
 echo("<td width=100 class=entity-title><span class='".$tunnel_class."'>" . $tunnel['tunnel_status'] . "</span></td>");
 echo("</tr>");
   if (isset($vars['graph']))

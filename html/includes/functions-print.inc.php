@@ -94,15 +94,15 @@ function print_vm_row($vm, $device = NULL)
 
   if ($vm['vmwVmGuestOS'] == "E: tools not installed")
   {
-    echo('<td class="box-desc">Unknown (VMware Tools not installed)</td>');
+    echo('<td class="small">Unknown (VMware Tools not installed)</td>');
   }
   else if ($vm['vmwVmGuestOS'] == "E: tools not running")
   {
-    echo('<td class="box-desc">Unknown (VMware Tools not running)</td>');
+    echo('<td class="small">Unknown (VMware Tools not running)</td>');
   }
   else if ($vm['vmwVmGuestOS'] == "")
   {
-    echo('<td class="box-desc"><i>(Unknown)</i></td>');
+    echo('<td class="small"><i>(Unknown)</i></td>');
   }
   elseif (isset($config['vmware_guestid'][$vm['vmwVmGuestOS']]))
   {

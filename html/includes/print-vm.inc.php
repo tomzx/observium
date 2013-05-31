@@ -16,11 +16,11 @@ echo('<td class="list">' . $vm['vmwVmState'] . "</td>");
 
 if ($vm['vmwVmGuestOS'] == "E: tools not installed")
 {
-  echo('<td class="box-desc">Unknown (VMware Tools not installed)</td>');
+  echo('<td class="small">Unknown (VMware Tools not installed)</td>');
 }
 else if ($vm['vmwVmGuestOS'] == "")
 {
-  echo('<td class="box-desc"><i>(Unknown)</i></td>');
+  echo('<td class="small"><i>(Unknown)</i></td>');
 }
 elseif (isset($config['vmware_guestid'][$vm['vmwVmGuestOS']]))
 {
