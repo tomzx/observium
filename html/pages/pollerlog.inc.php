@@ -7,20 +7,21 @@
  *
  * @package    observium
  * @subpackage web
- * @author     Dennis de Houx <info@all-in-one.be>
  * @copyright  (C) 2006 - 2013 Adam Armstrong
  * @version    1.0.1
  *
  */
 
-$pagetitle[] = "Polling Information";
+$pagetitle[] = "Poller/Discovery Timing";
 
 ?>
 
-<table class="table table-striped table-condensed table-bordered table-rounded" style="margin-top: 10px;">
+<h3>Poller/Discovery Timing</h3>
+
+<table class="table table-striped table-condensed table-bordered">
   <thead>
     <tr>
-      <th></th><th></th>
+      <th></th>
       <th>Device</th>
       <th colspan=3>Last Polled</th>
       <th></th>
@@ -55,8 +56,7 @@ foreach ($cache['devices']['hostname'] as $hostname=>$id)
 
   echo('    <tr class="'.$device['html_row_class'].'">
       <td style="width: 1px; max-width: 1px; background-color: '.$device['html_tab_colour'].'; margin: 0px; padding: 0px"></td>
-      <td style="width: 1px; max-width: 1px;"></td>
-      <td>'.generate_device_link($device).'</td>
+      <td class="entity">'.generate_device_link($device).'</td>
       <td style="width: 12%;">
         <div class="progress progress-'.$proc['color']['poller'].' active" style="margin-bottom: 5px;"><div class="bar" style="text-align: right; width: '.$proc['time']['poller'].'%;"></div></div>
       </td>

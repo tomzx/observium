@@ -10,20 +10,17 @@ if(!isset($vars['interval'])) {
   }
 }
 
-print_optionbar_start();
-
-echo("Polling Interval: ");
+$navbar['class'] = "navbar-narrow";
+$navbar['brand'] = "Polling Interval";
 
 foreach (array(0.25, 1, 2, 5, 15, 60) as $interval)
 {
-  echo($thinger);
-  if ($vars['interval'] == $interval) { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link($interval."s",$link_array,array('view'=>'realtime','interval'=>$interval)));
-  if ($vars['interval'] == $interval) { echo("</span>"); }
-  $thinger = " | ";
+  if ($vars['interval'] == $interval) { $navbar['options'][$interval]['class'] = "active"; }
+  $navbar['options'][$interval]['url'] = generate_url($link_array,array('view'=>'realtime','interval'=>$interval));
+  $navbar['options'][$interval]['text'] = $interval."s";
 }
 
-print_optionbar_end();
+print_navbar($navbar);
 
 ?>
 

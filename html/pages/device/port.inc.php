@@ -111,7 +111,10 @@ $navbars['main']['brand'] = "Port";
 foreach ($navbars as $type => $navbar)
 {
   if ($type == $vars['view'] || $type == 'main')
+  {
     print_navbar($navbar);
+  }
+  unset($navbar);
 }
 
 unset($navbars);

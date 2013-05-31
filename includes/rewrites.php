@@ -167,6 +167,7 @@ function humanize_port(&$port)
   // Lots of hacky shit will end up here with if (os);
 
   $device = device_by_id_cache($port['device_id']);
+  $os = $device['os'];
 
   $port['human_speed'] = humanspeed($port['ifSpeed']);
   $port['human_type']  = fixiftype($port['ifType']);

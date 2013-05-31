@@ -37,8 +37,11 @@ if (is_numeric($_GET['id']) && ($config['allow_unauth_graphs'] || port_permitted
 $in  = snmp_get($device, "ifInOctets.".$port['ifIndex'], "-OUqnv", "IF-MIB");
 $out = snmp_get($device, "ifOutOctets.".$port['ifIndex'], "-OUqnv", "IF-MIB");
 
+$data = snmp_get_multi($device, "ifInOctets.".$port['ifIndex']." ifOutOctets.".$port['ifIndex'], "-OQUs", "IF-MIB");
+
+
 $time = time();
 
-printf("%lf|%s|%s\n", time(), $in, $out);
+printf("%lf|%s|%s\n", time(), $data[$port['ifIndex']][ifInOctets], $data[$port['ifIndex']][ifOutOctets]);
 
 ?>

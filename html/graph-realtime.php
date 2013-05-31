@@ -58,7 +58,7 @@ if(is_numeric($_GET['interval'])) {
  $time_interval=1;		//Refresh time Interval
 }
 
-$fetch_link = "data.php?id=".$_GET[id];
+$fetch_link = "data.php?id=".$_GET['id'];
 
 //SVG attributes
 $attribs['axis']='fill="black" stroke="black"';
@@ -77,7 +77,7 @@ $attribs['error']='fill="blue" font-family="Arial" font-size="4"';
 $attribs['collect_initial']='fill="gray" font-family="Tahoma, Verdana, Arial, Helvetica, sans-serif" font-size="4"';
 
 //Error text if we cannot fetch data : depends on which method is used
-$error_text = "Cannot get data about interface $ifnum";
+$error_text = "Can't get data about interface $ifnum";
 
 $height=125;            //SVG internal height : do not modify
 $width=300;             //SVG internal width : do not modify
