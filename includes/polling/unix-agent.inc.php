@@ -152,15 +152,14 @@ if ($device['os_group'] == "unix")
       }
     }
 
-    // memcached
+    // Memcached
     if (!empty($agent_data['app']['memcached']))
     {
-      $agent_data['app']['memcached'] = unserialize($agent_data['app']['memcached']);
       foreach ($agent_data['app']['memcached'] as $memcached_host => $memcached_data)
-      {
+{
         if (dbFetchCell("SELECT COUNT(*) FROM `applications` WHERE `device_id` = ? AND `app_type` = ? AND `app_instance` = ?", array($device['device_id'], 'memcached', $memcached_host)) == "0")
         {
-          echo("Found new application 'Memcached' $memcached_host\n");
+          echo("Found new application 'Memcached $instance'\n");
           dbInsert(array('device_id' => $device['device_id'], 'app_type' => 'memcached', 'app_instance' => $memcached_host), 'applications');
         }
       }
