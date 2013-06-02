@@ -71,7 +71,16 @@ if ($timestamp_min)
   // Print syslog
   print_syslogs($vars);
 } else {
-  echo('<div class="alert alert-info"><h3>No syslog entries found!</h3><p>This device does not have any syslog entries. Check that the syslog server and config options are set correctly. See <a href="http://www.observium.org/wiki/Category:Documentation" target="_blank">documentation</a> and <a href="http://www.observium.org/wiki/Configuration_Options#Syslog_Settings" target="_blank">config options</a>.</p></div>');
+?>
+
+  <div class="alert alert-info">
+    <h3>No syslog entries found!</h3>
+    <p>This device does not have any syslog entries. Check that the syslog server and config options are set correctly.
+       See <a href="http://www.observium.org/wiki/Category:Documentation" target="_blank">documentation</a> and <a href="http://www.observium.org/wiki/Configuration_Options#Syslog_Settings" target="_blank">config options</a>.
+    </p>
+  </div>
+
+<?php
 }
 
 $pagetitle[] = 'Syslog';

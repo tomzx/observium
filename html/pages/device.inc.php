@@ -16,6 +16,31 @@
 if (empty($vars['device']) and !empty($vars['hostname']))
 {
   $vars['device'] = getidbyname($vars['hostname']);
+  if (empty($vars['device']))
+  {
+  ?>
+    <div class="alert alert-info">
+      <h3>Invalid hostname</h3>
+      <p>A device matching the given hostname was not found.</p>
+    </div>
+
+  <?php
+    break;
+  }
+
+}
+
+if (empty($vars['device']))
+{
+?>
+
+  <div class="alert alert-info">
+    <h3>No device specified</h3>
+    <p>A valid device was not specified in the URL.</p>
+  </div>
+
+<?php
+  break;
 }
 
 // Allow people to see this page if they have permission to see one of the ports, but don't show them tabs.
@@ -24,6 +49,19 @@ if ($vars['tab'] == "port" && is_numeric($vars['device']) && port_permitted($var
 {
   $check_device = get_device_id_by_port_id($vars['port']);
   $permit_ports = 1;
+
+  if($check_device != $vars['device'])
+  {
+  ?>
+
+  <div class="alert alert-danger">
+    <h3>Invalid device/port combination</h3>
+    <p>The port/device combination was invalid.</p>
+  </div>
+
+  <?php
+  }
+
 }
 
 // Only show if they have access to the whole device or a single port.
@@ -45,10 +83,6 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
   $attribs = get_dev_attribs($device['device_id']);
   $entity_state = get_dev_entity_state($device['device_id']);
   $device_state = unserialize($device['device_state']);
-
-#  print_r($device_state);
-
-#  print_r($entity_state);
 
   $pagetitle[] = $device['hostname'];
 
@@ -409,6 +443,6 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
   } else {
     include("includes/error-no-perm.inc.php");
   }
-}
+} 
 
 ?>
