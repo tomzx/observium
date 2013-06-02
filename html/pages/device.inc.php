@@ -11,6 +11,12 @@
  *
  */
 
+// If we've been given a hostname, try to retrieve the device_id
+
+if (empty($vars['device']) and !empty($vars['hostname']))
+{
+  $vars['device'] = getidbyname($vars['hostname']);
+}
 
 // Allow people to see this page if they have permission to see one of the ports, but don't show them tabs.
 

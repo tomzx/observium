@@ -1,6 +1,27 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage webui
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
 if (!isset($vars['view']) ) { $vars['view'] = "graphs"; }
+
+// If we've been given a 'ifdescr' variable, try to work out the port_id from this
+
+if (is_array($device) && empty($vars['port']) && !empty($vars['ifdescr']))
+{
+  $vars['port'] = get_port_id_by_ifDescr(
+    $device['device_id'],
+    base64_decode($vars['ifdescr'])
+  );
+}
 
 $sql  = "SELECT *, `ports`.`port_id` as `port_id`";
 $sql .= " FROM  `ports`";
