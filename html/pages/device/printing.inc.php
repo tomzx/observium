@@ -1,5 +1,7 @@
 <?php
 
+echo('<table class="table table-condensed table-striped">');
+
 $graph_title = "Toner";
 $graph_type = "device_toner";
 
@@ -61,6 +63,8 @@ if (get_dev_attrib($device, "wastebox_oid"))
 
   include("includes/print-device-graph.php");
 }
+
+echo('</table>');
 
 $pagetitle[] = "Printing";
 
