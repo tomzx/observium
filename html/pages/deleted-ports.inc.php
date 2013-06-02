@@ -1,40 +1,40 @@
 <?php
 
-$pagetitle[] = "Deleted ports";
+$pagetitle[] = 'Deleted ports';
 
-if ($vars['purge'] == "all")
+if ($vars['purge'] == 'all')
 {
-  foreach (dbFetchRows("SELECT * FROM `ports` AS P, `devices` as D WHERE P.`deleted` = '1' AND D.device_id = P.device_id") as $interface)
+  foreach (dbFetchRows('SELECT * FROM `ports` AS P, `devices` as D WHERE P.`deleted` = "1" AND D.device_id = P.device_id') as $port)
   {
-    if (port_permitted($interface['port_id'], $interface['device_id']))
+    if (port_permitted($port['port_id'], $port['device_id']))
     {
-      delete_port($interface['port_id']);
-      echo("<div class=infobox>Deleted ".generate_device_link($interface)." - ".generate_port_link($interface)."</div>");
+      delete_port($port['port_id']);
+      echo('<div class=infobox>Deleted '.generate_device_link($port).' - '.generate_port_link($port).'</div>');
     }
   }
 } elseif ($vars['purge']) {
-  $interface = dbFetchRow("SELECT * from `ports` AS P, `devices` AS D WHERE `port_id` = ? AND D.device_id = P.device_id", array($vars['purge']));
-  if (port_permitted($interface['port_id'], $interface['device_id']))
-  delete_port($interface['port_id']);
-  echo("<div class=infobox>Deleted ".generate_device_link($interface)." - ".generate_port_link($interface)."</div>");
+  $port = dbFetchRow('SELECT * from `ports` AS P, `devices` AS D WHERE `port_id` = ? AND D.device_id = P.device_id', array($vars['purge']));
+  if (port_permitted($port['port_id'], $port['device_id']))
+  delete_port($port['port_id']);
+  echo('<div class="infobox">Deleted '.generate_device_link($port).' - '.generate_port_link($port).'</div>');
 }
 
-echo("<table cellpadding=5 cellspacing=0 border=0 width=100%>");
-echo("<tr><td></td><td></td><td></td><td><a href='deleted-ports/purge=all/'><img src='images/16/cross.png' align=absmiddle></img> Purge All</a></td></tr>");
+echo('<table class="table table-striped table-bordered table-condensed">');
+echo('<thead><tr><th>Device</th><th>Port</th><th>Description</th><th style="text-align: right;"><a href="deleted-ports/purge=all/"><button class="btn btn-danger btn-small"><i class="icon-remove icon-white"></i> Purge All</button></a></th></tr></thead>');
 
-foreach (dbFetchRows("SELECT * FROM `ports` AS P, `devices` as D WHERE P.`deleted` = '1' AND D.device_id = P.device_id") as $interface)
+foreach (dbFetchRows('SELECT * FROM `ports` AS P, `devices` as D WHERE P.`deleted` = "1" AND D.device_id = P.device_id') as $port)
 {
-  humanize_port($interface);
-  if (port_permitted($interface['port_id'], $interface['device_id']))
+  humanize_port($port);
+  if (port_permitted($port['port_id'], $port['device_id']))
   {
-    echo("<tr class=list>");
-    echo("<td width=250>".generate_device_link($interface)."</td>");
-    echo("<td width=250>".generate_port_link($interface)."</td>");
-    echo("<td></td>");
-    echo("<td width=100><a href='deleted-ports/purge=".$interface['port_id']."/'><img src='images/16/cross.png' align=absmiddle></img> Purge</a></td>");
+    echo('<tr class="list">');
+    echo('<td width="200" class="strong">'.generate_device_link($port).'</td>');
+    echo('<td width="350" class="strong">'.generate_port_link($port).'</td>');
+    echo('<td>'.$port['ifAlias'].'</td>');
+    echo('<td width="100"><a href="deleted-ports/purge='.$port['port_id'].'/"><button class="btn btn-danger btn-small"><i class="icon-remove icon-white"></i> Purge</button></a></td>');
   }
 }
 
-echo("</table>");
+echo('</table>');
 
 ?>
