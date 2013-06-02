@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage webui
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
+
 // Allow people to see this page if they have permission to see one of the ports, but don't show them tabs.
 
 if ($vars['tab'] == "port" && is_numeric($vars['device']) && port_permitted($vars['port']))

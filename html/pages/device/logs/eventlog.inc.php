@@ -1,4 +1,17 @@
 <?php
+
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage webui
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
+
 unset($search, $types);
 
 //Message field
