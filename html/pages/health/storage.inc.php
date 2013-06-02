@@ -10,7 +10,7 @@ $sql .= " ORDER BY `hostname`, `storage_descr`";
 
 if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
 
-echo('<table class="table '.$stripe_class.' table-condensed" style="margin-top: 10px;">');
+echo('<table class="table '.$stripe_class.' table-condensed table-bordered">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="250"><a href="'. generate_url($vars, array('sort' => 'hostname')).'">Device</a></th>');

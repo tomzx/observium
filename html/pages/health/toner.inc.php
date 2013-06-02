@@ -2,16 +2,20 @@
 
 $graph_type = "toner_usage";
 
-echo("<div style='padding: 5px;'>
-        <table width=100% cellspacing=0 cellpadding=6 class='sortable'>");
+if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
+
+echo('<table class="table '.$stripe_class.' table-bordered table-condensed">');
+echo('  <thead>');
 
 echo("<tr class=strong>
         <th width=280>Device</th>
         <th>Toner</th>
         <th width=100></th>
-        <th width=280>Usage</th>
-        <th width=50>Used</th>
+        <th width=200>Usage</th>
+        <th width=70>Used</th>
       </tr>");
+
+echo('</thead>');
 
 foreach (dbFetchRows("SELECT * FROM `toner` AS S, `devices` AS D WHERE S.device_id = D.device_id ORDER BY D.hostname, S.toner_descr") as $toner)
 {
@@ -39,11 +43,13 @@ foreach (dbFetchRows("SELECT * FROM `toner` AS S, `devices` AS D WHERE S.device_
 
     $background = get_percentage_colours(100 - $perc);
 
-    echo("<tr class='health'><td>" . generate_device_link($toner) . "</td><td class=strong>" . $toner['toner_descr'] . "</td>
-         <td>$mini_graph</td>
+    /// FIXME - popup for toner entity.
+
+    echo('<tr><td class="strong">' . generate_device_link($toner) . '</td><td class="strong">' . $toner['toner_descr'] . '</td>
+         <td>'.$mini_graph.'</td>
          <td>
-          <a href='#' $store_popup>".print_percentage_bar (400, 20, $perc, "$perc%", "ffffff", $background['left'], $free, "ffffff", $background['right'])."</a>
-          </td><td>$perc"."%</td></tr>");
+          <a href="#">'.print_percentage_bar (400, 20, $perc, "$perc%", "ffffff", $background['left'], $free, "ffffff", $background['right']).'</a>
+          </td><td>'.$perc.'%</td></tr>');
 
     if ($vars['view'] == "graphs")
     {
@@ -61,6 +67,6 @@ foreach (dbFetchRows("SELECT * FROM `toner` AS S, `devices` AS D WHERE S.device_
   }
 }
 
-echo("</table></div>");
+echo("</table>");
 
 ?>

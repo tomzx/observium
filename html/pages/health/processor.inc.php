@@ -4,7 +4,7 @@ $graph_type = "processor_usage";
 
 if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
 
-echo('<table class="table '.$stripe_class.' table-condensed" style="margin-top: 10px;">');
+echo('<table class="table '.$stripe_class.' table-condensed table-bordered">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="200">Device</th>');

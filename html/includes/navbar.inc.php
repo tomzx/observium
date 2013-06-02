@@ -285,6 +285,8 @@ foreach (dbFetchRows("SELECT sensor_class,COUNT(sensor_id) AS c FROM sensors GRO
   #$config['sensor_types']['current']
 }
 
+
+
 // Copy the variable so we can use $used_sensors later in other parts of the code
 $menu_sensors = $used_sensors;
 
@@ -300,6 +302,12 @@ $menu_sensors = $used_sensors;
 $items = array('mempool' => array('text' => "Memory", 'icon' => 'oicon-memory'),
                'processor' => array('text' => "Processors", 'icon' => 'oicon-processor'),
                'storage' => array('text' => "Storage", 'icon' => 'oicon-drive'));
+
+if(dbFetchCell("SELECT count(*) FROM `toner`"))
+{
+  $items['toner'] = array('text' => "Toner", 'icon' => 'oicon-contrast');
+  $toner_exists = TRUE;
+}
 
 foreach ($items as $item => $item_data)
 {

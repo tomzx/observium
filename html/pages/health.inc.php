@@ -1,6 +1,9 @@
 <?php
 
 $datas = array('processor','mempool','storage');
+
+if ($toner_exists) $datas[] = 'toner';
+
 if ($used_sensors['temperature']) $datas[] = 'temperature';
 if ($used_sensors['humidity']) $datas[] = 'humidity';
 if ($used_sensors['fanspeed']) $datas[] = 'fanspeed';
@@ -9,6 +12,7 @@ if ($used_sensors['frequency']) $datas[] = 'frequency';
 if ($used_sensors['current']) $datas[] = 'current';
 if ($used_sensors['power']) $datas[] = 'power';
 if ($used_sensors['dBm']) $datas[] = 'dBm';
+
 
 // FIXME generalize -> static-config ?
 $type_text['overview'] = "Overview";

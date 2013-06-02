@@ -4,7 +4,7 @@ $graph_type = "mempool_usage";
 
 if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
 
-echo('<table class="table '.$stripe_class.' table-condensed">');
+echo('<table class="table '.$stripe_class.' table-bordered table-condensed">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th width="250">Device</th>');
