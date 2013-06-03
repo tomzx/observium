@@ -157,10 +157,38 @@ function format_number_short($number, $sf)
 
 function external_exec($command)
 {
-  global $debug;
+  global $debug, $exec_status;
+
+  //$command = str_replace(' 2>/dev/null', '', $command);
+  $exec_status = array('command' => $command);
 
   if ($debug) { echo($command."\n"); }
-  $output = shell_exec($command);
+  //$output = shell_exec($command); // old way
+
+  $descriptorspec = array(
+    //0 => array('pipe', 'r'), // stdin
+    1 => array('pipe', 'w'), // stdout
+    2 => array('pipe', 'w')  // stderr
+  );
+  $process = proc_open($command, $descriptorspec, $pipes);
+  stream_set_blocking($pipes[2], 0); // Set nonblocking STDERR (very, very speeds up executing)
+  if (is_resource($process))
+  {
+    $exec_status['error'] = stream_get_contents($pipes[2]);
+    if ($exec_status['error'])
+    {
+      $output = FALSE;
+    } else {
+      $output = stream_get_contents($pipes[1]);
+    }
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    $exec_status['status'] = proc_close($process);
+  } else {
+    $output = FALSE;
+    $exec_error['error'] = '';
+    $exec_status['status'] = -1;
+  }
   if ($debug) { echo($output."\n"); }
 
   return $output;

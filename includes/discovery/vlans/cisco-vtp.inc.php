@@ -30,6 +30,11 @@ if ($device['os_group'] == "cisco")
           $vlan_update['vlan_mtu'] = $vlan['vtpVlanMtu'];
         }
 
+        if (is_array($vlans_db[$vtpdomain_id][$vlan_id]) && $vlans_db[$vtpdomain_id][$vlan_id]['vlan_status'] != $vlan['vtpVlanState'])
+        {
+          $vlan_update['vlan_status'] = $vlan['vtpVlanState'];
+        }
+        
         echo(" $vlan_id");
         if (is_array($vlan_update))
         {

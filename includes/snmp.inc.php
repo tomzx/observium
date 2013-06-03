@@ -348,10 +348,13 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
 {
   global $debug,$config,$runtime_stats;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];  }
+  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
+  {
+    $timeout = $device['timeout'];
+  } elseif (isset($config['snmp']['timeout']))
+  {
+    $timeout =  $config['snmp']['timeout'];
+  }
 
   if (is_numeric($device['retries']) && $device['retries'] > 0) {
     $retries = $device['retries'];
@@ -361,10 +364,12 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
   if (!isset($device['transport']))  {
     $device['transport'] = "udp";  }
 
-  if ($device['snmpver'] == 'v1' || (isset($config['os'][$device['os']]['nobulk']) && $config['os'][$device['os']]['nobulk']))  {
+  if ($device['snmpver'] == 'v1' || (isset($config['os'][$device['os']]['nobulk']) && $config['os'][$device['os']]['nobulk']))
+  {
     $snmpcommand = $config['snmpwalk'];
   } else {
-    $snmpcommand = $config['snmpbulkwalk']; }
+    $snmpcommand = $config['snmpbulkwalk'];
+  }
 
   $cmd = $snmpcommand." ".snmp_gen_auth($device);
 
@@ -404,9 +409,10 @@ function snmpwalk_cache_cip($device, $oid, $array, $mib = 0)
 
   if (is_numeric($device['timeout']) && $device['timeout'] > 0)
   {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
+    $timeout = $device['timeout'];
+  } elseif (isset($config['snmp']['timeout']))
+  {
+    $timeout =  $config['snmp']['timeout'];
   }
 
   if (is_numeric($device['retries']) && $device['retries'] > 0)
@@ -473,9 +479,10 @@ function snmp_cache_ifIndex($device)
 
   if (is_numeric($device['timeout']) && $device['timeout'] > 0)
   {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
+    $timeout = $device['timeout'];
+  } elseif (isset($config['snmp']['timeout']))
+  {
+    $timeout =  $config['snmp']['timeout'];
   }
 
   if (is_numeric($device['retries']) && $device['retries'] > 0)
@@ -966,44 +973,52 @@ function snmp_gen_auth (&$device)
 {
   global $debug;
 
-  $cmd = "";
-
-  if ($device['snmpver'] === "v3")
+  $cmd = '';
+  $vlan = FALSE;
+  if (isset($device['snmpcontext']))
   {
-    $cmd = " -v3 -n \"\" -l " . $device['authlevel'];
-
-    if ($device['authlevel'] === "noAuthNoPriv")
+    if (is_numeric($device['snmpcontext']) && $device['snmpcontext'] > 0 && $device['snmpcontext'] < 4096 )
     {
-      // We have to provide a username anyway (see Net-SNMP doc)
-      $cmd .= " -u observium";
-    }
-    elseif ($device['authlevel'] === "authNoPriv")
-    {
-      $cmd .= " -a " . $device['authalgo'];
-      $cmd .= " -A \"" . $device['authpass'] . "\"";
-      $cmd .= " -u " . $device['authname'];
-    }
-    elseif ($device['authlevel'] === "authPriv")
-    {
-      $cmd .= " -a " . $device['authalgo'];
-      $cmd .= " -A \"" . $device['authpass'] . "\"";
-      $cmd .= " -u " . $device['authname'];
-      $cmd .= " -x " . $device['cryptoalgo'];
-      $cmd .= " -X \"" . $device['cryptopass'] . "\"";
-    }
-    else
-    {
-      if ($debug) { print "DEBUG: " . $device['snmpver'] ." : Unsupported SNMPv3 AuthLevel (wtf have you done ?)\n"; }
+      $vlan = $device['snmpcontext'];
     }
   }
-  elseif ($device['snmpver'] === "v2c" or $device['snmpver'] === "v1")
+  switch($device['snmpver'])
   {
-    $cmd  = " -" . $device['snmpver'];
-    $cmd .= " -c " . $device['community'];
-  }
-  else
-  {
-    if ($debug) { print "DEBUG: " . $device['snmpver'] ." : Unsupported SNMP Version (wtf have you done ?)\n"; }
+    case 'v3':
+      $cmd = ' -v3 -l ' . $device['authlevel'];
+      /* NOTE.
+       * For proper work of 'vlan-' context on cisco, it is necessary to add 'match prefix' in snmp-server config --mike
+       * example: snmp-server group MONITOR v3 auth match prefix access SNMP-MONITOR
+       */
+      $cmd .= ($vlan) ? ' -n "vlan-' . $vlan . '"' : ' -n ""'; // Some devices, like HP, always require option '-n'
+      
+      switch($device['authlevel'])
+      {
+        case 'authPriv':
+          $cmd .= ' -x ' . $device['cryptoalgo'];
+          $cmd .= ' -X "' . $device['cryptopass'] . '"';
+        case 'authNoPriv':
+          $cmd .= ' -a ' . $device['authalgo'];
+          $cmd .= ' -A "' . $device['authpass'] . '"';
+          $cmd .= ' -u ' . $device['authname'];
+          break;
+        case 'noAuthNoPriv':
+          // We have to provide a username anyway (see Net-SNMP doc)
+          $cmd .= ' -u observium';
+          break;
+        default:
+          if ($debug) { print 'DEBUG: ' . $device['authlevel'] . ' : Unsupported SNMPv3 AuthLevel.' . PHP_EOL; }
+      }
+      break;
+    
+    case 'v2c':
+    case 'v1':
+      $cmd  = ' -' . $device['snmpver'];
+      $cmd .= ' -c ' . $device['community'];
+      if ($vlan) { $cmd .= '@' . $vlan; }
+      break;
+    default:
+      if ($debug) { print 'DEBUG: ' . $device['snmpver'] . ' : Unsupported SNMP Version.' . PHP_EOL; }
   }
 
   if ($debug) { print "DEBUG: SNMP Auth options = $cmd\n"; }

@@ -74,7 +74,7 @@ function discover_new_device($hostname, $source = 'xdp')
 
 function discover_device($device, $options = NULL)
 {
-  global $config, $valid;
+  global $config, $valid, $exec_status;
 
   $valid = array(); // Reset $valid array
 

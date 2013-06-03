@@ -1654,6 +1654,16 @@ function rewrite_unix_hardware($hardware)
   return ($hardware);
 }
 
+function rewrite_ftos_vlanid($device, $ifindex)
+{
+  // damn DELL use them one known indexes
+  //dot1qVlanStaticName.1107787777 = Vlan 1
+  //dot1qVlanStaticName.1107787998 = mgmt
+  $ftos_vlan = dbFetchCell('SELECT ifName FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?', array($device['device_id'], $ifindex));
+  list(,$vlanid) = explode(' ', $ftos_vlan);
+  return $vlanid;
+}
+
 function fixiftype ($type)
 {
   global $rewrite_iftype;

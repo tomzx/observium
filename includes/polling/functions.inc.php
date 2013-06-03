@@ -143,7 +143,7 @@ function poll_sensor($device, $class, $unit)
 
 function poll_device($device, $options)
 {
-  global $config, $debug, $device, $polled_devices, $db_stats, $memcache;
+  global $config, $debug, $device, $polled_devices, $db_stats, $memcache, $exec_status;
 
   $old_device_state = unserialize($device['device_state']);
 
