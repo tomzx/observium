@@ -26,7 +26,7 @@
 
 .well-small {
   padding: @baseMargin / 2;
-  margin-bottom: @baseMargin / 2;
+  margin-bottom: @baseMargin;
   .border-radius(@baseBorderRadius);
 }
 
@@ -38,7 +38,8 @@
 
 .info_box { 
     margin-top: @baseMargin * 2;
-    margin-bottom: @baseMargin * 2;
+    margin-bottom: 0; // This will cause some messy things in places, but it prevents double margin for infoboxes. adama.
+    padding-bottom: 10px;
 }
 
 .info_box #title { 

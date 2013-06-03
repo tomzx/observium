@@ -45,11 +45,9 @@ $ports_info = array("ports" => $count, "capacity" => $speed);
 
 ?>
 
-<div class="row-fluid">
-  <div class="span12 well info_box">
+  <div class="well info_box">
     <div id="title"><i class="oicon-network-ethernet"></i> Billed Ports</div>
     <div id="content">
       <?php echo($res); ?>
     </div>
   </div>
-</div>

@@ -10,8 +10,7 @@
 
 ?>
 
-<div class="row-fluid">
- <div class="span12 well info_box">
+ <div class="well info_box">
   <div id="title"><i class="oicon-information"></i> Historical Usage Overview</div>
   <div id="content">
 
@@ -161,7 +160,6 @@
   }
   echo("      </tobdy>");
   echo("    </table>");
-  echo("  </div>");
-  echo("</div>");
+  echo('  </div>');
 
 ?>
