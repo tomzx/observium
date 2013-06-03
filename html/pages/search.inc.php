@@ -2,7 +2,7 @@
 
 $pagetitle[] = "Search";
 
-$sections = array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'MAC Tables');
+$sections = array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC Address', 'arp' => 'ARP/NDP Tables', 'fdb' => 'FDB Tables');
 
 $navbar['brand'] = "Search";
 $navbar['class'] = "navbar-narrow";
