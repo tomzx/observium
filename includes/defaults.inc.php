@@ -403,21 +403,32 @@ $config['auth_mechanism']           = "mysql"; // Available mechanisms: mysql (d
 
 // LDAP Authentication
 
-$config['auth_ldap_version'] = 3;                    // LDAP client version (2 or 3)
-$config['auth_ldap_server'] = "ldap.yourserver.com"; // LDAP server name
-$config['auth_ldap_port']   = 389;                   // LDAP server port
-$config['auth_ldap_starttls'] = 'no';                // Use STARTTLS ('no', 'optional' or 'require')
+$config['auth_ldap_version'] = 3;                     // LDAP client version (2 or 3)
+$config['auth_ldap_server'] = "ldap.yourserver.com";  // LDAP server name
+$config['auth_ldap_port']   = 389;                    // LDAP server port
+$config['auth_ldap_starttls'] = 'no';                 // Use STARTTLS ('no', 'optional' or 'require')
 $config['auth_ldap_prefix'] = "uid=";
 $config['auth_ldap_suffix'] = ",ou=People,dc=example,dc=com";
 $config['auth_ldap_group']  = "cn=observium,ou=groups,dc=example,dc=com";
+$config['auth_ldap_groupbase'] = "ou=groups,dc=example,dc=com";
 
-$config['auth_ldap_groupbase'] = "ou=group,dc=example,dc=com";
-$config['auth_ldap_groupmembertype'] = "nodn";       // Available membertypes: 'nodn' (default, used $username);
-                                                     // 'fulldn' ($config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'])
-$config['auth_ldap_groupmemberattr'] = "memberUid";  // Use your unique attribute for username, example "uniqueMember".
-$config['auth_ldap_groups']['admin']['level'] = 10;
-$config['auth_ldap_groups']['pfy']['level'] = 7;
-$config['auth_ldap_groups']['support']['level'] = 1;
+$config['auth_ldap_binddn'] = ""; // Initial LDAP bind dn and password, leave empty for anonymous bind
+$config['auth_ldap_bindpw'] = "";
+
+$config['auth_ldap_attr']['uid'] = "uid";             // LDAP attribute containing the user login name
+$config['auth_ldap_attr']['uidNumber'] = "uidNumber"; // LDAP attribute containing the numeric user ID
+$config['auth_ldap_attr']['cn'] = "cn";               // LDAP attribute containing the user's full name
+
+$config['auth_ldap_objectclass'] = "posixAccount";    // objectClass to filter out valid users, use * for all objects under ldap_suffix tree
+
+
+$config['auth_ldap_groupmembertype'] = "nodn";        // Available membertypes: 'nodn' (default, uses $username);
+                                                      // 'fulldn' ($config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'])
+$config['auth_ldap_groupmemberattr'] = "memberUid";   // Use your unique attribute for username, example "uniqueMember".
+
+#$config['auth_ldap_groups']['admin']['level'] = 10;  // Assign levels to certain LDAP groups
+#$config['auth_ldap_groups']['pfy']['level'] = 7;
+#$config['auth_ldap_groups']['support']['level'] = 1;
 
 // Sensors
 
