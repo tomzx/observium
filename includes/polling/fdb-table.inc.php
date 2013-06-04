@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage poller
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
 echo("FDB Tables\n");
 
 // Build ifIndex > port cache table
@@ -32,7 +43,7 @@ if ($device['os_group'] == 'cisco')
     $vlan = $cisco_vlan['vlan_vlan'];
     if ($vlan >= 1002 && $vlan <= 1005) { continue; }
     $device['snmpcontext'] = $vlan; // Add vlan context for snmp auth
-    
+
     // Build dot1dBasePort
     //dot1dBasePortIfIndex.28 = 10128
     $dot1dBasePortIfIndex = snmpwalk_cache_oid($device, 'dot1dBasePortIfIndex', $port_stats, 'BRIDGE-MIB', mib_dirs());
