@@ -466,6 +466,7 @@ $config['os'][$os]['text']              = "SAOS";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "ciena";
 $config['os'][$os]['ifXmcbc']           = 1;
+$config['os'][$os]['ifname']            = 1;
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Device Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
