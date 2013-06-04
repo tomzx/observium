@@ -414,6 +414,7 @@ $config['auth_ldap_groupbase'] = "ou=groups,dc=example,dc=com";
 
 $config['auth_ldap_binddn'] = ""; // Initial LDAP bind dn and password, leave empty for anonymous bind
 $config['auth_ldap_bindpw'] = "";
+$config['auth_ldap_bindanonymous'] = FALSE;
 
 $config['auth_ldap_attr']['uid'] = "uid";             // LDAP attribute containing the user login name
 $config['auth_ldap_attr']['uidNumber'] = "uidNumber"; // LDAP attribute containing the numeric user ID

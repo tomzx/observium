@@ -31,9 +31,14 @@ function ldap_bind_dn($username = "", $password = "")
       return 1;
     }
   } else {
-    # Try anonymous bind, if this doesnt work, use user's username and password as passed to the function
-    if (!ldap_bind($ds))
+    # Try anonymous bind if configured to do so
+    if ($config['auth_ldap_bindanonymous'])
     {
+      if (!ldap_bind($ds))
+      {
+        return 1;
+      }
+    } else {
       if (!ldap_bind($ds, $config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'], $password))
       {
         return 1;
