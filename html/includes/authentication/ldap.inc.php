@@ -22,9 +22,9 @@ function ldap_bind_dn($username = "", $password = "")
 {
   global $config, $debug, $ds;
 
-  if ($debug) { echo("LDAP[Bind][" . $config['auth_ldap_binddn'] . "]\n"); }
   if ($config['auth_ldap_binddn'])
   {
+    if ($debug) { echo("LDAP[Bind][" . $config['auth_ldap_binddn'] . "]\n"); }
     if (!ldap_bind($ds, $config['auth_ldap_binddn'], $config['auth_ldap_bindpw']))
     {
       print_message("Error binding to LDAP server " . $config['auth_ldap_server']);
@@ -34,11 +34,13 @@ function ldap_bind_dn($username = "", $password = "")
     # Try anonymous bind if configured to do so
     if ($config['auth_ldap_bindanonymous'])
     {
+      if ($debug) { echo("LDAP[Bind][anonymous]\n"); }
       if (!ldap_bind($ds))
       {
         return 1;
       }
     } else {
+      if ($debug) { echo("LDAP[Bind][" . $config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'] . "]\n"); }
       if (!ldap_bind($ds, $config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'], $password))
       {
         return 1;
