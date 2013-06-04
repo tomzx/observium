@@ -4,7 +4,7 @@
 
 <table class="table table-striped">
 
-<?
+<?php
 
 $rrdfile = get_port_rrdfilename($device, $port);
 
