@@ -18,7 +18,7 @@ if ($config['auth_ldap_version'])
 }
 
 # Private function for this ldap module only
-function ldap_bind_dn()
+function ldap_bind_dn($username = "", $password = "")
 {
   global $config, $debug, $ds;
 
@@ -31,10 +31,13 @@ function ldap_bind_dn()
       return 1;
     }
   } else {
+    # Try anonymous bind, if this doesnt work, use user's username and password as passed to the function
     if (!ldap_bind($ds))
     {
-      print_message("Error binding anonymously to LDAP server " . $config['auth_ldap_server']);
-      return 1;
+      if (!ldap_bind($ds, $config['auth_ldap_prefix'] . $username . $config['auth_ldap_suffix'], $password))
+      {
+        return 1;
+      }
     }
   }
   
@@ -84,7 +87,7 @@ function authenticate($username,$password)
 
   if ($username && $ds)
   {
-    if (ldap_bind_dn()) { return 0; }
+    if (ldap_bind_dn($username, $password)) { return 0; }
 
     $binduser = ldap_dn_from_username($username);
     
@@ -142,7 +145,7 @@ function user_exists($username)
 {
   global $config, $ds;
 
-  if (ldap_bind_dn()) { return 0; }
+  if (ldap_bind_dn()) { return 0; } // Will not work without bind user or anon bind
 
   $binduser = ldap_dn_from_username($username);
     
