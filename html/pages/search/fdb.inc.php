@@ -2,15 +2,14 @@
 <div class="span12">
 
 <?php
-unset($search, $devices);
+unset($search, $devices, $vlans, $vlan_names);
 
-$devices[''] = 'All Devices';
-// Select the devices only with ARP/NDP tables
-foreach (dbFetchRows('SELECT D.device_id AS device_id, `hostname`
-                     FROM `vlans_fdb` AS V
-                     LEFT JOIN `devices` AS D ON V.device_id = D.device_id
-                     GROUP BY `device_id`
-                     ORDER BY `hostname`;') as $data)
+// Select devices and vlans only with FDB tables
+foreach (dbFetchRows('SELECT D.device_id AS device_id, `hostname`, vlan_vlan, vlan_name
+                     FROM `vlans_fdb` AS F
+                     LEFT JOIN `vlans` as V ON V.vlan_vlan = F.vlan_id AND V.device_id = F.device_id 
+                     LEFT JOIN `devices` AS D ON D.device_id = F.device_id
+                     GROUP BY device_id, vlan_vlan;') as $data)
 {
   $device_id = $data['device_id'];
   // Exclude not permited devices
@@ -18,15 +17,34 @@ foreach (dbFetchRows('SELECT D.device_id AS device_id, `hostname`
   {
     if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
     $devices[$device_id] = $data['hostname'];
+    $vlans[$data['vlan_vlan']] = 'Vlan' . $data['vlan_vlan'];
+    $vlan_names[$data['vlan_name']] = $data['vlan_name'];
   }
 }
 //Device field
+natcasesort($devices);
 $search[] = array('type'    => 'select',
-                  'name'    => 'Device',
+                  'width'   => '160px',
+                  'name'    => 'Devices',
                   'id'      => 'device_id',
                   'value'   => $vars['device_id'],
                   'values'  => $devices);
-
+//Vlans field
+ksort($vlans);
+$search[] = array('type'    => 'multiselect',
+                  'name'    => 'VLANs',
+                  'id'      => 'vlan_id',
+                  'value'   => $vars['vlan_id'],
+                  'values'  => $vlans);
+//Vlan names field
+natcasesort($vlan_names);
+$search[] = array('type'    => 'multiselect',
+                  'width'   => '160px',
+                  'name'    => 'VLAN names',
+                  'id'      => 'vlan_name',
+                  'value'   => $vars['vlan_name'],
+                  'values'  => $vlan_names);
+//MAC address field
 $search[] = array('type'    => 'text',
                   'name'    => 'MAC Address',
                   'id'      => 'address',

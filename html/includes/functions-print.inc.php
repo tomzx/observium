@@ -932,6 +932,26 @@ function print_fdbtable($vars)
           $where .= ' AND I.ifDescr LIKE ?';
           $param[] = $value;
           break;
+        case 'vlan_id':
+          if (!is_array($value)) { $value = array($value); }
+          $where .= ' AND (';
+          foreach ($value as $v)
+          {
+            $where .= "F.vlan_id = ? OR ";
+            $param[] = $v;
+          }
+          $where = substr($where, 0, -4) . ')';
+          break;
+        case 'vlan_name':
+          if (!is_array($value)) { $value = array($value); }
+          $where .= ' AND (';
+          foreach ($value as $v)
+          {
+            $where .= "V.vlan_name = ? OR ";
+            $param[] = $v;
+          }
+          $where = substr($where, 0, -4) . ')';
+          break;
         case 'address':
           $where .= ' AND F.`mac_address` LIKE ?';
           $param[] = '%'.str_replace(array(':', ' ', '-', '.', '0x'),'',mres($value)).'%';
