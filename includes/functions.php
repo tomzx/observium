@@ -26,7 +26,7 @@ include_once($config['install_dir'] . "/includes/dbFacile.php");
 include_once($config['install_dir'] . "/includes/geolocation.inc.php");
 
 // Include from PEAR
-set_include_path(get_include_path() . PATH_SEPARATOR . $config['install_dir'] . "/includes/pear");
+set_include_path($config['install_dir'] . "/includes/pear" . PATH_SEPARATOR . get_include_path());
 include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
 include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
 include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
@@ -34,7 +34,7 @@ include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
 if ($config['alerts']['email']['enable'])
 {
   // Use Pear::Mail
-  include_once("Mail/Mail.php");
+  include_once($config['install_dir'] . "/includes/pear/Mail/Mail.php");
 }
 
 function array_sort($array, $on, $order=SORT_ASC)
