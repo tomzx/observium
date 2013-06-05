@@ -29,7 +29,7 @@ function parse_ipmitool_sensor($device, $results, $source = 'ipmi')
 }
 
 // Poll a sensor
-function poll_sensor($device, $class, $unit)
+function poll_sensor($device, $class, $unit, &$oid_cache)
 {
   global $config, $agent_sensors, $ipmi_sensors;
 
@@ -44,19 +44,34 @@ function poll_sensor($device, $class, $unit)
 
     if ($sensor['poller_type'] == "snmp")
     {
-#      if ($class == "temperature" && $device['os'] == "papouch")
+      # if ($class == "temperature" && $device['os'] == "papouch")
+      // Why all temperature?
       if ($class == "temperature")
       {
         for ($i = 0;$i < 5;$i++) # Try 5 times to get a valid temp reading
         {
           if ($debug) echo("Attempt $i ");
-          $sensor_value =  preg_replace("/[^0-9.]/", "", snmp_get($device, $sensor['sensor_oid'], "-OUqnv", "SNMPv2-MIB"));
+          // Take value from $oid_cache if we have it, else snmp_get it
+          if(is_numeric($oid_cache[$sensor['sensor_oid']]))
+          {
+            if ($debug) echo("value taken from oid_cache ");
+            $sensor_value = $oid_cache[$sensor['sensor_oid']];
+          } else {
+            $sensor_value =  preg_replace("/[^0-9.]/", "", snmp_get($device, $sensor['sensor_oid'], "-OUqnv", "SNMPv2-MIB"));
+          }
 
           if (is_numeric($sensor_value) && $sensor_value != 9999) break; # TME sometimes sends 999.9 when it is right in the middle of an update;
           sleep(1); # Give the TME some time to reset
         }
       } else {
-        $sensor_value = trim(str_replace("\"", "", snmp_get($device, $sensor['sensor_oid'], "-OUqnv", "SNMPv2-MIB")));
+        // Take value from $oid_cache if we have it, else snmp_get it
+        if(is_numeric($oid_cache[$sensor['sensor_oid']]))
+        {
+          if ($debug) echo("value taken from oid_cache ");
+          $sensor_value = $oid_cache[$sensor['sensor_oid']];
+        } else {
+          $sensor_value = trim(str_replace("\"", "", snmp_get($device, $sensor['sensor_oid'], "-OUqnv", "SNMPv2-MIB")));
+        }
       }
     } else if ($sensor['poller_type'] == "agent")
     {
@@ -144,6 +159,8 @@ function poll_sensor($device, $class, $unit)
 function poll_device($device, $options)
 {
   global $config, $debug, $device, $polled_devices, $db_stats, $memcache, $exec_status;
+
+  $oid_cache = array();
 
   $old_device_state = unserialize($device['device_state']);
 
@@ -264,7 +281,13 @@ function poll_device($device, $options)
         {
           if ($debug) { echo("including: includes/polling/$module.inc.php\n"); }
 
+          $m_start = utime();
           include('includes/polling/'.$module.'.inc.php');
+          $m_end   = utime();
+          $m_run   = round($m_end - $m_start, 4);
+          $device_state['poller_mod_perf'][$module] = $m_run;
+          echo("Module time: ".$m_run."s");
+
         } elseif (isset($attribs['poll_'.$module]) && $attribs['poll_'.$module] == "0") {
           echo("Module [ $module ] disabled on host.\n");
         } else {
@@ -272,6 +295,7 @@ function poll_device($device, $options)
         }
       }
     }
+
 
     if (!isset($options['m']))
     {
@@ -304,7 +328,7 @@ function poll_device($device, $options)
       }
     }
 
-    $device_end = utime(); $device_run = $device_end - $device_start; $device_time = substr($device_run, 0, 5);
+    $device_end = utime(); $device_run = $device_end - $device_start; $device_time = round($device_run, 4);
 
     $update_array['last_polled'] = array('NOW()');
     $update_array['last_polled_timetaken'] = $device_time;

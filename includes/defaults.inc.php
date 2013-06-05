@@ -162,8 +162,8 @@ $config['alerts']['email']['default_only'] = FALSE;    // Only use default recip
 $config['alerts']['email']['enable']       = FALSE;    // Enable email alerts
 $config['alerts']['bgp']['whitelist']      = NULL;     // Populate as an array() with ASNs to alert on.
 
-$config['alerts']['port']['ifdown']['enable']  = FALSE;    // Generate alerts for ports that go down
-$config['alerts']['port']['ifdown']['iftype']  = array('core', 'transit', 'peering');    // Generate alerts for ports that go down
+$config['alerts']['port']['ifdown']        = FALSE;    // Generate alerts for ports that go down
+$config['alerts']['port']['ifdown_types']  = array('core', 'transit', 'peering');    // Generate alerts for ports that go down
 
 // Port bandwidth threshold percentage %age utilisation above this will cause an alert
 

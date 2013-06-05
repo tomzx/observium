@@ -553,6 +553,23 @@ function snmpwalk_values($device, $oid, $array, $mib = NULL, $mibdir = NULL)
   return $array;
 }
 
+
+function snmpwalk_numericoids($device, $oid, $array, $mib = NULL, $mibdir = NULL)
+{
+  $data = snmp_walk($device, $oid, "-OQUn", $mib, $mibdir);
+  foreach (explode("\n", $data) as $entry)
+  {
+    list($oid,$value) = explode("=", $entry, 2);
+    $oid = trim($oid); $value = trim($value);
+    if (!strstr($value, "at this OID") && isset($oid))
+    {
+      $array[$oid] = $value;
+    }
+  }
+
+  return $array;
+}
+
 function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL, $set_cache = FALSE)
 {
   global $cache;

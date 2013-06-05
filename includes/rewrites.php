@@ -71,6 +71,8 @@ function humanize_device(&$device)
 {
   global $config;
 
+  $device['state'] = unserialize($device['device_state']);
+
   // Set the HTML class and Tab color for the device based on status
   if ($device['status'] == '0')
   {
