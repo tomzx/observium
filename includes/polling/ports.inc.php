@@ -450,7 +450,7 @@ foreach ($ports as $port)
     // End Update Database
 
     // Send alerts for interface flaps.
-    if ($port['ignore'] == 0 && $config['alerts']['port']['ifdown'] && ($port['ifOperStatus'] != $this_port['ifOperStatus']))
+    if ($port['ignore'] == 0 && $config['alerts']['port']['ifdown']['enable'] && ($port['ifOperStatus'] != $this_port['ifOperStatus']))
     {
       if ($this_port['ifAlias'])
       {
