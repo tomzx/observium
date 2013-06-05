@@ -450,12 +450,16 @@ foreach ($ports as $port)
     // End Update Database
 
     // Send alerts for interface flaps.
-    $port_ifdown = (isset($port_ifAlias['type']) ? in_array($port_ifAlias['type'], $config['alerts']['port']['ifdown']['iftype']) : TRUE;
+
+    # no unreadable ternary bullshit
+#    $port_ifdown = (isset($port_ifAlias['type']) ? in_array($port_ifAlias['type'], $config['alerts']['port']['ifdown']['iftype']) : TRUE;
+
     if ($port['ignore'] == 0 && $config['alerts']['port']['ifdown']['enable'] && $port_ifdown && ($port['ifOperStatus'] != $this_port['ifOperStatus']))
     {
       if ($this_port['ifAlias'])
       {
-        $falias = preg_replace('/^"/', '', $this_port['ifAlias']); $falias = preg_replace('/"$/', '', $falias); $full = $this_port['ifDescr'] . " (" . $falias . ")";
+        $falias = preg_replace('/^"/', '', $this_port['ifAlias']); $falias = preg_replace('/"$/', '', $falias);
+        $full = $this_port['ifDescr'] . " (" . $falias . ")";
       } else {
         $full = $this_port['ifDescr'];
       }
