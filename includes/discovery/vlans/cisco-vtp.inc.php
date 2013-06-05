@@ -34,7 +34,7 @@ if ($device['os_group'] == "cisco")
         {
           $vlan_update['vlan_status'] = $vlan['vtpVlanState'];
         }
-        
+
         echo(" $vlan_id");
         if (is_array($vlan_update))
         {

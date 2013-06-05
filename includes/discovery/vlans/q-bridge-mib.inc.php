@@ -28,7 +28,7 @@ if ($vlanversion == 'version1')
     {
       $vlan_update['vlan_status'] = $vlan['dot1qVlanStaticRowStatus'];
     }
-    
+
     echo(" $vlan_id");
     if (is_array($vlan_update))
     {

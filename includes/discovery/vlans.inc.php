@@ -43,16 +43,16 @@ foreach ($device['vlans'] as $domain_id => $vlans)
           echo("ERROR: For proper work please use SNMP v2/v1 for this device\n");
           break;
         }
-        $device['snmpcontext'] = $vlan_id;
-        $vlan_data = snmpwalk_cache_oid($device, "dot1dStpPortEntry", array(), "BRIDGE-MIB:Q-BRIDGE-MIB");
+        $device_context = array_merge($device, array('snmpcontext' => $vlan_id));
+
+        $vlan_data = snmpwalk_cache_oid($device_context, "dot1dStpPortEntry", array(), "BRIDGE-MIB:Q-BRIDGE-MIB");
         // Detection shit snmpv3 authorization errors for contexts
         if ($exec_status['status'] != 0)
         {
           echo("ERROR: For proper work of 'vlan-' context on cisco device with SNMPv3, it is necessary to add 'match prefix' in snmp-server config\n");
           break;
         }
-        $vlan_data = snmpwalk_cache_oid($device, "dot1dBasePortEntry", $vlan_data, "BRIDGE-MIB:Q-BRIDGE-MIB");
-        unset($device['snmpcontext']);
+        $vlan_data = snmpwalk_cache_oid($device_context, "dot1dBasePortEntry", $vlan_data, "BRIDGE-MIB:Q-BRIDGE-MIB");
       }
 
       echo("VLAN $vlan_id \n");

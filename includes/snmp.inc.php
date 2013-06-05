@@ -995,7 +995,7 @@ function snmp_gen_auth (&$device)
        * example: snmp-server group MONITOR v3 auth match prefix access SNMP-MONITOR
        */
       $cmd .= ($vlan) ? ' -n "vlan-' . $vlan . '"' : ' -n ""'; // Some devices, like HP, always require option '-n'
-      
+
       switch($device['authlevel'])
       {
         case 'authPriv':
@@ -1014,7 +1014,7 @@ function snmp_gen_auth (&$device)
           if ($debug) { print 'DEBUG: ' . $device['authlevel'] . ' : Unsupported SNMPv3 AuthLevel.' . PHP_EOL; }
       }
       break;
-    
+
     case 'v2c':
     case 'v1':
       $cmd  = ' -' . $device['snmpver'];
