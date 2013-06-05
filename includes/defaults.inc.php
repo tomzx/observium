@@ -172,7 +172,7 @@ $config['uptime_warning']                  = "84600";  // Time in seconds to dis
 
 // Proxy
 
-#$config['proxy'] = "yourproxy:80";                    // Proxy for HTTP/HTTPS requests (e.g. for geocoding)
+#$config['http_proxy'] = "yourproxy:80";                // Proxy for HTTP/HTTPS requests (e.g. for geocoding)
 
 // Geocoding Configuration
 

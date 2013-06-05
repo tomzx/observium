@@ -897,9 +897,9 @@ function get_http_request($request)
   $response = '';
 
   $opts = array('http' => array('timeout' => '20'));
-  if(isset($config['proxy']) && $config['proxy'])
+  if(isset($config['http_proxy']) && $config['http_proxy'])
   {
-    $opts['http']['proxy'] = 'tcp://' . $config['proxy'];
+    $opts['http']['proxy'] = 'tcp://' . $config['http_proxy'];
     $opts['http']['request_fulluri'] = TRUE;
   }
 
