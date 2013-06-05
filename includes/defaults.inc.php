@@ -165,10 +165,14 @@ $config['alerts']['port']['ifdown']        = FALSE;    // Generate alerts for po
 
 // Port bandwidth threshold percentage %age utilisation above this will cause an alert
 
-$config['alerts']['port_util_alert'] = FALSE;    // Disabled as default
-$config['alerts']['port_util_perc']  = 85;       // %age above which to alert
+$config['alerts']['port_util_alert']       = FALSE;    // Disabled as default
+$config['alerts']['port_util_perc']        = 85;       // %age above which to alert
 
-$config['uptime_warning']                  = "84600"; // Time in seconds to display a "Device Rebooted" Alert. 0 to disable warnings.
+$config['uptime_warning']                  = "84600";  // Time in seconds to display a "Device Rebooted" Alert. 0 to disable warnings.
+
+// Proxy
+
+#$config['proxy'] = "yourproxy:80";                    // Proxy for HTTP/HTTPS requests (e.g. for geocoding)
 
 // Geocoding Configuration
 

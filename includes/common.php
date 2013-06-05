@@ -891,4 +891,22 @@ function get_port_rrdfilename($device, $interface, $suffix = "")
   }
 }
 
+function get_http_request($request)
+{
+  global $config, $debug;
+  $response = '';
+
+  $opts = array('http' => array('timeout' => '20'));
+  if(isset($config['proxy']) && $config['proxy'])
+  {
+    $opts['http']['proxy'] = 'tcp://' . $config['proxy'];
+    $opts['http']['request_fulluri'] = TRUE;
+  }
+
+  $context = stream_context_create($opts);
+  $response = file_get_contents($request, FALSE, $context);
+
+  return $response;
+}
+
 ?>

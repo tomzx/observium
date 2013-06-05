@@ -7,9 +7,6 @@ function get_geolocation($address)
 {
   global $config, $debug;
   
-  ///FIXME. Need config option for default timeout or set in globally?
-  ini_set('default_socket_timeout', 20);
-  
   switch (strtolower($config['geocoding']['api']))
   {
     case 'osm':
@@ -53,7 +50,7 @@ function get_geolocation($address)
     } else {
       $request = $url.urlencode($address);
     }
-    $mapresponse = file_get_contents($request);
+    $mapresponse = get_http_request($request);
     $data = json_decode($mapresponse, true);
     if ($config['geocoding']['api'] == 'google')
     {
@@ -78,7 +75,7 @@ function get_geolocation($address)
         $csvArray = explode(",", $address);
         array_shift($csvArray);
         $address = implode(",", $csvArray);
-        $mapresponse = file_get_contents($url.urlencode($address));
+        $mapresponse = get_http_request($url.urlencode($address));
         $data = json_decode($mapresponse, true);
         /// We only want the first entry in the returned data.
         $data = $data[0];

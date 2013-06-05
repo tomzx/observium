@@ -49,52 +49,43 @@ $stat_serial = serialize($stats);
 $stat_base64 = base64_encode($stat_serial);
 
 $url = "http://update.observium.org/latest.php?i=".$stats['ports']."&d=".$stats['devices']."&v=".$config['version']."&stats=".$stat_base64;
-$dataHandle = fopen($url, r);
+$data = get_http_request($url);
 
-if ($dataHandle)
+if ($data)
 {
-  while (!feof($dataHandle))
-  {
-    $data.= fread($dataHandle, 4096);
-  }
-  if ($data)
-  {
-    list($omnipotence, $year, $month, $revision) = explode(".", $data);
-    list($cur, $tag) = explode("-", $config['version']);
-    list($cur_omnipotence, $cur_year, $cur_month, $cur_revision) = explode(".", $cur);
+  list($omnipotence, $year, $month, $revision) = explode(".", $data);
+  list($cur, $tag) = explode("-", $config['version']);
+  list($cur_omnipotence, $cur_year, $cur_month, $cur_revision) = explode(".", $cur);
 
-    if ($argv[1] == "--cron" || isset($options['q']))
+  if ($argv[1] == "--cron" || isset($options['q']))
+  {
+    $fd = fopen($config['log_file'],'a');
+    fputs($fd,$string . "\n");
+    fclose($fd);
+
+    shell_exec("echo $omnipotence.$year.$month.$month > ".$config['rrd_dir']."/version.txt ");
+  } else {
+    if ($cur != $data)
     {
-      $fd = fopen($config['log_file'],'a');
-      fputs($fd,$string . "\n");
-      fclose($fd);
+      echo("Current Revision : $cur_revision\n");
 
-      shell_exec("echo $omnipotence.$year.$month.$month > ".$config['rrd_dir']."/version.txt ");
-    } else {
-      if ($cur != $data)
+      if ($revision > $cur_revision)
       {
-        echo("Current Revision : $cur_revision\n");
-
-        if ($revision > $cur_revision)
-        {
-          echo("New Revision   : $revision\n");
-        }
-
-#        if ($omnipotence > $cur_omnipotence)
-#        {
-#          echo("New version     : $omnipotence.$year.$month.$revision\n");
-#        } elseif ($year > $cur_year) {
-#          echo("New version     : $omnipotence.$year.$month.$revision\n");
-#        } elseif ($month > $cur_month) {
-#          echo("New version     : $omnipotence.$year.$month.$revision\n");
-#        } elseif ($revision > $cur_revision) {
-#          echo("New release     : $omnipotence.$year.$month.$revision\n");
-#        }
+        echo("New Revision   : $revision\n");
       }
+
+      //if ($omnipotence > $cur_omnipotence)
+      //{
+      //  echo("New version     : $omnipotence.$year.$month.$revision\n");
+      //} elseif ($year > $cur_year) {
+      //  echo("New version     : $omnipotence.$year.$month.$revision\n");
+      //} elseif ($month > $cur_month) {
+      //  echo("New version     : $omnipotence.$year.$month.$revision\n");
+      //} elseif ($revision > $cur_revision) {
+      //  echo("New release     : $omnipotence.$year.$month.$revision\n");
+      //}
     }
   }
-
-  fclose($dataHandle);
 }
 
 ?>
