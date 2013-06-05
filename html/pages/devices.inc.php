@@ -219,7 +219,8 @@ $menu_options = array('bits'      => 'Bits',
                       'mempool'   => 'Memory',
                       'uptime'    => 'Uptime',
                       'storage'   => 'Storage',
-                      'diskio'    => 'Disk I/O'
+                      'diskio'    => 'Disk I/O',
+                      'poller_perf' => 'Poll Time'
                       );
 $sep = "";
 foreach ($menu_options as $option => $text)
@@ -268,7 +269,7 @@ foreach ($menu_options as $option => $text)
 
 $query = "SELECT * FROM `devices` " . $where . " ORDER BY hostname";
 
-list($format, $subformat) = explode("_", $vars['format']);
+list($format, $subformat) = explode("_", $vars['format'], 2);
 
 $devices = dbFetchRows($query, $sql_param);
 

@@ -115,8 +115,8 @@ $config['ports_page_default']      = "details"; // eg "details" or "basic"
 // SNMP Settings - Timeouts/Retries disabled as default
 #$config['snmp']['timeout'] = 1;            // timeout in seconds
 #$config['snmp']['retries'] = 5;            // how many times to retry the query
+$config['snmp']['max-rep'] = FALSE;         // allow use of -Cr in snmpbulkwalk vastly increasing walk speed
 $config['snmp']['transports'] = array('udp', 'udp6', 'tcp', 'tcp6');
-
 $config['snmp']['version'] = "v2c";         // Default version to use
 
 // SNMPv1/2c default settings
@@ -161,7 +161,9 @@ $config['alerts']['email']['default']      = NULL;     // Default alert recipien
 $config['alerts']['email']['default_only'] = FALSE;    // Only use default recipient
 $config['alerts']['email']['enable']       = FALSE;    // Enable email alerts
 $config['alerts']['bgp']['whitelist']      = NULL;     // Populate as an array() with ASNs to alert on.
-$config['alerts']['port']['ifdown']        = FALSE;    // Generate alerts for ports that go down
+
+$config['alerts']['port']['ifdown']['enable']  = FALSE;    // Generate alerts for ports that go down
+$config['alerts']['port']['ifdown']['iftype']  = array('core', 'transit', 'peering');    // Generate alerts for ports that go down
 
 // Port bandwidth threshold percentage %age utilisation above this will cause an alert
 

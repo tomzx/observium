@@ -369,6 +369,10 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
     $snmpcommand = $config['snmpwalk'];
   } else {
     $snmpcommand = $config['snmpbulkwalk'];
+    if($config['snmp']['max-rep'] == TRUE && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
+    {
+      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
+    }
   }
 
   $cmd = $snmpcommand." ".snmp_gen_auth($device);

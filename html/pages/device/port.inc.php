@@ -120,6 +120,12 @@ if ($_SESSION['userlevel'] == '10' && $config['enable_billing'])
   $navbars['main']['options_right']['bills'] = array('text' => 'Create Bill', 'icon' => 'oicon-money-coin', 'url' => generate_url(array('page' => 'bills', 'view' => 'add', 'port' => $port['port_id'])));
 }
 
+if ($_SESSION['userlevel'] == '10' )
+{
+  $navbars['main']['options_right']['data']['text'] = 'Data';
+}
+
+
 foreach ($navbars['main']['options'] as $option => $array)
 {
   if ($vars['view'] == $option) { $navbars['main']['options'][$option]['class'] .= " active"; }
