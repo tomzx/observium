@@ -1319,7 +1319,7 @@ $config['graph_types']['device']['netstat_udp']['descr'] = 'UDP Statistics';
 
 $config['graph_types']['device']['fdb_count']['section'] = 'system';
 $config['graph_types']['device']['fdb_count']['order'] = '0';
-$config['graph_types']['device']['fdb_count']['descr'] = 'MAC Addresses Learnt';
+$config['graph_types']['device']['fdb_count']['descr'] = 'FDB Table Usage';
 $config['graph_types']['device']['hr_processes']['section'] = 'system';
 $config['graph_types']['device']['hr_processes']['order'] = '0';
 $config['graph_types']['device']['hr_processes']['descr'] = 'Running Processes';

@@ -42,15 +42,22 @@ if ($device['os_group'] == 'cisco')
 
     $vlan = $cisco_vlan['vlan_vlan'];
     if ($vlan >= 1002 && $vlan <= 1005) { continue; }
-    $device['snmpcontext'] = $vlan; // Add vlan context for snmp auth
+    $device_context = $device;
+    $device_context['snmpcontext'] = $vlan; // Add vlan context for snmp auth
 
     // Build dot1dBasePort
     //dot1dBasePortIfIndex.28 = 10128
-    $dot1dBasePortIfIndex = snmpwalk_cache_oid($device, 'dot1dBasePortIfIndex', $port_stats, 'BRIDGE-MIB', mib_dirs());
+    $dot1dBasePortIfIndex = snmpwalk_cache_oid($device_context, 'dot1dBasePortIfIndex', $port_stats, 'BRIDGE-MIB', mib_dirs());
     // Detection shit snmpv3 authorization errors for contexts
     if ($exec_status['status'] != 0)
     {
-      echo("ERROR: For proper work of 'vlan-' context on cisco device with SNMPv3, it is necessary to add 'match prefix' in snmp-server config\n");
+      unset($device_context);
+      if ($device['snmpver'] == 'v3')
+      {
+        echo("ERROR: For proper work of 'vlan-' context on cisco device with SNMPv3, it is necessary to add 'match prefix' in snmp-server config\n");
+      } else {
+        echo("ERROR: Device does not support per-VLAN community\n");
+      }
       break;
     }
     foreach ($dot1dBasePortIfIndex as $dot1dbaseport => $data)
@@ -60,8 +67,8 @@ if ($device['os_group'] == 'cisco')
     //dot1dTpFdbAddress[0:7:e:6d:55:41] 0:7:e:6d:55:41
     //dot1dTpFdbPort[0:7:e:6d:55:41] 28
     //dot1dTpFdbStatus[0:7:e:6d:55:41] learned
-    $data = snmp_walk($device, 'dot1dTpFdbEntry', '-OqsX', 'BRIDGE-MIB');
-    unset($device['snmpcontext']);
+    $data = snmp_walk($device_context, 'dot1dTpFdbEntry', '-OqsX', 'BRIDGE-MIB');
+    unset($device_context);
 
     foreach (explode("\n", $data) as $text) {
       list(,$value) = explode(' ', $text);
@@ -97,6 +104,7 @@ if ($device['os_group'] == 'cisco')
 echo(str_pad("Vlan", 8) . " | " . str_pad("MAC",12) . " | " .  "Port                  (dot1d|ifIndex)" ." | ". str_pad("Status",16) . "\n".
 str_pad("", 90, "-")."\n");
 
+$fdb_count = 0;
 // Loop vlans
 foreach ($fdbs as $vlan => $macs)
 {
@@ -135,9 +143,22 @@ foreach ($fdbs as $vlan => $macs)
       // remove it from the existing list
       unset ($fdbs_db[$vlan][$mac]);
     }
+    $fdb_count++;
     echo("\n");
   }
 }
+
+if ($fdb_count)
+{
+  $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/fdb_count.rrd";
+  if (!is_file($rrd_file))
+  {
+    rrdtool_create($rrd_file, "DS:fdb:GAUGE:600:0:U ".$config['rrd_rra']);
+  }
+  rrdtool_update($rrd_file, "N:".$fdb_count);
+  $graphs['fdb_count'] = TRUE;
+}
+
 
 // Loop the existing list and delete anything remaining
 foreach ($fdbs_db as $vlan => $fdb_macs)
