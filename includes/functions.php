@@ -494,7 +494,7 @@ function createHost($host, $community = NULL, $snmpver, $port = 161, $transport 
 
   $device = array_merge($device, $v3);
 
-  $device['os']          = getHostOS($device);
+  $device['os']          = get_device_os($device);
   $device['sysName']     = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
   $device['location']    = snmp_get($device, "sysLocation.0", "-Oqv", "SNMPv2-MIB");
   $device['sysContact']  = snmp_get($device, "sysContact.0", "-Oqv", "SNMPv2-MIB");
