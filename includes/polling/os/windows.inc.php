@@ -8,6 +8,7 @@
 #sysDescr.0 = STRING: Hardware: EM64T Family 6 Model 26 Stepping 5 AT/AT COMPATIBLE - Software: Windows Version 5.2 (Build 3790 Multiprocessor Free)
 #sysDescr.0 = STRING: Hardware: Intel64 Family 6 Model 23 Stepping 6 AT/AT COMPATIBLE - Software: Windows Version 6.1 (Build 7600 Multiprocessor Free)
 #sysDescr.0 = STRING: Hardware: AMD64 Family 16 Model 8 Stepping 0 AT/AT COMPATIBLE - Software: Windows Version 6.1 (Build 7600 Multiprocessor Free)
+#sysDescr.0 = STRING: Hardware: Intel64 Family 6 Model 44 Stepping 2 AT/AT COMPATIBLE - Software: Windows Version 6.2 (Build 9200 Multiprocessor Free)
 
 if (strstr($poll_device['sysDescr'], "x86"))     { $hardware = "Generic x86"; }
 if (strstr($poll_device['sysDescr'], "ia64"))    { $hardware = "Intel Itanium IA64"; }
@@ -39,6 +40,7 @@ if($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.1") { // Workstation
   if (strstr($poll_device['sysDescr'], "Build 6002"))         { $version = "Server 2008 SP2 (NT 6.0)"; }
   if (strstr($poll_device['sysDescr'], "Build 7600"))         { $version = "Server 2008 R2 (NT 6.1)"; }
   if (strstr($poll_device['sysDescr'], "Build 7601"))         { $version = "Server 2008 R2 SP1 (NT 6.1)"; }
+  if (strstr($poll_device['sysDescr'], "Build 9200"))         { $version = "Server 2012 (NT 6.2)"; }
   $windows_type = "server";
 
 } elseif ($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.3") { // Datacentre Server
@@ -51,6 +53,7 @@ if($poll_device['sysObjectID'] == ".1.3.6.1.4.1.311.1.1.3.1.1") { // Workstation
   if (strstr($poll_device['sysDescr'], "Build 6002"))         { $version = "Server 2008 Datacenter SP2 (NT 6.0)"; }
   if (strstr($poll_device['sysDescr'], "Build 7600"))         { $version = "Server 2008 Datacenter R2 (NT 6.1)"; }
   if (strstr($poll_device['sysDescr'], "Build 7601"))         { $version = "Server 2008 Datacenter R2 SP1 (NT 6.1)"; }
+  if (strstr($poll_device['sysDescr'], "Build 9200"))         { $version = "Server 2012 Datacenter (NT 6.2)"; }
   $windows_type = "server";
 
 }
