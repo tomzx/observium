@@ -814,8 +814,11 @@ function print_arptable($vars)
   }
 
   // Don't show ignored and disabled devices
-  $query_device = ' AND D.ignore = 0 ';
-  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  if ($vars['page'] != 'device')
+  {
+    $query_device = ' AND D.ignore = 0 ';
+    if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  }
 
   $query = 'FROM `ip_mac` AS M ';
   $query .= 'LEFT JOIN `ports`   AS I ON I.port_id   = M.port_id ';
@@ -971,8 +974,11 @@ function print_fdbtable($vars)
   }
 
   // Don't show ignored and disabled devices
-  $query_device = ' AND D.ignore = 0 ';
-  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  if ($vars['page'] != 'device')
+  {
+    $query_device = ' AND D.ignore = 0 ';
+    if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  }
 
   $query = 'FROM `vlans_fdb` AS F ';
   $query .= 'LEFT JOIN `vlans` as V ON V.vlan_vlan = F.vlan_id AND V.device_id = F.device_id ';
@@ -1126,16 +1132,20 @@ function print_events($vars)
   }
 
   // Don't show ignored and disabled devices
-#  $query_device = ' AND D.ignore = 0 ';
-#  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  if ($vars['page'] != 'device')
+  {
+    $query_device = ' AND D.ignore = 0 ';
+    if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  }
 
   $query = 'FROM `eventlog` AS E ';
+  $query .= 'LEFT JOIN `devices` AS D ON E.device_id = D.device_id ';
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
   $query_count = 'SELECT COUNT(event_id) '.$query;
 
   /// FIXME Mike: bad table column `type` they intersect with table `devices`
-  $query = 'SELECT STRAIGHT_JOIN E.device_id, E.timestamp, E.message, E.type, E.reference '.$query;
+  $query = 'SELECT E.device_id, E.timestamp, E.message, E.type, E.reference '.$query;
   $query .= ' ORDER BY `timestamp` DESC ';
   $query .= "LIMIT $start,$pagesize";
 
@@ -1179,7 +1189,11 @@ function print_events($vars)
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['device_id']);
-      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname'])) . '</td>' . PHP_EOL;
+      $device_vars = array('page'    => 'device',
+                           'device'  => $entry['device_id'],
+                           'tab'     => 'logs',
+                           'section' => 'eventlog');
+      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname']), $device_vars) . '</td>' . PHP_EOL;
     }
     if ($list['port'])
     {
@@ -1314,8 +1328,11 @@ function print_syslogs($vars)
   }
 
   // Don't show ignored and disabled devices
-  $query_device = ' AND D.ignore = 0 ';
-  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  if ($vars['page'] != 'device')
+  {
+    $query_device = ' AND D.ignore = 0 ';
+    if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  }
 
   $query = 'FROM `syslog` AS S ';
   $query .= 'LEFT JOIN `devices` AS D ON S.device_id = D.device_id ';
@@ -1362,7 +1379,11 @@ function print_syslogs($vars)
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['device_id']);
-      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname'])) . '</td>' . PHP_EOL;
+      $device_vars = array('page'    => 'device',
+                           'device'  => $entry['device_id'],
+                           'tab'     => 'logs',
+                           'section' => 'syslog');
+      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname']), $device_vars) . '</td>' . PHP_EOL;
     }
     if ($list['priority'])
     {

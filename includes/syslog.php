@@ -64,7 +64,7 @@ function process_syslog($entry, $update)
 #      }
 #      unset($matches);
 
-      if (strstr($entry[msg], "%"))
+      if (strstr($entry['msg'], "%"))
       {
         $entry['msg'] = preg_replace("/^%(.+?):\ /", "\\1||", $entry['msg']);
         list(,$entry[msg]) = split(": %", $entry['msg']);
@@ -92,7 +92,7 @@ function process_syslog($entry, $update)
 
       if (!$entry['msg']) { $entry['msg'] = $entry['program']; unset ($entry['program']); }
 
-    } elseif($os == 'linux' and get_cache($entry['host'], 'version') == 'Point') {
+    } elseif($os == 'linux' && get_cache($entry['host'], 'version') == 'Point') {
       // Cisco WAP200 and similar
       $matches = array();
       if (preg_match('#Log: \[(?P<program>.*)\] - (?P<msg>.*)#', $entry['msg'], $matches)) {
@@ -104,13 +104,13 @@ function process_syslog($entry, $update)
     } elseif($os == 'linux') {
       $matches = array();
       // User_CommonName/123.213.132.231:39872 VERIFY OK: depth=1, /C=PL/ST=Malopolska/O=VLO/CN=v-lo.krakow.pl/emailAddress=root@v-lo.krakow.pl
-      if ($entry['facility'] == 'daemon' and preg_match('#/([0-9]{1,3}\.) {3}[0-9]{1,3}:[0-9]{4,} ([A-Z]([A-Za-z])+( ?)) {2,}:#', $entry['msg']))
+      if ($entry['facility'] == 'daemon' && preg_match('#/([0-9]{1,3}\.) {3}[0-9]{1,3}:[0-9]{4,} ([A-Z]([A-Za-z])+( ?)) {2,}:#', $entry['msg']))
       {
         $entry['program'] = 'OpenVPN';
       }
       // pop3-login: Login: user=<username>, method=PLAIN, rip=123.213.132.231, lip=123.213.132.231, TLS
       // POP3(username): Disconnected: Logged out top=0/0, retr=0/0, del=0/1, size=2802
-      elseif($entry['facility'] == 'mail' and preg_match('#^(((pop3|imap)\-login)|((POP3|IMAP)\(.*\))):', $entry['msg']))
+      elseif($entry['facility'] == 'mail' && preg_match('#^(((pop3|imap)\-login)|((POP3|IMAP)\(.*\))):', $entry['msg']))
       {
         $entry['program'] = 'Dovecot';
       }
@@ -136,6 +136,15 @@ function process_syslog($entry, $update)
         $entry['program'] = $entry['facility'];
       }
       unset($matches);
+    } elseif($os == 'ftos') {
+      //Jun 3 02:33:23.489: %STKUNIT0-M:CP %SNMP-3-SNMP_AUTH_FAIL: SNMP Authentication failure for SNMP request from host 176.10.35.241
+      //Jun 1 17:11:50.806: %STKUNIT0-M:CP %ARPMGR-2-MAC_CHANGE: IP-4-ADDRMOVE: IP address 11.222.30.53 is moved from MAC address 52:54:00:7b:37:ad to MAC address 52:54:00:e4:ec:06 .
+      if (strstr($entry['msg'], '%'))
+      {
+        list(, $entry['program'], $entry['msg']) = explode(': ', $entry['msg'], 3);
+        $entry['timestamp'] = date("Y-m-d H:i:s", strtotime($entry['timestamp'])); // convert to timestamp
+        list(, $entry['program']) = explode(' %', $entry['program'], 2);
+      }
     }
 
     if (!isset($entry['program']))
