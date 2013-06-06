@@ -142,7 +142,7 @@ function process_syslog($entry, $update)
       if (strstr($entry['msg'], '%'))
       {
         list(, $entry['program'], $entry['msg']) = explode(': ', $entry['msg'], 3);
-        $entry['timestamp'] = date("Y-m-d H:i:s", strtotime($entry['timestamp'])); // convert to timestamp
+        //$entry['timestamp'] = date("Y-m-d H:i:s", strtotime($entry['timestamp'])); // convert to timestamp
         list(, $entry['program']) = explode(' %', $entry['program'], 2);
       }
     }

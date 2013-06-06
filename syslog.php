@@ -26,7 +26,7 @@ $i = "1";
 $s = fopen('php://stdin','r');
 while ($line = fgets($s))
 {
-  logfile($line);
+  //logfile($line);
   // host || facility || priority || level || tag || timestamp || msg || program
   list($entry['host'],$entry['facility'],$entry['priority'], $entry['level'], $entry['tag'], $entry['timestamp'], $entry['msg'], $entry['program']) = explode("||", trim($line));
   process_syslog($entry, 1);
