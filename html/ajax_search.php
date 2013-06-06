@@ -11,8 +11,6 @@
  *
  */
 
-#$debug =1;
-
 if (isset($_GET['debug']) && $_GET['debug'])
 {
   ini_set('display_errors', 1);
