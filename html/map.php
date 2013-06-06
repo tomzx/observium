@@ -90,7 +90,7 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
           #$loc_id = $locations[$device['location']];
           $loc_id = '"'.$ranktype.'"';
 
-          $map .= "\"".$device['hostname']."\" [fontsize=20, fillcolor=\"lightblue\", group=".$loc_id." URL=\"{$config['base_url']}device/device=".$device['device_id']."/tab=ports/view=map/\" shape=box3d]\n";
+          $map .= "\"".$device['hostname']."\" [fontsize=20, fillcolor=\"lightblue\", group=".$loc_id." URL=\"{$config['base_url']}/device/device=".$device['device_id']."/tab=ports/view=map/\" shape=box3d]\n";
         }
 
         foreach  ($links as $link)
@@ -152,7 +152,7 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
               }
               $ifdone[$src][$sif['port_id']] = 1;
             } else {
-              $map .= "\"" . $sif['port_id'] . "\" [label=\"" . $sif['label'] . "\", fontsize=12, fillcolor=lightblue, URL=\"{$config['base_url']}device/device=".$device['device_id']."/tab=port/port=$local_port_id/\"]\n";
+              $map .= "\"" . $sif['port_id'] . "\" [label=\"" . $sif['label'] . "\", fontsize=12, fillcolor=lightblue, URL=\"{$config['base_url']}/device/device=".$device['device_id']."/tab=port/port=$local_port_id/\"]\n";
               if (!$ifdone[$src][$sif['port_id']])
               {
                 $map .= "\"$src\" -> \"" . $sif['port_id'] . "\" [weight=500000, arrowsize=0, len=0];\n";
@@ -161,14 +161,14 @@ if (isset($_GET['format']) && preg_match("/^[a-z]*$/", $_GET['format']))
 
               if ($dst_host)
               {
-                $map .= "\"$dst\" [URL=\"{$config['base_url']}device/device=$dst_host/tab=ports/view=map/\", fontsize=20, shape=box3d]\n";
+                $map .= "\"$dst\" [URL=\"{$config['base_url']}/device/device=$dst_host/tab=ports/view=map/\", fontsize=20, shape=box3d]\n";
               } else {
                 $map .= "\"$dst\" [ fontsize=20 shape=box3d]\n";
               }
 
               if ($dst_host == $device['device_id'] || $where == '')
               {
-                $map .= "\"" . $dif['port_id'] . "\" [label=\"" . $dif['label'] . "\", fontsize=12, fillcolor=lightblue, URL=\"{$config['base_url']}device/device=$dst_host/tab=port/port=$remote_port_id/\"]\n";
+                $map .= "\"" . $dif['port_id'] . "\" [label=\"" . $dif['label'] . "\", fontsize=12, fillcolor=lightblue, URL=\"{$config['base_url']}/device/device=$dst_host/tab=port/port=$remote_port_id/\"]\n";
               } else {
                 $map .= "\"" . $dif['port_id'] . "\" [label=\"" . $dif['label'] . " \", fontsize=12, fillcolor=lightgray";
                 if ($dst_host)
