@@ -1,10 +1,10 @@
 <?php
 
-$os = getHostOS($device);
+$os = get_device_os($device);
 
 if ($os != $device['os'])
 {
-  $sql = mysql_query("UPDATE `devices` SET `os` = '$os' WHERE `device_id` = '".$device['device_id']."'");
+  dbUpdate(array('os' => $os), 'devices', '`device_id` = ?', array($device['device_id']));
   echo("Changed OS! : $os\n");
   log_event("Device OS changed ".$device['os']." => $os", $device, 'system');
   $device['os'] = $os;

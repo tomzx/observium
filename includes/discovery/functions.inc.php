@@ -86,7 +86,7 @@ function discover_device($device, $options = NULL)
 
   if ($device['os'] == 'generic') // verify if OS has changed from generic
   {
-      $device['os']= getHostOS($device);
+      $device['os']= get_device_os($device);
       if ($device['os'] != 'generic')
       {
           echo "\nDevice os was updated to ".$device['os']."!";

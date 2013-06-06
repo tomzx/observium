@@ -107,7 +107,7 @@ function error($message)
   if ($debug) { echo($message); }
 }
 
-function getHostOS($device)
+function get_device_os($device)
 {
   global $config, $debug;
 
