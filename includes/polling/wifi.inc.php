@@ -16,7 +16,7 @@ if ($device['type'] == 'network' || $device['type'] == 'firewall' || $device['ty
     // FIXME Also interesting to poll? dhcpNumber.0 for number of active dhcp leases
   }
 
-  if ($device['os'] == 'ios' and substr($device['hardware'],0,4) == 'AIR-')
+  if ($device['os'] == 'ios' && $device['type'] == 'wireless')
   {
     echo("Checking Aironet Wireless clients... ");
 

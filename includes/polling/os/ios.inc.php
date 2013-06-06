@@ -39,6 +39,16 @@ else
   }
 }
 
-if(empty($hardware)) {   $hardware = snmp_get($device, "sysObjectID.0", "-Osqv", "SNMPv2-MIB:CISCO-PRODUCTS-MIB"); }
+if (empty($hardware)) { $hardware = snmp_get($device, "sysObjectID.0", "-Osqv", "SNMPv2-MIB:CISCO-PRODUCTS-MIB"); }
+
+if (stristr($hardware, 'AIRAP') || substr($hardware,0,4) == 'AIR-') { $ios_type = 'wireless'; }
+
+// Set type to a predefined type for the OS if it's not already set
+if (isset($ios_type) && $device['type'] != $ios_type)
+{
+  $update_array['type'] = $ios_type;
+  log_event("type -> ".$ios_type, $device, 'system');
+}
+unset($ios_type);
 
 ?>
