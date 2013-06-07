@@ -163,7 +163,7 @@ function rrdtool($command, $filename, $options)
 
   if ($config['norrd'])
   {
-    print Console_Color::convert("[%rRRD Disabled - $cmd%n]");
+    print_message("[%rRRD Disabled - $cmd%n]", 'color');
   } else {
     fwrite($rrd_pipes[0], $cmd."\n");
     usleep(1000);
@@ -179,9 +179,9 @@ function rrdtool($command, $filename, $options)
 
   if ($debug)
   {
-    print Console_Color::convert('RRD[cmd[%g'.$cmd.'%n] ');
-    print Console_Color::convert('stdout[%g'.$std_out.'%n] ');
-    print Console_Color::convert('stderr[%g'.$std_err.'%n]]');
+    print_message('RRD[cmd[%g'.$cmd.'%n] ', 'color');
+    print_message('stdout[%g'.$std_out.'%n] ', 'color');
+    print_message('stderr[%g'.$std_err.'%n]]', 'color');
   }
 
 }
@@ -199,11 +199,11 @@ function rrdtool_create($filename, $options)
 
   if ($config['norrd'])
   {
-    print Console_Color::convert("[%gRRD Disabled%n] ", false);
+    print_message("[%gRRD Disabled%n] ");
   } else {
     $command = $config['rrdtool'] . " create $filename $options";
   }
-  if ($debug) { print Console_Color::convert("RRD[%g".$command."%n] "); }
+  if ($debug) { print_message("RRD[%g".$command."%n] ", 'color'); }
 
   return shell_exec($command);
 }

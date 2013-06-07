@@ -193,8 +193,9 @@ if (!empty($argv[1]))
   }
 }
 
-print Console_Color::convert("
-Observium v".$config['version']." Add Host Tool
+print_message("
+%gObservium v".$config['version']."
+%WAdd Host Tool%n
 
 Usage (SNMPv1/2c): ./addhost.php <%Whostname%n> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
 Usage (SNMPv3)   :  Config Defaults : ./addhost.php <%Whostname%n> any v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
@@ -203,6 +204,6 @@ Usage (SNMPv3)   :  Config Defaults : ./addhost.php <%Whostname%n> any v3 [user]
                       Auth,    Priv : ./addhost.php <%Whostname%n> ap v3 <user> <password> <enckey> [md5|sha] [aes|dsa] [port] [" . implode("|",$config['snmp']['transports']) . "]
 %rRemember to run discovery for the host afterwards.%n
 
-");
+", 'color');
 
 ?>

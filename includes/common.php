@@ -1,8 +1,5 @@
 <?php
 
-# needed for print_error()
-include_once($config['install_dir'] . "/includes/console_colour.php");
-
 // Common Functions
 
 // Fix this shit, it's pretty uglytarded.
@@ -223,28 +220,58 @@ function isCli()
 
 function print_error($text)
 {
-  if (isCli())
-  {
-    print Console_Color::convert("%r".$text."%n\n", false);
-  } else {
-  echo('
-    <div class="alert alert-error">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <img src="/images/16/exclamation.png" align="absmiddle">
-      '.$text.'
-    </div>');
-  }
+  print_message($text, 'error');
 }
 
-function print_message($text)
+function print_warning($text)
 {
+  print_message($text, 'warning');
+}
+
+function print_message($text, $type='')
+{
+  global $config;
+  $type = trim(strtolower($type));
+  switch ($type)
+  {
+    case 'warning':
+      $color = array('cli'       => '%b',                 // blue
+                     'cli_color' => FALSE,                // by default cli coloring disabled
+                     'class'     => 'alert');             // yellow
+      $icon  = 'oicon-bell';
+      break;
+    case 'error':
+      $color = array('cli'       => '%r',                 // red
+                     'cli_color' => FALSE,                // by default cli coloring disabled
+                     'class'     => 'alert alert-error'); // red
+      $icon  = 'oicon-exclamation-red';
+      break;
+    case 'color':
+      $color = array('cli'       => '',                  // none
+                     'cli_color' => TRUE,                // allow using coloring
+                     'class'     => 'alert alert-info'); // blue
+      $icon  = 'oicon-information';
+      $cli_color = TRUE;
+      break;
+    default:
+      $color = array('cli'       => '%W',                // bold
+                     'cli_color' => FALSE,               // by default cli coloring disabled
+                     'class'     => 'alert alert-info'); // blue
+      $icon  = 'oicon-information';
+      break;
+  }
+  
   if (isCli())
   {
-    print Console_Color::convert("%g".$text."%n\n", false);
+    include_once($config['install_dir'] . "/includes/pear/Console/Color2.php");
+    
+    $msg = new Console_Color2();
+    print $msg->convert($color['cli'].$text."%n\n", $color['cli_color']);
   } else {
   echo('
-    <div class="alert alert-info">
+    <div class="'.$color['class'].'">
       <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <i class="'.$icon.'"></i>
       '.$text.'
     </div>');
   }

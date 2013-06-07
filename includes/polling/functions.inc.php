@@ -1,5 +1,17 @@
 <?php
 
+// This hack for polling of some slow modules once per hour (e.g. fdb tables).
+function poll_time_allowed()
+{
+  global $config;
+  $current_min = date('i', $config['time']['now']) * 1;
+  if ($current_min >=20 && $current_min < 25) // Allowed runtime betwen 20 and 25 minutes
+  {
+    return TRUE;
+  }
+  return FALSE;
+}
+
 // Parse output of ipmitool sensor
 function parse_ipmitool_sensor($device, $results, $source = 'ipmi')
 {
@@ -127,18 +139,18 @@ function poll_sensor($device, $class, $unit, &$oid_cache)
      {
       $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is under threshold: " . $sensor_value . "$unit (< " . $sensor['sensor_limit_low'] . "$unit)";
       notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
-      print Console_Color::convert("[%rAlerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "%n\n");
+      print_message("[%rAlerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "%n\n", 'color');
       log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " under threshold: " . $sensor_value . " $unit (< " . $sensor['sensor_limit_low'] . " $unit)", $device, $class, $sensor['sensor_id']);
      }
      else if ($sensor['sensor_limit'] != "" && $sensor['sensor_value'] <= $sensor['sensor_limit'] && $sensor_value > $sensor['sensor_limit'])
      {
       $msg  = ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'] . " is over threshold: " . $sensor_value . "$unit (> " . $sensor['sensor_limit'] . "$unit)";
       notify($device, ucfirst($class) . " Alarm: " . $device['hostname'] . " " . $sensor['sensor_descr'], $msg);
-      print Console_Color::convert("[%rAlerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "%n\n");
+      print_message("[%rAlerting for " . $device['hostname'] . " " . $sensor['sensor_descr'] . "%n\n", 'color');
       log_event(ucfirst($class) . ' ' . $sensor['sensor_descr'] . " above threshold: " . $sensor_value . " $unit (> " . $sensor['sensor_limit'] . " $unit)", $device, $class, $sensor['sensor_id']);
      }
     } else {
-      print Console_Color::convert("[%ySensor Ignored%n]");
+      print_message("[%ySensor Ignored%n]", 'color');
     }
     echo("\n");
 
