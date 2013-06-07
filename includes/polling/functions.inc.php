@@ -1,17 +1,5 @@
 <?php
 
-// This hack for polling of some slow modules once per hour (e.g. fdb tables).
-function poll_time_allowed()
-{
-  global $config;
-  $current_min = date('i', $config['time']['now']) * 1;
-  if ($current_min >=20 && $current_min < 25) // Allowed runtime betwen 20 and 25 minutes
-  {
-    return TRUE;
-  }
-  return FALSE;
-}
-
 // Parse output of ipmitool sensor
 function parse_ipmitool_sensor($device, $results, $source = 'ipmi')
 {

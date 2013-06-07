@@ -251,7 +251,6 @@ function print_message($text, $type='')
                      'cli_color' => TRUE,                // allow using coloring
                      'class'     => 'alert alert-info'); // blue
       $icon  = 'oicon-information';
-      $cli_color = TRUE;
       break;
     default:
       $color = array('cli'       => '%W',                // bold
