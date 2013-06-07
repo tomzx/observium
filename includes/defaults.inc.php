@@ -241,13 +241,16 @@ $config['frontpage']['map']['realworld']           = false;        // Enable/Dis
 
 // Device status settings
 // Show the status messages you want
+$config['frontpage']['device_status']['max']['interval'] = 24;     // Maximal interval for which to display devices status (in hours)
+$config['frontpage']['device_status']['max']['count'] = 200;       // Maximal count for which to display devices status (in items)
 $config['frontpage']['device_status']['devices']   = true;         // Show the down devices
 $config['frontpage']['device_status']['ports']     = true;         // Show the down ports (Last 24 hours)
 $config['frontpage']['device_status']['links']     = true;         // Show the down inter-device links (with CDP/LLDP linked devices)
-$config['frontpage']['device_status']['errors']    = true;        // Show the ports with interface errors
+$config['frontpage']['device_status']['errors']    = true;         // Show the ports with interface errors
 $config['frontpage']['device_status']['services']  = true;         // Show the down services
 $config['frontpage']['device_status']['bgp']       = true;         // Show the bgp status
 $config['frontpage']['device_status']['uptime']    = true;         // Show the uptime status
+
 
 // Custom traffic graphs
 $config['frontpage']['custom_traffic']['ids']      = "";           // COMMA SEPERATED PORT ID FOR EXAMPLE: "1,2,3,4,5"
@@ -360,13 +363,14 @@ $config['bad_iftype'][] = "voiceOverIp";
 $config['bad_iftype'][] = "ds0";
 $config['bad_iftype'][] = "ds1";
 $config['bad_iftype'][] = "ds3";
-#$config['bad_iftype'][] = "isdn";     #show signaling traffic
-#$config['bad_iftype'][] = "lapd";      #show signaling traffic
+#$config['bad_iftype'][] = "isdn";       //show signaling traffic
+#$config['bad_iftype'][] = "lapd";       //show signaling traffic
 $config['bad_iftype'][] = "sonet";
 $config['bad_iftype'][] = "atmSubInterface";
 $config['bad_iftype'][] = "aal5";
 $config['bad_iftype'][] = "shdsl";
 $config['bad_iftype'][] = "mpls";
+$config['bad_iftype'][] = "usb";        // Ignore USB pseudo interface (BSD)
 
 $config['bad_if_regexp'][] = "/^ng[0-9]+$/";
 $config['bad_if_regexp'][] = "/^sl[0-9]/";

@@ -1145,8 +1145,8 @@ function print_events($vars)
   $query_count = 'SELECT COUNT(event_id) '.$query;
 
   /// FIXME Mike: bad table column `type` they intersect with table `devices`
-  $query = 'SELECT E.device_id, E.timestamp, E.message, E.type, E.reference '.$query;
-  $query .= ' ORDER BY `timestamp` DESC ';
+  $query = 'SELECT STRAIGHT_JOIN E.device_id, E.timestamp, E.message, E.type, E.reference '.$query;
+  $query .= ' ORDER BY `event_id` DESC ';
   $query .= "LIMIT $start,$pagesize";
 
   // Query events
@@ -1340,7 +1340,7 @@ function print_syslogs($vars)
   $query .= $where . $query_user . $query_device;
   $query_count = 'SELECT COUNT(seq) ' . $query;
   $query = 'SELECT STRAIGHT_JOIN * ' . $query;
-  $query .= ' ORDER BY `timestamp` DESC ';
+  $query .= ' ORDER BY `seq` DESC ';
   $query .= "LIMIT $start,$pagesize";
 
   // Query syslog messages
@@ -1426,9 +1426,13 @@ function print_syslogs($vars)
  */
 function print_status($status)
 {
-  // Mike: I know that there are duplicated variables, but later will remove global
   global $config;
 
+  $max_interval = filter_var($status['max']['interval'], FILTER_VALIDATE_INT, array('options' => array('default' => 24,
+                                                                                                       'min_range' => 1)));
+  $max_count    = filter_var($status['max']['count'],    FILTER_VALIDATE_INT, array('options' => array('default' => 200,
+                                                                                                       'min_range' => 1)));
+  
   $string  = '<table class="table table-bordered table-striped table-hover table-condensed">' . PHP_EOL;
   $string .= '  <thead>' . PHP_EOL;
   $string .= '  <tr>' . PHP_EOL;
@@ -1508,13 +1512,10 @@ function print_status($status)
     // warning about deprecated option: $config['warn']['ifdown']
     if (isset($config['warn']['ifdown']) && !$config['warn']['ifdown'])
     {
-      echo('
-  <div class="alert">
-     <button type="button" class="close" data-dismiss="alert">&times;</button>
-     <p><i class="oicon-bell"></i> <strong>Config option obsolete</strong></p>
-     <p>Please note that config option <strong>$config[\'warn\'][\'ifdown\']</strong> is now obsolete.<br />Use options: <strong>$config[\'frontpage\'][\'device_status\'][\'ports\']</strong> and <strong>$config[\'frontpage\'][\'device_status\'][\'errors\']</strong></p>
-     <p>To remove this message, delete <strong>$config[\'warn\'][\'ifdown\']</strong> from configuration file.</p>
-  </div>');
+      print_warning("<strong>Config option obsolete</strong><br />
+                    Please note that config option <strong>\$config['warn']['ifdown']</strong> is now obsolete.<br />
+                    Use options: <strong>\$config['frontpage']['device_status']['ports']</strong> and <strong>\$config['frontpage']['device_status']['errors']</strong><br />
+                    To remove this message, delete <strong>\$config['warn']['ifdown']</strong> from configuration file.");
     }
 
     $query = 'SELECT * FROM `ports` AS I ';
@@ -1524,16 +1525,14 @@ function print_status($status)
     $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 ";
     if ($status['links'] && !$status['ports']) { $query .= ' AND L.active = 1 '; }
     $query .= $query_device . $query_user;
-    $query .= ' AND I.ifLastChange >= DATE_SUB(NOW(), INTERVAL 24 HOUR) ';
+    $query .= ' AND I.ifLastChange >= DATE_SUB(NOW(), INTERVAL '.$max_interval.' HOUR) ';
     $query .= 'ORDER BY I.ifLastChange DESC, D.hostname ASC, I.ifDescr * 1 ASC ';
     $entries = dbFetchRows($query, $param);
-    //$count = count($entries);
     $i = 1;
     foreach ($entries as $port)
     {
-      if ($i > 200)
+      if ($i > $max_count)
       {
-        // Limit to 200 ports on overview page
         $string .= '  <tr><td></td><td><span class="badge badge-info">Port</span></td>';
         $string .= '<td><span class="label label-important">Port Down</span></td>';
         $string .= '<td colspan=3>Too many ports down. See <strong><a href="'.generate_url(array('page'=>'ports'), array('state'=>'down')).'">All DOWN ports</a></strong>.</td></tr>' . PHP_EOL;
@@ -1694,8 +1693,7 @@ function print_status_boxes($status)
 function get_status_array($status)
 {
   // Mike: I know that there are duplicated variables, but later will remove global
-  global $config;
-  global $cache;
+  global $config, $cache;
 
   $param = array();
   if ($_SESSION['userlevel'] >= 5)
@@ -1751,13 +1749,10 @@ function get_status_array($status)
     // warning about deprecated option: $config['warn']['ifdown']
     if (isset($config['warn']['ifdown']) && !$config['warn']['ifdown'])
     {
-      echo('
-  <div class="alert">
-     <button type="button" class="close" data-dismiss="alert">&times;</button>
-     <p><i class="oicon-bell"></i> <strong>Config option obsolete</strong></p>
-     <p>Please note that config option <strong>$config[\'warn\'][\'ifdown\']</strong> is now obsolete.<br />Use options: <strong>$config[\'frontpage\'][\'device_status\'][\'ports\']</strong> and <strong>$config[\'frontpage\'][\'device_status\'][\'errors\']</strong></p>
-     <p>To remove this message, delete <strong>$config[\'warn\'][\'ifdown\']</strong> from configuration file.</p>
-  </div>');
+      print_warning("<strong>Config option obsolete</strong><br />
+                    Please note that config option <strong>\$config['warn']['ifdown']</strong> is now obsolete.<br />
+                    Use options: <strong>\$config['frontpage']['device_status']['ports']</strong> and <strong>\$config['frontpage']['device_status']['errors']</strong><br />
+                    To remove this message, delete <strong>\$config['warn']['ifdown']</strong> from configuration file.");
     }
 
     $query = 'SELECT * FROM `ports` AS I ';
@@ -1767,14 +1762,13 @@ function get_status_array($status)
     $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 ";
     if ($status['links'] && !$status['ports']) { $query .= ' AND L.active = 1 '; }
     $query .= $query_device . $query_user;
-    $query .= ' AND I.ifLastChange >= DATE_SUB(NOW(), INTERVAL 24 HOUR) ';
+    $query .= ' AND I.ifLastChange >= DATE_SUB(NOW(), INTERVAL '.$max_interval.' HOUR) ';
     $query .= 'ORDER BY I.ifLastChange DESC, D.hostname ASC, I.ifDescr * 1 ASC ';
     $entries = dbFetchRows($query, $param);
-    //$count = count($entries);
     $i = 1;
     foreach ($entries as $port)
     {
-      if ($i > 200)
+      if ($i > $max_count)
       {
         // Limit to 200 ports on overview page
         $string .= '  <tr><td></td><td><span class="badge badge-info">Port</span></td>';
