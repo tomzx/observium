@@ -36,13 +36,18 @@ function snmp_dewrap32bit($value)
 }
 
 // Translate OID string to numeric:
-// 'BGP4-V2-MIB-JUNIPER::jnxBgpM2PeerRemoteAs' -> '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.13'
+//'BGP4-V2-MIB-JUNIPER::jnxBgpM2PeerRemoteAs' -> '.1.3.6.1.4.1.2636.5.1.1.2.1.1.1.13'
+// or numeric OID to string:
+// '.1.3.6.1.4.1.9.1.685' -> 'ciscoAIRAP1240'
 function snmp_translate($oid, $mib = NULL, $mibdir = NULL)
 {
   // $rewrite_oids set in rewrites.php
   global $rewrite_oids, $config, $debug;
 
-  if ($mib)
+  if (is_numeric(str_replace('.', '', $oid)))
+  {
+    $options = '-Os';
+  } elseif ($mib)
   {
     // If $mib::$oid known in $rewrite_oids use this value instead shell command snmptranslate.
     if (isset($rewrite_oids[$mib][$oid])) {
@@ -369,7 +374,7 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
     $snmpcommand = $config['snmpwalk'];
   } else {
     $snmpcommand = $config['snmpbulkwalk'];
-    if($config['snmp']['max-rep'] == TRUE && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
+    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
     {
       $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
     }
@@ -435,6 +440,10 @@ function snmpwalk_cache_cip($device, $oid, $array, $mib = 0)
   else
   {
     $snmpcommand = $config['snmpbulkwalk'];
+    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
+    {
+      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
+    }
   }
 
   $cmd = $snmpcommand;
@@ -505,6 +514,10 @@ function snmp_cache_ifIndex($device)
   else
   {
     $snmpcommand = $config['snmpbulkwalk'];
+    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
+    {
+      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
+    }
   }
 
   $cmd = $snmpcommand;
@@ -802,6 +815,10 @@ function snmp_cache_slotport_oid($oid, $device, $array, $mib = 0)
   else
   {
     $snmpcommand = $config['snmpbulkwalk'];
+    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
+    {
+      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
+    }
   }
 
   $cmd = $snmpcommand;
