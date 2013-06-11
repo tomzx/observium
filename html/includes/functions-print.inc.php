@@ -1776,7 +1776,7 @@ function get_status_array($status)
         $string .= '<td colspan=3>Too many ports down. See <strong><a href="'.generate_url(array('page'=>'ports'), array('state'=>'down')).'">All DOWN ports</a></strong>.</td></tr>' . PHP_EOL;
         break;
       }
-      humanize_port($port);
+#      humanize_port($port);
       $boxes[] = array('sev' => 50, 'class' => 'Port', 'event' => 'Down', 'device_link' => generate_device_link($port, shorthost($port['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
                        'time' => formatUptime($config['time']['now'] - strtotime($port['ifLastChange'])), 'location' => $device['location']);
@@ -1793,15 +1793,16 @@ function get_status_array($status)
 
     foreach ($cache['ports_errored'] as $port_id)
     {
-      $port = get_port_by_id($port_id);
+      $port   = get_port_by_id($port_id);
+      $device = device_by_id_cache($port['device_id']);
+      humanize_port($port);
+
       if(port_permitted($port))
       {
-        $device = device_by_id_cache($port['device_id']);
-        humanize_port($port);
 
-        if ($port['ifInErrors_delta']) { $port['string'] .= 'Rx: ' . $port['ifInErrors_delta']; }
+        if ($port['ifInErrors_delta']) { $port['string'] .= 'Rx: ' . format_number($port['ifInErrors_delta']); }
         if ($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $port['string'] .= ', '; }
-        if ($port['ifOutErrors_delta']) { $port['string'] .= 'Tx: ' . $port['ifOutErrors_delta']; }
+        if ($port['ifOutErrors_delta']) { $port['string'] .= 'Tx: ' . format_number($port['ifOutErrors_delta']); }
 
         $boxes[] = array('sev' => 75, 'class' => 'Port', 'event' => 'Errors', 'device_link' => generate_device_link($device, shorthost($device['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
