@@ -11,9 +11,13 @@
   margin-bottom: @baseLineHeight;
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
   background-color: @warningBackground;
-  border: 1px solid @warningBorder;
-  .border-radius(@baseBorderRadius);
+//  border: 1px solid @warningBorder;
+//  .border-radius(@baseBorderRadius);
+  border: none;
+  border-left: 7px solid;
+
 }
+
 .alert,
 .alert h4 {
   // Specified for the h4 to prevent conflicts of changing @headingsColor
@@ -88,6 +92,10 @@
   height: 85px;
   line-height:130%;
   display: table;
+
+  border: 1px solid @warningBorder;
+  .border-radius(@baseBorderRadius);
+
 }
 
 .statusbox-wide {
