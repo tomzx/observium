@@ -28,8 +28,6 @@ $stats['poller_time']    = dbFetchCell("SELECT SUM(`last_polled_timetaken`) FROM
 $stats['php_version']    = phpversion();
 $stats['os_version']     = shell_exec($config['install_dir']."/scripts/distro");
 
-echo($stats['os_version']);
-
 // sysObjectID for Generic devices
 foreach (dbFetch("SELECT sysObjectID, COUNT( * ) as count FROM  `devices` WHERE `os` = 'generic' GROUP BY `sysObjectID`") as $data)
 {
