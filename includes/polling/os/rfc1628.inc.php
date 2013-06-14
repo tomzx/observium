@@ -7,4 +7,7 @@ $model = trim(snmp_get($device, "upsIdentModel.0", "-OQv", "UPS-MIB"),'"');
 
 $hardware = $manufacturer . ' ' . $model;
 
+# Clean up
+$hardware = str_replace("Liebert Corporation Liebert", "Liebert", $hardware);
+
 ?>

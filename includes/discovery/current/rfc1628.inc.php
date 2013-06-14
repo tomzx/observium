@@ -5,7 +5,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
 {
   echo("RFC1628 ");
 
-  $oids = snmp_walk($device, "1.3.6.1.2.1.33.1.2.6", "-Osqn", "UPS-MIB");
+  $oids = snmp_walk($device, "upsBatteryCurrent", "-Osqn", "UPS-MIB");
   if ($debug) { echo($oids."\n"); }
   $oids = trim($oids);
   foreach (explode("\n", $oids) as $data)
@@ -23,25 +23,27 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
       $type = "rfc1628";
       $index = 500+$current_id;
 
-      discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '10', '1', NULL, NULL, NULL, NULL, $current);
+      discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, $precision, '1', NULL, NULL, NULL, NULL, $current);
     }
   }
 
-  $oids = trim(snmp_walk($device, "1.3.6.1.2.1.33.1.4.3.0", "-OsqnU"));
+/// FIXME: array-walk upsOutputTable and use those values
+  $oids = trim(snmp_walk($device, "upsOutputNumLines", "-OsqnU"));
   if ($debug) { echo($oids."\n"); }
   list($unused,$numPhase) = explode(' ',$oids);
   for($i = 1; $i <= $numPhase;$i++)
   {
     $current_oid   = ".1.3.6.1.2.1.33.1.4.4.1.3.$i";
     $descr      = "Output"; if ($numPhase > 1) $descr .= " Phase $i";
-    $current    = snmp_get($device, $current_oid, "-Oqv");
+    $precision  = 10;
+    $current    = snmp_get($device, $current_oid, "-Oqv") / $precision;
     $type       = "rfc1628";
-    $precision  = 1;
     $index      = $i;
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '1', '1', NULL, NULL, NULL, NULL, $current);
+    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, $precision, '1', NULL, NULL, NULL, NULL, $current);
   }
 
+/// FIXME: array-walk upsInputTable and use those values
   $oids = trim(snmp_walk($device, "1.3.6.1.2.1.33.1.3.2.0", "-OsqnU"));
   if ($debug) { echo($oids."\n"); }
   list($unused,$numPhase) = explode(' ',$oids);
@@ -49,14 +51,15 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
   {
     $current_oid   = "1.3.6.1.2.1.33.1.3.3.1.4.$i";
     $descr      = "Input"; if ($numPhase > 1) $descr .= " Phase $i";
-    $current    = snmp_get($device, $current_oid, "-Oqv");
+    $precision  = 10;
+    $current    = snmp_get($device, $current_oid, "-Oqv") / $precision;
     $type       = "rfc1628";
-    $precision  = 1;
     $index      = 100+$i;
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '1', '1', NULL, NULL, NULL, NULL, $current);
+    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, $precision, '1', NULL, NULL, NULL, NULL, $current);
   }
 
+/// FIXME: array-walk upsBypassTable and use those values
   $oids = trim(snmp_walk($device, "1.3.6.1.2.1.33.1.5.2.0", "-OsqnU"));
   if ($debug) { echo($oids."\n"); }
   list($unused,$numPhase) = explode(' ',$oids);
@@ -64,12 +67,12 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
   {
     $current_oid   = "1.3.6.1.2.1.33.1.5.3.1.3.$i";
     $descr      = "Bypass"; if ($numPhase > 1) $descr .= " Phase $i";
-    $current    = snmp_get($device, $current_oid, "-Oqv");
+    $precision  = 10;
+    $current    = snmp_get($device, $current_oid, "-Oqv") / $precision;
     $type       = "rfc1628";
-    $precision  = 1;
     $index      = 200+$i;
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, '1', '1', NULL, NULL, NULL, NULL, $current);
+    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, $precision, '1', NULL, NULL, NULL, NULL, $current);
   }
 }
 
