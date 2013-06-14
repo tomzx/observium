@@ -22,6 +22,7 @@ $stats['pseudowires']    = dbFetchCell("SELECT count(*) FROM `pseudowires`");
 $stats['vrfs']           = dbFetchCell("SELECT count(*) FROM `vrfs`");
 $stats['vminfo']         = dbFetchCell("SELECT count(*) FROM `vminfo`");
 $stats['users']          = dbFetchCell("SELECT count(*) FROM `users`");
+$stats['bills']          = dbFetchCell("SELECT count(*) FROM `bills`");
 
 $stats['poller_time']    = dbFetchCell("SELECT SUM(`last_polled_timetaken`) FROM devices");
 $stats['php_version']    = phpversion();

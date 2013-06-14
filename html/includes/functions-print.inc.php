@@ -1851,11 +1851,13 @@ function get_status_array($status)
       foreach ($entries as $peer)
       {
         $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
-        if (strstr($peer['bgpPeerRemoteAddr'], ':')) { $peer['wide'] = TRUE;  }
+#        if (strstr($peer['bgpPeerRemoteAddr'], ':')) { $peer['wide'] = TRUE;  }
 
         $boxes[] = array('sev' => 75, 'class' => 'BGP Peer', 'event' => 'Down', 'device_link' => generate_device_link($peer, shorthost($peer['hostname'])),
                          'entity_link' => $peer_ip, 'wide' => $peer['wide'],
                          'time' => formatUptime($peer['bgpPeerFsmEstablishedTime'], 'shorter'), 'location' => $device['location']);
+
+        echo($peer['bgpPeerFsmEstablishedTime']);
 
       }
     }
