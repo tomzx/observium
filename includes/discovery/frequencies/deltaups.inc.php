@@ -29,7 +29,7 @@ if ($device['os'] == "deltaups")
     $index = substr($preIndex, 9);
 
     // Prevent NULL returned values from being added as sensors
-    if($current != "NULL" )
+    if ($current != "NULL")
     {
       discover_sensor($valid['sensor'], 'frequency', $device, $eachValue['OID'], $index, "DeltaUPS", $eachValue['descr'], $eachValue['divisor'], '1', NULL, NULL, NULL, NULL, $current);
     }
