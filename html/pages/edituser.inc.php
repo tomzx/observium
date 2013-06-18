@@ -19,7 +19,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
 
 <?php
 
-  $user_list = get_userlist();
+  $user_list = auth_user_list();
 
   echo('
          <li>
@@ -70,11 +70,11 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
 
     // Perform actions if requested
 
-    if (passwordscanchange($user_data['username']) && $vars['action'] == "changepass")
+    if (auth_can_change_password($user_data['username']) && $vars['action'] == "changepass")
     {
       if ($_POST['new_pass'] == $_POST['new_pass2'])
       {
-        changepassword($user_data['username'], $_POST['new_pass']);
+        auth_change_password($user_data['username'], $_POST['new_pass']);
         print_message("Password Changed.");
        } else {
         print_error("Passwords don't match!");
@@ -134,7 +134,7 @@ if ($_SESSION['userlevel'] != '10') { include("includes/error-no-perm.inc.php");
       }
     }
 
-    if (passwordscanchange($vars['user_id'])) // FIXME user_id? function takes username as a parameter, so this can't work!
+    if (auth_can_change_password($vars['user_id'])) // FIXME user_id? function takes username as a parameter, so this can't work!
     {
       echo("<div class='well'>
               <div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>
