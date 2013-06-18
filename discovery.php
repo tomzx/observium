@@ -94,7 +94,12 @@ if (!$where)
   exit;
 }
 
-include("includes/update/update.php");
+if ($options['h'] == "new")
+{
+  echo("Schema update disabled by -h new, run with -h none to perform it manually.\n");
+} else {
+  include("includes/update/update.php");
+}
 
 $discovered_devices = 0;
 
