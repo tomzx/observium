@@ -5,7 +5,7 @@
 foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ?", array($device['device_id'])) as $svc)
 {
 
-  $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("netscaler-svc-".$svc['svc_name'].".rrd");
+  $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("nscaler-svc-".$svc['svc_name'].".rrd");
 
   if (is_file($rrd_filename))
   {

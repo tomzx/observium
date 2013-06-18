@@ -79,10 +79,15 @@ function array_sort($array, $on, $order=SORT_ASC)
   return $new_array;
 }
 
+function include_wrapper($filename)
+{
+  global $config;
+  include($filename);
+}
+
 function mac_clean_to_readable($mac)
 {
   for ($i = 0; $i < 12; $i+=2) { $r[] .= substr($mac, $i, 2); }
-   
   return implode($r, ':');
 }
 

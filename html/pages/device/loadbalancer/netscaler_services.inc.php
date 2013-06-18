@@ -6,7 +6,8 @@ if(is_numeric($vars['svc']))
 $graph_types = array("bits"   => "Bits",
                      "pkts"   => "Packets",
                      "conns"  => "Connections",
-                     "reqs"   => "Requests");
+                     "reqs"   => "Requests",
+                     "ttfb"   => "Time to first byte");
 
 $i=0;
 
@@ -116,7 +117,8 @@ foreach ($menu_options as $option => $text)
 $graph_types = array("bits"   => "Bits",
                      "pkts"   => "Packets",
                      "conns"  => "Connections",
-                     "reqs"   => "Requests");
+                     "reqs"   => "Requests",
+                     "ttfb"   => "Time to 1st Byte");
 
 foreach ($graph_types as $type => $descr)
 {

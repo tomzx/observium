@@ -55,13 +55,14 @@ if ($old_rev = @dbFetchCell("SELECT revision FROM `dbSchema`"))
 
 $updating = 0;
 
-$include_dir_regexp = "/\.sql$/";
+$sql_regexp = "/\.sql$/";
+$php_regexp = "/\.php$/";
 
-if ($handle = opendir($config['install_dir'] . '/sql-schema'))
+if ($handle = opendir($config['install_dir'] . '/update'))
 {
   while (false !== ($file = readdir($handle)))
   {
-    if (filetype($config['install_dir'] . '/sql-schema/' . $file) == 'file' && preg_match($include_dir_regexp, $file))
+    if (filetype($config['install_dir'] . '/update/' . $file) == 'file' && (preg_match($sql_regexp, $file) || preg_match($php_regexp, $file)))
     {
       $filelist[] = $file;
     }
@@ -76,16 +77,24 @@ foreach ($filelist as $file)
   list($filename,$extension) = explode('.',$file,2);
   if ($filename > $db_rev)
   {
-    if (!$updating)
-    {
-      echo "-- Updating database schema\n";
-    }
+   if (!$updating)
+   {
+     echo "-- Updating database/file schema\n";
+   }
 
-    echo sprintf("%03d",$db_rev) . " -> " . sprintf("%03d",$filename) . " ...";
+   if($extension == "php")
+   {
+
+     echo sprintf("%03d",$db_rev) . " -> " . sprintf("%03d",$filename) . " ... (file)";
+     include_wrapper($config['install_dir'] . '/update/' . $file);
+
+   } elseif ($extension == "sql") {
+
+    echo sprintf("%03d",$db_rev) . " -> " . sprintf("%03d",$filename) . " ... (db)";
 
     $err = 0;
 
-    if ($fd = @fopen($config['install_dir'] . '/sql-schema/' . $file,'r'))
+    if ($fd = @fopen($config['install_dir'] . '/update/' . $file,'r'))
     {
       $data = fread($fd,4096);
       while (!feof($fd))
@@ -118,7 +127,7 @@ foreach ($filelist as $file)
       elseif($err)
       {
         echo(" done ($err errors).\n");
-        $fd = fopen($config['install_dir'] . '/sql-schema-errors.log','a+');
+        $fd = fopen($config['install_dir'] . '/update-errors.log','a+');
         fputs($fd,"====== Schema update " . sprintf("%03d",$db_rev) . " -> " . sprintf("%03d",$filename) . " ==============\n");
         foreach ($errors as $error)
         {
@@ -138,8 +147,9 @@ foreach ($filelist as $file)
       echo(" Could not open file!\n");
     }
 
-    $updating++;
-    $db_rev = $filename;
+   }
+   $updating++;
+   $db_rev = $filename;
   }
 }
 

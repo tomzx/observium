@@ -2,36 +2,36 @@
 
 /// VServers
 
-# NS-ROOT-MIB::vsvrName."observium" = STRING: "observium"
-# NS-ROOT-MIB::vsvrIpAddress."observium" = IpAddress: 195.78.84.141
-# NS-ROOT-MIB::vsvrPort."observium" = INTEGER: 80
-# NS-ROOT-MIB::vsvrType."observium" = INTEGER: http(0)
-# NS-ROOT-MIB::vsvrState."observium" = INTEGER: up(7)
-# NS-ROOT-MIB::vsvrCurClntConnections."observium" = Gauge32: 18
-# NS-ROOT-MIB::vsvrCurSrvrConnections."observium" = Gauge32: 0
-# NS-ROOT-MIB::vsvrSurgeCount."observium" = Counter32: 0
-# NS-ROOT-MIB::vsvrTotalRequests."observium" = Counter64: 64532
-# NS-ROOT-MIB::vsvrTotalRequestBytes."observium" = Counter64: 22223153
-# NS-ROOT-MIB::vsvrTotalResponses."observium" = Counter64: 64496
-# NS-ROOT-MIB::vsvrTotalResponseBytes."observium" = Counter64: 1048603453
-# NS-ROOT-MIB::vsvrTotalPktsRecvd."observium" = Counter64: 629637
-# NS-ROOT-MIB::vsvrTotalPktsSent."observium" = Counter64: 936237
-# NS-ROOT-MIB::vsvrTotalSynsRecvd."observium" = Counter64: 43130
-# NS-ROOT-MIB::vsvrCurServicesDown."observium" = Gauge32: 0
-# NS-ROOT-MIB::vsvrCurServicesUnKnown."observium" = Gauge32: 0
-# NS-ROOT-MIB::vsvrCurServicesOutOfSvc."observium" = Gauge32: 0
-# NS-ROOT-MIB::vsvrCurServicesTransToOutOfSvc."observium" = Gauge32: 0
-# NS-ROOT-MIB::vsvrCurServicesUp."observium" = Gauge32: 0
-# NS-ROOT-MIB::vsvrTotMiss."observium" = Counter64: 0
-# NS-ROOT-MIB::vsvrRequestRate."observium" = STRING: "0"
-# NS-ROOT-MIB::vsvrRxBytesRate."observium" = STRING: "248"
-# NS-ROOT-MIB::vsvrTxBytesRate."observium" = STRING: "188"
-# NS-ROOT-MIB::vsvrSynfloodRate."observium" = STRING: "0"
-# NS-ROOT-MIB::vsvrIp6Address."observium" = STRING: 0:0:0:0:0:0:0:0
-# NS-ROOT-MIB::vsvrTotHits."observium" = Counter64: 64537
-# NS-ROOT-MIB::vsvrTotSpillOvers."observium" = Counter32: 0
-# NS-ROOT-MIB::vsvrTotalClients."observium" = Counter64: 43023
-# NS-ROOT-MIB::vsvrClientConnOpenRate."observium" = STRING: "0"
+## NS-ROOT-MIB::vsvrName."observium" = STRING: "observium"
+## NS-ROOT-MIB::vsvrIpAddress."observium" = IpAddress: 195.78.84.141
+## NS-ROOT-MIB::vsvrPort."observium" = INTEGER: 80
+## NS-ROOT-MIB::vsvrType."observium" = INTEGER: http(0)
+## NS-ROOT-MIB::vsvrState."observium" = INTEGER: up(7)
+## NS-ROOT-MIB::vsvrCurClntConnections."observium" = Gauge32: 18
+## NS-ROOT-MIB::vsvrCurSrvrConnections."observium" = Gauge32: 0
+## NS-ROOT-MIB::vsvrSurgeCount."observium" = Counter32: 0
+## NS-ROOT-MIB::vsvrTotalRequests."observium" = Counter64: 64532
+## NS-ROOT-MIB::vsvrTotalRequestBytes."observium" = Counter64: 22223153
+## NS-ROOT-MIB::vsvrTotalResponses."observium" = Counter64: 64496
+## NS-ROOT-MIB::vsvrTotalResponseBytes."observium" = Counter64: 1048603453
+## NS-ROOT-MIB::vsvrTotalPktsRecvd."observium" = Counter64: 629637
+## NS-ROOT-MIB::vsvrTotalPktsSent."observium" = Counter64: 936237
+## NS-ROOT-MIB::vsvrTotalSynsRecvd."observium" = Counter64: 43130
+## NS-ROOT-MIB::vsvrCurServicesDown."observium" = Gauge32: 0
+## NS-ROOT-MIB::vsvrCurServicesUnKnown."observium" = Gauge32: 0
+## NS-ROOT-MIB::vsvrCurServicesOutOfSvc."observium" = Gauge32: 0
+## NS-ROOT-MIB::vsvrCurServicesTransToOutOfSvc."observium" = Gauge32: 0
+## NS-ROOT-MIB::vsvrCurServicesUp."observium" = Gauge32: 0
+## NS-ROOT-MIB::vsvrTotMiss."observium" = Counter64: 0
+## NS-ROOT-MIB::vsvrRequestRate."observium" = STRING: "0"
+## NS-ROOT-MIB::vsvrRxBytesRate."observium" = STRING: "248"
+## NS-ROOT-MIB::vsvrTxBytesRate."observium" = STRING: "188"
+## NS-ROOT-MIB::vsvrSynfloodRate."observium" = STRING: "0"
+## NS-ROOT-MIB::vsvrIp6Address."observium" = STRING: 0:0:0:0:0:0:0:0
+## NS-ROOT-MIB::vsvrTotHits."observium" = Counter64: 64537
+## NS-ROOT-MIB::vsvrTotSpillOvers."observium" = Counter32: 0
+## NS-ROOT-MIB::vsvrTotalClients."observium" = Counter64: 43023
+## NS-ROOT-MIB::vsvrClientConnOpenRate."observium" = STRING: "0"
 
 if ($device['os'] == "netscaler")
 {
@@ -175,85 +175,87 @@ if ($device['os'] == "netscaler")
 
 /// Services
 
-# NS-ROOT-MIB::svcServiceName."http81_observium-server" = STRING: "http81_observium-server"
-# NS-ROOT-MIB::svcIpAddress."http81_observium-server" = IpAddress: 46.105.127.13
-# NS-ROOT-MIB::svcPort."http81_observium-server" = INTEGER: 81
-# NS-ROOT-MIB::svcServiceType."http81_observium-server" = INTEGER: http(0)
-# NS-ROOT-MIB::svcState."http81_observium-server" = INTEGER: up(7)
-# NS-ROOT-MIB::svcMaxReqPerConn."http81_observium-server" = INTEGER: 0
-# NS-ROOT-MIB::svcAvgTransactionTime."http81_observium-server" = Wrong Type (should be Timeticks): INTEGER: 137870
-# NS-ROOT-MIB::svcEstablishedConn."http81_observium-server" = Counter32: 4
-# NS-ROOT-MIB::svcActiveConn."http81_observium-server" = Gauge32: 3
-# NS-ROOT-MIB::svcSurgeCount."http81_observium-server" = Counter32: 0
-# NS-ROOT-MIB::svcTotalRequests."http81_observium-server" = Counter64: 3227
-# NS-ROOT-MIB::svcTotalRequestBytes."http81_observium-server" = Counter64: 1947816
-# NS-ROOT-MIB::svcTotalResponses."http81_observium-server" = Counter64: 3227
-# NS-ROOT-MIB::svcTotalResponseBytes."http81_observium-server" = Counter64: 43924021
-# NS-ROOT-MIB::svcTotalPktsRecvd."http81_observium-server" = Counter64: 37739
-# NS-ROOT-MIB::svcTotalPktsSent."http81_observium-server" = Counter64: 23972
-# NS-ROOT-MIB::svcTotalSynsRecvd."http81_observium-server" = Counter64: 0
-# NS-ROOT-MIB::svcGslbSiteName."http81_observium-server" = STRING: "N/A"
-# NS-ROOT-MIB::svcAvgSvrTTFB."http81_observium-server" = Gauge32: 0
-# NS-ROOT-MIB::svctotalJsTransactions."http81_observium-server" = Counter64: 0
-# NS-ROOT-MIB::svcdosQDepth."http81_observium-server" = Counter32: 0
-# NS-ROOT-MIB::svcCurClntConnections."http81_observium-server" = Gauge32: 3
-# NS-ROOT-MIB::svcRequestRate."http81_observium-server" = STRING: "0"
-# NS-ROOT-MIB::svcRxBytesRate."http81_observium-server" = STRING: "0"
-# NS-ROOT-MIB::svcTxBytesRate."http81_observium-server" = STRING: "0"
-# NS-ROOT-MIB::svcSynfloodRate."http81_observium-server" = STRING: "0"
-# NS-ROOT-MIB::svcTicksSinceLastStateChange."http81_observium-server" = Timeticks: (371894) 1:01:58.94
-# NS-ROOT-MIB::svcTotalClients."http81_observium-server" = Counter64: 3228
-# NS-ROOT-MIB::svcTotalServers."http81_observium-server" = Counter64: 464
-# NS-ROOT-MIB::svcMaxClients."http81_observium-server" = INTEGER: 0
-# NS-ROOT-MIB::svcActiveTransactions."http81_observium-server" = Gauge32: 3
-# NS-ROOT-MIB::svcServiceFullName."http81_observium-server" = STRING: "http81_observium-server"
-# NS-ROOT-MIB::svcInetAddressType."http81_observium-server" = INTEGER: ipv4(1)
-# NS-ROOT-MIB::svcInetAddress."http81_observium-server" = Hex-STRING: 2E 69 7F 0D
-# NS-ROOT-MIB::monsvcServiceName."http81_observium-server"."tcp-default" = STRING: "http81_observium-server"
-# NS-ROOT-MIB::monitorRTO."http81_observium-server"."tcp-default" = Gauge32: 0
-# NS-ROOT-MIB::monitorState."http81_observium-server"."tcp-default" = INTEGER: monitorStateUp(7)
-# NS-ROOT-MIB::drtmRTO."http81_observium-server"."tcp-default" = Gauge32: 0
-# NS-ROOT-MIB::drtmLearningProbes."http81_observium-server"."tcp-default" = Gauge32: 0
-# NS-ROOT-MIB::monitorCurFailedCount."http81_observium-server"."tcp-default" = Gauge32: 0
-# NS-ROOT-MIB::monitorWeight."http81_observium-server"."tcp-default" = INTEGER: 1
-# NS-ROOT-MIB::monitorProbes."http81_observium-server"."tcp-default" = Counter32: 329
-# NS-ROOT-MIB::monitorFailed."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorMaxClient."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedCon."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedCode."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedStr."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedTimeout."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedSend."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedFTP."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedPort."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedResponse."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorFailedId."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorProbesNoChange."http81_observium-server"."tcp-default" = Counter32: 0
-# NS-ROOT-MIB::monitorResponseTimeoutThreshExceed."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::svcServiceName."http81_observium-server" = STRING: "http81_observium-server"
+## NS-ROOT-MIB::svcIpAddress."http81_observium-server" = IpAddress: 46.105.127.13
+## NS-ROOT-MIB::svcPort."http81_observium-server" = INTEGER: 81
+## NS-ROOT-MIB::svcServiceType."http81_observium-server" = INTEGER: http(0)
+## NS-ROOT-MIB::svcState."http81_observium-server" = INTEGER: up(7)
+## NS-ROOT-MIB::svcMaxReqPerConn."http81_observium-server" = INTEGER: 0
+// NS-ROOT-MIB::svcAvgTransactionTime."http81_observium-server" = Wrong Type (should be Timeticks): INTEGER: 137870
+// NS-ROOT-MIB::svcEstablishedConn."http81_observium-server" = Counter32: 4
+// NS-ROOT-MIB::svcActiveConn."http81_observium-server" = Gauge32: 3
+// NS-ROOT-MIB::svcSurgeCount."http81_observium-server" = Counter32: 0
+// NS-ROOT-MIB::svcTotalRequests."http81_observium-server" = Counter64: 3227
+// NS-ROOT-MIB::svcTotalRequestBytes."http81_observium-server" = Counter64: 1947816
+// NS-ROOT-MIB::svcTotalResponses."http81_observium-server" = Counter64: 3227
+// NS-ROOT-MIB::svcTotalResponseBytes."http81_observium-server" = Counter64: 43924021
+// NS-ROOT-MIB::svcTotalPktsRecvd."http81_observium-server" = Counter64: 37739
+// NS-ROOT-MIB::svcTotalPktsSent."http81_observium-server" = Counter64: 23972
+// NS-ROOT-MIB::svcTotalSynsRecvd."http81_observium-server" = Counter64: 0
+## NS-ROOT-MIB::svcGslbSiteName."http81_observium-server" = STRING: "N/A"
+// NS-ROOT-MIB::svcAvgSvrTTFB."http81_observium-server" = Gauge32: 0
+// NS-ROOT-MIB::svctotalJsTransactions."http81_observium-server" = Counter64: 0
+// NS-ROOT-MIB::svcdosQDepth."http81_observium-server" = Counter32: 0
+// NS-ROOT-MIB::svcCurClntConnections."http81_observium-server" = Gauge32: 3
+## NS-ROOT-MIB::svcRequestRate."http81_observium-server" = STRING: "0"
+## NS-ROOT-MIB::svcRxBytesRate."http81_observium-server" = STRING: "0"
+## NS-ROOT-MIB::svcTxBytesRate."http81_observium-server" = STRING: "0"
+## NS-ROOT-MIB::svcSynfloodRate."http81_observium-server" = STRING: "0"
+## NS-ROOT-MIB::svcTicksSinceLastStateChange."http81_observium-server" = Timeticks: (371894) 1:01:58.94
+// NS-ROOT-MIB::svcTotalClients."http81_observium-server" = Counter64: 3228
+// NS-ROOT-MIB::svcTotalServers."http81_observium-server" = Counter64: 464
+## NS-ROOT-MIB::svcMaxClients."http81_observium-server" = INTEGER: 0
+// NS-ROOT-MIB::svcActiveTransactions."http81_observium-server" = Gauge32: 3
+## NS-ROOT-MIB::svcServiceFullName."http81_observium-server" = STRING: "http81_observium-server"
+## NS-ROOT-MIB::svcInetAddressType."http81_observium-server" = INTEGER: ipv4(1)
+## NS-ROOT-MIB::svcInetAddress."http81_observium-server" = Hex-STRING: 2E 69 7F 0D
+## NS-ROOT-MIB::monsvcServiceName."http81_observium-server"."tcp-default" = STRING: "http81_observium-server"
+## NS-ROOT-MIB::monitorRTO."http81_observium-server"."tcp-default" = Gauge32: 0
+## NS-ROOT-MIB::monitorState."http81_observium-server"."tcp-default" = INTEGER: monitorStateUp(7)
+## NS-ROOT-MIB::drtmRTO."http81_observium-server"."tcp-default" = Gauge32: 0
+## NS-ROOT-MIB::drtmLearningProbes."http81_observium-server"."tcp-default" = Gauge32: 0
+## NS-ROOT-MIB::monitorCurFailedCount."http81_observium-server"."tcp-default" = Gauge32: 0
+## NS-ROOT-MIB::monitorWeight."http81_observium-server"."tcp-default" = INTEGER: 1
+## NS-ROOT-MIB::monitorProbes."http81_observium-server"."tcp-default" = Counter32: 329
+## NS-ROOT-MIB::monitorFailed."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorMaxClient."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedCon."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedCode."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedStr."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedTimeout."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedSend."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedFTP."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedPort."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedResponse."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorFailedId."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorProbesNoChange."http81_observium-server"."tcp-default" = Counter32: 0
+## NS-ROOT-MIB::monitorResponseTimeoutThreshExceed."http81_observium-server"."tcp-default" = Counter32: 0
 
   echo("Netscaler Services\n");
 
-  $oids_gauge   = array('svcActiveConn','svcActiveTransactions','svcAvgTransactionTime');
-  $oids_counter = array('svcEstablishedConn', 'svcSurgeCount', 'svcTotalRequests', 'svcTotalRequestBytes',
-    'svcTotalResponses', 'svcTotalResponseBytes', 'svcTotalPktsRecvd', 'svcTotalPktsSent', 'svcTotalSynsRecvd',
-    'svcTotalClients', 'svcTotalServers');
+  $oids = array('svcActiveConn:G','svcActiveTransactions:G','svcAvgTransactionTime:G',
+                'svcEstablishedConn:C', 'svcSurgeCount:C', 'svcTotalRequests:C', 'svcTotalRequestBytes:C',
+                'svcTotalResponses:C', 'svcTotalResponseBytes:C', 'svcTotalPktsRecvd:C', 'svcTotalPktsSent:C', 'svcTotalSynsRecvd:C',
+                'svcTotalClients:C', 'svcTotalServers:C', 'svcAvgSvrTTFB:G', 'svcCurClntConnections:G', 'svctotalJsTransactions:C',
+                'svcdosQDepth:C');
 
-  $oids = array_merge($oids_gauge, $oids_counter);
+##  $oids = array_merge($oids_gauge, $oids_counter);
 
   unset($snmpstring, $rrdupdate, $snmpdata, $snmpdata_cmd, $rrd_create);
 
   $rrd_create = $config['rrd_rra'];
 
-  foreach ($oids_gauge as $oid)
+  foreach ($oids as $oid)
   {
-    $oid_ds = truncate(str_replace("svc", "", $oid), 19, '');
-    $rrd_create .= " DS:$oid_ds:GAUGE:600:U:100000000000";
-  }
-
-  foreach ($oids_counter as $oid)
-  {
-    $oid_ds = truncate(str_replace("svc", "", $oid), 19, '');
-    $rrd_create .= " DS:$oid_ds:COUNTER:600:U:100000000000";
+    list($oid, $type) = explode(":", $oid);
+    if($type == "G")
+    {
+      $oid_ds = truncate(str_replace("svc", "", $oid), 19, '');
+      $rrd_create .= " DS:$oid_ds:GAUGE:600:U:100000000000";
+    } elseif ($type == "C") {
+      $oid_ds = truncate(str_replace("svc", "", $oid), 19, '');
+      $rrd_create .= " DS:$oid_ds:COUNTER:600:U:100000000000";
+    }
   }
 
   $svc_array = snmpwalk_cache_oid($device, "serviceEntry", array(), "NS-ROOT-MIB");
@@ -269,9 +271,6 @@ if ($device['os'] == "netscaler")
     if (isset($svc['svcServiceFullName']))
     {
       $svc['label'] = $svc['svcServiceFullName'];
-      $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceName']).".rrd";
-      $rrd_file_old = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceFullName']).".rrd";
-      if (is_file($rrd_file_old)) { rename($rrd_file_old, $rrd_file); }
     } else {
       $svc['label'] = $svc['svcServiceName'];
     }
@@ -279,11 +278,12 @@ if ($device['os'] == "netscaler")
     if (isset($svc['svcServiceName']))
     {
       $svc_exist[$svc['svcServiceName']] = 1;
-      $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-svc-".safename($svc['svcServiceName']).".rrd";
+      $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/nscaler-svc-".safename($svc['svcServiceName']).".rrd";
       $rrdupdate = "N";
 
       foreach ($oids as $oid)
       {
+        list($oid, $type) = explode(":", $oid);
         if (is_numeric($svc[$oid]))
         {
           $rrdupdate .= ":".$svc[$oid];
