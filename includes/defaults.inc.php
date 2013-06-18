@@ -444,6 +444,13 @@ $config['auth_ldap_groupmemberattr'] = "memberUid";   // Use your unique attribu
 #$config['auth_ldap_groups']['pfy']['level'] = 7;
 #$config['auth_ldap_groups']['support']['level'] = 1;
 
+// RADIUS Authentication
+$config['auth_radius_server']  = array('127.0.0.1'); // RADIUS server list
+$config['auth_radius_port']    = 1812;               // Server port
+$config['auth_radius_secret']  = 'secret';           // RADIUS authentication secret
+$config['auth_radius_timeout'] = 5;                  // Timeout in seconds
+$config['auth_radius_retries'] = 2;                  // Number of retries to reconnect to RADIUS server
+
 // Sensors
 
 $config['allow_entity_sensor']['amperes'] = 1;
