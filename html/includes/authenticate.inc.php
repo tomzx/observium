@@ -5,6 +5,7 @@
 session_start();
 
 // Preflight checks
+// FIXME why are they in this file?!
 if (!is_dir($config['rrd_dir']))
 {
   echo("<div class='errorbox'>RRD Log Directory is missing ({$config['rrd_dir']}).  Graphing may fail.</div>");
@@ -20,29 +21,6 @@ if (!is_writable($config['temp_dir']))
   echo("<div class='errorbox'>Temp Directory is not writable ({$config['tmp_dir']}).  Graphing may fail.</div>");
 }
 
-if ($vars['page'] == "logout" && $_SESSION['authenticated'])
-{
-  dbInsert(array('user' => $_SESSION['username'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Logged Out'), 'authlog');
-  unset($_SESSION);
-  session_destroy();
-  header('Location: /');
-  setcookie ("username", "", time() - 60*60*24*100, "/");
-  setcookie ("password", "", time() - 60*60*24*100, "/");
-  $auth_message = "Logged Out";
-}
-
-if (isset($_GET['username']) && isset($_GET['password']))
-{
-  $_SESSION['username'] = mres($_GET['username']);
-  $_SESSION['password'] = $_GET['password'];
-} elseif (isset($_POST['username']) && isset($_POST['password'])) {
-  $_SESSION['username'] = mres($_POST['username']);
-  $_SESSION['password'] = $_POST['password'];
-} elseif (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
-  $_SESSION['username'] = mres($_COOKIE['username']);
-  $_SESSION['password'] = $_COOKIE['password'];
-}
-
 if (!isset($config['auth_mechanism']))
 {
   $config['auth_mechanism'] = "mysql";
@@ -56,6 +34,32 @@ else
 {
   print_error('ERROR: no valid auth_mechanism defined!');
   exit();
+}
+
+if ($vars['page'] == "logout" && $_SESSION['authenticated'])
+{
+  if (auth_can_logout())
+  {
+    dbInsert(array('user' => $_SESSION['username'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Logged Out'), 'authlog');
+    unset($_SESSION);
+    session_destroy();
+    setcookie ("username", "", time() - 60*60*24*100, "/");
+    setcookie ("password", "", time() - 60*60*24*100, "/");
+    $auth_message = "Logged Out";
+  }
+  header('Location: /');
+}
+
+if (isset($_GET['username']) && isset($_GET['password']))
+{
+  $_SESSION['username'] = mres($_GET['username']);
+  $_SESSION['password'] = $_GET['password'];
+} elseif (isset($_POST['username']) && isset($_POST['password'])) {
+  $_SESSION['username'] = mres($_POST['username']);
+  $_SESSION['password'] = $_POST['password'];
+} elseif (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
+  $_SESSION['username'] = mres($_COOKIE['username']);
+  $_SESSION['password'] = $_COOKIE['password'];
 }
 
 $auth_success = 0;
@@ -86,4 +90,5 @@ if (isset($_SESSION['username']))
     dbInsert(array('user' => $_SESSION['username'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Authentication Failure'), 'authlog');
   }
 }
+
 ?>
