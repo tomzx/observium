@@ -427,6 +427,8 @@ $config['auth_ldap_binddn'] = ""; // Initial LDAP bind dn and password, leave em
 $config['auth_ldap_bindpw'] = "";
 $config['auth_ldap_bindanonymous'] = FALSE;
 
+$config['auth_ldap_kerberized'] = FALSE; // Trust Apache server to authenticate user, READ DOCUMENTATION FIRST!!
+
 $config['auth_ldap_attr']['uid'] = "uid";             // LDAP attribute containing the user login name
 $config['auth_ldap_attr']['uidNumber'] = "uidNumber"; // LDAP attribute containing the numeric user ID
 $config['auth_ldap_attr']['cn'] = "cn";               // LDAP attribute containing the user's full name

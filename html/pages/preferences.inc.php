@@ -15,7 +15,7 @@ if ($_POST['action'] == "changepass")
     }
     elseif ($_POST['new_pass'] == $_POST['new_pass2'])
     {
-      changepassword($_SESSION['username'],$_POST['new_pass']);
+      auth_change_password($_SESSION['username'],$_POST['new_pass']);
       $changepass_message = "Password Changed.";
     }
     else
@@ -35,7 +35,7 @@ echo("</div>");
 echo("<div style='width: 300px; float: right;'>");
 echo("<div style='background-color: #e5e5e5; border: solid #e5e5e5 10px; margin-bottom:10px;'>");
 
-if (passwordscanchange($_SESSION['username']))
+if (auth_can_change_password($_SESSION['username']))
 {
   echo("<div style='font-size: 18px; font-weight: bold; margin-bottom: 5px;'>Change Password</div>");
   echo($changepass_message);

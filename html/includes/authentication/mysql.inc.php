@@ -12,7 +12,7 @@ function authenticate($username,$password)
       $row = dbFetchRow("DESCRIBE users password");
       if ($row['Type'] == 'varchar(34)')
       {
-        changepassword($username,$password);
+        auth_change_password($username,$password);
       }
       return 1;
     }
@@ -24,14 +24,19 @@ function authenticate($username,$password)
   return 0;
 }
 
-function passwordscanchange($username = "")
+function auth_can_logout()
+{
+  return TRUE;
+}
+
+function auth_can_change_password($username = "")
 {
   /*
    * By default allow the password to be modified, unless the existing
    * user is explicitly prohibited to do so.
    */
 
-  if (empty($username) || !user_exists($username))
+  if (empty($username) || !auth_user_exists($username))
   {
     return 1;
   } else {
@@ -60,7 +65,7 @@ function generateSalt($max = 15)
   return $salt;
 }
 
-function changepassword($username,$password)
+function auth_change_password($username,$password)
 {
   $encrypted = crypt($password,'$1$' . generateSalt(8).'$');
   return dbUpdate(array('password' => $encrypted), 'users', '`username` = ?', array($username));
@@ -73,7 +78,7 @@ function auth_usermanagement()
 
 function adduser($username, $password, $level, $email = "", $realname = "", $can_modify_passwd='1', $description = "")
 {
-  if (!user_exists($username))
+  if (!auth_user_exists($username))
   {
     $encrypted = crypt($password,'$1$' . generateSalt(8).'$');
     return dbInsert(array('username' => $username, 'password' => $encrypted, 'level' => $level, 'email' => $email, 'realname' => $realname, 'can_modify_passwd' => $can_modify_passwd, 'descr' => $description), 'users');
@@ -82,17 +87,17 @@ function adduser($username, $password, $level, $email = "", $realname = "", $can
   }
 }
 
-function user_exists($username)
+function auth_user_exists($username)
 {
   return @dbFetchCell("SELECT COUNT(*) FROM users WHERE username = ?", array($username));
 }
 
-function get_userlevel($username)
+function auth_user_level($username)
 {
   return dbFetchCell("SELECT `level` FROM `users` WHERE `username` = ?", array($username));
 }
 
-function get_userid($username)
+function auth_user_id($username)
 {
   return dbFetchCell("SELECT `user_id` FROM `users` WHERE `username` = ?", array($username));
 }
@@ -110,7 +115,7 @@ function deluser($username)
 
 }
 
-function get_userlist()
+function auth_user_list()
 {
   return dbFetchRows("SELECT * FROM `users`");
 }

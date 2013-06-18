@@ -34,7 +34,7 @@ if (auth_usermanagement())
 {
   if (isset($argv[1]) && isset($argv[2]) && isset($argv[3]))
   {
-    if (!user_exists($argv[1]))
+    if (!auth_user_exists($argv[1]))
     {
       if (adduser($argv[1],$argv[2],$argv[3],@$argv[4]))
       {

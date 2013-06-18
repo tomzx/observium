@@ -27,12 +27,17 @@ function authenticate($username,$password)
   return 0;
 }
 
-function passwordscanchange($username = "")
+function auth_can_logout()
+{
+  return FALSE;
+}
+
+function auth_can_change_password($username = "")
 {
   return 0;
 }
 
-function changepassword($username,$newpassword)
+function auth_change_password($username,$newpassword)
 {
   # Not supported
 }
@@ -47,18 +52,18 @@ function adduser($username, $password, $level, $email = "", $realname = "", $can
   return dbInsert(array('username' => $username, 'password' => $password, 'level' => $level, 'email' => $email, 'realname' => $realname), 'users');
 }
 
-function user_exists($username)
+function auth_user_exists($username)
 {
   // FIXME this doesn't seem right? (adama)
   return dbFetchCell("SELECT * FROM `users` WHERE `username` = ?", array($username));
 }
 
-function get_userlevel($username)
+function auth_user_level($username)
 {
   return dbFetchCell("SELECT `level` FROM `users` WHERE `username`= ?", array($username));
 }
 
-function get_userid($username)
+function auth_user_id($username)
 {
   return dbFetchCell("SELECT `user_id` FROM `users` WHERE `username`= ?", array($username));
 }
@@ -69,7 +74,7 @@ function deluser($username)
   return 0;
 }
 
-function get_userlist()
+function auth_user_list()
 {
   return dbFetchRows("SELECT * FROM `users`");
 }

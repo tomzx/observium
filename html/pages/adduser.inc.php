@@ -9,7 +9,7 @@ if ($_SESSION['userlevel'] == '10') {
   if (auth_usermanagement()) {
     if ($_POST['action'] == "add") {
       if ($_POST['new_username']) {
-        if (!user_exists($_POST['new_username'])) {
+        if (!auth_user_exists($_POST['new_username'])) {
           if (isset($_POST['can_modify_passwd'])) {
             $_POST['can_modify_passwd'] = 1;
           } else {

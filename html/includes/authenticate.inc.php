@@ -62,10 +62,10 @@ $auth_success = 0;
 
 if (isset($_SESSION['username']))
 {
-  if (authenticate($_SESSION['username'],$_SESSION['password']) || get_userlevel($_SESSION['origusername']) >= 10)
+  if (authenticate($_SESSION['username'],$_SESSION['password']) || auth_user_level($_SESSION['origusername']) >= 10)
   {
-    $_SESSION['userlevel'] = get_userlevel($_SESSION['username']);
-    $_SESSION['user_id'] = get_userid($_SESSION['username']);
+    $_SESSION['userlevel'] = auth_user_level($_SESSION['username']);
+    $_SESSION['user_id'] = auth_user_id($_SESSION['username']);
     if (!$_SESSION['authenticated'])
     {
       $_SESSION['authenticated'] = true;

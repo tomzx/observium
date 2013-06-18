@@ -510,8 +510,15 @@ if ($_SESSION['userlevel'] >= 10)
                 <li class="divider"></li>
                 <li><a href="<?php echo generate_url(array('page'=>'settings')); ?>" title="Global Settings"><i class="oicon-wrench"></i> Global Settings</a></li>
                 <li><a href="<?php echo generate_url(array('page'=>'preferences')); ?>" title="My Settings "><i class="oicon-wrench-screwdriver"></i> My Settings</a></li>
+<?php
+if (auth_can_logout())
+{
+?>
                 <li class="divider"></li>
                 <li><a href="<?php echo generate_url(array('page'=>'logout')); ?>" title="Logout"><i class="oicon-door-open-out"></i> Logout</a></li>
+<?php
+}
+?>
                 <li class="divider"></li>
                 <li><a href="<?php echo generate_url(array('page'=>'about')); ?>" title="About Observium"><i class="oicon-information"></i> About Observium</a></li>
               </ul>
