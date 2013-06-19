@@ -15,7 +15,7 @@ echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 1
 echo("  <thead>\n");
 echo("  </thead>");
 
-foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? AND `svc_id` = ? ORDER BY `svc_name`", array($device['device_id'], $vars['svc'])) as $svc)
+foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? AND `svc_id` = ? ORDER BY `svc_label`", array($device['device_id'], $vars['svc'])) as $svc)
 {
 
   if (is_integer($i/2)) { $bg_colour = $list_colour_a; } else { $bg_colour = $list_colour_b; }
@@ -23,7 +23,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? A
   if ($svc['svc_state'] == "up") { $svc_class="green"; } else { $svc_class="red"; }
 
   echo("<tr bgcolor='$bg_colour'>");
-  echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</strong></td>');
+  echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_label'] . '</strong></td>');
   echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
   echo("<td width=100><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
   echo("<td width=320>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
@@ -147,7 +147,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? O
   if ($svc['svc_state'] == "up") { $svc_class="green"; } else { $svc_class="red"; }
 
   echo("<tr bgcolor='$bg_colour'>");
-  echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_name'] . '</a></td>');
+  echo('<td width=320 class=object-name><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_label'] . '</a></td>');
   echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
   echo("<td width=100><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
   echo("<td width=320>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
