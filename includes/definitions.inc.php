@@ -1160,6 +1160,8 @@ $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['type']              = "storage";
 $config['os'][$os]['icon']              = "synology";
 
+// Ubiquiti
+
 $os = "airos";
 $config['os'][$os]['text']              = "Ubiquiti AirOS";
 $config['os'][$os]['type']              = "network";
@@ -1169,6 +1171,17 @@ $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Traffic";
 $config['os'][$os]['over'][1]['graph']  = "device_processor";
 $config['os'][$os]['over'][1]['text']   = "CPU Usage";
+
+$os = "edgeos";
+$config['os'][$os]['text']              = "Ubiquiti EdgeOS";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "ubiquiti";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "Processors";
+$config['os'][$os]['over'][2]['graph']  = "device_mempool";
+$config['os'][$os]['over'][2]['text']   = "Memory";
 
 $os = "draytek";
 $config['os'][$os]['text']              = "Draytek";

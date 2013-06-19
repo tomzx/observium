@@ -11,9 +11,9 @@ $graph_types = array("bits"   => "Bits",
 
 $i=0;
 
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
-echo("  <thead>\n");
-echo("  </thead>");
+echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('  <thead>');
+echo('  </thead>');
 
 foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? AND `svc_id` = ? ORDER BY `svc_label`", array($device['device_id'], $vars['svc'])) as $svc)
 {
