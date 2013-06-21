@@ -72,6 +72,7 @@ if ($device['os_group'] == "unix")
       
       # Workaround for older script where we didn't split into 3 possible parts yet
       if ($section == "app-powerdns-recursor") { $sa = "app"; $sb = "powerdns-recursor"; $sc = ""; }
+      if ($section == "app-exim-mailqueue") { $sa = "app"; $sb = "exim-mailqueue"; $sc = ""; }
 
       if (!empty($sa) && !empty($sb))
       {
