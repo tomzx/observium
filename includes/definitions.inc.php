@@ -1175,6 +1175,7 @@ $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 $os = "edgeos";
 $config['os'][$os]['text']              = "Ubiquiti EdgeOS";
 $config['os'][$os]['type']              = "network";
+$config['os'][$os]['group']             = "unix";
 $config['os'][$os]['icon']              = "ubiquiti";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Traffic";
