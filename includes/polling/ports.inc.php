@@ -23,11 +23,17 @@ $pagp_oids = array('pagpOperationMode', 'pagpPortState', 'pagpPartnerDeviceId', 
                    'pagpPartnerDeviceName', 'pagpEthcOperationMode', 'pagpDeviceId', 'pagpGroupIfIndex');
 
 $ifmib_oids = array_merge($data_oids, $stat_oids);
-
 $ifmib_oids = array('ifEntry', 'ifXEntry');
 
 echo("Caching Oids: ");
 foreach ($ifmib_oids as $oid) { echo("$oid "); $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "IF-MIB"); }
+
+// Check if we're dealing with a retarded ass-backwards OS which feels the need to dump standardised variables in its own MIB, apparently just for shits.
+if($device['os'] == "netapp")
+{
+  // Add NetApp's own table so we can get 64-bit values. They are checked later on.
+  $port_stats = snmpwalk_cache_oid($device, "NetIfEntry", $port_stats, "NETAPP-MIB", mib_dirs("netapp"));
+}
 
 if ($config['enable_ports_etherlike'])
 {
@@ -180,15 +186,19 @@ foreach ($ports as $port)
 
     // Copy ifHC[In|Out] values to non-HC if they exist
     // Check if they're greater than zero to work around stupid devices which expose HC counters, but don't populate them. HERPDERP. - adama
-    foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
+    if($device['os'] == "netapp") { $hc_prefixes = array('HC', '64'); } else { $hc_prefixes = array('HC'); }
+    foreach($hc_prefixes as $hc_prefix)
     {
-      $hcin = 'ifHCIn'.$hc;
-      $hcout = 'ifHCOut'.$hc;
-      if (is_numeric($this_port[$hcin]) && $this_port[$hcin] > 0 && is_numeric($this_port[$hcout]) && $this_port[$hcout] > 0)
+      foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
       {
-        echo("HC $hc, ");
-        $this_port['ifIn'.$hc]  = $this_port[$hcin];
-        $this_port['ifOut'.$hc] = $this_port[$hcout];
+        $hcin = 'if'.$hc_prefix.'In'.$hc;
+        $hcout = 'if'.$hc_prefix.'Out'.$hc;
+        if (is_numeric($this_port[$hcin]) && $this_port[$hcin] > 0 && is_numeric($this_port[$hcout]) && $this_port[$hcout] > 0)
+        {
+          echo(" ".$hc_prefix." $hc, ");
+          $this_port['ifIn'.$hc]  = $this_port[$hcin];
+          $this_port['ifOut'.$hc] = $this_port[$hcout];
+        }
       }
     }
 
