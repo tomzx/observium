@@ -8,10 +8,10 @@ if ($width > "500")
   $descr_len=18;
 } else {
   $descr_len=8;
-  $descr_len += round(($width - 260) / 9.5);
+  $descr_len += round(($width - 215) / 9.5);
 }
 
-$unit_text = "Bits/sec";
+$unit_text = "Bps";
 
 if (!$noheader)
 {
@@ -21,7 +21,7 @@ if (!$noheader)
     if (!$nototal) { $rrd_options .= " COMMENT:'Total      '"; }
     $rrd_options .= " COMMENT:'\l'";
   } else {
-    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."     Now         Ave          Max\l'";
+    $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+5),0,$descr_len+5)."     Now       Ave       Max\l'";
   }
 }
 
@@ -36,11 +36,12 @@ foreach ($rrd_list as $rrd)
 
   if (isset($rrd['descr_in']))
   {
-    $descr     = rrdtool_escape($rrd['descr_in'], $descr_len) . "  In";
+    $descr     = rrdtool_escape($rrd['descr_in'], $descr_len) . " <";
   } else {
-    $descr     = rrdtool_escape($rrd['descr'], $descr_len) . "  In";
+    $descr     = rrdtool_escape($rrd['descr'], $descr_len) . " <";
   }
-  $descr_out = rrdtool_escape($rrd['descr_out'], $descr_len) . " Out";
+  $descr_out = rrdtool_escape($rrd['descr_out'], $descr_len) . " >";
+
   $descr     = str_replace("'", "", $descr); // FIXME does this mean ' should be filtered in rrdtool_escape? probably...
   $descr_out = str_replace("'", "", $descr_out);
 
@@ -57,12 +58,9 @@ foreach ($rrd_list as $rrd)
   $seperator = ",";
   $plus = ",+";
 
-  if (!$args['nototal'])
-  {
-    $rrd_options .= " VDEF:totin".$i."=inB".$i.",TOTAL";
-    $rrd_options .= " VDEF:totout".$i."=outB".$i.",TOTAL";
-    $rrd_options .= " VDEF:tot".$i."=octets".$i.",TOTAL";
-  }
+  $rrd_options .= " VDEF:totin".$i."=inB".$i.",TOTAL";
+  $rrd_options .= " VDEF:totout".$i."=outB".$i.",TOTAL";
+  $rrd_options .= " VDEF:tot".$i."=octets".$i.",TOTAL";
 
   if ($i) { $stack="STACK"; }
 
@@ -96,18 +94,26 @@ foreach ($rrd_list as $rrd)
   $rrd_options .= " VDEF:95thin=inbits,95,PERCENT";
   $rrd_options .= " VDEF:95thout=outbits,95,PERCENT";
   $rrd_options .= " VDEF:d95thout=doutbits,5,PERCENT";
+  $rrd_options .= " VDEF:totin=inoctets,TOTAL";
+  $rrd_options .= " VDEF:totout=outoctets,TOTAL";
 
-  $rrd_options .= " LINE1.25:inbits#005500:'Total In '";
-  $rrd_options .= " GPRINT:inbits:LAST:%6.2lf%s";
-  $rrd_options .= " GPRINT:inbits:AVERAGE:%6.2lf%s";
-  $rrd_options .= " GPRINT:inbits:MAX:%6.2lf%s";
-  $rrd_options .= " GPRINT:95thin:%6.2lf%s\\\\n";
+  $rrd_options .= " 'COMMENT: \\\\n'";
+  $rrd_options .= " 'COMMENT:Aggregate Totals\\\\n'";
 
-  $rrd_options .= " LINE1.25:doutbits#000055:'".str_pad("Total Out", $descr_len+5)."'";
-  $rrd_options .= " GPRINT:outbits:LAST:%6.2lf%s";
-  $rrd_options .= " GPRINT:outbits:AVERAGE:%6.2lf%s";
-  $rrd_options .= " GPRINT:outbits:MAX:%6.2lf%s";
-  $rrd_options .= " GPRINT:95thout:%6.2lf%s\\\\n";
+  $rrd_options .= " GPRINT:totin:'%6.2lf%s$total_units'";
+  $rrd_options .= " 'COMMENT:".str_pad("", $descr_len-8)."<'";
+  $rrd_options .= " GPRINT:inbits:LAST:%6.2lf%s$units";
+  $rrd_options .= " GPRINT:inbits:AVERAGE:%6.2lf%s$units";
+  $rrd_options .= " GPRINT:inbits:MAX:%6.2lf%s$units\\\\n";
+#  $rrd_options .= " GPRINT:95thin:%6.2lf%s\\\\n";
+
+  $rrd_options .= " GPRINT:totout:'%6.2lf%s$total_units'";
+  $rrd_options .= " 'COMMENT:".str_pad("", $descr_len-8).">'";
+  $rrd_options .= " GPRINT:outbits:LAST:%6.2lf%s$units";
+  $rrd_options .= " GPRINT:outbits:AVERAGE:%6.2lf%s$units";
+  $rrd_options .= " GPRINT:outbits:MAX:%6.2lf%s$units\\\\n";
+
+#  $rrd_options .= " GPRINT:95thout:%6.2lf%s\\\\n";
 
 if ($custom_graph) { $rrd_options .= $custom_graph; }
 
