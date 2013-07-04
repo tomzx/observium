@@ -15,7 +15,7 @@ foreach (dbFetchRows("SELECT * FROM `ports` AS I, `devices` AS D WHERE `port_des
   }
 }
 
-$units ='bps';
+$units ='b';
 $total_units ='B';
 $colours_in ='greens';
 $multiplier = "8";
