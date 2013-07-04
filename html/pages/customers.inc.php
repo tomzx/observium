@@ -35,7 +35,7 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `port_descr_type` = 'cust' GRO
     }
 
     echo("
-           <tr bgcolor='$bg_colour'>
+           <tr>
              <td width='250'><span style='font-weight: bold;' class=interface>".$customer_name."</span></td>
              <td width='150'>" . generate_device_link($device) . "</td>
              <td width='100'>" . generate_port_link($port, makeshortif($port['ifDescr'])) . "</td>
