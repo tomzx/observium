@@ -952,8 +952,8 @@ function parse_csv($content, $has_header = 1, $separator = ",")
           } else {
             $line_array[] = trim($entry);
           }
-          $entrycount++;
         }
+        $entrycount++;
       }  
    
       # Add resulting line array to final result
