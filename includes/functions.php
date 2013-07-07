@@ -926,31 +926,40 @@ function parse_csv($content, $has_header = 1, $separator = ",")
     $header = array_shift($lines);
     foreach (explode($separator,$header) as $heading)
     {
-      $headers[$headcount] = trim($heading);
-      $headcount++;
-    }
-  }
-
+      if (trim($heading) != "")
+      {
+        $headers[$headcount] = trim($heading);
+        $headcount++;
+      }
+    }  
+  }    
+     
   # Process every line
   foreach ($lines as $line)
   {
-    $entrycount = 1;
-    foreach (explode($separator,$line) as $entry)
+    if ($line != "")
     {
-      # If we use header, place the value inside the named array entry
-      # Otherwise, just stuff it in numbered fields in the array
-      if ($has_header)
+      $entrycount = 1;
+      foreach (explode($separator,$line) as $entry)
       {
-        $line_array[$headers[$entrycount]] = trim($entry);
-      } else {
-        $line_array[] = trim($entry);
-      }
-      $entrycount++;
+        # If we use header, place the value inside the named array entry
+        # Otherwise, just stuff it in numbered fields in the array
+        if (trim($entry) != "")
+        {
+          if ($has_header)
+          {
+            $line_array[$headers[$entrycount]] = trim($entry);
+          } else {
+            $line_array[] = trim($entry);
+          }
+          $entrycount++;
+        }
+      }  
+   
+      # Add resulting line array to final result
+      $result[] = $line_array; unset($line_array);
     }
-
-    # Add resulting line array to final result
-    $result[] = $line_array; unset($line_array);
-  }
+  }  
 
   return $result;
 }
