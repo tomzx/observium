@@ -2,7 +2,7 @@
 
 if (!$os)
 {
-  if (preg_match("/^Cisco\ IronPort.*\ AsyncOS/", $sysDescr)) { $os = "asyncos"; }
+  if (preg_match("/IronPort.*\ AsyncOS/", $sysDescr)) { $os = "asyncos"; }
 }
 
 //EOF
