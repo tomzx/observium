@@ -54,10 +54,16 @@ $config['svn']            = "/usr/bin/svn";
 // Though one could conceivably increase or decrease the size of each RRA if one had performance problems
 // Or if one had a very fast I/O subsystem with no performance worries.
 
-$config['rrd_rra']  = " RRA:AVERAGE:0.5:1:2016 RRA:AVERAGE:0.5:6:1440 RRA:AVERAGE:0.5:24:1440 RRA:AVERAGE:0.5:288:1440 ";
+// These settings make quite large RRDs.
+// They store 4 years of 1-day resolution data.
+
+//                      7 days of 5 min        62 days of 30 min      120 days of 2 hour      4 years of 1 day
+$config['rrd_rra']  = " RRA:AVERAGE:0.5:1:2016 RRA:AVERAGE:0.5:6:2976 RRA:AVERAGE:0.5:24:1440 RRA:AVERAGE:0.5:288:1440 ";
 $config['rrd_rra'] .= "                        RRA:MIN:0.5:6:1440     RRA:MIN:0.5:96:360      RRA:MIN:0.5:288:1440 ";
 $config['rrd_rra'] .= "                        RRA:MAX:0.5:6:1440     RRA:MAX:0.5:96:360      RRA:MAX:0.5:288:1440 ";
-$config['rrd_rra'] .= " RRA:LAST:0.5:1:1       RRA:LAST:0.5:6:1       RRA:LAST:0.5:24:1       RRA:LAST:0.5:288:1";
+$config['rrd_rra'] .= " RRA:LAST:0.5:1:1";
+
+#$config['rrd_rra'] .= " RRA:LAST:0.5:1:1       RRA:LAST:0.5:6:1       RRA:LAST:0.5:24:1       RRA:LAST:0.5:288:1";
 
 // RRDCacheD - Make sure it can write to your RRD dir!
 
@@ -532,6 +538,41 @@ $config['sla_type_labels']['lspTrace'] = 'LSP trace';
 $config['sla_type_labels']['ethernetPing'] = 'Ethernet ping';
 $config['sla_type_labels']['ethernetJitter'] = 'Ethernet jitter';
 $config['sla_type_labels']['lspPingPseudowire'] = 'LSP Pseudowire ping';
+
+// List of MIB types. Needed to be able to enable/disable them in the webif.
+
+$config['mibs']['SNMPv2-MIB']                        = 1;
+$config['mibs']['IF-MIB']	                     = 1;
+$config['mibs']['OSPF-MIB']                          = 1;
+$config['mibs']['EIGRP-MIB']                         = 1;
+$config['mibs']['CISCO-MAC-ACCOUNTING-MIB']          = 1;
+$config['mibs']['JUNIPER-MAC-MIB']                   = 1;
+$config['mibs']['IP-MIB']                            = 1;
+$config['mibs']['IPV6-MIB']                          = 1;
+$config['mibs']['CISCO-IETF-IP-MIB']		     = 1;
+$config['mibs']['BGP4-V2-MIB-JUNIPER']		     = 1;
+$config['mibs']['FORCE10-BGP4-V2-MIB']               = 1;
+$config['mibs']['BGP4-MIB']                          = 1;
+$config['mibs']['CISCO-BGP4-MIB']                    = 1;
+$config['mibs']['CISCO-CEF-MIB']                     = 1;
+$config['mibs']['ENTITY-MIB']                        = 1;
+$config['mibs']['CISCO-ENTITY-SENSOR-MIB']           = 1;
+$config['mibs']['ENTITY-SENSOR-MIB']                 = 1;
+$config['mibs']['CISCO-IETF-PW-MPLS-MIB']            = 1;
+$config['mibs']['CISCO-RTTMON-MIB']                  = 1;
+$config['mibs']['MPLS-L3VPN-STD-MIB']                = 1;
+$config['mibs']['MPLS-VPN-MIB']                      = 1;
+$config['mibs']['FOUNDRY-SN-SWITCH-GROUP-MIB']       = 1;
+$config['mibs']['LLDP-MIB']                          = 1;
+$config['mibs']['BRIDGE-MIB']                        = 1;
+$config['mibs']['HOST-RESOURCES-MIB']                = 1;
+$config['mibs']['Juniper-UNI-ATM-MIB']               = 1;
+$config['mibs']['UCD-SNMP-MIB']                      = 1;
+$config['mibs']['UCD-DISKIO-MIB']                    = 1;
+$config['mibs']['Q-BRIDGE-MIB']                      = 1;
+$config['mibs']['VMWARE-VMINFO-MIB']                 = 1;
+$config['mibs']['EtherLike-MIB']                     = 1;
+
 
 // List of poller modules. Need to be in the array to be
 // considered for execution.

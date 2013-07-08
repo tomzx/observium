@@ -360,6 +360,18 @@ $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory";
 $config['os'][$os]['icon']              = "cisco";
 
+// Cisco IronPort
+
+$os = "asyncos";
+$config['os'][$os]['group']             = "cisco";
+$config['os'][$os]['text']              = "Cisco IronPort";
+$config['os'][$os]['type']              = "server";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_processor";
+$config['os'][$os]['over'][1]['text']   = "CPU Usage";
+$config['os'][$os]['icon']              = "cisco";
+
 // Cisco Small Business (Linksys)
 
 $os = "ciscosb";
@@ -1411,6 +1423,10 @@ $config['graph_types']['device']['netscalervsvr_pkts']['descr']    = 'Aggregate 
 $config['graph_types']['device']['netscalervsvr_conns']['descr']   = 'Aggregate vServer Connections';
 $config['graph_types']['device']['netscalervsvr_reqs']['descr']    = 'Aggregate vServer Requests';
 $config['graph_types']['device']['netscalervsvr_hitmiss']['descr'] = 'Aggregate vServer Hits/Misses';
+
+$config['graph_types']['device']['asyncos_workq']['section'] = 'appliance';
+$config['graph_types']['device']['asyncos_workq']['order'] = '0';
+$config['graph_types']['device']['asyncos_workq']['descr'] = 'Work Queue Messages';
 
 $config['graph_descr']['device_smokeping_in_all'] = "This is an aggregate graph of the incoming smokeping tests to this host. The line corresponds to the average RTT. The shaded area around each line denotes the standard deviation.";
 $config['graph_descr']['device_processor']        = "This is an aggregate graph of all processors in the system.";

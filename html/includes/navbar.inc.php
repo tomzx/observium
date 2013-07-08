@@ -285,8 +285,6 @@ foreach (dbFetchRows("SELECT sensor_class,COUNT(sensor_id) AS c FROM sensors GRO
   #$config['sensor_types']['current']
 }
 
-
-
 // Copy the variable so we can use $used_sensors later in other parts of the code
 $menu_sensors = $used_sensors;
 
