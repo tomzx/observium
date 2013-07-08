@@ -206,6 +206,7 @@ function humanize_port(&$port)
   if ($port['ifAdminStatus'] == "down")                                                 { $port['table_tab_colour'] = "#aaaaaa"; $port['row_class'] = "";
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down")           { $port['table_tab_colour'] = "#cc0000"; $port['row_class'] = "error";
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $port['table_tab_colour'] = "#ff6600"; $port['row_class'] = "warning";
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "testing")        { $port['table_tab_colour'] = "#85004b"; $port['row_class'] = "info";
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up")             { $port['table_tab_colour'] = "#194B7F"; $port['row_class'] = ""; }
 
   $port['humanized'] = TRUE; /// Set this so we can check it later.
