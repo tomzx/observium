@@ -23,7 +23,7 @@ if ($width > "1000")
 }
 else if ($width > "500")
 {
-  $descr_len = 24;   
+  $descr_len = 24;
 } else {
   $descr_len = 12;
   $descr_len += round(($width - 250) / 8);
@@ -31,7 +31,7 @@ else if ($width > "500")
 
 // Build the legend headers using the length values previously calculated
 
-if (!$noheader)
+if ($legend != 'no')
 {
   $rrd_options .= " COMMENT:'".substr(str_pad($unit_text, $descr_len+2),0,$descr_len+2)."'";
   if (in_array("lst", $data_show)) { $rrd_options .= " COMMENT:' Last  '"; }
