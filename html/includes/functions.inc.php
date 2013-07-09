@@ -410,7 +410,7 @@ function generate_url($vars, $new_vars = array())
   {
     if ($value == "0" || $value != "" && strstr($var, "opt") === FALSE && is_numeric($var) === FALSE)
     {
-      $url .= $var ."=".$value."/";
+      $url .= urlencode($var) ."=".urlencode($value)."/";
     }
   }
 
