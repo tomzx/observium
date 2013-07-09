@@ -79,8 +79,6 @@ if ($device['adsl_count'] > "0")
 
 if ($device['os_group'] == "cisco")
 {
-  $port_stats = snmp_cache_portIfIndex ($device, $port_stats);
-  $port_stats = snmp_cache_portName ($device, $port_stats);
   foreach ($pagp_oids as $oid) { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "CISCO-PAGP-MIB"); }
   $data_oids[] = "portName";
 
@@ -151,12 +149,14 @@ foreach ($port_stats as $ifIndex => $port)
       #print_r($ports);
     } elseif ($ports[$ifIndex]['deleted'] == "1") {
       dbUpdate(array('deleted' => '0'), 'ports', '`port_id` = ?', array($ports[$ifIndex]['port_id']));
+      log_event("Has been removed mark DELETED from port", $device, 'interface', $ports[$ifIndex]['port_id']);
       $ports[$ifIndex]['deleted'] = "0";
     }
   } else {
-    if ($ports[$port['ifIndex']]['deleted'] != "1")
+    if (isset($ports[$port['ifIndex']]) && $ports[$port['ifIndex']]['deleted'] != "1")
     {
       dbUpdate(array('deleted' => '1'), 'ports', '`port_id` = ?', array($ports[$ifIndex]['port_id']));
+      log_event("Port was marked as DELETED", $device, 'interface', $ports[$ifIndex]['port_id']);
       $ports[$ifIndex]['deleted'] = "1";
     }
   }
@@ -487,6 +487,7 @@ foreach ($ports as $port)
     if ($port['deleted'] != "1")
     {
       dbUpdate(array('deleted' => '1'), 'ports',  '`device_id` = ? AND `ifIndex` = ?', array($device['device_id'], $port['ifIndex']));
+      log_event("Port was marked as DELETED", $device, 'interface', $port['port_id']);
     }
   } else {
     echo("Port Disabled.");
