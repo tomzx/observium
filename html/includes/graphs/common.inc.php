@@ -1,6 +1,6 @@
 <?php
 
-if ($_GET['from'])    { $from   = mres($_GET['from']);   }
+if ($_GET['from'])    { $from   = mres($_GET['from']); }
 if ($_GET['to'])      { $to     = mres($_GET['to']);     }
 if ($_GET['width'])   { $width  = mres($_GET['width']);  }
 if($config['trim_tobias']) { $width+=12; }
@@ -18,6 +18,14 @@ if (!isset($scale_min) && !isset($scale_max) && !isset($norigid)) { $rrd_options
 if (isset($scale_min)) { $rrd_options .= ' -l $scale_min'; }
 if (isset($scale_max)) { $rrd_options .= ' -u $scale_max'; }
 if (isset($scale_rigid)) { $rrd_options .= ' -r'; }
+
+if (is_numeric($from))
+{
+  if ($to-$from <= 172800) { $graph_max = 0; } // Do not graph MAX areas for intervals less then 48 hours
+} elseif (preg_match('/\d(d(ay)?s?|h(our)?s?)$/', $from))
+{
+  $graph_max = 0; // Also for RRD style from (6h, 2day)
+}
 
 $rrd_options .= ' -E --start '.$from.' --end ' . $to . ' --width '.$width.' --height '.$height.' ';
 $rrd_options .= $config['rrdgraph_def_text'];
