@@ -78,7 +78,7 @@ foreach ($segments as $pos => $segment)
 
 foreach ($_GET as $name => $value)
 {
-  $vars[$name] = $value;
+  $vars[urldecode($name)] = urldecode($value);
 }
 
 foreach ($_POST as $name => $value)
