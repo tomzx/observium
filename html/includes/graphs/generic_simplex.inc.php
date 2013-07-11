@@ -6,12 +6,20 @@ if ($config['old_graphs'])
 } else {
 
 // Draw generic bits graph
-// args: ds_in, ds_out, rrd_filename, bg, legend, from, to, width, height, inverse, percentile
+// args: ds_in, ds_out, unit_integer, rrd_filename, bg, legend, from, to, width, height, inverse, percentile
 
 include("includes/graphs/common.inc.php");
 
 $unit_text = str_pad(truncate($unit_text,18,''),18);
 $line_text = str_pad(truncate($line_text,12,''),12);
+
+if (isset($unit_integer) && $unit_integer)
+{
+  $ds_format = '"%6.0lf "'; //NOTE. max value 999999
+} else {
+  $ds_format = '"%6.2lf%s"';
+}
+
 
 if ($multiplier)
 {
@@ -61,10 +69,10 @@ if ($_GET['previous'] == "yes")
   {
     $rrd_options .= " VDEF:".$ds."_percentileX=".$ds.",".$percentile.",PERCENT";
   }
-#  if ($graph_max)
-#  {
-#    $rrd_options .= " AREA:".$ds."_max#".$colour_area_max.":";
-#  }
+  //if ($graph_max)
+  //{
+  //  $rrd_options .= " AREA:".$ds."_max#".$colour_area_max.":";
+  //}
 }
 
 if ($colour_minmax)
@@ -79,7 +87,7 @@ if ($colour_minmax)
   }
 }
 
-$rrd_options .= " COMMENT:'".$unit_text."Now       Ave      Max";
+$rrd_options .= " COMMENT:'".$unit_text."Now       Ave       Max       ";
 
 if ($percentile)
 {
@@ -88,13 +96,13 @@ if ($percentile)
 
 $rrd_options .= "\\n'";
 $rrd_options .= " LINE1.25:".$ds."#".$colour_line.":'".$line_text."'";
-$rrd_options .= " GPRINT:".$ds.":LAST:%6.2lf%s";
-$rrd_options .= " GPRINT:".$ds.":AVERAGE:%6.2lf%s";
-$rrd_options .= " GPRINT:".$ds."_max:MAX:%6.2lf%s";
+$rrd_options .= " GPRINT:".$ds.":LAST:".$ds_format;
+$rrd_options .= " GPRINT:".$ds.":AVERAGE:".$ds_format;
+$rrd_options .= " GPRINT:".$ds."_max:MAX:".$ds_format;
 
 if ($percentile)
 {
-  $rrd_options .= " GPRINT:".$ds."_percentile:%6.2lf%s";
+  $rrd_options .= " GPRINT:".$ds."_percentile:".$ds_format;
 }
 
 $rrd_options .= "\\\\n";
@@ -102,7 +110,7 @@ $rrd_options .= " COMMENT:\\\\n";
 
 if ($print_total)
 {
-  $rrd_options .= " GPRINT:".$ds."_tot:Total\ %6.2lf%s\)\\\\l";
+  $rrd_options .= " GPRINT:".$ds."_tot:Total\ ".$ds_format."\)\\\\l";
 }
 
 if ($percentile)

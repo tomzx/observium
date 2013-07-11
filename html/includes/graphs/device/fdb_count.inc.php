@@ -16,9 +16,10 @@ $colour_area = 'EEEEEE';
 $colour_line = '36393D';
 $colour_area_max = 'FFEE99';
 $unit_text = 'MACs';
+$unit_integer = TRUE;
 $line_text = 'Count';
 
-include('includes/graphs/generic_simplex.inc.php');
+include_once('includes/graphs/generic_simplex.inc.php');
 
 //$rrd_options .= " DEF:value=$rrd_filename:fdb:AVERAGE";
 //$rrd_options .= " DEF:value_min=$rrd_filename:fdb:MIN";
