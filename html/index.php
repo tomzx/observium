@@ -71,14 +71,14 @@ foreach ($segments as $pos => $segment)
     {
       $vars[$name] = yes;
     } else {
-      $vars[$name] = $value;
+      $vars[$name] = urldecode($value);
     }
   }
 }
 
 foreach ($_GET as $name => $value)
 {
-  $vars[urldecode($name)] = urldecode($value);
+  $vars[$name] = urldecode($value);
 }
 
 foreach ($_POST as $name => $value)
