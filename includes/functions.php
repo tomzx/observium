@@ -168,38 +168,52 @@ function renamehost($id, $new, $source = 'console')
       // Test reachability
       if (isPingable($new))
       {
-        $host = dbFetchCell("SELECT `hostname` FROM `devices` WHERE `device_id` = ?", array($id));
-        rename($config['rrd_dir']."/$host",$config['rrd_dir']."/$new");
-        $return = dbUpdate(array('hostname' => $new), 'devices', 'device_id=?', array($id));
-        log_event("Hostname changed -> $new ($source)", $id, 'system');
-        return TRUE;
+        // Test directory mess in /rrd/
+        if (!file_exists($config['rrd_dir'].'/'.$new))
+        {
+          $host = dbFetchCell("SELECT `hostname` FROM `devices` WHERE `device_id` = ?", array($id));
+          rename($config['rrd_dir'].'/'.$host, $config['rrd_dir'].'/'.$new);
+          $return = dbUpdate(array('hostname' => $new), 'devices', 'device_id=?', array($id));
+          log_event("Hostname changed -> $new ($source)", $id, 'system');
+          return TRUE;
+        } else {
+          // directory already exists
+          print_error("NOT renamed. Directory rrd/$new already exists");
+        }
       } else {
         // failed Reachability
-        print_error("Could not ping $new");
+        print_error("NOT renamed. Could not ping $new");
       }
     } else {
       // Failed DNS lookup
-      print_error("Could not resolve $new");
+      print_error("NOT renamed. Could not resolve $new");
     }
   } else {
     // found in database
-    print_error("Already got host $new");
+    print_error("NOT renamed. Already got host $new");
   }
   return FALSE;
 }
 
-function delete_device($id)
+function delete_device($id, $delete_rrd=FALSE)
 {
   global $config;
 
+  $ret = PHP_EOL;
   $host = dbFetchCell("SELECT hostname FROM devices WHERE device_id = ?", array($id));
 
-  foreach (dbFetch("SELECT * FROM `ports` WHERE `device_id` = ?", array($id)) as $int_data)
+  $ports = dbFetch("SELECT * FROM `ports` WHERE `device_id` = ?", array($id));
+  if (!empty($ports))
   {
-    $int_if = $int_data['ifDescr'];
-    $int_id = $int_data['port_id'];
-    delete_port($int_id);
-    $ret .= "Removed interface $int_id ($int_if)\n";
+    $ret .= '> Deleted interfaces: ';
+    foreach ($ports as $int_data)
+    {
+      $int_if = $int_data['ifDescr'];
+      $int_id = $int_data['port_id'];
+      delete_port($int_id);
+      $ret .= "id=$int_id ($int_if), ";
+    }
+    $ret .= PHP_EOL;
   }
 
   dbDelete('devices', "`device_id` =  ?", array($id));
@@ -207,14 +221,21 @@ function delete_device($id)
   $device_tables = array('entPhysical', 'devices_attribs', 'devices_perms', 'bgpPeers', 'vlans', 'vrfs', 'storage', 'alerts', 'eventlog',
                          'syslog', 'ports', 'services', 'toner', 'frequency', 'current', 'sensors', 'ospf_areas', 'ospf_ports', 'ospf_nbrs', 'ospf_instances');
 
+  $ret .= '> Deleted table entries: ';
   foreach ($device_tables as $table)
   {
-    dbDelete($table, "`device_id` =  ?", array($id));
+    $table_status = dbDelete($table, "`device_id` = ?", array($id));
+    if ($table_status) { $ret .= $table.', '; }
+  }
+  $ret .= PHP_EOL;
+
+  if ($delete_rrd)
+  {
+    shell_exec("rm -rf ".trim($config['rrd_dir']).'/'.$host);
+    $ret .= '> Deleted device RRDs dir: '.$config['rrd_dir'].'/'.$host.PHP_EOL;
   }
 
-  #shell_exec("rm -rf ".trim($config['rrd_dir'])."/$host");
-
-  $ret = "Removed device $host\n";
+  $ret .= "> Deleted device: $host\n";
   return $ret;
 }
 
@@ -232,6 +253,12 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
       // Test reachability
       if (isPingable($host))
       {
+        // Test directory exists in /rrd/
+        if (file_exists($config['rrd_dir'].'/'.$host))
+        {
+          print_error("Directory rrd/$host already exists");
+          return 0;
+        }
         $added = 0;
 
         if (empty($snmpver))
@@ -285,7 +312,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
           foreach ($config['snmp']['community'] as $community)
           {
             $device = deviceArray($host, $community, $snmpver, $port, $transport, NULL);
-            print_message("Trying community $community ...");
+            print_message("Trying $snmpver community $community ...");
             if (isSNMPable($device))
             {
               $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
