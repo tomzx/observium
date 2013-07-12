@@ -228,12 +228,23 @@ function print_warning($text)
   print_message($text, 'warning');
 }
 
+function print_success($text)
+{
+  print_message($text, 'success');
+}
+
 function print_message($text, $type='')
 {
   global $config;
   $type = trim(strtolower($type));
   switch ($type)
   {
+    case 'success':
+      $color = array('cli'       => '%g',                 // green
+                     'cli_color' => FALSE,                // by default cli coloring disabled
+                     'class'     => 'alert alert-success'); // green
+      $icon  = 'oicon-tick-circle';
+      break;
     case 'warning':
       $color = array('cli'       => '%b',                 // blue
                      'cli_color' => FALSE,                // by default cli coloring disabled
@@ -267,12 +278,16 @@ function print_message($text, $type='')
     $msg = new Console_Color2();
     print $msg->convert($color['cli'].$text."%n\n", $color['cli_color']);
   } else {
-  echo('
-    <div class="'.$color['class'].'">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <i class="'.$icon.'"></i>
-      '.$text.'
-    </div>');
+    $msg = '<div class="'.$color['class'].'">';
+    if ($type != 'warning' && $type != 'error')
+    {
+      $msg .= '<button type="button" class="close" data-dismiss="alert">&times;</button>';
+    }
+    $msg .= '
+      <div class="pull-left" style="padding:0 5px 0 0"><i class="'.$icon.'"></i></div>
+      <div>'.nl2br($text).'</div>
+    </div>';
+    echo($msg);
   }
 }
 
