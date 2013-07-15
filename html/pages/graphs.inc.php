@@ -254,9 +254,13 @@ unset($navbar);
     </div>
     <div id="content">
       <?php
-        foreach($graph_return['rrds'] as $rrd)
-        {
-          echo("$rrd <br />");
+        if(is_array($graph_return['rrds'])) {
+          foreach($graph_return['rrds'] as $rrd)
+          {
+            echo("$rrd <br />");
+          }
+        } else {
+            echo("No RRD information returned. This may be because the graph module doesn't yet return this data. <br />");
         }
       ?>
     </div>
