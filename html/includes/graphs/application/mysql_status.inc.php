@@ -44,7 +44,7 @@ if (is_file($rrd_filename))
 
 $colours   = "mixed";
 $nototal   = 1;
-$unit_text = "activity";
+$unit_text = "Activity";
 
 include("includes/graphs/generic_multi_simplex_seperated.inc.php");
 
