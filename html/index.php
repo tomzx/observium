@@ -341,6 +341,7 @@ if (is_array($pagetitle))
         },
         position: {
                 target: 'mouse',
+                viewport: $(window),
                 adjust: {
                         x: 2,
                         y: 2
@@ -358,6 +359,7 @@ if (is_array($pagetitle))
       },
       position: {
               target: 'mouse',
+              viewport: $(window),
               adjust: {
                       x: 2,
                       y: 2
