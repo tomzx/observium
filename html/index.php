@@ -86,6 +86,22 @@ foreach ($_POST as $name => $value)
   $vars[$name] = $value;
 }
 
+# Preflight checks 
+if (!is_dir($config['rrd_dir']))
+{
+  print_error("RRD Log Directory is missing ({$config['rrd_dir']}).  Graphing may fail.");
+}
+ 
+if (!is_dir($config['temp_dir']))
+{
+  print_error("Temp Directory is missing ({$config['temp_dir']}).  Graphing may fail.");
+}
+ 
+if (!is_writable($config['temp_dir']))
+{
+  print_error("Temp Directory is not writable ({$config['tmp_dir']}).  Graphing may fail.");
+}
+
 include("includes/authenticate.inc.php");
 
 if ($vars['widescreen'] == "yes") { $_SESSION['widescreen'] = 1; unset($vars['widescreen']); }

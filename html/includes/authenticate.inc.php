@@ -4,23 +4,7 @@
 
 session_start();
 
-// Preflight checks
-// FIXME why are they in this file?!
-if (!is_dir($config['rrd_dir']))
-{
-  echo("<div class='errorbox'>RRD Log Directory is missing ({$config['rrd_dir']}).  Graphing may fail.</div>");
-}
-
-if (!is_dir($config['temp_dir']))
-{
-  echo("<div class='errorbox'>Temp Directory is missing ({$config['temp_dir']}).  Graphing may fail.</div>");
-}
-
-if (!is_writable($config['temp_dir']))
-{
-  echo("<div class='errorbox'>Temp Directory is not writable ({$config['tmp_dir']}).  Graphing may fail.</div>");
-}
-
+# Fallback to MySQL auth as default
 if (!isset($config['auth_mechanism']))
 {
   $config['auth_mechanism'] = "mysql";
