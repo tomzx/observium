@@ -14,16 +14,16 @@ if ($_SESSION['userlevel'] < '10') { include("includes/error-no-perm.inc.php"); 
       {
         if (deluser($delete_username))
         {
-          echo('<div class="infobox">User "' . $delete_username . '" deleted!</div>');
+          print_success('User "' . $delete_username . '" deleted!');
         }
         else
         {
-          echo('<div class="errorbox">Error deleting user "' . $delete_username . '"!</div>');
+          print_error('Error deleting user "' . $delete_username . '"!');
         }
       }
       else
       {
-        echo('<div class="errorbox">You have requested deletion of the user "' . $delete_username . '". This action can not be reversed.<br /><a href="edituser/action=deleteuser/user_id=' . $vars['user_id'] . '/confirm=yes/">Click to confirm</a></div>');
+        print_error('You have requested deletion of the user "' . $delete_username . '". This action can not be reversed.<br /><a href="edituser/action=deleteuser/user_id=' . $vars['user_id'] . '/confirm=yes/">Click to confirm</a>');
       }
     }
   }
