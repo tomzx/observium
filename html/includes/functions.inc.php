@@ -11,7 +11,17 @@
  *
  */
 
+// Includes
 include("../includes/alerts.inc.php");
+
+$print_functions = array('addresses', 'events', 'mac_addresses', 'rows',
+                         'status', 'arptable', 'fdbtable', 'navbar',
+                         'search_simple', 'syslogs');
+foreach($print_functions as $item)
+{
+  $print_path = $config['html_dir'].'/includes/print/'.$item.'.inc.php';
+  if (is_file($print_path)) { include($print_path); }
+}
 
 
 /**
