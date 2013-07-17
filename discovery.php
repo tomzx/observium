@@ -9,7 +9,7 @@
  * @package    observium
  * @subpackage discovery
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -26,11 +26,16 @@ $runtime_stats = array();
 
 // Observium Device Discovery
 
-$options = getopt("h:m:i:n:d::a::q");
+$options = getopt("h:m:i:n:d::a::qV");
 
+if (isset($options['V']))
+{
+  print_message("Observium ".$config['version']);
+  exit;
+}
 if (!isset($options['q']))
 {
-  echo("Observium v".$config['version']." Discovery\n\n");
+  print_message("%gObservium v".$config['version'].PHP_EOL."%WDiscovery\n%n", 'color');
 }
 
 if (isset($options['h']))
@@ -78,25 +83,37 @@ if (isset($options['d']))
 
 if (!$where)
 {
-  echo("-h <device id> | <device hostname wildcard>  Poll single device\n");
-  echo("-h odd                                       Poll odd numbered devices  (same as -i 2 -n 0)\n");
-  echo("-h even                                      Poll even numbered devices (same as -i 2 -n 1)\n");
-  echo("-h all                                       Poll all devices\n");
-  echo("-h new                                       Poll all devices that have not had a discovery run before\n\n");
-  echo("-i <instances> -n <number>                   Poll as instance <number> of <instances>\n");
-  echo("                                             Instances start at 0. 0-3 for -n 4\n\n");
-  echo("\n");
-  echo("Debugging and testing options:\n");
-  echo("-d                                           Enable debugging output\n");
-  echo("-m                                           Specify single module to be run\n");
-  echo("\n");
-  echo("Invalid arguments!\n");
+  print_message("USAGE:
+discovery.php [-dqV] [-i instances] [-n number] [-m module] [-h device]
+
+EXAMPLE:
+-h <device id> | <device hostname wildcard>  Discover single device
+-h odd                                       Discover odd numbered devices  (same as -i 2 -n 0)
+-h even                                      Discover even numbered devices (same as -i 2 -n 1)
+-h all                                       Discover all devices
+-h new                                       Discover all devices that have not had a discovery run before
+
+-i <instances> -n <number>                   Discover as instance <number> of <instances>
+                                             Instances start at 0. 0-3 for -n 4
+
+OPTIONS:
+ -h                                          Device hostname, id or key odd/even/all/new.
+ -i                                          Discovery instance.
+ -n                                          Discovery number.
+ -q                                          Quiet output.
+ -V                                          Show version and exit.
+
+DEBUGGING OPTIONS:
+ -d                                          Enable debugging output.
+ -m                                          Specify modules (separated by commas) to be run.
+
+%rInvalid arguments!%n", 'color');
   exit;
 }
 
 if ($options['h'] == "new")
 {
-  echo("Schema update disabled by -h new, run with -h none to perform it manually.\n");
+  print_warning("Schema update disabled by %W-h new%n, run with %W-h none%n to perform it manually.");
 } else {
   include("includes/update/update.php");
 }
@@ -132,14 +149,13 @@ if($options['h'] != "new" && $config['version_check'])
 
 if (!isset($options['q']))
 {
-  echo('MySQL: Cell['.($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,2).'s]'.
-              ' Row['.($db_stats['fetchrow']+0). '/'.round($db_stats['fetchrow_sec']+0,2).'s]'.
-             ' Rows['.($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,2).'s]'.
-           ' Column['.($db_stats['fetchcol']+0). '/'.round($db_stats['fetchcol_sec']+0,2).'s]'.
-           ' Update['.($db_stats['update']+0).'/'.round($db_stats['update_sec']+0,2).'s]'.
-           ' Insert['.($db_stats['insert']+0). '/'.round($db_stats['insert_sec']+0,2).'s]'.
-           ' Delete['.($db_stats['delete']+0). '/'.round($db_stats['delete_sec']+0,2).'s]');
-  echo("\n");
+  print_message('MySQL: Cell['.($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,2).'s]'.
+                       ' Row['.($db_stats['fetchrow']+0). '/'.round($db_stats['fetchrow_sec']+0,2).'s]'.
+                      ' Rows['.($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,2).'s]'.
+                    ' Column['.($db_stats['fetchcol']+0). '/'.round($db_stats['fetchcol_sec']+0,2).'s]'.
+                    ' Update['.($db_stats['update']+0).'/'.round($db_stats['update_sec']+0,2).'s]'.
+                    ' Insert['.($db_stats['insert']+0). '/'.round($db_stats['insert_sec']+0,2).'s]'.
+                    ' Delete['.($db_stats['delete']+0). '/'.round($db_stats['delete_sec']+0,2).'s]');
 }
 
 logfile($string);

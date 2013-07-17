@@ -9,7 +9,7 @@
  * @package    observium
  * @subpackage cli
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -45,7 +45,13 @@ if ($argv[1] && $argv[2])
 }
 else
 {
-  echo("Host Rename Tool\nUsage: ./renamehost.php <old hostname> <new hostname>\n");
+    print_message("%gObservium v".$config['version']."
+%WRename Device%n
+
+USAGE:
+renamehost.php <old hostname> <new hostname>
+
+%rInvalid arguments!%n", 'color');
 }
 
 ?>

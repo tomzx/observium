@@ -9,7 +9,7 @@
  * @package    observium
  * @subpackage cli
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -188,22 +188,25 @@ if (!empty($argv[1]))
   if ($device_id)
   {
     $device = device_by_id_cache($device_id);
-    echo("Added device ".$device['hostname']." (".$device_id.")\n");
+    print_success("Added device ".$device['hostname']." (".$device_id.")");
     exit;
   }
 }
 
-print_message("
-%gObservium v".$config['version']."
-%WAdd Host Tool%n
+print_message("%gObservium v".$config['version']."
+%WAdd Host%n
 
-Usage (SNMPv1/2c): ./addhost.php <%Whostname%n> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
-Usage (SNMPv3)   :  Config Defaults : ./addhost.php <%Whostname%n> any v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
-                   No Auth, No Priv : ./addhost.php <%Whostname%n> nanp v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
-                      Auth, No Priv : ./addhost.php <%Whostname%n> anp v3 <user> <password> [md5|sha] [port] [" . implode("|",$config['snmp']['transports']) . "]
-                      Auth,    Priv : ./addhost.php <%Whostname%n> ap v3 <user> <password> <enckey> [md5|sha] [aes|dsa] [port] [" . implode("|",$config['snmp']['transports']) . "]
-%rRemember to run discovery for the host afterwards.%n
+USAGE:
+addhost.php <hostname> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
+addhost.php <hostname> [any|nanp|anp|ap] [v3] [user] [password] [enckey] [md5|sha] [aes|dsa] [port] [" . implode("|",$config['snmp']['transports']) . "]
 
-", 'color');
+EXAMPLE:
+%WSNMPv1/2c%n: addhost.php <%Whostname%n> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
+%WSNMPv3%n   :         Defaults : addhost.php <%Whostname%n> any v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
+           No Auth, No Priv : addhost.php <%Whostname%n> nanp v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
+              Auth, No Priv : addhost.php <%Whostname%n> anp v3 <user> <password> [md5|sha] [port] [" . implode("|",$config['snmp']['transports']) . "]
+              Auth,    Priv : addhost.php <%Whostname%n> ap v3 <user> <password> <enckey> [md5|sha] [aes|dsa] [port] [" . implode("|",$config['snmp']['transports']) . "]
+
+%rRemember to run discovery for the host afterwards.%n", 'color');
 
 ?>

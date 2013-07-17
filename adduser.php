@@ -9,7 +9,7 @@
  * @package    observium
  * @subpackage cli
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -26,7 +26,7 @@ if (file_exists('html/includes/authentication/' . $config['auth_mechanism'] . '.
 }
 else
 {
-  echo("ERROR: no valid auth_mechanism defined.\n");
+  print_error("ERROR: no valid auth_mechanism defined.");
   exit();
 }
 
@@ -38,26 +38,37 @@ if (auth_usermanagement())
     {
       if (adduser($argv[1],$argv[2],$argv[3],@$argv[4]))
       {
-        echo("User ".$argv[1]." added successfully\n");
+        print_success("User ".$argv[1]." added successfully.");
       }
       else
       {
-        echo("User ".$argv[1]." creation failed!\n");
+        print_error("User ".$argv[1]." creation failed!");
       }
     }
     else
     {
-      echo("User ".$argv[1]." already exists!\n");
+      print_warning("User ".$argv[1]." already exists!");
     }
   }
   else
   {
-    echo("Add User Tool\nUsage: ./adduser.php <username> <password> <level 1-10> [email]\n");
+    print_message("%gObservium v".$config['version']."
+%WAdd User%n
+
+USAGE:
+adduser.php <username> <password> <level 1-10> [email]
+
+EXAMPLE:
+%WADMIN%n:   adduser.php <username> <password> 10 [email]
+%WRW user%n: adduser.php <username> <password> 7  [email]
+%WRO user%n: adduser.php <username> <password> 1  [email]
+
+%rInvalid arguments!%n", 'color');
   }
 }
 else
 {
-  echo("Auth module does not allow adding users!\n");
+  print_error("Auth module does not allow adding users!");
 }
 
 ?>

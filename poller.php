@@ -9,7 +9,7 @@
  * @package    observium
  * @subpackage poller
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -22,9 +22,18 @@ include("includes/functions.php");
 include("includes/polling/functions.inc.php");
 
 $poller_start = utime();
-echo("Observium Poller v".$config['version']."\n\n");
 
-$options = getopt("h:m:i:n:r::d::a::");
+$options = getopt("h:m:i:n:r::d::a::qV");
+
+if (isset($options['V']))
+{
+  print_message("Observium ".$config['version']);
+  exit;
+}
+if (!isset($options['q']))
+{
+  print_message("%gObservium v".$config['version'].PHP_EOL."%WPoller\n%n", 'color');
+}
 
 if ($options['h'] == "odd")      { $options['n'] = "1"; $options['i'] = "2"; }
 elseif ($options['h'] == "even") { $options['n'] = "0"; $options['i'] = "2"; }
@@ -59,18 +68,32 @@ if (isset($options['i']) && $options['i'] && isset($options['n']))
 
 if (!$where)
 {
-  echo("-h <device id> | <device hostname wildcard>  Poll single device\n");
-  echo("-h odd                                       Poll odd numbered devices  (same as -i 2 -n 0)\n");
-  echo("-h even                                      Poll even numbered devices (same as -i 2 -n 1)\n");
-  echo("-h all                                       Poll all devices\n\n");
-  echo("-i <instances> -n <number>                   Poll as instance <number> of <instances>\n");
-  echo("                                             Instances start at 0. 0-3 for -n 4\n\n");
-  echo("Debugging and testing options:\n");
-  echo("-r                                           Do not create or update RRDs\n");
-  echo("-d                                           Enable debugging output\n");
-  echo("-m                                           Specify module(s) to be run\n");
-  echo("\n");
-  echo("No polling type specified!\n");
+  print_message("USAGE:
+poller.php [-drqV] [-i instances] [-n number] [-m module] [-h device]
+
+EXAMPLE:
+-h <device id> | <device hostname wildcard>  Poll single device
+-h odd                                       Poll odd numbered devices  (same as -i 2 -n 0)
+-h even                                      Poll even numbered devices (same as -i 2 -n 1)
+-h all                                       Poll all devices
+-h new                                       Poll all devices that have not had a discovery run before
+
+-i <instances> -n <number>                   Poll as instance <number> of <instances>
+                                             Instances start at 0. 0-3 for -n 4
+
+OPTIONS:
+ -h                                          Device hostname, id or key odd/even/all/new.
+ -i                                          Poll instance.
+ -n                                          Poll number.
+ -q                                          Quiet output.
+ -V                                          Show version and exit.
+
+DEBUGGING OPTIONS:
+ -r                                          Do not create or update RRDs
+ -d                                          Enable debugging output.
+ -m                                          Specify module(s) (separated by commas) to be run.
+
+%rInvalid arguments!%n", 'color');
   exit;
 }
 
@@ -121,16 +144,16 @@ if ($polled_devices)
 $string = $argv[0] . " $doing " .  date("F j, Y, G:i") . " - $polled_devices devices polled in $poller_time secs";
 if ($debug) { echo("$string\n"); }
 
-echo("\n" .
-     'MySQL: Cell['.($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,2).'s]'.
-            ' Row['   .($db_stats['fetchrow']+0). '/'.round($db_stats['fetchrow_sec']+0,2).'s]'.
-           ' Rows['   .($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,2).'s]'.
-         ' Column['.($db_stats['fetchcol']+0). '/'.round($db_stats['fetchcol_sec']+0,2).'s]'.
-         ' Update['   .($db_stats['update']+0).'/'.round($db_stats['update_sec']+0,2).'s]'.
-         ' Insert['.($db_stats['insert']+0). '/'.round($db_stats['insert_sec']+0,2).'s]'.
-         ' Delete['.($db_stats['delete']+0). '/'.round($db_stats['delete_sec']+0,2).'s]');
-
-echo("\n");
+if (!isset($options['q']))
+{
+  print_message('MySQL: Cell['.($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,2).'s]'.
+                       ' Row['.($db_stats['fetchrow']+0). '/'.round($db_stats['fetchrow_sec']+0,2).'s]'.
+                      ' Rows['.($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,2).'s]'.
+                    ' Column['.($db_stats['fetchcol']+0). '/'.round($db_stats['fetchcol_sec']+0,2).'s]'.
+                    ' Update['.($db_stats['update']+0).'/'.round($db_stats['update_sec']+0,2).'s]'.
+                    ' Insert['.($db_stats['insert']+0). '/'.round($db_stats['insert_sec']+0,2).'s]'.
+                    ' Delete['.($db_stats['delete']+0). '/'.round($db_stats['delete_sec']+0,2).'s]');
+}
 
 logfile($string);
 rrdtool_pipe_close($rrd_process, $rrd_pipes);

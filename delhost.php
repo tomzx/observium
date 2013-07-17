@@ -9,7 +9,7 @@
  * @package    observium
  * @subpackage cli
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -26,15 +26,26 @@ if ($argv[1])
 {
   $host = strtolower($argv[1]);
   $id = getidbyname($host);
+  $delete_rrd = (isset($argv[2]) && strtolower($argv[2]) == 'rrd') ? TRUE : FALSE;
   if ($id)
   {
-    echo(delete_device($id));
-    echo("Removed $host\n");
+    echo(delete_device($id, $delete_rrd));
+    print_success("Device $host removed.");
   } else {
-    echo("Host doesn't exist!\n");
+    print_error("Device $host doesn't exist!");
   }
 } else {
-  echo("Host Removal Tool\nUsage: ./delhost.php <hostname>\n");
+    print_message("%gObservium v".$config['version']."
+%WRemove Device%n
+
+USAGE:
+delhost.php <hostname> [rrd]
+
+EXAMPLE:
+%WKeep RRDs%n:   delhost.php <hostname>
+%WRemove RRDs%n: delhost.php <hostname> rrd
+
+%rInvalid arguments!%n", 'color');
 }
 
 ?>
