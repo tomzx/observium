@@ -36,7 +36,7 @@ if ($device['os_group'] == 'cisco')
     // vlan context not worked on Cisco IOS <= 12.1 (SNMPv3)
     if ($device['snmpver'] == 'v3' && $device['os'] == "ios" && ($ios_version * 10) <= 121)
     {
-      echo("ERROR: For proper work please use SNMP v2/v1 for this device\n");
+      print_error("ERROR: For proper work please use SNMP v2/v1 for this device.");
       break;
     }
 
@@ -54,9 +54,9 @@ if ($device['os_group'] == 'cisco')
       unset($device_context);
       if ($device['snmpver'] == 'v3')
       {
-        echo("ERROR: For proper work of 'vlan-' context on cisco device with SNMPv3, it is necessary to add 'match prefix' in snmp-server config\n");
+        print_error("ERROR: For proper work of 'vlan-' context on cisco device with SNMPv3, it is necessary to add 'match prefix' in snmp-server config.");
       } else {
-        echo("ERROR: Device does not support per-VLAN community\n");
+        print_error("ERROR: Device does not support per-VLAN community.");
       }
       break;
     }
