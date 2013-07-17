@@ -194,19 +194,19 @@ if (!empty($argv[1]))
 }
 
 print_message("%gObservium v".$config['version']."
-%WAdd Host%n
+%WAdd Device%n
 
 USAGE:
 addhost.php <hostname> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
-addhost.php <hostname> [any|nanp|anp|ap] [v3] [user] [password] [enckey] [md5|sha] [aes|dsa] [port] [" . implode("|",$config['snmp']['transports']) . "]
+addhost.php <hostname> [any|nanp|anp|ap] [v3] [user] [password] [enckey] [md5|sha] [aes|des] [port] [" . implode("|",$config['snmp']['transports']) . "]
 
 EXAMPLE:
 %WSNMPv1/2c%n: addhost.php <%Whostname%n> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
 %WSNMPv3%n   :         Defaults : addhost.php <%Whostname%n> any v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
            No Auth, No Priv : addhost.php <%Whostname%n> nanp v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
               Auth, No Priv : addhost.php <%Whostname%n> anp v3 <user> <password> [md5|sha] [port] [" . implode("|",$config['snmp']['transports']) . "]
-              Auth,    Priv : addhost.php <%Whostname%n> ap v3 <user> <password> <enckey> [md5|sha] [aes|dsa] [port] [" . implode("|",$config['snmp']['transports']) . "]
+              Auth,    Priv : addhost.php <%Whostname%n> ap v3 <user> <password> <enckey> [md5|sha] [aes|des] [port] [" . implode("|",$config['snmp']['transports']) . "]
 
-%rRemember to run discovery for the host afterwards.%n", 'color');
+%rRemember to run discovery for the device afterwards.%n", 'color');
 
 ?>
