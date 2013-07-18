@@ -435,7 +435,9 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
     if (!$device['last_polled'] || $device['last_polled'] == '0000-00-00 00:00:00')
     {
-      echo('<div class="alert alert-info"><h3>Device not yet polled</h3><p>This device has not yet been successfully polled. System information and statistics will not be populated and graphs will not draw. Please wait 5-10 minutes for graphs to draw correctly.</p></div>');
+      print_warning('<h3>Device not yet polled</h3>
+This device has not yet been successfully polled. System information and statistics will not be populated and graphs will not draw.
+Please wait 5-10 minutes for graphs to draw correctly.');
     }
 
     include("pages/device/".mres(basename($tab)).".inc.php");
