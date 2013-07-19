@@ -11,8 +11,7 @@
  *
  */
 
-// Includes
-include("../includes/alerts.inc.php");
+#include("../includes/alerts.inc.php");
 
 $print_functions = array('addresses', 'events', 'mac_addresses', 'rows',
                          'status', 'arptable', 'fdbtable', 'navbar',
@@ -230,6 +229,14 @@ function nicecase($item)
 {
   switch ($item)
   {
+    case "bgp_peer":
+      return "BGP Peer";
+    case "netscaler_vsvr":
+      return "Netscaler vServer";
+    case "netscaler_svc":
+      return "Netscaler Service";
+    case "mempool":
+      return "Memory";
     case "ipsec_tunnels":
       return "IPSEC Tunnels";
     case "vrf":
@@ -812,7 +819,6 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
       if (empty($text)) { $text = $entity['processor_descr']; }
       $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
       break;
-
     case "sensor":
       if (empty($text)) { $text = $entity['sensor_descr']; }
       $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
@@ -824,6 +830,19 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
       if (empty($text)) { $text = $entity['storage_descr']; }
       $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'storage'));
       break;
+    case "bgp_peer":
+      if (empty($text)) { $text = "AS".$entity['bgpPeerRemoteAs'] ." ". $entity['bgpPeerRemoteAddr']. " ".truncate($entity['astext'], "30"); }
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'storage'));
+      break;
+    case "netscaler_vsvr":
+      if (empty($text)) { $text = $entity['vsvr_label']; }
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'loadbalancer', 'type' => 'netscaler_vsvr', 'vsvr' => $entity['vsvr_id']));
+      break;
+    case "netscaler_svc":
+      if (empty($text)) { $text = $entity['svc_label']; }
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'loadbalancer', 'type' => 'netscaler_svc', 'svc' => $entity['svc_id']));
+      break;
+
     default:
       $link = $entity[$type.'_id'];
   }

@@ -421,15 +421,19 @@ function get_entity_by_id_cache($type, $id)
 {
   global $entity_cache;
 
-  $table = table_from_entity_type($type);
+  list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
 
-  if (is_array($entity_cache[$type][$id]))
-  {
+  #echo("<pre>");
+  #debug_print_backtrace();
+  #echo("</pre>");
+
+  if (is_array($entity_cache[$type][$id])) {
     $entity = $entity_cache[$type][$id];
   } else {
-    $entity = dbFetchRow("SELECT * FROM `".$table."` WHERE `".$type."_id` = ?", array($id));
+    $entity = dbFetchRow("SELECT * FROM `".$entity_table."` WHERE `".$entity_id_field."` = ?", array($id));
     $entity_cache[$type][$id] = $entity;
   }
+
   return $entity;
 }
 

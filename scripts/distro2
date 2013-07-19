@@ -1,7 +1,7 @@
 #!/bin/sh
 # Observium License Version 1.0
 #
-# Copyright (C)2013 Joe Gingerman Holden
+# Copyright (c) 2013 Joe Holden
 #
 # The intent of this license is to establish the freedom to use, share and contribute to
 # the software regulated by this license.
@@ -42,37 +42,39 @@
 #
 # The Software and this license document are provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#
+# URL: https://github.com/joeholden/distroscript/
+# README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-if [ -z ${DISTROEXEC} ]; then
-	SOURCED=0
-else
-	SOURCED=1
-fi
-
-DISTROSCRIPT="0.15"
+DISTROSCRIPT="1.0.2"
 
 getos() {
-	OS=$(uname -s)
+	OS=`uname -s`
 	if [ "${OS}" = "SunOS" ]; then
 		OS="Solaris"
+	elif [ "${OS}" = "DragonFly" ]; then
+		OS="DragonFlyBSD"
 	fi
 	export OS
 	return 0
 }
 
 getkernel() {
-	KERNEL=$(uname -r)
+	KERNEL=`uname -r`
 	export KERNEL
 	return 0
 }
 
 getdistro() {
 	if [ "${OS}" = "Linux" ]; then
-		if [ -f /usr/bin/lsb_release ]; then
-			DISTRO=$(/usr/bin/lsb_release -si 2>/dev/null)
+		if [ -f /etc/os-release ]; then
+			. /etc/os-release
+			DISTRO=${NAME}
+		elif [ -f /usr/bin/lsb_release ]; then
+			DISTRO=`/usr/bin/lsb_release -si 2>/dev/null`
 		elif [ -f /etc/redhat-release ]; then
-			DISTRO=$(cat /etc/redhat-release | awk '{print $1}')
+			DISTRO=`cat /etc/redhat-release | awk '{print $1}'`
 			if [ "${DISTRO}" = "Red" ]; then
 				DISTRO="RedHat"
 			fi
@@ -93,6 +95,10 @@ getdistro() {
 			fi
 		elif [ -f /etc/UnitedLinux-release ]; then
 			DISTRO="UnitedLinux"
+		elif [ -f /etc/openwrt_version ]; then
+			DISTRO="OpenWRT"
+		elif [ -f /etc/slackware-version ]; then
+			DISTRO="Slackware"
 		else
 			DISTRO="Unknown"
 		fi
@@ -107,7 +113,22 @@ getdistro() {
 			DISTRO=
 		fi
 	elif [ "${OS}" = "Solaris" ]; then
- 		DISTRO=$(head -n 1 /etc/release | awk '{print $1}')
+ 		DISTRO=`head -n 1 /etc/release | awk '{print $1}'`
+		if [ "${DISTRO}" = "Solaris" -o "${DISTRO}" = "Oracle" ]; then
+			DISTRO=
+		fi
+	elif [ "${OS}" = "Darwin" ]; then
+		case `uname -m` in
+			AppleTV*)
+				DISTRO="iOS"
+				;;
+			iPhone*)
+				DISTRO="iOS"
+				;;
+			*)
+				DISTRO="OSX"
+				;;
+		esac
 	else
 		DISTRO=
 	fi
@@ -117,17 +138,17 @@ getdistro() {
 
 getarch() {
 	if [ "${OS}" = "Solaris" ]; then
-		if [ $(isainfo | grep -c amd64) -eq 1 ]; then
-			ARCH="amd64"
-		else
-			ARCH=$(isainfo)
-		fi
+		ARCH=`isainfo -k`
+	elif [ "${OS}" = "Darwin" ]; then
+		ARCH=`uname -p`
 	else
-		ARCH=$(uname -m)
+		ARCH=`uname -m`
 	fi
 	if [ "${OS}" = "Linux" ]; then
 		if [ "${ARCH}" = "x86_64" ]; then
 			ARCH="amd64"
+		elif [ "${ARCH}" = "i486" -o "${ARCH}" = "i586" -o "${ARCH}" = "i686" ]; then
+			ARCH="i386"
 		fi
 	fi
 	export ARCH
@@ -135,29 +156,42 @@ getarch() {
 }
 
 getversion() {
-	if [ "${OS}" = "FreeBSD" ]; then
+	if [ "${OS}" = "FreeBSD" -o "${OS}" = "DragonFlyBSD" ]; then
 		if [ "${DISTRO}" = "pfSense" ]; then
-			VERSION=$(cat /etc/version)
+			VERSION=`cat /etc/version`
 		elif [ "${DISTRO}" = "PC-BSD" ]; then
-			VERSION=$(pbreg get /PC-BSD/Version)
+			VERSION=`pbreg get /PC-BSD/Version`
 		else
-			VERSION=$(uname -i)
+			VERSION=`uname -i`
 		fi
-	elif [ "${OS}" = "OpenBSD" ]; then
-		VERSION=$(uname -v)
+	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
+		VERSION=`uname -v`
 	elif [ "${OS}" = "Linux" ]; then
-		if [ -f /etc/redhat-release ]; then
-			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
+		if [ "${DISTRO}" = "OpenWRT" ]; then
+			VERSION=`cat /etc/openwrt_version`
+		elif [ "${DISTRO}" = "Slackware" ]; then
+			VERSION=`cat /etc/slackware-version | cut -d" " -f2`
+		elif [ -f /etc/os-release ]; then
+			. /etc/os-release
+			VERSION=${VERSION_ID}
+		elif [ -f /etc/redhat-release ]; then
+			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
+		elif [ -f /usr/bin/lsb_release ]; then
+			VERSION=`lsb_release -sr 2>/dev/null`
 		else
-			VERSION=$(lsb_release -sr 2>/dev/null)
+			VERSION=
 		fi
+	elif [ "${OS}" = "Darwin" ]; then
+		VERSION=`sw_vers -productVersion`
+	elif [ "${OS}" = "Solaris" ]; then
+		VERSION=`uname -v`
 	fi
 	export VERSION
 	return 0
 }
 
 if [ -z ${DISTROEXEC} ]; then
-	case $(uname -s) in
+	case `uname -s` in
 		Linux)
 			OS="Linux"
 			getkernel
@@ -183,6 +217,25 @@ if [ -z ${DISTROEXEC} ]; then
 			OS="OpenBSD"
 			getkernel
 			getarch
+			getversion
+			;;
+		NetBSD)
+			OS="NetBSD"
+			getkernel
+			getarch
+			getversion
+			;;
+		DragonFly)
+			OS="DragonFlyBSD"
+			getkernel
+			getarch
+			getversion
+			;;
+		Darwin)
+			OS="Darwin"
+			getkernel
+			getarch
+			getdistro
 			getversion
 			;;
 		*)

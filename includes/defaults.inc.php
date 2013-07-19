@@ -57,13 +57,10 @@ $config['svn']            = "/usr/bin/svn";
 // These settings make quite large RRDs.
 // They store 4 years of 1-day resolution data.
 
-//                      7 days of 5 min        62 days of 30 min      120 days of 2 hour      4 years of 1 day
-$config['rrd_rra']  = " RRA:AVERAGE:0.5:1:2016 RRA:AVERAGE:0.5:6:2976 RRA:AVERAGE:0.5:24:1440 RRA:AVERAGE:0.5:288:1440 ";
-$config['rrd_rra'] .= "                        RRA:MIN:0.5:6:1440     RRA:MIN:0.5:96:360      RRA:MIN:0.5:288:1440 ";
-$config['rrd_rra'] .= "                        RRA:MAX:0.5:6:1440     RRA:MAX:0.5:96:360      RRA:MAX:0.5:288:1440 ";
-$config['rrd_rra'] .= " RRA:LAST:0.5:1:1";
-
-#$config['rrd_rra'] .= " RRA:LAST:0.5:1:1       RRA:LAST:0.5:6:1       RRA:LAST:0.5:24:1       RRA:LAST:0.5:288:1";
+//                      7 days of 5 min         62 days of 30 min       120 days of 2 hour       4 years of 1 day
+$config['rrd_rra']  = " RRA:AVERAGE:0.5:1:2016  RRA:AVERAGE:0.5:6:2976  RRA:AVERAGE:0.5:24:1440  RRA:AVERAGE:0.5:288:1440 ";
+$config['rrd_rra'] .= "                         RRA:MIN:0.5:6:1440      RRA:MIN:0.5:96:360       RRA:MIN:0.5:288:1440 ";
+$config['rrd_rra'] .= "                         RRA:MAX:0.5:6:1440      RRA:MAX:0.5:96:360       RRA:MAX:0.5:288:1440 ";
 
 // RRDCacheD - Make sure it can write to your RRD dir!
 
@@ -100,7 +97,7 @@ $config['login_message']    = "Unauthorised access or use shall render the user 
 $config['web_mouseover']    = TRUE;      // Enable or disable mouseover popups.
 $config['web_show_disabled'] = TRUE;     // Show or not disabled devices on major pages.
 
-$config['old_graphs']             = 1;   // RRDfiles from before the great rra reform. This is default for a while.
+$config['old_graphs']              = 1;   // RRDfiles from before the great rra reform. This is default for a while.
 
 $config['int_customers']           = 1;  // Enable Customer Port Parsing
 $config['int_customers_graphs' ]   = 1;  // Enable Customer Port List Graphs
@@ -171,6 +168,8 @@ $config['alerts']['bgp']['whitelist']      = NULL;     // Populate as an array()
 $config['alerts']['port']['ifdown']        = FALSE;    // Generate alerts for ports that go down
 $config['alerts']['port']['ifdown_types']  = array('core', 'transit', 'peering');    // Generate alerts for ports that go down
 
+$config['poller-wrapper']['alerter']       = TRUE;
+
 // Port bandwidth threshold percentage %age utilisation above this will cause an alert
 
 $config['alerts']['port_util_alert']       = FALSE;    // Disabled as default
@@ -179,8 +178,32 @@ $config['alerts']['port_util_perc']        = 85;       // %age above which to al
 $config['uptime_warning']                  = "84600";  // Time in seconds to display a "Device Rebooted" Alert. 0 to disable warnings.
 
 // Proxy
-
+/// FIXME - make sure this doens't break if it's set to FALSE, and set it to false, rather than commenting it.
 #$config['http_proxy'] = "yourproxy:80";                // Proxy for HTTP/HTTPS requests (e.g. for geocoding)
+
+// Carbon/Ceres/StatsD configuration
+
+$config['statsd']['enable']		= FALSE;
+$config['statsd']['host']		= '127.0.0.1';
+$config['statsd']['port']		= '8125';
+
+// amqp Configuration
+// This is very alpha, please do not use it unless you want it to eat your children
+
+$config['amqp']['enable']                  = FALSE;
+$config['amqp']['conn']['host']            = "localhost";
+$config['amqp']['conn']['port']            = "5672";
+$config['amqp']['conn']['user']            = "guest";
+$config['amqp']['conn']['pass']            = "guest";
+$config['amqp']['conn']['vhost']           = "/";
+$config['amqp']['conn']['debug']	   = FALSE;
+$config['amqp']['proxy']['host']           = "localhost";
+$config['amqp']['proxy']['port']           = "36603";
+
+$config['amqp']['modules']['ports']	= TRUE;
+$config['amqp']['modules']['sensors']	= TRUE;
+$config['amqp']['modules']['processor']	= TRUE;
+$config['amqp']['modules']['mempools']	= TRUE;
 
 // Geocoding Configuration
 
@@ -259,12 +282,13 @@ $config['frontpage']['device_status']['uptime']    = true;         // Show the u
 
 
 // Custom traffic graphs
-$config['frontpage']['custom_traffic']['ids']      = "";           // COMMA SEPERATED PORT ID FOR EXAMPLE: "1,2,3,4,5"
+$config['frontpage']['custom_traffic']['ids']      = "";           // COMMA SEPARATED PORT ID FOR EXAMPLE: "1,2,3,4,5"
 $config['frontpage']['custom_traffic']['title']    = "";           // Your own title for the custom traffic graphs
 
 // Custom mini graphs
-$config['frontpage']['minigraphs']['ids']          = "";           // Comma and semicolon seperated array list, first the device id or graph id followed by the image type and the text header you want (example: "2,device_processor,CPU Usage;10,diskio_bits,IOPS")
+$config['frontpage']['minigraphs']['ids']          = "";           // Comma and semicolon separated array list, first the device id or graph id followed by the image type and the text header you want (example: "2,device_processor,CPU Usage;10,diskio_bits,IOPS")
 $config['frontpage']['minigraphs']['legend']       = false;        // Enable/Disable the legend on custom mini graph view
+$config['frontpage']['minigraphs']['title']        = "Mini Graphs Overview";
 
 // Frontpage order you can use: status_summary, map, device_status_boxes, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
 $config['frontpage']['order']           = array('status_summary', 'map', 'device_status_boxes', 'device_status', 'eventlog');

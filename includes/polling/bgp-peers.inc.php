@@ -269,6 +269,8 @@ if ($config['enable_bgp'])
       }
     }
 
+    check_entity('bgp_peer', $peer, array('bgpPeerState' => $bgpPeerState, 'bgpPeerAdminStatus' => $bgpPeerAdminStatus));
+
     $polled = time();
     $polled_period = $polled - $peer['bgpPeer_polled'];
 
@@ -294,6 +296,7 @@ if ($config['enable_bgp'])
     {
       if ($$oid != $peer[$oid]) { $peer['update'][$oid] = $$oid; }
     }
+
     if (count($peer['update']))
     {
       dbUpdate($peer['update'], 'bgpPeers', '`bgpPeer_id` = ?', array($peer['bgpPeer_id']));
@@ -312,6 +315,12 @@ if ($config['enable_bgp'])
         {
           $peer['state'][$oid.'_rate'] = '0';
           echo("$oid went backwards.");
+        }
+
+        if($config['statsd']['enable'] == TRUE)
+        {
+          // Update StatsD/Carbon
+          StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'bgp'.'.'.str_replace(".", "_", $peer_ip).'.'.$oid, $$oid);
         }
       }
     }
@@ -340,7 +349,7 @@ if ($config['enable_bgp'])
           foreach ($cbgp_oids as $cbgp_oid)
           {
             $c_oid = ($use_cisco_v2) ? str_replace('cbgpPeer', 'cbgpPeer2', $cbgp_oid) : $cbgp_oid;
-#            $c_prefixes = snmpwalk_cache_oid($device, $c_oid, $c_prefixes, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
+            #$c_prefixes = snmpwalk_cache_oid($device, $c_oid, $c_prefixes, 'CISCO-BGP4-MIB', mib_dirs('cisco'), TRUE);
             $$cbgp_oid = $c_prefixes[$c_index][$c_oid];
           }
         }
@@ -380,6 +389,20 @@ if ($config['enable_bgp'])
         }
         dbUpdate($peer['c_update'], 'bgpPeers_cbgp-state', '`cbgp_id` = ?', array($peer_afi['cbgp_id']));
 
+        // Update cbgp StatsD
+
+        if($config['statsd']['enable'] == TRUE)
+        {
+          foreach(array('AcceptedPrefixes', 'DeniedPrefixes', 'AdvertisedPrefixes', 'SuppressedPrefixes', 'WithdrawnPrefixes') as $oid)
+          {
+            // Update StatsD/Carbon
+            $r_oid = 'cbgpPeer'.$oid;
+            StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'bgp' . '.' . str_replace(".", "_", $peer_ip).".$afi.$safi" . '.' . $oid, $$r_oid);
+          }
+        }
+
+
+        // Update cbgp RRD
         $cbgp_rrd    = $config['rrd_dir'] . '/' . $device['hostname'] . '/' . safename('cbgp-' . "$peer_ip.$afi.$safi.rrd");
         if (!is_file($cbgp_rrd))
         {

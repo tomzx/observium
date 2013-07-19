@@ -1623,6 +1623,13 @@ if (!$observium_link)
 }
 $observium_db = mysql_select_db($config['db_name'], $observium_link);
 
+// Connect to statsd
+
+#if($config['statsd']['enable'])
+#{
+#  $log = new \StatsD\Client($config['statsd']['host'].':'.$config['statsd']['port']);
+#}
+
 // Set some times needed by loads of scripts (it's dynamic, so we do it here!)
 $config['time']['now']        = time();
 $config['time']['fourhour']   = $config['time']['now'] - 14400;    //time() - (4 * 60 * 60);

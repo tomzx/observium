@@ -29,6 +29,15 @@ if ($port_stats[$port['ifIndex']] && $port['ifType'] == "ethernetCsmacd"
     }
   }
 
+  if($config['statsd']['enable'] == TRUE)
+  {
+    foreach ($etherlike_oids as $oid)
+    {
+      // Update StatsD/Carbon
+      StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'port'.'.'.$port['ifIndex'].'.'.$oid, $this_port[$oid]);
+    }
+  }
+
   $rrdupdate = "N";
   foreach ($etherlike_oids as $oid)
   {

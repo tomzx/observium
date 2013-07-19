@@ -28,7 +28,18 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
     $percent = 0;
   }
 
+  $percent = round($percent, 2);
+
   echo($percent."% ");
+
+  // Update StatsD/Carbon
+  if($config['statsd']['enable'] == TRUE)
+  {
+    StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'mempool'.'.'.$mempool['mempool_type'] . "." . $mempool['mempool_index'].".used", $mempool['used']);
+    StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'mempool'.'.'.$mempool['mempool_type'] . "." . $mempool['mempool_index'].".free", $mempool['free']);
+  }
+
+
 
   if (!is_file($mempool_rrd))
   {
@@ -43,6 +54,8 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
 
   dbUpdate($mempool['state'], 'mempools-state', '`mempool_id` = ?', array($mempool['mempool_id']));
   $graphs['mempool'] = TRUE;
+
+  check_entity('mempool', $mempool, array('mempool_perc' => $percent));
 
   echo("\n");
 }

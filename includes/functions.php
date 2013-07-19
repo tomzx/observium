@@ -16,6 +16,7 @@
 
 include_once($config['install_dir'] . "/includes/common.php");
 include_once($config['install_dir'] . "/includes/rrdtool.inc.php");
+include_once($config['install_dir'] . "/includes/statsd.inc.php");
 include_once($config['install_dir'] . "/includes/billing.php");
 include_once($config['install_dir'] . "/includes/cisco-entities.php");
 include_once($config['install_dir'] . "/includes/syslog.php");
@@ -24,6 +25,7 @@ include_once($config['install_dir'] . "/includes/snmp.inc.php");
 include_once($config['install_dir'] . "/includes/services.inc.php");
 include_once($config['install_dir'] . "/includes/dbFacile.php");
 include_once($config['install_dir'] . "/includes/geolocation.inc.php");
+include_once($config['install_dir'] . "/includes/alerts.inc.php");
 
 // Include from PEAR
 set_include_path($config['install_dir'] . "/includes/pear" . PATH_SEPARATOR . get_include_path());
@@ -36,6 +38,45 @@ if ($config['alerts']['email']['enable'])
   // Use Pear::Mail
   include_once($config['install_dir'] . "/includes/pear/Mail/Mail.php");
 }
+
+// Send to AMQP via UDP-based python proxy.
+
+function messagebus_send($message)
+{
+
+  global $config, $debug;
+
+  if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))
+  {
+    $message = json_encode($message);
+    if($debug) { echo('Sending JSON via AQMP:' . $message . PHP_EOL); }
+    socket_sendto($socket, $message, strlen($message), 0, $config['amqp']['proxy']['host'], $config['amqp']['proxy']['port']);
+    socket_close($socket);
+    return TRUE;
+  } else {
+    print("Failed to create UDP socket towards AQMP proxy.".PHP_EOL);
+    return FALSE;
+  }
+
+}
+
+function entity_descr($type, $entity_id)
+{
+  global $config, $entity_cache;
+
+  if (is_numeric($entity_id))
+  {
+    $entity = get_entity_by_id_cache($type, $entity_id);
+  }
+
+  list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
+
+  $text = $entity[$entity_descr_field];
+
+  return($text);
+}
+
+
 
 function array_sort($array, $on, $order=SORT_ASC)
 {
@@ -219,7 +260,7 @@ function delete_device($id, $delete_rrd=FALSE)
   dbDelete('devices', "`device_id` =  ?", array($id));
 
   $device_tables = array('entPhysical', 'devices_attribs', 'devices_perms', 'bgpPeers', 'vlans', 'vrfs', 'storage', 'alerts', 'eventlog',
-                         'syslog', 'ports', 'services', 'toner', 'frequency', 'current', 'sensors', 'ospf_areas', 'ospf_ports', 'ospf_nbrs', 'ospf_instances');
+                         'syslog', 'ports', 'services', 'toner', 'frequency', 'current', 'sensors', 'ospf_areas', 'ospf_ports', 'ospf_nbrs', 'ospf_instances', 'alert_table');
 
   $ret .= '> Deleted table entries: ';
   foreach ($device_tables as $table)
@@ -765,7 +806,7 @@ function notify($device,$title,$message)
         }
       }
       $emails = parse_email($email);
-      
+
       if ($emails)
       {
         // Mail backend params
@@ -815,11 +856,12 @@ function notify($device,$title,$message)
         }
         $rcpts_full = substr($rcpts_full, 0, -2); // To:
         $rcpts = substr($rcpts, 0, -2);
-        $headers['Subject']  = $title; // Subject:
-        $headers['X-Priority'] = 3; // Mail priority
-        $headers['X-Mailer'] = 'Observium ' . $config['version']; // X-Mailer:
-        $headers['Message-ID'] = '<' . md5(uniqid(time())) . '@' . $params['localhost'] . '>';
-        $headers['Date'] = date('r', time());
+        $headers['Subject']      = $title; // Subject:
+        $headers['X-Priority']   = 3; // Mail priority
+        $headers['X-Mailer']     = 'Observium ' . $config['version']; // X-Mailer:
+        $headers['Content-type'] = 'text/html';
+        $headers['Message-ID']   = '<' . md5(uniqid(time())) . '@' . $params['localhost'] . '>';
+        $headers['Date']         = date('r', time());
 
         // Mail body
         $message_header = $config['page_title_prefix']."\n\n";

@@ -104,11 +104,13 @@ except:
     print "ERROR: Could not load or parse observium configuration, are PATHs correct?"
     sys.exit(2)
 
-poller_path = config['install_dir'] + '/poller.php'
-db_username = config['db_user']
-db_password = config['db_pass']
-db_server   = config['db_host']
-db_dbname   = config['db_name']
+poller_path  = config['install_dir'] + '/poller.php'
+alerter_path = config['install_dir'] + '/alerter.php'
+db_username  = config['db_user']
+db_password  = config['db_pass']
+db_server    = config['db_host']
+db_dbname    = config['db_name']
+alerting     = config['poller-wrapper']['alerter']
 
 s_time = time.time()
 real_duration = 0
@@ -185,6 +187,11 @@ def poll_worker():
             start_time = time.time()
             command = "/usr/bin/env php %s -h %s >> /dev/null 2>&1" % (poller_path, device_id)
             subprocess.check_call(command, shell=True)
+            if alerting == True:
+                print "INFO starting alerter.php for %s" % device_id
+                command = "/usr/bin/env php %s -h %s >> /dev/null 2>&1" % (alerter_path, device_id)
+                print "INFO finished alerter.php for %s" % device_id
+                subprocess.check_call(command, shell=True)
             elapsed_time = int(time.time() - start_time)
             print_queue.put([threading.current_thread().name, device_id, elapsed_time])
         except (KeyboardInterrupt, SystemExit):

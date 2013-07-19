@@ -223,8 +223,13 @@ function show_map($config)
         $legend = (($config['frontpage']['minigraphs']['legend'] == false) ? "no" : "yes");
         echo("<div class=\"row-fluid\">");
         echo("    <div class=\"span12 \">");
-        echo("        <h3 class=\"bill\">Mini Graphs Overview</h3>");
-        foreach($minigraphs as $graph) {
+        if ($config['frontpage']['minigraphs']['title'])
+        {
+          echo("        <h3 class=\"bill\">".$config['frontpage']['minigraphs']['title']."</h3>");
+        }
+
+        foreach($minigraphs as $graph)
+        {
           list($device, $type, $header) = explode(",", $graph, 3);
           if (strpos($type, "device") === false)
           {

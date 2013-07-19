@@ -142,8 +142,26 @@ function poll_sensor($device, $class, $unit, &$oid_cache)
     }
     echo("\n");
 
+    // Send statistics array via AMQP/JSON if AMQP is enabled globally and for the ports module
+    if($config['amqp']['enable'] == TRUE && $config['amqp']['modules']['sensors'])
+    {
+      $json_data = array('value' => $sensor_value);
+      messagebus_send(array('attribs' => array('t' => time(), 'device' => $device['hostname'], 'device_id' => $device['device_id'], 
+                                               'e_type' => 'sensor', 'e_class' => $sensor['sensor_class'], 'e_type' => $sensor['sensor_type'], 'e_index' => $sensor['sensor_index']), 'data' => $json_data));
+    }
+
+    // Update StatsD/Carbon
+    if($config['statsd']['enable'] == TRUE)
+    {
+      StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'sensor'.'.'.$sensor['sensor_class'].'.'.$sensor['sensor_type'].'.'.$sensor['sensor_index'], $sensor_value);
+    }
+
     // Update RRD
     rrdtool_update($rrd_file,"N:$sensor_value");
+
+    // Check alerts
+    check_entity('sensor', $sensor, array('sensor_value' => $sensor_value));
+
 
     // Update SQL State
     if (is_numeric($sensor['sensor_polled']))
@@ -158,13 +176,19 @@ function poll_sensor($device, $class, $unit, &$oid_cache)
 
 function poll_device($device, $options)
 {
-  global $config, $debug, $device, $polled_devices, $db_stats, $memcache, $exec_status;
+  global $config, $debug, $device, $polled_devices, $db_stats, $memcache, $exec_status, $alert_rules, $alert_table;
 
   $oid_cache = array();
 
   $old_device_state = unserialize($device['device_state']);
 
   $attribs = get_dev_attribs($device['device_id']);
+
+  $alert_rules = cache_alert_rules();
+  $alert_table = cache_device_alert_table($device['device_id']);
+
+  print_r($alert_rules);
+  print_r($alert_table);
 
   $status = 0; unset($array);
   $device_start = utime();  // Start counting device poll time

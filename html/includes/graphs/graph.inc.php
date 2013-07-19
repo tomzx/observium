@@ -25,11 +25,6 @@ if(is_numeric($vars['device']))
 
 // FIXME -- remove these
 
-#$width    = $vars['width'];
-#$height   = $vars['height'];
-#$title    = $vars['title'];
-#$vertical = $vars['vertical'];
-
 // $from, $to - unixtime (or rrdgraph time interval, i.e. '-1d', '-6w')
 // $timestamp_from, $timestamp_to - timestamps formatted as 'Y-m-d H:i:s'
 $timestamp_pattern = '/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/';
@@ -52,9 +47,6 @@ $period = $to - $from;
 $prev_from = $from - $period;
 
 $graphfile = $config['temp_dir'] . "/"  . strgen() . ".png";
-
-#$type = $graphtype['type'];
-#$subtype = $graphtype['subtype'];
 
 if (is_file($config['html_dir'] . "/includes/graphs/$type/$subtype.inc.php"))
 {
@@ -130,7 +122,7 @@ function graph_error($string)
       header('Content-type: image/png');
       $fd = fopen($graphfile,'r'); fpassthru($fd); fclose($fd);
       unlink($graphfile);
-      exit();
+#      exit();
     }
   } else {
     if (!$debug) { header('Content-type: image/png'); }
@@ -140,7 +132,7 @@ function graph_error($string)
     imagestring($im, 3, $px, $height / 2 - 8, $string, imagecolorallocate($im, 128, 0, 0));
     imagepng($im);
     imagedestroy($im);
-    exit();
+#    exit();
   }
 }
 
@@ -156,39 +148,32 @@ if ($error_msg) {
   {
    graph_error("No Auth");
   } else {
-   graph_error("No Authorisation");
+   graph_error("No Authorization");
   }
 } else {
   #$rrd_options .= " HRULE:0#999999";
   if ($no_file)
   {
+
     if ($width < 200)
     {
       graph_error("No RRD");
     } else {
       graph_error("Missing RRD Datafile");
     }
+
   } elseif($command_only) {
 
-
-#    echo("<div class='infobox'>");
-#    echo("<p style='font-size: 16px; font-weight: bold;'>RRDTool Command</p>");
-#    echo("rrdtool graph $graphfile $rrd_options");
-#    echo("</span>");
     $graph_start = utime();
     $return = rrdtool_graph($graphfile, $rrd_options);
     $graph_end = utime(); $graph_run = $graph_end - $graph_start; $graph_time = substr($graph_run, 0, 5);
     $total_end = utime(); $total_run = $total_end - $total_start; $total_time = substr($total_run, 0, 5);
 
-#    echo("<br /><br />");
-#    echo("<p style='font-size: 16px; font-weight: bold;'>RRDTool Output</p>$return");
-#    echo("<p>Total time: ".$total_time." | RRDtool time: ".$graph_time."s</p>");
     unlink($graphfile);
-#    echo("</div>");
 
-     $graph_return['total_time'] = $total_time;
-     $graph_return['rrdtool_time'] = $graph_time;
-     $graph_return['cmd']  = "rrdtool graph $graphfile $rrd_options";
+    $graph_return['total_time'] = $total_time;
+    $graph_return['rrdtool_time'] = $graph_time;
+    $graph_return['cmd']  = "rrdtool graph $graphfile $rrd_options";
 
   } else {
 
@@ -198,31 +183,13 @@ if ($error_msg) {
       if ($debug) { echo($rrd_cmd); }
       if (is_file($graphfile))
       {
-        if (!$debug)
+        if ($vars['image_data_uri'] == TRUE)
+        {
+          $image_data_uri = data_uri($graphfile,'image/png');
+        } elseif (!$debug)
         {
           header('Content-type: image/png');
-          if ($config['trim_tobias'])
-          {
-            list($w, $h, $type, $attr) = getimagesize($graphfile);
-            $src_im = imagecreatefrompng($graphfile);
-            $src_x = '0';   // begin x
-              $src_y = '0';   // begin y
-              $src_w = $w-12; // width
-            $src_h = $h; // height
-            $dst_x = '0';   // destination x
-            $dst_y = '0';   // destination y
-            $dst_im = imagecreatetruecolor($src_w, $src_h);
-             imagesavealpha($dst_im, true);
-            $white = imagecolorallocate($dst_im, 255, 255, 255);
-            $trans_colour = imagecolorallocatealpha($dst_im, 0, 0, 0, 127);
-            imagefill($dst_im, 0, 0, $trans_colour);
-            imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
-            imagepng($dst_im);
-            imagedestroy($dst_im);
-          } else {
-            $fd = fopen($graphfile,'r');fpassthru($fd);fclose($fd);
-          }
-
+          $fd = fopen($graphfile,'r');fpassthru($fd);fclose($fd);
         } else {
           echo(`ls -l $graphfile`);
           echo('<img src="'.data_uri($graphfile,'image/png').'" alt="graph" />');

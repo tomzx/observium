@@ -304,6 +304,16 @@ foreach ($ports as $port)
         $port['state'][$oid.'_delta'] = $oid_diff;
         if ($debug) { echo("\n $oid ($oid_diff B) $oid_rate Bps $polled_period secs\n"); }
       }
+
+    }
+
+    foreach ($stat_oids as $oid)
+    {
+      // Update StatsD/Carbon
+      if($config['statsd']['enable'] == TRUE && !strpos($oid, "HC"))
+      {
+        StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'port'.'.'.$port['ifIndex'].'.'.$oid, $this_port[$oid]);
+      }
     }
 
     if ($config['debug_port'][$port['port_id']])
@@ -330,11 +340,15 @@ foreach ($ports as $port)
       file_put_contents($debug_file, $debug_temp, FILE_APPEND);
     }
 
-    // Put ifMtu into alert array
-    if (is_numeric($this_port['ifMtu']))
+    // Put States into alert array
+    foreach(array('ifOperStatus', 'ifAdminStatus', 'ifMtu') AS $oid)
     {
-      $port['alert_array']['ifMtu'] = $this_port['ifMtu'];
+      if (isset($this_port[$oid]))
+      {
+        $port['alert_array'][$oid] = $this_port[$oid];
+      }
     }
+
 
     // If we have a valid ifSpeed we should populate the percentage stats for checking.
     if (is_numeric($this_port['ifSpeed']))
@@ -350,7 +364,6 @@ foreach ($ports as $port)
 
     $port['alert_array']['ifInOctets_perc'] = $port['stats']['ifInBits_perc'];
     $port['alert_array']['ifOutOctets_perc'] = $port['stats']['ifOutBits_perc'];
-
 
     echo('bps('.formatRates($port['stats']['ifInBits_rate']).'/'.formatRates($port['stats']['ifOutBits_rate']).')');
     echo('bytes('.formatStorage($port['stats']['ifInOctets_diff']).'/'.formatStorage($port['stats']['ifOutOctets_diff']).')');
@@ -423,7 +436,8 @@ foreach ($ports as $port)
     }
     // End Update PAgP
 
-    /// FIXME. Is that true include for EACH port? -- mike
+    /// FIXME. Is that true include for EACH port? -- mike 
+    /// Yes, but it's not expensive computationally. Use php-xcache. :) -- adama
     // Do EtherLike-MIB
     if ($config['enable_ports_etherlike']) { include("port-etherlike.inc.php"); }
 
@@ -433,7 +447,19 @@ foreach ($ports as $port)
     // Do PoE MIBs
     if ($config['enable_ports_poe']) { include("port-poe.inc.php"); }
 
-    if ($debug) { print_r($port['alert_array']); }
+#    if ($debug || TRUE) { print_r($port['alert_array']); echo(PHP_EOL); print_r($this_port);}
+
+    check_entity('port', $port, $port['alert_array']);
+
+
+    // Send statistics array via AMQP/JSON if AMQP is enabled globally and for the ports module
+    if($config['amqp']['enable'] == TRUE && $config['amqp']['modules']['ports'])
+    {
+      $json_data = array_merge($this_port, $port['state']) ;
+      unset($json_data['rrd_update']);
+      messagebus_send(array('attribs' => array('t' => $polled, 'device' => $device['hostname'], 'device_id' => $device['device_id'], 'e_type' => 'port', 'e_index' => $port['ifIndex']), 'data' => $json_data));
+      unset($json_data);
+    }
 
 #    // Do Alcatel Detailed Stats
 #    if ($device['os'] == "aos") { include("port-alcatel.inc.php"); }

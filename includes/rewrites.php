@@ -14,6 +14,33 @@
  *
  */
 
+/**
+ * Humanize Alert
+ *
+ *   Process an array containing a row from `alert_entry` and `alert_entry-state` in place to add/modify elements.
+ *
+ * @param array $device
+ * @return none
+ */
+
+function humanize_alert_entry(&$entry)
+{
+
+   if($entry['alert_status'] == '1')
+   {
+     $entry['class']  = "green"; $entry['table_tab_colour'] = "#194b7f"; $entry['html_row_class'] = "";
+   } elseif($entry['alert_status'] == '0') {
+     $entry['class']  = "red"; $entry['table_tab_colour'] = "#cc0000"; $entry['html_row_class'] = "error";
+   } else {
+     $entry['class']  = "gray"; $entry['table_tab_colour'] = "#555555"; $entry['html_row_class'] = "disabled";
+   }
+
+    if($entry['last_checked'] == '0') { $entry['checked'] = "<i>Never</i>"; } else { $entry['checked'] = formatUptime(time()-$entry['last_checked'], 'short-3'); }
+    if($entry['last_changed'] == '0') { $entry['changed'] = "<i>Never</i>"; } else { $entry['changed'] = formatUptime(time()-$entry['last_changed'], 'short-3'); }
+    if($entry['last_alerted'] == '0') { $entry['alerted'] = "<i>Never</i>"; } else { $entry['alerted'] = formatUptime(time()-$entry['last_alerted'], 'short-3'); }
+
+}
+
 function rewrite_location($location)
 {
   /// FIXME - also check the database for rewrites?
@@ -61,7 +88,7 @@ function rewrite_entity_descr ($descr)
 /**
  * Humanize Device
  *
- *   Process the $device array to add/modify elements.
+ *   Process an array containing a row from `devices` to add/modify elements.
  *
  * @param array $device
  * @return none
@@ -94,6 +121,7 @@ function humanize_device(&$device)
     {
       $device['html_row_class'] = "";
       $device['html_tab_colour'] = "#009900"; // Why green for ignore? Confusing!
+                                              // I chose this purely because using green for up and blue for up/ignore was uglier.
     }
   }
   if ($device['disabled'] == '1')

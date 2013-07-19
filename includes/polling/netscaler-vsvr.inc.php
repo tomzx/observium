@@ -150,6 +150,10 @@ if ($device['os'] == "netscaler")
      } else {
        $updated  = dbUpdate($db_update, 'netscaler_vservers', '`vsvr_id` = ?', array($vsvrs[$vsvr['vsvrName']]['vsvr_id']));
        echo(" U");
+
+       // Check Alerts
+       check_entity('netscaler_vsvr', $vsvrs[$vsvr['vsvrName']], array('vsvr_state' => $vsvr['vsvrState']));
+
      }
 
      if (!file_exists($rrd_file)) { rrdtool_create($rrd_file, $rrd_create); }
@@ -305,6 +309,10 @@ if ($device['os'] == "netscaler")
      } else {
        $updated  = dbUpdate($db_update, 'netscaler_services', '`svc_id` = ?', array($svcs[$svc['svcServiceName']]['svc_id']));
        echo(" U");
+
+       // Check Alerts
+       check_entity('netscaler_svc', $svcs[$svc['svcServiceName']], array('svc_state' => $svc['svcState']));
+
      }
 
      if (!file_exists($rrd_file)) { rrdtool_create($rrd_file, $rrd_create); }

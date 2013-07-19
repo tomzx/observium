@@ -12,9 +12,8 @@ $peth_oids = array('pethPsePortAdminEnable', 'pethPsePortPowerPairsControlAbilit
 $port_stats = snmpwalk_cache_oid($device, "pethPsePortEntry", $port_stats, "POWER-ETHERNET-MIB");
 $port_stats = snmpwalk_cache_oid($device, "cpeExtPsePortEntry", $port_stats, "CISCO-POWER-ETHERNET-EXT-MIB");
 
-if ($port_stats[$port['ifIndex']] && $port['ifType'] == "ethernetCsmacd"
-   && isset($port_stats[$port['ifIndex']]['dot3StatsIndex']))
-  { // Check to make sure Port data is cached.
+if ($port_stats[$port['ifIndex']] && $port['ifType'] == "ethernetCsmacd" && isset($port_stats[$port['ifIndex']]['dot3StatsIndex']))
+{ // Check to make sure Port data is cached.
 
     $this_port = &$port_stats[$port['ifIndex']];
 
@@ -31,6 +30,15 @@ if ($port_stats[$port['ifIndex']] && $port['ifType'] == "ethernetCsmacd"
       $rrd_create .= " DS:PortMaxPwrDrawn:GAUGE:600:0:U ";
 
       rrdtool_create($rrdfile, $rrd_create);
+    }
+
+    if($config['statsd']['enable'] == TRUE)
+    {
+      foreach (array('cpeExtPsePortPwrAllocated', 'cpeExtPsePortPwrAvailable', 'cpeExtPsePortPwrConsumption', 'cpeExtPsePortMaxPwrDrawn') as $oid)
+      {
+        // Update StatsD/Carbon
+        StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'port'.'.'.$port['ifIndex'].'.'.$oid, $this_port[$oid]);
+      }
     }
 
     $upd = "$polled:".$port['cpeExtPsePortPwrAllocated'].":".$port['cpeExtPsePortPwrAvailable'].":".$port['cpeExtPsePortPwrConsumption'].":".$port['cpeExtPsePortMaxPwrDrawn'];

@@ -110,6 +110,13 @@ if (isset($port_stats[$port['ifIndex']]['adslLineCoding']))
     // Set data to be "unknown" if it's garbled, unexistant or zero
     if (!is_numeric($data)) { $data = "U"; }
     $rrdupdate .= ":$data";
+
+    if($config['statsd']['enable'] == TRUE)
+    {
+      // Update StatsD/Carbon
+      StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'port'.'.'.$port['ifIndex'].'.'.$oid, $this_port[$oid]);
+    }
+
   }
 
   if (!is_file($rrdfile)) { rrdtool_create ($rrdfile, $rrd_create); }

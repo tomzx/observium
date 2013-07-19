@@ -32,8 +32,14 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $processor)
   $proc = round($proc / $processor['processor_precision'],2);
 
   $graphs['processor'] = TRUE;
-  
+
   echo($proc . "%\n");
+
+  // Update StatsD/Carbon
+  if($config['statsd']['enable'] == TRUE)
+  {
+    StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'processor'.'.'.$processor['processor_type'] . "-" . $processor['processor_index'], $proc);
+  }
 
   // Update RRD
   rrdtool_update($procrrd,"N:$proc");
@@ -45,6 +51,10 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $processor)
   } else {
     dbInsert(array('processor_id' => $processor['processor_id'], 'processor_usage' => $proc, 'processor_polled' => time()), 'processors-state');
   }
+
+  // Check alerts
+
+  check_entity('processor', $processor, array('processor_usage' => $proc));
 
 }
 

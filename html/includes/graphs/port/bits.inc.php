@@ -5,6 +5,6 @@ $ds_out = "OUTOCTETS";
 
 $graph_max = 1;
 
-include("includes/graphs/generic_data.inc.php");
+include($config['html_dir']."/includes/graphs/generic_data.inc.php");
 
 ?>

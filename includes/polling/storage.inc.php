@@ -39,6 +39,14 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $storage)
 
   echo($percent."% ");
 
+  // Update StatsD/Carbon
+  if($config['statsd']['enable'] == TRUE)
+  {
+    StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'storage'.'.' .$storage['storage_mib'] . "-" . safename($storage['storage_descr']).".used", $storage['used']);
+    StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'storage'.'.' .$storage['storage_mib'] . "-" . safename($storage['storage_descr']). ".free", $storage['free']);
+  }
+
+  // Update RRD
   rrdtool_update($storage_rrd,"N:".$storage['used'].":".$storage['free']);
 
   if (!is_numeric($storage['storage_polled'])) { dbInsert(array('storage_id' => $storage['storage_id'], 'storage_used' => $storage['used'],
