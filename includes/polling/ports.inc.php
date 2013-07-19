@@ -356,7 +356,6 @@ foreach ($ports as $port)
       $port['stats']['ifInBits_perc'] = round($port['stats']['ifInBits_rate'] / $this_port['ifSpeed'] * 100);
       $port['stats']['ifOutBits_perc'] = round($port['stats']['ifOutBits_rate'] / $this_port['ifSpeed'] * 100);
       $port['alert_array']['ifSpeed'] = $this_port['ifSpeed'];
-
     }
 
     $port['state']['ifInOctets_perc'] = $port['stats']['ifInBits_perc'];
@@ -364,6 +363,10 @@ foreach ($ports as $port)
 
     $port['alert_array']['ifInOctets_perc'] = $port['stats']['ifInBits_perc'];
     $port['alert_array']['ifOutOctets_perc'] = $port['stats']['ifOutBits_perc'];
+
+    $port['alert_array']['rx_ave_pktsize']   = $port['state']['ifInOctets_delta'] / ($port['state']['ifInUcastPkts_delta'] + $port['state']['ifInNUcastPkts_delta']);
+    $port['alert_array']['tx_ave_pktsize']   = $port['state']['ifOutOctets_delta'] / ($port['state']['ifOutUcastPkts_delta'] + $port['state']['ifOutNUcastPkts_delta']);
+
 
     echo('bps('.formatRates($port['stats']['ifInBits_rate']).'/'.formatRates($port['stats']['ifOutBits_rate']).')');
     echo('bytes('.formatStorage($port['stats']['ifInOctets_diff']).'/'.formatStorage($port['stats']['ifOutOctets_diff']).')');
@@ -449,6 +452,7 @@ foreach ($ports as $port)
 
 #    if ($debug || TRUE) { print_r($port['alert_array']); echo(PHP_EOL); print_r($this_port);}
 
+    print_r($port['alert_array']);
     check_entity('port', $port, $port['alert_array']);
 
 

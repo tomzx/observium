@@ -6,6 +6,17 @@
 //               YES, THAT MEANS YOU                   //
 /////////////////////////////////////////////////////////
 
+// Alert Graphs
+## FIXME - this is ugly
+
+$config['alert_graphs']['port']['ifInOctets_rate']  = array('type' => 'port_bits', 'id' => '@port_id');
+$config['alert_graphs']['port']['ifOutOctets_rate'] = array('type' => 'port_bits', 'id' => '@port_id');
+$config['alert_graphs']['port']['ifInOctets_perc']  = array('type' => 'port_bits', 'id' => '@port_id');
+$config['alert_graphs']['port']['ifOutOctets_perc'] = array('type' => 'port_bits', 'id' => '@port_id');
+$config['alert_graphs']['mempool']['mempool_perc']  = array('type' => 'mempool_usage', 'id' => '@mempool_id');
+$config['alert_graphs']['sensor']['sensor_value']   = array('type' => 'sensor_graph', 'id' => '@sensor_id');
+$config['alert_graphs']['mempool']['processor_usage']  = array('type' => 'processor_usage', 'id' => '@processor_id');
+
 $config['os']['default']['over'][0]['graph']       = "device_processor";
 $config['os']['default']['over'][0]['text']        = "Processors";
 $config['os']['default']['over'][1]['graph']       = "device_mempool";
