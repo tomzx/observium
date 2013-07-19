@@ -21,6 +21,7 @@ include("includes/definitions.inc.php");
 include("includes/functions.php");
 include("includes/polling/functions.inc.php");
 include("html/includes/functions.inc.php");
+include_once($config['install_dir'] . "/includes/pear/Mail/Mail.php");
 
 
 $start = utime();
