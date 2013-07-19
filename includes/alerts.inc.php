@@ -27,7 +27,7 @@ function check_entity($type, $entity, $data)
 
   echo("\nChecking alerts\n");
 
-  print_r($data);
+  #print_r($data);
 
   list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
 
@@ -55,7 +55,7 @@ function check_entity($type, $entity, $data)
             echo(" replaced @".$ent_val." with ". $test['value'] ." from entity. ");
           }
 
-          print_r($test);
+          #print_r($test);
 
           echo("Testing: " . $test['metric']. " ". $test['condition'] . " " .$test['value']);
           $update_array['state']['metrics'][$test['metric']] = $data[$test['metric']];
@@ -115,8 +115,19 @@ function check_entity($type, $entity, $data)
 
         // Serialize the state array before we put it into MySQL.
         $update_array['state'] = serialize($update_array['state']);
+#        $update_array['alert_table_id'] = $alert_args['alert_table_id'];
+
+        /// Perhaps this is better done with SQL replace?
+        #print_r($alert_args);
+        if(!$alert_args['state_entry'])
+        {
+          // State entry seems to be missing. Insert it before we update it.
+          dbInsert(array('alert_table_id' => $alert_args['alert_table_id']), 'alert_table-state');
+          echo("INSERTING");
+        }
 
         dbUpdate($update_array, 'alert_table-state', '`alert_table_id` = ?', array($alert_args['alert_table_id']));
+
 
       } else {
         echo("Alert missing!");
@@ -166,7 +177,7 @@ function cache_device_alert_table($device_id)
 
   $alert_table = array();
 
-  $sql  = "SELECT * FROM  `alert_table`";
+  $sql  = "SELECT *,`alert_table`.`alert_table_id` AS `alert_table_id` FROM  `alert_table`";
   $sql .= " LEFT JOIN  `alert_table-state` ON  `alert_table`.`alert_table_id` =  `alert_table-state`.`alert_table_id`";
   $sql .= " WHERE  `device_id` =  ?";
 

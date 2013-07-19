@@ -168,6 +168,8 @@ $config['alerts']['bgp']['whitelist']      = NULL;     // Populate as an array()
 $config['alerts']['port']['ifdown']        = FALSE;    // Generate alerts for ports that go down
 $config['alerts']['port']['ifdown_types']  = array('core', 'transit', 'peering');    // Generate alerts for ports that go down
 
+// Execute alerter.php after poller.php during poller-wrapper.py
+
 $config['poller-wrapper']['alerter']       = TRUE;
 
 // Port bandwidth threshold percentage %age utilisation above this will cause an alert
