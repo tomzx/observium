@@ -811,7 +811,7 @@ function process_alerts($device)
         }
         $message .= "</p>";
 
-        notify($device, "ALERT: [".$device['hostname']."] [".$alert['entity_type']."] [".$entity_descr."] ".$alert['alert_message'],  $message);
+        alert_notify($device, "ALERT: [".$device['hostname']."] [".$alert['entity_type']."] [".$entity_descr."] ".$alert['alert_message'],  $message);
 
         $update_array['last_alerted'] = time();
         dbUpdate($update_array, 'alert_table-state', '`alert_table_id` = ?', array($entry['alert_table_id']));
@@ -821,5 +821,104 @@ function process_alerts($device)
       echo(PHP_EOL);
   }
 }
+
+function alert_notify($device,$title,$message)
+{
+  /// NOTE. Need full rewrite to universal function with message queues and multi-protocol (email,jabber,twitter)
+  global $config, $debug;
+
+  if (!$device['ignore'])
+  {
+    if (!get_dev_attrib($device,'disable_notify'))
+    {
+      if ($config['alerts']['email']['default_only'])
+      {
+        $email = $config['alerts']['email']['default'];
+      } else {
+        if (get_dev_attrib($device,'override_sysContact_bool'))
+        {
+          $email = get_dev_attrib($device,'override_sysContact_string');
+        }
+        elseif ($device['sysContact'])
+        {
+          $email = $device['sysContact'];
+        } else {
+          $email = $config['alerts']['email']['default'];
+        }
+      }
+      $emails = parse_email($email);
+
+      if ($emails)
+      {
+        // Mail backend params
+        $params = array('localhost' => php_uname('n'));
+        $backend = strtolower(trim($config['email_backend']));
+        switch ($backend) {
+          case 'sendmail':
+            $params['sendmail_path'] = $config['email_sendmail_path'];
+            break;
+          case 'smtp':
+            $params['host']     = $config['email_smtp_host'];
+            $params['port']     = $config['email_smtp_port'];
+            if ($config['email_smtp_secure'] == 'ssl')
+            {
+              $params['host']   = 'ssl://'.$config['email_smtp_host'];
+              if ($config['email_smtp_port'] == 25) {
+                $params['port'] = 465; // Default port for SSL
+              }
+            }
+            $params['timeout']  = $config['email_smtp_timeout'];
+            $params['auth']     = $config['email_smtp_auth'];
+            $params['username'] = $config['email_smtp_username'];
+            $params['password'] = $config['email_smtp_password'];
+            if ($debug) { $params['debug'] = TRUE; }
+            break;
+          default:
+            $backend = 'mail'; // Default mailer backend
+        }
+
+        // Mail headers
+        $headers = array();
+        if (empty($config['email_from']))
+        {
+          $headers['From']   = '"Observium" <observium@'.$params['localhost'].'>'; // Default "From:"
+        } else {
+          foreach (parse_email($config['email_from']) as $from => $from_name)
+          {
+            $headers['From'] = (empty($from_name)) ? $from : '"'.$from_name.'" <'.$from.'>'; // From:
+          }
+        }
+        $rcpts_full = '';
+        $rcpts = '';
+        foreach ($emails as $to => $to_name)
+        {
+          $rcpts_full .= (empty($to_name)) ? $to.', ' : '"'.$to_name.'" <'.$to.'>, ';
+          $rcpts .= $to.', ';
+        }
+        $rcpts_full = substr($rcpts_full, 0, -2); // To:
+        $rcpts = substr($rcpts, 0, -2);
+        $headers['Subject']      = $title; // Subject:
+        $headers['X-Priority']   = 3; // Mail priority
+        $headers['X-Mailer']     = 'Observium ' . $config['version']; // X-Mailer:
+        $headers['Content-type'] = 'text/html';
+        $headers['Message-ID']   = '<' . md5(uniqid(time())) . '@' . $params['localhost'] . '>';
+        $headers['Date']         = date('r', time());
+
+        // Mail body
+        $message_header = $config['page_title_prefix']."\n\n";
+        $message_footer = "\n\nE-mail sent to: ".$rcpts."\n";
+        $message_footer .= "E-mail sent at: " . date($config['timestamp_format']) . "\n";
+        $body = $message_header . $message . $message_footer;
+
+        // Create mailer instance
+        $mail =& Mail::factory($backend, $params);
+        // Sending email
+        $status = $mail->send($rcpts_full, $headers, $body);
+        if (PEAR::isError($status)) { echo 'Mailer Error: ' . $status->getMessage() . PHP_EOL; }
+      }
+    }
+  }
+}
+
 
 // EOF
