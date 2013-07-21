@@ -54,14 +54,14 @@ echo('<table class="table table-condensed table-bordered table-striped table-rou
 
   $args = array();
   $sql  = "SELECT * FROM  `alert_table`";
-  $sql .= " LEFT JOIN  `alert_table-state` ON  `alert_table`.`alert_table_id` =  `alert_table-state`.`alert_table_id`";
+  $sql .= " LEFT JOIN  `alert_table-state` ON  `alert_table`.`alert_table_id` =  `alert_table-state`.`alert_table_id` WHERE 1";
   if($vars['alerted'] == '1')
   {
-    $sql .= " WHERE `alert_status` = '0'";
+    $sql .= " AND `alert_status` = '0'";
   }
   if(isset($vars['entity_type']))
   {
-    $sql .= " WHERE `entity_type` = ?";
+    $sql .= " AND `entity_type` = ?";
     $args[] = $vars['entity_type'];
   }
   $sql .= " ORDER BY `device_id`,`entity_type`";

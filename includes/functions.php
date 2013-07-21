@@ -859,7 +859,7 @@ function notify($device,$title,$message)
         $headers['Subject']      = $title; // Subject:
         $headers['X-Priority']   = 3; // Mail priority
         $headers['X-Mailer']     = 'Observium ' . $config['version']; // X-Mailer:
-        $headers['Content-type'] = 'text/html';
+        #$headers['Content-type'] = 'text/html';
         $headers['Message-ID']   = '<' . md5(uniqid(time())) . '@' . $params['localhost'] . '>';
         $headers['Date']         = date('r', time());
 
