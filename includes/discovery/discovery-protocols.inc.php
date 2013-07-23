@@ -131,7 +131,7 @@ if ($lldp_array)
         $remote_device_id = $remote_device['device_id']; 
 
         // Overwrite remote hostname with the one we know, for devices that we identify by sysName
-        $lldp['lldpRemSysName'] = $remote_device['hostname'];
+        if ($remote_device['hostname']) { $lldp['lldpRemSysName'] = $remote_device['hostname']; }
 
         if (!$remote_device_id && is_valid_hostname($lldp['lldpRemSysName']))
         {
