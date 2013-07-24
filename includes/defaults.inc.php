@@ -141,7 +141,7 @@ $config['autodiscovery']['ospf']           = TRUE; // Autodiscover hosts via OSP
 $config['autodiscovery']['bgp']            = TRUE; // Autodiscover hosts via BGP
 $config['autodiscovery']['snmpscan']       = TRUE; // Autodiscover hosts via SNMP scanning
 $config['autodiscovery']['libvirt']        = TRUE; // Autodiscover hosts found via libvirt
-$config['autodiscovery']['ip_nets']        = array("127.0.0.0/8", "192.168.0.0/16", "10.0.0.0/8", "172.0.0.0/8");  // Networks to permit autodiscovery
+$config['autodiscovery']['ip_nets']        = array("127.0.0.0/8", "192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12");  // Networks to permit autodiscovery
 
 $config['discover_services']               = FALSE; // Autodiscover services via SNMP on devices of type "server"
 
@@ -442,7 +442,7 @@ $config['irc_chan'][] = "#observium";
 
 $config['allow_unauth_graphs']      = 0;       // Allow graphs to be viewed by anyone
 $config['allow_unauth_graphs_cidr'] = array(); // Allow graphs to be viewed without authorisation from certain IP ranges
-$config['auth_mechanism']           = "mysql"; // Available mechanisms: mysql (default), ldap, http-auth
+$config['auth_mechanism']           = "mysql"; // Available mechanisms: mysql (default), ldap, radius, http-auth
 
 // LDAP Authentication
 
