@@ -49,7 +49,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? A
     {
       if ($vsvr['vsvr_state'] == "up") { $vsvr_class="green"; } else { $vsvr_class="red"; }
       echo("<tr>");
-      echo('<td width=320 class="object-name"><a href="'.generate_url($vars, array('type' => 'netscaler_vsvr', 'vsvr' => $vsvr['vsvr_id'], 'svc' => NULL, 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_name'] . '</a></td>');
+      echo('<td width=320 class="object-name"><a href="'.generate_url($vars, array('type' => 'netscaler_vsvr', 'vsvr' => $vsvr['vsvr_id'], 'svc' => NULL, 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_label'] . '</a></td>');
       echo("<td width=320>" . $vsvr['vsvr_ip'] . ":" . $vsvr['vsvr_port'] . "</a></td>");
       echo("<td width=100><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span></td>");
       echo("<td width=320>" . format_si($vsvr['vsvr_bps_in']*8) . "bps</a></td>");
