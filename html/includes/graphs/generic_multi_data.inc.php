@@ -76,7 +76,7 @@ if ($i)
     $rrd_options .= " AREA:dout".$format."#".$colour_area_out.":";
 #    $rrd_options .= " LINE1.25:dout".$format."#".$colour_line_out.":";
   } else {
-    $rrd_options .= " COMMENT:'bps      Now       Ave      Max      95th %\\n'";
+    $rrd_options .= " COMMENT:'bps      Now       Avg      Max      95th %\\n'";
     $rrd_options .= " AREA:in".$format."#".$colour_area_in.":'In '";
 #    $rrd_options .= " LINE1.25:in".$format."#".$colour_line_in.":'In '";
     $rrd_options .= " GPRINT:in".$format.":LAST:%6.2lf%s";

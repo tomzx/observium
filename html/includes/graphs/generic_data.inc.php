@@ -21,7 +21,7 @@ $units_descr = rrdtool_escape($units_descr, 9);
 
 if (!$noheader)
 {
-  $rrd_options .= " COMMENT:'$units_descr  Now      Ave      Max     95th \\n'";
+  $rrd_options .= " COMMENT:'$units_descr  Now      Avg      Max     95th \\n'";
 }
 
 if ($rrd_filename) { $rrd_filename_out = $rrd_filename; $rrd_filename_in = $rrd_filename; }

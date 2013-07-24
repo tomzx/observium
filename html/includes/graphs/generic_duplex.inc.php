@@ -74,7 +74,7 @@ if ($_GET['previous'] == "yes")
 }
 
 $rrd_options .= " AREA:in#".$colour_area_in.":";
-$rrd_options .= " COMMENT:'".$unit_text."      Now       Ave      Max";
+$rrd_options .= " COMMENT:'".$unit_text."      Now       Avg      Max";
 
 if ($percentile)
 {
