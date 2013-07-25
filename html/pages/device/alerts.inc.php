@@ -94,10 +94,28 @@ if(is_numeric($vars['alert']) && FALSE)
 
 
     $alert = $alert_rules[$alert_test_id];
-
     list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($alert['entity_type']);
-
     $link = generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'alerts', 'type' => $alert['entity_type'], 'alert' => $alert_test_id));
+
+    $entities = $alert_entry['ids'];
+
+    $s = array('up' => 0, 'down' => 0, 'unknown' => 0);
+
+    // Generate list and popup for total number of entities which match this alert
+    $entities_content = "";
+    if(count($entities) < "15") { $e_sep = "<br />"; } else { $e_sep = ", "; }
+    foreach($entities as $alert_table_id => $entity_id)
+    {
+      $alert_table_entry = $alert_table[$vars['type']][$entity_id][$alert_test_id];
+      $entities_content[] = generate_entity_link($vars['type'], $entity_id, $text = NULL, $graph_type=NULL);
+      #print_r($alert_table_entry);
+
+      if($alert_table_entry['alert_status'] == '1') { $s['up']++;
+      } elseif($alert_table_entry['alert_status'] == '0') { $s['down']++;
+      } else { $s['unknown']++; }
+
+    }
+    $entities_content = implode($e_sep, $entities_content);
 
     echo('<tr>');
 
@@ -137,7 +155,6 @@ if(is_numeric($vars['alert']) && FALSE)
     // Loop the associations which link this alert to this device
     foreach($alert_entry['assoc'] as $assoc_id => $assoc_data)
     {
-
       #print_r($assoc_id);
       $assoc = $alert_assoc[$assoc_id];
 
@@ -177,17 +194,17 @@ if(is_numeric($vars['alert']) && FALSE)
 
       // Print the count of entities this alert applies to and a popup containing a list
 
-      $entities = $assoc_data['ids'];
+      $a_entities = $assoc_data['ids'];
       echo('<td>');
-      $content = "";
-      if(count($entities) < "15") { $e_sep = "<br />"; } else { $e_sep = ", "; }
+      $a_content = "";
+      if(count($a_entities) < "15") { $e_sep = "<br />"; } else { $e_sep = ", "; }
       foreach($entities as $entity)
       {
-        $content[] = generate_entity_link($vars['type'], $entity, $text = NULL, $graph_type=NULL);
+        $a_content[] = generate_entity_link($vars['type'], $entity, $text = NULL, $graph_type=NULL);
       }
-      $content = implode($e_sep, $content);
+      $a_content = implode($e_sep, $a_content);
 
-      echo(overlib_link('#', count($entities), $content,  NULL));
+      echo(overlib_link('#', count($a_entities), $a_content,  NULL));
       echo('</td>');
 
       echo('</tr>');
@@ -200,30 +217,8 @@ if(is_numeric($vars['alert']) && FALSE)
 
 
     // Print the count of entities this alert applies to and a popup containing a list
-
-    $s = array('up' => 0, 'down' => 0, 'unknown' => 0);
-
-    $entities = $alert_entry['ids'];
     echo('<td>');
-    $content = "";
-    if(count($entities) < "15") { $e_sep = "<br />"; } else { $e_sep = ", "; }
-    foreach($entities as $alert_table_id => $entity_id)
-    {
-
-      $alert_table_entry = $alert_table[$vars['type']][$entity_id][$alert_test_id];
-      $content[] = generate_entity_link($vars['type'], $entity_id, $text = NULL, $graph_type=NULL);
-
-#      print_r($alert_table_entry);
-
-      if($alert_table_entry['alert_status'] == '1') { $s['up']++;
-      } elseif($alert_table_entry['alert_status'] == '0') { $s['down']++;
-      } else { $s['unknown']++; }
-
-
-    }
-    $content = implode($e_sep, $content);
-
-    echo(overlib_link('#', count($entities), $content,  NULL));
+    echo(overlib_link('#', count($entities), $entities_content,  NULL));
     echo('</td>');
 
     echo('<td>');
@@ -280,8 +275,9 @@ if(is_numeric($vars['alert']) && FALSE)
 
         echo('<td>'.$alert_table_id.'</td>');
         echo('<td>'.generate_entity_link($vars['type'], $entity_id, $text = NULL, $graph_type=NULL).'</td>');
-        echo('<td>'); 
-        print_r($alert_table_entry['state']);
+        echo('<td>');
+        ## FIXME -- generate a nice popup with parsed information from the state array
+        echo(overlib_link("", "view state", $alert_table_entry['state'], NULL));
         echo('</td>');
         echo('<td class="'.$alert_table_entry['class'].'">'.$alert_table_entry['last_message'].'</td>');
         echo('<td>'.$alert_table_entry['lc'].'</td>');

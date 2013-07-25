@@ -840,7 +840,7 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
       break;
     case "netscaler_svc":
       if (empty($text)) { $text = $entity['svc_label']; }
-      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'loadbalancer', 'type' => 'netscaler_svc', 'svc' => $entity['svc_id']));
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'loadbalancer', 'type' => 'netscaler_services', 'svc' => $entity['svc_id']));
       break;
 
     default:

@@ -18,11 +18,11 @@ $navbar['brand'] = "Alert Types";
 
 $types = dbFetchRows("SELECT `entity_type` FROM `alert_tests` GROUP BY `entity_type`");
 
-$navbar['options']['all']['url'] = generate_url(array('page' => 'alerts', 'entity_type' => 'all'));
+$navbar['options']['all']['url'] = generate_url($vars, array('page' => 'alerts', 'entity_type' => 'all'));
 $navbar['options']['all']['text'] = htmlspecialchars(nicecase('all'));
 if ($vars['entity_type'] == 'all') {
   $navbar['options']['all']['class'] = "active";
-  $navbar['options']['all']['url'] = generate_url(array('page' => 'alerts', 'entity_type' => NULL));
+  $navbar['options']['all']['url'] = generate_url($vars, array('page' => 'alerts', 'entity_type' => NULL));
 }
 
 foreach ($types as $thing)
