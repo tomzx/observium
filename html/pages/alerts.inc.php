@@ -84,7 +84,7 @@ echo('<table class="table table-condensed table-bordered table-striped table-rou
     echo('<td><span class="entity-title">'.generate_device_link($device).'</span></td>');
     echo('<td>'.$alert_entry['entity_type'].'</td>');
     echo('<td>'.$alert_rule['alert_name'].'</td>');
-    echo('<td><span class="entity-title">'.generate_entity_link($alert_entry['entity_type'], $alert_entry['entity_id'], substr($entity_descr, 20)).'</span></td>');
+    echo('<td><span class="entity-title">'.generate_entity_link($alert_entry['entity_type'], $alert_entry['entity_id'], truncate($entity_descr, 40)).'</span></td>');
 
     echo('<td>'.$alert_entry['checked'].'</td>');
     echo('<td>'.$alert_entry['changed'].'</td>');
