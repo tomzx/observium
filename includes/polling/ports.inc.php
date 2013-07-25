@@ -451,8 +451,8 @@ foreach ($ports as $port)
     if ($config['enable_ports_poe']) { include("port-poe.inc.php"); }
 
 #    if ($debug || TRUE) { print_r($port['alert_array']); echo(PHP_EOL); print_r($this_port);}
+#    print_r($port['alert_array']);
 
-    print_r($port['alert_array']);
     check_entity('port', $port, $port['alert_array']);
 
 
@@ -513,14 +513,14 @@ foreach ($ports as $port)
   }
   elseif ($port['disabled'] != "1")
   {
-    echo("Port Deleted"); // Port missing from SNMP cache.
-    if ($port['deleted'] != "1")
+    print_message("Port Deleted."); // Port missing from SNMP cache.
+    if (isset($port['ifIndex']) && $port['deleted'] != "1")
     {
       dbUpdate(array('deleted' => '1'), 'ports',  '`device_id` = ? AND `ifIndex` = ?', array($device['device_id'], $port['ifIndex']));
       log_event("Port was marked as DELETED", $device, 'interface', $port['port_id']);
     }
   } else {
-    echo("Port Disabled.");
+    print_message("Port Disabled.");
   }
 
   echo("\n");
