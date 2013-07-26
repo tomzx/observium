@@ -813,15 +813,15 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
   {
     case "mempool":
       if (empty($text)) { $text = $entity['mempool_descr']; }
-      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'mempool'));
       break;
     case "processor":
       if (empty($text)) { $text = $entity['processor_descr']; }
-      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'processor'));
       break;
     case "sensor":
       if (empty($text)) { $text = $entity['sensor_descr']; }
-      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'temperature'));
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => $entity['sensor_class']));
       break;
     case "port":
       $link = generate_port_link($entity, $text, $graph_type);
@@ -832,7 +832,7 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
       break;
     case "bgp_peer":
       if (empty($text)) { $text = "AS".$entity['bgpPeerRemoteAs'] ." ". $entity['bgpPeerRemoteAddr']. " ".truncate($entity['astext'], "30"); }
-      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'health', 'metric' => 'storage'));
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'routing', 'proto' => 'bgo'));
       break;
     case "netscaler_vsvr":
       if (empty($text)) { $text = $entity['vsvr_label']; }
