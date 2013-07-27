@@ -29,16 +29,17 @@ function get_cache($host, $value)
         // If failed, try by IP
         if (!is_numeric($dev_cache[$host]['device_id']))
         {
+          $ip = strtolower($host);
           $address_type = (is_numeric(stripos($addr, ':abcdef'))) ? $address_type = 'ipv6' : $address_type = 'ipv4';
-          $address_count = dbFetchCell('SELECT COUNT(*) FROM `'.$address_type.'_addresses` WHERE '.$address_type.'_address = ?;', array($host));
+          if ($address_type == 'ipv6') { $ip = Net_IPv6::uncompress($ip, TRUE); }
+          $address_count = dbFetchCell('SELECT COUNT(*) FROM `'.$address_type.'_addresses` WHERE '.$address_type.'_address = ?;', array($ip));
           if ($address_count)
           {
             $query = 'SELECT `device_id` FROM `'.$address_type.'_addresses` AS A, `ports` AS I WHERE A.'.$address_type.'_address = ? AND I.port_id = A.port_id';
             // If more than one IP address, also check the status of the port.
             if ($address_count > 1) { $query .= " AND I.`ifOperStatus` = 'up'"; }
-            $dev_cache[$host]['device_id'] = dbFetchCell($query, array($host));
+            $dev_cache[$host]['device_id'] = dbFetchCell($query, array($ip));
           }
-          
         }
         break;
       case 'os':
