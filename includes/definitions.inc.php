@@ -1512,7 +1512,7 @@ $config['device_types'][$i]['icon'] = 'oicon-arrow-split';
 $i++;
 $config['device_types'][$i]['text'] = 'Video';
 $config['device_types'][$i]['type'] = 'video';
-$config['device_types'][$i]['icon'] = 'oicon-video';
+$config['device_types'][$i]['icon'] = 'oicon-surveillance-camera';
 
 $i++;
 $config['device_types'][$i]['text'] = 'Storage';
