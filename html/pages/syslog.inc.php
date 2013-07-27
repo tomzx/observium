@@ -35,10 +35,18 @@ $search[] = array('type'    => 'multiselect',
 //Program field
 //$programs[''] = 'All Programs';
 $where = ($vars['device_id']) ? 'WHERE `device_id` = ' . $vars['device_id'] : '';
-foreach (dbFetchRows('SELECT `program` FROM `syslog` ' . $where . ' GROUP BY `program` ORDER BY `program`') as $data)
+foreach (dbFetchRows('SELECT  S.`device_id` AS `device_id`, `program` FROM `syslog` AS S
+                      LEFT JOIN `devices` AS D ON S.device_id = D.device_id ' . $where . '
+                      GROUP BY `program` ORDER BY `program`') as $data)
 {
-  $program = ($data['program']) ? $data['program'] : '[[EMPTY]]';
-  $programs[$program] = $program;
+  $device_id = $data['device_id'];
+  // Exclude not permited devices
+  if (isset($cache['devices']['id'][$device_id]))
+  {
+    if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
+    $program = ($data['program']) ? $data['program'] : '[[EMPTY]]';
+    $programs[$program] = $program;
+  }
 }
 $search[] = array('type'    => 'multiselect',
                   'name'    => 'Programs',

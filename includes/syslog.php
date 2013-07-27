@@ -9,8 +9,17 @@
 function get_cache($host, $value)
 {
   global $dev_cache;
+  
+  // Check cache expiration
+  $now = time();
+  $expired = TRUE;
+  if (isset($dev_cache[$host]['lastchecked']))
+  {
+    if (($dev_cache[$host]['lastchecked'] - $now) < 21600) { $expired = FALSE; } // will expire after 6 hrs
+  }
+  if ($expired) { $dev_cache[$host]['lastchecked'] = $now; }
 
-  if (!isset($dev_cache[$host][$value]))
+  if (!isset($dev_cache[$host][$value]) || $expired)
   {
     switch($value)
     {
@@ -20,7 +29,16 @@ function get_cache($host, $value)
         // If failed, try by IP
         if (!is_numeric($dev_cache[$host]['device_id']))
         {
-          $dev_cache[$host]['device_id'] = dbFetchCell('SELECT `device_id` FROM `ipv4_addresses` AS A, `ports` AS I WHERE A.ipv4_address = ? AND I.port_id = A.port_id', array($host));
+          $address_type = (is_numeric(stripos($addr, ':abcdef'))) ? $address_type = 'ipv6' : $address_type = 'ipv4';
+          $address_count = dbFetchCell('SELECT COUNT(*) FROM `'.$address_type.'_addresses` WHERE '.$address_type.'_address = ?;', array($host));
+          if ($address_count)
+          {
+            $query = 'SELECT `device_id` FROM `'.$address_type.'_addresses` AS A, `ports` AS I WHERE A.'.$address_type.'_address = ? AND I.port_id = A.port_id';
+            // If more than one IP address, also check the status of the port.
+            if ($address_count > 1) { $query .= " AND I.`ifOperStatus` = 'up'"; }
+            $dev_cache[$host]['device_id'] = dbFetchCell($query, array($host));
+          }
+          
         }
         break;
       case 'os':
