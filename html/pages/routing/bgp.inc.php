@@ -157,7 +157,7 @@ else
 
   if ($vars['adminstatus'] == "stop")
   {
-    $where .= " AND (B.bgpPeerAdminStatus = 'stop')";
+    $where .= " AND (B.bgpPeerAdminStatus = 'stop' OR B.bgpPeerAdminStatus = 'halted')";
   } elseif ($vars['adminstatus'] == "start")
   {
     $where .= " AND (B.bgpPeerAdminStatus = 'start' OR B.bgpPeerAdminStatus = 'running')";
@@ -178,7 +178,6 @@ else
 
   foreach (dbFetchRows($peer_query) as $peer)
   {
-
     humanize_bgp($peer);
 
     $ip_version = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? 'ipv6' : 'ipv4';

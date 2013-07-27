@@ -154,18 +154,18 @@ function humanize_device(&$device)
 function humanize_bgp (&$peer)
 {
   // Peer is disabled, set all things grey.
-  if ($peer['bgpPeerAdminStatus'] == "stop")
+  if ($peer['bgpPeerAdminStatus'] == 'stop' || $peer['bgpPeerAdminStatus'] == 'halted')
   {
-       $peer['table_tab_colour'] = "#aaaaaa"; $peer['html_row_class'] = "warning"; $peer['state_class'] = "muted"; $peer['admin_class'] = "muted"; $peer['alert']=0; $peer['disabled']=1;
+    $peer['table_tab_colour'] = "#aaaaaa"; $peer['html_row_class'] = "warning"; $peer['state_class'] = "muted"; $peer['admin_class'] = "muted"; $peer['alert']=0; $peer['disabled']=1;
   } elseif ($peer['bgpPeerAdminStatus'] == "start" || $peer['bgpPeerAdminStatus'] == "running" ) {
-       // Peer is enabled, set state green and check other things
-       $peer['admin_class'] = "text-success";
-       if ($peer['bgpPeerState'] == "established")
-       {
-         $peer['state_class'] = "text-success"; $peer['table_tab_colour'] = "#194B7F"; $peer['html_row_class'] = "";
-       } else {
-         $peer['state_class'] = "text-error"; $peer['table_tab_colour'] = "#cc0000"; $peer['html_row_class'] = "error";
-       }
+    // Peer is enabled, set state green and check other things
+    $peer['admin_class'] = "text-success";
+    if ($peer['bgpPeerState'] == "established")
+    {
+      $peer['state_class'] = "text-success"; $peer['table_tab_colour'] = "#194B7F"; $peer['html_row_class'] = "";
+    } else {
+      $peer['state_class'] = "text-error"; $peer['table_tab_colour'] = "#cc0000"; $peer['html_row_class'] = "error";
+    }
   }
 
   if ($peer['bgpPeerRemoteAs'] == $peer['bgpLocalAs'])                                    { $peer['peer_type'] = "<span style='color: #00f;'>iBGP</span>"; }
