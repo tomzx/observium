@@ -753,11 +753,15 @@ function process_alerts($device)
     {
       echo('Alert tripped. ');
 
+      if($device['ignore'] || ($device['ignore_until'] && $device['ignore_until'] > time() )) { $entry['suppress_alert'] = TRUE; }
+      if((time() - $entry['last_alerted']) < 84000) { $entry['suppress_alert'] = TRUE; }
+
       ## FIXME -- this time should be configurable per-alert or per-entity or something
-      if((time() - $entry['last_alerted']) > 84000)
+      if($entry['suppress_alert'] != TRUE)
       {
         echo('Not alerted today. ');
-        $alert = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($entry['alert_test_id']));
+        $alert = $alert_rules[$entry['alert_test_id']];
+        #dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($entry['alert_test_id']));
 
         #print_r($alert);
         #print_r($entry);
@@ -771,24 +775,16 @@ function process_alerts($device)
         $entity = get_entity_by_id_cache($entry['entity_type'], $entry['entity_id']);
         $entity_descr = entity_descr($entry['entity_type'], $entry['entity_id']);
 
-        #print_r($entity);
-
-        $message   = '<html><head><link href="'.$config['base_url'].'/css/bootstrap-email.css" rel="stylesheet" type="text/css" /></head>';
-        $message .= "<h4>Device: ".generate_device_link($device)."</h4>";
-        $message .= "<h4>Entity: ".$entry['entity_type']." ".generate_entity_link($entry['entity_type'], $entry['entity_id'])."</h4>";
-
-        $message .= "<p><b>".$alert['alert_message']."</b></p>";
-
-        $message .= "<p>Conditions:".PHP_EOL."<br />";
+        $condition_text = "";
         foreach($state['failed'] AS $failed)
         {
-          $message .= $failed['metric'] . " " . $failed['condition'] . " ". $failed['value'] ." (". $state['metrics'][$failed['metric']].")".PHP_EOL;
+          $condition_text .= $failed['metric'] . " " . $failed['condition'] . " ". $failed['value'] ." (". $state['metrics'][$failed['metric']].")<br />";
         }
 
-        $message .= "</p><p>Metrics: ".PHP_EOL."<br />";
+        $graphs = ""; $metric_text = "";
         foreach($state['metrics'] AS $metric => $value)
         {
-          $message .= $metric ." = ".$value.PHP_EOL."<br />";
+          $metric_text .= $metric ." = ".$value.PHP_EOL."<br />";
           if(is_array($config['alert_graphs'][$entry['entity_type']][$metric]))
           {
             // We can draw a graph for this type/metric pair!
@@ -808,19 +804,57 @@ function process_alerts($device)
             $vars = $graph_array;
             $auth = TRUE;
             $vars['image_data_uri'] = TRUE;
-            $vars['height'] = '200';
-            $vars['width']  = '600';
+            $vars['height'] = '150';
+            $vars['width']  = '400';
+            $_GET['legend'] = 'no';
             $vars['from']   = time();
             $vars['to']     = time()-8400;
 
             include('html/includes/graphs/graph.inc.php');
 
-            $message .= '<img src="'.$image_data_uri.'">'."<br />";
+            $graphs .= '<img src="'.$image_data_uri.'">'."<br />";
 
             unset ($vars); unset($graph_array);
           }
         }
-        $message .= "</p>";
+
+$message = '
+<head>
+    <title>Observium Alert</title>
+<style>
+.observium{ width:100%; max-width: 500px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; border:1px solid #DDDDDD; background-color:#FAFAFA;
+ font-size: 13px; color: #777777; }
+.header{ font-weight: bold; font-size: 16px; padding: 5px; color: #555555; }
+.red { color: #cc0000; }
+#deviceinfo tr:nth-child(odd){ background: #ffffff; }
+</style>
+<style type="text/css"></style></head>
+<body>
+<table class="observium">
+  <tbody>
+    <tr>
+      <td align="center">
+        <table class="observium" id="deviceinfo">
+  <tbody>
+    <tr><td colspan=2 class="header">Alert</td></tr>
+    <tr><td><b>Alert</b></font></td><td class="red">'.$alert['alert_message'].'</font></td></tr>
+    <tr><td><b>Entity</b></font></td><td>'.generate_entity_link($entry['entity_type'], $entry['entity_id']).'</font></td></tr>
+    <tr><td><b>Conditions</b></font></td><td>'.$condition_text.'</font></td></tr>
+    <tr><td><b>Metrics</b></font></td><td>'.$metric_text.'</font></td></tr>
+    <tr><td><b>Duration</b></font></td><td>'.formatUptime(time() - $entry['last_changed']).'</font></td></tr>
+    <tr><td colspan="2" class="header">Device</td></tr>
+    <tr><td><b>Device</b></font></td><td>'.generate_device_link($device).'</font></td></tr>
+    <tr><td><b>Hardware</b></font></td><td>'.$device['hardware'].'</font></td></tr>
+    <tr><td><b>Operating System</b></font></td><td>' . $device['os_text'] . ' ' . $device['version'] . ' ' . $device['features'] .'</font></td></tr>
+    <tr><td><b>Location</b></font></td><td>'.htmlspecialchars($device['location']).'</font></td></tr>
+    <tr><td><b>Uptime</b></font></td><td>'.deviceUptime($device).'</font></td></tr>
+  </tbody></table>
+</td></tr>
+<tr><td>
+<center>'.$graphs.'</center></td></tr>
+</tbody></table>
+</body>
+</html>';
 
         alert_notify($device, "ALERT: [".$device['hostname']."] [".$alert['entity_type']."] [".$entity_descr."] ".$alert['alert_message'],  $message);
 
