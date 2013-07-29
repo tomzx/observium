@@ -751,10 +751,22 @@ function process_alerts($device)
 
     if($entry['alert_status'] == '0')
     {
-      echo('Alert tripped. ');
+      echo('Alert status set. ');
 
+      // Check to see if this alert has been suppressed by anything
+
+      // Have all alerts on the device been suppressed?
       if($device['ignore'] || ($device['ignore_until'] && $device['ignore_until'] > time() )) { $entry['suppress_alert'] = TRUE; }
-      if((time() - $entry['last_alerted']) < 84000) { $entry['suppress_alert'] = TRUE; }
+
+      // Have all alerts on the entity been suppressed?
+
+      // Have alerts from this alerter been suppressed?
+
+      // Has this specific alert been suppressed?
+
+      // Has this been alerted more frequently than the alert interval in the config?
+      if((time() - $entry['last_alerted']) < $config['alerts']['interval']) { $entry['suppress_alert'] = TRUE; }
+
 
       ## FIXME -- this time should be configurable per-alert or per-entity or something
       if($entry['suppress_alert'] != TRUE)

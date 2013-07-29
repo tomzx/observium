@@ -7,15 +7,18 @@ $graph_return['valid_options'][] = "total";
 $graph_return['valid_options'][] = "trend";
 
 
-if ($format == "octets" || $format == "bytes")
+if(!isset($units_descr))
 {
-  $units = "Bps";
-  $format = "bytes";
-  $units_descr = "Bytes/s";
-} else {
-  $units = "bps";
-  $format = "bits";
-  $units_descr = "Bits/s";
+  if ($format == "octets" || $format == "bytes")
+  {
+    $units = "Bps";
+    $format = "bytes";
+    $units_descr = "Bytes/s";
+  } else {
+    $units = "bps";
+    $format = "bits";
+    $units_descr = "Bits/s";
+  }
 }
 
 $i = 0;

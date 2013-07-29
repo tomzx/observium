@@ -1,6 +1,6 @@
 <?php
 
-// Draw generic bits graph
+// Draw generic duplex graph
 // args: ds_in, ds_out, rrd_filename, bg, legend, from, to, width, height, inverse, $percentile
 
 include("includes/graphs/common.inc.php");
