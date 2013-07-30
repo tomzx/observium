@@ -9,30 +9,45 @@ function discover_new_device_ip($host)
 {
   global $config;
 
+  print_debug("Discovering possible new device on $host");
+
   if (match_network($config['autodiscovery']['ip_nets'], $host))
   {
-    if (isPingable($host)) {
-      echo("Pingable ");
-      foreach ($config['snmp']['community'] as $community)
+    $db = dbFetchRow("SELECT * FROM ipv4_addresses AS A, ports AS P, devices AS D WHERE A.ipv4_address = ? AND P.port_id = A.port_id AND D.device_id = P.device_id", array($host));
+    if (is_array($db))
+    {
+      print_debug("Already have $host on ".$db['hostname']);
+    }
+    else
+    {
+      if (isPingable($host))
       {
-        $device = deviceArray($host, $community, "v2c", "161", "udp", NULL);
-        print_message("Trying community $community ...");
-        if (isSNMPable($device))
+        echo("Pingable ");
+        foreach ($config['snmp']['community'] as $community)
         {
-          echo("SNMPable ");
-          $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
-          if (dbFetchCell("SELECT COUNT(device_id) FROM devices WHERE sysName = ?", array($snmphost)) == '0')
+          $device = deviceArray($host, $community, "v2c", "161", "udp", NULL);
+          print_message("Trying community $community ...");
+          if (isSNMPable($device))
           {
-            $device_id = createHost($snmphost, $community, "v2c", "161", "udp");
-            $device = device_by_id_cache($device_id, 1);
-            array_push($GLOBALS['devices'], $device);
-            return $device_id;
-          } else {
-            echo("Already have host with sysName $snmphost\n");
+            echo("SNMPable ");
+            $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
+            if (dbFetchCell("SELECT COUNT(device_id) FROM devices WHERE sysName = ?", array($snmphost)) == '0')
+            {
+              $device_id = createHost($snmphost, $community, "v2c", "161", "udp");
+              $device = device_by_id_cache($device_id, 1);
+              array_push($GLOBALS['devices'], $device);
+              return $device_id;
+            } else {
+              echo("Already have host with sysName $snmphost\n");
+            }
           }
         }
       }
     }
+  }
+  else
+  {
+    print_debug("Host does not match configured nets");
   }
 }
 

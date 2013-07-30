@@ -223,6 +223,16 @@ function print_error($text)
   print_message($text, 'error');
 }
 
+function print_debug($text)
+{
+  global $debug;
+  
+  if ($debug)
+  {
+    print_message($text, 'debug');
+  }
+}
+
 function print_warning($text)
 {
   print_message($text, 'warning');
@@ -252,6 +262,12 @@ function print_message($text, $type='')
       $icon  = 'oicon-bell';
       break;
     case 'error':
+      $color = array('cli'       => '%r',                 // red
+                     'cli_color' => FALSE,                // by default cli coloring disabled
+                     'class'     => 'alert alert-error'); // red
+      $icon  = 'oicon-exclamation-red';
+      break;
+    case 'debug':
       $color = array('cli'       => '%r',                 // red
                      'cli_color' => FALSE,                // by default cli coloring disabled
                      'class'     => 'alert alert-error'); // red
