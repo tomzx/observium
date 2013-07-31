@@ -1,6 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
+  <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/mktree.css" rel="stylesheet" type="text/css" />
+  <link href="css/sprite.css" rel="stylesheet" type="text/css" />
+  <link href="css/flags.css" rel="stylesheet" type="text/css" />
+
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/google-code-prettify.js"></script>
+
 <?php
-
-
 
 /**
  * Observium
@@ -132,9 +143,6 @@ if (isset($config['branding']) && is_array($config['branding']))
 if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title']; }
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
   <title><?php echo($config['page_title_prefix'] . ($config['page_title_prefix'] != '' && $config['page_title_suffix'] != '' ? ' - ' : '') . $config['page_title_suffix']); ?></title>
   <base href="<?php echo($config['base_url']); ?>" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -144,16 +152,6 @@ if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title'
 if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$config['page_refresh'].'" />' . "\n"); }
 ?>
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
-  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-  <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
-  <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
-  <link href="css/mktree.css" rel="stylesheet" type="text/css" />
-  <link href="css/sprite.css" rel="stylesheet" type="text/css" />
-  <link href="css/flags.css" rel="stylesheet" type="text/css" />
-
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/google-code-prettify.js"></script>
-
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
 ?>

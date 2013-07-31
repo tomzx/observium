@@ -1633,7 +1633,7 @@ if (is_ssl())
 }
 
 // Connect to database
-$observium_link = mysql_pconnect($config['db_host'], $config['db_user'], $config['db_pass']);
+$observium_link = mysql_connect($config['db_host'], $config['db_user'], $config['db_pass']);
 if (!$observium_link)
 {
   include_once("common.php");
