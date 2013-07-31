@@ -105,6 +105,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
     $foundid=0;
 
     // whoever write this: fuck you.
+    // what the fuck is this shit? this is why we don't like accepting "contributions". -adama
     for ($z=0;$z<sizeof($ap_db);$z++) {
       if ($ap_db[$z]['name']==$name && $ap_db[$z]['radio_number']==$radionum) {
         $foundid=$ap_db[$z]['accesspoint_id'];
@@ -117,7 +118,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
       $ap_id = dbInsert(array('device_id' => $device['device_id'], 'name' => $name,'radio_number'=>$radionum, 'type'=>$type,'mac_addr'=>$mac, 'deleted' => '0'), 'accesspoints');
 
       dbInsert(array('accesspoint_id' => $ap_id, 'channel'=>$channel,'txpow'=>$txpow,'radioutil'=>$radioutil,'numasoclients'=>$numasoclients,'nummonclients'=>$nummonclients,'numactbssid'=>$numactbssid,
-               'nummonbssid'=>$nummonbssid,'interference'=>$interference), 'accesspoints');
+               'nummonbssid'=>$nummonbssid,'interference'=>$interference), 'accesspoints-state');
 
     } else {
       dbUpdate(array('mac_addr' => $mac,'deleted'=>0), 'accesspoints', '`accesspoint_id` = ?', Array($foundid));
@@ -130,6 +131,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
   }
 
   //mark APs which are not on this controller anymore as deleted
+  //learn to use foreach you fucking flaming spaztard! - adama
   for ($z=0;$z<sizeof($ap_db);$z++) {
     if (!isset($ap_db[$z]['seen']) && $ap_db[$z]['deleted']==0) {
       dbUpdate(array('deleted'=>1), 'accesspoints', '`accesspoint_id` = ?', Array($ap_db[$z]['accesspoint_id']));
