@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-  <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
-  <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
-  <link href="css/mktree.css" rel="stylesheet" type="text/css" />
-  <link href="css/sprite.css" rel="stylesheet" type="text/css" />
-  <link href="css/flags.css" rel="stylesheet" type="text/css" />
-
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/google-code-prettify.js"></script>
-
 <?php
 
 /**
@@ -27,6 +14,23 @@
 
 include("../includes/defaults.inc.php");
 include("../config.php");
+
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="<?php echo($config['base_url']); ?>" />
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
+  <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/mktree.css" rel="stylesheet" type="text/css" />
+  <link href="css/sprite.css" rel="stylesheet" type="text/css" />
+  <link href="css/flags.css" rel="stylesheet" type="text/css" />
+
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/google-code-prettify.js"></script>
+
+<?php
+
 include_once("../includes/definitions.inc.php");
 include("../includes/functions.php");
 include("includes/functions.inc.php");
@@ -144,7 +148,6 @@ if ($config['page_title']) { $config['page_title_prefix'] = $config['page_title'
 
 ?>
   <title><?php echo($config['page_title_prefix'] . ($config['page_title_prefix'] != '' && $config['page_title_suffix'] != '' ? ' - ' : '') . $config['page_title_suffix']); ?></title>
-  <base href="<?php echo($config['base_url']); ?>" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
   <meta http-equiv="content-language" content="en-us" />
