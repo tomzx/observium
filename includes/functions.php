@@ -473,11 +473,8 @@ function isSNMPable($device)
  *
  * It's fully BOOLEAN safe function.
  *
- * Setting is_ip parameter to 4 or 6 will skip DNS resolution and try to ping the IP in v4 or v6.
- * WARNING: No syntax checking is done on the parameter that is passed on!
- *
  */
-function isPingable($hostname, $is_ip = 0)
+function isPingable($hostname)
 {
   global $config;
 
@@ -497,13 +494,13 @@ function isPingable($hostname, $is_ip = 0)
 
   //$ping_debug = TRUE; $file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time()); /// Uncomment this line for DEBUG isPingable()
 
-  // Forced check for actual ipv4 address
-  if ($is_ip == 4)
+  // Forced check for actual IPv4 address
+  if (Net_IPv4::validateIP($hostname))
   {
     $cmd = $config['fping'] . " -t $timeout -c 1 -q $hostname 2>&1";
   }
-  // Forced check for actual ipv6 address
-  elseif ($is_ip == 6)
+  // Forced check for actual IPv6 address
+  elseif (Net_IPv6::checkIPv6($hostname))
   {
     $cmd = $config['fping6'] . " -t $timeout -c 1 -q $hostname 2>&1";
   }

@@ -22,7 +22,7 @@ function discover_new_device_ip($host, $source = 'xdp', $protocol = NULL, $devic
       }
       else
       {
-        if (isPingable($host,4))
+        if (isPingable($host))
         {
           echo("Pingable ");
           foreach ($config['snmp']['community'] as $community)
