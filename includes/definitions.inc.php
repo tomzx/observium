@@ -789,6 +789,10 @@ $os = "engenius";
 $config['os'][$os]['type']              = "wireless";
 $config['os'][$os]['text']              = "EnGenius Access Point";
 $config['os'][$os]['icon']              = "engenius";
+$config['os'][$os]['over'][0]['graph']  = "device_bits";
+$config['os'][$os]['over'][0]['text']   = "Traffic";
+$config['os'][$os]['over'][1]['graph']  = "device_wifi_clients";
+$config['os'][$os]['over'][1]['text']   = "Wireless clients";
 
 // Apple
 
