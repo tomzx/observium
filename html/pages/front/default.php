@@ -81,7 +81,7 @@ function show_map($config)
 			    if ($device['location'] == $location) {
 				$devices[] = $device['hostname'];
 				$count++;
-				if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname']; 
+				if ($device['status'] == "0" && $device['disabled'] == "0" && $device['ignore'] == "0") { $down++; $devices_down[] = $device['hostname'];  $lat = $device['location_lat']; $lon = $device['location_lon'];
                                 } elseif ($device['status'] == "1") { $devices_up[] = $device['hostname']; $lat = $device['location_lat']; $lon = $device['location_lon']; }
 			    }
 			}
