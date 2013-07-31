@@ -15,8 +15,8 @@ if (isset($_GET['graph_title']))  { $rrd_options .= " --title='".$_GET['graph_ti
 if (!isset($scale_min) && !isset($scale_max)) { $rrd_options .= ' --alt-autoscale-max'; }
 if (!isset($scale_min) && !isset($scale_max) && !isset($norigid)) { $rrd_options .= ' --rigid'; }
 
-if (isset($scale_min)) { $rrd_options .= ' -l $scale_min'; }
-if (isset($scale_max)) { $rrd_options .= ' -u $scale_max'; }
+if (isset($scale_min)) { $rrd_options .= ' -l '.$scale_min; }
+if (isset($scale_max)) { $rrd_options .= ' -u '.$scale_max; }
 if (isset($scale_rigid)) { $rrd_options .= ' -r'; }
 
 if (is_numeric($from))
