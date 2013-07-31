@@ -1636,7 +1636,7 @@ if (is_ssl())
 $observium_link = mysql_pconnect($config['db_host'], $config['db_user'], $config['db_pass']);
 if (!$observium_link)
 {
-  include_once("includes/common.php");
+  include_once("common.php");
   print_error("MySQL Error: " . mysql_error());
   die;
 }
