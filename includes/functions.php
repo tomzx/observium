@@ -473,8 +473,11 @@ function isSNMPable($device)
  *
  * It's fully BOOLEAN safe function.
  *
+ * Setting is_ip parameter to 4 or 6 will skip DNS resolution and try to ping the IP in v4 or v6.
+ * WARNING: No syntax checking is done on the parameter that is passed on!
+ *
  */
-function isPingable($hostname)
+function isPingable($hostname, $is_ip = 0)
 {
   global $config;
 
@@ -494,21 +497,34 @@ function isPingable($hostname)
 
   //$ping_debug = TRUE; $file = '/tmp/pings_debug.log'; $time = date('Y-m-d H:i:s', time()); /// Uncomment this line for DEBUG isPingable()
 
-  // First try IPv4
-  $ip = gethostbyname($hostname);
-  if ($ip && $ip != $hostname)
+  // Forced check for actual ipv4 address
+  if ($is_ip == 4)
   {
-    $cmd = $config['fping'] . " -t $timeout -c 1 -q $ip 2>&1";
-  } else {
-    $ip = gethostbyname6($hostname);
-    // Second try IPv6
-    if ($ip)
+    $cmd = $config['fping'] . " -t $timeout -c 1 -q $hostname 2>&1";
+  }
+  // Forced check for actual ipv6 address
+  elseif ($is_ip == 6)
+  {
+    $cmd = $config['fping6'] . " -t $timeout -c 1 -q $hostname 2>&1";
+  }
+  else
+  {
+    // First try IPv4
+    $ip = gethostbyname($hostname);
+    if ($ip && $ip != $hostname)
     {
-      $cmd = $config['fping6'] . " -t $timeout -c 1 -q $ip 2>&1";
+      $cmd = $config['fping'] . " -t $timeout -c 1 -q $ip 2>&1";
     } else {
-      // No DNS records
-      if ($ping_debug) { file_put_contents($file, "$time | DNS ERROR: $hostname | NO DNS record found" . PHP_EOL, FILE_APPEND); }
-      return 0;
+      $ip = gethostbyname6($hostname);
+      // Second try IPv6
+      if ($ip)
+      {
+        $cmd = $config['fping6'] . " -t $timeout -c 1 -q $ip 2>&1";
+      } else {
+        // No DNS records
+        if ($ping_debug) { file_put_contents($file, "$time | DNS ERROR: $hostname | NO DNS record found" . PHP_EOL, FILE_APPEND); }
+        return 0;
+      }
     }
   }
 

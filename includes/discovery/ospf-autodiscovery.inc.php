@@ -11,7 +11,7 @@ if($config['autodiscovery']['ospf'] != FALSE)
 
   foreach ($ips as $ip)
   {
-    discover_new_device_ip($ip);
+    discover_new_device_ip($ip, 'ospf', 'OSPF', $device);
   }
 }
 
