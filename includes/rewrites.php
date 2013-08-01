@@ -58,6 +58,16 @@ function rewrite_location($location)
 function formatMac($mac)
 {
   $mac = preg_replace("/(..)(..)(..)(..)(..)(..)/", "\\1:\\2:\\3:\\4:\\5:\\6", $mac);
+  // Convert fake MACs to IP
+  if (preg_match('/ff:ff:([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/', $mac, $matches))
+  {
+    if ($matches[1] == 0 && $matches[2] == 0)
+    {
+      $mac = hexdec($matches[3]).'.'.hexdec($matches[4]).'.X.X'; // Cisco, why you convert 192.88.99.1 to 0:0:c0:58 (should be c0:58:63:1)
+    } else {
+      $mac = hexdec($matches[1]).'.'.hexdec($matches[2]).'.'.hexdec($matches[3]).'.'.hexdec($matches[4]);
+    }
+  }
 
   return $mac;
 }

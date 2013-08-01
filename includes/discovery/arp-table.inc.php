@@ -80,7 +80,7 @@ foreach($cache_arp as $entry)
   $old_table[$old_if][$old_version][$old_address] = $old_mac;
 }
 $ipv4_pattern = '/\[(\d+)\](?:\[ipv4\])?\["?([\d\.]+)"?\]\s+([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
-$ipv6_pattern = '/\[(\d+)\](?:\[ipv6\])?\["?([a-f\d:]+)"?\]\s+([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
+$ipv6_pattern = '/\[(\d+)\](?:\[ipv6\])?\["?([a-f\d:]+)"?\]\s+(?:([a-f\d]+):([a-f\d]+):)?([a-f\d]+):([a-f\d]+):([a-f\d]+):([a-f\d]{1,2})/i';
 
 foreach (explode("\n", $oid_data) as $data)
 {
@@ -109,6 +109,13 @@ foreach (explode("\n", $oid_data) as $data)
   
   if ($ip & $port_id)
   {
+    if ($matches[3] === '' && $matches[4] === '')
+    {
+      // Convert IPv4 to fake MAC for 6to4 tunnels
+      //ipNetToPhysicalPhysAddress[27][ipv6]["20:02:c0:58:63:01:00:00:00:00:00:00:00:00:00:00"] 0:0:c0:58
+      $matches[3] = 'ff';
+      $matches[4] = 'ff';
+    }
     $mac = zeropad($matches[3]);
     for ($i = 4; $i <= 8; $i++) { $mac .= ':' . zeropad($matches[$i]); }
     $clean_mac = str_replace(':', '', $mac);
