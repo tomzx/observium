@@ -14,6 +14,9 @@
 
 include("../includes/defaults.inc.php");
 include("../config.php");
+include_once("../includes/definitions.inc.php");
+include("../includes/functions.php");
+include("includes/functions.inc.php");
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -30,10 +33,6 @@ include("../config.php");
   <script type="text/javascript" src="js/google-code-prettify.js"></script>
 
 <?php
-
-include_once("../includes/definitions.inc.php");
-include("../includes/functions.php");
-include("includes/functions.inc.php");
 
 $runtime_start = utime();
 
