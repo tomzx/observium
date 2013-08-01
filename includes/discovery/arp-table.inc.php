@@ -114,7 +114,7 @@ foreach (explode("\n", $oid_data) as $data)
       // Convert IPv4 to fake MAC for 6to4 tunnels
       //ipNetToPhysicalPhysAddress[27][ipv6]["20:02:c0:58:63:01:00:00:00:00:00:00:00:00:00:00"] 0:0:c0:58
       $matches[3] = 'ff';
-      $matches[4] = 'ff';
+      $matches[4] = 'fe';
     }
     $mac = zeropad($matches[3]);
     for ($i = 4; $i <= 8; $i++) { $mac .= ':' . zeropad($matches[$i]); }
