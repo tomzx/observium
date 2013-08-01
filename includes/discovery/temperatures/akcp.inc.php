@@ -12,7 +12,7 @@ if ($device['os'] == "akcp" || $device['os'] == "minkelsrms")
     if ($data)
     {
       list($oid,$status) = explode(" ", $data,2);
-      if ($status == 2) # 2 = normal, 0 = not connected
+      if ($status != 0) # 2 = normal, 0 = not connected
       {
         $split_oid = explode('.',$oid);
         $temperature_id          = $split_oid[count($split_oid)-1];
