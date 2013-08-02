@@ -85,6 +85,8 @@ function check_entity($type, $entity, $data)
           var_dump($alert);
         }
 
+
+
         if($alert)
         {
           // Alert conditions tripped. Do alerting things here!
@@ -103,13 +105,15 @@ function check_entity($type, $entity, $data)
             dbInsert(array('alert_table_id' => $alert_args['alert_table_id'], 'alert_first' => time(), 'alert_last' => time() ), 'alert_queue');
           }
 
+
+
         } else {
           // Alert conditions passed. Record that we tested it and update status and other data.
           echo(" Checks OK.\n");
           $update_array['alert_status'] = '1';
           $update_array['last_message'] = 'Checks OK';
           $update_array['last_checked'] = time();
-          $update_array['count'] = $alert_args['count']+1;
+          $update_array['count'] = 0;
           if($alert_args['alert_status'] != '1' || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); }
         }
 
@@ -731,6 +735,13 @@ function update_device_alert_table($device)
 
 }
 
+
+/**
+ * Check all alerts for a device to see if they should be notified or not
+ *
+ * @param array device
+ * @return NULL
+ */
 
 function process_alerts($device)
 {

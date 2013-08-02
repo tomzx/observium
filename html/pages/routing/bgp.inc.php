@@ -24,7 +24,7 @@ else
     $navbar['options'][$option]['url'] = generate_url($link_array, $bgp_options);
   }
 
-  $statuses = array('stop'  => 'Stoped',
+  $statuses = array('stop'  => 'Stopped',
                     'start' => 'Enabled',
                     'down'  => 'Down');
   foreach ($statuses as $option => $text)
