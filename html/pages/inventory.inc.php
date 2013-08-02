@@ -1,118 +1,68 @@
-
-<?php print_optionbar_start('25'); ?>
-
-<form method="post" action="" class="form-inline">
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Desc</span>
-    <input type="text" name="string" id="prependedInput" class="input-medium" value="<?php echo($_POST['string']); ?>" />
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Part #</span>
-    <select name="part" id="part" class="span2">
-      <option value="">All Parts</option>
-      <?php
-        foreach (dbFetchRows("SELECT `entPhysicalModelName` FROM `entPhysical` GROUP BY `entPhysicalModelName` ORDER BY `entPhysicalModelName`") as $data)
-        {
-          echo("<option value='".$data['entPhysicalModelName']."'");
-          if ($data['entPhysicalModelName'] == $_POST['part']) { echo("selected"); }
-          echo(">".$data['entPhysicalModelName']."</option>");
-        }
-      ?>
-    </select>
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Serial #</span>
-    <input type="text" name="serial" id="serial" class="input-medium" value="<?php echo($_POST['serial']); ?>" />
-  </label>
-  </div>
-
-  <div class="input-prepend" style="margin-right: 3px;">
-    <span class="add-on">Device</span>
-    <input type="text" class="input-medium add-on" name="device_string" id="device_string" value="<?php if ($_POST['device_string']) { echo($_POST['device_string']); } ?>" />
-    <select name="device" id="device" class="span2">
-      <option value="">All Devices</option>
-      <?php
-        foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $data)
-        {
-          echo("<option value='".$data['device_id']."'");
-
-          if ($data['device_id'] == $_POST['device']) { echo("selected"); }
-
-          echo(">".$data['hostname']."</option>");
-        }
-      ?>
-    </select>
-  </div>
-
-  <button type="submit" class="btn"><i class="oicon-search"></i> Search</button>
-  </form>
+<div class="row">
+<div class="span12">
 
 <?php
+unset($search, $devices, $parts);
+
+// Select devices only with Inventory parts
+foreach (dbFetchRows('SELECT D.device_id AS device_id, `hostname`, `entPhysicalModelName`
+                     FROM `entPhysical` AS E
+                     LEFT JOIN `devices` AS D ON D.device_id = E.device_id
+                     GROUP BY device_id, entPhysicalModelName;') as $data)
+{
+  $device_id = $data['device_id'];
+  // Exclude not permited devices
+  if (isset($cache['devices']['id'][$device_id]))
+  {
+    if ($cache['devices']['id'][$device_id]['disabled'] && !$config['web_show_disabled']) { continue; }
+    $devices[$device_id] = $data['hostname'];
+    if ($data['entPhysicalModelName'] != '')
+    {
+      $parts[$data['entPhysicalModelName']] = $data['entPhysicalModelName'];
+    }
+  }
+}
+//Device field
+natcasesort($devices);
+$search[] = array('type'    => 'select',
+                  'width'   => '160px',
+                  'name'    => 'Devices',
+                  'id'      => 'device_id',
+                  'value'   => $vars['device_id'],
+                  'values'  => $devices);
+//Parts field
+ksort($parts);
+$search[] = array('type'    => 'multiselect',
+                  'width'   => '160px',
+                  'name'    => 'Parts',
+                  'id'      => 'parts',
+                  'value'   => $vars['parts'],
+                  'values'  => $parts);
+//Serial field
+$search[] = array('type'    => 'text',
+                  'width'   => '160px',
+                  'name'    => 'Serial',
+                  'id'      => 'serial',
+                  'value'   => $vars['serial']);
+//Description field
+$search[] = array('type'    => 'text',
+                  'width'   => '160px',
+                  'name'    => 'Desc',
+                  'id'      => 'description',
+                  'value'   => $vars['description']);
+
+print_search_simple($search);
+
+// Pagination
+$vars['pagination'] = TRUE;
+if(!$vars['pagesize']) { $vars['pagesize'] = 100; }
+if(!$vars['pageno']) { $vars['pageno'] = 1; }
+
+print_inventory($vars);
 
 $pagetitle[] = "Inventory";
 
-print_optionbar_end();
-
-$param = array();
-
-if ($_SESSION['userlevel'] >= '5')
-{
-  $sql = "SELECT * from entPhysical AS E, devices AS D WHERE D.device_id = E.device_id";
-} else {
-  $sql = "SELECT * from entPhysical AS E, devices AS D, devices_perms AS P WHERE D.device_id = E.device_id AND P.device_id = D.device_id AND P.user_id = ?";
-  $param[] = $_SESSION['user_id'];
-}
-
-if (isset($_POST['string']) && strlen($_POST['string']))
-{
-  $sql  .= " AND E.entPhysicalDescr LIKE ?";
-  $param[] = "%".$_POST['string']."%";
-}
-
-if (isset($_POST['device_string']) && strlen($_POST['device_string']))
-{
-  $sql .= " AND D.hostname LIKE ?";
-  $param[] = "%".$_POST['device_string']."%";
-}
-
-if (isset($_POST['part']) && strlen($_POST['part']))
-{
-  $sql .= " AND E.entPhysicalModelName = ?";
-  $param[] = $_POST['part'];
-}
-
-if (isset($_POST['serial']) && strlen($_POST['serial']))
-{
-  $sql .= " AND E.entPhysicalSerialNum LIKE ?";
-  $param[] = "%".$_POST['serial']."%";
-}
-
-if (isset($_POST['device']) && is_numeric($_POST['device']))
-{
-  $sql .= " AND D.device_id = ?";
-  $param[] = $_POST['device'];
-}
-
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
-echo("  <thead>\n");
-echo("    <tr>\n");
-echo("      <th>Device</th>\n");
-echo("      <th>Descr</th>\n");
-echo("      <th>Name</th>\n");
-echo("      <th>Part #</th>\n");
-echo("      <th>Serial #</th>\n");
-echo("    </tr>\n");
-echo("  </thead>\n");
-echo('<tbody>');
-
-foreach (dbFetchRows($sql, $param) as $entry)
-{
-  echo('<tr class="inventory"><td>' . generate_device_link($entry, shortHost($entry['hostname'])) . '</td><td>' . $entry['entPhysicalDescr']  .
-     '</td><td>' . $entry['entPhysicalName']  . '</td><td>' . $entry['entPhysicalModelName']  . '</td><td>' . $entry['entPhysicalSerialNum'] . '</td></tr>');
-}
-echo("</table>");
-
 ?>
-</table>
+
+  </div> <!-- span12 -->
+</div> <!-- row -->
