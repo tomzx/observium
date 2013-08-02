@@ -30,8 +30,8 @@ if(dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `ifType` = 'adsl' AND `device
   $navbar['options']['adsl']['text'] = 'ADSL';
 }
 
-  $navbar['options']['graphs']     = array('text' => 'Graphs', 'class' => 'pull-right');
-  $navbar['options']['minigraphs'] = array('text' => 'Minigraphs', 'class' => 'pull-right');
+$navbar['options']['graphs']     = array('text' => 'Graphs', 'class' => 'pull-right');
+$navbar['options']['minigraphs'] = array('text' => 'Minigraphs', 'class' => 'pull-right');
 
 foreach ($navbar['options'] as $option => $array)
 {

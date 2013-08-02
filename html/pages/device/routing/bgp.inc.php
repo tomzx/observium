@@ -6,104 +6,107 @@
 
 /// FIXME - this whole page needs rewritte. Use view = graphs / graph = $graphtype.
 
+if(!isset($vars['view'])) { $vars['view'] = "basic"; }
+unset($navbar);
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab'     => 'routing',
                     'proto'   => 'bgp');
 
-if(!isset($vars['view'])) { $vars['view'] = "basic"; }
+$types = array('all'      => 'All',
+               'internal' => 'iBGP',
+               'external' => 'eBGP');
+foreach ($types as $option => $text)
+{
+  $navbar['options'][$option]['text'] = $text;
+  if ($vars['type'] == $option || (empty($vars['type']) && $option == 'all')) { $navbar['options'][$option]['class'] .= " active"; }
+  $bgp_options = array('type' => $option);
+  if ($vars['adminstatus']) { $bgp_options['adminstatus'] = $vars['adminstatus']; }
+  elseif ($vars['state']) { $bgp_options['state'] = $vars['state']; }
+  $navbar['options'][$option]['url'] = generate_url($link_array, $bgp_options);
+}
 
-print_optionbar_start();
-
-echo("<span style='font-weight: bold;'>BGP</span> &#187; ");
-
-  if (!$vars['type']) { $vars['type'] = "all"; }
-
-  if ($vars['type'] == "all") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("All",$vars, array('type' => 'all')));
-  if ($vars['type'] == "all") { echo("</span>"); }
-
-  echo(" | ");
-
-  if ($vars['type'] == "internal") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("iBGP",$vars, array('type' => 'internal')));
-  if ($vars['type'] == "internal") { echo("</span>"); }
-
-  echo(" | ");
-
-  if ($vars['type'] == "external") { echo("<span class='pagemenu-selected'>"); }
-  echo(generate_link("eBGP",$vars, array('type' => 'external')));
-  if ($vars['type'] == "external") { echo("</span>"); }
-
-  echo(" | ");
-
-
-if ($vars['view'] == "basic") { echo("<span class='pagemenu-selected'>"); }
-echo(generate_link("Basic", $link_array,array('view'=>'basic')));
-if ($vars['view'] == "basic") { echo("</span>"); }
-
-echo(" | ");
-
-if ($vars['view'] == "updates") { echo("<span class='pagemenu-selected'>"); }
-echo(generate_link("Updates", $link_array,array('view'=>'updates')));
-if ($vars['view'] == "updates") { echo("</span>"); }
-
-echo(" | Prefixes: ");
-
-if ($vars['view'] == "prefixes_ipv4unicast") { echo("<span class='pagemenu-selected'>"); }
-echo(generate_link("IPv4", $link_array,array('view'=>'prefixes_ipv4unicast')));
-if ($vars['view'] == "prefixes_ipv4unicast") { echo("</span>"); }
-
-echo(" | ");
-
-if ($vars['view'] == "prefixes_vpnv4unicast") { echo("<span class='pagemenu-selected'>"); }
-echo(generate_link("VPNv4", $link_array,array('view'=>'prefixes_vpnv4unicast')));
-if ($vars['view'] == "prefixes_vpnv4unicast") { echo("</span>"); }
-
-echo(" | ");
-
-if ($vars['view'] == "prefixes_ipv6unicast") { echo("<span class='pagemenu-selected'>"); }
-echo(generate_link("IPv6", $link_array,array('view'=>'prefixes_ipv6unicast')));
-if ($vars['view'] == "prefixes_ipv6unicast") { echo("</span>"); }
-
-echo(" | Traffic: ");
-
-if ($vars['view'] == "macaccounting_bits") { echo("<span class='pagemenu-selected'>"); }
-echo(generate_link("Bits", $link_array,array('view'=>'macaccounting_bits')));
-if ($vars['view'] == "macaccounting_bits") { echo("</span>"); }
-echo(" | ");
-if ($vars['view'] == "macaccounting_pkts") { echo("<span class='pagemenu-selected'>"); }
-echo(generate_link("Packets", $link_array,array('view'=>'macaccounting_pkts')));
-if ($vars['view'] == "macaccounting_pkts") { echo("</span>"); }
-
-print_optionbar_end();
-
-  switch ($vars['view'])
+/*
+$statuses = array('stop'  => 'Stoped',
+                  'start' => 'Enabled',
+                  'down'  => 'Down');
+foreach ($statuses as $option => $text)
+{
+  $status = ($option == 'down') ? 'state' : 'adminstatus';
+  $navbar['options'][$option]['text'] = $text;
+  if ($vars[$status] == $option)
   {
-    case 'prefixes_ipv4unicast':
-    case 'prefixes_ipv4multicast':
-    case 'prefixes_ipv4vpn':
-    case 'prefixes_ipv6unicast':
-    case 'prefixes_ipv6multicast':
-    case 'updates':
-      $table_class = 'table-striped-two'; $graphs = 1;
-      break;
-    default:
-      $table_class = 'table-striped';
+    $navbar['options'][$option]['class'] .= " active";
+    $bgp_options = array($status => NULL);
+  } else {
+    $bgp_options = array($status => $option);
   }
+  if ($vars['type']) { $bgp_options['type'] = $vars['type']; }
+  $navbar['options'][$option]['url'] = generate_url($link_array, $bgp_options);
+}
+*/
+$navbar['options_right']['basic']['text'] = 'No Graphs';
+if ($vars['view'] == 'basic') { $navbar['options_right']['basic']['class'] .= ' active'; }
+$navbar['options_right']['basic']['url'] = generate_url($vars, array('view' => 'basic', 'graph' => 'NULL'));
+
+$navbar['options_right']['updates']['text'] = 'Updates';
+if ($vars['view'] == 'updates') { $navbar['options_right']['updates']['class'] .= ' active'; }
+$navbar['options_right']['updates']['url'] = generate_url($vars, array('view' => 'updates'));
+
+$bgp_graphs = array('unicast'   => array('text' => 'Unicast'),
+                    //'multicast' => array('text' => 'Multicast'),
+                    'mac'       => array('text' => 'MACaccounting'));
+$bgp_graphs['unicast']['types'] = array('prefixes_ipv4unicast' => 'IPv4 Ucast Prefixes',
+                                        'prefixes_ipv6unicast' => 'IPv6 Ucast Prefixes',
+                                        'prefixes_ipv4vpn'     => 'VPNv4 Prefixes');
+//$bgp_graphs['multicast']['types'] = array('prefixes_ipv4multicast' => 'IPv4 Mcast Prefixes',
+//                                          'prefixes_ipv6multicast' => 'IPv6 Mcast Prefixes');
+$bgp_graphs['mac']['types'] = array('macaccounting_bits' => 'MAC Bits',
+                                    'macaccounting_pkts' => 'MAC Pkts');
+foreach($bgp_graphs as $bgp_graph => $bgp_options)
+{
+  $navbar['options_right'][$bgp_graph]['text'] = $bgp_options['text'];
+  foreach ($bgp_options['types'] as $option => $text)
+  {
+    if ($vars['graph'] == $option)
+    {
+      $navbar['options_right'][$bgp_graph]['class'] .= ' active';
+      $navbar['options_right'][$bgp_graph]['suboptions'][$option]['class'] = 'active';
+    }
+    $navbar['options_right'][$bgp_graph]['suboptions'][$option]['text'] = $text;
+    $navbar['options_right'][$bgp_graph]['suboptions'][$option]['url'] = generate_url($vars, array('view' => $option));
+  }
+}
+
+$navbar['class'] = "navbar-narrow";
+$navbar['brand'] = "BGP";
+print_navbar($navbar);
+
+switch ($vars['view'])
+{
+  case 'prefixes_ipv4unicast':
+  case 'prefixes_ipv4multicast':
+  case 'prefixes_ipv4vpn':
+  case 'prefixes_ipv6unicast':
+  case 'prefixes_ipv6multicast':
+  case 'updates':
+    $table_class = 'table-striped-two'; $graphs = 1;
+    break;
+  default:
+    $table_class = 'table-striped';
+}
 
 echo('<table class="table table-hover '.$table_class.' table-bordered table-condensed table-rounded">');
 echo('<thead>');
 echo('<tr><th></th><th></th><th>Peer address</th><th>Type</th><th>AFI.SAFI</th><th>Remote AS</th><th>State</th><th>Uptime</th></tr>');
 echo('</thead>');
 
-  if ($vars['type'] == "external")
-  {
-    $where = " AND bgpPeerRemoteAs != '".$device['bgpLocalAs']."'";
-  } elseif ($vars['type'] == "internal") {
-    $where = " AND bgpPeerRemoteAs = '".$device['bgpLocalAs']."'";
-  }
-
+if ($vars['type'] == "external")
+{
+  $where = " AND bgpPeerRemoteAs != '".$device['bgpLocalAs']."'";
+} elseif ($vars['type'] == "internal") {
+  $where = " AND bgpPeerRemoteAs = '".$device['bgpLocalAs']."'";
+}
 
 $sql = 'SELECT * FROM `bgpPeers` AS B
         LEFT JOIN `bgpPeers-state` AS S ON B.bgpPeer_id = S.bgpPeer_id
@@ -112,7 +115,6 @@ $sql = 'SELECT * FROM `bgpPeers` AS B
 
 foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 {
-
   $peer['bgpLocalAs'] = $device['bgpLocalAs'];
   humanize_bgp($peer);
 
@@ -141,7 +143,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
 
   $graph_type       = "bgp_updates";
   $peer_daily_url   = "graph.php?id=" . $peer['bgpPeer_id'] . "&amp;type=" . $graph_type . "&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=500&amp;height=150";
-  $peeraddresslink  = "<span class=entity-title><a onmouseover=\"return overlib('<img src=\'$peer_daily_url\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer['human_remoteip'] . "</a></span>";
+  $peeraddresslink  = "<span class=entity-title><a onmouseover=\"return overlib('<img src=\'$peer_daily_urfl\'>', LEFT".$config['overlib_defaults'].");\" onmouseout=\"return nd();\">" . $peer['human_remoteip'] . "</a></span>";
 
   echo('<tr class="'.$peer['html_row_class'].'">');
   echo('
@@ -154,8 +156,8 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $peer)
            <td><strong>AS" . $peer['bgpPeerRemoteAs'] . "</strong><br />" . $peer['astext'] . "</td>
            <td><strong><span class='".$peer['admin_class']."'>" . $peer['bgpPeerAdminStatus'] . "<span><br /><span class='".$peer['state_class']."'>" . $peer['bgpPeerState'] . "</span></strong></td>
            <td>" .formatUptime($peer['bgpPeerFsmEstablishedTime']). "<br />
-               Updates <img src='images/16/arrow_down.png' align=absmiddle> " . format_si($peer['bgpPeerInUpdates']) . "
-                       <img src='images/16/arrow_up.png' align=absmiddle> " . format_si($peer['bgpPeerOutUpdates']) . "</td>
+               Updates <i class='oicon-arrow_down'></i> " . format_si($peer['bgpPeerInUpdates']) . "
+                       <i class='oicon-arrow_up'></i> " . format_si($peer['bgpPeerOutUpdates']) . "</td>
           </tr>");
 
   unset($invalid);

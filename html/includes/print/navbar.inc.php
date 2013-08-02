@@ -63,7 +63,7 @@ function print_navbar($navbar)
           echo($array['text'].'</a>');
           echo('</li>');
         } else {
-          echo('  <li class="dropdown">');
+          echo('  <li class="dropdown '.$array['class'].'">');
           echo('    <a class="dropdown-toggle" data-toggle="dropdown"  href="'.$array['url'].'">');
           if (isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
           echo($array['text'].'
