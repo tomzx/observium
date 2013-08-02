@@ -167,9 +167,11 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
     {
       $ipv4_network_id = $net['ipv4_network_id'];
       $sql = "SELECT I.port_id FROM ipv4_addresses AS A, ports AS I, devices AS D
-           WHERE A.port_id = I.port_id
-           AND A.ipv4_network_id = ? AND D.device_id = I.device_id
-           AND D.device_id != ?";
+              WHERE A.port_id = I.port_id
+              AND A.ipv4_network_id = ? AND D.device_id = I.device_id
+              AND I.`ifAdminStatus` = 'up'
+              AND D.device_id != ?";
+      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
       $array = array($net['ipv4_network_id'], $device['device_id']);
       foreach (dbFetchRows($sql, $array) AS $new)
       {
@@ -187,9 +189,11 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
     {
       $ipv6_network_id = $net['ipv6_network_id'];
       $sql = "SELECT I.port_id FROM ipv6_addresses AS A, ports AS I, devices AS D
-           WHERE A.port_id = I.port_id
-           AND A.ipv6_network_id = ? AND D.device_id = I.device_id
-           AND D.device_id != ? AND A.ipv6_origin != 'linklayer' AND A.ipv6_origin != 'wellknown'";
+              WHERE A.port_id = I.port_id
+              AND A.ipv6_network_id = ? AND D.device_id = I.device_id
+              AND I.`ifAdminStatus` = 'up' AND A.ipv6_origin != 'linklayer' AND A.ipv6_origin != 'wellknown'
+              AND D.device_id != ?";
+      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
       $array = array($net['ipv6_network_id'], $device['device_id']);
 
       foreach (dbFetchRows($sql, $array) AS $new)
