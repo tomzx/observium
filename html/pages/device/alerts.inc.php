@@ -254,30 +254,24 @@ if(is_numeric($vars['alert']) && FALSE)
       foreach($entities as $alert_table_id => $entity_id)
       {
         $alert_table_entry = &$alert_table[$vars['type']][$entity_id][$alert_test_id];
+        humanize_alert_entry($alert_table_entry);
+
+        ## FIXME -- move this to humanize_alert_entry
         if($alert_table_entry['last_checked'] == '0') { $alert_table_entry['lc'] = "<i>Never</i>"; } else { $alert_table_entry['lc'] = formatUptime(time()-$alert_table_entry['last_checked']); }
         if($alert_table_entry['last_changed'] == '0') { $alert_table_entry['c']  = "<i>Never</i>"; } else { $alert_table_entry['c'] = formatUptime(time()-$alert_table_entry['last_changed']); }
         if($alert_table_entry['last_alerted'] == '0') { $alert_table_entry['la']  = "<i>Never</i>"; } else { $alert_table_entry['la'] = formatUptime(time()-$alert_table_entry['last_alerted']); }
 
-        if($alert_table_entry['alert_status'] == '1')
-        {
-          $alert_table_entry['class']  = "green"; $table_tab_colour = "#194b7f"; $html_row_class = "";
-        } elseif($alert_table_entry['alert_status'] == '0') {
-          $alert_table_entry['class']  = "red"; $table_tab_colour = "#cc0000"; $html_row_class = "error";
-        } else {
-          $alert_table_entry['class']  = "gray"; $table_tab_colour = "#555555"; $html_row_class = "disabled";
-        }
-
-        echo('<tr class="'.$html_row_class.'">');
+        echo('<tr class="'.$alert_table_entry['html_row_class'].'">');
 
         echo('
-         <td style="width: 1px; background-color: '.$table_tab_colour.'; margin: 0px; padding: 0px"></td>
+         <td style="width: 1px; background-color: '.$alert_table_entry['table_tab_colour'].'; margin: 0px; padding: 0px"></td>
          <td style="width: 1px;"></td>');
 
         echo('<td>'.$alert_table_id.'</td>');
         echo('<td>'.generate_entity_link($vars['type'], $entity_id, $text = NULL, $graph_type=NULL).'</td>');
         echo('<td>');
         ## FIXME -- generate a nice popup with parsed information from the state array
-        echo(overlib_link("", "view state", $alert_table_entry['state'], NULL));
+        echo(overlib_link("", "view state", "<pre>".print_r(unserialize($alert_table_entry['state']), TRUE)."</pre>", NULL));
         echo('</td>');
         echo('<td class="'.$alert_table_entry['class'].'">'.$alert_table_entry['last_message'].'</td>');
         echo('<td>'.$alert_table_entry['lc'].'</td>');

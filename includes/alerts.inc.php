@@ -797,6 +797,7 @@ function process_alerts($device)
         foreach($state['failed'] AS $failed)
         {
           $condition_text .= $failed['metric'] . " " . $failed['condition'] . " ". $failed['value'] ." (". $state['metrics'][$failed['metric']].")<br />";
+          
         }
 
         $graphs = ""; $metric_text = "";
@@ -819,20 +820,12 @@ function process_alerts($device)
               }
             }
 
-            $vars = $graph_array;
-            $auth = TRUE;
-            $vars['image_data_uri'] = TRUE;
-            $vars['height'] = '150';
-            $vars['width']  = '400';
-            $_GET['legend'] = 'no';
-            $vars['from']   = time();
-            $vars['to']     = time()-8400;
+            print_r($graph_array);
 
-            include('html/includes/graphs/graph.inc.php');
-
+            $image_data_uri = generate_alert_graph($graph_array);
             $graphs .= '<img src="'.$image_data_uri.'">'."<br />";
+            unset($graph_array);
 
-            unset ($vars); unset($graph_array);
           }
         }
 

@@ -13,13 +13,38 @@
 
 #include("../includes/alerts.inc.php");
 
+include_once($config['html_dir'].'/includes/graphs/functions.inc.php');
+
 $print_functions = array('addresses', 'events', 'mac_addresses', 'rows',
                          'status', 'arptable', 'fdbtable', 'navbar',
                          'search_simple', 'syslogs', 'inventory');
+
 foreach($print_functions as $item)
 {
   $print_path = $config['html_dir'].'/includes/print/'.$item.'.inc.php';
   if (is_file($print_path)) { include($print_path); }
+}
+
+function generate_alert_graph($graph_array)
+{
+
+   global $config;
+
+   $vars = $graph_array;
+   $auth = TRUE;
+   $vars['image_data_uri'] = TRUE;
+   $vars['height'] = '150';
+   $vars['width']  = '400';
+   $vars['legend'] = 'no';
+   $vars['from']   = time();
+   $vars['to']     = time()-8400;
+
+   echo("doing");
+   include('html/includes/graphs/graph.inc.php');
+   echo("done");
+
+   return $image_data_uri;
+
 }
 
 
