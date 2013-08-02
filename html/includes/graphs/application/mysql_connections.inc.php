@@ -1,7 +1,5 @@
 <?php
 
-include("includes/graphs/common.inc.php");
-
 include('includes/graphs/common.inc.php');
 
 $rrd_filename = $config["rrd_dir"] . '/' . $device["hostname"] . '/app-mysql-'.$app["app_id"].'.rrd';
@@ -17,12 +15,12 @@ $array = array('MaCs'  => array('descr' => 'Max Connections', 'colour' => '22FF2
 $i = 0;
 if (is_file($rrd_filename))
 {
-  foreach ($array as $ds => $vars)
+  foreach ($array as $ds => $data)
   {
     $rrd_list[$i]['filename'] = $rrd_filename;
-    $rrd_list[$i]['descr'] = $vars['descr'];
+    $rrd_list[$i]['descr'] = $data['descr'];
     $rrd_list[$i]['ds'] = $ds;
-#    $rrd_list[$i]['colour'] = $vars['colour'];
+#    $rrd_list[$i]['colour'] = $data['colour'];
     $i++;
   }
 } else { echo("file missing: $file");  }
@@ -32,5 +30,3 @@ $nototal   = 1;
 $unit_text = "Connections";
 
 include("includes/graphs/generic_multi_simplex_seperated.inc.php");
-
-?>

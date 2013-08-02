@@ -26,14 +26,14 @@ $array = array(
 $i = 0;
 if (is_file($rrd_filename))
 {
-  foreach ($array as $vars => $ds)
+  foreach ($array as $data => $ds)
   {
     $rrd_list[$i]['filename'] = $rrd_filename;
-    if (is_array($vars))
+    if (is_array($data))
     {
-      $rrd_list[$i]['descr'] = $vars['descr'];
+      $rrd_list[$i]['descr'] = $data['descr'];
     } else {
-      $rrd_list[$i]['descr'] = $vars;
+      $rrd_list[$i]['descr'] = $data;
     }
     $rrd_list[$i]['descr'] = str_replace("_", " ", $rrd_list[$i]['descr']);
     $rrd_list[$i]['descr'] = str_replace("State ", "", $rrd_list[$i]['descr']);
@@ -47,5 +47,3 @@ $nototal   = 1;
 $unit_text = "Activity";
 
 include("includes/graphs/generic_multi_simplex_seperated.inc.php");
-
-?>

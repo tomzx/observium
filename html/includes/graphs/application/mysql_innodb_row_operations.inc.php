@@ -13,14 +13,14 @@ $array = array('IDBRDd' => 'Deletes',
 $i = 0;
 if (is_file($rrd_filename))
 {
-  foreach ($array as $ds => $vars)
+  foreach ($array as $ds => $data)
   {
     $rrd_list[$i]['filename'] = $rrd_filename;
-    if (is_array($vars))
+    if (is_array($data))
     {
-      $rrd_list[$i]['descr'] = $vars['descr'];
+      $rrd_list[$i]['descr'] = $data['descr'];
     } else {
-      $rrd_list[$i]['descr'] = $vars;
+      $rrd_list[$i]['descr'] = $data;
     }
     $rrd_list[$i]['ds'] = $ds;
     $i++;

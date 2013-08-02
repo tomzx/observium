@@ -1,6 +1,6 @@
 <?php
 
-//$device = device_by_id_cache($vars['id']);
+//$device = device_by_id_cache($data['id']);
 
 $units           = "b";
 $total_units     = "B";
