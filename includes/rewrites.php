@@ -31,6 +31,8 @@ function humanize_alert_entry(&$entry)
      $entry['class']  = "green"; $entry['table_tab_colour'] = "#194b7f"; $entry['html_row_class'] = "";
    } elseif($entry['alert_status'] == '0') {
      $entry['class']  = "red"; $entry['table_tab_colour'] = "#cc0000"; $entry['html_row_class'] = "error";
+   } elseif($entry['alert_status'] == '2') {
+     $entry['class']  = "orange"; $entry['table_tab_colour'] = "#ff6600"; $entry['html_row_class'] = "warning";
    } else {
      $entry['class']  = "gray"; $entry['table_tab_colour'] = "#555555"; $entry['html_row_class'] = "disabled";
    }

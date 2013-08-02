@@ -44,8 +44,6 @@ function check_entity($type, $entity, $data)
         echo("Checking alert ".$alert_test_id." associated by ".$alert_args['alert_assocs']."\n");
         var_dump($alert);
 
-        #$alert_rules[$alert_test_id]['and'];
-
         foreach($alert_rules[$alert_test_id]['conditions'] as $test_key => $test)
         {
 
@@ -54,8 +52,6 @@ function check_entity($type, $entity, $data)
             $ent_val = substr($test['value'],1); $test['value'] = $entity[$ent_val];
             echo(" replaced @".$ent_val." with ". $test['value'] ." from entity. ");
           }
-
-          #print_r($test);
 
           echo("Testing: " . $test['metric']. " ". $test['condition'] . " " .$test['value']);
           $update_array['state']['metrics'][$test['metric']] = $data[$test['metric']];
@@ -82,38 +78,37 @@ function check_entity($type, $entity, $data)
             if($alert_rules[$alert_test_id]['and']) { $alert  = ($alert && FALSE);
                                              } else { $alert =  ($alert || FALSE); }
           }
-          var_dump($alert);
         }
-
-
 
         if($alert)
         {
-          // Alert conditions tripped. Do alerting things here!
-          echo(" Checks failed. Generate alert.\n");
-          $update_array['alert_status'] = '0';
-          $update_array['last_message'] = 'Checks failed';
-          $update_array['last_checked'] = time();
           $update_array['count'] = $alert_args['count']+1;
-          if($alert_args['alert_status'] != '0'  || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); $update_array['last_alerted'] = '0'; }
 
-          $alert_queue = dbFetchRow("SELECT * FROM `alert_queue` WHERE `alert_table_id` = ?", array($alert_args['alert_table_id']));
-
-          if(is_array($alert_queue)) {
-            dbUpdate(array('alert_last' => time()), 'alert_queue', '`alert_table_id` = ?' , array($alert_args['alert_table_id']));
+          // Check against the alert test's delay
+          if($update_array['count'] >= $alert_rules[$alert_test_id]['delay'])
+          {
+            // This is a real alert.
+            echo(" Checks failed. Generate alert.\n");
+            $update_array['alert_status'] = '0';
+            $update_array['last_message'] = 'Checks failed';
+            $update_array['last_checked'] = time();
+            if($alert_args['alert_status'] != '0'  || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); $update_array['last_alerted'] = '0'; }
           } else {
-            dbInsert(array('alert_table_id' => $alert_args['alert_table_id'], 'alert_first' => time(), 'alert_last' => time() ), 'alert_queue');
+            // This is alert needs to exist for longer.
+            echo(" Checks failed. Delaying alert.\n");
+            $update_array['alert_status'] = '2';
+            $update_array['last_message'] = 'Checks failed (delayed)';
+            $update_array['last_checked'] = time();
+            if($alert_args['alert_status'] != '2'  || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); $update_array['last_alerted'] = '0'; }
           }
-
-
-
         } else {
+          $update_array['count'] = 0;
           // Alert conditions passed. Record that we tested it and update status and other data.
           echo(" Checks OK.\n");
           $update_array['alert_status'] = '1';
           $update_array['last_message'] = 'Checks OK';
           $update_array['last_checked'] = time();
-          $update_array['count'] = 0;
+          #$update_array['count'] = 0;
           if($alert_args['alert_status'] != '1' || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); }
         }
 

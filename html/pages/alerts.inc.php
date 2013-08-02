@@ -58,7 +58,15 @@ echo('<table class="table table-condensed table-bordered table-striped table-rou
       <th></th>
       <th></th>
       <th style="width: 150px">Device</th>
+');
+
+if ($vars['entity_type'] == 'all') {
+  echo('
       <th style="width: 50px;">Type</th>
+');
+}
+
+echo('
       <th style="width: 100px;">Alert</th>
       <th style="">Entity</th>
       <th style="width: 90px;">Checked</th>
@@ -98,7 +106,11 @@ echo('<table class="table table-condensed table-bordered table-striped table-rou
     echo('<td style="width: 1px; background-color: '.$alert_entry['table_tab_colour'].'; margin: 0px; padding: 0px"></td>');
     echo('<td style="width: 1px;"></td>');
     echo('<td><span class="entity-title">'.generate_device_link($device).'</span></td>');
+
+if ($vars['entity_type'] == 'all') {
     echo('<td>'.$alert_entry['entity_type'].'</td>');
+}
+
     echo('<td>'.$alert_rule['alert_name'].'</td>');
     echo('<td><span class="entity-title">'.generate_entity_link($alert_entry['entity_type'], $alert_entry['entity_id'], truncate($entity_descr, 40)).'</span></td>');
 
