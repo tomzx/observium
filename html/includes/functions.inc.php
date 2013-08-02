@@ -15,7 +15,7 @@
 
 $print_functions = array('addresses', 'events', 'mac_addresses', 'rows',
                          'status', 'arptable', 'fdbtable', 'navbar',
-                         'search_simple', 'syslogs');
+                         'search_simple', 'syslogs', 'inventory');
 foreach($print_functions as $item)
 {
   $print_path = $config['html_dir'].'/includes/print/'.$item.'.inc.php';
@@ -832,7 +832,7 @@ function generate_entity_link($type, $entity, $text=NULL, $graph_type=NULL)
       break;
     case "bgp_peer":
       if (empty($text)) { $text = "AS".$entity['bgpPeerRemoteAs'] ." ". $entity['bgpPeerRemoteAddr']. " ".truncate($entity['astext'], "30"); }
-      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'routing', 'proto' => 'bgo'));
+      $link = generate_link($text, array('page' => 'device', 'device' => $entity['device_id'], 'tab' => 'routing', 'proto' => 'bgp'));
       break;
     case "netscaler_vsvr":
       if (empty($text)) { $text = $entity['vsvr_label']; }
