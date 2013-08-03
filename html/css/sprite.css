@@ -1,4 +1,4 @@
-/* glue: 0.3 hash: 3e8ee07158 */
+/* glue: 0.3 hash: 7af04b4b29 */
 [class^="oicon-"], [class*=" oicon-"] { display: inline-block;  margin-top: 1px;  *margin-right: .3em;  vertical-align: text-top; background-image: url("../img/sprite.png");  background-position: 16px 16px;  background-repeat: no-repeat; }
 .oicon-widescreen{background-position:0px 0px;width:24px;height:24px;}
 .oicon-non-widescreen{background-position:-24px 0px;width:24px;height:24px;}
@@ -193,11 +193,15 @@
 .oicon-arrow-incident-green{background-position:-224px -144px;width:16px;height:16px;}
 .oicon-arrow-incident-blue{background-position:-224px -160px;width:16px;height:16px;}
 .oicon-arrow-in{background-position:-224px -176px;width:16px;height:16px;}
-.oicon-arrow-branch-gyr{background-position:-224px -192px;width:16px;height:16px;}
-.oicon-arrow-branch-byr{background-position:0px -216px;width:16px;height:16px;}
-.oicon-arrow-branch-bgr{background-position:-16px -216px;width:16px;height:16px;}
-.oicon-arrow-branch-000-left{background-position:-32px -216px;width:16px;height:16px;}
-.oicon-application-terminal{background-position:-48px -216px;width:16px;height:16px;}
-.oicon-application-icon-large{background-position:-64px -216px;width:16px;height:16px;}
-.oicon-application-block{background-position:-80px -216px;width:16px;height:16px;}
-.oicon-application--exclamation{background-position:-96px -216px;width:16px;height:16px;}
+.oicon-arrow-grey_right{background-position:-224px -192px;width:16px;height:16px;}
+.oicon-arrow-grey_left{background-position:0px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-gyr{background-position:-16px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-byr{background-position:-32px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-bgr{background-position:-48px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-000-left{background-position:-64px -216px;width:16px;height:16px;}
+.oicon-arrow-blue_right{background-position:-80px -216px;width:16px;height:16px;}
+.oicon-arrow-blue_left{background-position:-96px -216px;width:16px;height:16px;}
+.oicon-application-terminal{background-position:-112px -216px;width:16px;height:16px;}
+.oicon-application-icon-large{background-position:-128px -216px;width:16px;height:16px;}
+.oicon-application-block{background-position:-144px -216px;width:16px;height:16px;}
+.oicon-application--exclamation{background-position:-160px -216px;width:16px;height:16px;}

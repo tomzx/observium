@@ -51,9 +51,7 @@ $i = 1;
 $inf = fixifName($ifname);
 $show_all = 1;
 
-  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded"
-               style="vertical-align: middle; margin-top: 5px; margin-bottom: 10px;">');
-
+echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded">');
 
 include("includes/print-interface.inc.php");
 

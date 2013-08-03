@@ -48,7 +48,8 @@ function print_navbar($navbar)
   {
     foreach ($navbar[$array_name] as $option => $array)
     {
-      if ($array['class'] == 'pull-right' || $array_name == 'options_right') {
+      if (strstr($array['class'], 'pull-right') || $array_name == 'options_right') {
+        $array['class'] = str_replace('pull-right', '', $array['class']);
         $newbar['options_right'][$option] = $array;
       } else {
         $newbar['options'][$option] = $array;

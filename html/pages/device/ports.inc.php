@@ -11,6 +11,16 @@ $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab' => 'ports');
 
+if (isset($vars['filters']))
+{
+  $filters_array = json_decode(base64_decode($vars['filters']), TRUE);
+} else {
+  $filters_array = array('deleted' => TRUE);
+}
+$link_array['filters'] = base64_encode(json_encode($filters_array));
+
+$navbar = array('brand' => "Ports", 'class' => "navbar-narrow");
+
 $navbar['options']['basic']['text']   = 'Basic';
 $navbar['options']['details']['text'] = 'Details';
 $navbar['options']['arp']['text']     = 'ARP/NDP Table';
@@ -36,42 +46,80 @@ $navbar['options']['minigraphs'] = array('text' => 'Minigraphs', 'class' => 'pul
 foreach ($navbar['options'] as $option => $array)
 {
   if ($vars['view'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
-  $navbar['options'][$option]['url'] = generate_url($link_array,array('view'=>$option));
+  $navbar['options'][$option]['url'] = generate_url($link_array,array('view' => $option));
 }
 
-  $graph_types = array("bits" => "Bits",
-                       "upkts" => "Ucast Packets",
-                       "nupkts" => "NUcast Packets",
-                       "errors" => "Errors",
-                       "etherlike" => "Etherlike");
-
-foreach (array('graphs', 'minigraphs') as $option)
+$graph_types = array("bits" => "Bits",
+                     "upkts" => "Ucast Packets",
+                     "nupkts" => "NUcast Packets",
+                     "errors" => "Errors",
+                     "etherlike" => "Etherlike");
+foreach (array('graphs', 'minigraphs') as $type)
 {
- foreach ($graph_types as $type => $descr)
- {
-
-  if ($vars['view'] == $option)
+  foreach ($graph_types as $option => $text)
   {
-    $navbar_b['class'] = "navbar-narrow";
-    $navbar_b['brand'] = $navbar['options'][$option]['text'];
-
-    $navbar_b['options'][$type]['text'] = $descr;
-    $navbar_b['options'][$type]['url']  = generate_url($link_array,array('view'=>'graphs','graph'=>$type));
-    if ($vars['graph'] == $type) { $navbar_b['options'][$type]['class'] = "active"; }
-
+    if ($vars['view'] == $type && $vars['graph'] == $option)
+    {
+      $navbar['options'][$type]['suboptions'][$option]['class'] = 'active';
+    }
+    $navbar['options'][$type]['suboptions'][$option]['text'] = $text;
+    $navbar['options'][$type]['suboptions'][$option]['url'] = generate_url($link_array, array('view' => $type, 'graph' => $option));
   }
-  if ($vars['view'] == $option && $vars['graph'] == $type) { $navbar['options'][$option]['suboptions'][$type]['class'] = "active"; }
-  $navbar['options'][$option]['suboptions'][$type]['text'] = $descr;
-  $navbar['options'][$option]['suboptions'][$type]['url']  = generate_url($link_array,array('view'=>$option,'graph'=>$type));
- }
 }
 
-$navbar['class'] = "navbar-narrow";
-$navbar['brand'] = "Ports";
+// Quick filters
+function is_filtered()
+{
+  global $filters_array, $port;
+  return ($filters_array['up']       && $port['ifOperStatus'] == 'up' && $port['ifAdminStatus'] == 'up' && !$port['ignore'] && !$port['deleted']) ||
+         ($filters_array['down']     && $port['ifOperStatus'] != 'up' && $port['ifAdminStatus'] == 'up') ||
+         ($filters_array['shutdown'] && $port['ifAdminStatus'] == 'down') ||
+         ($filters_array['ignored']  && $port['ignore']) ||
+         ($filters_array['deleted']  && $port['deleted']);
+}
+
+if (isset($vars['view']) && ($vars['view'] == 'basic' || $vars['view'] == 'details' || $vars['view'] == 'graphs' || $vars['view'] == 'minigraphs'))
+{
+  // List filters
+  $filter_options = array('up'       => 'Hide UP',
+                          'down'     => 'Hide DOWN',
+                          'shutdown' => 'Hide SHUTDOWN',
+                          'ignored'  => 'Hide IGNORED',
+                          'deleted'  => 'Hide DELETED');
+  // To be or not to be
+  $filters_array['all'] = TRUE;
+  foreach($filter_options as $option => $text)
+  {
+    $filters_array['all'] = $filters_array['all'] && $filters_array[$option];
+    $option_all[$option] = TRUE;
+  }
+  $filter_options['all'] = ($filters_array['all']) ? 'Reset ALL' : 'Hide ALL';
+  
+  // Generate filted links
+  $navbar['options_right']['filters']['text'] = 'Quick Filters';
+  foreach($filter_options as $option => $text)
+  {
+    $option_array = array_merge($filters_array, array($option => TRUE));
+    $navbar['options_right']['filters']['suboptions'][$option]['text'] = $text;
+    if ($filters_array[$option])
+    {
+      $navbar['options_right']['filters']['class'] .= ' active';
+      $navbar['options_right']['filters']['suboptions'][$option]['class'] = 'active';
+      if ($option == 'all')
+      {
+        $option_array = array('disabled' => FALSE);
+      } else {
+        $option_array[$option] = FALSE;
+      }
+    } elseif ($option == 'all') {
+      $option_array = $option_all;
+    }
+    $navbar['options_right']['filters']['suboptions'][$option]['url'] = generate_url($vars, array('filters' => base64_encode(json_encode($option_array))));
+  }
+}
+
 print_navbar($navbar);
 unset($navbar);
-
-if(is_array($navbar_b)) { print_navbar($navbar_b); }
 
 if ($vars['view'] == 'minigraphs')
 {
@@ -81,8 +129,9 @@ if ($vars['view'] == 'minigraphs')
   unset ($seperator);
 
   // FIXME - FIX THIS. UGLY.
-  foreach (dbFetchRows("select * from ports WHERE device_id = ? ORDER BY ifIndex", array($device['device_id'])) as $port)
+  foreach (dbFetchRows("SELECT * FROM ports WHERE device_id = ? ORDER BY ifIndex", array($device['device_id'])) as $port)
   {
+    if (is_filtered()) { continue; }
     echo("<div style='display: block; padding: 3px; margin: 3px; min-width: 183px; max-width:183px; min-height:90px; max-height:90px; text-align: center; float: left; background-color: #e9e9e9;'>
     <div style='font-weight: bold;'>".makeshortif($port['ifDescr'])."</div>
     <a href=\"" . generate_port_url($port) . "\" onmouseover=\"return overlib('\
@@ -101,42 +150,40 @@ if ($vars['view'] == 'minigraphs')
 } else {
   if ($vars['view'] == "details") { $port_details = 1; }
 
-if($vars['view'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
-echo('<table class="table table-hover table-bordered table-condensed table-rounded '.$table_class.'"
+  if($vars['view'] == "graphs") { $table_class = "table-striped-two"; } else { $table_class = "table-striped"; }
+  echo('<table class="table table-hover table-bordered table-condensed table-rounded '.$table_class.'"
              style="vertical-align: middle; margin-top: 5px; margin-bottom: 10px;">');
 
-echo('  <thead>');
+  echo('  <thead>');
+  echo('<tr>');
 
-echo('<tr>');
-
-$cols = array(
-              'state' => NULL,
-              'BLANK' => NULL,
-              'port' => 'Port',
-              'graphs' => NULL,
-              'traffic' => 'Traffic',
-              'speed' => 'Speed',
-              'media' => 'Media',
-              'mac' => 'MAC Address',
-              'details' => NULL);
-
-foreach ($cols as $sort => $col)
-{
-  if ($col == NULL)
+  $cols = array(
+                'state' => NULL,
+                'BLANK' => NULL,
+                'port' => 'Port',
+                'graphs' => NULL,
+                'traffic' => 'Traffic',
+                'speed' => 'Speed',
+                'media' => 'Media',
+                'mac' => 'MAC Address',
+                'details' => NULL);
+  
+  foreach ($cols as $sort => $col)
   {
-    echo('<th></th>');
+    if ($col == NULL)
+    {
+      echo('<th></th>');
+    }
+    elseif ($vars['sort'] == $sort)
+    {
+      echo('<th>'.$col.' *</th>');
+    } else {
+      echo('<th><a href="'. generate_url($vars, array('sort' => $sort)).'">'.$col.'</a></th>');
+    }
   }
-  elseif ($vars['sort'] == $sort)
-  {
-    echo('<th>'.$col.' *</th>');
-  } else {
-    echo('<th><a href="'. generate_url($vars, array('sort' => $sort)).'">'.$col.'</a></th>');
-  }
-}
 
-echo("      </tr>");
-
-echo('  </thead>');
+  echo('      </tr>');
+  echo('  </thead>');
 
   $i = "1";
 
@@ -161,8 +208,8 @@ echo('  </thead>');
 
   foreach ($ports as $port)
   {
+    if (is_filtered()) { continue; }
     include("includes/print-interface.inc.php");
-
     $i++;
   }
   echo("</table></div>");

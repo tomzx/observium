@@ -19,7 +19,7 @@ $port['device_id'] = $device['device_id'];
 $port['hostname'] = $device['hostname'];
 
 // Process port properties and generate printable values
-humanize_port($port);
+if(!isset($port['humanized'])) { humanize_port($port); }
 
 $port_adsl = dbFetchRow("SELECT * FROM `ports_adsl` WHERE `port_id` = ?", array($port['port_id']));
 
@@ -48,7 +48,7 @@ echo('<tr class="'.$port['row_class'].'" valign=top onclick="location.href=\'" .
          <td style="width: 1px;"></td>
          <td valign="top" width="350">');
 
-echo("        <span class=entity-title>
+echo("        <span class='entity-title'>
               " . generate_port_link($port, $port['ifIndex_FIXME'] . "".$port['label']) . " ".$port['tags']."
            </span><br /><span class=small>".$port['ifAlias']."</span>");
 
@@ -84,43 +84,120 @@ if ($port_details)
   echo(generate_port_link($port, "<img src='graph.php?type=port_errors&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no'>"));
 }
 
-echo('</td><td width=120 class="small">');
+echo('</td><td width=120 class="small" nowrap>');
 
 if ($port['ifOperStatus'] == "up")
 {
   $port['in_rate'] = $port['ifInOctets_rate'] * 8;
   $port['out_rate'] = $port['ifOutOctets_rate'] * 8;
-  $in_perc = @round($port['in_rate']/$port['ifSpeed']*100);
-  $out_perc = @round($port['in_rate']/$port['ifSpeed']*100);
-  echo("<img src='images/16/arrow_left.png' align=absmiddle> <span style='color: " . percent_colour($in_perc) . "'>".formatRates($port['in_rate'])."</span><br />
-        <img align=absmiddle src='images/16/arrow_out.png'> <span style='color:  " . percent_colour($out_perc) . "'>".formatRates($port['out_rate']) . "</span><br />
-        <img src='images/icons/arrow_pps_in.png' align=absmiddle> ".format_bi($port['ifInUcastPkts_rate'])."pps</span><br />
-        <img src='images/icons/arrow_pps_out.png' align=absmiddle> ".format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
+  if ($port['in_rate'] == 0)
+  {
+    $in_style = '';
+    $in_icon  = 'oicon-arrow-grey_left';
+  } else {
+    $in_style = 'style="color: ' . percent_colour(round($port['in_rate']/$port['ifSpeed']*100)) . '"';
+    $in_icon  = 'oicon-arrow_left';
+  }
+  if ($port['out_rate'] == 0)
+  {
+    $out_style = '';
+    $out_icon  = 'oicon-arrow-grey_right';
+  } else {
+    $out_style = 'style="color: ' . percent_colour(round($port['out_rate']/$port['ifSpeed']*100)) . '"';
+    $out_icon  = 'oicon-arrow_right';
+  }
+  if ($port['ifInUcastPkts_rate'] == 0)
+  {
+    $pkts_in_style = '';
+    $pkts_in_icon  = 'oicon-arrow-grey_left';
+  } else {
+    $pkts_in_style = 'style="color: #1489CC"';
+    $pkts_in_icon  = 'oicon-arrow-blue_left';
+  }
+  if ($port['ifOutUcastPkts_rate'] == 0)
+  {
+    $pkts_out_style = '';
+    $pkts_out_icon  = 'oicon-arrow-grey_right';
+  } else {
+    $pkts_out_style = 'style="color: #1489CC"';
+    $pkts_out_icon  = 'oicon-arrow-blue_right';
+  }
+
+  $pkts_in_icon  = ($port['ifInUcastPkts_rate']  == 0) ? 'oicon-arrow-grey_left'  : 'oicon-arrow-blue_left';
+  $pkts_out_icon = ($port['ifOutUcastPkts_rate'] == 0) ? 'oicon-arrow-grey_right' : 'oicon-arrow-blue_right';
+  echo("<i class='$in_icon'></i>  <span $in_style>" . formatRates($port['in_rate'])  . "</span><br />
+        <i class='$out_icon'></i> <span $out_style>". formatRates($port['out_rate']) . "</span><br />
+        <i class='$pkts_in_icon'></i>  <span $pkts_in_style>" . format_bi($port['ifInUcastPkts_rate']) ."pps</span><br />
+        <i class='$pkts_out_icon'></i> <span $pkts_out_style>". format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
 }
 
 echo("</td><td width=75>");
 if ($port['ifSpeed']) { echo("<span class=small>".humanspeed($port['ifSpeed'])."</span>"); }
 echo("<br />");
 
-if ($port[ifDuplex] != "unknown") { echo("<span class=small>" . $port['ifDuplex'] . "</span>"); } else { echo("-"); }
+if ($port['ifDuplex'] != "unknown") { echo("<span class=small>" . $port['ifDuplex'] . "</span>"); } else { echo("-"); }
 
 if ($device['os'] == "ios" || $device['os'] == "iosxe")
 {
   if ($port['ifTrunk']) {
-
-    echo('<p class=small><span class=purple><a title="');
-    $vlans = dbFetchRows("SELECT * FROM `ports_vlans` AS PV, vlans AS V WHERE PV.`port_id` ='".$port['port_id']."' and PV.`device_id` = '".$device['device_id']."' AND V.`vlan_vlan` = PV.vlan AND V.device_id = PV.device_id");
+    $vlans = dbFetchRows('SELECT * FROM `ports_vlans` AS PV
+                         LEFT JOIN vlans AS V ON PV.`vlan` = V.`vlan_vlan` AND PV.`device_id` = V.`device_id`
+                         WHERE PV.`port_id` = ? AND PV.`device_id` = ? ORDER BY PV.`vlan`;', array($port['port_id'], $device['device_id']));
+    $vlans_count = count($vlans);
+    echo('<p class="small"><a rel="tooltip" data-tooltip="<div class=\'small\' style=\'max-width: 320px; text-align: justify;\'>');
+    $vlan_prev = 0;
     foreach ($vlans as $vlan)
     {
-      if ($vlan['state'] == "blocking") { $class="red"; } elseif ($vlan['state'] == "forwarding" ) { $class="green"; } else { $class = "none"; }
-      echo("<b class=".$class.">".$vlan['vlan'] ."</b> ".$vlan['vlan_descr']."<br />");
+      if ($vlans_count > 20)
+      {
+        $last_char = $vlans_aggr[strlen($vlans_aggr)-1];
+        // Aggregate VLANs
+        if ($vlan_prev == 0)
+        {
+          $vlans_aggr = '<strong>'.$vlan['vlan'];
+        } elseif (is_numeric($last_char))
+        {
+          $vlans_aggr .= ($vlan['vlan']-1 == $vlan_prev) ? '-' : ', '.$vlan['vlan'];
+        } elseif ($last_char == '-')
+        {
+          if ($vlan['vlan']-1 == $vlan_prev)
+          {
+            continue;
+          } else {
+            $vlans_aggr .= $vlan_prev.', '.$vlan['vlan'];
+          }
+        } else {
+          $vlans_aggr .= $vlan['vlan'];
+        }
+        $vlan_prev = $vlan['vlan'];
+      } else {
+        if     ($vlan['state'] == 'blocking')   { $class = 'text-error'; }
+        elseif ($vlan['state'] == 'forwarding') { $class = 'text-success'; }
+        else                                    { $class = 'muted'; }
+        if (empty($vlan['vlan_name'])) { $vlan['vlan_name'] = 'VLAN '.$vlan['vlan']; }
+        echo("<strong class=".$class.">".$vlan['vlan'] ." [".$vlan['vlan_name']."]</strong><br />");
+      }
     }
-    echo('">'.$port['ifTrunk'].'</a></span></p>');
+    if ($vlan_prev)
+    {
+      if ($last_char == '-')
+      {
+        $vlans_aggr = substr($vlans_aggr, 0, -1);
+      } elseif ($last_char == ' ') {
+        $vlans_aggr = substr($vlans_aggr, 0, -2);
+      }
+      echo($vlans_aggr.'</strong>');
+    }
+    echo('</div>">'.$port['ifTrunk'].'</a></p>');
   } elseif ($port['ifVlan']) {
-    echo("<p class=small><span class=blue>VLAN " . $port['ifVlan'] . "</span></p>");
+    $vlan_state = dbFetchCell('SELECT `state` FROM `ports_vlans` WHERE `port_id` = ? AND `device_id` = ?', array($port['port_id'], $device['device_id']));
+    if     ($vlan_state == 'blocking')   { $class = 'text-error'; }
+    elseif ($vlan_state == 'forwarding') { $class = 'text-success'; }
+    else                                 { $class = 'muted'; }
+    echo('<p class="small '.$class.'">VLAN ' . $port['ifVlan'] . '</p>');
   } elseif ($port['ifVrf']) {
     $vrf = dbFetchRow("SELECT * FROM vrfs WHERE vrf_id = ?", array($port['ifVrf']));
-    echo("<p style='color: green;'>" . $vrf['vrf_name'] . "</p>");
+    echo('<p class="small text-warning" rel="tooltip" data-tooltip="VRF">' . $vrf['vrf_name'] . "</p>");
   }
 }
 
@@ -211,70 +288,74 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
 
   if ($port_details && $int_links)
   {
-         foreach ($int_links as $int_link)
-         {
-               $link_if = dbFetchRow("SELECT * from ports AS I, devices AS D WHERE I.device_id = D.device_id and I.port_id = ?", array($int_link));
+    foreach ($int_links as $int_link)
+    {
+      $link_if = dbFetchRow("SELECT * from ports AS I, devices AS D WHERE I.device_id = D.device_id and I.port_id = ?", array($int_link));
 
-               echo("$br");
+      echo("$br");
 
-               if ($int_links_phys[$int_link]) { echo('<a alt="Directly connected" class="oicon-connect"><a> '); } else {
-                                                                                 echo('<a alt="Same subnet" class="oicon-arrow_right"><a> '); }
+      if ($int_links_phys[$int_link]) { echo('<a alt="Directly connected" class="oicon-connect"><a> '); }
+      else { echo('<a alt="Same subnet" class="oicon-arrow-transition"><a> '); }
 
-               echo("<b>" . generate_port_link($link_if, makeshortif($link_if['label'])) . " on " . generate_device_link($link_if, shorthost($link_if['hostname'])));
+      echo("<b>" . generate_port_link($link_if, makeshortif($link_if['label'])) . " on " . generate_device_link($link_if, shorthost($link_if['hostname'])));
 
-               if ($int_links_v6[$int_link]) { echo(" <b style='color: #a10000;'>v6</b>"); }
-               if ($int_links_v4[$int_link]) { echo(" <b style='color: #00a100'>v4</b>"); }
-               $br = "<br />";
-         }
+      if ($int_links_v6[$int_link]) { echo(" <strong style='color: #a10000;'>IPv6</strong>"); }
+      if ($int_links_v4[$int_link]) { echo(" <strong style='color: #00a100'>IPv4</strong>"); }
+      $br = "<br />";
+    }
   }
 #     unset($int_links, $int_links_v6, $int_links_v4, $int_links_phys, $br);
 }
 
 if ($port_details)
 {
-       foreach (dbFetchRows("SELECT * FROM `pseudowires` WHERE `port_id` = ?", array($port['port_id'])) as $pseudowire)
-       {
-       #`port_id`,`peer_device_id`,`peer_ldp_id`,`cpwVcID`,`cpwOid`
-         $pw_peer_dev = dbFetchRow("SELECT * FROM `devices` WHERE `device_id` = ?", array($pseudowire['peer_device_id']));
-         $pw_peer_int = dbFetchRow("SELECT * FROM `ports` AS I, pseudowires AS P WHERE I.device_id = ? AND P.cpwVcID = ? AND P.port_id = I.port_id", array($pseudowire['peer_device_id'], $pseudowire['cpwVcID']));
+  foreach (dbFetchRows("SELECT * FROM `pseudowires` WHERE `port_id` = ?", array($port['port_id'])) as $pseudowire)
+  {
+    //`port_id`,`peer_device_id`,`peer_ldp_id`,`cpwVcID`,`cpwOid`
+    $pw_peer_dev = dbFetchRow("SELECT * FROM `devices` WHERE `device_id` = ?", array($pseudowire['peer_device_id']));
+    $pw_peer_int = dbFetchRow("SELECT * FROM `ports` AS I, pseudowires AS P WHERE I.device_id = ? AND P.cpwVcID = ? AND P.port_id = I.port_id", array($pseudowire['peer_device_id'], $pseudowire['cpwVcID']));
 
-         humanize_port($pw_peer_int);
-         echo("$br<img src='images/16/arrow_switch.png' align=absmiddle><b> " . generate_port_link($pw_peer_int, makeshortif($pw_peer_int['label'])) ." on ". generate_device_link($pw_peer_dev, shorthost($pw_peer_dev['hostname'])) . "</b>");
-         $br = "<br />";
-       }
+    humanize_port($pw_peer_int);
+    echo($br.'<i class="oicon-arrow-switch"></i> <strong>' . generate_port_link($pw_peer_int, makeshortif($pw_peer_int['label'])) .' on '. generate_device_link($pw_peer_dev, shorthost($pw_peer_dev['hostname'])) . '</strong>');
+    $br = "<br />";
+  }
 
-       foreach (dbFetchRows("SELECT * FROM `ports` WHERE `pagpGroupIfIndex` = ? and `device_id` = ?", array($port['ifIndex'], $device['device_id'])) as $member)
-       {
-         echo("$br<img src='images/16/brick_link.png' align=absmiddle> <strong>" . generate_port_link($member) . " (PAgP)</strong>");
-         $br = "<br />";
-       }
+  foreach (dbFetchRows("SELECT * FROM `ports` WHERE `pagpGroupIfIndex` = ? and `device_id` = ?", array($port['ifIndex'], $device['device_id'])) as $member)
+  {
+    $pagp[$device['device_id']][$port['ifIndex']][$member['ifIndex']] = TRUE;
+    echo($br.'<i class="oicon-arrow-join"></i> <strong>' . generate_port_link($member) . ' [PAgP]</strong>');
+    $br = "<br />";
+  }
 
-       if ($port['pagpGroupIfIndex'] && $port['pagpGroupIfIndex'] != $port['ifIndex'])
-       {
-         $parent = dbFetchRow("SELECT * FROM `ports` WHERE `ifIndex` = ? and `device_id` = ?", array($port['pagpGroupIfIndex'], $device['device_id']));
-         echo("$br<img src='images/16/bricks.png' align=absmiddle> <strong>" . generate_port_link($parent) . " (PAgP)</strong>");
-         $br = "<br />";
-       }
+  if ($port['pagpGroupIfIndex'] && $port['pagpGroupIfIndex'] != $port['ifIndex'])
+  {
+    $pagp[$device['device_id']][$port['pagpGroupIfIndex']][$port['ifIndex']] = TRUE;
+    $parent = dbFetchRow("SELECT * FROM `ports` WHERE `ifIndex` = ? and `device_id` = ?", array($port['pagpGroupIfIndex'], $device['device_id']));
+    echo($br.'<i class="oicon-arrow-split"></i> <strong>' . generate_port_link($parent) . ' [PAgP]</strong>');
+    $br = "<br />";
+  }
 
-       foreach (dbFetchRows("SELECT * FROM `ports_stack` WHERE `port_id_low` = ? and `device_id` = ?", array($port['ifIndex'], $device['device_id'])) as $higher_if)
-       {
-         if ($higher_if['port_id_high'])
-         {
-               $this_port = get_port_by_index_cache($device['device_id'], $higher_if['port_id_high']);
-               echo($br.'<i class="oicon-arrow-split"></i> <strong>' . generate_port_link($this_port) . '</strong>');
-               $br = "<br />";
-         }
-       }
+  foreach (dbFetchRows("SELECT * FROM `ports_stack` WHERE `port_id_low` = ? and `device_id` = ?", array($port['ifIndex'], $device['device_id'])) as $higher_if)
+  {
+    if ($higher_if['port_id_high'])
+    {
+      if ($pagp[$device['device_id']][$higher_if['port_id_high']][$port['ifIndex']]) { continue; } // Skip if same PAgP port
+      $this_port = get_port_by_index_cache($device['device_id'], $higher_if['port_id_high']);
+      echo($br.'<i class="oicon-arrow-split"></i> <strong>' . generate_port_link($this_port) . '</strong>');
+      $br = "<br />";
+    }
+  }
 
-       foreach (dbFetchRows("SELECT * FROM `ports_stack` WHERE `port_id_high` = ? and `device_id` = ?", array($port['ifIndex'], $device['device_id'])) as $lower_if)
-       {
-         if ($lower_if['port_id_low'])
-         {
-               $this_port = get_port_by_index_cache($device['device_id'], $lower_if['port_id_low']);
-               echo($br.'<i class="oicon-arrow-join"></i> <strong>' . generate_port_link($this_port) . "</strong>");
-               $br = "<br />";
-         }
-       }
+  foreach (dbFetchRows("SELECT * FROM `ports_stack` WHERE `port_id_high` = ? and `device_id` = ?", array($port['ifIndex'], $device['device_id'])) as $lower_if)
+  {
+    if ($lower_if['port_id_low'])
+    {
+      if ($pagp[$device['device_id']][$port['ifIndex']][$lower_if['port_id_low']]) { continue; } // Skip if same PAgP ports
+      $this_port = get_port_by_index_cache($device['device_id'], $lower_if['port_id_low']);
+      echo($br.'<i class="oicon-arrow-join"></i> <strong>' . generate_port_link($this_port) . "</strong>");
+      $br = "<br />";
+    }
+  }
 }
 
 unset($int_links, $int_links_v6, $int_links_v4, $int_links_phys, $br);

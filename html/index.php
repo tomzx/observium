@@ -325,6 +325,7 @@ if (is_array($pagetitle))
   <script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
   <script src="js/bootstrap-datetimepicker.min.js"></script>
   <script src="js/bootstrap-select.min.js"></script>
+
   <script type="text/javascript">$('.selectpicker').selectpicker();</script>
   <script type="text/javascript" src="js/mktree.js"></script>
   <script type="text/javascript" src="js/sorttable.js"></script>
@@ -351,6 +352,23 @@ if (is_array($pagetitle))
       });
     });
 
+    $("[rel='tooltip']").qtip({
+      content: {
+              attr: 'data-tooltip'
+      },
+      style: {
+              classes: 'qtip-bootstrap',
+      },
+      position: {
+              //target: 'mouse',
+              viewport: $(window),
+              adjust: {
+                      x: 2,
+                      y: 2
+              }
+      }
+    })
+    
     $('.tooltip-from-data').qtip({
       content: {
               attr: 'data-tooltip'
