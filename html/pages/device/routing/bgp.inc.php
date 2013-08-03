@@ -27,7 +27,7 @@ foreach ($types as $option => $text)
 }
 
 /*
-$statuses = array('stop'  => 'Stopped',
+$statuses = array('stop'  => 'Shutdown',
                   'start' => 'Enabled',
                   'down'  => 'Down');
 foreach ($statuses as $option => $text)
