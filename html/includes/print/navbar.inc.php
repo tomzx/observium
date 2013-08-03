@@ -42,45 +42,55 @@ function print_navbar($navbar)
   if (isset($navbar['brand'])) { echo ' <a class="brand">'.$navbar['brand'].'</a>'; }
   echo('<div class="nav-collapse" id="nav-'.$id.'">');
 
+  //rewrite navbar (for class pull-right)
+  $newbar = array();
   foreach (array('options', 'options_right') as $array_name)
   {
-    if ($array_name == "options_right") {
-      if (!$navbar[$array_name]) { break; }
+    foreach ($navbar[$array_name] as $option => $array)
+    {
+      if ($array['class'] == 'pull-right' || $array_name == 'options_right') {
+        $newbar['options_right'][$option] = $array;
+      } else {
+        $newbar['options'][$option] = $array;
+      }
+    }
+  }
+  
+  foreach (array('options', 'options_right') as $array_name)
+  {
+    if ($array_name == 'options_right') {
+      if (!$newbar[$array_name]) { break; }
       echo('<ul class="nav pull-right">');
     } else {
       echo('<ul class="nav">');
     }
-    foreach ($navbar[$array_name] as $option => $array)
+    foreach ($newbar[$array_name] as $option => $array)
     {
-      if ($array[''] == "pull-right") {
-        $navbar['options_right'][$option] = $array;
+      if (!is_array($array['suboptions']))
+      {
+        echo('<li class="'.$array['class'].'">');
+        echo('<a href="'.$array['url'].'">');
+        if (isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
+        echo($array['text'].'</a>');
+        echo('</li>');
       } else {
-        if (!is_array($array['suboptions']))
-        {
-          echo('<li class="'.$array['class'].'">');
-          echo('<a href="'.$array['url'].'">');
-          if (isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
-          echo($array['text'].'</a>');
-          echo('</li>');
-        } else {
-          echo('  <li class="dropdown '.$array['class'].'">');
-          echo('    <a class="dropdown-toggle" data-toggle="dropdown"  href="'.$array['url'].'">');
-          if (isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
-          echo($array['text'].'
-            <b class="caret"></b>
+        echo('  <li class="dropdown '.$array['class'].'">');
+        echo('    <a class="dropdown-toggle" data-toggle="dropdown"  href="'.$array['url'].'">');
+        if (isset($array['icon'])) { echo('<i class="'.$array['icon'].'"></i> '); }
+        echo($array['text'].'
+            <strong class="caret"></strong>
           </a>
         <ul class="dropdown-menu">');
-          foreach ($array['suboptions'] as $suboption => $subarray)
-          {
-            echo('<li class="'.$subarray['class'].'">');
-            echo('<a href="'.$subarray['url'].'">');
-            if (isset($subarray['icon'])) { echo('<i class="'.$subarray['icon'].'"></i> '); }
-            echo($subarray['text'].'</a>');
-            echo('</li>');
-          }
-          echo('    </ul>
-      </li>');
+        foreach ($array['suboptions'] as $suboption => $subarray)
+        {
+          echo('<li class="'.$subarray['class'].'">');
+          echo('<a href="'.$subarray['url'].'">');
+          if (isset($subarray['icon'])) { echo('<i class="'.$subarray['icon'].'"></i> '); }
+          echo($subarray['text'].'</a>');
+          echo('</li>');
         }
+        echo('    </ul>
+      </li>');
       }
     }
     echo('</ul>');
