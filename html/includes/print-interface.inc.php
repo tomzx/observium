@@ -162,6 +162,7 @@ if ($device['os'] == "ios" || $device['os'] == "iosxe")
         {
           if ($vlan['vlan']-1 == $vlan_prev)
           {
+            $vlan_prev = $vlan['vlan'];
             continue;
           } else {
             $vlans_aggr .= $vlan_prev.', '.$vlan['vlan'];
