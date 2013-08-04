@@ -187,8 +187,11 @@ function poll_device($device, $options)
   $alert_rules = cache_alert_rules();
   $alert_table = cache_device_alert_table($device['device_id']);
 
-  print_r($alert_rules);
-  print_r($alert_table);
+  if ($debug) // Fuck you, dirty outputs.
+  {
+    print_r($alert_rules);
+    print_r($alert_table);
+  }
 
   $status = 0; unset($array);
   $device_start = utime();  // Start counting device poll time
