@@ -26,7 +26,12 @@ $stats['bills']          = dbFetchCell("SELECT count(*) FROM `bills`");
 
 $stats['poller_time']    = dbFetchCell("SELECT SUM(`last_polled_timetaken`) FROM devices");
 $stats['php_version']    = phpversion();
+
+// Old version
 $stats['os_version']     = trim(shell_exec($config['install_dir']."/scripts/distro"));
+// New version
+$stats['os_text']	 = trim(shell_exec($config['install_dir']."/scripts/os"));
+list($stats['os']['os'], $stats['os']['os_ver'], $stats['os']['arch'], $stats['os']['distro'], $stats['os']['distro_ver']) = explode("|", $stats['os_text']);
 
 // sysObjectID for Generic devices
 foreach (dbFetch("SELECT sysObjectID, COUNT( * ) as count FROM  `devices` WHERE `os` = 'generic' GROUP BY `sysObjectID`") as $data)
