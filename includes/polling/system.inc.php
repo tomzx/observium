@@ -33,11 +33,25 @@
       $hrSystemUptime = str_replace(")", "", $hrSystemUptime);
       list($days,$hours, $mins, $secs) = explode(":", $hrSystemUptime);
       list($secs, $microsecs) = explode(".", $secs);
-      $hours = $hours + ($days * 24);
-      $mins = $mins + ($hours * 60);
-      $secs = $secs + ($mins * 60);
-      $uptime = $secs;
-      $uptime_msg = "Using SNMP Agent hrSystemUptime";
+
+      // Some Unixes return hrSystemUptime as an integer count of ten millisecond ticks instead of the
+      // as a Timetick type
+      if(strstr($hrSystemUptime, 'Wrong Type'))
+      {
+        // HOST-RESOURCES-MIB::hrSystemUptime.0 = Wrong Type (should be Timeticks): 1632295600
+        list($type_msg,$ten_ms) = explode(":", $hrSystemUptime);
+        $uptime = $ten_ms/100;
+        echo("Found Wrong type: interpreting as seconds instead of timeticks ($uptime seconds)\n");
+       $uptime_msg = "Using integer SNMP Agent hrSystemUptime";
+      } else {
+        // HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (63050465) 7 days, 7:08:24.65
+        $hours = $hours + ($days * 24);
+        $mins = $mins + ($hours * 60);
+        $secs = $secs + ($mins * 60);
+        $uptime = $secs;
+        $uptime_msg = "Using SNMP Agent hrSystemUptime";
+      }
+
     } else {
       // SNMPv2-MIB::sysUpTime.0 = Timeticks: (2542831) 7:03:48.31
       $poll_device['sysUpTime'] = str_replace("(", "", $poll_device['sysUpTime']);
