@@ -950,17 +950,18 @@ function is_port_valid($port, $device)
 {
   global $config, $debug;
 
-  if (strstr($port['ifDescr'], "irtual"))
+  $valie = TRUE;
+
+  if (strstr($port['ifDescr'], "Virtual") && FALSE)
   {
-    $valid = 0;
+    $valid = FALSE;
   } else {
-    $valid = 1;
     $if = strtolower($port['ifDescr']);
     foreach ($config['bad_if'] as $bi)
     {
       if (strstr($if, $bi))
       {
-        $valid = 0;
+        $valid = FALSE;
         if ($debug) { echo("ignored : $bi : $if"); }
       }
     }
@@ -971,7 +972,7 @@ function is_port_valid($port, $device)
       {
         if (preg_match($bi ."i", $if))
         {
-          $valid = 0;
+          $valid = FALSE;
           if ($debug) { echo("ignored : $bi : ".$if); }
         }
       }
@@ -983,13 +984,13 @@ function is_port_valid($port, $device)
       {
       if (strstr($port['ifType'], $bi))
         {
-          $valid = 0;
+          $valid = FALSE;
           if ($debug) { echo("ignored ifType : ".$port['ifType']." (matched: ".$bi." )"); }
         }
       }
     }
-    if (empty($port['ifDescr']) && empty($port['ifName'])) { $valid = 0; }
-    if ($device['os'] == "catos" && strstr($if, "vlan")) { $valid = 0; }
+    if (empty($port['ifDescr']) && empty($port['ifName'])) { $valid = FALSE; }
+    if ($device['os'] == "catos" && strstr($if, "vlan")) { $valid = FALSE; }
   }
 
   return $valid;
