@@ -2,7 +2,7 @@
 
 if (!$os)
 {
-  if (preg_match("/^Cisco\ Adaptive\ Security\ Appliance/", $sysDescr)) { $os = "asa"; }
+  if (strpos($sysDescr, "Cisco Adaptive Security Appliance") !==  false) { $os = "asa"; }
 }
 
 ?>
