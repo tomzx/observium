@@ -2,6 +2,11 @@
 
 include("includes/graphs/common.inc.php");
 
+#$graph_return['valid_options'][] = "previous";
+#$graph_return['valid_options'][] = "total";
+#$graph_return['valid_options'][] = "trend";
+$graph_return['valid_options'][] = "line_graph";
+
 $i = 0;
 if ($width > "500")
 {
@@ -64,7 +69,12 @@ foreach ($rrd_list as $rrd)
 
   if ($i) { $stack="STACK"; }
 
-  $rrd_options .= " AREA:inB".$i."#" . $colour_in . ":'" . $descr . "':$stack";
+  if($vars['line_graph'])
+  {
+    $rrd_options .= " LINE1.25:inB".$i."#" . $colour_in . ":'" . $descr . "'";
+  } else {
+    $rrd_options .= " AREA:inB".$i."#" . $colour_in . ":'" . $descr . "':$stack";
+  }
   $rrd_options .= " GPRINT:inB".$i.":LAST:%6.2lf%s$units";
   $rrd_options .= " GPRINT:inB".$i.":AVERAGE:%6.2lf%s$units";
   $rrd_options .= " GPRINT:inB".$i.":MAX:%6.2lf%s$units";
@@ -73,8 +83,13 @@ foreach ($rrd_list as $rrd)
 
   $rrd_options .= " 'COMMENT:\\n'";
 
-  $rrd_options  .= " 'HRULE:0#" . $colour_out.":".$descr_out."'";
-  $rrd_optionsb .= " 'AREA:outB".$i."_neg#" . $colour_out . "::$stack'";
+  if($vars['line_graph'])
+  {
+    $rrd_options .= " 'LINE1.25:outB".$i."_neg#" . $colour_out . ":" . $descr_out . "'";
+  } else {
+    $rrd_options  .= " 'HRULE:0#" . $colour_out.":".$descr_out."'";
+    $rrd_optionsb .= " 'AREA:outB".$i."_neg#" . $colour_out . "::$stack'";
+  }
   $rrd_options  .= " GPRINT:outB".$i.":LAST:%6.2lf%s$units";
   $rrd_options  .= " GPRINT:outB".$i.":AVERAGE:%6.2lf%s$units";
   $rrd_options  .= " GPRINT:outB".$i.":MAX:%6.2lf%s$units";
