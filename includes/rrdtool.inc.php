@@ -277,4 +277,61 @@ function rrdtool_escape($string, $maxlength = NULL)
   }
 }
 
+/**
+ * Determine useful information about RRD file
+ *
+ * Copyright (C) 2009  Bruno Prémont <bonbons AT linux-vserver.org>
+ *
+ * @file Name of RRD file to analyse
+ * @return Array describing the RRD file
+ *
+ */
+
+function rrdtool_info($file) {
+        $info = array('filename'=>$file);
+
+        $rrd = popen(RRDTOOL.' info '.escapeshellarg($file), 'r');
+        if ($rrd) {
+                while (($s = fgets($rrd)) !== false) {
+                        $p = strpos($s, '=');
+                        if ($p === false)
+                                continue;
+                        $key = trim(substr($s, 0, $p));
+                        $value = trim(substr($s, $p+1));
+                        if (strncmp($key,'ds[', 3) == 0) {
+                                /* DS definition */
+                                $p = strpos($key, ']');
+                                $ds = substr($key, 3, $p-3);
+                                if (!isset($info['DS']))
+                                        $info['DS'] = array();
+                                $ds_key = substr($key, $p+2);
+
+                                if (strpos($ds_key, '[') === false) {
+                                        if (!isset($info['DS']["$ds"]))
+                                                $info['DS']["$ds"] = array();
+                                        $info['DS']["$ds"]["$ds_key"] = rrd_strip_quotes($value);
+                                }
+                        } else if (strncmp($key, 'rra[', 4) == 0) {
+                                /* RRD definition */
+                                $p = strpos($key, ']');
+                                $rra = substr($key, 4, $p-4);
+                                if (!isset($info['RRA']))
+                                        $info['RRA'] = array();
+                                $rra_key = substr($key, $p+2);
+
+                                if (strpos($rra_key, '[') === false) {
+                                        if (!isset($info['RRA']["$rra"]))
+                                                $info['RRA']["$rra"] = array();
+                                        $info['RRA']["$rra"]["$rra_key"] = rrd_strip_quotes($value);
+                                }
+                        } else if (strpos($key, '[') === false) {
+                                $info[$key] = rrd_strip_quotes($value);
+                        }
+                }
+                pclose($rrd);
+        }
+        return $info;
+}
+
+
 ?>

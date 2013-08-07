@@ -385,57 +385,6 @@ function rrd_strip_quotes($str) {
 		return $str;
 }
 
-/**
- * Determine useful information about RRD file
- * @file Name of RRD file to analyse
- * @return Array describing the RRD file
- */
-function rrd_info($file) {
-	$info = array('filename'=>$file);
-
-	$rrd = popen(RRDTOOL.' info '.escapeshellarg($file), 'r');
-	if ($rrd) {
-		while (($s = fgets($rrd)) !== false) {
-			$p = strpos($s, '=');
-			if ($p === false)
-				continue;
-			$key = trim(substr($s, 0, $p));
-			$value = trim(substr($s, $p+1));
-			if (strncmp($key,'ds[', 3) == 0) {
-				/* DS definition */
-				$p = strpos($key, ']');
-				$ds = substr($key, 3, $p-3);
-				if (!isset($info['DS']))
-					$info['DS'] = array();
-				$ds_key = substr($key, $p+2);
-
-				if (strpos($ds_key, '[') === false) {
-					if (!isset($info['DS']["$ds"]))
-						$info['DS']["$ds"] = array();
-					$info['DS']["$ds"]["$ds_key"] = rrd_strip_quotes($value);
-				}
-			} else if (strncmp($key, 'rra[', 4) == 0) {
-				/* RRD definition */
-				$p = strpos($key, ']');
-				$rra = substr($key, 4, $p-4);
-				if (!isset($info['RRA']))
-					$info['RRA'] = array();
-				$rra_key = substr($key, $p+2);
-
-				if (strpos($rra_key, '[') === false) {
-					if (!isset($info['RRA']["$rra"]))
-						$info['RRA']["$rra"] = array();
-					$info['RRA']["$rra"]["$rra_key"] = rrd_strip_quotes($value);
-				}
-			} else if (strpos($key, '[') === false) {
-				$info[$key] = rrd_strip_quotes($value);
-			}
-		}
-		pclose($rrd);
-	}
-	return $info;
-}
-
 function rrd_get_color($code, $line = true) {
 	global $config;
 	$name = ($line ? 'f_' : 'h_').$code;
@@ -477,7 +426,7 @@ function collectd_draw_rrd($host, $plugin, $pinst = null, $type, $tinst = null, 
 	$rrdfile = sprintf('%s/%s%s%s/%s%s%s', $host, $plugin, is_null($pinst) ? '' : '-', $pinst, $type, is_null($tinst) ? '' : '-', $tinst);
 	foreach ($config['datadirs'] as $datadir)
 		if (is_file($datadir.'/'.$rrdfile.'.rrd')) {
-			$rrdinfo = rrd_info($datadir.'/'.$rrdfile.'.rrd');
+			$rrdinfo = rrdtool_info($datadir.'/'.$rrdfile.'.rrd');
 			if (isset($rrdinfo['RRA']) && is_array($rrdinfo['RRA']))
 				break;
 			else
@@ -593,7 +542,7 @@ function collectd_draw_generic($timespan, $host, $plugin, $pinst = null, $type, 
 
 	$rrd_file = sprintf('%s/%s%s%s/%s%s%s', $host, $plugin, is_null($pinst) ? '' : '-', $pinst, $type, is_null($tinst) ? '' : '-', $tinst);
 	#$rrd_cmd  = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height'], '-t', $rrd_file);
-        $rrd_cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+        #$rrd_cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
         $rrd_cmd = array('-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
 
         if($config['rrd_width'] <= "300") {
@@ -613,7 +562,8 @@ function collectd_draw_generic($timespan, $host, $plugin, $pinst = null, $type, 
 		$rrd_args = str_replace('{file}', $file, $rrd_args);
 
 		$rrdgraph = array_merge($rrd_cmd, $rrd_args);
-		$cmd = RRDTOOL; $cmd = '';
+		#$cmd = RRDTOOL;
+                $cmd = '';
 		for ($i = 1; $i < count($rrdgraph); $i++)
 			$cmd .= ' '.escapeshellarg($rrdgraph[$i]);
 
@@ -649,7 +599,7 @@ function collectd_draw_meta_stack(&$opts, &$sources) {
 #	$cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height'],
 #                    '-t', $opts['title']);
 
-        $cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
+        #$cmd = array(RRDTOOL, 'graph', '-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
 
         $cmd = array('-', '-E', '-a', 'PNG', '-w', $config['rrd_width'], '-h', $config['rrd_height']);
 
@@ -718,6 +668,7 @@ function collectd_draw_meta_stack(&$opts, &$sources) {
 	}
 
 	$rrdcmd = RRDTOOL;
+        $rrdcmd = "";
 	for ($i = 1; $i < count($cmd); $i++)
 		$rrdcmd .= ' '.escapeshellarg($cmd[$i]);
 	return $rrdcmd;
