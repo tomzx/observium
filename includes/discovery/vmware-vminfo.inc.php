@@ -29,6 +29,34 @@ if (($device['os'] == "vmware") || ($device['os'] == "linux"))
    */
 
   $oids = snmp_walk($device, "VMWARE-VMINFO-MIB::vmwVmVMID", "-Osqnv", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
+  
+  /*
+   * Newer VMware versions don't populate VMWARE-VMINFO-MIB::vmwVmVMID
+   * anymore.  It has been deprecated and officially
+   * VMWARE-VMINFO-MIB::vmwVmUUID should be used as the identifier.  Lets
+   * use that to get the old indexes back.
+   */
+  if ($oids == "")
+  {
+    $indexes = array();
+    
+    $uuids = snmp_walk($device, "VMWARE-VMINFO-MIB::vmwVmUUID", "-Osqn", "+VMWARE-ROOT-MIB:VMWARE-VMINFO-MIB", mib_dirs('vmware'));
+    
+    if ($uuids != "")
+    {
+      $uuids = explode("\n", $uuids);
+      
+      foreach ($uuids as $uuid)
+      {
+        list($oid,) = explode(" ", $uuid, 2);
+        $index = array_pop(explode(".", $oid));
+        $indexes[] = $index;
+      }
+      
+      $oids = implode("\n", $indexes);
+    }
+  }
+     
   if ($oids != "")
   {
     $oids = explode("\n", $oids);
