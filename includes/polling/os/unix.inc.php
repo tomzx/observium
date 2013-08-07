@@ -42,6 +42,14 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
   }
 
 }
+elseif ($device['os'] == "aix")
+{
+  list($hardware,,$os_detail,) = explode("\n", $poll_device['sysDescr']);
+  list(,$version) = explode(":", $os_detail);
+
+  echo("\n\nHardware: $hardware, Version: $version\n\n");
+
+}
 elseif ($device['os'] == "freebsd")
 {
   preg_match('/FreeBSD ([\d\.]+-[\w\d-]+)/i', $poll_device['sysDescr'], $matches);
