@@ -2,7 +2,9 @@
 
 // EQLMEMBER-MIB
 
-if ($device['os'] == "equallogic")
+$eqlgrpmemid = get_dev_attrib($device, 'eqlgrpmemid');
+
+if ($device['os'] == "equallogic" && (isset($eqlgrpmemid)))
 {
   echo("EQLMEMBER-MIB ");
   $oids = snmpwalk_cache_oid($device, "eqlMemberHealthDetailsFanTable", array(), "EQLMEMBER-MIB", mib_dirs("equallogic") );
@@ -21,18 +23,24 @@ if ($device['os'] == "equallogic")
 
   if (is_array($oids))
   {
+    if ($debug) { print_r($oids); }
     foreach ($oids as $index => $entry)
     {
-      $numindex = str_replace($sensorname, $sensorid, $index);
-      $entry['oid'] = ".1.3.6.1.4.1.12740.2.1.7.1.3.".$numindex;
-      if ($entry['eqlMemberHealthDetailsFanValue'] <> 0) {
-        discover_sensor($valid['sensor'], 'fanspeed', $device, $entry['oid'], $numindex, 'equallogic',
-          $entry['eqlMemberHealthDetailsFanName'], '1', '1',
-          $entry['eqlMemberHealthDetailsFanLowCriticalThreshold'],
-          $entry['eqlMemberHealthDetailsFanLowWarningThreshold'],
-          $entry['eqlMemberHealthDetailsFanHighCriticalThreshold'],
-          $entry['eqlMemberHealthDetailsFanHighWarningThreshold'],
-          $entry['eqlMemberHealthDetailsFanValue']);
+      # EQLMEMBER-MIB returns sensors for all members. only process sensors that match our member id
+      if (strstr($index, $eqlgrpmemid))
+      {
+        $numindex = str_replace($sensorname, $sensorid, $index);
+        $entry['oid'] = ".1.3.6.1.4.1.12740.2.1.7.1.3.".$numindex;
+        if ($entry['eqlMemberHealthDetailsFanValue'] <> 0)
+          {
+          discover_sensor($valid['sensor'], 'fanspeed', $device, $entry['oid'], $numindex, 'equallogic',
+            $entry['eqlMemberHealthDetailsFanName'], '1', '1',
+            $entry['eqlMemberHealthDetailsFanLowCriticalThreshold'],
+            $entry['eqlMemberHealthDetailsFanLowWarningThreshold'],
+            $entry['eqlMemberHealthDetailsFanHighCriticalThreshold'],
+            $entry['eqlMemberHealthDetailsFanHighWarningThreshold'],
+            $entry['eqlMemberHealthDetailsFanValue']);
+        }
       }
     }
   }
