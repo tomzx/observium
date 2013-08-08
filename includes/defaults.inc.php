@@ -295,6 +295,13 @@ $config['frontpage']['minigraphs']['ids']          = "";           // Comma and 
 $config['frontpage']['minigraphs']['legend']       = false;        // Enable/Disable the legend on custom mini graph view
 $config['frontpage']['minigraphs']['title']        = "Mini Graphs Overview";
 
+// Custom micro graphs
+//$config['frontpage']['micrographs']['GROUPNAME']['ids']        = "";             // Comma and semicolon separated array list, first the device id or graph id followed by the image type and the text header you want (example: "2,device_processor,CPU Usage;10,diskio_bits,IOPS"); text header may be empty
+//$config['frontpage']['micrographs']['GROUPNAME']['legend']     = false;          // Enable/Disable the legend on custom micro graph view; not used unless you make the size quite large
+//$config['frontpage']['micrographs']['GROUPNAME']['title']      = "GROUP TITLE";  // may be empty string
+$config['frontpage']['micrograph_settings']['width']           = 125;
+$config['frontpage']['micrograph_settings']['height']          = 30;
+
 // Frontpage order you can use: status_summary, map, device_status_boxes, overall_traffic, custom_traffic, minigraphs, syslog, eventlog
 $config['frontpage']['order']           = array('status_summary', 'map', 'device_status_boxes', 'device_status', 'eventlog');
 
