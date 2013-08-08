@@ -950,7 +950,7 @@ function is_port_valid($port, $device)
 {
   global $config, $debug;
 
-  $valie = TRUE;
+  $valid = TRUE;
 
   if (strstr($port['ifDescr'], "Virtual") && FALSE)
   {
