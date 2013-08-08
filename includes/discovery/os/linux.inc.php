@@ -24,6 +24,7 @@ if (!$os)
     elseif (preg_match("/Cisco Small Business/", $sysDescr)) { $os = "ciscosmblinux"; }
     elseif (strpos($entPhysicalMfgName, "QNAP") !== FALSE) { $os = "qnap"; }
     elseif (strpos($sysObjectId, ".1.3.6.1.4.1.3375.2.1.3.4.") !== FALSE) { $os = "f5"; }
+    elseif (strstr($sysObjectId, ".1.3.6.1.4.1.10002.1")) { $os = "airos"; }
     elseif (is_numeric(trim(snmp_get($device,"roomTemp.0", "-OqvU", "CAREL-ug40cdz-MIB")))) { $os = "pcoweb"; }
     elseif (strpos(trim(snmp_get($device, "hrSystemInitialLoadParameters.0", "-Osqnv")), "syno_hw_version") !== FALSE) { $os = "dsm"; }
     elseif (strpos(trim(snmp_get($device, "dot11manufacturerName.5", "-Osqnv", "IEEE802dot11-MIB")), "Ubiquiti") !== FALSE) { $os = "airos"; }
