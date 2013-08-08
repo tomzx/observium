@@ -42,6 +42,9 @@
 	    case "minigraphs":
 		show_minigraphs($config);
 		break;
+	    case "micrographs":
+		show_micrographs($config);
+		break;
 	}
     }
 
@@ -221,11 +224,11 @@ function show_map($config)
       {
         $minigraphs = explode(";", $config['frontpage']['minigraphs']['ids']);
         $legend = (($config['frontpage']['minigraphs']['legend'] == false) ? "no" : "yes");
-        echo("<div class=\"row-fluid\">");
-        echo("    <div class=\"span12 \">");
+        echo("<div class=\"row-fluid\">\n");
+        echo("    <div class=\"span12\">\n");
         if ($config['frontpage']['minigraphs']['title'])
         {
-          echo("        <h3 class=\"bill\">".$config['frontpage']['minigraphs']['title']."</h3>");
+          echo("        <h3 class=\"bill\">".$config['frontpage']['minigraphs']['title']."</h3>\n");
         }
 
         foreach($minigraphs as $graph)
@@ -233,19 +236,72 @@ function show_map($config)
           list($device, $type, $header) = explode(",", $graph, 3);
           if (strpos($type, "device") === false)
           {
-            $links = generate_url(array("page" => "graphs", "type" => $type, "id" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
-            echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
+            $links = generate_url(array("page" => "graphs", "type" => $type, "id" => $device));
+	    //, "from" => $config['time']['day'], "to" => $config['time']['now']));
+            echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;id=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>\n");
           } else {
-            $links = generate_url(array("page" => "graphs", "type" => $type, "device" => $device, "from" => $config['time']['day'], "to" => $config['time']['now']));
-            echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>");
+            $links = generate_url(array("page" => "graphs", "type" => $type, "device" => $device));
+	    //, "from" => $config['time']['day'], "to" => $config['time']['now']));
+            echo("        <div class=\"pull-left\"><p style=\"text-align: center; margin-bottom: 0px;\"><strong>".$header."</strong></p><a href=\"".$links."\"><img src=\"graph.php?type=".$type."&amp;device=".$device."&amp;legend=".$legend."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=215&amp;height=100\"/></a></div>\n");
           }
         }
         unset($links);
-        echo("    </div>");
-        echo("</div>");
+        echo("    </div>\n");
+        echo("</div>\n");
       }
     } // End show_minigraphs
 
+    function show_micrographs($config)
+    {
+      echo("<!-- Show custom micrographs -->\n");
+      if ($_SESSION['userlevel'] >= '5')
+      {
+        $width = $config['frontpage']['micrograph_settings']['width'];
+        $height = $config['frontpage']['micrograph_settings']['height'];
+        echo("<div class=\"row-fluid\">\n");
+        echo("  <div class=\"span12\">\n");
+        echo("    <table class=\"table table-bordered table-condensed-more table-rounded\">\n");
+        echo("      <tbody>\n");
+        foreach ($config['frontpage']['micrographs'] as $row)
+        {
+          $micrographs = explode(";", $row['ids']);
+          $legend = (($row['legend'] == false) ? "no" : "yes");
+          echo("        <tr>\n");
+          if ($row['title'])
+          {
+            echo("          <th style=\"vertical-align: middle;\">".$row['title']."</th>\n");
+          }
+
+          echo("          <td>");
+          foreach($micrographs as $graph)
+          {
+            list($device, $type, $header) = explode(",", $graph, 3);
+            if (strpos($type, "device") === false)
+            {
+              $which = "id";
+            } else {
+	      $which = "device";
+	    }
+
+            $links = generate_url(array("page" => "graphs", "type" => $type, $which => $device));
+            echo("<div class=\"pull-left\">");
+            if ($header)
+            {
+              echo("<p style=\"text-align: center; margin-bottom: 0px;\">".$header."</p>");
+            }
+            echo("<a href=\"".$links."\" style=\"margin-left: 5px\"><img src=\"graph.php?type=".$type."&amp;".$which."=".$device."&amp;legend=".$legend."&amp;width=".$width."&amp;height=".$height."\"/></a>");
+            echo("</div>");
+          }
+          unset($links);
+          echo("          </td>\n");
+          echo("        </tr>\n");
+        }
+        echo("      </tbody>\n");
+        echo("    </table>\n");
+        echo("  </div>\n");
+        echo("</div>\n");
+      }
+    } // End show_micrographs
 
     function show_status($config)
     {
@@ -261,11 +317,11 @@ function show_map($config)
     function show_status_boxes($config)
     {
       // Show Status Boxes
-      echo("<div class=\"row-fluid\">");
-      echo("    <div class=\"span12\">");
+      echo("<div class=\"row-fluid\">\n");
+      echo("    <div class=\"span12\">\n");
       print_status_boxes($config['frontpage']['device_status']);
-      echo("    </div>");
-      echo("</div>");
+      echo("    </div>\n");
+      echo("</div>\n");
     } // End show_status_boxes
 
 
