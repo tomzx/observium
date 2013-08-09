@@ -84,7 +84,7 @@ if ($port_details)
   echo(generate_port_link($port, "<img src='graph.php?type=port_errors&amp;id=".$port['port_id']."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=100&amp;height=20&amp;legend=no'>"));
 }
 
-echo('</td><td width=120 class="small" nowrap>');
+echo('</td><td width=120 nowrap>');
 
 if ($port['ifOperStatus'] == "up")
 {
@@ -99,10 +99,10 @@ if ($port['ifOperStatus'] == "up")
   $pkts_out_icon  = 'icon-circle-arrow-right';
   $pkts_out_style = ($port['ifOutUcastPkts_rate'] == 0) ? '' : 'style="color: #AC5C35"';
 
-  echo("<i class='$in_icon' $in_style></i>  <span $in_style>" . formatRates($port['in_rate'])  . "</span><br />
-        <i class='$out_icon' $out_style></i> <span $out_style>". formatRates($port['out_rate']) . "</span><br />
-        <i class='$pkts_in_icon' $pkts_in_style></i>  <span $pkts_in_style>" . format_bi($port['ifInUcastPkts_rate']) ."pps</span><br />
-        <i class='$pkts_out_icon' $pkts_out_style></i> <span $pkts_out_style>". format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
+  echo("<i class='$in_icon' $in_style></i>  <span class='small' $in_style>" . formatRates($port['in_rate'])  . "</span><br />
+        <i class='$out_icon' $out_style></i> <span class='small' $out_style>". formatRates($port['out_rate']) . "</span><br />
+        <i class='$pkts_in_icon' $pkts_in_style></i>  <span class='small' $pkts_in_style>" . format_bi($port['ifInUcastPkts_rate']) ."pps</span><br />
+        <i class='$pkts_out_icon' $pkts_out_style></i> <span class='small' $pkts_out_style>". format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
 }
 
 echo("</td><td width=75>");
