@@ -90,45 +90,19 @@ if ($port['ifOperStatus'] == "up")
 {
   $port['in_rate'] = $port['ifInOctets_rate'] * 8;
   $port['out_rate'] = $port['ifOutOctets_rate'] * 8;
-  if ($port['in_rate'] == 0)
-  {
-    $in_style = '';
-    $in_icon  = 'oicon-arrow-grey_left';
-  } else {
-    $in_style = 'style="color: ' . percent_colour(round($port['in_rate']/$port['ifSpeed']*100)) . '"';
-    $in_icon  = 'oicon-arrow_left';
-  }
-  if ($port['out_rate'] == 0)
-  {
-    $out_style = '';
-    $out_icon  = 'oicon-arrow-grey_right';
-  } else {
-    $out_style = 'style="color: ' . percent_colour(round($port['out_rate']/$port['ifSpeed']*100)) . '"';
-    $out_icon  = 'oicon-arrow_right';
-  }
-  if ($port['ifInUcastPkts_rate'] == 0)
-  {
-    $pkts_in_style = '';
-    $pkts_in_icon  = 'oicon-arrow-grey_left';
-  } else {
-    $pkts_in_style = 'style="color: #1489CC"';
-    $pkts_in_icon  = 'oicon-arrow-blue_left';
-  }
-  if ($port['ifOutUcastPkts_rate'] == 0)
-  {
-    $pkts_out_style = '';
-    $pkts_out_icon  = 'oicon-arrow-grey_right';
-  } else {
-    $pkts_out_style = 'style="color: #1489CC"';
-    $pkts_out_icon  = 'oicon-arrow-blue_right';
-  }
+  $in_icon  = 'icon-circle-arrow-left';
+  $in_style = ($port['in_rate'] == 0) ? '' : 'style="color: ' . percent_colour(round($port['in_rate']/$port['ifSpeed']*100)) . '"';
+  $out_icon  = 'icon-circle-arrow-right';
+  $out_style = ($port['out_rate'] == 0) ? '' : 'style="color: ' . percent_colour(round($port['out_rate']/$port['ifSpeed']*100)) . '"';
+  $pkts_in_icon  = 'icon-circle-arrow-left';
+  $pkts_in_style = ($port['ifInUcastPkts_rate'] == 0) ? '' : 'style="color: #6B5DBB"';
+  $pkts_out_icon  = 'icon-circle-arrow-right';
+  $pkts_out_style = ($port['ifOutUcastPkts_rate'] == 0) ? '' : 'style="color: #AC5C35"';
 
-  $pkts_in_icon  = ($port['ifInUcastPkts_rate']  == 0) ? 'oicon-arrow-grey_left'  : 'oicon-arrow-blue_left';
-  $pkts_out_icon = ($port['ifOutUcastPkts_rate'] == 0) ? 'oicon-arrow-grey_right' : 'oicon-arrow-blue_right';
-  echo("<i class='$in_icon'></i>  <span $in_style>" . formatRates($port['in_rate'])  . "</span><br />
-        <i class='$out_icon'></i> <span $out_style>". formatRates($port['out_rate']) . "</span><br />
-        <i class='$pkts_in_icon'></i>  <span $pkts_in_style>" . format_bi($port['ifInUcastPkts_rate']) ."pps</span><br />
-        <i class='$pkts_out_icon'></i> <span $pkts_out_style>". format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
+  echo("<i class='$in_icon' $in_style></i>  <span $in_style>" . formatRates($port['in_rate'])  . "</span><br />
+        <i class='$out_icon' $out_style></i> <span $out_style>". formatRates($port['out_rate']) . "</span><br />
+        <i class='$pkts_in_icon' $pkts_in_style></i>  <span $pkts_in_style>" . format_bi($port['ifInUcastPkts_rate']) ."pps</span><br />
+        <i class='$pkts_out_icon' $pkts_out_style></i> <span $pkts_out_style>". format_bi($port['ifOutUcastPkts_rate'])."pps</span>");
 }
 
 echo("</td><td width=75>");
@@ -140,62 +114,92 @@ if ($port['ifDuplex'] != "unknown") { echo("<span class=small>" . $port['ifDuple
 if ($device['os'] == "ios" || $device['os'] == "iosxe")
 {
   if ($port['ifTrunk']) {
+    if ($port['ifVlan']) {
+      // Native VLAN
+      $native_state = dbFetchCell('SELECT `state` FROM `ports_vlans` WHERE `port_id` = ? AND `device_id` = ?', array($port['port_id'], $device['device_id']));
+      $native_name = dbFetchCell('SELECT `vlan_name` FROM vlans WHERE `device_id` = ? AND `vlan_vlan` = ?;', array($device['device_id'], $port['ifVlan']));
+      switch ($vlan_state)
+      {
+        case 'blocking':   $class = 'text-error'; break;
+        case 'forwarding': $class = 'text-success';  break;
+        default:           $class = 'muted';
+      }
+      if (empty($native_name)) {$native_name = 'VLAN'.str_pad($port['ifVlan'], 4, '0', STR_PAD_LEFT); }
+      $native_tooltip = 'NATIVE: <strong class='.$class.'>'.$port['ifVlan'].' ['.$native_name.']</strong><br />';
+    }
+
     $vlans = dbFetchRows('SELECT * FROM `ports_vlans` AS PV
                          LEFT JOIN vlans AS V ON PV.`vlan` = V.`vlan_vlan` AND PV.`device_id` = V.`device_id`
                          WHERE PV.`port_id` = ? AND PV.`device_id` = ? ORDER BY PV.`vlan`;', array($port['port_id'], $device['device_id']));
     $vlans_count = count($vlans);
-    echo('<p class="small"><a rel="tooltip" data-tooltip="<div class=\'small\' style=\'max-width: 320px; text-align: justify;\'>');
-    $vlan_prev = 0;
-    foreach ($vlans as $vlan)
+    $rel = ($vlans_count || $native_tooltip) ? 'tooltip' : ''; // Hide tooltip for empty
+    echo('<p class="small"><a rel="'.$rel.'" data-tooltip="<div class=\'small\' style=\'max-width: 320px; text-align: justify;\'>'.$native_tooltip);
+    if ($vlans_count)
     {
-      if ($vlans_count > 20)
+      echo('ALLOWED: ');
+      $vlan_prev = 0;
+      foreach ($vlans as $vlan)
       {
-        $last_char = $vlans_aggr[strlen($vlans_aggr)-1];
-        // Aggregate VLANs
-        if ($vlan_prev == 0)
+        if ($vlans_count > 20)
         {
-          $vlans_aggr = '<strong>'.$vlan['vlan'];
-        } elseif (is_numeric($last_char))
-        {
-          $vlans_aggr .= ($vlan['vlan']-1 == $vlan_prev) ? '-' : ', '.$vlan['vlan'];
-        } elseif ($last_char == '-')
-        {
-          if ($vlan['vlan']-1 == $vlan_prev)
+          // Aggregate VLANs
+          $last_char = $vlans_aggr[strlen($vlans_aggr)-1];
+          if ($vlan_prev == 0)
           {
-            $vlan_prev = $vlan['vlan'];
-            continue;
+            $vlans_aggr = '<strong>'.$vlan['vlan'];
+          } elseif (is_numeric($last_char))
+          {
+            $vlans_aggr .= ($vlan['vlan']-1 == $vlan_prev) ? '-' : ', '.$vlan['vlan'];
+          } elseif ($last_char == '-')
+          {
+            if ($vlan['vlan']-1 == $vlan_prev)
+            {
+              $vlan_prev = $vlan['vlan'];
+              continue;
+            } else {
+              $vlans_aggr .= $vlan_prev.', '.$vlan['vlan'];
+            }
           } else {
-            $vlans_aggr .= $vlan_prev.', '.$vlan['vlan'];
+            $vlans_aggr .= $vlan['vlan'];
           }
+          $vlan_prev = $vlan['vlan'];
         } else {
-          $vlans_aggr .= $vlan['vlan'];
+          // List VLANs
+          switch ($vlan['state'])
+          {
+            case 'blocking':   $class = 'text-error'; break;
+            case 'forwarding': $class = 'text-success';  break;
+            default:           $class = 'muted';
+          }
+          if (empty($vlan['vlan_name'])) { 'VLAN'.str_pad($vlan['vlan'], 4, '0', STR_PAD_LEFT); }
+          echo("<strong class=".$class.">".$vlan['vlan'] ." [".$vlan['vlan_name']."]</strong><br />");
         }
-        $vlan_prev = $vlan['vlan'];
-      } else {
-        if     ($vlan['state'] == 'blocking')   { $class = 'text-error'; }
-        elseif ($vlan['state'] == 'forwarding') { $class = 'text-success'; }
-        else                                    { $class = 'muted'; }
-        if (empty($vlan['vlan_name'])) { $vlan['vlan_name'] = 'VLAN '.$vlan['vlan']; }
-        echo("<strong class=".$class.">".$vlan['vlan'] ." [".$vlan['vlan_name']."]</strong><br />");
       }
-    }
-    if ($vlan_prev)
-    {
-      if ($last_char == '-')
+      if ($vlan_prev)
       {
-        $vlans_aggr = substr($vlans_aggr, 0, -1);
-      } elseif ($last_char == ' ') {
-        $vlans_aggr = substr($vlans_aggr, 0, -2);
+        // End aggregate VLANs
+        $last_char = $vlans_aggr[strlen($vlans_aggr)-1];
+        if ($last_char == '-')
+        {
+          $vlans_aggr = substr($vlans_aggr, 0, -1);
+        } elseif ($last_char == ' ') {
+          $vlans_aggr = substr($vlans_aggr, 0, -2);
+        }
+        echo($vlans_aggr.'</strong>');
       }
-      echo($vlans_aggr.'</strong>');
     }
     echo('</div>">'.$port['ifTrunk'].'</a></p>');
   } elseif ($port['ifVlan']) {
     $vlan_state = dbFetchCell('SELECT `state` FROM `ports_vlans` WHERE `port_id` = ? AND `device_id` = ?', array($port['port_id'], $device['device_id']));
-    if     ($vlan_state == 'blocking')   { $class = 'text-error'; }
-    elseif ($vlan_state == 'forwarding') { $class = 'text-success'; }
-    else                                 { $class = 'muted'; }
-    echo('<p class="small '.$class.'">VLAN ' . $port['ifVlan'] . '</p>');
+    $vlan_name = dbFetchCell('SELECT `vlan_name` FROM vlans WHERE `device_id` = ? AND `vlan_vlan` = ?;', array($device['device_id'], $port['ifVlan']));
+    switch ($vlan_state)
+    {
+      case 'blocking':   $class = 'text-error'; break;
+      case 'forwarding': $class = 'text-success';  break;
+      default:           $class = 'muted';
+    }
+    $rel = ($vlan_name) ? 'tooltip' : ''; // Hide tooltip for empty
+    echo('<p rel="'.$rel.'" class="small '.$class.'"  data-tooltip="<strong class=\'small '.$class.'\'>'.$port['ifVlan'].' ['.$vlan_name.']</strong>">VLAN ' . $port['ifVlan'] . '</p>');
   } elseif ($port['ifVrf']) {
     $vrf = dbFetchRow("SELECT * FROM vrfs WHERE vrf_id = ?", array($port['ifVrf']));
     echo('<p class="small text-warning" rel="tooltip" data-tooltip="VRF">' . $vrf['vrf_name'] . "</p>");
