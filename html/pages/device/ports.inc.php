@@ -94,7 +94,7 @@ if (isset($vars['view']) && ($vars['view'] == 'basic' || $vars['view'] == 'detai
     $option_all[$option] = TRUE;
   }
   $filter_options['all'] = ($filters_array['all']) ? 'Reset ALL' : 'Hide ALL';
-  
+
   // Generate filted links
   $navbar['options_right']['filters']['text'] = 'Quick Filters';
   foreach($filter_options as $option => $text)
@@ -157,6 +157,7 @@ if ($vars['view'] == 'minigraphs')
   echo('  <thead>');
   echo('<tr>');
 
+  // Define column headers for the table
   $cols = array(
                 'state' => NULL,
                 'BLANK' => NULL,
@@ -167,7 +168,7 @@ if ($vars['view'] == 'minigraphs')
                 'media' => 'Media',
                 'mac' => 'MAC Address',
                 'details' => NULL);
-  
+
   foreach ($cols as $sort => $col)
   {
     if ($col == NULL)
@@ -187,6 +188,7 @@ if ($vars['view'] == 'minigraphs')
 
   $i = "1";
 
+  // Make the port caches available easily to this code.
   global $port_cache, $port_index_cache;
 
   $sql  = "SELECT *, `ports`.`port_id` as `port_id`";

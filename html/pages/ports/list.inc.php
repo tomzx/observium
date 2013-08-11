@@ -50,10 +50,10 @@ foreach ($ports as $port)
 #  if (port_permitted($port['port_id'], $port['device_id']))
 #  {
 
-    if ($port['ifAdminStatus'] == "down") { $ports_disabled++; $table_tab_colour = "#aaaaaa";
-    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down") { $ports_down++; $table_tab_colour = "#cc0000";
-    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $ports_down++; $table_tab_colour = "#ff6600";
-    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up") { $ports_up++; $table_tab_colour = "#194B7F"; }
+#    if ($port['ifAdminStatus'] == "down") { $ports_disabled++; $table_tab_colour = "#aaaaaa";
+#    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down") { $ports_down++; $table_tab_colour = "#cc0000";
+#    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $ports_down++; $table_tab_colour = "#ff6600";
+#    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up") { $ports_up++; $table_tab_colour = "#194B7F"; }
     $ports_total++;
 
     humanize_port($port);
@@ -69,25 +69,27 @@ foreach ($ports as $port)
     $port['pps_in'] = format_si($port['ifInUcastPkts_rate'])."pps";
     $port['pps_out'] = format_si($port['ifOutUcastPkts_rate'])."pps";
 
-    echo("<tr class='ports'>
+    echo "<tr class='ports'>
           <td style='background-color: ".$table_tab_colour.";'></td>
           <td></td>
           <td><span class=entity>".generate_device_link($port, shorthost($port['hostname'], "20"))."</span><br />
               <span class=em>".truncate($port['location'],32,"")."</span></td>
 
           <td><span class=entity>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
-              <span class=em>".truncate($port['ifAlias'], 50, '')."</span></td>
-          <td><span class=green>&darr; ".$port['bps_in']."<br />
-                        <span class=blue>&uarr; ".$port['bps_out']."<br />
+              <span class=em>".truncate($port['ifAlias'], 50, '')."</span></td>".
 
-          <td><span class=green>".$port['ifInOctets_perc']."%<br />
-                        <span class=blue>".$port['ifOutOctets_perc']."%<br />
+    '<td> <i class="icon-circle-arrow-down" style="',$port['bps_in_style'],'"></i>  <span class="small" style="',$port['bps_in_style'],'">' , formatRates($port['in_rate'])  , '</span><br />'.
+       '<i class="icon-circle-arrow-up" style="',$port['bps_out_style'],'"></i> <span class="small" style="',$port['bps_out_style'],'">' , formatRates($port['out_rate']) , '</span><br /></td>'.
 
-          <td><span class=purple>&darr; ".$port['pps_in']."<br />
-                        <span class=orange>&uarr; ".$port['pps_out']."<br />
-          <td>".$port['human_speed']."<br />".$port['ifMtu']."</td>
+    '<td> <i class="icon-circle-arrow-down" style="',$port['bps_in_style'],'"></i>  <span class="small" style="',$port['bps_in_style'],'">' , $port['ifInOctets_perc']  , '%</span><br />'.
+       '<i class="icon-circle-arrow-up" style="',$port['bps_out_style'],'"></i> <span class="small" style="',$port['bps_out_style'],'">' ,  $port['ifOutOctets_perc'], '%</span><br /></td>'.
+
+       '<td><i class="icon-circle-arrow-down" style="',$port['pps_in_style'],'"></i>  <span class="small" style="',$port['pps_in_style'],'">' , format_bi($port['ifInUcastPkts_rate']) ,'pps</span><br />',
+       '<i class="icon-circle-arrow-up" style="',$port['pps_out_style'],'"></i> <span class="small" style="',$port['pps_out_style'],'">' , format_bi($port['ifOutUcastPkts_rate']),'pps</span></td>',
+
+          "<td>".$port['human_speed']."<br />".$port['ifMtu']."</td>
           <td >".$port['human_type']."<br />".$port['human_mac']."</td>
-        </tr>\n");
+        </tr>\n";
 #  }
 }
 

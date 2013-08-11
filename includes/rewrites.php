@@ -249,6 +249,35 @@ function humanize_port(&$port)
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "testing")        { $port['table_tab_colour'] = "#85004b"; $port['row_class'] = "info";
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up")             { $port['table_tab_colour'] = "#194B7F"; $port['row_class'] = ""; }
 
+  $port['in_rate'] = $port['ifInOctets_rate'] * 8;
+  $port['out_rate'] = $port['ifOutOctets_rate'] * 8;
+
+  // Colour in bps based on speed if > 50, else by UI convention.
+  $in_perc  = round($port['in_rate']/$port['ifSpeed']*100);
+  if($port['in_rate'] == 0)
+  {
+    $port['bps_in_style'] = '';
+  } elseif ($in_perc < '50') {
+    $port['bps_in_style'] = 'color: #008C00;';
+  } else {
+    $port['bps_in_style'] = 'color: ' . percent_colour(round($port['in_rate']/$port['ifSpeed']*100)) .'; ';
+  }
+
+  // Colour out bps based on speed if > 50, else by UI convention.
+  $out_perc  = round($port['out_rate']/$port['ifSpeed']*100);
+  if($port['out_rate'] == 0)
+  {
+    $port['bps_out_style'] = '';
+  } elseif ($out_perc < '50') {
+    $port['bps_out_style'] = 'color: #394182;';
+  } else {
+    $port['bps_out_style'] = 'color: ' . percent_colour(round($port['out_rate']/$port['ifSpeed']*100)) .'; ';
+  }
+
+  // Colour in and out pps based on UI convention
+  $port['pps_in_style'] = ($port['ifInUcastPkts_rate'] == 0) ? '' : 'color: #740074;';
+  $port['pps_out_style'] = ($port['ifOutUcastPkts_rate'] == 0) ? '' : 'color: #FF7400;';
+
   $port['humanized'] = TRUE; /// Set this so we can check it later.
 
 }
