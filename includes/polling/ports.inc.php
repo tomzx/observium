@@ -149,7 +149,7 @@ foreach ($port_stats as $ifIndex => $port)
       #print_r($ports);
     } elseif ($ports[$ifIndex]['deleted'] == "1") {
       dbUpdate(array('deleted' => '0'), 'ports', '`port_id` = ?', array($ports[$ifIndex]['port_id']));
-      log_event("Has been removed mark DELETED from port", $device, 'interface', $ports[$ifIndex]['port_id']);
+      log_event("Port DELETED mark removed", $device, 'interface', $ports[$ifIndex]['port_id']);
       $ports[$ifIndex]['deleted'] = "0";
     }
   } else {
