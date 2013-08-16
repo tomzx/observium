@@ -184,6 +184,14 @@ foreach ($ports as $port)
     $port['state']['poll_time'] = $polled;
     $port['state']['poll_period'] = $polled_period;
 
+    if ($config['debug_port'][$port['port_id']])
+    {
+      $port_debug  = $port['port_id']."|".$polled."|".$polled_period."|".$this_port['ifInOctets']."|".$this_port['ifOutOctets']."|".$this_port['ifHCInOctets']."|".$this_port['ifHCOutOctets'];
+      $port_debug .= "|".formatRates($port['stats']['ifInOctets_rate'])."|".formatRates($port['stats']['ifOutOctets_rate'])."\n";
+      file_put_contents("/tmp/port_debug_".$port['port_id'].".txt", $port_debug, FILE_APPEND);
+      echo("Wrote port debugging data");
+    }
+
     // Copy ifHC[In|Out] values to non-HC if they exist
     // Check if they're greater than zero to work around stupid devices which expose HC counters, but don't populate them. HERPDERP. - adama
     if($device['os'] == "netapp") { $hc_prefixes = array('HC', '64'); } else { $hc_prefixes = array('HC'); }
@@ -198,7 +206,6 @@ foreach ($ports as $port)
           echo(" ".$hc_prefix." $hc, ");
           $this_port['ifIn'.$hc]  = $this_port[$hcin];
           $this_port['ifOut'.$hc] = $this_port[$hcout];
-          $this_port['64counters'] .= " ".$hc_prefix;
         }
       }
     }
@@ -315,14 +322,6 @@ foreach ($ports as $port)
       {
         StatsD::gauge(str_replace(".", "_", $device['hostname']).'.'.'port'.'.'.$port['ifIndex'].'.'.$oid, $this_port[$oid]);
       }
-    }
-
-    if ($config['debug_port'][$port['port_id']])
-    {
-      $port_debug  = $port['port_id']."|".$polled."|".$polled_period."|".$this_port['ifInOctets']."|".$this_port['ifOutOctets'];
-      $port_debug .= "|".formatRates($port['stats']['ifInOctets_rate'])."|".formatRates($port['stats']['ifOutOctets_rate']).$this_port['64counters']."\n";
-      file_put_contents("/tmp/port_debug_".$port['port_id'].".txt", $port_debug, FILE_APPEND);
-      echo("Wrote port debugging data");
     }
 
     $port['stats']['ifInBits_rate'] = round($port['stats']['ifInOctets_rate'] * 8);
