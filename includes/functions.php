@@ -295,7 +295,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
       if (isPingable($host))
       {
         // Test directory exists in /rrd/
-        if (file_exists($config['rrd_dir'].'/'.$host))
+        if (!$config['rrd_override'] && file_exists($config['rrd_dir'].'/'.$host))
         {
           print_error("Directory rrd/$host already exists");
           return 0;
@@ -590,7 +590,7 @@ function createHost($host, $community = NULL, $snmpver, $port = 161, $transport 
     $device_id = dbInsert($device, 'devices');
     if ($device_id)
     {
-      echo("Discovering ".$device['hostname']." (".$device_id.")");
+      print_success("Now discovering ".$device['hostname']." (id = ".$device_id.")");
       $device['device_id'] = $device_id;
       // Discover things we need when linking this to other hosts.
       discover_device($device, $options = array('m' => 'ports'));

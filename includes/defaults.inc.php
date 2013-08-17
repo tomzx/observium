@@ -66,6 +66,8 @@ $config['rrd_rra'] .= "                         RRA:MAX:0.5:6:1440      RRA:MAX:
 
 #$config['rrdcached']    = "unix:/var/run/rrdcached.sock";
 
+$config['rrd_override'] = FALSE;         // Override RRD files if already exists.
+
 // Web Interface Settings
 
 if (isset($_SERVER["SERVER_NAME"]) && isset($_SERVER["SERVER_PORT"]))
@@ -87,7 +89,7 @@ $config['stylesheet']       = "css/styles.css";
 $config['mono_font']        = "DejaVuSansMono";
 $config['favicon']          = "images/observium-icon.png";
 $config['header_color']     = "#1F334E";
-$config['page_refresh']     = "300";  // Refresh the page every xx seconds, 0 to disable
+$config['page_refresh']     = "300";     // Refresh the page every xx seconds, 0 to disable
 $config['front_page']       = "pages/front/default.php";
 $config['page_title_prefix'] = "Observium :: Network Observation and Monitoring";
 $config['timestamp_format'] = 'Y-m-d H:i:s';

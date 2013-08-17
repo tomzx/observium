@@ -48,10 +48,12 @@ if ($_POST['hostname'])
     {
       print_error("Unsupported SNMP Version. There was a dropdown menu, how did you reach this error ?");
     }
+    if ($_POST['ignorerrd'] == 'confirm') { $config['rrd_override'] = TRUE; }
+
     $result = addHost($hostname, $snmpver, $port);
     if ($result)
     {
-      print_message("Device added ($result)");
+      print_success("Device added ($result)");
     }
   } else {
     print_error("You don't have the necessary privileges to add hosts.");
@@ -69,9 +71,15 @@ $pagetitle[] = "Add host";
   <fieldset>
     <legend>Device Properties</legend>
     <div class="control-group">
-      <label class="control-label" for="snmpver">Hostname</label>
+      <label class="control-label" for="hostname">Hostname</label>
       <div class="controls">
-         <input type=text name="hostname" size="32" value="<?php echo($vars['hostname']); ?>"/>
+         <input type="text" name="hostname" size="32" value="<?php echo($vars['hostname']); ?>"/>
+      </div>
+      <label class="control-label" for="ignorerrd">Ignore RRD exist</label>
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name="ignorerrd" value="confirm" <?php if ($config['rrd_override']) { echo('disabled checked'); } ?> />Add device anyway if directory with RRDs already exists
+        </label>
       </div>
     </div>
 
