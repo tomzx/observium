@@ -7,7 +7,7 @@ if ($config['auth_ldap_starttls'] && ($config['auth_ldap_starttls'] == 'optional
   $tls = ldap_start_tls($ds);
   if ($config['auth_ldap_starttls'] == 'require' && $tls == FALSE)
   {
-    print_message("Fatal error: LDAP TLS required but not successfully negotiated:" . ldap_error($ds));
+    print_error("Fatal error: LDAP TLS required but not successfully negotiated [" . ldap_error($ds) . "]");
     exit;
   }
 }
@@ -243,7 +243,7 @@ function ldap_bind_dn($username = "", $password = "")
     if ($debug) { echo("LDAP[Bind][" . $config['auth_ldap_binddn'] . "]\n"); }
     if (!ldap_bind($ds, $config['auth_ldap_binddn'], $config['auth_ldap_bindpw']))
     {
-      print_message("Error binding to LDAP server " . $config['auth_ldap_server']);
+      print_error("Error binding to LDAP server: " . $config['auth_ldap_server']);
       return 1;
     }
   } else {

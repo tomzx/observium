@@ -13,7 +13,7 @@ foreach ($config['auth_radius_server'] as $server)
 
 if (!$success)
 {
-  print_message("Fatal error: Could not connect to configured RADIUS server(s).");
+  print_error("Fatal error: Could not connect to configured RADIUS server(s).");
   exit;
 }
 
