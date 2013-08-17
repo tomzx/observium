@@ -1,5 +1,7 @@
 <?php
 
+echo("Ports : ");
+
 // Build SNMP Cache Array
 
 $port_stats = array();
@@ -34,7 +36,7 @@ foreach ($port_stats as $ifIndex => $port)
     {
       $port_id = dbInsert(array('device_id' => $device['device_id'], 'ifIndex' => $ifIndex, 'ifAlias' => $port['ifAlias'], 'ifDescr' => $port['ifDescr'], 'ifName' => $port['ifName'], 'ifType' => $port['ifType']), 'ports');
       $ports_db[$ifIndex] = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?", array($device['device_id'], $ifIndex));
-      echo("Adding: ".$port['ifName']."(".$ifIndex.")(".$ports_db[$port['ifIndex']]['port_id'].")");
+      echo(" ".$port['ifName']."(".$ifIndex.")[".$ports_db[$ifIndex]['port_id']."]");
     } elseif ($ports_db[$ifIndex]['deleted'] == "1") {
       dbUpdate(array('deleted' => '0'), 'ports', '`port_id` = ?', array($ports_db[$ifIndex]['port_id']));
       $ports_db[$ifIndex]['deleted'] = "0";

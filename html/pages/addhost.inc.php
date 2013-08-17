@@ -53,7 +53,7 @@ if ($_POST['hostname'])
     $result = addHost($hostname, $snmpver, $port);
     if ($result)
     {
-      print_success("Device added ($result)");
+      print_success("Device added (id = $result)");
     }
   } else {
     print_error("You don't have the necessary privileges to add hosts.");

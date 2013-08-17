@@ -43,7 +43,7 @@ if (isset($options['h']))
   if ($options['h'] == "odd")    { $options['n'] = "1"; $options['i'] = "2"; }
   elseif ($options['h'] == "even") { $options['n'] = "0"; $options['i'] = "2"; }
   elseif ($options['h'] == "all")  { $where = " "; $doing = "all"; }
-  elseif ($options['h'] == "new")  { $where = "AND `last_discovered` IS NULL"; $doing = "new"; }
+  elseif ($options['h'] == "new")  { $where = "AND (`last_discovered` IS NULL OR `last_discovered` = '0000-00-00 00:00:00')"; $doing = "new"; }
   elseif ($options['h'])
   {
     if (is_numeric($options['h']))

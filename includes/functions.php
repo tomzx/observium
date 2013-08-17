@@ -284,6 +284,9 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
 {
   global $config;
 
+  // Reset snmp timeout and retries options for speedup device adding
+  unset($config['snmp']['timeout'], $config['snmp']['retries']);
+
   list($hostshort) = explode(".", $host);
   // Test if host exists in database
   if (dbFetchCell("SELECT COUNT(*) FROM `devices` WHERE `hostname` = ?", array($host)) == '0')
@@ -590,13 +593,18 @@ function createHost($host, $community = NULL, $snmpver, $port = 161, $transport 
     $device_id = dbInsert($device, 'devices');
     if ($device_id)
     {
-      print_success("Now discovering ".$device['hostname']." (id = ".$device_id.")");
-      $device['device_id'] = $device_id;
-      // Discover things we need when linking this to other hosts.
-      discover_device($device, $options = array('m' => 'ports'));
-      discover_device($device, $options = array('m' => 'ipv4-addresses'));
-      discover_device($device, $options = array('m' => 'ipv6-addresses'));
-      array_push($GLOBAL['devices'], $device_id);
+      if (isCli())
+      {
+        print_success("Now discovering ".$device['hostname']." (id = ".$device_id.")");
+        $device['device_id'] = $device_id;
+        // Discover things we need when linking this to other hosts.
+        discover_device($device, $options = array('m' => 'ports'));
+        discover_device($device, $options = array('m' => 'ipv4-addresses'));
+        discover_device($device, $options = array('m' => 'ipv6-addresses'));
+        // Reset `last_discovered` for full rediscover device by cron
+        dbUpdate(array('last_discovered' => 'NULL'), 'devices', '`device_id` = ?', array($device_id));
+        array_push($GLOBAL['devices'], $device_id);
+      }
       return($device_id);
     }
     else
