@@ -338,12 +338,12 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
             if (isSNMPable($device))
             {
               $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
-              if (empty($snmphost) or ($snmphost == $host || $hostshort = $host))
+              if (empty($snmphost) || dbFetchCell('SELECT COUNT(*) FROM `devices` WHERE `disabled` = 0 AND `sysName` = ?', array($snmphost)) == '0')
               {
                 $device_id = createHost($host, NULL, $snmpver, $port, $transport, $v3);
                 return $device_id;
               } else {
-                print_error("Given hostname does not match SNMP-read hostname ($snmphost)!");
+                print_error("Already got device with SNMP-read sysName ($snmphost).");
               }
             } else {
               print_error("No reply on credentials " . $v3['authname'] . "/" .  $v3['authlevel'] . " using $snmpver");
@@ -360,12 +360,12 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
             if (isSNMPable($device))
             {
               $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
-              if ($snmphost == "" || ($snmphost && ($snmphost == $host || $hostshort = $host)))
+              if (empty($snmphost) || dbFetchCell('SELECT COUNT(*) FROM `devices` WHERE `disabled` = 0 AND `sysName` = ?', array($snmphost)) == '0')
               {
                 $device_id = createHost($host, $community, $snmpver, $port, $transport);
                 return $device_id;
               } else {
-                print_error("Given hostname does not match SNMP-read hostname ($snmphost)!");
+                print_error("Already got device with SNMP-read sysName ($snmphost).");
               }
             } else {
               print_error("No reply on community $community using $snmpver");
@@ -392,7 +392,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
     }
   } else {
     // found in database
-    print_error("Already got host $host");
+    print_error("Already got device $host");
   }
 
   return 0;
