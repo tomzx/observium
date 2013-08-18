@@ -13,6 +13,13 @@ $active['previous'] = (($vars['tab'] == "previous") ? "active" : "");
 if (empty($active['billing']) && empty($active['24hour']) && empty($active['monthly']) && empty($active['previous'])) { $active['billing'] = "active"; }
 $graph              = "";
 
+$cur_days     = date('d', ($config['time']['now'] - strtotime($datefrom)));
+$total_days   = date('d', (strtotime($dateto)));
+
+$used         = format_bytes_billing($total_data);
+$average      = format_bytes_billing($total_data / $cur_days);
+$estimated    = format_bytes_billing($total_data / $cur_days * $total_days);
+
 if ($bill_data['bill_type'] == "quota") {
   $quota      = $bill_data['bill_quota'];
   $percent    = round(($total_data) / $quota * 100, 2);
@@ -83,7 +90,7 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
 
 ?>
 
-<div class="row-fluid">
+<div class="row-fluid" style="margin-bottom: 15px;">
  <div class="span6 well info_box">
   <div id="title"><i class="oicon-information"></i> Bill Summary</div>
   <div id="content">
@@ -109,6 +116,16 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <td><span class="badge badge-warning"><?php echo($used); ?></span></td>
       </tr>
       <tr>
+        <th>Average</th>
+        <td>:</td>
+        <td><span class="badge"><?php echo($average); ?></span></td>
+      </tr>
+      <tr>
+        <th>Estimated</th>
+        <td>:</td>
+        <td><span class="badge badge-info"><?php echo($estimated); ?></span></td>
+      </tr>
+      <tr>
         <th>Overusage</th>
         <td>:</td>
         <td><?php echo($overuse); ?></td>
@@ -122,10 +139,10 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
   </div>
  </div>
 
- <div class="span6 well info_box">
-  <div id="title"><i class="oicon-information-button"></i> Optional Information</div>
-  <div id="content">
-
+ <div class="span6">
+  <div class="well info_box">
+   <div id="title"><i class="oicon-information-button"></i> Optional Information</div>
+   <div id="content">
     <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 175px;"><i class="icon-user"></i> Customer Reference</th>
@@ -143,13 +160,12 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <td><?php echo($optional['notes']); ?></td>
       </tr>
     </table>
+   </div>
   </div>
- </div>
 
- <div class="span6 well info_box">
-  <div id="title"><i class="oicon-network-ethernet"></i> Ports Information</div>
-  <div id="content">
-
+  <div class="well info_box">
+   <div id="title"><i class="oicon-network-ethernet"></i> Ports Information</div>
+   <div id="content">
     <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 175px;"><i class="icon-random"></i> Number of ports</th>
@@ -162,6 +178,7 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <td><?php echo(format_si($ports_info['capacity'])); ?>bps</td>
       </tr>
     </table>
+   </div>
   </div>
  </div>
 </div>

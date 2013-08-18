@@ -95,6 +95,9 @@ function gbConvert($data) {
 function transferOverview($bill_id, $start, $end) {
   $tot       = array();
   $traf      = array();
+  global $cur_days, $total_days;
+  //$cur_days     = date('d', ($config['time']['now'] - strtotime($datefrom)));
+  //$total_days   = date('d', (strtotime($dateto)));
   $res       = "    <table class=\"table table-striped table-bordered table-hover table-condensed table-rounded\" style=\"margin-bottom: 0px;\">";
   $res      .= "      <thead>";
   $res      .= "        <tr>";
@@ -123,10 +126,20 @@ function transferOverview($bill_id, $start, $end) {
     $res    .= "          <td style=\"text-align: center;\"><span class=\"badge badge\">".$traf['stot']."</span></td>";
     $res    .= "        </tr>";
   }
+  $est['in'] = formatStorage($tot['in'] / $cur_days * $total_days);
+  $est['out']= formatStorage($tot['out'] / $cur_days * $total_days);
+  $est['tot']= formatStorage($tot['tot'] / $cur_days * $total_days);
+  $res      .= "        <tr class=\"alert\">";
+  $res      .= "          <td><strong>Estimated for this billing period</strong></td>";
+  $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-success\"><strong>".$est['in']."</strong></span></td>";
+  $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-info\"><strong>".$est['out']."</strong></span></td>";
+  $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-inverse\"><strong>".$est['tot']."</strong></span></td>";
+  $res      .= "          <td></td>";
+  $res      .= "        </tr>";
   $tot['in'] = formatStorage($tot['in']);
   $tot['out']= formatStorage($tot['out']);
   $tot['tot']= formatStorage($tot['tot']);
-  $res      .= "        <tr>";
+  $res      .= "        <tr class=\"info\">";
   $res      .= "          <td><strong>Total of this billing period</strong></td>";
   $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-success\"><strong>".$tot['in']."</strong></span></td>";
   $res      .= "          <td style=\"text-align: center;\"><span class=\"badge badge-info\"><strong>".$tot['out']."</strong></span></td>";
@@ -144,11 +157,13 @@ elseif ($active['monthly'] == "active") { $graph = $mi; }
 elseif ($active['detail'] == "active") { $graph = transferOverview($bill_id, $unixfrom, $unixto); }
 elseif ($active['previous'] == "active") { $graph = $li; }
 
+/**
+
 ?>
 
-<div class="row-fluid">
-  <div class="span6 well">
-    <h3 class="bill"><i class="icon-tag"></i> Bill summary</h3>
+<div class="row-fluid" style="margin-bottom: 15px;">
+  <div class="span6 well info_box">
+    <div id="title"><i class="oicon-information"></i> Bill Summary</div>
     <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 125px;">Billing period</th>
@@ -180,6 +195,7 @@ elseif ($active['previous'] == "active") { $graph = $li; }
         <td>:</td>
         <td><span class="badge badge-info"><?php echo($estimated); ?></span></td>
       </tr>
+<?php if ($bill_data['bill_type'] == "quota") { ?>
       <tr>
         <th>Overusage</th>
         <td>:</td>
@@ -187,12 +203,16 @@ elseif ($active['previous'] == "active") { $graph = $li; }
       </tr>
       <tr>
         <td colspan="3">
-          <div class="progress progress-<?php echo($perc['BG']); ?>  active" style="margin-bottom: 0px;"><div class="bar" style="text-align: middle; width:<?php echo($perc['width']); ?>%;"><?php echo($percent); ?>%</div></div>
+          <?php $background = get_percentage_colours($percent); ?>
+          <?php echo(print_percentage_bar(400, 20, $percent, $percent.'%', "ffffff", $background['left'], 100-$percent."%", "ffffff", $background['right'])); ?>
         </td>
+      </tr>
+<?php } ?>
     </table>
   </div>
-  <div class="span6 well">
-    <h3 class="bill"><i class="icon-tags"></i> Optional information</h3>
+  <div class="span6">
+   <div class="well info_box">
+    <div id="title"><i class="oicon-information-button"></i> Optional information</div>
     <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 175px;"><i class="icon-user"></i> Customer Reference</th>
@@ -210,7 +230,9 @@ elseif ($active['previous'] == "active") { $graph = $li; }
         <td><?php echo($optional['notes']); ?></td>
       </tr>
     </table>
-    <h3 class="bill"><i class="icon-tags"></i> Ports information</h3>
+   </div>
+   <div class="well info_box">
+    <div id="title"><i class="oicon-network-ethernet"></i> Ports information</div>
     <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
         <th style="width: 175px;"><i class="icon-random"></i> Number of ports</th>
@@ -223,8 +245,15 @@ elseif ($active['previous'] == "active") { $graph = $li; }
         <td><?php echo(format_si($ports_info['capacity'])); ?>bps</td>
       </tr>
     </table>
+   </div>
   </div>
 </div>
+
+<?php
+
+*/
+
+?>
 
 <div class="tabBox">
   <ul class="nav nav-tabs" id="transferBillTab">

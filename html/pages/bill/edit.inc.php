@@ -44,7 +44,7 @@ if ($bill_data['bill_type'] == "cdr") {
           <div class="control-group">
             <label class="control-label" for="bill_name"><strong>Description</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_name" value="<?php echo $bill_data["bill_name"]; ?>" />
+              <input class="span10" type="text" name="bill_name" value="<?php echo $bill_data["bill_name"]; ?>" />
             </div>
           </div>
           <div class="control-group">
@@ -59,16 +59,16 @@ if ($bill_data['bill_type'] == "cdr") {
               </div>
             //-->
               <div id="cdrDiv"<?php if ($bill_data['bill_type'] == "quota") { echo(' style="display: none"'); } ?>>
-                <input class="span1" type="text" name="bill_cdr" value="<?php echo $cdr['data']; ?>">
-                <select name="bill_cdr_type" style="width: 233px;">
+                <input class="span2" type="text" name="bill_cdr" value="<?php echo $cdr['data']; ?>">
+                <select name="bill_cdr_type" style="width: 253px;">
                   <option value="Kbps"<?php echo $cdr['select_kbps']; ?>>Kilobits per second (Kbps)</option>
                   <option value="Mbps"<?php echo $cdr['select_mbps']; ?>>Megabits per second (Mbps)</option>
                   <option value="Gbps"<?php echo $cdr['select_gbps']; ?>>Gigabits per second (Gbps)</option>
                 </select>
               </div>
               <div id="quotaDiv"<?php if ($bill_data['bill_type'] == "cdr") { echo(' style="display: none"'); } ?>>
-                <input class="span1" type="text" name="bill_quota" value="<?php echo $quota['data']; ?>">
-                <select name="bill_quota_type" style="width: 233px;">
+                <input class="span2" type="text" name="bill_quota" value="<?php echo $quota['data']; ?>">
+                <select name="bill_quota_type" style="width: 253px;">
                   <option value="MB"<?php echo $quota['select_mb']; ?>>Megabytes (MB)</option>
                   <option value="GB"<?php echo $quota['select_gb']; ?>>Gigabytes (GB)</option>
                   <option value="TB"<?php echo $quota['select_tb']; ?>>Terabytes (TB)</option>
@@ -97,23 +97,23 @@ for ($x=1;$x<32;$x++) {
           <div class="control-group">
             <label class="control-label" for="bill_custid"><strong>Customer&nbsp;Reference</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_custid" value="<?php echo $bill_data['bill_custid']; ?>" />
+              <input class="span10" type="text" name="bill_custid" value="<?php echo $bill_data['bill_custid']; ?>" />
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="bill_ref"><strong>Billing Reference</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_ref" value="<?php echo $bill_data['bill_ref']; ?>" />
+              <input class="span10" type="text" name="bill_ref" value="<?php echo $bill_data['bill_ref']; ?>" />
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="bill_notes"><strong>Notes</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_notes" value="<?php echo $bill_data['bill_notes']; ?>" />
+              <input class="span10" type="text" name="bill_notes" value="<?php echo $bill_data['bill_notes']; ?>" />
             </div>
           </div>
         </fieldset>
-        <div class="form-actions">
+        <div class="form-actions" style="margin: 0px -10px -20px -10px;">
           <button type="submit" class="btn btn-primary" name="Submit" value="Save" /><i class="icon-ok icon-white"></i> <strong>Save Properties</strong></button>
         </div>
       </form>
@@ -214,7 +214,7 @@ foreach ($devices as $device)
           </div>
         </div>
       </fieldset>
-      <div class="form-actions">
+      <div class="form-actions" style="margin: 0px -10px -20px -10px;">
         <button type="submit" class="btn btn-primary" name="Submit" value=" Add " /><i class="icon-plus-sign icon-white"></i> <strong>Add Interface</strong></button>
       </div>
     </form>
