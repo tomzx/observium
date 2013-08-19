@@ -23,34 +23,6 @@ if (is_numeric($vars['device']))
   $device = device_by_name($vars['device']);
 }
 
-if ($type == 'port' && !is_numeric($vars['id']))
-{
-  if (is_numeric($device['device_id']))
-  {
-    if (is_numeric($vars['ifindex']))
-    {
-      // Get port by ifIndex
-      $port = get_port_by_index_cache($device['device_id'], $vars['ifindex']);
-      if ($port) { $vars['id'] = $port['port_id']; }
-    } elseif (!empty($vars['ifdescr']))
-    {
-      // Get port by ifDescr
-      $port_id = get_port_id_by_ifDescr($device['device_id'], $vars['ifdescr']);
-      if ($port_id) { $vars['id'] = $port_id; }
-    } elseif (!empty($vars['ifalias']))
-    {
-      // Get port by ifAlias
-      $port_id = get_port_id_by_ifAlias($device['device_id'], $vars['ifalias']);
-      if ($port_id) { $vars['id'] = $port_id; }
-    }
-  } elseif (!empty($vars['circuit']))
-  {
-    // Get port by circuit id
-    $port_id = get_port_id_by_customer(array('circuit' => $vars['circuit']));
-    if ($port_id) { $vars['id'] = $port_id; }
-  }
-}
-
 // FIXME -- remove these
 
 // $from, $to - unixtime (or rrdgraph time interval, i.e. '-1d', '-6w')
