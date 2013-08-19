@@ -30,8 +30,8 @@ if ($services['total'])
 ?>
 
 <div class="well info_box">
-    <div id="title"><i class="oicon-network-ethernet"></i> Services</div>
-    <div id="content">
+    <div class="title"><i class="oicon-network-ethernet"></i> Services</div>
+    <div class="content">
 
 <?php
 
@@ -67,9 +67,9 @@ if ($config['enable_syslog'])
   { ?>
 
     <div class="well info_box">
-      <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'logs', 'section' => 'syslog'))); ?>">
+      <div class="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'logs', 'section' => 'syslog'))); ?>">
         <i class="oicon-clipboard-eye"></i> Syslog</a></div>
-      <div id="content">
+      <div class="content">
 
     <?php
     print_syslogs(array('device' => $device['device_id'], 'short' => TRUE));
@@ -110,9 +110,9 @@ include("overview/sensors/frequencies.inc.php");
 // Start events
 ?>
    <div class="well info_box">
-      <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'logs', 'section' => 'eventlog'))); ?>">
+      <div class="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'logs', 'section' => 'eventlog'))); ?>">
         <i class="oicon-clipboard-audit"></i> Events</a></div>
-      <div id="content">
+      <div class="content">
 <?php
       print_events(array('device' => $device['device_id'], 'pagesize' => 15, 'short' => TRUE));
 ?>

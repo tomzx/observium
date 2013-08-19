@@ -13,8 +13,8 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
 
 ?>
   <div class="well info_box">
-    <div id="title"><i class="oicon-information"></i> Version Information</div>
-    <div id="content">
+    <div class="title"><i class="oicon-information"></i> Version Information</div>
+    <div class="content">
         <table class="table table-striped table-condensed-more">
           <tbody>
             <tr><td><b>Observium</b></td><td><?php echo($Observium_version); ?></td></tr>
@@ -41,8 +41,8 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
   </div>
 
   <div class="well info_box">
-    <div id="title"><i class="oicon-user-detective"></i> Development Team</div>
-    <div id="content">
+    <div class="title"><i class="oicon-user-detective"></i> Development Team</div>
+    <div class="content">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
           <dt style="text-align: left;"><i class="icon-user"></i> Adam Armstrong</dt><dd>Project Leader</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Tom Laermans</dt><dd>Committer & Developer</dd>
@@ -54,8 +54,8 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
   </div>
 
   <div class="well info_box">
-    <div id="title"><i class="oicon-users"></i> Acknowledgements</div>
-    <div id="content">
+    <div class="title"><i class="oicon-users"></i> Acknowledgements</div>
+    <div class="content">
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
           <dt style="text-align: left;"><i class="icon-user"></i> Twitter</dt><dd>Bootstrap CSS Framework</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> <a href="mailto:p@yusukekamiyamane.com" alt="p@yusukekamiyamane.com">Yusuke Kamiyamane</a></dt><dd>Fugue Iconset</dd>
@@ -73,8 +73,8 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
       </div>
 
   <div class="well info_box">
-    <div id="title"><i class="oicon-system-monitor"></i> Statistics</div>
-    <div id="content">
+    <div class="title"><i class="oicon-system-monitor"></i> Statistics</div>
+    <div class="content">
 
 <?php
 $stat_devices = dbFetchCell("SELECT COUNT(device_id) FROM `devices`");
@@ -162,8 +162,8 @@ echo("
       </div>
 
   <div class="well info_box">
-    <div id="title"><i class="oicon-notebook"></i> License</div>
-    <div id="content">
+    <div class="title"><i class="oicon-notebook"></i> License</div>
+    <div class="content">
       <pre>
 <?php include("../LICENSE"); ?>
       </pre>

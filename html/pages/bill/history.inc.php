@@ -11,10 +11,10 @@
 ?>
 
  <div class="well info_box">
-  <div id="title"><i class="oicon-information"></i> Historical Usage Overview</div>
-  <div id="content">
+  <div class="title"><i class="oicon-information"></i> Historical Usage Overview</div>
+  <div class="content">
 
-      <table class="table table-striped table-bordered">
+      <table class="table table-striped table-bordered" style="margin-bottom: 10px;">
         <tr>
           <td style="background: #fff; text-align: center;">
   <?php echo($img['his']); ?>

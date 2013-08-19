@@ -9,8 +9,8 @@ if (count($toners))
 ?>
 
    <div class="well info_box">
-      <div id="title"><i class="oicon-contrast"></i> Toner</div>
-      <div id="content">
+      <div class="title"><i class="oicon-contrast"></i> Toner</div>
+      <div class="content">
 
 <?php
   echo('<table class="table table-condensed-more table-striped">');

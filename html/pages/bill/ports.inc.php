@@ -46,8 +46,16 @@ $ports_info = array("ports" => $count, "capacity" => $speed);
 ?>
 
   <div class="well info_box">
-    <div id="title"><i class="oicon-network-ethernet"></i> Billed Ports</div>
-    <div id="content">
+    <script type="text/javascript">
+      function togglePorts() {
+        $('#ports_content').toggle();
+        $('#ports_minmax').toggleClass('icon-chevron-up');
+        $('#ports_minmax').toggleClass('icon-chevron-down');
+      }
+    </script>
+    <div class="title"><i class="oicon-network-ethernet"></i> Billed Ports</div>
+    <div class="title pull-right"><a href="javascript:;" onclick="togglePorts();"><i class="icon-chevron-down" id="ports_minmax"></i></a></div>
+    <div class="content" id="ports_content" style="display: none;">
       <?php echo($res); ?>
     </div>
   </div>

@@ -229,10 +229,10 @@ unset($navbar);
 ?>
 
   <div class="well info_box">
-    <div id="title"><a href="device/device=12/tab=ports/">
+    <div class="title"><a href="device/device=12/tab=ports/">
       <i class="oicon-clock"></i> Performance & Output</a>
     </div>
-    <div id="content">
+    <div class="content">
       <?php echo("RRDTool Output: ".$return."<br />"); ?>
       <?php echo("<p>Total time: ".$graph_return['total_time']." | RRDtool time: ".$graph_return['rrdtool_time']."s</p>"); ?>
     </div>
@@ -240,19 +240,19 @@ unset($navbar);
 
 
   <div class="well info_box">
-    <div id="title"><a href="device/device=12/tab=ports/">
+    <div class="title"><a href="device/device=12/tab=ports/">
       <i class="oicon-application-terminal"></i> RRDTool Command</a>
     </div>
-    <div id="content">
+    <div class="content">
       <?php echo($graph_return['cmd']); ?>
     </div>
   </div>
 
   <div class="well info_box">
-    <div id="title"><a href="device/device=12/tab=ports/">
+    <div class="title"><a href="device/device=12/tab=ports/">
       <i class="oicon-database"></i> RRDTool Files Used</a>
     </div>
-    <div id="content">
+    <div class="content">
       <?php
         if(is_array($graph_return['rrds'])) {
           foreach($graph_return['rrds'] as $rrd)

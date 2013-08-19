@@ -5,11 +5,8 @@ $links['24hour']    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id
 $links['monthly']   = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'transfer', 'tab' => 'monthly'));
 $links['detail']    = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'transfer', 'tab' => 'detail'));
 $links['previous']  = generate_url(array('page' => 'bill', 'bill_id' => $bill_id, 'view' => 'transfer', 'tab' => 'previous'));
-$active['billing']  = (($vars['tab'] == "billing") ? "active" : "");
-$active['24hour']   = (($vars['tab'] == "24hour") ? "active" : "");
-$active['monthly']  = (($vars['tab'] == "monthly") ? "active" : "");
-$active['detail']   = (($vars['tab'] == "detail") ? "active" : "");
-$active['previous'] = (($vars['tab'] == "previous") ? "active" : "");
+
+/*
 if (empty($active['billing']) && empty($active['24hour']) && empty($active['monthly']) && empty($active['detail']) && empty($active['previous'])) { $active['billing'] = "active"; }
 $graph              = "";
 
@@ -42,7 +39,7 @@ $optional['notes'] = (!empty($bill_data['bill_notes']) ? $bill_data['bill_notes'
 $lastmonth    = dbFetchCell("SELECT UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 MONTH))");
 $yesterday    = dbFetchCell("SELECT UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 DAY))");
 $rightnow     = date(U);
-
+*/
 $bi           = "<img src='bandwidth-graph.php?bill_id=" . $bill_id . "&amp;bill_code=" . $_GET['bill_code'];
 $bi          .= "&amp;from=" . $unixfrom .  "&amp;to=" . $unixto;
 $bi          .= "&amp;type=day&amp;imgbill=1";
@@ -66,7 +63,7 @@ $mi          .= "&amp;from=" . $lastmonth .  "&amp;to=" . $rightnow;
 $mi          .= "&amp;type=day";
 $mi          .= "&amp;x=1050&amp;y=300";
 $mi          .= "'>";
-
+/*
 switch(true) {
   case($percent >= 90):
     $perc['BG'] = "danger";
@@ -81,7 +78,7 @@ switch(true) {
     $perc['BG'] = "info";
 }
 $perc['width'] = (($percent <= "100") ? $percent : "100");
-
+*/
 // GB Convert (1000 vs 1024)
 function gbConvert($data) {
   global $config;
@@ -269,4 +266,3 @@ elseif ($active['previous'] == "active") { $graph = $li; }
     </div>
   </div>
 </div>
-

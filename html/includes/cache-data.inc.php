@@ -42,12 +42,17 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 
   }
 }
+
 #echo("<pre>");
 #print_r($cache['locations']);
 #echo("</pre>");
 
 // Ports
-foreach (dbFetchRows("SELECT device_id, ports.port_id, ifAdminStatus, ifOperStatus, `deleted`, `ignore`, `ifOutErrors_delta`, `ifInErrors_delta` FROM `ports` LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`") as $port)
+$ports_array = dbFetchRows("SELECT device_id, ports.port_id, ifAdminStatus, ifOperStatus, `deleted`, `ignore`, `ifOutErrors_delta`, `ifInErrors_delta` FROM `ports` LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`");
+
+port_permitted_array($ports_array);
+
+foreach($ports_array as $port)
 {
   if (!$config['web_show_disabled'])
   {
@@ -75,6 +80,8 @@ foreach (dbFetchRows("SELECT device_id, ports.port_id, ifAdminStatus, ifOperStat
     }
   }
 }
+
+unset($ports_array);
 
 // Routing
 // BGP

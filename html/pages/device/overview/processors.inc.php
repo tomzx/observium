@@ -13,9 +13,9 @@ if (count($processors))
 {
 ?>
 <div class="well info_box">
-    <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'processor'))); ?>">
+    <div class="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'processor'))); ?>">
        <i class="oicon-processor"></i> Processors</a></div>
-    <div id="content">
+    <div class="content">
 
 <?php
   echo('<table class="table table-condensed-more table-striped">');

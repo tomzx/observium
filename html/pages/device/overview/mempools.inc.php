@@ -13,9 +13,9 @@ if (count($mempools))
 { ?>
 
 <div class="well info_box">
-    <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'mempool'))); ?>">
+    <div class="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'mempool'))); ?>">
       <i class="oicon-memory"></i> Memory Pools</a></div>
-    <div id="content">
+    <div class="content">
 
 <?php
   echo('<table class="table table-condensed-more table-striped">');

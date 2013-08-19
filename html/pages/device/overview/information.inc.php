@@ -1,6 +1,6 @@
 <div class="well info_box">
-    <div id="title"><i class="oicon-server"></i> Device Information</div>
-    <div id="content">
+    <div class="title"><i class="oicon-server"></i> Device Information</div>
+    <div class="content">
 <?php
 
 if ($config['overview_show_sysDescr'])

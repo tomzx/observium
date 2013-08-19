@@ -23,7 +23,7 @@ if ($vars['view'] == "graphs") { echo("</span>"); }
 
 print_optionbar_end();
 
-echo('<div id="content">
+echo('
         <table  border="0" cellspacing="0" cellpadding="5" width="100%">');
 
 echo('<tr><th><a title="Physical hardware entity">Entity</a></th>
@@ -103,6 +103,6 @@ foreach (dbFetchRows("SELECT * FROM `cef_switching` WHERE `device_id` = ?  ORDER
   $i++;
 }
 
-echo("</table></div>");
+echo("</table>");
 
 ?>

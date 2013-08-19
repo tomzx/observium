@@ -89,7 +89,7 @@ if ($isUser) {
     case "transfer":
       include("pages/bill/navbar.inc.php");
       include("pages/bill/ports.inc.php");
-      /// include("pages/bill/infoboxes.inc.php"); /// FIXME - this can't share code. BOO.
+      include("pages/bill/infoboxes.inc.php");
       include("pages/bill/transfer.inc.php");
       break;
     case "history":

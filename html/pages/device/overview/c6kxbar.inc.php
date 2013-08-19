@@ -1,7 +1,7 @@
 
 <div class="well info_box">
-    <div id="title"><i class="oicon-arrow-switch"></i> 6500/7600 Crossbar</div>
-    <div id="content">
+    <div class="title"><i class="oicon-arrow-switch"></i> 6500/7600 Crossbar</div>
+    <div class="content">
 
 <?php
 

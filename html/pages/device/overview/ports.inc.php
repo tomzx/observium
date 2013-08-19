@@ -5,9 +5,9 @@ if ($ports['total'])
 ?>
 
 <div class="well info_box">
-    <div id="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'ports'))); ?>">
+    <div class="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'ports'))); ?>">
       <i class="oicon-network-ethernet"></i> Ports</a></div>
-    <div id="content">
+    <div class="content">
 
 <?php
   $graph_array['height'] = "100";

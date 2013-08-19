@@ -54,6 +54,7 @@ $links['previous']  = generate_url(array('page' => 'bill', 'bill_id' => $bill_id
 
 ?>
 
+<div class="tabBox">
   <ul class="nav nav-tabs" id="quickBillTab">
     <li class="<?php echo($active['billing']); ?> first"><a href="<?php echo($links['billing']); ?>">Billing view</a></li>
     <li class="<?php echo($active['24hour']); ?>"><a href="<?php echo($links['24hour']); ?>">24 Hour view</a></li>
@@ -65,4 +66,4 @@ $links['previous']  = generate_url(array('page' => 'bill', 'bill_id' => $bill_id
       <?php echo($graph."\n"); ?>
     </div>
   </div>
-
+</div>
