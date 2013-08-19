@@ -33,7 +33,7 @@ function print_status($status)
                                                                                                        'min_range' => 1)));
   $max_count    = filter_var($status['max']['count'],    FILTER_VALIDATE_INT, array('options' => array('default' => 200,
                                                                                                        'min_range' => 1)));
-  
+
   $string  = '<table class="table table-bordered table-striped table-hover table-condensed">' . PHP_EOL;
   $string .= '  <thead>' . PHP_EOL;
   $string .= '  <tr>' . PHP_EOL;
