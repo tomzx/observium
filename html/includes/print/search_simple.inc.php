@@ -193,6 +193,7 @@ function print_search_simple($data, $title = '', $button = 'search')
         break;
       case 'select':
       case 'multiselect':
+        if (empty($item['values'])) { $item['values'] = array(0 => '[there is no data]'); }
         if ($item['type'] == 'multiselect')
         {
           $title = (isset($item['name'])) ? 'title="'.$item['name'].'" ' : '';
