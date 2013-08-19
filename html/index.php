@@ -16,6 +16,8 @@
  *
  */
 
+ob_start();
+
 if (strpos($_SERVER['PATH_INFO'], "debug"))
 {
   $debug = TRUE;
@@ -31,24 +33,16 @@ if (strpos($_SERVER['PATH_INFO'], "debug"))
   ini_set('error_reporting', 0);
 }
 
-
 include_once("../includes/defaults.inc.php");
 include_once("../config.php");
 include_once("../includes/definitions.inc.php");
-
-?>
-
-  <base href="<?php echo($config['base_url']); ?>" />
-  <link href="css/ref.css" rel="stylesheet" type="text/css" />
-
-
-<?php
 include_once("../includes/functions.php");
 include_once("includes/functions.inc.php");
 
 ?>
 
   <base href="<?php echo($config['base_url']); ?>" />
+  <link href="css/ref.css" rel="stylesheet" type="text/css" />
   <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
   <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
   <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
@@ -63,8 +57,6 @@ include_once("includes/functions.inc.php");
 <?php
 
 $runtime_start = utime();
-
-ob_start();
 
 ini_set('allow_url_fopen', 0);
 ini_set('display_errors', 0);
@@ -114,17 +106,17 @@ foreach ($_POST as $name => $value)
   $vars[$name] = $value;
 }
 
-# Preflight checks 
+# Preflight checks
 if (!is_dir($config['rrd_dir']))
 {
   print_error("RRD Log Directory is missing ({$config['rrd_dir']}).  Graphing may fail.");
 }
- 
+
 if (!is_dir($config['temp_dir']))
 {
   print_error("Temp Directory is missing ({$config['temp_dir']}).  Graphing may fail.");
 }
- 
+
 if (!is_writable($config['temp_dir']))
 {
   print_error("Temp Directory is not writable ({$config['tmp_dir']}).  Graphing may fail.");

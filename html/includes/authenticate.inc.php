@@ -27,8 +27,9 @@ if ($vars['page'] == "logout" && $_SESSION['authenticated'])
     dbInsert(array('user' => $_SESSION['username'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Logged Out'), 'authlog');
     unset($_SESSION);
     session_destroy();
-    setcookie ("username", "", time() - 60*60*24*100, "/");
-    setcookie ("password", "", time() - 60*60*24*100, "/");
+    setcookie("user_id", NULL, time()+60*60*24*14, "/");
+    setcookie("ckey",    NULL, time()+60*60*24*14, "/");
+    setcookie("dkey",    NULL, time()+60*60*24*14, "/");
     $auth_message = "Logged Out";
   }
   header('Location: /');
@@ -57,6 +58,7 @@ if (isset($_GET['username']) && isset($_GET['password']))
       $_SESSION['username'] = dbFetchCell("SELECT `username` FROM `users` WHERE `user_id` = ?", array($_COOKIE['user_id']));
       $_SESSION['password'] = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $_COOKIE['dkey'], $ckey['user_encpass'], MCRYPT_MODE_ECB);
       $_SESSION['user_ckey_id'] = $ckey['user_ckey_id'];
+      $_SESSION['cookie_auth'] = TRUE;
     } else {
       // Do something here?
     }
@@ -64,6 +66,10 @@ if (isset($_GET['username']) && isset($_GET['password']))
 }
 
 $auth_success = 0;
+
+#print_vars($_GET);
+#print_vars($_POST);
+#print_vars($_SESSION);
 
 if (isset($_SESSION['username']))
 {
@@ -76,9 +82,6 @@ if (isset($_SESSION['username']))
       $_SESSION['authenticated'] = true;
       dbInsert(array('user' => $_SESSION['username'], 'address' => $_SERVER["REMOTE_ADDR"], 'result' => 'Logged In'), 'authlog');
       header("Location: ".$_SERVER['REQUEST_URI']);
-      setcookie("user_id", NULL, time()+60*60*24*14, "/");
-      setcookie("ckey",    NULL, time()+60*60*24*14, "/");
-      setcookie("dkey",    NULL, time()+60*60*24*14, "/");
     }
     if (isset($_POST['remember']) && isset($_SESSION['user_ckey_id']))
     {
@@ -93,10 +96,9 @@ if (isset($_SESSION['username']))
       setcookie("dkey",    $dkey, time()+60*60*24*14, "/");
     }
     $permissions = permissions_cache($_SESSION['user_id']);
-
-    unset($_SESSION['password']);
-
+#    unset($_SESSION['password']);
   }
+
   elseif (isset($_SESSION['username']))
   {
     $auth_message = "Authentication Failed";
