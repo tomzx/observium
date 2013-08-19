@@ -35,15 +35,18 @@ if ($vars['page'] == "logout" && $_SESSION['authenticated'])
   header('Location: /');
 }
 
-if (isset($_GET['username']) && isset($_GET['password']))
+if (!$_SESSION['authenticated'] && isset($_GET['username']) && isset($_GET['password']))
 {
   $_SESSION['username'] = $_GET['username'];
   $_SESSION['password'] = $_GET['password'];
-} elseif (isset($_POST['username']) && isset($_POST['password'])) {
+}
+else if (!$_SESSION['authenticated'] && isset($_POST['username']) && isset($_POST['password']))
+{
   $_SESSION['username'] = $_POST['username'];
   $_SESSION['password'] = $_POST['password'];
-} elseif (isset($_COOKIE['user_id']) && isset($_COOKIE['ckey']) && function_exists('mcrypt_decrypt')) {
-
+}
+else if (!$_SESSION['authenticated'] && isset($_COOKIE['user_id']) && isset($_COOKIE['ckey']) && function_exists('mcrypt_decrypt'))
+{
   $_SESSION['user_ip']   = $_SERVER['REMOTE_ADDR'];
   $_SESSION['user_id']   = $_COOKIE['user_id'];
   $_SESSION['user_ckey'] = $_COOKIE['user_ckey'];
@@ -55,20 +58,16 @@ if (isset($_GET['username']) && isset($_GET['password']))
   {
     if($ckey['expire'] > time())
     {
-      $_SESSION['username'] = dbFetchCell("SELECT `username` FROM `users` WHERE `user_id` = ?", array($_COOKIE['user_id']));
-      $_SESSION['password'] = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $_COOKIE['dkey'], $ckey['user_encpass'], MCRYPT_MODE_ECB);
+      $_SESSION['username']     = dbFetchCell("SELECT `username` FROM `users` WHERE `user_id` = ?", array($_COOKIE['user_id']));
+      $_SESSION['password']     = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $_COOKIE['dkey'], $ckey['user_encpass'], MCRYPT_MODE_ECB);
       $_SESSION['user_ckey_id'] = $ckey['user_ckey_id'];
-      $_SESSION['cookie_auth'] = TRUE;
-    } else {
-      // Do something here?
+      $_SESSION['cookie_auth']  = TRUE;
     }
   }
 }
 
 $auth_success = 0;
 
-#print_vars($_GET);
-#print_vars($_POST);
 #print_vars($_SESSION);
 
 if (isset($_SESSION['username']))
