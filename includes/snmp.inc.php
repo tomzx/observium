@@ -586,7 +586,7 @@ function snmpwalk_numericoids($device, $oid, $array, $mib = NULL, $mibdir = NULL
 function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL, $set_cache = FALSE)
 {
   global $cache;
-   
+
   if (!(is_array($cache['snmp'][$device['device_id']]) && array_key_exists($oid,$cache['snmp'][$device['device_id']])))
   {
     $data = snmp_walk($device, $oid, "-OQUs", $mib, $mibdir);
@@ -617,7 +617,7 @@ function snmpwalk_cache_oid($device, $oid, $array, $mib = NULL, $mibdir = NULL, 
 function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NULL, $set_cache = FALSE)
 {
   global $cache;
-   
+
   if (!(is_array($cache['snmp'][$device['device_id']]) && array_key_exists($oid,$cache['snmp'][$device['device_id']])))
   {
     $data = snmp_walk($device, $oid, "-OQUn", $mib, $mibdir);
@@ -647,7 +647,7 @@ function snmpwalk_cache_oid_num($device, $oid, $array, $mib = NULL, $mibdir = NU
 function snmpwalk_cache_oid_num2($device, $oid, $array, $mib = NULL, $mibdir = NULL, $set_cache = FALSE)
 {
   global $cache;
-   
+
   if (!(is_array($cache['snmp'][$device['device_id']]) && array_key_exists($oid,$cache['snmp'][$device['device_id']])))
   {
     $data = snmp_walk($device, $oid, '-OQUn', $mib, $mibdir);
@@ -660,7 +660,7 @@ function snmpwalk_cache_oid_num2($device, $oid, $array, $mib = NULL, $mibdir = N
       list($oid_num, $value) = explode("=", $entry, 2);
       $oid_num = trim($oid_num); $value = trim($value);
       $index = preg_replace($pattern, '', $oid_num);
-      
+
       if (!strstr($value, "at this OID") && isset($oid) && isset($index))
       {
         $array[$index][$oid] = $value;

@@ -10,7 +10,7 @@ $rrd_list[1]['filename'] = $rrd_filename;
 $rrd_list[1]['descr'] = "Log";
 $rrd_list[1]['ds'] = "logpercent";
 
-if ($_GET['debug']) { print_r($rrd_list); }
+if ($_GET['debug']) { print_vars($rrd_list); }
 
 $colours = "juniperive";
 

@@ -31,7 +31,7 @@ if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
 
 if ($debug)
 {
-  print_r($ipmi_sensors);
+  print_vars($ipmi_sensors);
 }
 
 foreach ($config['ipmi_unit'] as $type)

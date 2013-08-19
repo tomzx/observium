@@ -2,7 +2,8 @@
 
 foreach ($ports as $port)
 {
-  if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
+#  if (is_integer($row/2)) { $row_colour = $list_colour_a; } else { $row_colour = $list_colour_b; }
+
 
   $speed = humanspeed($port['ifSpeed']);
   $type = humanmedia($port['ifType']);

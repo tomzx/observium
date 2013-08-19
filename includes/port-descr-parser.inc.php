@@ -24,7 +24,7 @@ if ($type && $descr)
 
   if ($debug)
   {
-    print_r($port_ifAlias);
+    print_vars($port_ifAlias);
   }
 }
 

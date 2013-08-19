@@ -118,7 +118,7 @@ if ($config['enable_printers'])
   echo(" ");
   
   // Delete removed toners
-  if ($debug) { echo("\n Checking ... \n"); print_r($valid_toner); }
+  if ($debug) { echo("\n Checking ... \n"); print_vars($valid_toner); }
 
   $sql = "SELECT * FROM toner WHERE device_id = '".$device['device_id']."'";
   if ($query = mysql_query($sql))

@@ -3,7 +3,7 @@
 echo("UCD Disk IO : ");
 $diskio_array = snmpwalk_cache_oid($device, "diskIOEntry", array(), "UCD-DISKIO-MIB" , mib_dirs());
 $valid_diskio = array();
-#  if ($debug) { print_r($diskio_array); }
+#  if ($debug) { print_vars($diskio_array); }
 
 if (is_array($diskio_array))
 {
@@ -35,7 +35,7 @@ if (is_array($diskio_array))
 $sql = "SELECT * FROM `ucd_diskio` where `device_id`  = '".$device['device_id']."'";
 $query = mysql_query($sql);
 
-if ($debug) { print_r ($valid_diskio); }
+if ($debug) { print_vars ($valid_diskio); }
 
 while ($test = mysql_fetch_assoc($query))
 {

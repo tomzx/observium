@@ -7,7 +7,7 @@ if (is_numeric($vars['id']))
 
   if ($debug) {
     echo("<pre>");
-    print_r($ma);
+    print_vars($ma);
     echo("</pre>");
   }
 

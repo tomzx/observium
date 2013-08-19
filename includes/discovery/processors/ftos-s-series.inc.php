@@ -10,7 +10,7 @@ if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
 
   $processors_array = snmpwalk_cache_oid($device, "chStackUnitCpuUtil5Min", array(), "F10-S-SERIES-CHASSIS-MIB", mib_dirs('force10'));
   $processors_array = snmpwalk_cache_oid($device, "chStackUnitSysType", $processors_array, "F10-S-SERIES-CHASSIS-MIB", mib_dirs('force10'));
-  if ($debug) { print_r($processors_array); }
+  if ($debug) { print_vars($processors_array); }
 
   if (is_array($processors_array))
   {

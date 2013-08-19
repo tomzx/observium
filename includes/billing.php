@@ -100,7 +100,7 @@ function getLastMeasurement($bill_id)
 {
   $row = dbFetchRow("SELECT timestamp,delta,in_delta,out_delta FROM bill_data WHERE bill_id='".mres($bill_id)."' ORDER BY timestamp DESC LIMIT 0,1");
 
-  print_r($row);
+  print_vars($row);
 
   if (is_numeric($row['delta']))
   {
@@ -184,7 +184,7 @@ function getRates($bill_id,$datefrom,$dateto)
   $data['total_data_out']  = $mtot_out;
   $data['rate_average']    = $mtot / $ptot * 8;
 
-#  print_r($data);
+#  print_vars($data);
 
   return($data);
 }

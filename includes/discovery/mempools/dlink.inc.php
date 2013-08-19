@@ -17,7 +17,7 @@ if ($device['os'] == "dlink")
   echo("D-Link MemPools: ");
 
   $mempools_array = snmpwalk_cache_oid($device, "agentDRAMutilizationUnitID", array(), "AGENT-GENERAL-MIB");
-  if ($debug) { print_r($mempools_array); }
+  if ($debug) { print_vars($mempools_array); }
 
   if (is_array($mempools_array))
   {

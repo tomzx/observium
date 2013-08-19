@@ -12,7 +12,7 @@ $port_stats = snmpwalk_cache_oid($device, "ifType", $port_stats, "IF-MIB");
 
 // End Building SNMP Cache Array
 
-if ($debug) { print_r($port_stats); }
+if ($debug) { print_vars($port_stats); }
 
 // Build array of ports in the database
 

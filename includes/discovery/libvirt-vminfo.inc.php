@@ -66,7 +66,7 @@ if ($config['enable_libvirt'] == '1' && $device['os'] == "linux" )
           foreach ($vm_info_array as $line) { $vm_info_xml .= $line; }
 
           $xml = simplexml_load_string('<?xml version="1.0"?> ' . $vm_info_xml);
-          if ($debug) { print_r($xml); }
+          if ($debug) { print_vars($xml); }
 
           $vmwVmDisplayName = $xml->name;
           $vmwVmGuestOS   = ''; # libvirt does not supply this

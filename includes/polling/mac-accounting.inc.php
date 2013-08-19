@@ -24,7 +24,7 @@ echo("Caching DB...");
     $ma_db_array[$acc['ifIndex'].'-'.$acc['vlan_id'].'-'.$acc['mac']] = $acc;
   }
 
-  if($debug) { print_r($ma_db_array); }
+  if($debug) { print_vars($ma_db_array); }
   echo(count($ma_db_array)." entries. ");
 
 // JUNIPER-MAC-MIB
@@ -85,7 +85,7 @@ if ($device['os_group'] == "cisco")
     $ma_array[$ifIndex.'-'.$vlan.'-'.$mac][$oid][$dir] = $value;
 
   }
-  if($debug) { print_r($ma_array); }
+  if($debug) { print_vars($ma_array); }
 }
 
 // Below this should be MIB / vendor agnostic.
@@ -130,7 +130,7 @@ if(count($ma_array))
 
     $polled_period = $polled - $acc['poll_time'];
 
-    if($debug) { print_r($ma_array[$ifIndex][$vlan_id][$mac]); }
+    if($debug) { print_vars($ma_array[$ifIndex][$vlan_id][$mac]); }
 
     $ma['update']['poll_time'] = $polled;
     $ma['update']['poll_period'] = $polled_period;
@@ -178,7 +178,7 @@ if(count($ma_array))
       $rrdupdate = array($b_in, $b_out, $p_in, $p_out);
       rrdtool_update($rrdfile, $rrdupdate);
 
-      if ($debug) { print_r($ma['update']); }
+      if ($debug) { print_vars($ma['update']); }
 
       if (is_array($ma['update']))
       { // Do Updates

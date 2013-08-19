@@ -7,7 +7,7 @@ echo("Temperatures: ");
 $include_dir = "includes/discovery/temperatures";
 include("includes/include-dir.inc.php");
 
-if ($debug) { print_r($valid['sensor']['temperature']); }
+if ($debug) { print_vars($valid['sensor']['temperature']); }
 
 check_valid_sensors($device, 'temperature', $valid['sensor']);
 

@@ -55,22 +55,22 @@ if($device['os'] == "ios")
 
  }
 
-#print_r($entPhysical_state);
+#print_vars($entPhysical_state);
 
 }
 
 // Remove/Update Entity state
-foreach (dbFetch("SELECT * FROM `entPhysical_state` WHERE `device_id` = ?", array($device['device_id'])) as $entity)
+foreach (dbFetch("SELECT * FROM `entPhysical-state` WHERE `device_id` = ?", array($device['device_id'])) as $entity)
 {
   if (!isset($entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']]))
   {
-    dbDelete('entPhysical_state', "`device_id` = ? AND `entPhysicalIndex` = ? AND `subindex` = ? AND `group` = ? AND `key` = ?",
+    dbDelete('entPhysical-state', "`device_id` = ? AND `entPhysicalIndex` = ? AND `subindex` = ? AND `group` = ? AND `key` = ?",
                                array($device['device_id'], $entity['entPhysicalIndex'], $entity['subindex'], $entity['group'], $entity['key']));
   } else {
     if ($entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']] != $entity['value'])
     {
 #      echo("no match!");
-      dbUpdate(array('value' => $entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']]), 'entPhysical_state', '`entPhysical_state_id` = ?', array($entity['entPhysical_state_id']));
+      dbUpdate(array('value' => $entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']]), 'entPhysical-state', '`entPhysical_state_id` = ?', array($entity['entPhysical_state_id']));
     }
     unset($entPhysical_state[$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']]);
   }
@@ -86,7 +86,7 @@ foreach ($entPhysical_state as $epi => $entity)
     {
       foreach ($ti as $key => $value)
       {
-        dbInsert(array('device_id' => $device['device_id'], 'entPhysicalIndex' => $epi, 'subindex' => $subindex, 'group' => $group, 'key' => $key, 'value' => $value), 'entPhysical_state');
+        dbInsert(array('device_id' => $device['device_id'], 'entPhysicalIndex' => $epi, 'subindex' => $subindex, 'group' => $group, 'key' => $key, 'value' => $value), 'entPhysical-state');
       }
     }
   }

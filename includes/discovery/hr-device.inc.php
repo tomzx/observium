@@ -3,11 +3,11 @@
 echo("hrDevice : ");
 
 $hrDevice_oids = array('hrDeviceEntry','hrProcessorEntry');
-if ($debug) { print_r($hrDevices); }
+if ($debug) { print_vars($hrDevices); }
 
 $hrDevices = array();
 foreach ($hrDevice_oids as $oid) { $hrDevices = snmpwalk_cache_oid($device, $oid, $hrDevices, "HOST-RESOURCES-MIB:HOST-RESOURCES-TYPES"); }
-if ($debug) { print_r($hrDevices); }
+if ($debug) { print_vars($hrDevices); }
 
 if (is_array($hrDevices))
 {
@@ -35,7 +35,7 @@ if (is_array($hrDevices))
         $insert_query = "INSERT INTO `hrDevice` (`hrDeviceIndex`,`device_id`,`hrDeviceType`,`hrDeviceDescr`,`hrDeviceStatus`,`hrDeviceErrors`) ";
         $insert_query .= " VALUES ('".mres($hrDevice[hrDeviceIndex])."','".mres($device[device_id])."','".mres($hrDevice[hrDeviceType])."','".mres($hrDevice[hrDeviceDescr])."','".mres($hrDevice[hrDeviceStatus])."','".mres($hrDevice[hrDeviceErrors])."')";
         @mysql_query($insert_query); echo("+");
-        if ($debug) { print_r($hrDevice); echo("$insert_query" . mysql_affected_rows() . " row inserted"); }
+        if ($debug) { print_vars($hrDevice); echo("$insert_query" . mysql_affected_rows() . " row inserted"); }
       }
       $valid_hrDevice[$hrDevice['hrDeviceIndex']] = 1;
     }
@@ -51,7 +51,7 @@ while ($test_hrDevice = mysql_fetch_assoc($query))
   {
     echo("-");
     mysql_query("DELETE FROM `hrDevice` WHERE hrDevice_id = '" . $test_hrDevice['hrDevice_id'] . "'");
-    if ($debug) { print_r($test_hrDevice); echo(mysql_affected_rows() . " row deleted"); }
+    if ($debug) { print_vars($test_hrDevice); echo(mysql_affected_rows() . " row deleted"); }
   }
 }
 

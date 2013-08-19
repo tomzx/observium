@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
 <?php
 
 /**
@@ -12,40 +16,9 @@
  *
  */
 
-include("../includes/defaults.inc.php");
-include("../config.php");
-include_once("../includes/definitions.inc.php");
-include("../includes/functions.php");
-include("includes/functions.inc.php");
-
-?><!DOCTYPE html>
-<html lang="en">
-<head>
-  <base href="<?php echo($config['base_url']); ?>" />
-  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-  <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
-  <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
-  <link href="css/mktree.css" rel="stylesheet" type="text/css" />
-  <link href="css/sprite.css" rel="stylesheet" type="text/css" />
-  <link href="css/flags.css" rel="stylesheet" type="text/css" />
-
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/google-code-prettify.js"></script>
-
-<?php
-
-$runtime_start = utime();
-
-ob_start();
-
-ini_set('allow_url_fopen', 0);
-ini_set('display_errors', 0);
-
-$_SERVER['PATH_INFO'] = (isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['ORIG_PATH_INFO']);
-
 if (strpos($_SERVER['PATH_INFO'], "debug"))
 {
-  $debug = "1";
+  $debug = TRUE;
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   ini_set('log_errors', 1);
@@ -57,6 +30,46 @@ if (strpos($_SERVER['PATH_INFO'], "debug"))
   ini_set('log_errors', 0);
   ini_set('error_reporting', 0);
 }
+
+
+include_once("../includes/defaults.inc.php");
+include_once("../config.php");
+
+?>
+
+  <base href="<?php echo($config['base_url']); ?>" />
+  <link href="css/ref.css" rel="stylesheet" type="text/css" />
+
+
+<?php
+include_once("../includes/definitions.inc.php");
+include_once("../includes/functions.php");
+include_once("includes/functions.inc.php");
+
+?>
+
+  <base href="<?php echo($config['base_url']); ?>" />
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
+  <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/mktree.css" rel="stylesheet" type="text/css" />
+  <link href="css/sprite.css" rel="stylesheet" type="text/css" />
+  <link href="css/flags.css" rel="stylesheet" type="text/css" />
+
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/google-code-prettify.js"></script>
+  <script type="text/javascript" src="js/ref.js"></script>
+
+<?php
+
+$runtime_start = utime();
+
+ob_start();
+
+ini_set('allow_url_fopen', 0);
+ini_set('display_errors', 0);
+
+$_SERVER['PATH_INFO'] = (isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['ORIG_PATH_INFO']);
 
 // Parse GET variables into $vars for backwards compatibility
 // Can probably remove this soon
@@ -168,8 +181,8 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 if ($devel || $vars['devel'])
 {
   echo("<pre>");
-  print_r($_GET);
-  print_r($vars);
+  print_vars($_GET);
+  print_vars($vars);
   echo("</pre>");
 }
 
@@ -180,6 +193,13 @@ if ($_SESSION['authenticated'])
 
   // Include navbar
   if (!$vars['bare'] == "yes") {  include("includes/navbar.inc.php"); }
+
+  // Warn about lack of mcrypt unless told not to.
+
+  if($config['remember_me'] = TRUE && (!function_exists('mcrypt_decrypt') || !function_exists('mcrypt_encrypt')))
+  {
+    print_error('Observium now requires mcrypt to be installed for use by the "remember me" function. Please install the php5-mcrypt package on Ubuntu/Debian or the php-mcrypt package on RHEL/Centos. Alternatively, you can disable this feature by setting $config[\'login_remember_me\'] = FALSE; in your config.');
+  }
 
   // Authenticated. Print a page.
   if (isset($vars['page']) && !strstr("..", $vars['page']) &&  is_file("pages/" . $vars['page'] . ".inc.php"))
@@ -230,6 +250,7 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
           <li class="divider-vertical" style="margin:0;"></li>
         </ul>
 
+
         <ul class="nav pull-right">
           <li><a id="poller_status"></a></li>
 
@@ -248,16 +269,16 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
                   <th colspan=2>MySQL</th>
                 </tr>
                 <tr>
-                  <th>Cell</th><td><?php echo(($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,3).'s'); ?></td>
+                  <th>Cell</th><td><?php echo(($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,4).'s'); ?></td>
                 </tr>
                 <tr>
-                  <th>Row</th><td><?php echo(($db_stats['fetchrow']+0).'/'.round($db_stats['fetchrow_sec']+0,3).'s'); ?></td>
+                  <th>Row</th><td><?php echo(($db_stats['fetchrow']+0).'/'.round($db_stats['fetchrow_sec'],4).'s'); ?></td>
                 </tr>
                 <tr>
-                  <th>Rows</th><td><?php echo(($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,3).'s'); ?></td>
+                  <th>Rows</th><td><?php echo(($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,4).'s'); ?></td>
                 </tr>
                 <tr>
-                  <th>Column</th><td><?php echo(($db_stats['fetchcol']+0).'/'.round($db_stats['fetchcol_sec']+0,3).'s'); ?></td>
+                  <th>Column</th><td><?php echo(($db_stats['fetchcol']+0).'/'.round($db_stats['fetchcol_sec']+0,4).'s'); ?></td>
                 </tr>
               </table>
               <table class="table table-bordered table-condensed-more table-rounded table-striped">
@@ -276,6 +297,29 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
               </table>
             </div>
           </li>
+          <li class="dropdown">
+            <a href="<?php echo(generate_url(array('page'=>'overview'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
+              <i class="oicon-databases"></i> <b class="caret"></b></a>
+            <div class="dropdown-menu" style="padding: 10px; width: 1150px;">
+
+              <table class="table table-bordered table-condensed-more table-rounded table-striped">
+
+  <?php
+
+  $sql_profile = array_sort($sql_profile, 'time', SORT_DESC);
+  $sql_profile = array_slice($sql_profile, 0, 15);
+  foreach($sql_profile AS $sql_query)
+  {
+    #echo '<tr><td>', $sql_query['time'], '</td><td>' ,SqlFormatter::highlight($sql_query['sql']), '</td></tr>';
+    echo '<tr><td>', $sql_query['time'], '</td><td>' ,$sql_query['sql'], '</td></tr>';
+
+  }
+
+  ?>
+              </table>
+            </div>
+          </li>
+
         </ul>
       </div>
     </div>
@@ -368,7 +412,7 @@ if (is_array($pagetitle))
               }
       }
     })
-    
+
     $('.tooltip-from-data').qtip({
       content: {
               attr: 'data-tooltip'
@@ -395,7 +439,6 @@ if (is_array($pagetitle))
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
   <script type="text/javascript" src="js/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
   -->
-
 
   </body>
 </html>

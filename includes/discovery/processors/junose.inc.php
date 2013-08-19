@@ -5,7 +5,7 @@ if ($device['os'] == "junose")
 {
   echo("JUNOSe : ");
   $processors_array = snmpwalk_cache_double_oid($device, "juniSystemModule", $processors_array, "Juniper-System-MIB", mib_dirs('junose'));
-  if ($debug) { print_r($processors_array); }
+  if ($debug) { print_vars($processors_array); }
 
   foreach ($processors_array as $index => $entry)
   {

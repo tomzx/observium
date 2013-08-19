@@ -26,7 +26,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $storage)
     // Generic poller goes here if we ever have a discovery module which uses it.
   }
 
-  if ($debug) {print_r($storage); }
+  if ($debug) {print_vars($storage); }
 
   if ($storage['size'])
   {

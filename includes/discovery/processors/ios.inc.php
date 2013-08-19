@@ -4,7 +4,7 @@ if ($device['os_group'] == "cisco" || $device['os'] == "acsw")
 {
   echo("CISCO-PROCESS-MIB: ");
   $processors_array = snmpwalk_cache_oid($device, "cpmCPU", NULL, "CISCO-PROCESS-MIB");
-  if ($debug) { print_r($processors_array); }
+  if ($debug) { print_vars($processors_array); }
 
   foreach ($processors_array as $index => $entry)
   {

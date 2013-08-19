@@ -15,8 +15,28 @@
 
 chdir(dirname($argv[0]));
 
+$options = getopt("h:m:i:n:d::a::qV");
+
 include("includes/defaults.inc.php");
 include("config.php");
+
+if (isset($options['d']))
+{
+  echo("DEBUG!\n");
+  $debug = TRUE;
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  ini_set('log_errors', 1);
+  ini_set('error_reporting', 1);
+} else {
+  $debug = FALSE;
+  #  ini_set('display_errors', 0);
+  ini_set('display_startup_errors', 0);
+  ini_set('log_errors', 0);
+  #  ini_set('error_reporting', 0);
+}
+
+
 include("includes/definitions.inc.php");
 include("includes/functions.php");
 include("includes/discovery/functions.inc.php");
@@ -63,22 +83,6 @@ if (isset($options['i']) && $options['i'] && isset($options['n']))
 {
   $where = "AND MOD(device_id,".$options['i'].") = '" . $options['n'] . "'";
   $doing = $options['n'] ."/".$options['i'];
-}
-
-if (isset($options['d']))
-{
-  echo("DEBUG!\n");
-  $debug = TRUE;
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  ini_set('log_errors', 1);
-  ini_set('error_reporting', 1);
-} else {
-  $debug = FALSE;
-  #  ini_set('display_errors', 0);
-  ini_set('display_startup_errors', 0);
-  ini_set('log_errors', 0);
-  #  ini_set('error_reporting', 0);
 }
 
 if (!$where)

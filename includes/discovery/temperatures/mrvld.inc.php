@@ -10,7 +10,7 @@ if ($device['os'] == "mrvld")
   $oids = snmpwalk_cache_oid($device, "oaLdCardTemp", array(), "OADWDM-MIB");
   $oids = snmpwalk_cache_oid($device, "oaLdCardType", $oids, "OADWDM-MIB");
 
-  if ($debug) { print_r($oids); }
+  if ($debug) { print_vars($oids); }
 
   if (is_array($oids))
   {

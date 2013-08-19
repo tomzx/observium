@@ -64,7 +64,7 @@ function poll_bill($bill)
 
   $ports = dbFetchRows("SELECT * FROM `bill_ports` as P, `ports` as I, `devices` as D WHERE P.bill_id=? AND I.port_id = P.port_id AND D.device_id = I.device_id", array($bill['bill_id']));
   if (isset($options['d'])) {
-    print_r($ports);
+    print_vars($ports);
   }
   foreach ($ports as $port)
   {
@@ -93,7 +93,7 @@ function poll_bill($bill)
         $data = array('in' => $data['ifInOctets'], 'out' => $data['ifOutOctets']);
       }
       if (isset($options['d'])) {
-        print_r($data);
+        print_vars($data);
       }
     }
 

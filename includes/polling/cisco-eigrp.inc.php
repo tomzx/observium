@@ -37,7 +37,7 @@ foreach($port_db_q AS $db_port)
   $port_db[$db_port['eigrp_vpn']."-".$db_port['eigrp_as']."-".$db_port['eigrp_ifIndex']] = $db_port;
 }
 
-print_r($port_db);
+print_vars($port_db);
 
 
 $ports_poll = snmpwalk_cache_oid($device, "CEigrpInterfaceEntry", array(), "CISCO-EIGRP-MIB", mib_dirs(array("cisco")));

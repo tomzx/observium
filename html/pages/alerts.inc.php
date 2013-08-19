@@ -113,7 +113,7 @@ echo('
     }
 
     // Print link to the alert rule page
-    echo '<td><a href="', generate_url(array('page' => 'alert_test', 'alert_test_id' => $alert_rule['alert_test_id'])), '">', $alert_rule['alert_name'], '</a></td>';
+    echo '<td><a href="', generate_url(array('page' => 'alert_check', 'alert_test_id' => $alert_rule['alert_test_id'])), '">', $alert_rule['alert_name'], '</a></td>';
 
     echo('<td><span class="entity-title">'.generate_entity_link($alert_entry['entity_type'], $alert_entry['entity_id'], truncate($entity_descr, 40)).'</span></td>');
 

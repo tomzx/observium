@@ -13,6 +13,29 @@ function hexStringToIPv4($string)
   return $ip;
 }
 
+// Observium's variable debugging. Choses nice output depending upon web or cli
+function print_vars($vars)
+{
+
+  if($GLOBALS['cli'])
+  {
+    if(function_exists('rt'))
+    {
+      print_r($vars);
+      rt($vars);
+    } else {
+      print_r($vars);
+    }
+  } else {
+    if(function_exists('r'))
+    {
+      r($vars);
+    } else {
+      print_r($vars);
+    }
+  }
+}
+
 # If a device is up, return its uptime, otherwise return the
 # time since the last time we were able to poll it.  This
 # is not very accurate, but better than reporting what the
@@ -286,11 +309,11 @@ function print_message($text, $type='')
       $icon  = 'oicon-information';
       break;
   }
-  
+
   if (isCli())
   {
     include_once($config['install_dir'] . "/includes/pear/Console/Color2.php");
-    
+
     $msg = new Console_Color2();
     print $msg->convert($color['cli'].$text."%n\n", $color['cli_color']);
   } else {
@@ -801,11 +824,12 @@ function get_dev_attribs($device_id)
 function get_dev_entity_state($device)
 {
   $state = array();
-  foreach (dbFetchRows("SELECT * FROM entPhysical_state WHERE `device_id` = ?", array($device)) as $entity)
+  foreach (dbFetchRows("SELECT * FROM `entPhysical-state` WHERE `device_id` = ?", array($device)) as $entity)
   {
     $state['group'][$entity['group']][$entity['entPhysicalIndex']][$entity['subindex']][$entity['key']] = $entity['value'];
     $state['index'][$entity['entPhysicalIndex']][$entity['subindex']][$entity['group']][$entity['key']] = $entity['value'];
   }
+
   return $state;
 }
 

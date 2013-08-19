@@ -11,7 +11,7 @@ if (!is_array($mempool_cache['junos']))
   $mempool_cache['junos'] = snmpwalk_cache_multi_oid($device, "jnxOperatingBuffer", $mempool_cache['junos'], "JUNIPER-MIB" , mib_dirs('junos'));
   $mempool_cache['junos'] = snmpwalk_cache_multi_oid($device, "jnxOperatingDRAMSize", $mempool_cache['junos'], "JUNIPER-MIB" , mib_dirs('junos'));
   $mempool_cache['junos'] = snmpwalk_cache_multi_oid($device, "jnxOperatingMemory", $mempool_cache['junos'], "JUNIPER-MIB" , mib_dirs('junos'));
-  if ($debug) { print_r($mempool_cache); }
+  if ($debug) { print_vars($mempool_cache); }
 }
 
 $entry = $mempool_cache['junos'][$mempool[mempool_index]];

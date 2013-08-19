@@ -28,7 +28,7 @@ if (!is_numeric($vars['to']))   { $vars['to']   = $config['time']['now']; }
 
 preg_match('/^(?P<type>[a-z0-9A-Z-]+)_(?P<subtype>.+)/', $vars['type'], $graphtype);
 
-if($debug) print_r($graphtype);
+if($debug) print_vars($graphtype);
 
 $type = $graphtype['type'];
 $subtype = $graphtype['subtype'];
@@ -223,7 +223,7 @@ unset($navbar);
     print_optionbar_end();
   }
 
-#print_r($graph_return);
+#print_vars($graph_return);
 
   if (isset($vars['showcommand']))
   {

@@ -189,8 +189,8 @@ function poll_device($device, $options)
 
   if ($debug) // Fuck you, dirty outputs.
   {
-    print_r($alert_rules);
-    print_r($alert_table);
+    print_vars($alert_rules);
+    print_vars($alert_table);
   }
 
   $status = 0; unset($array);
@@ -378,7 +378,7 @@ function poll_device($device, $options)
       rrdtool_update($poller_rrd, "N:".$device_time);
     }
 
-    if ($debug) { echo("Updating " . $device['hostname'] . " - ".print_r($update_array)." \n"); }
+    if ($debug) { echo("Updating " . $device['hostname'] . " - ".print_vars($update_array)." \n"); }
 
     $updated = dbUpdate($update_array, 'devices', '`device_id` = ?', array($device['device_id']));
     if ($updated) { echo("UPDATED!\n"); }

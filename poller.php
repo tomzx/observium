@@ -15,6 +15,25 @@
 
 chdir(dirname($argv[0]));
 
+$options = getopt("h:m:i:n:r::d::a::qV");
+
+if (isset($options['d']))
+{
+  echo("DEBUG!\n");
+  $debug = TRUE;
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  ini_set('log_errors', 1);
+#  ini_set('error_reporting', E_ALL ^ E_NOTICE);
+} else {
+  $debug = FALSE;
+#  ini_set('display_errors', 0);
+  ini_set('display_startup_errors', 0);
+  ini_set('log_errors', 0);
+#  ini_set('error_reporting', 0);
+}
+
+
 include("includes/defaults.inc.php");
 include("config.php");
 include("includes/definitions.inc.php");
@@ -22,8 +41,6 @@ include("includes/functions.php");
 include("includes/polling/functions.inc.php");
 
 $poller_start = utime();
-
-$options = getopt("h:m:i:n:r::d::a::qV");
 
 if (isset($options['V']))
 {
@@ -97,22 +114,6 @@ DEBUGGING OPTIONS:
   exit;
 }
 
-if (isset($options['d']))
-{
-  echo("DEBUG!\n");
-  $debug = TRUE;
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  ini_set('log_errors', 1);
-#  ini_set('error_reporting', E_ALL ^ E_NOTICE);
-} else {
-  $debug = FALSE;
-#  ini_set('display_errors', 0);
-  ini_set('display_startup_errors', 0);
-  ini_set('log_errors', 0);
-#  ini_set('error_reporting', 0);
-}
-
 if (isset($options['r']))
 {
   $config['norrd'] = TRUE;
@@ -159,6 +160,6 @@ logfile($string);
 rrdtool_pipe_close($rrd_process, $rrd_pipes);
 unset($config); // Remove this for testing
 
-#print_r(get_defined_vars());
+#print_vars(get_defined_vars());
 
 ?>

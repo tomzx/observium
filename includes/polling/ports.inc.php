@@ -120,7 +120,7 @@ $polled = time();
 
 // End Building SNMP Cache Array
 
-if ($debug) { print_r($port_stats); }
+if ($debug) { print_vars($port_stats); }
 
 // Build array of ports in the database
 
@@ -146,7 +146,7 @@ foreach ($port_stats as $ifIndex => $port)
       $port_id = dbInsert(array('device_id' => $device['device_id'], 'ifIndex' => $ifIndex), 'ports');
       $ports[$port['ifIndex']] = dbFetchRow("SELECT * FROM `ports` WHERE `port_id` = ?", array($port_id));
       echo("Adding: ".$port['ifName']."(".$ifIndex.")(".$ports[$port['ifIndex']]['port_id'].")");
-      #print_r($ports);
+      #print_vars($ports);
     } elseif ($ports[$ifIndex]['deleted'] == "1") {
       dbUpdate(array('deleted' => '0'), 'ports', '`port_id` = ?', array($ports[$ifIndex]['port_id']));
       log_event("Port DELETED mark removed", $device, 'interface', $ports[$ifIndex]['port_id']);
@@ -450,8 +450,8 @@ foreach ($ports as $port)
     // Do PoE MIBs
     if ($config['enable_ports_poe']) { include("port-poe.inc.php"); }
 
-#    if ($debug || TRUE) { print_r($port['alert_array']); echo(PHP_EOL); print_r($this_port);}
-#    print_r($port['alert_array']);
+#    if ($debug || TRUE) { print_vars($port['alert_array']); echo(PHP_EOL); print_vars($this_port);}
+#    print_vars($port['alert_array']);
 
     check_entity('port', $port, $port['alert_array']);
 

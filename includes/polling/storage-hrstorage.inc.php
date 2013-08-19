@@ -5,7 +5,7 @@
 if (!is_array($storage_cache['hrstorage']))
 {
   $storage_cache['hrstorage'] = snmpwalk_cache_oid($device, "hrStorageEntry", NULL, "HOST-RESOURCES-MIB:HOST-RESOURCES-TYPES");
-  if ($debug) { print_r($storage_cache); }
+  if ($debug) { print_vars($storage_cache); }
 }
 
 if (is_array($storage_cache['hrstorage']) && !is_array($storage_cache['dsk']))

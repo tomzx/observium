@@ -4,7 +4,7 @@
   if (!empty($agent_data['munin']))
   {
     echo("Munin Plugins:");
-    if ($debug) { print_r($agent_data['munin']); }
+    if ($debug) { print_vars($agent_data['munin']); }
 
     // Build array of existing plugins
     $plugins_dbq = dbFetchRows("SELECT * FROM `munin_plugins` WHERE `device_id` = ?", array($device['device_id']));

@@ -16,7 +16,7 @@ include("processors-ucd-old.inc.php");
 $sql = "SELECT * FROM `processors` WHERE `device_id`  = '".$device['device_id']."'";
 $query = mysql_query($sql);
 
-if ($debug) { print_r ($valid['processor']); }
+if ($debug) { print_vars ($valid['processor']); }
 
 while ($test_processor = mysql_fetch_assoc($query))
 {

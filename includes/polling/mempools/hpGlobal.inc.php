@@ -11,7 +11,7 @@
 if (!is_array($mempool_cache['hpGlobal']))
 {
   $mempool_cache['hpGlobal'] = snmpwalk_cache_oid($device, "hpGlobal", NULL, "NETSWITCH-MIB", mib_dirs('hp'));
-  if ($debug) { print_r($mempool_cache); }
+  if ($debug) { print_vars($mempool_cache); }
 }
 else
 {

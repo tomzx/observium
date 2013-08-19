@@ -63,7 +63,7 @@ if(is_numeric($vars['alert']) && FALSE)
   // Loop the associations array
 
   #echo('<pre>');
-  #print_r($alert_table);
+  #print_vars($alert_table);
   #echo('</pre>');
 
   foreach ($alert_table[$vars['type']] as $entity_id => $alert_list)
@@ -81,7 +81,7 @@ if(is_numeric($vars['alert']) && FALSE)
   }
 
 #  echo('<pre>');
-#  print_r($alert_table);
+#  print_vars($alert_table);
 #  echo('</pre>');
 
 
@@ -89,7 +89,7 @@ if(is_numeric($vars['alert']) && FALSE)
   {
 
   #echo('<pre>');
-  #print_r($alert_entry);
+  #print_vars($alert_entry);
   #echo('</pre>');
 
 
@@ -108,7 +108,7 @@ if(is_numeric($vars['alert']) && FALSE)
     {
       $alert_table_entry = $alert_table[$vars['type']][$entity_id][$alert_test_id];
       $entities_content[] = generate_entity_link($vars['type'], $entity_id, $text = NULL, $graph_type=NULL);
-      #print_r($alert_table_entry);
+      #print_vars($alert_table_entry);
 
       if($alert_table_entry['alert_status'] == '1') { $s['up']++;
       } elseif($alert_table_entry['alert_status'] == '0') { $s['down']++;
@@ -147,7 +147,7 @@ if(is_numeric($vars['alert']) && FALSE)
     #if($debug)
     #{
     #echo('<pre> Alert Array');
-    #print_r($alert);
+    #print_vars($alert);
     #echo('</pre>');
     #}
 
@@ -155,7 +155,7 @@ if(is_numeric($vars['alert']) && FALSE)
     // Loop the associations which link this alert to this device
     foreach($alert_entry['assoc'] as $assoc_id => $assoc_data)
     {
-      #print_r($assoc_id);
+      #print_vars($assoc_id);
       $assoc = $alert_assoc[$assoc_id];
 
       echo('<tr>');
@@ -240,7 +240,7 @@ if(is_numeric($vars['alert']) && FALSE)
       echo('<tr><td colspan="11">');
       echo('<table  class="table table-condensed table-bordered table-striped table-rounded">');
       echo('<tr>');
-      echo('<td></td><td></td>');
+      echo('<th></th><th></th>');
       echo('<th style="width: 60px;">Alert Id</th>');
       echo('<th style="width: 300px;">Entity</th>');
       echo('<th>State</th>');
@@ -271,7 +271,7 @@ if(is_numeric($vars['alert']) && FALSE)
         echo('<td>'.generate_entity_link($vars['type'], $entity_id, $text = NULL, $graph_type=NULL).'</td>');
         echo('<td>');
         ## FIXME -- generate a nice popup with parsed information from the state array
-        echo(overlib_link("", "view state", "<pre>".print_r(unserialize($alert_table_entry['state']), TRUE)."</pre>", NULL));
+        echo(overlib_link("", "view state", "<pre>".print_vars(unserialize($alert_table_entry['state']), TRUE)."</pre>", NULL));
         echo('</td>');
         echo('<td class="'.$alert_table_entry['class'].'">'.$alert_table_entry['last_message'].'</td>');
         echo('<td>'.$alert_table_entry['lc'].'</td>');

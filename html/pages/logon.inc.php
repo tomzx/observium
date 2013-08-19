@@ -29,10 +29,18 @@
                 <div class="control-group">
                   <label class="control-label" for="optionsCheckbox2"></label>
                   <div class="controls">
+<?php
+if(function_exists('mcrypt_decrypt') && function_exists('mcrypt_encrypt'))
+{
+?>
                     <label class="checkbox">
                       <input type="checkbox" id="remember" name="remember">
                       Remember my login on this computer
                     </label>
+<?php
+} else {
+}
+?>
                   </div>
                 </div>
                 <div class="controls">

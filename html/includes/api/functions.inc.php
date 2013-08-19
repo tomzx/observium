@@ -28,7 +28,7 @@ function api_show_debug($txt, $value) {
   if ($vars['debug']) {
     echo "<pre>\n";
     echo "DEBUG ".$txt.":\n";
-    print_r($value);
+    print_vars($value);
     echo "</pre>\n";
   }
 }

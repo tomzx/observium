@@ -88,7 +88,7 @@ if ($device['os_group'] == "unix")
     
     $agent_sensors = array(); # Init to empty to be able to use array_merge() later on
 
-    if ($debug) { print_r($agent_data); }
+    if ($debug) { print_vars($agent_data); }
 
     include("unix-agent/packages.inc.php");
     include("unix-agent/munin-plugins.inc.php");
@@ -137,7 +137,7 @@ if ($device['os_group'] == "unix")
         list($user, $vsz, $rss, $pcpu, $command) = explode("|", $process, 5);
           $processlist[] = array('user' => $user, 'vsz' => $vsz, 'rss' => $rss, 'pcpu' => $pcpu, 'command' => $command);
       }
-      #print_r($processlist);
+      #print_vars($processlist);
       echo("\n");
     }
 

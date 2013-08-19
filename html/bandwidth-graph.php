@@ -113,7 +113,7 @@ if ($imgtype == "historical")
     array_push($allow_data, $traf['allowed']);
     array_push($overuse_data, $traf['overuse']);
     $i++;
-    //print_r($data);
+    //print_vars($data);
   }
 
   if ($i < 12)

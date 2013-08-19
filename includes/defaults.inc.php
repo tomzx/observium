@@ -96,6 +96,7 @@ $config['timestamp_format'] = 'Y-m-d H:i:s';
 $config['page_gen']         = 1;
 $config['web_header']       = "header.inc.php";  // in html/includes
 $config['login_message']    = "Unauthorised access or use shall render the user liable to criminal and/or civil prosecution.";
+$config['login_remember_me'] =  TRUE;    // Enable or disable the remember me feature.
 $config['web_mouseover']    = TRUE;      // Enable or disable mouseover popups.
 $config['web_show_disabled'] = TRUE;     // Show or not disabled devices on major pages.
 

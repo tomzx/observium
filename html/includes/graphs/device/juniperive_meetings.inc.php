@@ -10,7 +10,7 @@ $rrd_list[1]['filename'] = $rrd_filename;
 $rrd_list[1]['descr'] = "Meetings";
 $rrd_list[1]['ds'] = "meetings";
 
-if ($_GET['debug']) { print_r($rrd_list); }
+if ($_GET['debug']) { print_vars($rrd_list); }
 
 $colours = "juniperive";
 $nototal = 1;

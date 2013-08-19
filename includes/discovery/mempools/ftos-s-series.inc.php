@@ -10,7 +10,7 @@ if ($device['os'] == "ftos" || $device['os_group'] == "ftos")
 
   $mempools_array = snmpwalk_cache_oid($device, "chStackUnitMemUsageUtil", array(), "F10-S-SERIES-CHASSIS-MIB", mib_dirs('force10'));
   $mempools_array = snmpwalk_cache_oid($device, "chStackUnitSysType", $mempools_array, "F10-S-SERIES-CHASSIS-MIB", mib_dirs('force10'));
-  if ($debug) { print_r($mempools_array); }
+  if ($debug) { print_vars($mempools_array); }
 
   if (is_array($mempools_array))
   {

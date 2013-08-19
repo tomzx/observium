@@ -7,7 +7,7 @@ echo("Storage : ");
 $include_dir = "includes/discovery/storage";
 include("includes/include-dir.inc.php");
 
-if ($debug) { print_r($valid_storage); }
+if ($debug) { print_vars($valid_storage); }
 
 // Remove storage which weren't redetected here
 $query = 'SELECT * FROM `storage` WHERE `device_id` = ?';

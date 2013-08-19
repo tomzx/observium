@@ -502,7 +502,7 @@ function generate_device_link_header($device, $vars=array())
 
   if ($device['os'] == "ios") { formatCiscoHardware($device, true); }
 
-#  print_r($device);
+#  print_vars($device);
 
   $contents = '
       <table class="table table-striped table-bordered table-rounded table-condensed">

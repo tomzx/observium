@@ -47,10 +47,11 @@ foreach (dbFetchRows("SELECT * FROM `bills` ORDER BY `bill_id`") as $bill)
     if ($period > 0 && $dateto > $date_updated)
     {
       $rate_data    = getRates($bill['bill_id'],$datefrom,$dateto);
-      $rate_95th    = $rate_data['rate_95th'];
-      $dir_95th     = $rate_data['dir_95th'];
-      $total_data   = $rate_data['total_data'];
-      $rate_average = $rate_data['rate_average'];
+#print_vars($rate_data);
+#      $rate_95th    = $rate_data['rate_95th'];
+#      $dir_95th     = $rate_data['dir_95th'];
+#      $total_data   = $rate_data['total_data'];
+#      $rate_average = $rate_data['rate_average'];
 
       if ($bill['bill_type'] == "cdr")
       {

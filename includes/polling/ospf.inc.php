@@ -35,9 +35,9 @@ foreach ($ospf_instances_poll as $ospf_instance_id => $ospf_entry)
 if ($debug)
 {
   echo("\nPolled: ");
-  print_r($ospf_instances_poll);
+  print_vars($ospf_instances_poll);
   echo("Database: ");
-  print_r($ospf_instances_db);
+  print_vars($ospf_instances_db);
   echo("\n");
 }
 
@@ -101,9 +101,9 @@ foreach ($ospf_areas_poll as $ospf_area_id => $ospf_area)
 if ($debug)
 {
   echo("\nPolled: ");
-  print_r($ospf_areas_poll);
+  print_vars($ospf_areas_poll);
   echo("Database: ");
-  print_r($ospf_areas_db);
+  print_vars($ospf_areas_db);
   echo("\n");
 }
 
@@ -144,7 +144,7 @@ unset($ospf_areas_db);
 unset($ospf_areas_poll);
 
 #$ospf_ports = snmpwalk_cache_oid($device, "OSPF-MIB::ospfIfEntry", array(), "OSPF-MIB");
-#print_r($ospf_ports);
+#print_vars($ospf_ports);
 
 echo(" Ports: ");
 
@@ -173,9 +173,9 @@ foreach ($ospf_ports_poll as $ospf_port_id => $ospf_port)
 if ($debug)
 {
   echo("\nPolled: ");
-  print_r($ospf_ports_poll);
+  print_vars($ospf_ports_poll);
   echo("Database: ");
-  print_r($ospf_ports_db);
+  print_vars($ospf_ports_db);
   echo("\n");
 }
 
@@ -264,9 +264,9 @@ foreach ($ospf_nbrs_poll as $ospf_nbr_id => $ospf_nbr)
 if ($debug)
 {
   echo("\nPolled: ");
-  print_r($ospf_nbrs_poll);
+  print_vars($ospf_nbrs_poll);
   echo("Database: ");
-  print_r($ospf_nbrs_db);
+  print_vars($ospf_nbrs_db);
   echo("\n");
 }
 

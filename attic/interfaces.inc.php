@@ -12,7 +12,7 @@ if ($device['os_group'] == "ios") {
     list($slotport, $ifIndex) = explode(" ", $entry);
     $portifIndex[$ifIndex] = $slotport;
   }
-  if ($debug) { print_r($portifIndex); }
+  if ($debug) { print_vars($portifIndex); }
 }
 
 $interface_query = mysql_query("SELECT * FROM `ports` $where");

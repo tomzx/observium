@@ -8,7 +8,7 @@ if ($device['os'] == "junos")
   $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingDRAMSize", $processors_array, "JUNIPER-MIB", mib_dirs('junos'));
   $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingMemory",   $processors_array, "JUNIPER-MIB", mib_dirs('junos'));
   $processors_array = snmpwalk_cache_multi_oid($device, "jnxOperatingDescr",    $processors_array, "JUNIPER-MIB", mib_dirs('junos'));
-  if ($debug) { print_r($processors_array); }
+  if ($debug) { print_vars($processors_array); }
 
   if (is_array($processors_array))
   {

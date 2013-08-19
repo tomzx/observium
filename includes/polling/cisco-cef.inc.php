@@ -15,7 +15,7 @@ if ($device['os_group'] == "cisco")
     $cefs_db[$cef_id] = $ceftmp['cef_switching_id'];
   }
 
-  if ($debug) { print_r($cefs); }
+  if ($debug) { print_vars($cefs); }
 
   if (is_array($cefs))
   {
@@ -92,7 +92,7 @@ if ($device['os_group'] == "cisco")
 
   // FIXME - need to delete old ones. FIXME REALLY.
 
-  print_r($cefs_db);
+  print_vars($cefs_db);
 
   foreach ($cefs_db as $cef_switching_id)
   {

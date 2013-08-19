@@ -160,7 +160,7 @@ if ($lldp_array)
   }
 }
 
-if ($debug) { print_r($link_exists); }
+if ($debug) { print_vars($link_exists); }
 
 /// FIXME dbFacile
 $sql = "SELECT * FROM `links` AS L, `ports` AS I WHERE L.local_port_id = I.port_id AND I.device_id = '".$device['device_id']."'";

@@ -6,6 +6,9 @@
 //               YES, THAT MEANS YOU                   //
 /////////////////////////////////////////////////////////
 
+// Debugging Include. This isn't in SVN.
+if($debug && file_exists($config['install_dir']."/includes/ref.inc.php")) { include_once($config['install_dir']."/includes/ref.inc.php"); echo ("poooooo");}
+
 // Alert Graphs
 ## FIXME - this is ugly
 
@@ -1611,6 +1614,15 @@ if (isset($config['cdp_autocreate']))
 {
   $config['dp_autocreate'] = $config['cdp_autocreate'];
 }
+
+// Detect if we're on CLI or WEB.
+if (php_sapi_name() !== 'cli' || !isset($_SERVER["argv"][0]) || isset($_SERVER['REQUEST_METHOD'])  || isset($_SERVER['REMOTE_ADDR']))
+{
+  $cli = FALSE;
+} else {
+  $cli = TRUE;
+}
+
 
 // If we're on SSL, let's properly detect it
 function is_ssl()

@@ -244,6 +244,6 @@ if [ -z ${DISTROEXEC} ]; then
 			exit 1
 	esac
 
-	echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
+	echo "OS=${OS}\nKERNEL=${KERNEL}\nARCH=${ARCH}\nDISTRO=${DISTRO}\nDISTROVER=${VERSION}\nSCRIPTVER=${DISTROSCRIPT}"
 	exit 0
 fi

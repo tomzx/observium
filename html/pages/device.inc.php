@@ -145,7 +145,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['collectd'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'collectd')).'">
-      <i class="oicon-chart-up"></i> CollectD
+      <i class="oicon-chart-up-color"></i> CollectD
     </a>
   </li>');
     }
@@ -154,7 +154,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     {
       echo('<li class="' . $select['munin'] . '">
     <a href="'.generate_device_url($device, array('tab' => 'munin')). '">
-      <i class="oicon-chart-up"></i> Munin
+      <i class="oicon-chart-down-color"></i> Munin
     </a>
   </li>');
     }

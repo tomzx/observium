@@ -7,7 +7,7 @@ if($device['os'] == "vrp")
   $mempools_array = snmpwalk_cache_multi_oid($device, "hwEntityMemUsage", $mempools_array, "HUAWEI-ENTITY-EXTENT-MIB", mib_dirs('huawei'));
   $mempools_array = snmpwalk_cache_multi_oid($device, "hwEntityMemSize",  $mempools_array, "HUAWEI-ENTITY-EXTENT-MIB", mib_dirs('huawei'));
   $mempools_array = snmpwalk_cache_multi_oid($device, "hwEntityBomEnDesc",$mempools_array, "HUAWEI-ENTITY-EXTENT-MIB", mib_dirs('huawei'));
-  if ($debug) { print_r($mempools_array); }
+  if ($debug) { print_vars($mempools_array); }
 
   if (is_array($mempools_array))
   {

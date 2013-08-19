@@ -35,7 +35,7 @@ if ($device['os_group'] == "cisco")
   echo(" entSensorThresholdValue");
   $t_oids = snmpwalk_cache_twopart_oid($device, "entSensorThresholdValue", $t_oids, "CISCO-ENTITY-SENSOR-MIB");
 
-  if ($debug) { print_r($oids); }
+  if ($debug) { print_vars($oids); }
 
   $entitysensor['voltsDC']   = "voltage";
   $entitysensor['voltsAC']   = "voltage";

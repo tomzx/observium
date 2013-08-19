@@ -26,7 +26,7 @@ $nototal = 1;
 $ds_in  = "INOCTETS";
 $ds_out = "OUTOCTETS";
 
-#print_r($rates);
+#print_vars($rates);
 
 if($bill['bill_type'] == "cdr") {
    $custom_graph = " COMMENT:'\\r' ";

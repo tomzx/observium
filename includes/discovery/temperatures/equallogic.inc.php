@@ -33,7 +33,7 @@ if ($device['os'] == "equallogic" && (isset($eqlgrpmemid)))
 
   if (is_array($oids))
   {
-    if ($debug) { print_r($oids); }
+    if ($debug) { print_vars($oids); }
     foreach ($oids as $index => $entry)
     {
       # EQLMEMBER-MIB returns sensors for all members. only process sensors that match our member id

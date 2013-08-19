@@ -37,7 +37,7 @@ foreach($groups as $group_id => $group)
 }
 
 #echo("<pre>");
-#print_r($rrd_list);
+#print_vars($rrd_list);
 #echo("</pre>");
 
 $units = 'bps';

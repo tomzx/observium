@@ -153,7 +153,7 @@ if ($device['os'] == "apc")
   if ($oids)
   {
     $type = "apc";
-    if ($debug) { print_r($oids); }
+    if ($debug) { print_vars($oids); }
     $oids = trim($oids);
     if ($oids) echo("APC PowerNet-MIB ATS ");
     $current_oid   = "1.3.6.1.4.1.318.1.1.8.5.4.3.1.4.1.1.1";  #atsOutputCurrent

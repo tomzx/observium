@@ -44,7 +44,7 @@ foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 }
 
 #echo("<pre>");
-#print_r($cache['locations']);
+#print_vars($cache['locations']);
 #echo("</pre>");
 
 // Ports

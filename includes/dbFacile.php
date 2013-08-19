@@ -17,6 +17,11 @@ Usage
 
 */
 
+if(true)
+{
+  include_once('SqlFormatter.php');
+}
+
 /*
  * Performs a query using the given string.
  * Used by the other _query functions.
@@ -25,22 +30,27 @@ function dbQuery($sql, $parameters = array()) {
 	global $fullSql, $debug;
 	$fullSql = dbMakeQuery($sql, $parameters);
         if($debug) {
-#          print Console_Color::convert("\nSQL[%y".$fullSql."%n] ");
-          echo("\nSQL[".$fullSql."] ");
+          if($GLOBALS['cli'])
+          {
+            print_message("\nSQL[%y".$fullSql."%n] ", 'color');
+          } else {
+            print_vars($fullSql);
+          }
         }
 
-	/*
-	if($this->logFile)
-		$time_start = microtime(true);
-	*/
+	if($config['profile_mysql'] || TRUE)
+        {
+	  $time_start = microtime(true);
+        }
 
 	$result = mysql_query($fullSql); // sets $this->result
-	/*
-	if($this->logFile) {
+
+	if($config['profile_mysql'] || TRUE)
+        {
 		$time_end = microtime(true);
-		fwrite($this->logFile, date('Y-m-d H:i:s') . "\n" . $fullSql . "\n" . number_format($time_end - $time_start, 8) . " seconds\n\n");
+		#fwrite($this->logFile, date('Y-m-d H:i:s') . "\n" . $fullSql . "\n" . number_format($time_end - $time_start, 8) . " seconds\n\n");
+                $GLOBALS['sql_profile'][] = array('sql' => $fullSql, 'time' => number_format($time_end - $time_start, 8));
 	}
-	*/
 
 	if($result === false && (error_reporting() & 1)) {
 		// aye. this gets triggers on duplicate Contact insert
@@ -55,7 +65,7 @@ function dbQuery($sql, $parameters = array()) {
  * */
 function dbInsert($data, $table) {
 	global $fullSql;
-        global $db_stats;
+
 	// the following block swaps the parameters if they were given in the wrong order.
 	// it allows the method to work for those that would rather it (or expect it to)
 	// follow closer with SQL convention:
@@ -87,8 +97,8 @@ function dbInsert($data, $table) {
 	#logfile($fullSql);
 
         $time_end = microtime(true);
-        $db_stats['insert_sec'] += number_format($time_end - $time_start, 8);
-        $db_stats['insert']++;
+        $GLOBALS['db_stats']['insert_sec'] += ($time_end - $time_start);
+        $GLOBALS['db_stats']['insert']++;
 
         return $id;
 
@@ -100,7 +110,7 @@ function dbInsert($data, $table) {
  * */
 function dbUpdate($data, $table, $where = null, $parameters = array()) {
 	global $fullSql;
-        global $db_stats;
+
 	// the following block swaps the parameters if they were given in the wrong order.
 	// it allows the method to work for those that would rather it (or expect it to)
 	// follow closer with SQL convention:
@@ -134,8 +144,8 @@ function dbUpdate($data, $table, $where = null, $parameters = array()) {
 		$return = false;
 	}
         $time_end = microtime(true);
-        $db_stats['update_sec'] += number_format($time_end - $time_start, 8);
-        $db_stats['update']++;
+        $GLOBALS['db_stats']['update_sec'] += number_format($time_end - $time_start, 8);
+        $GLOBALS['db_stats']['update']++;
 
         return $return;
 
@@ -158,7 +168,6 @@ function dbDelete($table, $where = null, $parameters = array()) {
  * Most other retrieval functions build off this
  * */
 function dbFetchRows($sql, $parameters = array()) {
-        global $db_stats;
 
         $time_start = microtime(true);
 	$result = dbQuery($sql, $parameters);
@@ -175,8 +184,8 @@ function dbFetchRows($sql, $parameters = array()) {
         mysql_free_result($result);
 
         $time_end = microtime(true);
-        $db_stats['fetchrows_sec'] += number_format($time_end - $time_start, 8);
-        $db_stats['fetchrows']++;
+        $GLOBALS['db_stats']['fetchrows_sec'] += round($time_end - $time_start,4);
+        $GLOBALS['db_stats']['fetchrows']++;
 
 	// no records, thus return empty array
 	// which should evaluate to false, and will prevent foreach notices/warnings
@@ -205,7 +214,7 @@ function dbFetch($sql, $parameters = array()) {
  * The first argument is an sprintf-ready query stringTypes
  * */
 function dbFetchRow($sql = null, $parameters = array()) {
-        global $db_stats;
+        
 
         $time_start = microtime(true);
 	$result = dbQuery($sql, $parameters);
@@ -214,8 +223,8 @@ function dbFetchRow($sql = null, $parameters = array()) {
 		mysql_free_result($result);
                 $time_end = microtime(true);
 
-                $db_stats['fetchrow_sec'] += number_format($time_end - $time_start, 8);
-                $db_stats['fetchrow']++;
+                $GLOBALS['db_stats']['fetchrow_sec'] += number_format($time_end - $time_start, 8);
+                $GLOBALS['db_stats']['fetchrow']++;
 
 		return $row;
 	} else {
@@ -229,7 +238,7 @@ function dbFetchRow($sql = null, $parameters = array()) {
  * Fetches the first call from the first row returned by the query
  * */
 function dbFetchCell($sql, $parameters = array()) {
-        global $db_stats;
+        
         $time_start = microtime(true);
 	$row = dbFetchRow($sql, $parameters);
 	if($row) {
@@ -237,8 +246,8 @@ function dbFetchCell($sql, $parameters = array()) {
 	}
         $time_end = microtime(true);
 
-        $db_stats['fetchcell_sec'] += number_format($time_end - $time_start, 8);
-        $db_stats['fetchcell']++;
+        $GLOBALS['db_stats']['fetchcell_sec'] += number_format($time_end - $time_start, 8);
+        $GLOBALS['db_stats']['fetchcell']++;
 
 	return null;
 }
@@ -248,7 +257,7 @@ function dbFetchCell($sql, $parameters = array()) {
  * It fetches one cell from each row and places all the values in 1 array
  * */
 function dbFetchColumn($sql, $parameters = array()) {
-        global $db_stats;
+        
         $time_start = microtime(true);
 	$cells = array();
 	foreach(dbFetch($sql, $parameters) as $row) {
@@ -256,8 +265,8 @@ function dbFetchColumn($sql, $parameters = array()) {
 	}
         $time_end = microtime(true);
 
-        $db_stats['fetchcol_sec'] += number_format($time_end - $time_start, 8);
-        $db_stats['fetchcol']++;
+        $GLOBALS['db_stats']['fetchcol_sec'] += number_format($time_end - $time_start, 8);
+        $GLOBALS['db_stats']['fetchcol']++;
 
 	return $cells;
 }

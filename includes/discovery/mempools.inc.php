@@ -12,7 +12,7 @@ include("includes/include-dir.inc.php");
 $sql = "SELECT * FROM `mempools` WHERE `device_id`  = '".$device['device_id']."'";
 $query = mysql_query($sql);
 
-if ($debug) { print_r ($valid_mempool); }
+if ($debug) { print_vars ($valid_mempool); }
 
 while ($test_mempool = mysql_fetch_assoc($query))
 {

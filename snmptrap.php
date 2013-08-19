@@ -27,7 +27,7 @@ $entry = explode(",", $argv[1]);
 
 logfile($argv[1]);
 
-#print_r($entry);
+#print_vars($entry);
 
 $device = @dbFetchRow("SELECT * FROM devices WHERE `hostname` = ?", array($entry['0']));
 

@@ -7,7 +7,7 @@ if($device['os'] == "vrp")
   $processors_array = snmpwalk_cache_multi_oid($device, "hwEntityCpuUsage", $processors_array, "HUAWEI-ENTITY-EXTENT-MIB", mib_dirs('huawei'));
   $processors_array = snmpwalk_cache_multi_oid($device, "hwEntityMemSize",  $processors_array, "HUAWEI-ENTITY-EXTENT-MIB", mib_dirs('huawei'));
   $processors_array = snmpwalk_cache_multi_oid($device, "hwEntityBomEnDesc",$processors_array, "HUAWEI-ENTITY-EXTENT-MIB", mib_dirs('huawei'));
-  if ($debug) { print_r($processors_array); }
+  if ($debug) { print_vars($processors_array); }
 
   if (is_array($processors_array))
   {

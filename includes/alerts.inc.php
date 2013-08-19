@@ -27,7 +27,7 @@ function check_entity($type, $entity, $data)
 
   echo("\nChecking alerts\n");
 
-  #print_r($data);
+  #print_vars($data);
 
   list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
 
@@ -117,7 +117,7 @@ function check_entity($type, $entity, $data)
 #        $update_array['alert_table_id'] = $alert_args['alert_table_id'];
 
         /// Perhaps this is better done with SQL replace?
-        #print_r($alert_args);
+        #print_vars($alert_args);
         if(!$alert_args['state_entry'])
         {
           // State entry seems to be missing. Insert it before we update it.
@@ -614,8 +614,8 @@ function match_device_entities($device_id, $attributes, $entity_type)
 function match_entity($entity, $attributes)
 {
 
-  #print_r($entity);
-  #print_r($attributes);
+  #print_vars($entity);
+  #print_vars($attributes);
 
 
   $failed  = 0;
@@ -781,14 +781,14 @@ function process_alerts($device)
         $alert = $alert_rules[$entry['alert_test_id']];
         #dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($entry['alert_test_id']));
 
-        #print_r($alert);
-        #print_r($entry);
+        #print_vars($alert);
+        #print_vars($entry);
 
         $state      = unserialize($entry['state']);
         $conditions = unserialize($alert['conditions']);
 
-        #print_r($conditions);
-        #print_r($state);
+        #print_vars($conditions);
+        #print_vars($state);
 
         $entity = get_entity_by_id_cache($entry['entity_type'], $entry['entity_id']);
         $entity_descr = entity_descr($entry['entity_type'], $entry['entity_id']);
@@ -820,7 +820,7 @@ function process_alerts($device)
               }
             }
 
-            print_r($graph_array);
+            print_vars($graph_array);
 
             $image_data_uri = generate_alert_graph($graph_array);
             $graphs .= '<img src="'.$image_data_uri.'">'."<br />";

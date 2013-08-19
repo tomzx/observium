@@ -11,7 +11,7 @@ foreach ($_GET as $name => $value)
 
 preg_match('/^(?P<type>[a-z0-9A-Z-]+)_(?P<subtype>.+)/', $vars['type'], $graphtype);
 
-if($debug) print_r($graphtype);
+if($debug) print_vars($graphtype);
 
 $type = $graphtype['type'];
 $subtype = $graphtype['subtype'];

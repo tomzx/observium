@@ -157,7 +157,7 @@ if ($config['enable_bgp'])
       {
         $v_ip = hex2ip($entry[$vendor_PeerRemoteAddr]);
         $entry[$vendor_PeerLocalAddr] = hex2ip($entry[$vendor_PeerLocalAddr]);
-        print_r($entry);
+        print_vars($entry);
         $vendor_peers[$v_ip] = $entry;
       }
     }
@@ -173,7 +173,7 @@ if ($config['enable_bgp'])
     }
   }
 
-  #print_r($bgp_peers);
+  #print_vars($bgp_peers);
 
   $sql  = 'SELECT *, `bgpPeers`.bgpPeer_id as bgpPeer_id ';
   $sql .= 'FROM `bgpPeers` ';
