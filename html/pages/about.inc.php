@@ -3,12 +3,11 @@
   <div class="span6">
 <?php
 
-$Observium_version = $config['version'];
-
+$observium_version = $config['version'];
 $apache_version = str_replace("Apache/", "", $_SERVER['SERVER_SOFTWARE']);
 $php_version = phpversion();
 $mysql_version = dbFetchCell("SELECT version()");
-#$netsnmp_version = shell_exec($config['snmpget'] . " --version 2>&1");
+//$netsnmp_version = shell_exec($config['snmpget'] . " --version 2>&1");
 $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdtool'] . " --version |head -n1")),1,1));
 
 ?>
@@ -17,7 +16,7 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
     <div class="content">
         <table class="table table-striped table-condensed-more">
           <tbody>
-            <tr><td><b>Observium</b></td><td><?php echo($Observium_version); ?></td></tr>
+            <tr><td><b>Observium</b></td><td><?php echo($observium_version); ?></td></tr>
             <tr><td><b>Apache</b></td><td><?php echo($apache_version); ?></td></tr>
             <tr><td><b>PHP</b></td><td><?php echo($php_version); ?></td></tr>
             <tr><td><b>MySQL</b></td><td><?php echo($mysql_version); ?></td></tr>
@@ -30,12 +29,12 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
   <div style="margin-bottom: 20px; margin-top: -10px;">
   <table width=100%>
     <tr>
-      <td><a class="btn btn-small" href="http://www.observium.org"><i class="icon oicon-globe"></i> Web</a></td>
-      <td><a class="btn btn-small" href="http://jira.observium.org/"><i class="icon oicon-fire"></i> Bugtracker</a></td>
-      <td><a class="btn btn-small" href="http://www.observium.org/wiki/Mailing_Lists"><i class="icon oicon-mail"></i> Mailing List</a></td>
-      <td><a class="btn btn-small" href="http://twitter.com/observium"><i class="icon oicon-globe"></i> Twitter</a></td>
-      <td><a class="btn btn-small" href="http://twitter.com/observium_svn"><i class="icon oicon-globe"></i> SVN Twitter</a></td>
-      <td><a class="btn btn-small" href="http://www.facebook.com/pages/Observium/128354461353"><i class="icon oicon-globe"></i> Facebook</a></td>
+      <td><a class="btn btn-small" href="http://www.observium.org"><i style="font-size: small;" class="icon-globe"></i> Web</a></td>
+      <td><a class="btn btn-small" href="http://jira.observium.org/"><i style="font-size: small;" class="icon-bug"></i> Bugtracker</a></td>
+      <td><a class="btn btn-small" href="http://www.observium.org/wiki/Mailing_Lists"><i style="font-size: small;" class="icon-envelope"></i> Mailing List</a></td>
+      <td><a class="btn btn-small" href="http://twitter.com/observium"><i style="font-size: small;" class="icon-twitter-sign"></i> Twitter</a></td>
+      <!--<td><a class="btn btn-small" href="http://twitter.com/observium_svn"><i class="icon-twitter-sign"></i> SVN Twitter</a></td>-->
+      <td><a class="btn btn-small" href="http://www.facebook.com/pages/Observium/128354461353"><i style="font-size: small;" class="icon-facebook-sign"></i> Facebook</a></td>
     </tr>
   </table>
   </div>
@@ -73,7 +72,7 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
       </div>
 
   <div class="well info_box">
-    <div class="title"><i class="oicon-system-monitor"></i> Statistics</div>
+    <div class="title"><i class="oicon-chart"></i> Statistics</div>
     <div class="content">
 
 <?php
@@ -105,40 +104,40 @@ echo("
       <table class=\"table table-bordered table-striped table-condensed table-rounded\">
         <tbody>
           <tr>
-            <td width=45%><img src='images/icons/device.png' class='optionicon'> <b>Devices</b></td><td align=right>$stat_devices</td>
-            <td width=45%><img src='images/icons/port.png' class='optionicon'> <b>Ports</b></td><td align=right>$stat_ports</td>
+            <td width=45%><i class='oicon-servers'></i> <strong>Devices</strong></td><td><span class='pull-right'>$stat_devices</span></td>
+            <td width=45%><i class='oicon-network-ethernet'></i> <strong>Ports</strong></td><td><span class='pull-right'>$stat_ports</span></td>
           </tr>
           <tr>
-            <td><img src='images/icons/ipv4.png'  class='optionicon'> <b>IPv4 Addresses<b></td><td align=right>$stat_ipv4_addy</td>
-            <td><img src='images/icons/ipv4.png' class='optionicon'> <b>IPv4 Networks</b></td><td align=right>$stat_ipv4_nets</td>
+            <td><i class='oicon-ipv4'></i> <b>IPv4 Addresses</strong></td><td><span class='pull-right'>$stat_ipv4_addy</span></td>
+            <td><i class='oicon-ipv4'></i> <b>IPv4 Networks</strong></td><td><span class='pull-right'>$stat_ipv4_nets</span></td>
           </tr>
           <tr>
-            <td><img src='images/icons/ipv6.png'  class='optionicon'> <b>IPv6 Addresses<b></td><td align=right>$stat_ipv6_addy</td>
-            <td><img src='images/icons/ipv6.png' class='optionicon'> <b>IPv6 Networks</b></td><td align=right>$stat_ipv6_nets</td>
+            <td><i class='oicon-ipv6'></i> <strong>IPv6 Addresses</strong></td><td><span class='pull-right'>$stat_ipv6_addy</span></td>
+            <td><i class='oicon-ipv6'></i> <strong>IPv6 Networks</strong></td><td><span class='pull-right'>$stat_ipv6_nets</span></td>
            </tr>
          <tr>
-            <td><img src='images/icons/services.png'  class='optionicon'> <b>Services<b></td><td align=right>$stat_services</td>
-            <td><img src='images/icons/apps.png' class='optionicon'> <b>Applications</b></td><td align=right>$stat_apps</td>
+            <td><i class='oicon-gear'></i> <strong>Services</strong></td><td><span class='pull-right'>$stat_services</span></td>
+            <td><i class='oicon-application-icon-large'></i> <strong>Applications</strong></td><td><span class='pull-right'>$stat_apps</span></td>
           </tr>
           <tr>
-            <td ><img src='images/icons/processor.png' class='optionicon'> <b>Processors</b></td><td align=right>$stat_processors</td>
-            <td><img src='images/icons/memory.png' class='optionicon'> <b>Memory</b></td><td align=right>$stat_memory</td>
+            <td><i class='oicon-processor'></i> <strong>Processors</strong></td><td><span class='pull-right'>$stat_processors</span></td>
+            <td><i class='oicon-memory'></i> <strong>Memory</strong></td><td><span class='pull-right'>$stat_memory</span></td>
           </tr>
           <tr>
-            <td><img src='images/icons/storage.png' class='optionicon'> <b>Storage</b></td><td align=right>$stat_storage</td>
-            <td><img src='images/icons/diskio.png' class='optionicon'> <b>Disk I/O</b></td><td align=right>$stat_diskio</td>
+            <td><i class='oicon-drive'></i> <strong>Storage</strong></td><td><span class='pull-right'>$stat_storage</span></td>
+            <td><i class='oicon-drive--arrow'></i> <strong>Disk I/O</strong></td><td><span class='pull-right'>$stat_diskio</span></td>
           </tr>
           <tr>
-            <td><img src='images/icons/inventory.png' class='optionicon'> <b>HR-MIB</b></td><td align=right>$stat_hrdev</td>
-            <td><img src='images/icons/inventory.png' class='optionicon'> <b>Entity-MIB</b></td><td align=right>$stat_entphys</td>
+            <td><i class='oicon-wooden-box'></i> <strong>HR-MIB</strong></td><td><span class='pull-right'>$stat_hrdev</span></td>
+            <td><i class='oicon-wooden-box'></i> <strong>Entity-MIB</strong></td><td><span class='pull-right'>$stat_entphys</span></td>
           </tr>
           <tr>
-            <td ><img src='images/icons/syslog.png' class='optionicon'> <b>Syslog Entries</b></td><td align=right>$stat_syslog</td>
-            <td><img src='images/icons/eventlog.png' class='optionicon'> <b>Eventlog Entries</b></td><td align=right>$stat_events</td>
+            <td><i class='oicon-clipboard-eye'></i> <strong>Syslog Entries</strong></td><td><span class='pull-right'>$stat_syslog</span></td>
+            <td><i class='oicon-clipboard-audit'></i> <strong>Eventlog Entries</strong></td><td><span class='pull-right'>$stat_events</span></td>
           </tr>
           <tr>
-            <td ><img src='images/icons/sensors.png' class='optionicon'> <b>Sensors</b></td><td align=right>$stat_sensors</td>
-            <td><img src='images/icons/toner.png' class='optionicon'> <b>Toner</b></td><td align=right>$stat_toner</td>
+            <td><i class='oicon-system-monitor'></i> <strong>Sensors</strong></td><td><span class='pull-right'>$stat_sensors</span></td>
+            <td><i class='oicon-printer-color'></i> <strong>Toner</string></td><td><span class='pull-right'>$stat_toner</span></td>
           </tr>
         </tbody>
       </table>
