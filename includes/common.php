@@ -355,6 +355,31 @@ function get_sensor_rrd($device, $sensor)
   return($rrd_file);
 }
 
+// Get port array by ID (using cache)
+/// FIXME. Newer used. -- mike
+function get_port_by_id_cache($port_id)
+{
+  return get_entity_by_id_cache('port', $port_id);
+}
+
+// Get port array by ID (with port state)
+// NOTE get_port_by_id(ID) != get_port_by_id_cache(ID)
+function get_port_by_id($port_id)
+{
+  if (is_numeric($port_id))
+  {
+    $port = dbFetchRow("SELECT * FROM `ports` LEFT JOIN `ports-state` ON `ports`.`port_id` = `ports-state`.`port_id`  WHERE `ports`.`port_id` = ?", array($port_id));
+  }
+  if (is_array($port))
+  {
+    humanize_port($port);
+    return $port;
+  } else {
+    return FALSE;
+  }
+}
+
+// Get port array by ifIndex (using cache)
 function get_port_by_index_cache($device_id, $ifIndex)
 {
   global $port_index_cache;
@@ -371,18 +396,7 @@ function get_port_by_index_cache($device_id, $ifIndex)
   return $port;
 }
 
-function get_port_id_by_ifDescr($device_id, $ifDescr)
-{
-  $port = dbFetchRow("SELECT `port_id` FROM `ports` WHERE `device_id` = ? AND `ifDescr` = ? LIMIT 1", array($device_id, $ifDescr));
-
-  if (is_array($port))
-  {
-    return $port['port_id'];
-  } else {
-    return FALSE;
-  }
-}
-
+// Get port array by ifIndex
 function get_port_by_ifIndex($device_id, $ifIndex)
 {
   $port = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?", array($device_id, $ifIndex));
@@ -390,6 +404,75 @@ function get_port_by_ifIndex($device_id, $ifIndex)
   if (is_array($port))
   {
     return $port;
+  } else {
+    return FALSE;
+  }
+}
+
+// Get port ID by ifDescr (i.e. 'TenGigabitEthernet1/1') or ifName (i.e. 'Te1/1')
+function get_port_id_by_ifDescr($device_id, $ifDescr)
+{
+  $port_id = dbFetchCell("SELECT `port_id` FROM `ports` WHERE `device_id` = ? AND (`ifDescr` = ? OR `ifName` = ?) LIMIT 1", array($device_id, $ifDescr, $ifDescr));
+
+  if (is_numeric($port_id))
+  {
+    return $port_id;
+  } else {
+    return FALSE;
+  }
+}
+
+// Get port ID by ifAlias (interface description)
+function get_port_id_by_ifAlias($device_id, $ifAlias)
+{
+  $port_id = dbFetchCell("SELECT `port_id` FROM `ports` WHERE `device_id` = ? AND `ifAlias` = ? LIMIT 1", array($device_id, $ifAlias));
+
+  if (is_numeric($port_id))
+  {
+    return $port_id;
+  } else {
+    return FALSE;
+  }
+}
+
+// Get port ID by customer params (see http://www.observium.org/wiki/Interface_Description_Parsing)
+function get_port_id_by_customer($customer)
+{
+  $where = ' WHERE 1';
+  if (is_array($customer))
+  {
+    foreach ($customer as $var => $value)
+    {
+      if ($value != '')
+      {
+        switch ($var)
+        {
+          case 'device':
+          case 'device_id':
+            $where .= ' AND `device_id` = ?';
+            $param[] = $value;
+            break;
+          case 'type':
+          case 'descr':
+          case 'circuit':
+          case 'speed':
+          case 'notes':
+            $where .= ' AND `port_descr_'.$var.'` = ?';
+            $param[] = $value;
+            break;
+        }
+      }
+    }
+  } else {
+    return FALSE;
+  }
+
+  $query = 'SELECT `port_id` FROM `ports` '.$where.' LIMIT 1';
+  $port_id = dbFetchCell($query, $param);
+
+  if (is_numeric($port_id))
+  {
+    return $port_id;
   } else {
     return FALSE;
   }
@@ -415,11 +498,6 @@ function get_all_devices($device, $type = "")
   }
 
   return $devices;
-}
-
-function port_by_id_cache($port_id)
-{
-  return get_port_by_id_cache('port', $port_id);
 }
 
 function table_from_entity_type($type)
@@ -451,21 +529,6 @@ function get_entity_by_id_cache($type, $id)
   }
 
   return $entity;
-}
-
-function get_port_by_id($port_id)
-{
-  if (is_numeric($port_id))
-  {
-    $port = dbFetchRow("SELECT * FROM `ports` LEFT JOIN `ports-state` ON `ports`.`port_id` = `ports-state`.`port_id`  WHERE `ports`.`port_id` = ?", array($port_id));
-  }
-  if (is_array($port))
-  {
-    humanize_port($port);
-    return $port;
-  } else {
-    return FALSE;
-  }
 }
 
 function getImage($device)

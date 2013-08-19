@@ -16,10 +16,12 @@ $timestamp_pattern = '/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):
 if (isset($vars['timestamp_from']) && preg_match($timestamp_pattern, $vars['timestamp_from']))
 {
   $vars['from'] = strtotime($vars['timestamp_from']);
+  unset($vars['timestamp_from']);
 }
-if (isset($vars['timestamp_to']) && preg_match($timestamp_pattern, $vars['timestamp_to']))
+if (isset($vars['timestamp_to'])   && preg_match($timestamp_pattern, $vars['timestamp_to']))
 {
   $vars['to'] = strtotime($vars['timestamp_to']);
+  unset($vars['timestamp_to']);
 }
 if (!is_numeric($vars['from'])) { $vars['from'] = $config['time']['day']; }
 if (!is_numeric($vars['to']))   { $vars['to']   = $config['time']['now']; }
@@ -30,7 +32,6 @@ if($debug) print_r($graphtype);
 
 $type = $graphtype['type'];
 $subtype = $graphtype['subtype'];
-$id = $vars['id'];
 
 if(is_numeric($vars['device']))
 {
@@ -38,6 +39,36 @@ if(is_numeric($vars['device']))
 } elseif(!empty($vars['device'])) {
   $device = device_by_name($vars['device']);
 }
+
+if ($type == 'port' && !is_numeric($vars['id']))
+{
+  if (is_numeric($device['device_id']))
+  {
+    if (is_numeric($vars['ifindex']))
+    {
+      // Get port by ifIndex
+      $port = get_port_by_index_cache($device['device_id'], $vars['ifindex']);
+      if ($port) { $vars['id'] = $port['port_id']; }
+    } elseif (!empty($vars['ifdescr']))
+    {
+      // Get port by ifDescr
+      $port_id = get_port_id_by_ifDescr($device['device_id'], $vars['ifdescr']);
+      if ($port_id) { $vars['id'] = $port_id; }
+    } elseif (!empty($vars['ifalias']))
+    {
+      // Get port by ifAlias
+      $port_id = get_port_id_by_ifAlias($device['device_id'], $vars['ifalias']);
+      if ($port_id) { $vars['id'] = $port_id; }
+    }
+  } elseif (!empty($vars['circuit']))
+  {
+    // Get port by circuit id
+    $port_id = get_port_id_by_customer(array('circuit' => $vars['circuit']));
+    if ($port_id) { $vars['id'] = $port_id; }
+  }
+}
+
+$id = $vars['id'];
 
 if (is_file("includes/graphs/".$type."/auth.inc.php"))
 {
@@ -150,8 +181,8 @@ if (!$auth)
                     'presets' => TRUE,
                     'min'     => '2007-04-03 16:06:59',  // Hehe, who will guess what this date/time means? --mike
                     'max'     => date('Y-m-d 23:59:59'), // Today
-                    'from'    => $vars['timestamp_from'],
-                    'to'      => $vars['timestamp_to']);
+                    'from'    => date('Y-m-d H:i:s', $vars['from']),
+                    'to'      => date('Y-m-d H:i:s', $vars['to']));
   print_search_simple($search, '', 'update');
   unset($search);
 
