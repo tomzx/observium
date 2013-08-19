@@ -16,7 +16,7 @@ if($vars['action'] == 'update')
 $navbar['class'] = "navbar-narrow";
 $navbar['brand'] = "Alert Types";
 
-$types = dbFetchRows("SELECT `entity_type` FROM `alert_tests` GROUP BY `entity_type`");
+$types = dbFetchRows("SELECT `entity_type` FROM `alert_table` GROUP BY `entity_type`");
 
 $navbar['options']['all']['url'] = generate_url($vars, array('page' => 'alerts', 'entity_type' => 'all'));
 $navbar['options']['all']['text'] = htmlspecialchars(nicecase('all'));
@@ -107,11 +107,14 @@ echo('
     echo('<td style="width: 1px;"></td>');
     echo('<td><span class="entity-title">'.generate_device_link($device).'</span></td>');
 
-if ($vars['entity_type'] == 'all') {
-    echo('<td>'.$alert_entry['entity_type'].'</td>');
-}
+    // If we're showing all entity types, print the entity type here
+    if ($vars['entity_type'] == 'all') {
+      echo('<td>'.$alert_entry['entity_type'].'</td>');
+    }
 
-    echo('<td>'.$alert_rule['alert_name'].'</td>');
+    // Print link to the alert rule page
+    echo '<td><a href="', generate_url(array('page' => 'alert_test', 'alert_test_id' => $alert_rule['alert_test_id'])), '">', $alert_rule['alert_name'], '</a></td>';
+
     echo('<td><span class="entity-title">'.generate_entity_link($alert_entry['entity_type'], $alert_entry['entity_id'], truncate($entity_descr, 40)).'</span></td>');
 
     echo('<td>'.$alert_entry['checked'].'</td>');
