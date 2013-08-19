@@ -6,9 +6,6 @@
 //               YES, THAT MEANS YOU                   //
 /////////////////////////////////////////////////////////
 
-// Debugging Include. This isn't in SVN.
-if($debug && file_exists($config['install_dir']."/includes/ref.inc.php")) { include_once($config['install_dir']."/includes/ref.inc.php"); }
-
 // Alert Graphs
 ## FIXME - this is ugly
 

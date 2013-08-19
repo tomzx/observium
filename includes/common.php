@@ -2,6 +2,9 @@
 
 // Common Functions
 
+// Debugging Include. This isn't in SVN.
+if(file_exists($config['install_dir']."/includes/ref.inc.php")) { include_once($config['install_dir']."/includes/ref.inc.php"); }
+
 // Fix this shit, it's pretty uglytarded.
 function hexStringToIPv4($string)
 {
