@@ -34,6 +34,7 @@ if (strpos($_SERVER['PATH_INFO'], "debug"))
 
 include_once("../includes/defaults.inc.php");
 include_once("../config.php");
+include_once("../includes/definitions.inc.php");
 
 ?>
 
@@ -42,7 +43,6 @@ include_once("../config.php");
 
 
 <?php
-include_once("../includes/definitions.inc.php");
 include_once("../includes/functions.php");
 include_once("includes/functions.inc.php");
 

@@ -52,12 +52,13 @@ if ($bill_data['bill_type'] == "quota") {
   $current    = array(
                   'in' => format_si($bill_data['rate_95th_in'])."bps",
                   'out' => format_si($bill_data['rate_95th_out'])."bps",
-                  /*'tot' => format_si($bill_data['rate_95th'])."bps"*/
-                  'tot' => "n/a"
+                  'tot' => format_si($bill_data['rate_95th'])."bps"
                 );
   $average    = array(
-                  'in' => format_si($bill_data['rate_average_in'])."bps",
-                  'out' => format_si($bill_data['rate_average_out'])."bps",
+                  /* 'in' => format_si($bill_data['rate_average_in'])."bps", */
+                  /* 'out' => format_si($bill_data['rate_average_out'])."bps", */
+                  'in' => "n/a",
+                  'out' => "n/a",
                   'tot' => format_si($bill_data['rate_average'])."bps"
                 );
   $estimated  = array(
@@ -128,27 +129,27 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <table class="table table-striped table-bordered table-condensed table-rounded">
           <tr>
             <th style="width: 125px;">Billing period</th>
-            <td style="width: 5px;">:</td>
+
             <td><?php echo($fromtext." to ".$totext); ?></td>
           </tr>
           <tr>
             <th>Type</th>
-            <td>:</td>
+
             <td><span class="label label-inverse"><?php echo($type); ?></span></td>
           </tr>
           <tr>
             <th>Allowed</th>
-            <td>:</td>
+
             <td><span class="badge badge-success"><?php echo($allowed); ?></span></td>
           </tr>
           <tr>
             <th>Used</th>
-            <td>:</td>
+
             <td><span class="badge badge-warning"><?php echo($used); ?></span></td>
           </tr>
           <tr>
             <th>Overusage</th>
-            <td>:</td>
+
             <td><?php echo($overuse); ?></td>
           </tr>
           <tr>
@@ -166,33 +167,39 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <table class="table table-striped table-bordered table-condensed table-rounded">
           <thead>
             <tr>
-              <th colspan="2"></th>
+              <th>Billing period</th>
               <th>Inbound</th>
               <th>Outbound</th>
-              <th>Total</th>
+              <th>Used</th>
             </tr>
           </thead>
           <tr>
-            <th style="width: 125px;">Billing period</th>
-            <td style="width: 5px;">:</td>
+<?php if ($bill_data['bill_type'] == "cdr") { ?>
+            <th style="width: 125px;">95th percentile</th>
+<?php } else { ?>
+            <th style="width: 125px;">Total</th>
+<?php } ?>
+
             <td><span class="badge badge-success"><?php echo($current['in']); ?></span></td>
             <td><span class="badge badge-info"><?php echo($current['out']); ?></span></td>
             <td><span class="badge"><?php echo($current['tot']); ?></span></td>
           </tr>
           <tr>
             <th>Average</th>
-            <td>:</td>
+
             <td><span class="badge badge-success"><?php echo($average['in']); ?></span></td>
             <td><span class="badge badge-info"><?php echo($average['out']); ?></span></td>
             <td><span class="badge"><?php echo($average['tot']); ?></span></td>
           </tr>
+<?php if ($bill_data['bill_type'] == "quota") { ?>
           <tr>
             <th>Estimated</th>
-            <td>:</td>
+
             <td><span class="badge badge-success"><?php echo($estimated['in']); ?></span></td>
             <td><span class="badge badge-info"><?php echo($estimated['out']); ?></span></td>
             <td><span class="badge"><?php echo($estimated['tot']); ?></span></td>
           </tr>
+<?php } ?>
         </table>
       </div>
     </div>
@@ -204,17 +211,17 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <table class="table table-striped table-bordered table-condensed table-rounded">
           <tr>
             <th style="width: 175px;"><i class="icon-user"></i> Customer Reference</th>
-            <td style="width: 5px;">:</td>
+
             <td><?php echo($optional['cust']); ?></td>
           </tr>
           <tr>
             <th><i class="icon-info-sign"></i> Billing Reference</th>
-            <td>:</td>
+
             <td><?php echo($optional['ref']); ?></td>
           </tr>
           <tr>
             <th><i class="icon-comment"></i> Notes</th>
-            <td>:</td>
+
             <td><?php echo($optional['notes']); ?></td>
           </tr>
         </table>
@@ -226,12 +233,12 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <table class="table table-striped table-bordered table-condensed table-rounded">
           <tr>
             <th style="width: 175px;"><i class="icon-time"></i> Last polled</th>
-            <td style="width: 5px;">:</td>
+
             <td><?php echo(strftime('%A, %e %B %Y @ %H:%M:%S', $optional['poll'])); ?></td>
           </tr>
           <tr>
             <th><i class="icon-time"></i> Last calculated</th>
-            <td>:</td>
+
             <td><?php echo(strftime('%A, %e %B %Y @ %H:%M:%S', time($optional['calc']))); ?></td>
           </tr>
         </table>
@@ -243,12 +250,12 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
         <table class="table table-striped table-bordered table-condensed table-rounded">
           <tr>
             <th style="width: 175px;"><i class="icon-random"></i> Number of ports</th>
-            <td style="width: 5px;">:</td>
+
             <td><?php echo($ports_info['ports']); ?></td>
           </tr>
           <tr>
             <th><i class="icon-random"></i> Total capacity</th>
-            <td>:</td>
+
             <td><?php echo(format_si($ports_info['capacity'])); ?>bps</td>
           </tr>
         </table>
