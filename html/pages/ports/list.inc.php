@@ -1,6 +1,6 @@
 <?php
 
-/// Pagination
+// Pagination
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 if(!$vars['pageno']) { $vars['pageno'] = "1"; }
 echo pagination($vars, count($ports));
@@ -10,7 +10,41 @@ if($vars['pageno'])
   $ports = array_chunk($ports, $vars['pagesize']);
   $ports = $ports[$vars['pageno']-1];
 }
-/// End Pagination
+// End Pagination
+
+
+// Populate ports array (much faster for large systems)
+
+$where = " WHERE 0 ";
+$param = array();
+
+foreach($ports as $p)
+{
+  $where    .= " OR `ports`.`port_id` = ?";
+  $param[]  = $p['port_id'];
+}
+
+$select = "`ports`.*,`ports-state`.*,`ports`.`port_id` as `port_id`";
+#$select = "*,`ports`.`port_id` as `port_id`";
+
+
+include("includes/port-sort-select.inc.php");
+
+$sql  = "SELECT ".$select;
+$sql .= " FROM  `ports`";
+$sql .= " JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
+$sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
+$sql .= " ".$where;
+
+unset($ports);
+
+$ports = dbFetchRows($sql, $param);
+
+// Re-sort because the DB doesn't do that.
+include("includes/port-sort.inc.php");
+
+// End populating ports array
+
 
 echo('<table class="table table-striped table-bordered table-rounded table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
@@ -47,13 +81,9 @@ echo("      </tr></thead>");
 $ports_disabled = 0; $ports_down = 0; $ports_up = 0; $ports_total = 0;
 foreach ($ports as $port)
 {
-#  if (port_permitted($port['port_id'], $port['device_id']))
-#  {
 
-#    if ($port['ifAdminStatus'] == "down") { $ports_disabled++; $table_tab_colour = "#aaaaaa";
-#    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down") { $ports_down++; $table_tab_colour = "#cc0000";
-#    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $ports_down++; $table_tab_colour = "#ff6600";
-#    } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up") { $ports_up++; $table_tab_colour = "#194B7F"; }
+    $device = &$GLOBALS['cache']['devices']['id'][$port['device_id']];
+
     $ports_total++;
 
     humanize_port($port);
@@ -72,7 +102,7 @@ foreach ($ports as $port)
     echo "<tr class='ports'>
           <td style='background-color: ".$table_tab_colour.";'></td>
           <td></td>
-          <td><span class=entity>".generate_device_link($port, shorthost($port['hostname'], "20"))."</span><br />
+          <td><span class=entity>".generate_device_link($device, shorthost($device['hostname'], "20"))."</span><br />
               <span class=em>".truncate($port['location'],32,"")."</span></td>
 
           <td><span class=entity>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />

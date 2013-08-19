@@ -254,7 +254,10 @@ if(!isset($vars['ignore']))   { $vars['ignore'] = "0"; }
 if(!isset($vars['disabled'])) { $vars['disabled'] = "0"; }
 if(!isset($vars['deleted']))  { $vars['deleted'] = "0"; }
 
+$select = "`ports`.`port_id` as `port_id`,`devices`.`device_id` as `device_id`";
 $where = " WHERE 1 ";
+
+include("includes/port-sort-select.inc.php");
 
 foreach ($vars as $var => $value)
 {
@@ -334,9 +337,9 @@ foreach ($vars as $var => $value)
   }
 }
 
-$sql  = "SELECT *, `ports`.`port_id` as `port_id`";
+$sql  = "SELECT ".$select."";
 $sql .= " FROM  `ports`";
-$sql .= " JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
+$sql .= " INNER JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
 $sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
 $sql .= " ".$where;
 
@@ -344,21 +347,6 @@ $row = 1;
 
 list($format, $subformat) = explode("_", $vars['format']);
 $ports = dbFetchRows($sql, $param);
-
-function port_permitted_array(&$ports)
-{
-  // Strip out the ports the user isn't allowed to see, if they don't have global rights
-  if ($_SESSION['userlevel'] < '7')
-  {
-    foreach ($ports as $key => $port)
-    {
-      if (!port_permitted($port['port_id'], $port['device_id']))
-      {
-        unset($ports[$key]);
-      }
-    }
-  }
-}
 
 port_permitted_array($ports);
 

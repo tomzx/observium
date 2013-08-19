@@ -17,6 +17,9 @@ switch ($vars['sort'])
   case 'traffic_perc_out':
     $ports = array_sort($ports, 'ifOutOctets_perc', SORT_DESC);
     break;
+  case 'traffic_perc':
+    $ports = array_sort($ports, 'ifOctets_perc', SORT_DESC);
+    break;
   case 'packets':
     $ports = array_sort($ports, 'ifUcastPkts_rate', SORT_DESC);
     break;
