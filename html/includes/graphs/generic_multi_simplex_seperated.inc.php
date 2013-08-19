@@ -126,3 +126,5 @@ if ($_GET['previous'] == "yes")
   $rrd_options .= " LINE1.25:X#666666:";
 
 }
+
+?>

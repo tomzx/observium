@@ -338,7 +338,7 @@ foreach ($vars as $var => $value)
   }
 }
 
-$sql  = "SELECT ".$select."";
+$sql  = "SELECT " . $select;
 $sql .= " FROM  `ports`";
 $sql .= " INNER JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
 $sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
