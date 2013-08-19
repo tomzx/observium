@@ -459,7 +459,7 @@ function generate_url($vars, $new_vars = array())
   return($url);
 }
 
-function generate_overlib_content($graph_array, $text)
+function generate_overlib_content($graph_array, $text = NULL)
 {
     global $config;
     $graph_array['height'] = "100";
@@ -688,6 +688,22 @@ function port_permitted($port_id, $device_id = NULL)
 
   return $allowed;
 }
+
+function port_permitted_array(&$ports)
+{
+  // Strip out the ports the user isn't allowed to see, if they don't have global rights
+  if ($_SESSION['userlevel'] < '7')
+  {
+    foreach ($ports as $key => $port)
+    {
+      if (!port_permitted($port['port_id'], $port['device_id']))
+      {
+        unset($ports[$key]);
+      }
+    }
+  }
+}
+
 
 function application_permitted($app_id, $device_id = NULL)
 {
