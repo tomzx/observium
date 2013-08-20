@@ -26,7 +26,9 @@ function print_sql($query)
   } else {
     if(class_exists('SqlFormatter'))
     {
-      echo SqlFormatter::highlight($query);
+      // Hide it under a "database icon" popup.
+      #echo overlib_link('#', '<i class="oicon-databases"> </i>', SqlFormatter::highlight($query));
+      echo '<p>',SqlFormatter::highlight($query),'</p>';
     } else {
       print_vars($query);
     }

@@ -42,7 +42,6 @@ include_once("includes/functions.inc.php");
 ?>
 
   <base href="<?php echo($config['base_url']); ?>" />
-  <link href="css/ref.css" rel="stylesheet" type="text/css" />
   <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
   <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
   <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
@@ -52,9 +51,17 @@ include_once("includes/functions.inc.php");
 
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/google-code-prettify.js"></script>
-  <script type="text/javascript" src="js/ref.js"></script>
 
 <?php
+
+// If the php-ref scripts are installed, load up the bits needed
+
+if($ref_loaded) {
+?>
+  <script type="text/javascript" src="js/ref.js"></script>
+  <link   href="css/ref.css" rel="stylesheet" type="text/css" />
+<?php
+}
 
 $runtime_start = utime();
 
