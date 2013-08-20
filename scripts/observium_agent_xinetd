@@ -8,7 +8,7 @@ service observium_agent
         user           = root
         server         = /usr/bin/observium_agent
 
-        # configure the IP address(es) of your Nagios server here:
+        # configure the IP address(es) of your Observium server here:
         only_from      = 127.0.0.1
 
         # Don't be too verbose. Don't log every check. This might be
