@@ -3,7 +3,7 @@
 // Common Functions
 
 // Debugging Include. This isn't in SVN.
-if(file_exists($config['install_dir']."/includes/ref.inc.php")) { include_once($config['install_dir']."/includes/ref.inc.php"); }
+if(file_exists($config['install_dir']."/includes/debug/ref.inc.php")) { include_once($config['install_dir']."/includes/debug/ref.inc.php"); $ref_loaded = TRUE; }
 
 // Fix this shit, it's pretty uglytarded.
 function hexStringToIPv4($string)
@@ -14,6 +14,23 @@ function hexStringToIPv4($string)
   $ip = hexdec($a).".".hexdec($b).".".hexdec($c).".".hexdec($d);
 
   return $ip;
+}
+
+// Observium's SQL debugging. Choses nice output depending upon web or cli
+function print_sql($query)
+{
+
+  if($GLOBALS['cli'])
+  {
+    print_vars($query);
+  } else {
+    if(class_exists('SqlFormatter'))
+    {
+      echo SqlFormatter::highlight($query);
+    } else {
+      print_vars($query);
+    }
+  }
 }
 
 // Observium's variable debugging. Choses nice output depending upon web or cli

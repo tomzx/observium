@@ -17,10 +17,8 @@ Usage
 
 */
 
-if(true)
-{
-  include_once('SqlFormatter.php');
-}
+// Debugging Include. This isn't in SVN.
+if(file_exists($config['install_dir']."/includes/debug/SqlFormatter.php")) { include_once($config['install_dir']."/includes/debug/SqlFormatter.php"); }
 
 /*
  * Performs a query using the given string.
@@ -34,7 +32,7 @@ function dbQuery($sql, $parameters = array()) {
           {
             print_message("\nSQL[%y".$fullSql."%n] ", 'color');
           } else {
-            print_vars($fullSql);
+            print_sql($fullSql);
           }
         }
 
