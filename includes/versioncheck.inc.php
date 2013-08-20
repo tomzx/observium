@@ -31,6 +31,15 @@ $stats['php_version']    = phpversion();
 $stats['os_version']     = trim(shell_exec($config['install_dir']."/scripts/distro"));
 // New version
 $stats['os_text']	 = trim(shell_exec($config['install_dir']."/scripts/os"));
+
+#OS=Linux\nKERNEL=2.6.18-238.12.1.el5\nARCH=amd64\nDISTRO=CentOS\nDISTROVER=5.6\nSCRIPTVER=1.0.2
+
+foreach(explode("\n", $stats['os_text']) as $part)
+{
+  list($a, $b) = explode("=", $part);
+  $stats['os'][$a] = $b;
+}
+
 list($stats['os']['os'], $stats['os']['os_ver'], $stats['os']['arch'], $stats['os']['distro'], $stats['os']['distro_ver']) = explode("|", $stats['os_text']);
 
 // sysObjectID for Generic devices
