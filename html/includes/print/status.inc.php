@@ -53,22 +53,22 @@ function print_status($status)
     $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
-    $query_user = ' AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN `devices_perms` AS P ON D.`device_id` = P.`device_id` ';
+    $query_user = ' AND P.`user_id` = ? ';
     $param[] = $_SESSION['user_id'];
   }
 
   // Don't show ignored and disabled devices
-  $query_device = ' AND D.ignore = 0 ';
-  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  $query_device = ' AND D.`ignore` = 0 ';
+  if (!$config['web_show_disabled']) { $query_device .= 'AND D.`disabled` = 0 '; }
 
   // Show Device Status
   if ($status['devices'])
   {
     $query = 'SELECT * FROM `devices` AS D ';
     $query .= $query_perms;
-    $query .= 'WHERE D.status = 0' . $query_device . $query_user;
-    $query .= 'ORDER BY D.hostname ASC';
+    $query .= 'WHERE D.`status` = 0' . $query_device . $query_user;
+    $query .= 'ORDER BY D.`hostname` ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $device)
     {
@@ -90,8 +90,8 @@ function print_status($status)
     {
       $query = 'SELECT * FROM `devices` AS D ';
       $query .= $query_perms;
-      $query .= 'WHERE D.status = 1 AND D.uptime > 0 AND D.uptime < ' . $config['uptime_warning'] . $query_device . $query_user;
-      $query .= 'ORDER BY D.hostname ASC';
+      $query .= 'WHERE D.`status` = 1 AND D.`uptime` > 0 AND D.`uptime` < ' . $config['uptime_warning'] . $query_device . $query_user;
+      $query .= 'ORDER BY D.`hostname` ASC';
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $device)
       {
@@ -120,14 +120,14 @@ function print_status($status)
     }
 
     $query = 'SELECT * FROM `ports` AS I ';
-    if ($status['links'] && !$status['ports']) { $query .= 'INNER JOIN links as L ON I.port_id = L.local_port_id '; }
-    $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
+    if ($status['links'] && !$status['ports']) { $query .= 'INNER JOIN `links` AS L ON I.`port_id` = L.`local_port_id` '; }
+    $query .= 'LEFT JOIN `devices` AS D ON I.`device_id` = D.`device_id` ';
     $query .= $query_perms;
-    $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 ";
-    if ($status['links'] && !$status['ports']) { $query .= ' AND L.active = 1 '; }
+    $query .= "WHERE I.`ifOperStatus` = 'down' AND I.`ifAdminStatus` = 'up' AND I.`ignore` = 0 AND I.`deleted` = 0 ";
+    if ($status['links'] && !$status['ports']) { $query .= ' AND L.`active` = 1 '; }
     $query .= $query_device . $query_user;
-    $query .= ' AND I.ifLastChange >= DATE_SUB(NOW(), INTERVAL '.$max_interval.' HOUR) ';
-    $query .= 'ORDER BY I.ifLastChange DESC, D.hostname ASC, I.ifDescr * 1 ASC ';
+    $query .= ' AND I.`ifLastChange` >= DATE_SUB(NOW(), INTERVAL '.$max_interval.' HOUR) ';
+    $query .= 'ORDER BY I.`ifLastChange` DESC, D.`hostname` ASC, I.`ifDescr` * 1 ASC ';
     $entries = dbFetchRows($query, $param);
     $i = 1;
     foreach ($entries as $port)
@@ -158,11 +158,11 @@ function print_status($status)
   if ($status['errors'])
   {
     $query = 'SELECT * FROM `ports` AS I ';
-    $query .= 'LEFT JOIN `ports-state` AS E ON I.port_id = E.port_id ';
-    $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
+    $query .= 'LEFT JOIN `ports-state` AS E ON I.`port_id` = E.`port_id` ';
+    $query .= 'LEFT JOIN `devices` AS D ON I.`device_id` = D.`device_id` ';
     $query .= $query_perms;
-    $query .= "WHERE I.ifOperStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 AND (E.ifInErrors_delta > 0 OR E.ifOutErrors_delta > 0)" . $query_device . $query_user;
-    $query .= 'ORDER BY D.hostname ASC, I.ifDescr * 1 ASC';
+    $query .= "WHERE I.`ifOperStatus` = 'up' AND I.`ignore` = 0 AND I.`deleted` = 0 AND (E.`ifInErrors_delta` > 0 OR E.`ifOutErrors_delta` > 0)" . $query_device . $query_user;
+    $query .= 'ORDER BY D.`hostname` ASC, I.`ifDescr` * 1 ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $port)
     {
@@ -186,10 +186,10 @@ function print_status($status)
   if ($status['services'])
   {
     $query = 'SELECT * FROM `services` AS S ';
-    $query .= 'LEFT JOIN `devices` AS D ON S.device_id = D.device_id ';
+    $query .= 'LEFT JOIN `devices` AS D ON S.`device_id` = D.`device_id` ';
     $query .= $query_perms;
-    $query .= "WHERE S.service_status = 'down' AND S.service_ignore = 0" . $query_device . $query_user;
-    $query .= 'ORDER BY D.hostname ASC';
+    $query .= "WHERE S.`service_status` = 'down' AND S.`service_ignore` = 0" . $query_device . $query_user;
+    $query .= 'ORDER BY D.`hostname` ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $service)
     {
@@ -218,10 +218,10 @@ function print_status($status)
       //$bgpstates .= 'ESTABLISHED - Peering is established; routing begins.';
 
       $query = 'SELECT * FROM `devices` AS D ';
-      $query .= 'LEFT JOIN bgpPeers AS B ON B.device_id = D.device_id ';
+      $query .= 'LEFT JOIN `bgpPeers` AS B ON B.`device_id` = D.`device_id` ';
       $query .= $query_perms;
-      $query .= "WHERE (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established' " . $query_device . $query_user;
-      $query .= 'ORDER BY D.hostname ASC';
+      $query .= "WHERE (`bgpPeerAdminStatus` = 'start' OR `bgpPeerAdminStatus` = 'running') AND `bgpPeerState` != 'established' " . $query_device . $query_user;
+      $query .= 'ORDER BY D.`hostname` ASC';
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $peer)
       {
@@ -289,28 +289,33 @@ function get_status_array($status)
   // Mike: I know that there are duplicated variables, but later will remove global
   global $config, $cache;
 
+  $max_interval = filter_var($status['max']['interval'], FILTER_VALIDATE_INT, array('options' => array('default' => 24,
+                                                                                                       'min_range' => 1)));
+  $max_count    = filter_var($status['max']['count'],    FILTER_VALIDATE_INT, array('options' => array('default' => 200,
+                                                                                                       'min_range' => 1)));
+  
   $param = array();
   if ($_SESSION['userlevel'] >= 5)
   {
     $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
-    $query_user = ' AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN `devices_perms` AS P ON D.`device_id` = P.`device_id` ';
+    $query_user = ' AND P.`user_id` = ? ';
     $param[] = $_SESSION['user_id'];
   }
 
   // Don't show ignored and disabled devices
-  $query_device = ' AND D.ignore = 0 ';
-  if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+  $query_device = ' AND D.`ignore` = 0 ';
+  if (!$config['web_show_disabled']) { $query_device .= 'AND D.`disabled` = 0 '; }
 
   // Show Device Status
   if ($status['devices'])
   {
     $query = 'SELECT * FROM `devices` AS D ';
     $query .= $query_perms;
-    $query .= 'WHERE D.status = 0' . $query_device . $query_user;
-    $query .= 'ORDER BY D.hostname ASC';
+    $query .= 'WHERE D.`status` = 0' . $query_device . $query_user;
+    $query .= 'ORDER BY D.`hostname` ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $device)
     {
@@ -326,8 +331,8 @@ function get_status_array($status)
     {
       $query = 'SELECT * FROM `devices` AS D ';
       $query .= $query_perms;
-      $query .= 'WHERE D.status = 1 AND D.uptime > 0 AND D.uptime < ' . $config['uptime_warning'] . $query_device . $query_user;
-      $query .= 'ORDER BY D.hostname ASC';
+      $query .= 'WHERE D.`status` = 1 AND D.`uptime` > 0 AND D.`uptime` < ' . $config['uptime_warning'] . $query_device . $query_user;
+      $query .= 'ORDER BY D.`hostname` ASC';
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $device)
       {
@@ -350,14 +355,14 @@ function get_status_array($status)
     }
 
     $query = 'SELECT * FROM `ports` AS I ';
-    if ($status['links'] && !$status['ports']) { $query .= 'INNER JOIN links as L ON I.port_id = L.local_port_id '; }
-    $query .= 'LEFT JOIN `devices` AS D ON I.device_id = D.device_id ';
+    if ($status['links'] && !$status['ports']) { $query .= 'INNER JOIN `links` as L ON I.`port_id` = L.`local_port_id` '; }
+    $query .= 'LEFT JOIN `devices` AS D ON I.`device_id` = D.`device_id` ';
     $query .= $query_perms;
-    $query .= "WHERE I.ifOperStatus = 'down' AND I.ifAdminStatus = 'up' AND I.ignore = 0 AND I.deleted = 0 ";
-    if ($status['links'] && !$status['ports']) { $query .= ' AND L.active = 1 '; }
+    $query .= "WHERE I.`ifOperStatus` = 'down' AND I.`ifAdminStatus` = 'up' AND I.`ignore` = 0 AND I.`deleted` = 0 ";
+    if ($status['links'] && !$status['ports']) { $query .= ' AND L.`active` = 1 '; }
     $query .= $query_device . $query_user;
-    $query .= ' AND I.ifLastChange >= DATE_SUB(NOW(), INTERVAL '.$max_interval.' HOUR) ';
-    $query .= 'ORDER BY I.ifLastChange DESC, D.hostname ASC, I.ifDescr * 1 ASC ';
+    $query .= ' AND I.`ifLastChange` >= DATE_SUB(NOW(), INTERVAL '.$max_interval.' HOUR) ';
+    $query .= 'ORDER BY I.`ifLastChange` DESC, D.`hostname` ASC, I.`ifDescr` * 1 ASC ';
     $entries = dbFetchRows($query, $param);
     $i = 1;
     foreach ($entries as $port)
@@ -365,19 +370,11 @@ function get_status_array($status)
       if ($i > $max_count)
       {
         // Limit to 200 ports on overview page
-        $string .= '  <tr><td></td><td><span class="badge badge-info">Port</span></td>';
-        $string .= '<td><span class="label label-important">Port Down</span></td>';
-        $string .= '<td colspan=3>Too many ports down. See <strong><a href="'.generate_url(array('page'=>'ports'), array('state'=>'down')).'">All DOWN ports</a></strong>.</td></tr>' . PHP_EOL;
         break;
       }
-#      humanize_port($port);
       $boxes[] = array('sev' => 50, 'class' => 'Port', 'event' => 'Down', 'device_link' => generate_device_link($port, shorthost($port['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
                        'time' => formatUptime($config['time']['now'] - strtotime($port['ifLastChange'])), 'location' => $device['location']);
-
-      // We don't do anything with this here at the moment. There is no comment on it, what is it for?
-      // if ($status['links'] && !$status['ports']) { $string .= ' ('.strtoupper($port['protocol']).': ' .$port['remote_hostname'].' / ' .$port['remote_port'] .')'; }
-
     }
   }
 
@@ -393,7 +390,6 @@ function get_status_array($status)
 
       if(port_permitted($port))
       {
-
         if ($port['ifInErrors_delta']) { $port['string'] .= 'Rx: ' . format_number($port['ifInErrors_delta']); }
         if ($port['ifInErrors_delta'] && $port['ifOutErrors_delta']) { $port['string'] .= ', '; }
         if ($port['ifOutErrors_delta']) { $port['string'] .= 'Tx: ' . format_number($port['ifOutErrors_delta']); }
@@ -401,7 +397,6 @@ function get_status_array($status)
         $boxes[] = array('sev' => 75, 'class' => 'Port', 'event' => 'Errors', 'device_link' => generate_device_link($device, shorthost($device['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
                        'time' => $port['string'], 'location' => $device['location']);
-
       }
     }
   }
@@ -412,8 +407,8 @@ function get_status_array($status)
     $query = 'SELECT * FROM `services` AS S ';
     $query .= 'LEFT JOIN `devices` AS D ON S.device_id = D.device_id ';
     $query .= $query_perms;
-    $query .= "WHERE S.service_status = 'down' AND S.service_ignore = 0" . $query_device . $query_user;
-    $query .= 'ORDER BY D.hostname ASC';
+    $query .= "WHERE S.`service_status` = 'down' AND S.`service_ignore` = 0" . $query_device . $query_user;
+    $query .= 'ORDER BY D.`hostname` ASC';
     $entries = dbFetchRows($query, $param);
     foreach ($entries as $service)
     {
@@ -428,39 +423,25 @@ function get_status_array($status)
   {
     if (isset($config['enable_bgp']) && $config['enable_bgp'])
     {
-      // Description for BGP states
-      $bgpstates = 'IDLE - Router is searching routing table to see whether a route exists to reach the neighbor. &#xA;';
-      $bgpstates .= 'CONNECT - Router found a route to the neighbor and has completed the three-way TCP handshake. &#xA;';
-      $bgpstates .= 'OPEN SENT - Open message sent, with parameters for the BGP session. &#xA;';
-      $bgpstates .= 'OPEN CONFIRM - Router received agreement on the parameters for establishing session. &#xA;';
-      $bgpstates .= 'ACTIVE - Router did not receive agreement on parameters of establishment. &#xA;';
-      //$bgpstates .= 'ESTABLISHED - Peering is established; routing begins.';
-
       $query = 'SELECT * FROM `devices` AS D ';
-      $query .= 'LEFT JOIN bgpPeers AS B ON B.device_id = D.device_id ';
+      $query .= 'LEFT JOIN `bgpPeers` AS B ON B.`device_id` = D.`device_id` ';
+      $query .= 'LEFT JOIN `bgpPeers-state` AS BS ON B.`bgpPeer_id` = BS.`bgpPeer_id` ';
       $query .= $query_perms;
-      $query .= "WHERE (bgpPeerAdminStatus = 'start' OR bgpPeerAdminStatus = 'running') AND bgpPeerState != 'established' " . $query_device . $query_user;
-      $query .= 'ORDER BY D.hostname ASC';
+      $query .= "WHERE (`bgpPeerAdminStatus` = 'start' OR `bgpPeerAdminStatus` = 'running') AND `bgpPeerState` != 'established' " . $query_device . $query_user;
+      $query .= 'ORDER BY D.`hostname` ASC';
       $entries = dbFetchRows($query, $param);
       foreach ($entries as $peer)
       {
         $peer_ip = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
-#        if (strstr($peer['bgpPeerRemoteAddr'], ':')) { $peer['wide'] = TRUE;  }
-
+        $peer['wide'] = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? TRUE : FALSE;
         $boxes[] = array('sev' => 75, 'class' => 'BGP Peer', 'event' => 'Down', 'device_link' => generate_device_link($peer, shorthost($peer['hostname'])),
                          'entity_link' => $peer_ip, 'wide' => $peer['wide'],
-                         'time' => formatUptime($peer['bgpPeerFsmEstablishedTime'], 'shorter'), 'location' => $device['location']);
-
-        echo($peer['bgpPeerFsmEstablishedTime']);
-
+                         'time' => formatUptime($peer['bgpPeerFsmEstablishedTime'], 'short-3'), 'location' => $device['location']);
       }
     }
   }
 
-  $string .= '  </tbody>' . PHP_EOL;
-  $string .= '</table>';
-
-  // Final print all statuses
+  // Return boxes array
   return $boxes;
 }
 
