@@ -4,7 +4,7 @@ if (!$os)
 {
 
   // First check the sysObjectID, then the sysDescr
-  if (strstr($sysObjectId, "1.3.6.1.4.1.8072.3.2.8") || preg_match('/^FreeBSD/', $sysDescr))
+  if (preg_match('/^FreeBSD/', $sysDescr))
   {
     $os = "freebsd";
   }

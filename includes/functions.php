@@ -165,15 +165,26 @@ function get_device_os($device)
     echo("| $sysDescr | $sysObjectId | ");
   }
 
-  $dir_handle = @opendir($config['install_dir'] . "/includes/discovery/os") or die("Unable to open $path");
-  while ($file = readdir($dir_handle))
+  foreach (array_keys($config['os']) as $cos)
   {
-    if (preg_match("/.php$/", $file))
+    foreach ($config['os'][$cos]['sysObjectID'] as $oid)
     {
-      include($config['install_dir'] . "/includes/discovery/os/" . $file);
+      if (strstr($sysObjectId, $oid)) { $os = $cos; break 2; }
     }
   }
-  closedir($dir_handle);
+
+  if (!$os)
+  {
+    $dir_handle = @opendir($config['install_dir'] . "/includes/discovery/os") or die("Unable to open $path");
+    while ($file = readdir($dir_handle))
+     {
+      if (preg_match("/.php$/", $file))
+      {
+        include($config['install_dir'] . "/includes/discovery/os/" . $file);
+      }
+    }
+    closedir($dir_handle);
+  }
 
   if ($os) { return $os; } else { return "generic"; }
 }
