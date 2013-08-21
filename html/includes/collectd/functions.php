@@ -426,7 +426,7 @@ function collectd_draw_rrd($host, $plugin, $pinst = null, $type, $tinst = null, 
 	$rrdfile = sprintf('%s/%s%s%s/%s%s%s', $host, $plugin, is_null($pinst) ? '' : '-', $pinst, $type, is_null($tinst) ? '' : '-', $tinst);
 	foreach ($config['datadirs'] as $datadir)
 		if (is_file($datadir.'/'.$rrdfile.'.rrd')) {
-			$rrdinfo = rrdtool_info($datadir.'/'.$rrdfile.'.rrd');
+			$rrdinfo = rrdtool_file_info($datadir.'/'.$rrdfile.'.rrd');
 			if (isset($rrdinfo['RRA']) && is_array($rrdinfo['RRA']))
 				break;
 			else

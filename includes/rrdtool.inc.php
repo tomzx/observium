@@ -8,7 +8,7 @@
  * @package    observium
  * @subpackage rrdtool
  * @author     Adam Armstrong <adama@memetic.org>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -287,7 +287,7 @@ function rrdtool_escape($string, $maxlength = NULL)
  *
  */
 
-function rrdtool_info($file) {
+function rrdtool_file_info($file) {
         $info = array('filename'=>$file);
 
         $rrd = popen(RRDTOOL.' info '.escapeshellarg($file), 'r');
