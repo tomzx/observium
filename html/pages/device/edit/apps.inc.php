@@ -1,5 +1,9 @@
 <?php
 
+print_warning("<b>Warning</b>: do not toggle these settings manually for Observium agent applications.
+This section is deprecated and only exists to accomodate SNMP-polled applications which have not been converted to the agent system.
+Observium agent applications are automatically detected by the poller system.");
+
 # Load our list of available applications
 if ($handle = opendir($config['install_dir'] . "/includes/polling/applications/"))
 {
