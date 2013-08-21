@@ -305,13 +305,12 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
 
   <?php
 
-  $sql_profile = array_sort($sql_profile, 'time', SORT_DESC);
+  $sql_profile = array_sort($sql_profile, 'time', 'SORT_DESC');
   $sql_profile = array_slice($sql_profile, 0, 15);
   foreach($sql_profile AS $sql_query)
   {
     #echo '<tr><td>', $sql_query['time'], '</td><td>' ,SqlFormatter::highlight($sql_query['sql']), '</td></tr>';
     echo '<tr><td>', $sql_query['time'], '</td><td>' ,$sql_query['sql'], '</td></tr>';
-
   }
 
   ?>

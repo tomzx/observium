@@ -264,7 +264,7 @@ function print_status_boxes($status)
 
   $status_array = get_status_array($status);
 
-  $status_array = array_sort($status_array, 'sev', SORT_DESC);
+  $status_array = array_sort($status_array, 'sev', 'SORT_DESC');
 
   foreach($status_array AS $entry)
   {

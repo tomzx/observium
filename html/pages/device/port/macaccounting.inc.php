@@ -103,16 +103,16 @@ foreach ($cols as $sort => $col)
   switch ($vars['sort'])
   {
     case 'bps_in':
-      $ma_array = array_sort($ma_array, 'bytes_input_rate', SORT_DESC);
+      $ma_array = array_sort($ma_array, 'bytes_input_rate', 'SORT_DESC');
       break;
     case 'bps_out':
-      $ma_array = array_sort($ma_array, 'bytes_output_rate', SORT_DESC);
+      $ma_array = array_sort($ma_array, 'bytes_output_rate', 'SORT_DESC');
       break;
     case 'pkts_in':
-      $ma_array = array_sort($ma_array, 'bytes_input_rate', SORT_DESC);
+      $ma_array = array_sort($ma_array, 'bytes_input_rate', 'SORT_DESC');
       break;
     case 'pkts_out':
-      $ma_array = array_sort($ma_array, 'bytes_output_rate', SORT_DESC);
+      $ma_array = array_sort($ma_array, 'bytes_output_rate', 'SORT_DESC');
       break;
   }
 

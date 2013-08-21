@@ -255,7 +255,7 @@ if(!isset($vars['ignore']))   { $vars['ignore'] = "0"; }
 if(!isset($vars['disabled'])) { $vars['disabled'] = "0"; }
 if(!isset($vars['deleted']))  { $vars['deleted'] = "0"; }
 
-$select = "`ports`.`port_id` as `port_id`,`devices`.`device_id` as `device_id`";
+$select = "`ports`.`port_id` AS `port_id`, `devices`.`device_id` AS `device_id`";
 $where = " WHERE 1 ";
 
 include("includes/port-sort-select.inc.php");
@@ -340,8 +340,8 @@ foreach ($vars as $var => $value)
 
 $sql  = "SELECT " . $select;
 $sql .= " FROM  `ports`";
-$sql .= " INNER JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
-$sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
+$sql .= " INNER JOIN `devices` ON `ports`.`device_id` = `devices`.`device_id`";
+$sql .= " LEFT JOIN `ports-state` ON `ports`.`port_id` = `ports-state`.`port_id`";
 $sql .= " ".$where;
 
 $row = 1;
@@ -357,7 +357,7 @@ if(file_exists('pages/ports/'.$format.'.inc.php'))
 {
   include('pages/ports/'.$format.'.inc.php');
 } else {
-  echo("Invalid Format");
+  print_error("Wrong list format.");
 }
 
 ?>

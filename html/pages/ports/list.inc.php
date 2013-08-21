@@ -3,7 +3,7 @@
 // Pagination
 if(!$vars['pagesize']) { $vars['pagesize'] = "100"; }
 if(!$vars['pageno']) { $vars['pageno'] = "1"; }
-echo pagination($vars, count($ports));
+echo(pagination($vars, count($ports)));
 
 if($vars['pageno'])
 {
@@ -24,16 +24,15 @@ foreach($ports as $p)
   $param[]  = $p['port_id'];
 }
 
-$select = "`ports`.*,`ports-state`.*,`ports`.`port_id` as `port_id`";
+$select = "`ports`.*, `ports-state`.*, `ports`.`port_id` AS `port_id`";
 #$select = "*,`ports`.`port_id` as `port_id`";
-
 
 include("includes/port-sort-select.inc.php");
 
 $sql  = "SELECT ".$select;
 $sql .= " FROM  `ports`";
-$sql .= " JOIN `devices` ON  `ports`.`device_id` =  `devices`.`device_id`";
-$sql .= " LEFT JOIN `ports-state` ON  `ports`.`port_id` =  `ports-state`.`port_id`";
+$sql .= " JOIN `devices` ON `ports`.`device_id` =  `devices`.`device_id`";
+$sql .= " LEFT JOIN `ports-state` ON `ports`.`port_id` =  `ports-state`.`port_id`";
 $sql .= " ".$where;
 
 unset($ports);
@@ -45,7 +44,6 @@ include("includes/port-sort.inc.php");
 
 // End populating ports array
 
-
 echo('<table class="table table-striped table-bordered table-rounded table-condensed" style="margin-top: 10px;">');
 echo('  <thead>');
 
@@ -54,12 +52,12 @@ echo("      <th style='width: 1px'></th>\n");
 echo("      <th style='width: 1px'></th>\n");
 
 $cols = array(array('head' => 'Device', 'sort' => 'device', 'width' => 250),
-              array('head' => 'Port', 'sort' => 'port', 'width' => '350'),
-              array('head' => 'Traffic', 'sort' => 'traffic', 'width' => '100'),
-              array('head' => 'Traffic %', 'sort' => 'traffic_perc', 'width' => '90'),
-              array('head' => 'Packets', 'sort' => 'packets', 'width' => '90'),
-              array('head' => 'Speed', 'sort' => 'speed', 'width' => '90'),
-              array('head' => 'MAC Address', 'sort' => 'mac', 'width' => '150')
+              array('head' => 'Port', 'sort' => 'port', 'width' => 350),
+              array('head' => 'Traffic', 'sort' => 'traffic', 'width' => 100),
+              array('head' => 'Traffic %', 'sort' => 'traffic_perc', 'width' => 90),
+              array('head' => 'Packets', 'sort' => 'packets', 'width' => 90),
+              array('head' => 'Speed', 'sort' => 'speed', 'width' => 90),
+              array('head' => 'MAC Address', 'sort' => 'mac', 'width' => 150)
               );
 
 foreach ($cols as $col)
@@ -99,7 +97,7 @@ foreach ($ports as $port)
     $port['pps_in'] = format_si($port['ifInUcastPkts_rate'])."pps";
     $port['pps_out'] = format_si($port['ifOutUcastPkts_rate'])."pps";
 
-    echo "<tr class='ports'>
+    echo("<tr class='ports'>
           <td style='background-color: ".$table_tab_colour.";'></td>
           <td></td>
           <td><span class=entity>".generate_device_link($device, shorthost($device['hostname'], "20"))."</span><br />
@@ -108,19 +106,18 @@ foreach ($ports as $port)
           <td><span class=entity>" . generate_port_link($port, fixIfName($port['label']))." ".$error_img."</span><br />
               <span class=em>".truncate($port['ifAlias'], 50, '')."</span></td>".
 
-    '<td> <i class="icon-circle-arrow-down" style="',$port['bps_in_style'],'"></i>  <span class="small" style="',$port['bps_in_style'],'">' , formatRates($port['in_rate'])  , '</span><br />'.
-       '<i class="icon-circle-arrow-up" style="',$port['bps_out_style'],'"></i> <span class="small" style="',$port['bps_out_style'],'">' , formatRates($port['out_rate']) , '</span><br /></td>'.
+    '<td> <i class="icon-circle-arrow-down" style="'.$port['bps_in_style'].'"></i>  <span class="small" style="'.$port['bps_in_style'].'">' . formatRates($port['in_rate']) . '</span><br />'.
+       '<i class="icon-circle-arrow-up" style="'.$port['bps_out_style'].'"></i> <span class="small" style="'.$port['bps_out_style'].'">' . formatRates($port['out_rate']) . '</span><br /></td>'.
 
-    '<td> <i class="icon-circle-arrow-down" style="',$port['bps_in_style'],'"></i>  <span class="small" style="',$port['bps_in_style'],'">' , $port['ifInOctets_perc']  , '%</span><br />'.
-       '<i class="icon-circle-arrow-up" style="',$port['bps_out_style'],'"></i> <span class="small" style="',$port['bps_out_style'],'">' ,  $port['ifOutOctets_perc'], '%</span><br /></td>'.
+    '<td> <i class="icon-circle-arrow-down" style="'.$port['bps_in_style'].'"></i>  <span class="small" style="'.$port['bps_in_style'].'">' . $port['ifInOctets_perc'] . '%</span><br />'.
+       '<i class="icon-circle-arrow-up" style="'.$port['bps_out_style'].'"></i> <span class="small" style="'.$port['bps_out_style'].'">' . $port['ifOutOctets_perc'] . '%</span><br /></td>'.
 
-       '<td><i class="icon-circle-arrow-down" style="',$port['pps_in_style'],'"></i>  <span class="small" style="',$port['pps_in_style'],'">' , format_bi($port['ifInUcastPkts_rate']) ,'pps</span><br />',
-       '<i class="icon-circle-arrow-up" style="',$port['pps_out_style'],'"></i> <span class="small" style="',$port['pps_out_style'],'">' , format_bi($port['ifOutUcastPkts_rate']),'pps</span></td>',
+       '<td><i class="icon-circle-arrow-down" style="'.$port['pps_in_style'].'"></i>  <span class="small" style="'.$port['pps_in_style'].'">' . format_bi($port['ifInUcastPkts_rate']) . 'pps</span><br />'.
+       '<i class="icon-circle-arrow-up" style="'.$port['pps_out_style'].'"></i> <span class="small" style="'.$port['pps_out_style'].'">' . format_bi($port['ifOutUcastPkts_rate']) . 'pps</span></td>'.
 
           "<td>".$port['human_speed']."<br />".$port['ifMtu']."</td>
           <td >".$port['human_type']."<br />".$port['human_mac']."</td>
-        </tr>\n";
-#  }
+        </tr>\n");
 }
 
 echo('</td></tr></table>');

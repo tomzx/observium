@@ -28,18 +28,18 @@ $storage_array = dbFetchRows($sql);
 switch($vars['sort'])
 {
   case 'usage':
-    $storage_array = array_sort($storage_array, 'storage_perc', SORT_DESC);
+    $storage_array = array_sort($storage_array, 'storage_perc', 'SORT_DESC');
     break;
   case 'mountpoint':
-    $storage_array = array_sort($storage_array, 'storage_descr', SORT_DESC);
+    $storage_array = array_sort($storage_array, 'storage_descr', 'SORT_DESC');
     break;
   case 'size':
   case 'free':
   case 'used':
-    $storage_array = array_sort($storage_array, 'storage_'.$vars['sort'], SORT_DESC);
+    $storage_array = array_sort($storage_array, 'storage_'.$vars['sort'], 'SORT_DESC');
     break;
   case 'hostname':
-    $storage_array = array_sort($storage_array, 'hostname', SORT_ASC);
+    $storage_array = array_sort($storage_array, 'hostname', 'SORT_ASC');
     break;
 }
 
