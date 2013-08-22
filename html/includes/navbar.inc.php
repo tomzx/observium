@@ -92,7 +92,7 @@ foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC
 
 <?php
 
-if($config['location_menu_geocoded'])
+if($config['geocoding']['enable'] && $config['location_menu_geocoded'])
 {
 ?>
                  <li class="dropdown-submenu">
@@ -171,8 +171,7 @@ location_menu($cache['locations']);
                 </li>
 <?php
 }
-
-if($config['location_menu_geocoded'] == FALSE)
+else // Non-geocoded menu
 {
 ?>
                   <li class="dropdown-submenu">
