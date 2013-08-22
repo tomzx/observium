@@ -90,9 +90,9 @@ $pagetitle[] = "Add host";
       <label class="control-label" for="snmpver">SNMP Version</label>
       <div class="controls">
         <select name="snmpver">
-          <option value="v1"  <?php echo($vars['snmpver'] == 'v1' ? 'selected' : ''); ?> >v1</option>
-          <option value="v2c" <?php echo($vars['snmpver'] == 'v2c' ? 'selected' : ''); ?> >v2c</option>
-          <option value="v3"  <?php echo($vars['snmpver'] == 'v3' ? 'selected' : ''); ?> >v3</option>
+          <option value="v1"  <?php echo($vars['snmpver'] == 'v1'  || ($vars['snmpver'] == '' && $config['snmp']['version'] == 'v1')  ? 'selected' : ''); ?> >v1</option>
+          <option value="v2c" <?php echo($vars['snmpver'] == 'v2c' || ($vars['snmpver'] == '' && $config['snmp']['version'] == 'v2c') ? 'selected' : ''); ?> >v2c</option>
+          <option value="v3"  <?php echo($vars['snmpver'] == 'v3'  || ($vars['snmpver'] == '' && $config['snmp']['version'] == 'v3')  ? 'selected' : ''); ?> >v3</option>
         </select>
       </div>
     </div>
