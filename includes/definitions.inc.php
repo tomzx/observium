@@ -1038,9 +1038,10 @@ $config['os'][$os]['type']              = "power";
 $config['os'][$os]['over'][0]['graph']  = "device_current";
 $config['os'][$os]['over'][0]['text']   = "Current";
 
-$os = "akcp";
+$os = "sensorprobe";
 $config['os'][$os]['text']              = "AKCP SensorProbe";
 $config['os'][$os]['type']              = "environment";
+$config['os'][$os]['icon']              = "akcp";
 $config['os'][$os]['over'][0]['graph']  = "device_temperature";
 $config['os'][$os]['over'][0]['text']   = "temperature";
 
@@ -1476,6 +1477,10 @@ $config['graph_types']['device']['uptime']['descr'] = 'System Uptime';
 $config['graph_types']['device']['ksm_pages']['section']           = 'system';
 $config['graph_types']['device']['ksm_pages']['order']             = '0';
 $config['graph_types']['device']['ksm_pages']['descr']             = 'KSM Shared Pages';
+
+$config['graph_types']['device']['iostat_util']['section']         = 'system';
+$config['graph_types']['device']['iostat_util']['order']           = '0';
+$config['graph_types']['device']['iostat_util']['descr']           = 'Disk I/O Utilisation';
 
 $config['graph_types']['device']['vpdn_sessions_l2tp']['section']  = 'vpdn';
 $config['graph_types']['device']['vpdn_sessions_l2tp']['order']    = '0';
