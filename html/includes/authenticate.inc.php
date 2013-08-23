@@ -56,7 +56,7 @@ else if (!$_SESSION['authenticated'] && isset($_COOKIE['ckey']) && function_exis
   {
     if($ckey['expire'] > time())
     {
-      $_SESSION['username']     = dbFetchCell("SELECT `username` FROM `users` WHERE `user_id` = ?", array($ckey['user_id']));
+      $_SESSION['username']     = $ckey['username'];
       $_SESSION['password']     = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $_COOKIE['dkey'], base64_decode($ckey['user_encpass']), MCRYPT_MODE_ECB);
       $_SESSION['user_ckey_id'] = $ckey['user_ckey_id'];
       $_SESSION['cookie_test']  = TRUE;
@@ -64,9 +64,9 @@ else if (!$_SESSION['authenticated'] && isset($_COOKIE['ckey']) && function_exis
   }
 }
 
-if($_COOKIE['password']) { setcookie("password",    NULL, time()+60*60*24*14, "/"); }
-if($_COOKIE['username']) { setcookie("username",    NULL, time()+60*60*24*14, "/"); }
-if($_COOKIE['user_id']) { setcookie("user_id",    NULL, time()+60*60*24*14, "/"); }
+if($_COOKIE['password']) { setcookie("password",  NULL, time()+60*60*24*14, "/"); }
+if($_COOKIE['username']) { setcookie("username",  NULL, time()+60*60*24*14, "/"); }
+if($_COOKIE['user_id'] ) { setcookie("user_id",   NULL, time()+60*60*24*14, "/"); }
 
 $auth_success = 0;
 
@@ -76,6 +76,7 @@ if (isset($_SESSION['username']) && $_SESSION['password'])
   {
     $_SESSION['userlevel'] = auth_user_level($_SESSION['username']);
     $_SESSION['user_id'] = auth_user_id($_SESSION['username']);
+
     if($_SESSION['cookie_test']) { $_SESSION['cookie_auth']; }
     if (!$_SESSION['authenticated'])
     {
@@ -91,7 +92,7 @@ if (isset($_SESSION['username']) && $_SESSION['password'])
       $ckey = md5(strgen());
       $dkey = md5(strgen());
       $encpass = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $dkey, $_SESSION['password'], MCRYPT_MODE_ECB));
-      dbInsert(array('user_encpass' => $encpass, 'expire' => time()+60*60*24*14, 'user_id' => $_SESSION['user_id'], 'user_uniq' => $user_unique_id, 'user_ckey' => $ckey), 'users_ckeys');
+      dbInsert(array('user_encpass' => $encpass, 'expire' => time()+60*60*24*14, 'username' => $_SESSION['username'], 'user_uniq' => $user_unique_id, 'user_ckey' => $ckey), 'users_ckeys');
       setcookie("ckey",    $ckey, time()+60*60*24*14, "/");
       setcookie("dkey",    $dkey, time()+60*60*24*14, "/");
       unset($_SESSION['user_ckey_id']);
