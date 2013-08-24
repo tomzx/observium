@@ -309,7 +309,7 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
   $sql_profile = array_slice($sql_profile, 0, 15);
   foreach($sql_profile AS $sql_query)
   {
-    echo '<tr><td>', $sql_query['time'], '</td><td>' ,SqlFormatter::highlight($sql_query['sql']), '</td></tr>';
+    echo '<tr><td>', $sql_query['time'], '</td><td>' ,print_sql($sql_query['sql']), '</td></tr>';
     #echo '<tr><td>', $sql_query['time'], '</td><td>' ,$sql_query['sql'], '</td></tr>';
   }
 
@@ -440,7 +440,7 @@ if (is_array($pagetitle))
         }
     });
     });
-	
+
     $('.tooltip-from-data').qtip({
       content: {
               attr: 'data-tooltip'
