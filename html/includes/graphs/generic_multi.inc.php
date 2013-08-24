@@ -25,13 +25,18 @@ if (!$noheader)
 }
 
 $i = 0;
-$iter = 0;
+$colour_iter = 0;
 
 foreach ($rrd_list as $rrd)
 {
-  if (!$config['graph_colours'][$colours][$iter]) { $iter = 0; }
-
-  $colour=$config['graph_colours'][$colours][$iter];
+  if ($rrd['colour'])
+  {
+    $colour = $rrd['colour'];
+  } else {
+    if (!$config['graph_colours'][$colours][$colour_iter]) { $colour_iter = 0; }
+    $colour = $config['graph_colours'][$colours][$colour_iter];
+    $colour_iter++;
+  }
 
   $ds = $rrd['ds'];
   $filename = $rrd['filename'];
@@ -65,7 +70,7 @@ foreach ($rrd_list as $rrd)
     $bstack = "STACK";
   }
 
-  $i++; $iter++;
+  $i++;
 
 }
 

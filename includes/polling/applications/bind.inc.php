@@ -4,11 +4,11 @@ if (!empty($agent_data['app']['bind']['global']))
 {
     $app_id = dbFetchCell("SELECT app_id FROM `applications` WHERE `device_id` = ? AND `app_instance` = ?", array($device['device_id'], $memcached_host));
 
-  # Prepare data arrays
-  # -------------------
+  // Prepare data arrays
+  // -------------------
   $rrtypes = array('SOA', 'ANY', 'A', 'AAAA', 'NS', 'MX', 'CNAME', 'DNAME', 'TXT', 'SPF', 'SRV', 'SSHFP', 'TLSA', 'IPSECKEY', 'PTR', 'DNSKEY', 'RRSIG', 'NSEC', 'NSEC3', 'NSEC3PARAM', 'DS', 'DLV', 'IXFR', 'AXFR');
 
-  # Requests incoming
+  // Requests incoming
   $req_in = array(
     'QUERY' => 0,
     'STATUS' => 0,
@@ -16,17 +16,17 @@ if (!empty($agent_data['app']['bind']['global']))
     'UPDATE' => 0,
   );
 
-  # Query incoming
+  // Query incoming
   $query_in = array();
   foreach ($rrtypes as $rrtype)
   {
     $query_in[$rrtype] = 0;
   }
 
-  # Query outgoing
+  // Query outgoing
   $query_out = array();
 
-  # Name server statistics
+  // Name server statistics
   $ns_stats_field_mapping = array(
     "IPv4 requests received" => 'Requestv4',
     "IPv6 requests received" => 'Requestv6',
@@ -76,7 +76,7 @@ if (!empty($agent_data['app']['bind']['global']))
     $ns_stats[$field] = 0;
   }
 
-  # Zone maintenance
+  // Zone maintenance
   $zone_maint_field_mapping = array(
     "IPv4 notifies sent" => 'NotifyOutv4',
     "IPv6 notifies sent" => 'NotifyOutv6',
@@ -102,7 +102,7 @@ if (!empty($agent_data['app']['bind']['global']))
     $zone_maint[$field] = 0;
   }
 
-  # Resolver
+  // Resolver
   $resolver_field_mapping = array(
     "IPv4 queries sent" => 'Queryv4',
     "IPv6 queries sent" => 'Queryv6',
@@ -141,30 +141,30 @@ if (!empty($agent_data['app']['bind']['global']))
 
   $resolver = array();
 
-  # Store the data in arrays
-  # ------------------------
+  // Store the data in arrays
+  // ------------------------
   $lines = explode("\n", $agent_data['app']['bind']['global']);
   foreach ($lines as $line) {
-    # Line format is "key:value"
+    // Line format is "key:value"
     list ($key, $value) = explode(':', $line);
 
-    # Keys consist of "section,subkey"
+    // Keys consist of "section,subkey"
     list ($section, $subkey) = explode(',', $key, 2);
 
-    # The subkey depends on the section
+    // The subkey depends on the section
     if ($section == 'req-in')
     {
-      # Subkey is the opcode
+      // Subkey is the opcode
       $req_in[$subkey] = (int) $value;
     }
     elseif ($section == 'query-in')
     {
-      # Subkey is the RRType
+      // Subkey is the RRType
       $query_in[$subkey] = (int) $value;
     }
     elseif ($section == 'ns-stats')
     {
-      # Subkey is description
+      // Subkey is description
       if (isset($ns_stats_field_mapping[$subkey]))
       {
         $subkey = $ns_stats_field_mapping[$subkey];
@@ -173,7 +173,7 @@ if (!empty($agent_data['app']['bind']['global']))
     }
     elseif ($section == 'zone-maint')
     {
-      # Subkey is description
+      // Subkey is description
       if (isset($zone_maint_field_mapping[$subkey]))
       {
         $subkey = $zone_maint_field_mapping[$subkey];
@@ -182,24 +182,24 @@ if (!empty($agent_data['app']['bind']['global']))
     }
   }
 
-  # Done with the global stuff
+  // Done with the global stuff
   unset($agent_data['app']['bind']['global']);
 
-  # The rest is views
+  // The rest is views
   foreach ($agent_data['app']['bind'] as $view => $view_data)
   {
     $lines = explode("\n", $agent_data['app']['bind'][$view]);
     foreach ($lines as $line) {
-      # Line format is "key:value"
+      // Line format is "key:value"
       list ($key, $value) = explode(':', $line);
 
-      # Keys consist of "section,subkey"
+      // Keys consist of "section,subkey"
       list ($section, $subkey) = explode(',', $key, 2);
 
-      # The subkey depends on the section
+      // The subkey depends on the section
       if ($section == 'query-out')
       {
-        # Create the view if it doesn't exist yet
+        // Create the view if it doesn't exist yet
         if (!isset($query_out[$view]))
         {
           foreach ($rrtypes as $rrtype)
@@ -208,12 +208,12 @@ if (!empty($agent_data['app']['bind']['global']))
           }
         }
 
-        # Subkey is the RRType
+        // Subkey is the RRType
         $query_out[$view][$subkey] = (int) $value;
       }
       elseif ($section == 'resolver')
       {
-        # Create the view if it doesn't exist yet
+        // Create the view if it doesn't exist yet
         if (!isset($resolver[$view]))
         {
           foreach ($resolver_fields as $field)
@@ -221,8 +221,8 @@ if (!empty($agent_data['app']['bind']['global']))
             $resolver[$view][$field] = 0;
           }
         }
-        
-        # Subkey is the description
+
+        // Subkey is the description
         if (isset($resolver_field_mapping[$subkey]))
         {
           $subkey = $resolver_field_mapping[$subkey];
@@ -232,17 +232,17 @@ if (!empty($agent_data['app']['bind']['global']))
     }
   }
 
-  # Use the data from the arrays to build RRDs
-  # ------------------------------------------
+  // Use the data from the arrays to build RRDs
+  // ------------------------------------------
 
-  # rrdcreate list of rrtypes
+  // rrdcreate list of rrtypes
   $rrdcreate_rrtypes = "";
   foreach ($rrtypes as $rrtype)
   {
     $rrdcreate_rrtypes .= " DS:$rrtype:DERIVE:600:0:7500000";
   }
 
-  # req-in
+  // req-in
   $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-bind-".$app['app_id']."-req-in.rrd";
 
   if (!is_file($rrd_filename))
@@ -256,7 +256,7 @@ if (!empty($agent_data['app']['bind']['global']))
 
   rrdtool_update($rrd_filename,  "N:$req_in[QUERY]:$req_in[STATUS]:$req_in[NOTIFY]:$req_in[UPDATE]");
 
-  # query-in
+  // query-in
   $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-bind-".$app['app_id']."-query-in.rrd";
 
   if (!is_file($rrd_filename))
@@ -271,12 +271,12 @@ if (!empty($agent_data['app']['bind']['global']))
   }
   rrdtool_update($rrd_filename,  "N".$rrd_data);
 
-  # ns-stats
+  // ns-stats
   $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-bind-".$app['app_id']."-ns-stats.rrd";
 
   if (!is_file($rrd_filename))
   {
-    # rrdcreate list of fields
+    // rrdcreate list of fields
     $rrdcreate_ns_stats = "";
     foreach ($ns_stats_fields as $field)
     {
@@ -292,12 +292,12 @@ if (!empty($agent_data['app']['bind']['global']))
   }
   rrdtool_update($rrd_filename,  "N".$rrd_data);
 
-  # zone-maint
+  // zone-maint
   $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-bind-".$app['app_id']."-zone-maint.rrd";
 
   if (!is_file($rrd_filename))
   {
-    # rrdcreate list of fields
+    // rrdcreate list of fields
     $rrdcreate_zone_maint = "";
     foreach ($zone_maint_fields as $field)
     {
@@ -313,7 +313,7 @@ if (!empty($agent_data['app']['bind']['global']))
   }
   rrdtool_update($rrd_filename,  "N".$rrd_data);
 
-  # query-out
+  // query-out
   foreach ($query_out as $view => $view_data)
   {
     $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-bind-".$app['app_id']."-query-out-".$view.".rrd";
@@ -331,14 +331,14 @@ if (!empty($agent_data['app']['bind']['global']))
     rrdtool_update($rrd_filename,  "N".$rrd_data);
   }
 
-  # resolver
+  // resolver
   foreach ($resolver as $view => $view_data)
   {
     $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-bind-".$app['app_id']."-resolver-".$view.".rrd";
 
     if (!is_file($rrd_filename))
     {
-      # rrdcreate list of fields
+      // rrdcreate list of fields
       $rrdcreate_resolver = "";
       foreach ($resolver_fields as $field)
       {
