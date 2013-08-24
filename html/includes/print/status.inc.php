@@ -372,6 +372,7 @@ function get_status_array($status)
         // Limit to 200 ports on overview page
         break;
       }
+      humanize_port($port);
       $boxes[] = array('sev' => 50, 'class' => 'Port', 'event' => 'Down', 'device_link' => generate_device_link($port, shorthost($port['hostname'])),
                        'entity_link' => generate_port_link($port, truncate(makeshortif($port['label']),13,'')),
                        'time' => formatUptime($config['time']['now'] - strtotime($port['ifLastChange'])), 'location' => $device['location']);
@@ -381,7 +382,6 @@ function get_status_array($status)
   // Ports Errors (only deltas)
   if ($status['errors'])
   {
-
     foreach ($cache['ports_errored'] as $port_id)
     {
       $port   = get_port_by_id($port_id);

@@ -260,8 +260,12 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
             <div class="dropdown-menu" style="padding: 10px;">
               <table class="table table-bordered table-condensed-more table-rounded table-striped">
                 <tr>
-                  <th>Time</th><td><?php echo($gentime); ?>s</td>
+                  <th>Page</th><td><?php echo($gentime); ?>s</td>
                 </tr>
+                <tr>
+                  <th>Cache</th><td><?php echo($cache_time); ?>s</td>
+                </tr>
+
               </table>
               <table class="table table-bordered table-condensed-more table-rounded table-striped">
                 <tr>

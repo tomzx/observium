@@ -1,10 +1,30 @@
 <?php
 
-// If anybody has again the idea to implement the PHP internal library calls,
-// be aware that it was tried and banned by lead dev Adam
-//
-// TRUE STORY. THAT SHIT IS WHACK. -- adama.
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage snmp
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
 
+## If anybody has again the idea to implement the PHP internal library calls,
+## be aware that it was tried and banned by lead dev Adam
+##
+## TRUE STORY. THAT SHIT IS WHACK. -- adama.
+
+/**
+ * Generates a list of mibdirs in the correct format for net-snmp
+ *
+ * @return string
+ * @global config
+ * @global debug
+ * @param $mibs
+ */
 
 function mib_dirs($mibs)
 {
@@ -75,65 +95,86 @@ function snmp_translate($oid, $mib = NULL, $mibdir = NULL)
   }
 }
 
-// Take -OXsq output and parse it into an array. Fancy.
+
+/**
+ * Take -OXqs output and parse it into an array containing OID array and the value
+ * Hopefully this is the beginning of more intelligent OID parsing!
+ * Thanks to David Farrell <DavidPFarrell@gmail.com> for the parser solution.
+ * This function is free for use by all with attribution to David.
+ *
+ * @return array
+ * @global config
+ * @global debug
+ * @param $string
+ */
+
 function parse_oid2($string)
 {
-	$result = array();
-	$matches = array();
+  $result = array();
+  $matches = array();
 
-	// Match OID - If wrapped in double-quotes ('"'), must escape '"', else must escape ' ' (space) or '[' - Other escaping is optional
-	$match_count = preg_match('/^(?:((?!")(?:[^\\\\\\[ ]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))/', $string, $matches);
-	if (null !== $match_count && $match_count > 0)
-	{
-		// [1] = unquoted, [2] = quoted
-		$value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+  // Match OID - If wrapped in double-quotes ('"'), must escape '"', else must escape ' ' (space) or '[' - Other escaping is optional
+  $match_count = preg_match('/^(?:((?!")(?:[^\\\\\\[ ]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))/', $string, $matches);
+  if (null !== $match_count && $match_count > 0)
+  {
+    // [1] = unquoted, [2] = quoted
+    $value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+    $result[] = stripslashes($value);
 
-		$result[] = stripslashes($value);
+    // I do this (vs keeping track of offset) to use ^ in regex
+    $string = substr($string, strlen($matches[0]));
 
-		// I do this (vs keeping track of offset) to use ^ in regex
-		$string = substr($string, strlen($matches[0]));
+    // Match indexes (optional) - If wrapped in double-quotes ('"'), must escape '"', else must escape ']' - Other escaping is optional
+    while (true)
+    {
+      $match_count = preg_match('/^\\[(?:((?!")(?:[^\\\\\\]]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))\\]/', $string, $matches);
+      if (null !== $match_count && $match_count > 0)
+      {
+        // [1] = unquoted, [2] = quoted
+        $value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+        $result[] = stripslashes($value);
 
-		// Match indexes (optional) - If wrapped in double-quotes ('"'), must escape '"', else must escape ']' - Other escaping is optional
-		while (true)
-		{
-			$match_count = preg_match('/^\\[(?:((?!")(?:[^\\\\\\]]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))\\]/', $string, $matches);
-			if (null !== $match_count && $match_count > 0)
-			{
-				// [1] = unquoted, [2] = quoted
-				$value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+        // I do this (vs keeping track of offset) to use ^ in regex
+        $string = substr($string, strlen($matches[0]));
+      }
+      else
+      {
+        break;
+      }
+    } // while
 
-				$result[] = stripslashes($value);
+    // Match value - Skips leading ' ' characters - If remainder is wrapped in double-quotes ('"'), must escape '"', othe escaping is optional
+    $match_count = preg_match('/^\\s+(?:((?!")(?:[^\\\\]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))$/', $string, $matches);
+    if (null !== $match_count && $match_count > 0)
+    {
+      // [1] = unquoted, [2] = quoted
+      $value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
 
-				// I do this (vs keeping track of offset) to use ^ in regex
-				$string = substr($string, strlen($matches[0]));
-			}
-			else
-			{
-				break;
-			}
-		} // while
-		// Match value - Skips leading ' ' characters - If remainder is wrapped in double-quotes ('"'), must escape '"', othe escaping is optional
-		$match_count = preg_match('/^\\s+(?:((?!")(?:[^\\\\]|(?:\\\\.))+)|(?:"((?:[^\\\\\"]|(?:\\\\.))+)"))$/', $string, $matches);
-		if (null !== $match_count && $match_count > 0)
-		{
-			// [1] = unquoted, [2] = quoted
-			$value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
+      $result[] = stripslashes($value);
 
-			$result[] = stripslashes($value);
+      if (strlen($string) != strlen($matches[0])) { echo "Length error!"; return null; }
 
-			if (strlen($string) != strlen($matches[0])) { echo "Length error!"; return null; }
+      return $result;
+    }
+  }
 
-			return $result;
-		}
-	}
-	// All or nothing
-	return null;
+  // All or nothing
+  return null;
 }
 
-// Take -Oqs output and parse it into an array containing OID array and the value
-// Hopefully this is the beginning of more intelligent OID parsing!
-// Thanks to David Farrell <DavidPFarrell@gmail.com> for the parser solution.
-// This function is free for use by all with attribution to David.
+
+/**
+ * Take -Oqs output and parse it into an array containing OID array and the value
+ * Hopefully this is the beginning of more intelligent OID parsing!
+ * Thanks to David Farrell <DavidPFarrell@gmail.com> for the parser solution.
+ * This function is free for use by all with attribution to David.
+ *
+ * @return array
+ * @global config
+ * @global debug
+ * @param $string
+ */
+
 function parse_oid($string)
 {
     $result = array();
@@ -145,7 +186,6 @@ function parse_oid($string)
         {
             // [1] = unquoted, [2] = quoted
             $value = strlen($matches[1]) > 0 ? $matches[1] : $matches[2];
-
             $result[] = stripslashes($value);
 
             // Are we expecting any more parts?
@@ -191,43 +231,114 @@ function snmp_parser_unquote($str) {
       array('.',' ','"'), $str);
 }
 
-function snmp_get_multi($device, $oids, $options = "-OQUs", $mib = NULL, $mibdir = NULL)
-{
-  global $debug,$config,$runtime_stats,$mibs_loaded;
 
+/**
+ * Build a commandline string for net-snmp commands.
+ *
+ * @param  string $command
+ * @param  array  $device
+ * @param  string $oids
+ * @param  string $options
+ * @param  string $mib
+ * @param  string $mibdir
+ * @global config
+ * @global debug
+ * @return string
+ */
+
+function snmp_command ($command, $device, $oids, $options, $mib = NULL, $mibdir = NULL)
+{
+
+  global $debug,$config;
+
+  // Get the full command path from the config. Chose between bulkwalk and walk. Add max-reps if needed.
+  switch($command)
+  {
+    case "snmpwalk":
+      if ($device['snmpver'] == 'v1' || (isset($config['os'][$device['os']]['nobulk']) && $config['os'][$device['os']]['nobulk']))
+      {
+        $cmd = $config['snmpwalk'];
+      } else {
+        $cmd = $config['snmpbulkwalk'];
+        if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
+        {
+          $smd .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
+        }
+      }
+      break;
+    case "snmpget":
+      $cmd = $config[$command];
+      break;
+    default:
+      echo("THIS SHOULD NOT HAPPEN. PLEASE REPORT.");
+      return FALSE;
+  }
+
+  // Set timeout values if set in the database
   if (is_numeric($device['timeout']) && $device['timeout'] > 0)
   {
      $timeout = $device['timeout'];
   } elseif (isset($config['snmp']['timeout'])) {
      $timeout =  $config['snmp']['timeout'];
   }
+  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
 
+  // Set retries if set in the database
   if (is_numeric($device['retries']) && $device['retries'] > 0)
   {
     $retries = $device['retries'];
   } elseif (isset($config['snmp']['retries'])) {
     $retries =  $config['snmp']['retries'];
   }
+  if (isset($retries)) { $cmd .= " -r " . $retries; }
 
+  // If no transport is set in the database, default to UDP.
+  ## THIS IS PROBABLY NOT REQUIRED.
   if (!isset($device['transport']))
   {
     $device['transport'] = "udp";
   }
 
-  $cmd  = $config['snmpget'];
+  // Add the SNMP authentication settings for the device
   $cmd .= snmp_gen_auth ($device);
 
   if ($options) { $cmd .= " " . $options; }
   if ($mib) { $cmd .= " -m " . $mib; }
   if ($mibdir) { $cmd .= " -M " . $mibdir; } else { $cmd .= " -M " . $config['mib_dir']; }
 
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-
+  // Add the device URI to the string
   $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port'];
+
+  // Add the OID(s) to the strong
   $cmd .= " ".$oids;
+
+  // If we're not debugging, direct errors to /dev/null.
   if (!$debug) { $cmd .= " 2>/dev/null"; }
+
+  return $cmd;
+
+}
+
+/**
+ * Uses snmpget to fetch multiple OIDs and returns a parsed array.
+ *
+ * @param  array  $device
+ * @param  string $oids
+ * @param  string $options
+ * @param  string $mib
+ * @param  string $mibdir
+ * @global config
+ * @global debug
+ * @return array
+ */
+
+function snmp_get_multi($device, $oids, $options = "-OQUs", $mib = NULL, $mibdir = NULL)
+{
+  global $debug,$config,$runtime_stats,$mibs_loaded;
+
+  $cmd = snmp_command('snmpget', $device, $oids, $options, $mib, $mibdir);
   $data = trim(external_exec($cmd));
+
   $runtime_stats['snmpget']++;
   foreach (explode("\n", $data) as $entry)
   {
@@ -239,7 +350,6 @@ function snmp_get_multi($device, $oids, $options = "-OQUs", $mib = NULL, $mibdir
       $array[$index][$oid] = $value;
     }
   }
-
   return $array;
 }
 
@@ -247,43 +357,14 @@ function snmp_get($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL)
 {
   global $debug,$config,$runtime_stats,$mibs_loaded;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
-  }
-
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
-
   if (strstr($oid,' '))
   {
     echo("BUG: snmp_get called for multiple OIDs: $oid\n");
     echo("Please report this to the Observium team.");
   }
 
-  $cmd  = $config['snmpget'];
-  $cmd .= snmp_gen_auth ($device);
+  $cmd = snmp_command('snmpget', $device, $oid, $options, $mib, $mibdir);
 
-  if ($options) { $cmd .= " " . $options; }
-  if ($mib) { $cmd .= " -m " . $mib; }
-  if ($mibdir) { $cmd .= " -M " . $mibdir; } else { $cmd .= " -M ".$config['mib_dir']; }
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  $cmd .= " " . $device['transport'].":".$device['hostname'].":".$device['port'];
-  $cmd .= " " . $oid;
-
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
   $data = trim(external_exec($cmd));
 
   $runtime_stats['snmpget']++;
@@ -353,45 +434,9 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
 {
   global $debug,$config,$runtime_stats;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-    $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout']))
-  {
-    $timeout =  $config['snmp']['timeout'];
-  }
-
-  if (is_numeric($device['retries']) && $device['retries'] > 0) {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];  }
-
-  if (!isset($device['transport']))  {
-    $device['transport'] = "udp";  }
-
-  if ($device['snmpver'] == 'v1' || (isset($config['os'][$device['os']]['nobulk']) && $config['os'][$device['os']]['nobulk']))
-  {
-    $snmpcommand = $config['snmpwalk'];
-  } else {
-    $snmpcommand = $config['snmpbulkwalk'];
-    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
-    {
-      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
-    }
-  }
-
-  $cmd = $snmpcommand." ".snmp_gen_auth($device);
-
-  if ($options) { $cmd .= " $options "; }
-  if ($mib) { $cmd .= " -m $mib"; }
-  if ($mibdir) { $cmd .= " -M " . $mibdir; } else { $cmd .= " -M " . $config['mib_dir']; }
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." ".$oid;
-
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
+  $cmd = snmp_command('snmpwalk', $device, $oid, $options, $mib, $mibdir);
   $data = trim(external_exec($cmd));
+
   if ($strip_quotes) { $data = str_replace("\"", "", $data); }
 
   if (is_string($data) && (preg_match("/No Such (Object|Instance)/i", $data)))
@@ -412,56 +457,10 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
   return $data;
 }
 
-function snmpwalk_cache_cip($device, $oid, $array, $mib = 0)
+function snmpwalk_cache_cip($device, $oid, $array, $mib = NULL)
 {
-  global $config;
+  $data = snmp_walk($device, $oid, "-OsnQ", $mib, $mibdir);
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-    $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout']))
-  {
-    $timeout =  $config['snmp']['timeout'];
-  }
-
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport'])) { $device['transport'] = "udp"; }
-
-  if ($device['snmpver'] == 'v1' || $config['os'][$device['os']]['nobulk'])
-  {
-    $snmpcommand = $config['snmpwalk'];
-  }
-  else
-  {
-    $snmpcommand = $config['snmpbulkwalk'];
-    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
-    {
-      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
-    }
-  }
-
-  $cmd = $snmpcommand;
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -O snQ";
-  if ($mib) { $cmd .= " -m $mib"; }
-  $cmd .= " -M " . $config['mib_dir'];
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." ".$oid;
-
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
-  $data = trim(external_exec($cmd));
-  $device_id = $device['device_id'];
-
-  #echo("Caching: $oid\n");
   foreach (explode("\n", $data) as $entry)
   {
     list ($this_oid, $this_value) = preg_split("/=/", $entry);
@@ -485,53 +484,11 @@ function snmpwalk_cache_cip($device, $oid, $array, $mib = 0)
   return $array;
 }
 
+
+// This is an orphaned function, afaict.
 function snmp_cache_ifIndex($device)
 {
-  // FIXME: this is not yet using our own snmp_*
-  global $config;
-
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-    $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout']))
-  {
-    $timeout =  $config['snmp']['timeout'];
-  }
-
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport'])) { $device['transport'] = "udp"; }
-
-  if ($device['snmpver'] == 'v1' || $config['os'][$device['os']]['nobulk'])
-  {
-    $snmpcommand = $config['snmpwalk'];
-  }
-  else
-  {
-    $snmpcommand = $config['snmpbulkwalk'];
-    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
-    {
-      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
-    }
-  }
-
-  $cmd = $snmpcommand;
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -O Qs";
-  $cmd .= " -M " . $config['mib_dir'];
-  $cmd .= " -m IF-MIB ifIndex";
-
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
-  $data = trim(external_exec($cmd));
-  $device_id = $device['device_id'];
+  $data = snmp_walk($device, 'ifIndex', '-OQs', 'IF-MIB', mib_dirs());
 
   foreach (explode("\n", $data) as $entry)
   {
@@ -549,6 +506,7 @@ function snmp_cache_ifIndex($device)
   return $array;
 }
 
+// Return just an array of values without oids.
 function snmpwalk_values($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {
   $data = snmp_walk($device, $oid, "-OQUs", $mib, $mibdir);
@@ -566,7 +524,7 @@ function snmpwalk_values($device, $oid, $array, $mib = NULL, $mibdir = NULL)
   return $array;
 }
 
-
+// Return an array of values with numeric oids as keys
 function snmpwalk_numericoids($device, $oid, $array, $mib = NULL, $mibdir = NULL)
 {
   $data = snmp_walk($device, $oid, "-OQUn", $mib, $mibdir);
@@ -785,53 +743,15 @@ function snmpwalk_cache_threepart_oid($device, $oid, $array, $mib = NULL, $mibdi
   return $array;
 }
 
-function snmp_cache_slotport_oid($oid, $device, $array, $mib = 0)
+function snmp_cache_slotport_oid($oid, $device, $array, $mib = NULL)
 {
+
+  ## FIXME -- convert to snmp_*
+
   global $config;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
-  }
+  $data = snmp_walk($device, $oid, "-OQUs", $mib, mib_dirs());
 
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
-
-  if ($device['snmpver'] == 'v1' || $config['os'][$device['os']]['nobulk'])
-  {
-    $snmpcommand = $config['snmpwalk'];
-  }
-  else
-  {
-    $snmpcommand = $config['snmpbulkwalk'];
-    if($config['snmp']['max-rep'] && is_numeric($config['os'][$device['os']]['snmp']['max-rep']))
-    {
-      $snmpcommand .= ' -Cr'.$config['os'][$device['os']]['snmp']['max-rep'];
-    }
-  }
-
-  $cmd = $snmpcommand;
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -O QUs";
-  if ($mib) { $cmd .= " -m $mib"; }
-  $cmd .= " -M " . $config['mib_dir'];
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." ".$oid;
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
-  $data = trim(external_exec($cmd));
   $device_id = $device['device_id'];
 
   foreach (explode("\n", $data) as $entry)
@@ -849,101 +769,34 @@ function snmp_cache_slotport_oid($oid, $device, $array, $mib = 0)
   return $array;
 }
 
-function snmp_cache_oid($oid, $device, $array, $mib = 0)
+function snmp_cache_oid($oid, $device, $array, $mib = NULL)
 {
   $array = snmpwalk_cache_oid($device, $oid, $array, $mib);
   return $array;
 }
 
-function snmp_cache_port_oids($oids, $port, $device, $array, $mib=0)
+function snmpget_entity_oids($oids, $index, $device, $array, $mib = NULL)
 {
   global $config;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
-  }
-
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
-
   foreach ($oids as $oid)
   {
-    $string .= " $oid.$port";
+    $oid_string .= " $oid.$index";
   }
 
-  $cmd = $config['snmpget'];
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -O vq";
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  $cmd .= " -M " . $config['mib_dir'];
-  if ($mib) { $cmd .= " -m $mib"; }
-  $cmd .= " -t " . $timeout . " -r " . $retries;
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." ".$string;
-  if (!$debug) { $cmd .= " 2>/dev/null"; }
-  $data = trim(external_exec($cmd));
-  $x=0;
-  $values = explode("\n", $data);
-  #echo("Caching: ifIndex $port\n");
-  foreach ($oids as $oid) {
-    if (!strstr($values[$x], "at this OID"))
-    {
-      $array[$port][$oid] = $values[$x];
-    }
-    $x++;
-  }
+  $array = snmp_get_multi($device, $oids, "-Ovq", $mib, mib_dirs());
 
   return $array;
 }
 
+## Orphaned
 function snmp_cache_portIfIndex($device, $array)
 {
   global $config;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
-  }
+  $data = snmp_walk($device, 'portIfIndex', '-Oq', 'CISCO-STACK-MIB', mib_dirs());
 
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
-
-  $cmd = $config['snmpwalk'];
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -CI -m CISCO-STACK-MIB -O q";
-  $cmd .= " -M " . $config['mib_dir'];
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." portIfIndex";
-  $output = trim(external_exec($cmd));
-  $device_id = $device['device_id'];
-
-  foreach (explode("\n", $output) as $entry)
+  foreach (explode("\n", $data) as $entry)
   {
     $entry = str_replace("CISCO-STACK-MIB::portIfIndex.", "", $entry);
     list($slotport, $ifIndex) = explode(" ", $entry);
@@ -960,38 +813,9 @@ function snmp_cache_portName($device, $array)
 {
   global $config;
 
-  if (is_numeric($device['timeout']) && $device['timeout'] > 0)
-  {
-     $timeout = $device['timeout'];
-  } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
-  }
+  $data = snmp_walk($device, 'portName', '-O Qs', 'CISCO-STACK-MIB', mib_dirs());
 
-  if (is_numeric($device['retries']) && $device['retries'] > 0)
-  {
-    $retries = $device['retries'];
-  } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
-  }
-
-  if (!isset($device['transport']))
-  {
-    $device['transport'] = "udp";
-  }
-
-  $cmd = $config['snmpwalk'];
-  $cmd .= snmp_gen_auth ($device);
-
-  $cmd .= " -CI -m CISCO-STACK-MIB -O Qs";
-  $cmd .= " -M " . $config['mib_dir'];
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port']." portName";
-  $output = trim(external_exec($cmd));
-  $device_id = $device['device_id'];
-  #echo("Caching: portName\n");
-
-  foreach (explode("\n", $output) as $entry)
+  foreach (explode("\n", $data) as $entry)
   {
     $entry = str_replace("portName.", "", $entry);
     list($slotport, $portName) = explode("=", $entry, 2);
@@ -1006,6 +830,14 @@ function snmp_cache_portName($device, $array)
 
   return $array;
 }
+
+/**
+ * Build authentication for net-snmp commands using device array
+ *
+ * @return array
+ * @global debug
+ * @param array $device
+ */
 
 function snmp_gen_auth (&$device)
 {

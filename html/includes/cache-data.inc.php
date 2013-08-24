@@ -1,5 +1,8 @@
 <?php
 
+// Time our cache filling.
+$cache_start = microtime(true);
+
 // Devices
 foreach (dbFetchRows("SELECT * FROM `devices` ORDER BY `hostname`") as $device)
 {
@@ -144,5 +147,8 @@ if (isset($config['enable_ospf']) && $config['enable_ospf'])
 $routing['cef']['count']  = dbFetchCell("SELECT COUNT(cef_switching_id) from `cef_switching`");
 // VRF
 $routing['vrf']['count']  = dbFetchCell("SELECT COUNT(vrf_id) from `vrfs`");
+
+$cache_end  = microtime(true);
+$cache_time = number_format($cache_end - $cache_start, 3);
 
 ?>
