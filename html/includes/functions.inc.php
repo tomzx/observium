@@ -563,7 +563,7 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
   $class = devclass($device);
   if (!$text) { $text = $device['hostname']; }
 
-  $contents = generate_device_link_contents($device, $vars, $start, $end);
+#  $contents = generate_device_link_contents($device, $vars, $start, $end);
 
   $text = htmlentities($text);
   $url = generate_device_url($device, $vars);
@@ -573,6 +573,8 @@ function generate_device_link($device, $text=NULL, $vars=array(), $start=0, $end
   {
     return $device['hostname'];
   }
+
+  return '<a href="'.$url.'" class="entity-popup '.$class.'" data-eid="'.$device['device_id'].'" data-etype="device">'.$text.'</a>';
 
   return $link;
 }
@@ -911,7 +913,7 @@ function generate_port_link_header($port)
   return $contents;
 }
 
-function generate_port_link($port, $text = NULL, $type = NULL)
+function generate_port_popup($port, $text = NULL, $type = NULL)
 {
   global $config;
 
@@ -944,10 +946,25 @@ function generate_port_link($port, $text = NULL, $type = NULL)
   $content .= generate_graph_tag($graph_array);
   $content .= "</div>";
 
+  return $content;
+
+}
+
+
+function generate_port_link($port, $text = NULL, $type = NULL)
+{
+  global $config;
+
+  if (!isset($port['html_class'])) { $port['html_class'] = ifclass($port['ifOperStatus'], $port['ifAdminStatus']); }
+  if (!isset($text)) { $text = fixIfName($port['label']); }
+
+
+  #if (!isset($port['os'])) { $port = array_merge($port, device_by_id_cache($port['device_id'])); }
+
   $url = generate_port_url($port);
 
   if (port_permitted($port['port_id'], $port['device_id'])) {
-    return overlib_link($url, $text, $content, $class);
+    return '<a href="'.$url.'" class="entity-popup '.$port['html_class'].'" data-eid="'.$port['port_id'].'" data-etype="port">'.$text.'</a>';
   } else {
     return fixifName($text);
   }
@@ -967,13 +984,7 @@ function generate_port_thumbnail($args)
 
 function print_optionbar_start ($height = 0, $width = 0, $marginbottom = 5)
 {
-#  echo("
-#    <div class='rounded-5px' style='border: 1px solid #ccc; display: block; background: #eee; text-align: left; margin-top: 0px;
-#    margin-bottom: ".$marginbottom."px; " . ($width ? 'max-width: ' . $width . (strstr($width,'%') ? '' : 'px') . '; ' : '') . "
-#    padding: 7px 14px 8px 14px'>");
-
    echo(PHP_EOL . '<div class="well well-shaded">' . PHP_EOL);
-
 }
 
 function print_optionbar_end()

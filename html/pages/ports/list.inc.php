@@ -97,8 +97,8 @@ foreach ($ports as $port)
     $port['pps_in'] = format_si($port['ifInUcastPkts_rate'])."pps";
     $port['pps_out'] = format_si($port['ifOutUcastPkts_rate'])."pps";
 
-    echo("<tr class='ports'>
-          <td style='background-color: ".$table_tab_colour.";'></td>
+    echo("<tr class='ports ".$port['row_class']."'>
+          <td style='background-color: ".$port['table_tab_colour'].";'></td>
           <td></td>
           <td><span class=entity>".generate_device_link($device, shorthost($device['hostname'], "20"))."</span><br />
               <span class=em>".truncate($port['location'],32,"")."</span></td>

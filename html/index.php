@@ -309,8 +309,8 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
   $sql_profile = array_slice($sql_profile, 0, 15);
   foreach($sql_profile AS $sql_query)
   {
-    #echo '<tr><td>', $sql_query['time'], '</td><td>' ,SqlFormatter::highlight($sql_query['sql']), '</td></tr>';
-    echo '<tr><td>', $sql_query['time'], '</td><td>' ,$sql_query['sql'], '</td></tr>';
+    echo '<tr><td>', $sql_query['time'], '</td><td>' ,SqlFormatter::highlight($sql_query['sql']), '</td></tr>';
+    #echo '<tr><td>', $sql_query['time'], '</td><td>' ,$sql_query['sql'], '</td></tr>';
   }
 
   ?>
@@ -375,6 +375,7 @@ if (is_array($pagetitle))
   <script type="text/javascript" src="js/jquery-checkbox.js"></script>
   <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
   <script type="text/javascript">
+
   jQuery(document).ready(function($) {
     $(".tooltip-from-element").each(function() {
       var selector = '#' + $(this).data('tooltip-id');
@@ -411,6 +412,35 @@ if (is_array($pagetitle))
       }
     })
 
+    $('.entity-popup').each(function() {
+        var entity_id   = $(this).data('eid');
+        var entity_type = $(this).data('etype');
+
+        $(this).qtip({
+
+        content:{
+            text: '<img class="" src="images/loader.gif" alt="Loading..." />',
+            ajax:{
+                url: 'ajax_entitypopup.php',
+                type: 'POST',
+                loading: false,
+                data: { entity_type: $(this).data('etype'), entity_id: $(this).data('eid') },
+            }
+        },
+        style: {
+                classes: 'qtip-bootstrap',
+        },
+        position: {
+                target: 'mouse',
+                viewport: $(window),
+                adjust: {
+                        x: 2,
+                        y: 2
+                }
+        }
+    });
+    });
+	
     $('.tooltip-from-data').qtip({
       content: {
               attr: 'data-tooltip'

@@ -411,47 +411,58 @@ function get_port_by_id_cache($port_id)
 // NOTE get_port_by_id(ID) != get_port_by_id_cache(ID)
 function get_port_by_id($port_id)
 {
+
   if (is_numeric($port_id))
   {
     $port = dbFetchRow("SELECT * FROM `ports` LEFT JOIN `ports-state` ON `ports`.`port_id` = `ports-state`.`port_id`  WHERE `ports`.`port_id` = ?", array($port_id));
   }
+
   if (is_array($port))
   {
     humanize_port($port);
     return $port;
-  } else {
-    return FALSE;
   }
+
+  return FALSE;
+
 }
 
 // Get port array by ifIndex (using cache)
 function get_port_by_index_cache($device_id, $ifIndex)
 {
-  global $port_index_cache;
+  global $cache;
 
-  if (isset($port_index_cache[$device_id][$ifIndex]) && is_array($port_index_cache[$device_id][$ifIndex]))
+  if (isset($cache['port_index'][$device_id][$ifIndex]) && is_array($cache['port_index'][$device_id][$ifIndex]))
   {
-    $port = $port_index_cache[$device_id][$ifIndex];
+    $id = $cache['port_index'][$device_id][$ifIndex];
   } else {
-    $port = get_port_by_ifIndex($device_id, $ifIndex);
-    humanize_port($port);
-    $port_index_cache[$device_id][$ifIndex] = $port;
+    $id = dbFetchCell("SELECT `port_id` FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ? LIMIT 1", array($device_id, $ifIndex));
+    if(is_numeric($id)) { $cache['port_index'][$device_id][$ifIndex] = $id; }
   }
 
-  return $port;
+  if($port = get_port_by_id_cache($id)) { return $port; }
+
+
+  return FALSE;
+
 }
 
 // Get port array by ifIndex
 function get_port_by_ifIndex($device_id, $ifIndex)
 {
-  $port = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ?", array($device_id, $ifIndex));
-  humanize_port($port);
+
+  $GLOBALS['debug'] = TRUE;
+  $port = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ? LIMIT 1", array($device_id, $ifIndex));
+  $GLOBALS['debug'] = FALSE;
+
   if (is_array($port))
   {
+    humanize_port($port);
     return $port;
-  } else {
-    return FALSE;
   }
+
+  return FALSE;
+
 }
 
 // Get port ID by ifDescr (i.e. 'TenGigabitEthernet1/1') or ifName (i.e. 'Te1/1')
@@ -558,22 +569,31 @@ function table_from_entity_type($type)
 
 function get_entity_by_id_cache($type, $id)
 {
-  global $entity_cache;
+  global $cache;
 
   list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
 
-  #echo("<pre>");
-  #debug_print_backtrace();
-  #echo("</pre>");
-
   if (is_array($entity_cache[$type][$id])) {
-    $entity = $entity_cache[$type][$id];
+    return $cache[$type][$id];
   } else {
-    $entity = dbFetchRow("SELECT * FROM `".$entity_table."` WHERE `".$entity_id_field."` = ?", array($id));
-    $entity_cache[$type][$id] = $entity;
+    switch($type)
+    {
+      case "port":
+        $entity = get_port_by_id($id);
+        break;
+      default:
+        $entity = dbFetchRow("SELECT * FROM `".$entity_table."` WHERE `".$entity_id_field."` = ?", array($id));
+        if( function_exists('humanize_'.$type)) { $do = 'humanize_'.$type; $do($entity); }
+        break;
+    }
+    if(is_array($entity))
+    {
+      $cache[$type][$id] = $entity;
+      return $entity;
+    }
   }
 
-  return $entity;
+  return FALSE;
 }
 
 function getImage($device)

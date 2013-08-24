@@ -203,12 +203,13 @@ function humanize_bgp (&$peer)
 
 function humanize_port(&$port)
 {
-  global $config;
+  global $config, $cache;
 
   // Process port data to make it pretty for printing. EVOLUTION, BITCHES.
   // Lots of hacky shit will end up here with if (os);
 
-  $device = device_by_id_cache($port['device_id']);
+  $device = &$GLOBALS['cache']['devices']['id'][$port['device_id']];
+
   $os = $device['os'];
 
   $port['human_speed'] = humanspeed($port['ifSpeed']);
@@ -248,6 +249,14 @@ function humanize_port(&$port)
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $port['table_tab_colour'] = "#ff6600"; $port['row_class'] = "warning";
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "testing")        { $port['table_tab_colour'] = "#85004b"; $port['row_class'] = "info";
   } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up")             { $port['table_tab_colour'] = "#194B7F"; $port['row_class'] = ""; }
+  else { $port['table_tab_colour'] = "#aaaaaa"; $port['row_class'] = ""; }
+
+  // If the device is down, colour the row/tab as 'warning' meaning that the entity is down because of something below it.
+  if ($device['status'] == '0')
+  {
+    $port['row_class'] = "warning";
+    $port['table_tab_colour'] = "#ff6600";
+  }
 
   $port['in_rate'] = $port['ifInOctets_rate'] * 8;
   $port['out_rate'] = $port['ifOutOctets_rate'] * 8;

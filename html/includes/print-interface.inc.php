@@ -239,46 +239,36 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
   { // Show which other devices are on the same subnet as this interface
     foreach (dbFetchRows("SELECT `ipv4_network_id` FROM `ipv4_addresses` WHERE `port_id` = ? AND `ipv4_address` NOT LIKE '127.%'", array($port['port_id'])) as $net)
     {
-      $ipv4_network_id = $net['ipv4_network_id'];
-      $sql = "SELECT I.port_id FROM ipv4_addresses AS A, ports AS I, devices AS D
-              WHERE A.port_id = I.port_id
-              AND A.ipv4_network_id = ? AND D.device_id = I.device_id
-              AND I.`ifAdminStatus` = 'up'
-              AND D.device_id != ?";
-      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
+      $sql = "SELECT N.*, P.port_id FROM ipv4_addresses AS A, ipv4_networks AS N, ports AS P
+              WHERE A.port_id = P.port_id
+              AND A.ipv4_network_id = ? AND N.ipv4_network_id = A.ipv4_network_id
+              AND P.`ifAdminStatus` = 'up' AND P.device_id != ?";
+
+#      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
       $array = array($net['ipv4_network_id'], $device['device_id']);
+
       foreach (dbFetchRows($sql, $array) AS $new)
       {
-        echo($new['ipv4_network_id']);
-        $this_ifid = $new['port_id'];
-        $this_hostid = $new['device_id'];
-        $this_hostname = $new['hostname'];
-        $this_ifname = fixifName($new['label']);
-        $int_links[$this_ifid] = $this_ifid;
-        $int_links_v4[$this_ifid] = 1;
+        $int_links[$new['port_id']] = $new['port_id'];
+        $int_links_v4[$new['port_id']][] = $new['ipv4_network'];
       }
     }
 
     foreach (dbFetchRows("SELECT ipv6_network_id FROM ipv6_addresses WHERE port_id = ?", array($port['port_id'])) as $net)
     {
       $ipv6_network_id = $net['ipv6_network_id'];
-      $sql = "SELECT I.port_id FROM ipv6_addresses AS A, ports AS I, devices AS D
-              WHERE A.port_id = I.port_id
-              AND A.ipv6_network_id = ? AND D.device_id = I.device_id
-              AND I.`ifAdminStatus` = 'up' AND A.ipv6_origin != 'linklayer' AND A.ipv6_origin != 'wellknown'
-              AND D.device_id != ?";
-      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
+      $sql = "SELECT P.port_id FROM ipv6_addresses AS A, ipv6_networks AS N, ports AS I, devices AS D
+              WHERE A.port_id = P.port_id
+              AND A.ipv6_network_id = ? AND N.ipv6_network_id = A.ipv6_network_id AND P.device_id = ?
+              AND P.`ifAdminStatus` = 'up' AND A.ipv6_origin != 'linklayer' AND A.ipv6_origin != 'wellknown'";
+
+#      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
       $array = array($net['ipv6_network_id'], $device['device_id']);
 
       foreach (dbFetchRows($sql, $array) AS $new)
       {
-        echo($new['ipv6_network_id']);
-          $this_ifid = $new['port_id'];
-          $this_hostid = $new['device_id'];
-          $this_hostname = $new['hostname'];
-          $this_ifname = fixifName($new['label']);
-          $int_links[$this_ifid] = $this_ifid;
-          $int_links_v6[$this_ifid] = 1;
+          $int_links[$new['port_id']] = $new['port_id'];
+          $int_links_v6[$new['port_id']][] = $new['port_id'];
       }
     }
   }
@@ -287,17 +277,19 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
   {
     foreach ($int_links as $int_link)
     {
-      $link_if = dbFetchRow("SELECT * from ports AS I, devices AS D WHERE I.device_id = D.device_id and I.port_id = ?", array($int_link));
-
+      $link_if  = get_port_by_id_cache($int_link);
+      $link_dev = device_by_id_cache($link_if['device_id']);
       echo("$br");
 
       if ($int_links_phys[$int_link]) { echo('<a alt="Directly connected" class="oicon-connect"><a> '); }
-      else { echo('<a alt="Same subnet" class="oicon-arrow-transition"><a> '); }
+      else { echo('<a alt="Same subnet" class="oicon-network-hub"><a> '); }
 
-      echo("<b>" . generate_port_link($link_if, makeshortif($link_if['label'])) . " on " . generate_device_link($link_if, shorthost($link_if['hostname'])));
+      echo("<b>" . generate_port_link($link_if, makeshortif($link_if['label'])) . " on " . generate_device_link($link_dev, shorthost($link_dev['hostname'])));
 
-      if ($int_links_v6[$int_link]) { echo(" <strong style='color: #a10000;'>IPv6</strong>"); }
-      if ($int_links_v4[$int_link]) { echo(" <strong style='color: #00a100'>IPv4</strong>"); }
+      ## FIXME -- do something fancy here.
+
+      if ($int_links_v6[$int_link]) { echo ' ', overlib_link('', '<span class="label label-success">IPv6</span>', implode("<br />", $int_links_v6[$int_link]), NULL); }
+      if ($int_links_v4[$int_link]) { echo ' ', overlib_link('', '<span class="label label-info">IPv4</span>', implode("<br />", $int_links_v4[$int_link]), NULL); }
       $br = "<br />";
     }
   }
@@ -309,16 +301,28 @@ if ($port_details)
   foreach (dbFetchRows("SELECT * FROM `pseudowires` WHERE `port_id` = ?", array($port['port_id'])) as $pseudowire)
   {
     //`port_id`,`peer_device_id`,`peer_ldp_id`,`cpwVcID`,`cpwOid`
-    $pw_peer_dev = dbFetchRow("SELECT * FROM `devices` WHERE `device_id` = ?", array($pseudowire['peer_device_id']));
+#    $pw_peer_dev = dbFetchRow("SELECT * FROM `devices` WHERE `device_id` = ?", array($pseudowire['peer_device_id']));
     $pw_peer_int = dbFetchRow("SELECT * FROM `ports` AS I, pseudowires AS P WHERE I.device_id = ? AND P.cpwVcID = ? AND P.port_id = I.port_id", array($pseudowire['peer_device_id'], $pseudowire['cpwVcID']));
 
-    humanize_port($pw_peer_int);
-    echo($br.'<i class="oicon-arrow-switch"></i> <strong>' . generate_port_link($pw_peer_int, makeshortif($pw_peer_int['label'])) .' on '. generate_device_link($pw_peer_dev, shorthost($pw_peer_dev['hostname'])) . '</strong>');
+#    $pw_peer_int = get_port_by_id_cache($pseudowire['peer_device_id']);
+    $pw_peer_dev = device_by_id_cache($pseudowire['peer_device_id']);
+
+    if(is_array($pw_peer_int))
+    {
+      humanize_port($pw_peer_int);
+      echo($br.'<i class="oicon-arrow-switch"></i> <strong>' . generate_port_link($pw_peer_int, makeshortif($pw_peer_int['label'])) .' on '. generate_device_link($pw_peer_dev, shorthost($pw_peer_dev['hostname'])) . '</strong>');
+    } else {
+      echo($br.'<i class="oicon-arrow-switch"></i> <strong> VC ' . $pseudowire['cpwVcID'] .' on '. $pseudowire['peer_addr'] . '</strong>');
+    }
+    echo ' <span class="label">'.$pseudowire['pw_psntype'].'</span>';
+    echo ' <span class="label">'.$pseudowire['pw_type'].'</span>';
     $br = "<br />";
+
   }
 
   foreach (dbFetchRows("SELECT * FROM `ports` WHERE `pagpGroupIfIndex` = ? and `device_id` = ?", array($port['ifIndex'], $device['device_id'])) as $member)
   {
+    humanize_port($member);
     $pagp[$device['device_id']][$port['ifIndex']][$member['ifIndex']] = TRUE;
     echo($br.'<i class="oicon-arrow-join"></i> <strong>' . generate_port_link($member) . ' [PAgP]</strong>');
     $br = "<br />";
@@ -328,6 +332,7 @@ if ($port_details)
   {
     $pagp[$device['device_id']][$port['pagpGroupIfIndex']][$port['ifIndex']] = TRUE;
     $parent = dbFetchRow("SELECT * FROM `ports` WHERE `ifIndex` = ? and `device_id` = ?", array($port['pagpGroupIfIndex'], $device['device_id']));
+    humanize_port($parent);
     echo($br.'<i class="oicon-arrow-split"></i> <strong>' . generate_port_link($parent) . ' [PAgP]</strong>');
     $br = "<br />";
   }
@@ -338,8 +343,11 @@ if ($port_details)
     {
       if ($pagp[$device['device_id']][$higher_if['port_id_high']][$port['ifIndex']]) { continue; } // Skip if same PAgP port
       $this_port = get_port_by_index_cache($device['device_id'], $higher_if['port_id_high']);
-      echo($br.'<i class="oicon-arrow-split"></i> <strong>' . generate_port_link($this_port) . '</strong>');
-      $br = "<br />";
+      if(is_array($this_port))
+      {
+        echo($br.'<i class="oicon-arrow-split"></i> <strong>' . generate_port_link($this_port) . '</strong>');
+        $br = "<br />";
+      }
     }
   }
 
@@ -349,8 +357,11 @@ if ($port_details)
     {
       if ($pagp[$device['device_id']][$port['ifIndex']][$lower_if['port_id_low']]) { continue; } // Skip if same PAgP ports
       $this_port = get_port_by_index_cache($device['device_id'], $lower_if['port_id_low']);
-      echo($br.'<i class="oicon-arrow-join"></i> <strong>' . generate_port_link($this_port) . "</strong>");
-      $br = "<br />";
+      if(is_array($this_port))
+      {
+        echo($br.'<i class="oicon-arrow-join"></i> <strong>' . generate_port_link($this_port) . "</strong>");
+        $br = "<br />";
+      }
     }
   }
 }
