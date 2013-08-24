@@ -19,6 +19,13 @@ include("includes/discovery/voltages.inc.php");
 include("includes/discovery/frequencies.inc.php");
 include("includes/discovery/current.inc.php");
 include("includes/discovery/power.inc.php");
-include("includes/discovery/fanspeeds.inc.php");
+
+$sensortypes = array('fanspeed');
+
+foreach ($sensortypes as $type)
+{
+  if ($debug) { print_vars($valid['sensor']['$type']); }
+  check_valid_sensors($device, $type, $valid['sensor']);
+}
 
 ?>

@@ -1,4 +1,4 @@
-u<?php
+<?php
 
 if ($device['os'] == "nos" )
 {

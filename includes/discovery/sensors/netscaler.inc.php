@@ -1,6 +1,6 @@
 <?php
 
-if($device['os'] == "netscaler")
+if ($device['os'] == "netscaler")
 {
   echo(" NetScaler ");
   echo(" Caching OIDs:");
