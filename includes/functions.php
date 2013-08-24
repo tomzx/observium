@@ -14,29 +14,29 @@
 
 // Observium Includes
 
-include_once($config['install_dir'] . "/includes/common.php");
-include_once($config['install_dir'] . "/includes/rrdtool.inc.php");
-include_once($config['install_dir'] . "/includes/statsd.inc.php");
-include_once($config['install_dir'] . "/includes/billing.php");
-include_once($config['install_dir'] . "/includes/cisco-entities.php");
-include_once($config['install_dir'] . "/includes/syslog.php");
-include_once($config['install_dir'] . "/includes/rewrites.php");
-include_once($config['install_dir'] . "/includes/snmp.inc.php");
-include_once($config['install_dir'] . "/includes/services.inc.php");
-include_once($config['install_dir'] . "/includes/dbFacile.php");
-include_once($config['install_dir'] . "/includes/geolocation.inc.php");
-include_once($config['install_dir'] . "/includes/alerts.inc.php");
+include($config['install_dir'] . "/includes/common.php");
+include($config['install_dir'] . "/includes/rrdtool.inc.php");
+include($config['install_dir'] . "/includes/statsd.inc.php");
+include($config['install_dir'] . "/includes/billing.php");
+include($config['install_dir'] . "/includes/cisco-entities.php");
+include($config['install_dir'] . "/includes/syslog.php");
+include($config['install_dir'] . "/includes/rewrites.php");
+include($config['install_dir'] . "/includes/snmp.inc.php");
+include($config['install_dir'] . "/includes/services.inc.php");
+include($config['install_dir'] . "/includes/dbFacile.php");
+include($config['install_dir'] . "/includes/geolocation.inc.php");
+include($config['install_dir'] . "/includes/alerts.inc.php");
 
 // Include from PEAR
 set_include_path($config['install_dir'] . "/includes/pear" . PATH_SEPARATOR . get_include_path());
-include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
-include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
-include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
+include($config['install_dir'] . "/includes/pear/Net/IPv4.php");
+include($config['install_dir'] . "/includes/pear/Net/IPv6.php");
+include($config['install_dir'] . "/includes/pear/Net/MAC.php");
 
 if ($config['alerts']['email']['enable'])
 {
   // Use Pear::Mail
-  include_once($config['install_dir'] . "/includes/pear/Mail/Mail.php");
+  include($config['install_dir'] . "/includes/pear/Mail/Mail.php");
 }
 
 // Send to AMQP via UDP-based python proxy.

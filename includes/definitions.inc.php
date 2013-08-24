@@ -1529,6 +1529,19 @@ $config['graph_descr']['application_unbound_opcode']  = "Queries by DNS opcode i
 $config['graph_descr']['application_unbound_rcode']   = "Answers sorted by return value. RRSets bogus is the number of RRSets marked bogus per second by the validator.";
 $config['graph_descr']['application_unbound_flags']   = "This graphs plots the flags inside incoming queries. For example, if QR, AA, TC, RA, Z flags are set, the query can be rejected. RD, AD, CD and DO are legitimately set by some software.";
 
+$config['graph_types']['application']['bind_answers']['descr'] = 'BIND Received Answers';
+$config['graph_types']['application']['bind_query_in']['descr'] = 'BIND Incoming Queries';
+$config['graph_types']['application']['bind_query_out']['descr'] = 'BIND Outgoing Queries';
+$config['graph_types']['application']['bind_query_rejected']['descr'] = 'BIND Rejected Queries';
+$config['graph_types']['application']['bind_req_in']['descr'] = 'BIND Incoming Requests';
+$config['graph_types']['application']['bind_req_proto']['descr'] = 'BIND Request Protocol Details';
+$config['graph_types']['application']['bind_resolv_dnssec']['descr'] = 'BIND DNSSEC Validation';
+$config['graph_types']['application']['bind_resolv_errors']['descr'] = 'BIND Errors while Resolving';
+$config['graph_types']['application']['bind_resolv_queries']['descr'] = 'BIND Resolving Queries';
+$config['graph_types']['application']['bind_resolv_rtt']['descr'] = 'BIND Resolving RTT';
+$config['graph_types']['application']['bind_updates']['descr'] = 'BIND Dynamic Updates';
+$config['graph_types']['application']['bind_zone_maint']['descr'] = 'BIND Zone Maintenance';
+
 // Device Types
 
 $i = 0;

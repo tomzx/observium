@@ -18,7 +18,7 @@
 
 ob_start();
 
-if (strpos($_SERVER['PATH_INFO'], "debug"))
+if (isset($_SERVER['PATH_INFO']) && strpos($_SERVER['PATH_INFO'], "debug"))
 {
   $debug = TRUE;
   ini_set('display_errors', 1);
@@ -33,11 +33,11 @@ if (strpos($_SERVER['PATH_INFO'], "debug"))
   ini_set('error_reporting', 0);
 }
 
-include_once("../includes/defaults.inc.php");
-include_once("../config.php");
-include_once("../includes/definitions.inc.php");
-include_once("../includes/functions.php");
-include_once("includes/functions.inc.php");
+include("../includes/defaults.inc.php");
+include("../config.php");
+include("../includes/definitions.inc.php");
+include("../includes/functions.php");
+include("includes/functions.inc.php");
 
 ?>
 

@@ -3,7 +3,7 @@
 // Common Functions
 
 // Debugging Include. This isn't in SVN.
-if(file_exists($config['install_dir']."/includes/debug/ref.inc.php")) { include_once($config['install_dir']."/includes/debug/ref.inc.php"); $ref_loaded = TRUE; }
+if(file_exists($config['install_dir']."/includes/debug/ref.inc.php")) { include($config['install_dir']."/includes/debug/ref.inc.php"); $ref_loaded = TRUE; }
 
 // Fix this shit, it's pretty uglytarded.
 function hexStringToIPv4($string)
