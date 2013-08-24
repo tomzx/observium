@@ -1029,6 +1029,7 @@ $os = "areca";
 $config['os'][$os]['text']              = "Areca RAID Subsystem";
 $config['os'][$os]['over'][0]['graph']  = "";
 $config['os'][$os]['over'][0]['text']   = "";
+$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.18928.1";
 
 $os = "netmanplus";
 $config['os'][$os]['text']              = "NetMan Plus";
