@@ -194,7 +194,7 @@ if ($_SESSION['authenticated'])
 {
 
   // Warn about lack of mcrypt unless told not to.
-  if($config['remember_me'] = TRUE && (!function_exists('mcrypt_decrypt') || !function_exists('mcrypt_encrypt')))
+  if($config['login_remember_me'] = TRUE && (!function_exists('mcrypt_decrypt') || !function_exists('mcrypt_encrypt')))
   {
     print_error('Observium now requires mcrypt to be installed for use by the "remember me" function. Please install the php5-mcrypt package on Ubuntu/Debian or the php-mcrypt package on RHEL/Centos. Alternatively, you can disable this feature by setting $config[\'login_remember_me\'] = FALSE; in your config.');
   }
