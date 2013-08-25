@@ -178,16 +178,24 @@
 // Fix the top/bottom navbars when screen real estate supports it
 .navbar-fixed-top,
 .navbar-fixed-bottom {
+
   position: fixed;
   right: 0;
   left: 0;
   border-width: 0 0 1px;
+}
+
+.navbar-fixed-top,
+.navbar-fixed-bottom,
+.navbar-fixed-top .navbar-inner,
+.navbar-fixed-bottom .navbar-inner {
 
   // Undo the rounded corners
   @media (min-width: @grid-float-breakpoint) {
     border-radius: 0;
   }
 }
+
 .navbar-fixed-top {
   z-index: @zindex-navbar-fixed;
   top: 0;
