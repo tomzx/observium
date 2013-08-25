@@ -5,7 +5,7 @@
 $service_alerts = dbFetchCell("SELECT COUNT(*) FROM services WHERE service_status = '0'");
 
 ?>
-<div class="navbar navbar-fixed-top">
+<header class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#main-nav">
@@ -529,7 +529,7 @@ if (auth_can_logout())
         </div><!-- /.nav-collapse -->
       </div>
     </div><!-- /navbar-inner -->
-  </div>
+  </header>
 
 <?php
 if($_SESSION['widescreen'] == 1)

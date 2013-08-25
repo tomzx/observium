@@ -1,6 +1,6 @@
 
 <div class="row">
-<div class="span12">
+<div class="col-md-12">
 
 <?php
 unset($search, $devices);
@@ -51,6 +51,6 @@ $pagetitle[] = "IPv6 address search";
 
 ?>
 
-  </div> <!-- span12 -->
+  </div> <!-- col-md-12 -->
 
 </div> <!-- row -->

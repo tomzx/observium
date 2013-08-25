@@ -1,5 +1,5 @@
-<div class="row-fluid">
-  <div class="span12 well">
+<div class="row">
+  <div class="col-md-12 well">
     <h3>Inventory:</h3>
     <p>
       With this module it is possible to export the data that can be found in the

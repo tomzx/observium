@@ -51,8 +51,8 @@
 function show_map($config)
 {
 ?>
-<div class="row-fluid">
-    <div class="span12" style="padding: 10px;">
+<div class="row">
+    <div class="col-md-12" style="padding: 10px;">
 	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 	    google.load('visualization', '1.1', {'packages': ['geochart']});
@@ -171,18 +171,18 @@ function show_map($config)
 		$links['transit']	= generate_url(array("page" => "iftype", "type" => "transit"));
 		$links['peering']	= generate_url(array("page" => "iftype", "type" => "peering"));
 		$links['peer_trans']	= generate_url(array("page" => "iftype", "type" => "peering,transit"));
-		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span6 \">");
+		echo("<div class=\"row\">");
+		echo("    <div class=\"col-md-6 \">");
 		echo("        <h3 class=\"bill\">Overall Transit Traffic Today</h3>");
 		echo("        <a href=\"".$links['transit']."\"><img src=\"graph.php?type=multiport_bits_separate&amp;id=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
-		echo("    <div class=\"span6 \">");
+		echo("    <div class=\"col-md-6 \">");
 		echo("        <h3 class=\"bill\">Overall Peering Traffic Today</h3>");
 		echo("        <a href=\"".$links['peering']."\"><img src=\"graph.php?type=multiport_bits_separate&amp;id=".$ports['peering']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/></a>");
 		echo("    </div>");
 		echo("</div>");
-		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span12 \">");
+		echo("<div class=\"row\">");
+		echo("    <div class=\"col-md-12 \">");
 		echo("        <h3 class=\"bill\">Overall Transit &amp; Peering Traffic This Month</h3>");
 		echo("        <a href=\"".$links['peer_trans']."\"><img src=\"graph.php?type=multiport_bits_duo_separate&amp;id=".$ports['peering']."&amp;idb=".$ports['transit']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/></a>");
 		echo("    </div>");
@@ -197,18 +197,18 @@ function show_map($config)
 	// Show Custom Traffic
 	    if ($_SESSION['userlevel'] >= '5') {
 		$config['frontpage']['custom_traffic']['title'] = (empty($config['frontpage']['custom_traffic']['title']) ? "Custom Traffic" : $config['frontpage']['custom_traffic']['title']);
-		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span6 \">");
+		echo("<div class=\"row\">");
+		echo("    <div class=\"col-md-6 \">");
 		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." Today</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
 		echo("    </div>");
-		echo("    <div class=\"span6 \">");
+		echo("    <div class=\"col-md-6 \">");
 		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Week</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['week']."&amp;to=".$config['time']['now']."&amp;width=480&amp;height=100\"/>");
 		echo("    </div>");
 		echo("</div>");
-		echo("<div class=\"row-fluid\">");
-		echo("    <div class=\"span12 \">");
+		echo("<div class=\"row\">");
+		echo("    <div class=\"col-md-12 \">");
 		echo("        <h3 class=\"bill\">".$config['frontpage']['custom_traffic']['title']." This Month</h3>");
 		echo("        <img src=\"graph.php?type=multiport_bits&amp;id=".$config['frontpage']['custom_traffic']['ids']."&amp;legend=no&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=1100&amp;height=200\"/>");
 		echo("    </div>");
@@ -224,8 +224,8 @@ function show_map($config)
       {
         $minigraphs = explode(";", $config['frontpage']['minigraphs']['ids']);
         $legend = (($config['frontpage']['minigraphs']['legend'] == false) ? "no" : "yes");
-        echo("<div class=\"row-fluid\">\n");
-        echo("    <div class=\"span12\">\n");
+        echo("<div class=\"row\">\n");
+        echo("    <div class=\"col-md-12\">\n");
         if ($config['frontpage']['minigraphs']['title'])
         {
           echo("        <h3 class=\"bill\">".$config['frontpage']['minigraphs']['title']."</h3>\n");
@@ -258,8 +258,8 @@ function show_map($config)
       {
         $width = $config['frontpage']['micrograph_settings']['width'];
         $height = $config['frontpage']['micrograph_settings']['height'];
-        echo("<div class=\"row-fluid\">\n");
-        echo("  <div class=\"span12\">\n");
+        echo("<div class=\"row\">\n");
+        echo("  <div class=\"col-md-12\">\n");
         echo("    <table class=\"table table-bordered table-condensed-more table-rounded\">\n");
         echo("      <tbody>\n");
         foreach ($config['frontpage']['micrographs'] as $row)
@@ -306,8 +306,8 @@ function show_map($config)
     function show_status($config)
     {
       // Show Status
-      echo("<div class=\"row-fluid\">");
-      echo("    <div class=\"span12\">");
+      echo("<div class=\"row\">");
+      echo("    <div class=\"col-md-12\">");
       echo("        <h3 class=\"bill\">Device Alerts</h3>");
       print_status($config['frontpage']['device_status']);
       echo("    </div>");
@@ -317,8 +317,8 @@ function show_map($config)
     function show_status_boxes($config)
     {
       // Show Status Boxes
-      echo("<div class=\"row-fluid\">\n");
-      echo("    <div class=\"span12\">\n");
+      echo("<div class=\"row\">\n");
+      echo("    <div class=\"col-md-12\">\n");
       print_status_boxes($config['frontpage']['device_status']);
       echo("    </div>\n");
       echo("</div>\n");
@@ -328,8 +328,8 @@ function show_map($config)
 
     function show_syslog($config) {
       // Show syslog
-      $show_syslog = "<div class=\"row-fluid\">";
-      $show_syslog .= "    <div class=\"span12 \">";
+      $show_syslog = "<div class=\"row\">";
+      $show_syslog .= "    <div class=\"col-md-12 \">";
       $show_syslog .= "        <h3 class=\"bill\">Recent Syslog Messages</h3>";
       echo $show_syslog;
       print_syslogs(array('pagesize' => $config['frontpage']['syslog']['items']));
@@ -341,8 +341,8 @@ function show_map($config)
 
     function show_eventlog($config) {
       // Show eventlog
-      $show_event = "<div class=\"row-fluid\">";
-      $show_event .= "    <div class=\"span12 \">";
+      $show_event = "<div class=\"row\">";
+      $show_event .= "    <div class=\"col-md-12 \">";
       $show_event .= "        <h3 class=\"bill\">Recent Eventlog Entries</h3>";
       echo $show_event;
       print_events(array('pagesize' => $config['frontpage']['eventlog']['items']));

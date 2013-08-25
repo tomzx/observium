@@ -12,7 +12,7 @@ $graph_array['legend']      = "no";
 
 foreach ($app_list as $app)
 {
-  echo('<div class="row"><div class="span12">');
+  echo('<div class="row"><div class="col-md-12">');
 
   echo('<h4>'.generate_link(nicecase($app['app_type']),array('page'=>'apps','app'=>$app['app_type'])).'</h4>');
   $app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WHERE D.device_id = A.device_id AND A.app_type = ?", array($app['app_type']));

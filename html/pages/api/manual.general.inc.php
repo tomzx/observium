@@ -1,5 +1,5 @@
-<div class="row-fluid">
-  <div class="span12 well">
+<div class="row">
+  <div class="col-md-12 well">
     <h3>General Usage:</h3>
     <p>
       To use the Simple Observium API you always must start with the general usage

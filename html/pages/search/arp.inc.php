@@ -1,5 +1,5 @@
 <div class="row">
-<div class="span12">
+<div class="col-md-12">
 
 <?php
 unset($search, $devices);
@@ -62,5 +62,5 @@ $pagetitle[] = 'ARP/NDP Search';
 
 ?>
 
-  </div> <!-- span12 -->
+  </div> <!-- col-md-12 -->
 </div> <!-- row -->

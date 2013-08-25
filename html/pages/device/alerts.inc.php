@@ -44,7 +44,7 @@ if(is_numeric($vars['alert']) && FALSE)
   echo('<table class="table table-condensed table-bordered table-striped table-rounded">
     <thead>
       <tr>
-        <th style="width: 35px">Test Id</th>
+        <th style="width: 35px">Id</th>
         <th style="width: 175px">Tests</th>
 
         <th style="width: 400px">Match</th>

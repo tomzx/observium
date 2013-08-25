@@ -1,6 +1,6 @@
 <h2>About Observium</h2>
-<div class="row-fluid">
-  <div class="span6">
+<div class="row">
+  <div class="col-md-6">
 <?php
 
 $observium_version = $config['version'];
@@ -146,7 +146,7 @@ echo("
       </div>
     </div>
   </div>
-  <div class="span6">
+  <div class="col-md-6">
 
       <div class="alert alert-info" style="margin-top: 15px; text-align: center;">
         <h3>Observium is a Free software project. <br />Please donate to support continued development.</h3>

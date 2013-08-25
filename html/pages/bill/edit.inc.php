@@ -28,8 +28,8 @@ if ($bill_data['bill_type'] == "cdr") {
 
 ?>
 
-<div class="row-fluid">
-  <div class="span6 well info_box">
+<div class="row">
+  <div class="col-md-6 well info_box">
     <div class="title"><i class="oicon-wrench"></i> Bill Properties</div>
     <div class="content">
       <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
@@ -120,7 +120,7 @@ for ($x=1;$x<32;$x++) {
     </div>
   </div>
 
-  <div class="span6 well info_box">
+  <div class="col-md-6 well info_box">
     <div class="title"><i class="oicon-network-ethernet"></i> Bill Ports</div>
     <div class="content">
 

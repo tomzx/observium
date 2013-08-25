@@ -1,5 +1,5 @@
-<div class="row-fluid">
-  <div class="span12 well">
+<div class="row">
+  <div class="col-md-12 well">
     <h3>Billing:</h3>
     <p>
       With this module it is possible to export the raw traffic data that

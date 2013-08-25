@@ -4,7 +4,7 @@ include("includes/api/functions.inc.php");
 
 ?>
 <h2 style="margin-bottom: 10px">Simple Observium API - Manual</h2>
-<div class="row-fluid">
+<div class="row">
   <div class="span8 well">
     <h3>What is it?</h3>
     <p>

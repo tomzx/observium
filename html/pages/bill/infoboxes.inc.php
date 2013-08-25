@@ -121,8 +121,8 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
 
 ?>
 
-<div class="row-fluid" style="margin-bottom: 15px;">
-  <div class="span6">
+<div class="row" style="margin-bottom: 15px;">
+  <div class="col-md-6">
     <div class="well info_box">
       <div class="title"><i class="oicon-information"></i> Bill Summary</div>
       <div class="content">
@@ -204,7 +204,7 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
       </div>
     </div>
   </div>
-  <div class="span6">
+  <div class="col-md-6">
     <div class="well info_box">
       <div class="title"><i class="oicon-information-button"></i> Optional Information</div>
       <div class="content">

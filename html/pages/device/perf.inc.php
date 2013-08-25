@@ -2,7 +2,7 @@
 
 
 <div class="row">
-  <div class="span6">
+  <div class="col-md-6">
     <div class="well info_box">
       <div class="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'storage'))); ?>">
         <i class="oicon-blocks"></i> Module Performance</a></div>
@@ -43,7 +43,7 @@ foreach ($device['state']['poller_mod_perf'] as $module => $time)
 </div>
 </div>
 
-<div class="span6">
+<div class="col-md-6">
     <div class="well info_box">
       <div class="title"><a href="<?php echo(generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'health', 'metric' => 'storage'))); ?>">
         <i class="oicon-blocks"></i> Total Performance</a></div>
@@ -75,7 +75,7 @@ foreach ($times as $time)
   </tbody>
 </table>
 </div>
-<div class="span6">
+<div class="col-md-6">
 
 <h4  style="margin-bottom: 10px;">Discovery Times</h4>
 

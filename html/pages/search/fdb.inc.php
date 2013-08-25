@@ -1,5 +1,5 @@
 <div class="row">
-<div class="span12">
+<div class="col-md-12">
 
 <?php
 unset($search, $devices, $vlans, $vlan_names);
@@ -63,5 +63,5 @@ $pagetitle[] = "FDB Search";
 
 ?>
 
-  </div> <!-- span12 -->
+  </div> <!-- col-md-12 -->
 </div> <!-- row -->

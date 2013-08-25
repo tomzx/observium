@@ -29,9 +29,9 @@ if($_POST['toggle_discovery'] && isset($config['discovery_modules'][$_POST['togg
 }
 ?>
 
-<div class="row-fluid">
-    <div class="row-fluid">
-      <div class="span6">
+<div class="row">
+    <div class="row">
+      <div class="col-md-6">
 
 <fieldset>
   <legend>Poller Modules</legend>
@@ -83,7 +83,7 @@ foreach ($config['poller_modules'] as $module => $module_status)
 </table>
 
       </div>
-      <div class="span6">
+      <div class="col-md-6">
 
 <fieldset>
   <legend>Discovery Modules</legend>

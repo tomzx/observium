@@ -172,18 +172,8 @@ if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wid
 </head>
 
 <body>
-  <div class="container">
 
 <?php
-
-// To help debug the new URLs :)
-if ($devel || $vars['devel'])
-{
-  echo("<pre>");
-  print_vars($_GET);
-  print_vars($vars);
-  echo("</pre>");
-}
 
 if ($_SESSION['authenticated'])
 {
@@ -193,8 +183,17 @@ if ($_SESSION['authenticated'])
   // Include navbar
   if (!$vars['bare'] == "yes") {  include("includes/navbar.inc.php"); }
 
-  // Warn about lack of mcrypt unless told not to.
+}
+?>
 
+  <div class="container">
+
+<?php
+
+if ($_SESSION['authenticated'])
+{
+
+  // Warn about lack of mcrypt unless told not to.
   if($config['remember_me'] = TRUE && (!function_exists('mcrypt_decrypt') || !function_exists('mcrypt_encrypt')))
   {
     print_error('Observium now requires mcrypt to be installed for use by the "remember me" function. Please install the php5-mcrypt package on Ubuntu/Debian or the php-mcrypt package on RHEL/Centos. Alternatively, you can disable this feature by setting $config[\'login_remember_me\'] = FALSE; in your config.');

@@ -1,5 +1,5 @@
 <div class="row">
-<div class="span12">
+<div class="col-md-12">
 
 <?php
 unset($search, $vlans, $vlan_names);
@@ -46,5 +46,5 @@ print_fdbtable($vars);
 
 ?>
 
-  </div> <!-- span12 -->
+  </div> <!-- col-md-12 -->
 </div> <!-- row -->

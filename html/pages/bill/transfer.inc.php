@@ -158,8 +158,8 @@ elseif ($active['previous'] == "active") { $graph = $li; }
 
 ?>
 
-<div class="row-fluid" style="margin-bottom: 15px;">
-  <div class="span6 well info_box">
+<div class="row" style="margin-bottom: 15px;">
+  <div class="col-md-6 well info_box">
     <div id="title"><i class="oicon-information"></i> Bill Summary</div>
     <table class="table table-striped table-bordered table-condensed table-rounded">
       <tr>
@@ -207,7 +207,7 @@ elseif ($active['previous'] == "active") { $graph = $li; }
 <?php } ?>
     </table>
   </div>
-  <div class="span6">
+  <div class="col-md-6">
    <div class="well info_box">
     <div id="title"><i class="oicon-information-button"></i> Optional information</div>
     <table class="table table-striped table-bordered table-condensed table-rounded">

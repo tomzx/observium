@@ -95,8 +95,6 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
   echo('</table>');
 
-  echo('<div class="tabbable">');
-
   if (device_permitted($device['device_id']))
   {
   echo('<ul class="nav nav-tabs">');
@@ -431,7 +429,6 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
   if (device_permitted($device['device_id']) || $check_device == $vars['device'])
   {
-    echo('<div class="tab-content">');
 
     if (!$device['last_polled'] || $device['last_polled'] == '0000-00-00 00:00:00')
     {
@@ -442,10 +439,9 @@ Please wait 5-10 minutes for graphs to draw correctly.');
 
     include("pages/device/".mres(basename($tab)).".inc.php");
 
-    echo("</div>");
   } else {
     include("includes/error-no-perm.inc.php");
   }
-} 
+}
 
 ?>

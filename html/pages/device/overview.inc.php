@@ -16,8 +16,8 @@ if ($services['down']) { $services_colour = $warn_colour_a; } else { $services_c
 if ($ports['down']) { $ports_colour = $warn_colour_a; } else { $ports_colour = $list_colour_a; }
 ?>
 
-<div class="row-fluid">
-<div class="span6">
+<div class="row">
+<div class="col-md-6">
 
 <?php include("overview/information.inc.php"); ?>
 
@@ -82,7 +82,7 @@ if ($config['enable_syslog'])
 
 echo("</div>");
 
-echo('<div class="span6">');
+echo('<div class="col-md-6">');
 
 // Right Pane
 include("overview/processors.inc.php");
@@ -118,4 +118,5 @@ include("overview/sensors/frequencies.inc.php");
 ?>
     </div>
   <div>
+</div>
 </div>
