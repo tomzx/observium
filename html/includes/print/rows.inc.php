@@ -61,8 +61,8 @@ function print_graph_row($graph_array)
   {
     $graph_array['from']        = $config['time'][$period];
     $graph_array_zoom           = $graph_array;
-    $graph_array_zoom['height'] = "150";
-    $graph_array_zoom['width']  = "400";
+    $graph_array_zoom['height'] = "175";
+    $graph_array_zoom['width']  = "600";
 
     $link_array = $graph_array;
     $link_array['page'] = "graphs";
