@@ -46,9 +46,7 @@ if(is_numeric($vars['alert']) && FALSE)
       <tr>
         <th style="width: 35px">Id</th>
         <th style="width: 175px">Tests</th>
-
         <th style="width: 400px">Match</th>
-
         <th style="width: 35px">Entities</th>
         <th style="width: 35px;">Status</th>
         <th style="width: 35px;">Delay</th>
@@ -244,10 +242,10 @@ if(is_numeric($vars['alert']) && FALSE)
       echo('<th style="width: 60px;">Alert Id</th>');
       echo('<th style="width: 300px;">Entity</th>');
       echo('<th>State</th>');
-      echo('<th style="width: 100px;">Message</th>');
-      echo('<th style="width: 80px;">Checked</th>');
-      echo('<th style="width: 80px;">Changed</th>');
-      echo('<th style="width: 80px;">Alerted</th>');
+      echo('<th style="width: 150px;">Message</th>');
+      echo('<th style="width: 150px;">Checked</th>');
+      echo('<th style="width: 150px;">Changed</th>');
+      echo('<th style="width: 150px;">Alerted</th>');
       echo('<th style="width: 30px;">#</th>');
 
       echo('</tr>');
@@ -271,7 +269,7 @@ if(is_numeric($vars['alert']) && FALSE)
         echo('<td>'.generate_entity_link($vars['type'], $entity_id, $text = NULL, $graph_type=NULL).'</td>');
         echo('<td>');
         ## FIXME -- generate a nice popup with parsed information from the state array
-        echo(overlib_link("", "view state", "<pre>".print_vars(unserialize($alert_table_entry['state']), TRUE)."</pre>", NULL));
+        echo(overlib_link("", "view state", "<pre>".print_r(unserialize($alert_table_entry['state']), TRUE)."</pre>", NULL));
         echo('</td>');
         echo('<td class="'.$alert_table_entry['class'].'">'.$alert_table_entry['last_message'].'</td>');
         echo('<td>'.$alert_table_entry['lc'].'</td>');

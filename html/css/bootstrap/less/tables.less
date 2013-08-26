@@ -277,6 +277,9 @@ table th[class*="span"],
   &.warning > td {
     background-color: @warningBackground;
   }
+  &.suppressed > td {
+    background-color: @suppressedBackground;
+  }
   &.info > td {
     background-color: @infoBackground;
   }
@@ -292,6 +295,9 @@ table th[class*="span"],
   }
   &.warning:hover > td {
     background-color: darken(@warningBackground, 5%);
+  }
+  &.suppressed:hover > td {
+    background-color: darken(@suppressedBackground, 5%);
   }
   &.info:hover > td {
     background-color: darken(@infoBackground, 5%);

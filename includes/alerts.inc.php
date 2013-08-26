@@ -82,10 +82,41 @@ function check_entity($type, $entity, $data)
 
         if($alert)
         {
+
+          // Check to see if this alert has been suppressed by anything
+
+          // Have all alerts on the device been suppressed?
+          if($device['ignore']) { $alert_suppressed = TRUE; $suppressed[] = "DEV"; }
+          if(is_numeric($device['ignore_until']) && $device['ignore_until'] > time() ) { $alert_suppressed = TRUE; $suppressed[] = "DEV_UNTIL"; }
+
+          // Have all alerts on the entity been suppressed?
+
+          if($entity['ignore']) { $alert_suppressed = TRUE; $suppressed[] = "ENTITY"; }
+          if(is_numeric($entity['ignore_until']) && $entity['ignore_until'] > time() ) { $alert_suppressed = TRUE; $suppressed[] = "ENTITY_UNTIL"; }
+
+          // Have alerts from this alerter been suppressed?
+
+          if($alert_rules[$alert_test_id]['ignore']) { $alert_suppressed = TRUE; $suppressed[] = "CHECK"; }
+          if(is_numeric($alert_rules[$alert_test_id]['ignore_until']) && $alert_rules[$alert_test_id]['ignore_until'] > time() ) { $alert_suppressed = TRUE; $suppressed[] = "CHECK_UNTIL"; }
+
+          // Has this specific alert been suppressed?
+
+          if($alert_args['ignore']) { $alert_suppressed = TRUE; $suppressed[] = "ENTITY"; }
+          if(is_numeric($alert_args['ignore_until']) && $alert_args['ignore_until'] > time() ) { $alert_suppressed = TRUE; $suppressed[] = "ENTITY_UNTIL"; }
+
           $update_array['count'] = $alert_args['count']+1;
 
           // Check against the alert test's delay
-          if($update_array['count'] >= $alert_rules[$alert_test_id]['delay'])
+          if($update_array['count'] >= $alert_rules[$alert_test_id]['delay'] && $alert_suppressed)
+          {
+            // This alert is valid, but has been suppressed.
+            echo(" Checks failed. Alert suppressed (".implode(', ', $suppressed).").\n");
+            $update_array['alert_status'] = '3';
+            $update_array['last_message'] = 'Checks failed (Suppressed: '.implode(', ', $suppressed).')';
+            $update_array['last_checked'] = time();
+            if($alert_args['alert_status'] != '3' || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); }
+          }
+          elseif($update_array['count'] >= $alert_rules[$alert_test_id]['delay'])
           {
             // This is a real alert.
             echo(" Checks failed. Generate alert.\n");
@@ -99,7 +130,7 @@ function check_entity($type, $entity, $data)
             $update_array['alert_status'] = '2';
             $update_array['last_message'] = 'Checks failed (delayed)';
             $update_array['last_checked'] = time();
-            if($alert_args['alert_status'] != '2'  || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); $update_array['last_alerted'] = '0'; }
+            if($alert_args['alert_status'] != '2'  || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); }
           }
         } else {
           $update_array['count'] = 0;
@@ -111,6 +142,8 @@ function check_entity($type, $entity, $data)
           #$update_array['count'] = 0;
           if($alert_args['alert_status'] != '1' || $alert_args['last_changed'] == '0') { $update_array['last_changed'] = time(); }
         }
+
+        unset($suppressed); unset($alert_suppressed);
 
         // Serialize the state array before we put it into MySQL.
         $update_array['state'] = serialize($update_array['state']);
@@ -140,11 +173,17 @@ function check_entity($type, $entity, $data)
  *
  * This takes the array of global conditions and removes associations that don't match the supplied device array
  *
+ * @param  array device
  * @return array
 */
 
 function cache_device_conditions($device)
 {
+
+  // Return no conditions if the device is ignored or disabled.
+
+  if($device['ignore'] == 1 || $device['disabled'] == 1) { return array(); }
+
   $conditions = cache_conditions();
 
   foreach($conditions['assoc'] as $assoc_key => $assoc)
@@ -391,6 +430,9 @@ function match_devices($attributes)
 function match_device($device, $attributes)
 {
 
+  // Short circuit this check if the device is either disabled or ignored.
+  if($device['disable'] == 1 || $device['ignore'] == 1) { return FALSE; }
+
   $failed  = 0;
   $success = 0;
 
@@ -597,6 +639,7 @@ function match_device_entities($device_id, $attributes, $entity_type)
   }
 
   $entities = dbFetchRows($sql, $param);
+
   return $entities;
 
 }
@@ -759,20 +802,8 @@ function process_alerts($device)
     {
       echo('Alert status set. ');
 
-      // Check to see if this alert has been suppressed by anything
-
-      // Have all alerts on the device been suppressed?
-      if($device['ignore'] || ($device['ignore_until'] && $device['ignore_until'] > time() )) { $entry['suppress_alert'] = TRUE; }
-
-      // Have all alerts on the entity been suppressed?
-
-      // Have alerts from this alerter been suppressed?
-
-      // Has this specific alert been suppressed?
-
       // Has this been alerted more frequently than the alert interval in the config?
       if((time() - $entry['last_alerted']) < $config['alerts']['interval']) { $entry['suppress_alert'] = TRUE; }
-
 
       ## FIXME -- this time should be configurable per-alert or per-entity or something
       if($entry['suppress_alert'] != TRUE)
@@ -797,7 +828,6 @@ function process_alerts($device)
         foreach($state['failed'] AS $failed)
         {
           $condition_text .= $failed['metric'] . " " . $failed['condition'] . " ". $failed['value'] ." (". $state['metrics'][$failed['metric']].")<br />";
-          
         }
 
         $graphs = ""; $metric_text = "";
