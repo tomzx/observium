@@ -2,6 +2,7 @@
 
 /// FIXME this list should come from somewhere else; these are also kind of duplicated more eloquently in device/apps
 $graphs['apache']            = array('bits', 'hits', 'scoreboard', 'cpu');
+$graphs['bind']              = array('req_in', 'answers', 'resolv_errors', 'resolv_rtt');
 $graphs['drbd']              = array('disk_bits', 'network_bits', 'queue', 'unsynced');
 $graphs['mysql']             = array('network_traffic', 'connections', 'command_counters', 'select_types');
 $graphs['memcached']         = array('bits', 'commands', 'data', 'items');

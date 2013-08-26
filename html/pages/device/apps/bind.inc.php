@@ -27,7 +27,8 @@ print_optionbar_end();
 $graphs['stats'] = array('bind_req_in'  => "Incoming requests",
                          'bind_answers' => "Answers Given",
                          'bind_updates' => "Dynamic Updates",
-                         'bind_req_proto' => "Request protocol details");
+                         'bind_req_proto' => "Request protocol details",
+                         'bind_cache' => "Cache content");
 
 $graphs['auth'] = array('bind_zone_maint' => "Zone maintenance");
 

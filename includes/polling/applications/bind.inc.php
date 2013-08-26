@@ -141,6 +141,9 @@ if (!empty($agent_data['app']['bind']['global']))
 
   $resolver = array();
 
+  // Cache
+  $cache = array();
+
   // Store the data in arrays
   // ------------------------
   $lines = explode("\n", $agent_data['app']['bind']['global']);
@@ -228,6 +231,21 @@ if (!empty($agent_data['app']['bind']['global']))
           $subkey = $resolver_field_mapping[$subkey];
         }
         $resolver[$view][$subkey] = (int) $value;
+      }
+      elseif ($section == 'cache')
+      {
+        // Create the view if it doesn't exist yet
+        if (!isset($cache[$view]))
+        {
+          foreach ($rrtypes as $rrtype)
+          {
+            // Create fields for both positive and negative cache entries
+            $cache[$view][$field] = 0;
+            $cache[$view]['!'.$field] = 0;
+          }
+        }
+        // Subkey is the RRType
+        $cache[$view][$subkey] = (int) $value;
       }
     }
   }
@@ -351,6 +369,31 @@ if (!empty($agent_data['app']['bind']['global']))
     foreach ($resolver_fields as $field)
     {
       $rrd_data .= ":".$view_data[$field];
+    }
+    rrdtool_update($rrd_filename,  "N".$rrd_data);
+  }
+
+  // cache
+  foreach ($cache as $view => $view_data)
+  {
+    $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-bind-".$app['app_id']."-cache-".$view.".rrd";
+
+    if (!is_file($rrd_filename))
+    {
+      $rrdcreate_cache = "";
+      foreach ($rrtypes as $rrtype)
+      {
+        $rrdcreate_cache .= " DS:$rrtype:GAUGE:600:0:1000000";
+        $rrdcreate_cache .= " DS:NEG_$rrtype:GAUGE:600:0:1000000";
+      }
+      rrdtool_create($rrd_filename, "--step 300 $rrdcreate_cache ".$config['rrd_rra']);
+    }
+
+    $rrd_data = "";
+    foreach ($rrtypes as $rrtype)
+    {
+      $rrd_data .= ":".$view_data[$rrtype];
+      $rrd_data .= ":".$view_data['!'.$rrtype];
     }
     rrdtool_update($rrd_filename,  "N".$rrd_data);
   }
