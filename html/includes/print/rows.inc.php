@@ -44,11 +44,11 @@ function print_graph_row($graph_array)
     if ($_SESSION['big_graphs'])
     {
       if (!$graph_array['height']) { $graph_array['height'] = "100"; }
-      if (!$graph_array['width']) { $graph_array['width']  = "325"; }
+      if (!$graph_array['width']) { $graph_array['width']  = "323"; }
       $periods = array('day', 'week', 'month');
     } else {
       if (!$graph_array['height']) { $graph_array['height'] = "100"; }
-      if (!$graph_array['width']) { $graph_array['width']  = "230"; }
+      if (!$graph_array['width']) { $graph_array['width']  = "228"; }
       $periods = array('day', 'week', 'month', 'year');
     }
   }
