@@ -239,36 +239,36 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
   { // Show which other devices are on the same subnet as this interface
     foreach (dbFetchRows("SELECT `ipv4_network_id` FROM `ipv4_addresses` WHERE `port_id` = ? AND `ipv4_address` NOT LIKE '127.%'", array($port['port_id'])) as $net)
     {
-      $sql = "SELECT N.*, P.port_id FROM ipv4_addresses AS A, ipv4_networks AS N, ports AS P
-              WHERE A.port_id = P.port_id
-              AND A.ipv4_network_id = ? AND N.ipv4_network_id = A.ipv4_network_id
-              AND P.`ifAdminStatus` = 'up' AND P.device_id != ?";
+      $sql = "SELECT N.*, P.`port_id`, P.`device_id` FROM `ipv4_addresses` AS A, `ipv4_networks` AS N, `ports` AS P
+              WHERE A.`port_id` = P.`port_id` AND P.`device_id` != ?
+              AND A.`ipv4_network_id` = ? AND N.`ipv4_network_id` = A.`ipv4_network_id`
+              AND P.`ifAdminStatus` = 'up'";
 
-#      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
-      $array = array($net['ipv4_network_id'], $device['device_id']);
+      $params = array($device['device_id'], $net['ipv4_network_id']);
 
-      foreach (dbFetchRows($sql, $array) AS $new)
+      foreach (dbFetchRows($sql, $params) AS $new)
       {
+        if ($cache['devices']['id'][$new['device_id']]['disabled'] && !$config['web_show_disabled']) { continue; }
         $int_links[$new['port_id']] = $new['port_id'];
         $int_links_v4[$new['port_id']][] = $new['ipv4_network'];
       }
     }
 
-    foreach (dbFetchRows("SELECT ipv6_network_id FROM ipv6_addresses WHERE port_id = ?", array($port['port_id'])) as $net)
+    foreach (dbFetchRows("SELECT `ipv6_network_id` FROM `ipv6_addresses` WHERE `port_id` = ?", array($port['port_id'])) as $net)
     {
       $ipv6_network_id = $net['ipv6_network_id'];
-      $sql = "SELECT P.port_id FROM ipv6_addresses AS A, ipv6_networks AS N, ports AS I, devices AS D
-              WHERE A.port_id = P.port_id
-              AND A.ipv6_network_id = ? AND N.ipv6_network_id = A.ipv6_network_id AND P.device_id = ?
+      $sql = "SELECT P.`port_id`, P.`device_id` FROM `ipv6_addresses` AS A, `ipv6_networks` AS N, `ports` AS P
+              WHERE A.`port_id` = P.`port_id` AND P.device_id = ?
+              AND A.`ipv6_network_id` = ? AND N.`ipv6_network_id` = A.`ipv6_network_id`
               AND P.`ifAdminStatus` = 'up' AND A.ipv6_origin != 'linklayer' AND A.ipv6_origin != 'wellknown'";
 
-#      if (!$config['web_show_disabled']) { $sql .= ' AND D.disabled = 0'; }
-      $array = array($net['ipv6_network_id'], $device['device_id']);
+      $params = array($device['device_id'], $net['ipv6_network_id']);
 
-      foreach (dbFetchRows($sql, $array) AS $new)
+      foreach (dbFetchRows($sql, $params) AS $new)
       {
-          $int_links[$new['port_id']] = $new['port_id'];
-          $int_links_v6[$new['port_id']][] = $new['port_id'];
+        if ($cache['devices']['id'][$new['device_id']]['disabled'] && !$config['web_show_disabled']) { continue; }
+        $int_links[$new['port_id']] = $new['port_id'];
+        $int_links_v6[$new['port_id']][] = $new['port_id'];
       }
     }
   }
@@ -279,7 +279,7 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
     {
       $link_if  = get_port_by_id_cache($int_link);
       $link_dev = device_by_id_cache($link_if['device_id']);
-      echo("$br");
+      echo($br);
 
       if ($int_links_phys[$int_link]) { echo('<a alt="Directly connected" class="oicon-connect"><a> '); }
       else { echo('<a alt="Same subnet" class="oicon-network-hub"><a> '); }

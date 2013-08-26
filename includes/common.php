@@ -432,7 +432,7 @@ function get_port_by_index_cache($device_id, $ifIndex)
 {
   global $cache;
 
-  if (isset($cache['port_index'][$device_id][$ifIndex]) && is_array($cache['port_index'][$device_id][$ifIndex]))
+  if (isset($cache['port_index'][$device_id][$ifIndex]) && is_numeric($cache['port_index'][$device_id][$ifIndex]))
   {
     $id = $cache['port_index'][$device_id][$ifIndex];
   } else {
@@ -440,20 +440,16 @@ function get_port_by_index_cache($device_id, $ifIndex)
     if(is_numeric($id)) { $cache['port_index'][$device_id][$ifIndex] = $id; }
   }
 
-  if($port = get_port_by_id_cache($id)) { return $port; }
-
+  $port = get_port_by_id_cache($id);
+  if (is_array($port)) { return $port; }
 
   return FALSE;
-
 }
 
 // Get port array by ifIndex
 function get_port_by_ifIndex($device_id, $ifIndex)
 {
-
-  $GLOBALS['debug'] = TRUE;
   $port = dbFetchRow("SELECT * FROM `ports` WHERE `device_id` = ? AND `ifIndex` = ? LIMIT 1", array($device_id, $ifIndex));
-  $GLOBALS['debug'] = FALSE;
 
   if (is_array($port))
   {
@@ -462,7 +458,6 @@ function get_port_by_ifIndex($device_id, $ifIndex)
   }
 
   return FALSE;
-
 }
 
 // Get port ID by ifDescr (i.e. 'TenGigabitEthernet1/1') or ifName (i.e. 'Te1/1')
@@ -571,9 +566,14 @@ function get_entity_by_id_cache($type, $id)
 {
   global $cache;
 
-  list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
+  /// FIXME. entity_type_translate() defined in includes/alerts.inc.php. Adama, why?
+  if ($type !== 'port')
+  {
+    list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate($type);
+  }
 
-  if (is_array($entity_cache[$type][$id])) {
+  if (is_array($cache[$type][$id]))
+  {
     return $cache[$type][$id];
   } else {
     switch($type)
@@ -583,7 +583,7 @@ function get_entity_by_id_cache($type, $id)
         break;
       default:
         $entity = dbFetchRow("SELECT * FROM `".$entity_table."` WHERE `".$entity_id_field."` = ?", array($id));
-        if( function_exists('humanize_'.$type)) { $do = 'humanize_'.$type; $do($entity); }
+        if (function_exists('humanize_'.$type)) { $do = 'humanize_'.$type; $do($entity); }
         break;
     }
     if(is_array($entity))

@@ -1651,7 +1651,7 @@ if (file_exists($config['install_dir'] . '/.svn/entries'))
 if ($svn_new)
 {
   // SVN version >= 1.7
-  $xml = simplexml_load_string(shell_exec($config['svn'] . ' info --xml'));
+  $xml = simplexml_load_string(shell_exec($config['svn'] . ' info --xml ' . $config['install_dir']));
   if ($xml != false)
   {
     $svn_rev = $xml->entry->commit->attributes()->revision;
