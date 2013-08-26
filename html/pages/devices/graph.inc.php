@@ -30,15 +30,15 @@
     } else {
       if ($_SESSION['big_graphs'])
       {
-        $width_div = 579;
-        $width = 500;
+        $width_div = 611;
+        $width = 528;
         $height = 159;
-        $height_div = 230;
+        $height_div = 218;
       } else {
-        $width_div=286;
-        $width=211;
-        $height = 100;
-        $height_div = 163;
+        $width_div=303;
+        $width=226;
+        $height = 102;
+        $height_div = 158;
       }
     }
 
