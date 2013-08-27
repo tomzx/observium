@@ -18,7 +18,7 @@ if (count($sensors))
 
 <?php
 
-  echo('<table class="table table-condensed-more table-striped">');
+  echo('<table class="table table-condensed-more table-striped table-bordered">');
   foreach ($sensors as $sensor)
   {
     if (!is_numeric($sensor['sensor_value']))
@@ -48,6 +48,8 @@ if (count($sensors))
 
     $graph_array['width'] = 80; $graph_array['height'] = 20; $graph_array['bg'] = 'ffffff00'; # the 00 at the end makes the area transparent.
     $graph_array['from'] = $config['time']['day'];
+    $graph_array['style'][] = 'margin-top: -6px';
+
     $sensor_minigraph =  generate_graph_tag($graph_array);
 
     $sensor['sensor_descr'] = truncate($sensor['sensor_descr'], 48, '');
@@ -55,13 +57,13 @@ if (count($sensors))
     if (strtolower($sensor_type) == "frequency") {
       echo("<tr class=device-overview>
            <td class=strong style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
-           <td width=80 align=right class=strong>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
+           <td width=90 align=right class=strong>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
            <td width=80 align=right class=strong>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . format_si($sensor['sensor_value']) . $sensor_unit . "</span>", $overlib_content)."</td>
           </tr>");
     } else {
       echo("<tr class=device-overview>
            <td class=strong style='padding-left:5px;'><strong>".overlib_link($link, $sensor['sensor_descr'], $overlib_content)."</strong></td>
-           <td width=80 align=right class=strong>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
+           <td width=90 align=right class=strong style='margin-top: -4px'>".overlib_link($link, $sensor_minigraph, $overlib_content)."</td>
            <td width=80 align=right class=strong>".overlib_link($link, "<span " . ($sensor['sensor_value'] < $sensor['sensor_limit_low'] || $sensor['sensor_value'] > $sensor['sensor_limit'] ? "style='color: red'" : '') . '>' . $sensor['sensor_value'] . $sensor_unit . "</span>", $overlib_content)."</td>
           </tr>");
     }

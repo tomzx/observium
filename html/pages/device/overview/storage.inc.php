@@ -19,7 +19,7 @@ if (count($drives))
       <div class="content">
 
 <?php
-  echo('<table class="table table-condensed-more table-striped">');
+  echo('<table class="table table-condensed-more table-striped table-bordered">');
 
   foreach ($drives as $drive)
   {
@@ -72,6 +72,7 @@ if (count($drives))
     $overlib_content = generate_overlib_content($graph_array, $device['hostname'] . " - " . $drive['storage_descr']);
 
     $graph_array['width'] = 80; $graph_array['height'] = 20; $graph_array['bg'] = 'ffffff00'; # the 00 at the end makes the area transparent.
+    $graph_array['style'][] = 'margin-top: -6px';
 
     $minigraph =  generate_graph_tag($graph_array);
 

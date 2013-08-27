@@ -5,7 +5,7 @@
 
 <?php
 
-echo('<table class="table table-condensed table-striped">');
+echo('<table class="table table-condensed table-striped table-bordered">');
 
 foreach ($entity_state['group']['c6kxbar'] as $index => $entry)
 {
@@ -72,6 +72,7 @@ foreach ($entity_state['group']['c6kxbar'] as $index => $entry)
       $overlib_content = generate_overlib_content($graph_array, $device['hostname'] . " - " . $text_descr);
 
       $graph_array['width'] = 80; $graph_array['height'] = 20; $graph_array['bg'] = 'ffffff00'; # the 00 at the end makes the area transparent.
+      $graph_array['style'][] = 'margin-top: -6px';
 
       $minigraph =  generate_graph_tag($graph_array);
 

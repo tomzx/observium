@@ -47,7 +47,7 @@ $percentage_bar['bars'][1] = array('percent' => $shar_perc, 'colour' => '#008fea
 $percentage_bar['bars'][2] = array('percent' => $used_abs, 'colour' => '#FFAA66', 'text' => $used_perc.'%');
 $percentage_bar['bars'][3] = array('percent' => $cach_perc, 'colour' => '#f0e0a0', 'text' => '');
 
-echo('<table width="100%" class="table-striped table-condensed-more">');
+echo('<table width="100%" class="table table-striped table-condensed-more table-bordered">');
 echo('  <tr>');
 echo('    <td class="entity">RAM</td>');
 echo('    <td colspan=8>');

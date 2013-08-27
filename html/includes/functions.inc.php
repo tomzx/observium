@@ -754,12 +754,15 @@ function print_graph_tag($args)
 function generate_graph_tag($args)
 {
 
+  $style = implode(";", $args['style']);
+  unset($args['style']);
+
   foreach ($args as $key => $arg)
   {
     $urlargs[] = $key."=".$arg;
   }
 
-  return '<img src="graph.php?' . implode('&',$urlargs).'" border="0" style="max-width: 100%; width: auto;" />';
+  return '<img src="graph.php?' . implode('&',$urlargs).'" border="0" style="max-width: 100%; width: auto; '.$style.'" />';
 }
 
 function generate_graph_js_state($args) {

@@ -31,7 +31,7 @@ if ($ports['total'])
 
   echo('  <div style="height: 5px;"></div>');
 
-  echo('<table class="table table-condensed table-striped">
+  echo('<table class="table table-condensed table-striped table-bordered">
     <tr bgcolor="' . $ports_colour . '" align="center"><td></td>
       <td width="25%"><img src="images/16/connect.png" align="absmiddle"> ' . $ports['total'] . '</td>
       <td width="25%" class="green"><img src="images/16/if-connect.png" align="absmiddle"> ' . $ports['up'] . '</td>
