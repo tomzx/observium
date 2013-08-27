@@ -42,18 +42,21 @@ else
 include_once("../includes/defaults.inc.php");
 include_once("../config.php");
 include_once("../includes/definitions.inc.php");
-include_once("../includes/common.php");
-include_once("../includes/dbFacile.php");
-include_once("../includes/rewrites.php");
-include_once("includes/functions.inc.php");
-include_once("../includes/rrdtool.inc.php");
-include_once("includes/authenticate.inc.php");
+include($config['install_dir'] . "/includes/common.php");
+include($config['install_dir'] . "/includes/dbFacile.php");
+include($config['install_dir'] . "/includes/rewrites.php");
+include($config['install_dir'] . "/includes/rrdtool.inc.php");
+include($config['install_dir'] . "/includes/alerts.inc.php");
+include($config['html_dir'] . "/includes/functions.inc.php");
+include($config['html_dir'] . "/includes/authenticate.inc.php");
 
-include_once($config['install_dir'] . "/includes/pear/Net/IPv4.php");
-include_once($config['install_dir'] . "/includes/pear/Net/IPv6.php");
-include_once($config['install_dir'] . "/includes/pear/Net/MAC.php");
+// Include from PEAR
+set_include_path($config['install_dir'] . "/includes/pear" . PATH_SEPARATOR . get_include_path());
+include($config['install_dir'] . "/includes/pear/Net/IPv4.php");
+include($config['install_dir'] . "/includes/pear/Net/IPv6.php");
+include($config['install_dir'] . "/includes/pear/Net/MAC.php");
 
-include("includes/graphs/graph.inc.php");
+include($config['html_dir'] . "/includes/graphs/graph.inc.php");
 
 $end = utime(); $run = $end - $start;;
 

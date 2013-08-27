@@ -36,8 +36,8 @@ if (isset($_SERVER['PATH_INFO']) && strpos($_SERVER['PATH_INFO'], "debug"))
 include("../includes/defaults.inc.php");
 include("../config.php");
 include("../includes/definitions.inc.php");
-include("../includes/functions.php");
-include("includes/functions.inc.php");
+include($config['install_dir'] . "/includes/functions.php");
+include($config['html_dir'] . "/includes/functions.inc.php");
 
 ?>
 
@@ -129,7 +129,7 @@ if (!is_writable($config['temp_dir']))
   print_error("Temp Directory is not writable ({$config['tmp_dir']}).  Graphing may fail.");
 }
 
-include("includes/authenticate.inc.php");
+include($config['html_dir'] . "/includes/authenticate.inc.php");
 
 if ($vars['widescreen'] == "yes") { $_SESSION['widescreen'] = 1; unset($vars['widescreen']); }
 if ($vars['widescreen'] == "no")  { unset($_SESSION['widescreen']); unset($vars['widescreen']); }
@@ -299,6 +299,7 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
               </table>
             </div>
           </li>
+
           <li class="dropdown">
             <a href="<?php echo(generate_url(array('page'=>'overview'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
               <i class="oicon-databases"></i> <b class="caret"></b></a>
@@ -312,7 +313,7 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
   $sql_profile = array_slice($sql_profile, 0, 15);
   foreach($sql_profile AS $sql_query)
   {
-    echo '<tr><td>', $sql_query['time'], '</td><td>' ,print_sql($sql_query['sql']), '</td></tr>';
+    echo '<tr><td>', $sql_query['time'], '</td><td>', print_sql($sql_query['sql']), '</td></tr>';
     #echo '<tr><td>', $sql_query['time'], '</td><td>' ,$sql_query['sql'], '</td></tr>';
   }
 
