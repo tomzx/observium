@@ -12,7 +12,7 @@ if($vars['searchbar'] != 'hide')
 {
 
 ?>
-<form method="post" action="" style="margin-bottom: none;">
+<form method="post" action="" style="margin-bottom: none;" id="ports-form">
 <table style="width: 100%;" class="table-transparent">
  <tbody>
   <tr>
@@ -102,7 +102,7 @@ foreach ($sorts as $sort => $sort_text)
         </select>
         </td>
         <td style="text-align: center;" rowspan=2>
-        <button type="submit" class="btn btn-large"><i class="icon-search"></i> Search</button>
+        <button type="submit" onClick="submitURL()" class="btn btn-large"><i class="icon-search"></i> Search</button>
         <br />
         <a href="<?php echo(generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare']))); ?>" title="Reset critera to default." >Reset</a>
       </td>
@@ -170,6 +170,33 @@ foreach ($ports as $data)
  </tbody>
 </table>
 </form>
+
+<script>
+
+// This code updates the FORM URL
+
+function submitURL() {
+  var url = '/ports/';
+
+    var partFields = document.getElementById("ports-form").elements;
+
+    for(var el, i = 0, n = partFields.length; i < n; i++) {
+      el = partFields[i];
+      if(el.value != '') {
+        if (el.checked || el.type !== "checkbox") {
+            url += encodeURIComponent(el.name) + "=" +
+                   encodeURIComponent(el.value) + "/"
+            ;
+        }
+      }
+    }
+
+   $('#ports-form').attr('action', url);
+
+}
+
+</script>
+
 
 <hr />
 
