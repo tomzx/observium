@@ -30,11 +30,13 @@ if ($bill_data['bill_type'] == "quota") {
                   'out' => format_bytes_billing($bill_data['total_data_out']),
                   'tot' => format_bytes_billing($bill_data['total_data'])
                 );
+
   $average    = array(
                   'in' => format_bytes_billing($bill_data['total_data_in'] / $cur_days),
                   'out' => format_bytes_billing($bill_data['total_data_out'] / $cur_days),
                   'tot' => format_bytes_billing($bill_data['total_data'] / $cur_days)
                 );
+
   $estimated  = array(
                   'in' => format_bytes_billing($bill_data['total_data_in'] / $cur_days * $total_days),
                   'out' => format_bytes_billing($bill_data['total_data_out'] / $cur_days * $total_days),
@@ -47,7 +49,7 @@ if ($bill_data['bill_type'] == "quota") {
   $allowed    = format_si($cdr)."bps";
   $overuse    = $rate_95th - $cdr;
   $overuse    = (($overuse <= 0) ? "<span class=\"badge badge-success\">-</span>" : "<span class=\"badge badge-important\">".format_si($overuse)."bps</span>");
-  $type       = "CDR / 95th percentile";
+  $type       = "CDR / 95th %";
   $imgtype    = "&amp;95th=yes";
   $current    = array(
                   'in' => format_si($bill_data['rate_95th_in'])."bps",
@@ -55,10 +57,8 @@ if ($bill_data['bill_type'] == "quota") {
                   'tot' => format_si($bill_data['rate_95th'])."bps"
                 );
   $average    = array(
-                  /* 'in' => format_si($bill_data['rate_average_in'])."bps", */
-                  /* 'out' => format_si($bill_data['rate_average_out'])."bps", */
-                  'in' => "n/a",
-                  'out' => "n/a",
+                  'in' => format_si($bill_data['rate_average_in'])."bps",
+                  'out' => format_si($bill_data['rate_average_out'])."bps",
                   'tot' => format_si($bill_data['rate_average'])."bps"
                 );
   $estimated  = array(
@@ -124,55 +124,35 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
 <div class="row" style="margin-bottom: 15px;">
   <div class="col-md-6">
     <div class="well info_box">
-      <div class="title"><i class="oicon-information"></i> Bill Summary</div>
+      <div class="title"><i class="oicon-chart"></i> Bill Summary</div>
       <div class="content">
+
         <table class="table table-striped table-bordered table-condensed table-rounded">
+         <thead>
           <tr>
-            <th style="width: 125px;">Billing period</th>
-
-            <td><?php echo($fromtext." to ".$totext); ?></td>
+            <th style="width: 25%;">Type</th>
+            <th style="width: 25%;">Allowed</th>
+            <th style="width: 25%;">Used</th>
+            <th style="width: 25%;">Overusage</th>
           </tr>
-          <tr>
-            <th>Type</th>
-
-            <td><span class="label label-inverse"><?php echo($type); ?></span></td>
-          </tr>
-          <tr>
-            <th>Allowed</th>
-
-            <td><span class="badge badge-success"><?php echo($allowed); ?></span></td>
-          </tr>
-          <tr>
-            <th>Used</th>
-
+        </thead>
+        <tr>
+            <td style="width: 25%;"><span class="label label-inverse"><?php echo($type); ?></span></td>
+            <td style="width: 25%;"><span class="badge badge-success"><?php echo($allowed); ?></span></td>
             <td><span class="badge badge-warning"><?php echo($used); ?></span></td>
-          </tr>
-          <tr>
-            <th>Overusage</th>
-
             <td><?php echo($overuse); ?></td>
           </tr>
-          <tr>
-            <td colspan="3">
-              <?php $background = get_percentage_colours($percent); ?>
-              <?php echo(print_percentage_bar (400, 20, $percent, $percent.'%', "ffffff", $background['left'], 100-$percent."%" , "ffffff", $background['right']));  ?>
-            </td>
-          </tr>
         </table>
-      </div>
-    </div>
-    <div class="well info_box">
-      <div class="title"><i class="oicon-network-ethernet"></i> Usage Summary</div>
-      <div class="content">
-        <table class="table table-striped table-bordered table-condensed table-rounded">
+
+        <table class="table table-bordered table-striped table-condensed" style="margin-top: 10px;">
           <thead>
             <tr>
-              <th>Billing period</th>
-              <th>Inbound</th>
-              <th>Outbound</th>
-              <th>Used</th>
+              <th style="width: 25%;"></th>
+              <th style="width: 25%;">Inbound</th>
+              <th style="width: 25%;">Outbound</th>
+              <th style="width: 25%;">Used</th>
             </tr>
-          </thead>
+           </thead>
           <tr>
 <?php if ($bill_data['bill_type'] == "cdr") { ?>
             <th style="width: 125px;">95th percentile</th>
@@ -200,22 +180,34 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
             <td><span class="badge"><?php echo($estimated['tot']); ?></span></td>
           </tr>
 <?php } ?>
+          <tr>
+            <td colspan="4">
+              <?php $background = get_percentage_colours($percent); ?>
+              <?php echo(print_percentage_bar (400, 20, $percent, $percent.'%', "ffffff", $background['left'], 100-$percent."%" , "ffffff", $background['right']));  ?>
+            </td>
+          </tr>
+
         </table>
       </div>
     </div>
   </div>
+
   <div class="col-md-6">
     <div class="well info_box">
-      <div class="title"><i class="oicon-information-button"></i> Optional Information</div>
+      <div class="title"><i class="oicon-information-button"></i> Bill Information</div>
       <div class="content">
         <table class="table table-striped table-bordered table-condensed table-rounded">
           <tr>
-            <th style="width: 175px;"><i class="icon-user"></i> Customer Reference</th>
+            <th style="width: 25%;">Billing period</th>
+            <td colspan="3"><?php echo($fromtext." to ".$totext); ?></td>
+          </tr>
 
+          <tr>
+            <th style="width: 175px;"><i class="icon-user"></i> Customer Ref</th>
             <td><?php echo($optional['cust']); ?></td>
           </tr>
           <tr>
-            <th><i class="icon-info-sign"></i> Billing Reference</th>
+            <th><i class="icon-info-sign"></i> Billing Ref</th>
 
             <td><?php echo($optional['ref']); ?></td>
           </tr>
@@ -224,13 +216,6 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
 
             <td><?php echo($optional['notes']); ?></td>
           </tr>
-        </table>
-      </div>
-    </div>
-    <div class="well info_box">
-      <div class="title"><i class="oicon-clipboard-report-bar"></i> Polling Information</div>
-      <div class="content">
-        <table class="table table-striped table-bordered table-condensed table-rounded">
           <tr>
             <th style="width: 175px;"><i class="icon-time"></i> Last polled</th>
 
@@ -241,23 +226,21 @@ $perc['width'] = (($percent <= "100") ? $percent : "100");
 
             <td><?php echo(strftime('%A, %e %B %Y @ %H:%M:%S', time($optional['calc']))); ?></td>
           </tr>
-        </table>
-      </div>
-    </div>
-    <div class="well info_box">
-      <div class="title"><i class="oicon-network-ethernet"></i> Ports Information</div>
-      <div class="content">
-        <table class="table table-striped table-bordered table-condensed table-rounded">
           <tr>
-            <th style="width: 175px;"><i class="icon-random"></i> Number of ports</th>
+            <th style="width: 175px;"><i class="icon-random"></i> Billed ports</th>
 
-            <td><?php echo($ports_info['ports']); ?></td>
+            <td><?php include($config['html_dir']."/pages/bill/ports.inc.php");
+                ?></td>
           </tr>
+<?php
+/**
           <tr>
             <th><i class="icon-random"></i> Total capacity</th>
 
             <td><?php echo(format_si($ports_info['capacity'])); ?>bps</td>
           </tr>
+*/
+?>
         </table>
       </div>
     </div>

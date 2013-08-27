@@ -76,25 +76,25 @@ if ($isUser) {
   switch($vars['view']) {
     case "quick":
       include("pages/bill/navbar.inc.php");
-      include("pages/bill/ports.inc.php");
+      #include("pages/bill/ports.inc.php");
       include("pages/bill/infoboxes.inc.php");
       include("pages/bill/quick.inc.php");
       break;
     case "accurate":
       include("pages/bill/navbar.inc.php");
-      include("pages/bill/ports.inc.php");
+      #include("pages/bill/ports.inc.php");
       include("pages/bill/infoboxes.inc.php");
       include("pages/bill/accurate.inc.php");
       break;
     case "transfer":
       include("pages/bill/navbar.inc.php");
-      include("pages/bill/ports.inc.php");
+      #include("pages/bill/ports.inc.php");
       include("pages/bill/infoboxes.inc.php");
       include("pages/bill/transfer.inc.php");
       break;
     case "history":
       include("pages/bill/navbar.inc.php");
-      include("pages/bill/ports.inc.php");
+      #include("pages/bill/ports.inc.php");
       include("pages/bill/history.inc.php");
       break;
 
