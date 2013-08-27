@@ -16,7 +16,6 @@
 
 include($config['install_dir'] . "/includes/common.php");
 include($config['install_dir'] . "/includes/rrdtool.inc.php");
-include($config['install_dir'] . "/includes/statsd.inc.php");
 include($config['install_dir'] . "/includes/billing.php");
 include($config['install_dir'] . "/includes/cisco-entities.php");
 include($config['install_dir'] . "/includes/syslog.php");
@@ -26,6 +25,12 @@ include($config['install_dir'] . "/includes/services.inc.php");
 include($config['install_dir'] . "/includes/dbFacile.php");
 include($config['install_dir'] . "/includes/geolocation.inc.php");
 include($config['install_dir'] . "/includes/alerts.inc.php");
+
+/// FIXME. Adama, where this file? --mike
+if ($config['statsd']['enable'] && is_file($config['install_dir'] . "/includes/statsd.inc.php"))
+{
+  include($config['install_dir'] . "/includes/statsd.inc.php");
+}
 
 // Include from PEAR
 set_include_path($config['install_dir'] . "/includes/pear" . PATH_SEPARATOR . get_include_path());
