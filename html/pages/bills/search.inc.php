@@ -1,59 +1,53 @@
 <?php
 
-$data = "";
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage webui
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
 
-if (isset($_POST['billsearch'])) {
-  $type['cdr']    = (($_POST['billingtype'] == "cdr") ? " selected" : "");
-  $type['quota']  = (($_POST['billingtype'] == "quota") ? " selected" : "");
-  $state['under'] = (($_POST['billingstate'] == "under") ? " selected" : "");
-  $state['over']  = (($_POST['billingstate'] == "over") ? " selected" : "");
-}
+// Build a list of user ids we can use to search for bills that user is allowed to see.
 
 if ($isAdmin) {
-  $data .= "<option value=\"\">All Customers</option>";
-  $data .= "<optgroup label=\"Customer:\">";
   foreach (dbFetchRows("SELECT * FROM `bill_perms` GROUP BY `user_id` ORDER BY `user_id` ") as $customers) {
     if (bill_permitted($customers['bill_id'])) {
       $customer = dbFetchRow("SELECT * FROM `users` WHERE `user_id` = ? ORDER BY `user_id`", array($customers['user_id']));
       $name     = (empty($customer['realname']) ? $customer['username'] : $customer['realname']);
       $select   = (($_POST['billinguser'] == $customer['user_id']) ? " selected" : "");
-      $data    .= "<option value=\"".$customer['user_id']."\"".$select.">".$name."</option>";
+      $users[$customer['user_id']] = $name;
     }
   }
-  $data .= "</optgroup>";
 } else {
-  $data .= "<optgroup label=\"Customer:\">";
-  $data .= "<option value=\"".$_SESSION['user_id']."\" selected>".$_SESSION['username']."</option>";
-  $data .= "</optgroup>";
+  $users[$_SESSION['user_id']] = $_SESSION['username'];
 }
+
+// Billing name field
+$search[] = array('type'    => 'text',
+                  'name'    => 'Bill Name',
+                  'id'      => 'billingname',
+                  'value'   => $vars['billingname']);
+
+// Billing type field
+$search[] = array('type'    => 'select',
+                  'name'    => 'All Types',
+                  'id'      => 'billingtype',
+                  'value'   => $vars['billingtype'],
+                  'values'  => array('cdr' => 'CDR / 95th', 'quota' => 'Quota') );
+
+//Billing user field
+$search[] = array('type'    => 'select',
+                  'name'    => 'User',
+                  'id'      => 'billinguser',
+                  'width'   => '130px',
+                  'value'   => $vars['billinguser'],
+                  'values'  => $users);
+
+print_search_simple($search, 'Bill Search');
 
 ?>
 
-<form class="well form-search" method="post" action="" style="padding-bottom: 10px;">
-  <fieldset>
-    <strong>Search:</strong>
-    <input type="hidden" name="billsearch" value="true" />
-    <input class="span4" type="text" name="billingname" id="billingname" value="<?php echo($_POST['billingname']); ?>" />
-    <select class="col-lg-2" name="billingtype" id="billingtype">
-      <option value="">All Types</option>
-      <optgroup label="Type:">
-        <option value="cdr"<?php echo($type['cdr']); ?>>CDR 95th</option>
-        <option value="quota"<?php echo($type['quota']); ?>>Quota</option>
-        <!-- <option value="avg"<?php echo($type['avg']); ?>>Average</option> //-->
-      </optgroup>
-    </select>
-    <!--
-    <select class="col-lg-2" name="billingstate" id="billingstate">
-      <option value="">All Usages</option>
-      <optgroup label="Usage:">
-        <option value="under"<?php echo($state['under']); ?>>Under</option>
-        <option value="over"<?php echo($state['over']); ?>>Over</option>
-      </optgroup>
-    </select>
-    //-->
-    <select class="span3" name="billinguser" id="billinguser">
-      <?php echo($data); ?>
-    </select>
-    <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
-  </fieldset>
-</form>

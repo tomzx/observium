@@ -1,8 +1,8 @@
-<div style='padding: 10px; height: 20px; clear: both; display: block;'>
-  <div style='float: left; font-size: 22px; font-weight: bold;'>Local AS : <?php echo($device['bgpLocalAs']); ?></div>
-</div>
+<h2 style="padding: 0 10px;">Local AS : <?php echo($device['bgpLocalAs']); ?></h2>
 
 <?php
+
+/// FIXME -- output a table of statistics here to make the local AS thing look less weird.
 
 /// FIXME - this whole page needs rewritte. Use view = graphs / graph = $graphtype.
 

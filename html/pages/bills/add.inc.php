@@ -34,7 +34,7 @@ if ($_SESSION['userlevel'] == "10") {
           <div class="control-group">
             <label class="control-label" for="bill_name"><strong>Description</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_name" value="<?php echo($billingport['port_descr_descr']); ?>">
+              <input class="col-lg-4" type="text" name="bill_name" value="<?php echo($billingport['port_descr_descr']); ?>">
             </div>
           </div>
           <div class="control-group">
@@ -80,19 +80,19 @@ for ($x=1;$x<32;$x++) {
           <div class="control-group">
             <label class="control-label" for="bill_custid"><strong>Customer&nbsp;Reference</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_custid">
+              <input class="col-lg-4" type="text" name="bill_custid">
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="bill_ref"><strong>Billing Reference</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_ref" value="<?php echo($billingport['port_descr_circuit']); ?>">
+              <input class="col-lg-4" type="text" name="bill_ref" value="<?php echo($billingport['port_descr_circuit']); ?>">
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="bill_notes"><strong>Notes</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="bill_notes" value="<?php echo($billingport['port_descr_speed']); ?>">
+              <input class="col-lg-4" type="text" name="bill_notes" value="<?php echo($billingport['port_descr_speed']); ?>">
             </div>
           </div>
         </fieldset>

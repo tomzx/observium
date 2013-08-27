@@ -43,14 +43,14 @@ if ($_SESSION['userlevel'] == '10') {
           <div class="control-group<?php if (isset($errors["username"])) { echo " error"; } ?>">
             <label class="control-label" for="new_username"><strong>Username</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="new_username" value="<?php echo $_POST['new_username']; ?>">
+              <input class="col-lg-4" type="text" name="new_username" value="<?php echo $_POST['new_username']; ?>">
               <?php if (isset($errors["username"])) { echo $errors["username"]; } ?>
             </div>
           </div>
           <div class="control-group<?php if (isset($errors["passwd"])) { echo " error"; } ?>">
             <label class="control-label" for="new_password"><strong>Password</strong></label>
             <div class="controls">
-              <input class="span4" type="password" name="new_password" value="<?php echo $_POST['new_password']; ?>">
+              <input class="col-lg-4" type="password" name="new_password" value="<?php echo $_POST['new_password']; ?>">
               <?php if (isset($errors["passwd"])) { echo $errors["passwd"]; } ?><br />
               <input type="checkbox" checked="checked" name="can_modify_passwd"> Allow the user to change his password.
             </div>
@@ -58,7 +58,7 @@ if ($_SESSION['userlevel'] == '10') {
           <div class="control-group">
             <label class="control-label" for="new_realname"><strong>Real Name</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="new_realname" value="<?php echo $_POST['new_realname']; ?>">
+              <input class="col-lg-4" type="text" name="new_realname" value="<?php echo $_POST['new_realname']; ?>">
             </div>
           </div>
           <div class="control-group">
@@ -77,13 +77,13 @@ if ($_SESSION['userlevel'] == '10') {
           <div class="control-group">
             <label class="control-label" for="new_email"><strong>E-mail</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="new_email" value="<?php echo $_POST['new_email']; ?>">
+              <input class="col-lg-4" type="text" name="new_email" value="<?php echo $_POST['new_email']; ?>">
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="new_description"><strong>Description</strong></label>
             <div class="controls">
-              <input class="span4" type="text" name="new_description" value="<?php echo $_POST['new_description']; ?>">
+              <input class="col-lg-4" type="text" name="new_description" value="<?php echo $_POST['new_description']; ?>">
             </div>
           </div>
         </fieldset>

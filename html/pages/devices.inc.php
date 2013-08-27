@@ -52,7 +52,20 @@ if($vars['searchbar'] != "hide")
 
 ?>
 
-<form method="post" action="" style="margin-bottom: 0;">
+<form method="post" action="" style="margin-bottom: 0;" id="devices-form">
+
+<?php
+
+  // Loop variables which can be set by button to make sure they're squeezed in to the URL.
+
+  foreach(array('bare', 'searchbar', 'format') as $element) {
+    if(isset($vars[$element])) {
+      echo '<input type="hidden" name="',$element,'" value="',$vars[$element],'" />';
+    }
+  }
+
+?>
+
   <table style="width: 100%" class="table-transparent">
     <tr>
       <td width="290">
@@ -169,7 +182,7 @@ foreach (dbFetch('SELECT `type` FROM `devices` AS D WHERE 1 '.$where_form.' GROU
 
       </td>
       <td align="center">
-        <button type="submit" class="btn btn-large"><i class="icon-search"></i> Search</button>
+        <button type="submit" onClick="submitURL();" class="btn btn-large"><i class="icon-search"></i> Search</button>
         <br />
         <a href="<?php echo(generate_url($vars)); ?>" title="Update the browser URL to reflect the search criteria." >Update URL</a> |
         <a href="<?php echo(generate_url(array('page' => 'devices', 'section' => $vars['section'], 'bare' => $vars['bare']))); ?>" title="Reset critera to default." >Reset</a>
@@ -177,6 +190,32 @@ foreach (dbFetch('SELECT `type` FROM `devices` AS D WHERE 1 '.$where_form.' GROU
     </tr>
   </table>
 </form>
+
+<script>
+
+// This code updates the FORM URL
+
+function submitURL() {
+  var url = '/devices/';
+
+    var partFields = document.getElementById("devices-form").elements;
+
+    for(var el, i = 0, n = partFields.length; i < n; i++) {
+      el = partFields[i];
+      if(el.value != '') {
+        if (el.checked || el.type !== "checkbox") {
+            url += encodeURIComponent(el.name) + "=" +
+                   encodeURIComponent(el.value) + "/"
+            ;
+        }
+      }
+    }
+
+   $('#devices-form').attr('action', url);
+
+}
+
+</script>
 
 <hr style="margin: 0px 0px 10px 0px;">
 

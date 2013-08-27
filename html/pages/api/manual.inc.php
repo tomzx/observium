@@ -15,7 +15,7 @@ include("includes/api/functions.inc.php");
      logins to use this API and to encrypt the data and decrypt it on the other end.
     </p>
   </div>
-  <div class="span4 well">
+  <div class="col-lg-4 well">
     <h3>Available Modules:</h3>
     <p>
       <?php echo api_show_modules(); ?>
