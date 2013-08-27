@@ -34,7 +34,7 @@ if ($isAdmin) {
     <strong>Search:</strong>
     <input type="hidden" name="billsearch" value="true" />
     <input class="span4" type="text" name="billingname" id="billingname" value="<?php echo($_POST['billingname']); ?>" />
-    <select class="span2" name="billingtype" id="billingtype">
+    <select class="col-lg-2" name="billingtype" id="billingtype">
       <option value="">All Types</option>
       <optgroup label="Type:">
         <option value="cdr"<?php echo($type['cdr']); ?>>CDR 95th</option>
@@ -43,7 +43,7 @@ if ($isAdmin) {
       </optgroup>
     </select>
     <!--
-    <select class="span2" name="billingstate" id="billingstate">
+    <select class="col-lg-2" name="billingstate" id="billingstate">
       <option value="">All Usages</option>
       <optgroup label="Usage:">
         <option value="under"<?php echo($state['under']); ?>>Under</option>

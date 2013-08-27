@@ -29,7 +29,8 @@ if ($bill_data['bill_type'] == "cdr") {
 ?>
 
 <div class="row">
-  <div class="col-md-6 well info_box">
+  <div class="col-md-6">
+   <div class="well info_box">
     <div class="title"><i class="oicon-wrench"></i> Bill Properties</div>
     <div class="content">
       <form id="edit" name="edit" method="post" action="<?php echo($url); ?>" class="form-horizontal">
@@ -44,7 +45,7 @@ if ($bill_data['bill_type'] == "cdr") {
           <div class="control-group">
             <label class="control-label" for="bill_name"><strong>Description</strong></label>
             <div class="controls">
-              <input class="span10" type="text" name="bill_name" value="<?php echo $bill_data["bill_name"]; ?>" />
+              <input class="col-lg-10" type="text" name="bill_name" value="<?php echo $bill_data["bill_name"]; ?>" />
             </div>
           </div>
           <div class="control-group">
@@ -59,7 +60,7 @@ if ($bill_data['bill_type'] == "cdr") {
               </div>
             //-->
               <div id="cdrDiv"<?php if ($bill_data['bill_type'] == "quota") { echo(' style="display: none"'); } ?>>
-                <input class="span2" type="text" name="bill_cdr" value="<?php echo $cdr['data']; ?>">
+                <input class="col-lg-2" type="text" name="bill_cdr" value="<?php echo $cdr['data']; ?>">
                 <select name="bill_cdr_type" style="width: 253px;">
                   <option value="Kbps"<?php echo $cdr['select_kbps']; ?>>Kilobits per second (Kbps)</option>
                   <option value="Mbps"<?php echo $cdr['select_mbps']; ?>>Megabits per second (Mbps)</option>
@@ -67,7 +68,7 @@ if ($bill_data['bill_type'] == "cdr") {
                 </select>
               </div>
               <div id="quotaDiv"<?php if ($bill_data['bill_type'] == "cdr") { echo(' style="display: none"'); } ?>>
-                <input class="span2" type="text" name="bill_quota" value="<?php echo $quota['data']; ?>">
+                <input class="col-lg-2" type="text" name="bill_quota" value="<?php echo $quota['data']; ?>">
                 <select name="bill_quota_type" style="width: 253px;">
                   <option value="MB"<?php echo $quota['select_mb']; ?>>Megabytes (MB)</option>
                   <option value="GB"<?php echo $quota['select_gb']; ?>>Gigabytes (GB)</option>
@@ -97,19 +98,19 @@ for ($x=1;$x<32;$x++) {
           <div class="control-group">
             <label class="control-label" for="bill_custid"><strong>Customer&nbsp;Reference</strong></label>
             <div class="controls">
-              <input class="span10" type="text" name="bill_custid" value="<?php echo $bill_data['bill_custid']; ?>" />
+              <input class="col-lg-10" type="text" name="bill_custid" value="<?php echo $bill_data['bill_custid']; ?>" />
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="bill_ref"><strong>Billing Reference</strong></label>
             <div class="controls">
-              <input class="span10" type="text" name="bill_ref" value="<?php echo $bill_data['bill_ref']; ?>" />
+              <input class="col-lg-10" type="text" name="bill_ref" value="<?php echo $bill_data['bill_ref']; ?>" />
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="bill_notes"><strong>Notes</strong></label>
             <div class="controls">
-              <input class="span10" type="text" name="bill_notes" value="<?php echo $bill_data['bill_notes']; ?>" />
+              <input class="col-lg-10" type="text" name="bill_notes" value="<?php echo $bill_data['bill_notes']; ?>" />
             </div>
           </div>
         </fieldset>
@@ -118,9 +119,11 @@ for ($x=1;$x<32;$x++) {
         </div>
       </form>
     </div>
+   </div>
   </div>
 
-  <div class="col-md-6 well info_box">
+  <div class="col-md-6">
+   <div class="well info_box">
     <div class="title"><i class="oicon-network-ethernet"></i> Bill Ports</div>
     <div class="content">
 
