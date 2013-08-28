@@ -26,7 +26,8 @@ include($config['install_dir'] . "/includes/dbFacile.php");
 include($config['install_dir'] . "/includes/geolocation.inc.php");
 include($config['install_dir'] . "/includes/alerts.inc.php");
 
-/// FIXME. Adama, where this file? --mike
+// StatsD export class
+// This is not currently in SVN, do not enable it.
 if ($config['statsd']['enable'] && is_file($config['install_dir'] . "/includes/statsd.inc.php"))
 {
   include($config['install_dir'] . "/includes/statsd.inc.php");
