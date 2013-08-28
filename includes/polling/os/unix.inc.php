@@ -5,17 +5,27 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
   list(,,$version) = explode (" ", $poll_device['sysDescr']);
   $hardware = rewrite_unix_hardware($poll_device['sysDescr']);
 
-  # Distro "extend" support
+  $kernel = $version;
+
+  // Distro "extend" support
   $features = snmp_get($device, ".1.3.6.1.4.1.2021.7890.1.3.1.1.6.100.105.115.116.114.111", "-Oqv", "UCD-SNMP-MIB");
   $features = str_replace("\"", "", $features);
 
-  if (!$features) # No "extend" support, try "exec" support
+  if (!$features) // No "extend" support, try "exec" support
   {
     $features = snmp_get($device, ".1.3.6.1.4.1.2021.7890.1.101.1", "-Oqv", "UCD-SNMP-MIB");
     $features = str_replace("\"", "", $features);
   }
 
-  # Detect Dell hardware via OpenManage SNMP
+  // Unset features if we're just getting an error.
+  if(strpos($features, "/usr/bin/distro")) { unset($features); }
+
+  list($distro, $distro_ver) = explode(" ", $features);
+  unset($features);
+
+
+
+  // Detect Dell hardware via OpenManage SNMP
   $hw = snmp_get($device, ".1.3.6.1.4.1.674.10892.1.300.10.1.9.1", "-Oqv", "MIB-Dell-10892");
   $hw = trim(str_replace("\"", "", $hw));
   if ($hw) { $hardware = "Dell " . $hw; }
@@ -23,14 +33,14 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
   $serial = snmp_get($device, ".1.3.6.1.4.1.674.10892.1.300.10.1.11.1", "-Oqv", "MIB-Dell-10892");
   $serial = trim(str_replace("\"", "", $serial));
 
-  # Use agent DMI data if available
+  // Use agent DMI data if available
   if (isset($agent_data['dmi']))
   {
     if ($agent_data['dmi']['system-product-name'])
     {
       $hardware = ($agent_data['dmi']['system-manufacturer'] ? $agent_data['dmi']['system-manufacturer'] . ' ' : '') . $agent_data['dmi']['system-product-name'];
 
-      # Clean up "Dell Computer Corporation" and "Intel Corporation"
+      // Clean up "Dell Computer Corporation" and "Intel Corporation"
       $hardware = str_replace(" Computer Corporation","",$hardware);
       $hardware = str_replace(" Corporation","",$hardware);
     }
@@ -53,7 +63,7 @@ elseif ($device['os'] == "aix")
 elseif ($device['os'] == "freebsd")
 {
   preg_match('/FreeBSD ([\d\.]+-[\w\d-]+)/i', $poll_device['sysDescr'], $matches);
-  $version = $matches[1];
+  $kernel = $matches[1];
   $hardware = rewrite_unix_hardware($poll_device['sysDescr']);
 }
 elseif ($device['os'] == "dragonfly")
@@ -77,8 +87,8 @@ elseif ($device['os'] == "openbsd" || $device['os'] == "solaris" || $device['os'
 }
 elseif ($device['os'] == "monowall" || $device['os'] == "pfsense" || $device['os'] == "Voswall")
 {
-  list(,,$version,,$freebsda, $freebsdb) = explode(" ", $poll_device['sysDescr']);
-  $features = $freebsda . " " . $freebsdb;
+  list(,,$version,,, $kernel) = explode(" ", $poll_device['sysDescr']);
+  $distro = $device['os'];
   $hardware = rewrite_unix_hardware($poll_device['sysDescr']);
 }
 elseif ($device['os'] == "freenas" || $device['os'] == "nas4free")
@@ -95,9 +105,9 @@ elseif ($device['os'] == "qnap")
 }
 elseif ($device['os'] == "dsm")
 {
-#  This only gets us the build, not the actual version number, so won't use this.. yet.
-#  list(,,,$version,) = explode(" ",$poll_device['sysDescr'],5);
-#  $version = "Build " . trim($version,'#');
+//  This only gets us the build, not the actual version number, so won't use this.. yet.
+//  list(,,,$version,) = explode(" ",$poll_device['sysDescr'],5);
+//  $version = "Build " . trim($version,'#');
 
   $hrSystemInitialLoadParameters = trim(snmp_get($device, "hrSystemInitialLoadParameters.0", "-Osqnv"));
 
@@ -112,5 +122,31 @@ elseif ($device['os'] == "dsm")
     }
   }
 }
+
+// 'os' script data via SNMP "exec" support
+$os_data = str_replace('"', "", snmp_get($device, ".1.3.6.1.4.1.2021.36602.1.1.1.4.1.2.2.111.115.1", "-Oqv"));
+
+// check if we got a SCRIPTVER back
+if(strpos($os_data, "SCRIPTVER"))
+{
+  foreach(explode("||", $os_data) as $part)
+  {
+    list($a, $b) = explode("=", $part);
+    $stats['os'][$a] = $b;
+  }
+
+  print_vars($stats);
+
+  $distro     = $stats['os']['DISTRO'];
+  $distro_ver = $stats['os']['DISTROVER'];
+  $kernel     = $stats['os']['KERNEL'];
+  $arch       = $stats['os']['ARCH'];
+
+  unset($features);
+
+  #$hardware   = 'Generic '.$arch;
+
+}
+
 
 ?>

@@ -38,7 +38,7 @@ foreach(explode("||", $stats['os_text']) as $part)
   $stats['os'][$a] = $b;
 }
 
-list($stats['os']['os'], $stats['os']['os_ver'], $stats['os']['arch'], $stats['os']['distro'], $stats['os']['distro_ver']) = explode("|", $stats['os_text']);
+#list($stats['os']['os'], $stats['os']['os_ver'], $stats['os']['arch'], $stats['os']['distro'], $stats['os']['distro_ver']) = explode("|", $stats['os_text']);
 
 // sysObjectID for Generic devices
 foreach (dbFetch("SELECT sysObjectID, COUNT( * ) as count FROM  `devices` WHERE `os` = 'generic' GROUP BY `sysObjectID`") as $data)

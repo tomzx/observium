@@ -616,11 +616,10 @@ function getImage($device)
     }
     if ($device['os'] == "linux")
     {
-      $features = strtolower(trim($device['features']));
-      list($distro) = explode(" ", $features);
-      if (file_exists($config['html_dir'] . "/images/os/$distro" . ".png"))
+      $distro = strtolower(trim($device['distro']));
+      if (file_exists($config['html_dir'] . "/images/os/".safename($distro) . ".png"))
       {
-        $image = '<img src="' . $config['base_url'] . '/images/os/' . $distro . '.png" />';
+        $image = '<img src="' . $config['base_url'] . '/images/os/' . htmlentities($distro) . '.png" />';
       }
     }
   }
