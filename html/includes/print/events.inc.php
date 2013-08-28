@@ -139,17 +139,22 @@ function print_events($vars)
 
   foreach ($entries as $entry)
   {
+
     $icon = geteventicon($entry['message']);
     if ($icon) { $icon = '<img src="images/16/' . $icon . '" />'; }
 
     $string .= '  <tr>' . PHP_EOL;
     if ($short)
     {
-      $string .= '    <td width="105" class="syslog">';
+      $string .= '    <td width="100" class="syslog">';
+      $unixtime = strtotime($entry['timestamp']);
+      $timediff = time() - $unixtime;
+      $string .= overlib_link('', formatUptime($timediff, "short-3"), format_timestamp($entry['timestamp']), NULL) . '</td>' . PHP_EOL;
     } else {
       $string .= '    <td width="160">';
+      $string .= format_timestamp($entry['timestamp']) . '</td>' . PHP_EOL;
     }
-    $string .= format_timestamp($entry['timestamp']) . '</td>' . PHP_EOL;
+
     if ($list['device'])
     {
       $dev = device_by_id_cache($entry['device_id']);

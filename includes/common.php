@@ -72,7 +72,7 @@ function deviceUptime($device, $format="long")
   }
 }
 
-function formatUptime($diff, $format="long")
+function formatUptime($diff, $format = "long")
 {
   $yearsDiff = floor($diff/31536000);
   $diff -= $yearsDiff*31536000;
