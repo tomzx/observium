@@ -1,26 +1,51 @@
 <?php
 
 // Build SNMP Cache Array
+
+// IF-MIB OIDs that go into the ports table
+
 $data_oids = array('ifName','ifDescr','ifAlias', 'ifAdminStatus', 'ifOperStatus', 'ifMtu', 'ifSpeed', 'ifHighSpeed', 'ifType', 'ifPhysAddress',
                    'ifPromiscuousMode','ifConnectorPresent','ifDuplex', 'ifTrunk', 'ifVlan');
+
+// IF-MIB statistics OIDs that go into RRD
 
 $stat_oids = array('ifInErrors', 'ifOutErrors', 'ifInUcastPkts', 'ifOutUcastPkts', 'ifInNUcastPkts', 'ifOutNUcastPkts',
                    'ifHCInMulticastPkts', 'ifHCInBroadcastPkts', 'ifHCOutMulticastPkts', 'ifHCOutBroadcastPkts',
                    'ifInOctets', 'ifOutOctets', 'ifHCInOctets', 'ifHCOutOctets', 'ifInDiscards', 'ifOutDiscards', 'ifInUnknownProtos',
                    'ifInBroadcastPkts', 'ifOutBroadcastPkts', 'ifInMulticastPkts', 'ifOutMulticastPkts');
 
+// Subset of IF-MIB statistics OIDs that we put into the state table
+
 $stat_oids_db = array('ifInOctets', 'ifOutOctets', 'ifInErrors', 'ifOutErrors', 'ifInUcastPkts', 'ifOutUcastPkts'); // From above for DB
+
+// ETHERLIKE-MIB extended error stats oids
 
 $etherlike_oids = array('dot3StatsAlignmentErrors', 'dot3StatsFCSErrors', 'dot3StatsSingleCollisionFrames', 'dot3StatsMultipleCollisionFrames',
                         'dot3StatsSQETestErrors', 'dot3StatsDeferredTransmissions', 'dot3StatsLateCollisions', 'dot3StatsExcessiveCollisions',
                         'dot3StatsInternalMacTransmitErrors', 'dot3StatsCarrierSenseErrors', 'dot3StatsFrameTooLongs', 'dot3StatsInternalMacReceiveErrors',
                         'dot3StatsSymbolErrors');
 
+// Cisco old locIf OIDs. Currently unused.
+
 $cisco_oids = array('locIfHardType', 'locIfInRunts', 'locIfInGiants', 'locIfInCRC', 'locIfInFrame', 'locIfInOverrun', 'locIfInIgnored', 'locIfInAbort',
                     'locIfCollisions', 'locIfInputQueueDrops', 'locIfOutputQueueDrops');
 
+// PAgP OIDs
+
 $pagp_oids = array('pagpOperationMode', 'pagpPortState', 'pagpPartnerDeviceId', 'pagpPartnerLearnMethod', 'pagpPartnerIfIndex', 'pagpPartnerGroupIfIndex',
                    'pagpPartnerDeviceName', 'pagpEthcOperationMode', 'pagpDeviceId', 'pagpGroupIfIndex');
+
+// PoE OIDs
+
+$cpe_oids = array('cpeExtPsePortEnable', 'cpeExtPsePortDiscoverMode', 'cpeExtPsePortDeviceDetected', 'cpeExtPsePortIeeePd',
+  'cpeExtPsePortAdditionalStatus', 'cpeExtPsePortPwrMax', 'cpeExtPsePortPwrAllocated', 'cpeExtPsePortPwrAvailable', 'cpeExtPsePortPwrConsumption',
+  'cpeExtPsePortMaxPwrDrawn', 'cpeExtPsePortEntPhyIndex', 'cpeExtPsePortEntPhyIndex', 'cpeExtPsePortPolicingCapable', 'cpeExtPsePortPolicingEnable',
+  'cpeExtPsePortPolicingAction', 'cpeExtPsePortPwrManAlloc');
+
+$peth_oids = array('pethPsePortAdminEnable', 'pethPsePortPowerPairsControlAbility', 'pethPsePortPowerPairs', 'pethPsePortDetectionStatus',
+  'pethPsePortPowerPriority', 'pethPsePortMPSAbsentCounter', 'pethPsePortType', 'pethPsePortPowerClassifications', 'pethPsePortInvalidSignatureCounter',
+  'pethPsePortPowerDeniedCounter', 'pethPsePortOverLoadCounter', 'pethPsePortShortCounter', 'pethMainPseConsumptionPower');
+
 
 $ifmib_oids = array_merge($data_oids, $stat_oids);
 $ifmib_oids = array('ifEntry', 'ifXEntry');
@@ -35,6 +60,7 @@ if($device['os'] == "netapp")
   $port_stats = snmpwalk_cache_oid($device, "NetIfEntry", $port_stats, "NETAPP-MIB", mib_dirs("netapp"));
 }
 
+// If etherlike extended error statistics are enabled, walk dot3StatsEntry else only dot3StatsDuplexStatus.
 if ($config['enable_ports_etherlike'])
 {
   echo("dot3Stats "); $port_stats = snmpwalk_cache_oid($device, "dot3StatsEntry", $port_stats, "EtherLike-MIB");
@@ -42,11 +68,14 @@ if ($config['enable_ports_etherlike'])
   echo("dot3StatsDuplexStatus"); $port_stats = snmpwalk_cache_oid($device, "dot3StatsDuplexStatus", $port_stats, "EtherLike-MIB");
 }
 
+// Find out if we have any ADSL ports
 if ($config['enable_ports_adsl'])
 {
   $device['adsl_count'] = dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE `device_id` = ? AND `ifType` = 'adsl'", array($device['device_id']));
 }
 
+// Fetch the ADSL-LINE-MIB OIDs if we have more than one ADSL port.
+// This data is used in the per-port adsl include.
 if ($device['adsl_count'] > "0")
 {
   echo("ADSL ");
@@ -72,11 +101,20 @@ if ($device['adsl_count'] > "0")
   $port_stats = snmpwalk_cache_oid($device, ".1.3.6.1.2.1.10.94.1.1.7.1.7", $port_stats, "ADSL-LINE-MIB");
 }
 
+// Fetch POWER-ETHERNET-MIB and CISCO-POWER-ETHERNET-EXT-MIB if enable_ports_poe is enabled.
+// This data is used in the per-port poe include.
+if ($config['enable_ports_poe'])
+{
+  $port_stats = snmpwalk_cache_oid($device, "pethPsePortEntry", $port_stats, "POWER-ETHERNET-MIB");
+  $port_stats = snmpwalk_cache_oid($device, "cpeExtPsePortEntry", $port_stats, "CISCO-POWER-ETHERNET-EXT-MIB");
+}
+
 /// FIXME This probably needs re-enabled. We need to clear these things when they get unset, too.
 #foreach ($etherlike_oids as $oid) { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "EtherLike-MIB"); }
 #foreach ($cisco_oids as $oid)     { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "OLD-CISCO-INTERFACES-MIB"); }
 #foreach ($pagp_oids as $oid)      { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "CISCO-PAGP-MIB"); }
 
+// If the device is cisco, pull a few cisco-specific MIBs and try to get vlan data from CISCO-VTP-MIB
 if ($device['os_group'] == "cisco")
 {
   foreach ($pagp_oids as $oid) { $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, "CISCO-PAGP-MIB"); }
@@ -89,6 +127,9 @@ if ($device['os_group'] == "cisco")
   $port_stats = snmpwalk_cache_oid($device, "vlanTrunkPortNativeVlan", $port_stats, "CISCO-VTP-MIB");
 
 } else {
+
+  // The port is not Cisco. Try to get VLAN data from Q-BRIDGE-MIB.
+
   $port_stats = snmpwalk_cache_oid($device, "dot1qPortVlanTable", $port_stats, "Q-BRIDGE-MIB");
 
   $vlan_ports = snmpwalk_cache_twopart_oid($device, "dot1qVlanCurrentEgressPorts", $vlan_stats, "Q-BRIDGE-MIB");
@@ -146,7 +187,6 @@ foreach ($port_stats as $ifIndex => $port)
       $port_id = dbInsert(array('device_id' => $device['device_id'], 'ifIndex' => $ifIndex), 'ports');
       $ports[$port['ifIndex']] = dbFetchRow("SELECT * FROM `ports` WHERE `port_id` = ?", array($port_id));
       echo("Adding: ".$port['ifName']."(".$ifIndex.")(".$ports[$port['ifIndex']]['port_id'].")");
-      #print_vars($ports);
     } elseif ($ports[$ifIndex]['deleted'] == "1") {
       dbUpdate(array('deleted' => '0'), 'ports', '`port_id` = ?', array($ports[$ifIndex]['port_id']));
       log_event("Port DELETED mark removed", $device, 'interface', $ports[$ifIndex]['port_id']);
