@@ -10,4 +10,4 @@ for server_stats in mc.get_stats():
    server = server.split(' ', 2)
    print '<<<app-memcached-'+server[0]+'>>>'
    for stat_name, value in sorted(stats.iteritems()):
-     print value
+     print '%s:%s' % (stat_name, value)
