@@ -4,8 +4,6 @@ $pagetitle[] = "Routing";
 
 if ($_GET['optb'] == "graphs" || $_GET['optc'] == "graphs") { $graphs = "graphs"; } else { $graphs = "nographs"; }
 
-#$datas[] = 'overview';
-
 // $routing is populated by cache-data.inc.php
 
 $navbar['brand'] = "Routing";

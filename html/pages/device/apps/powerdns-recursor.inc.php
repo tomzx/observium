@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This files is part of Observium.
+ *
+ * @package    observium
+ * @subpackage applications
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
 $app_graphs['default'] = array('powerdns-recursor_queries' => 'PowerDNS Recursor - Questions and answers per second',
                 'powerdns-recursor_tcpqueries' => 'PowerDNS Recursor - TCP Questions and answers per second, unauthorized packets/s',
                 'powerdns-recursor_errors' => 'PowerDNS Recursor - Packet errors per second',

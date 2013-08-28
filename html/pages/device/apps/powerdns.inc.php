@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This files is part of Observium.
+ *
+ * @package    observium
+ * @subpackage applications
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
 $app_graphs['default'] = array('powerdns_latency'  => 'PowerDNS - Latency',
                 'powerdns_fail' => 'PowerDNS - Corrupt / Failed / Timed out',
                 'powerdns_packetcache' => 'PowerDNS - Packet Cache',

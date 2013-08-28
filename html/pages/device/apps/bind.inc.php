@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This files is part of Observium.
+ *
+ * @package    observium
+ * @subpackage applications
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
+
 $app_sections = array('stats' => "Server statistics",
                       'auth' => "Authoritative",
                       'resolv' => "Resolving",

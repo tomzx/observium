@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This files is part of Observium.
+ *
+ * @package    observium
+ * @subpackage applications
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
+## FIXME -- THIS IS MESSY AND NEEDS TO BE FIXED.
+
 global $config;
 
 $total        = true;

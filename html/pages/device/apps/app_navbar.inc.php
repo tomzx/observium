@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Observium
+ *
+ *   This files is part of Observium.
+ *
+ * @package    observium
+ * @subpackage applications
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
+
 $navbar['brand'] = nicecase($app['app_type']);
 $navbar['class'] = "navbar-narrow";
 foreach ($app_sections as $app_section => $app_section_text)
