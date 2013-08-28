@@ -97,7 +97,10 @@ if ($device['os'] == "ipoman")
 
       discover_sensor($valid['sensor'], 'humidity', $device, $current_oid, "1", 'ipoman', $descr, '10', '1', $low_limit, NULL, NULL, $high_limit, $current);
     }
-
+  }
+  
+  if ($emd_installed != 'disabled')
+  {
     $descr      = snmp_get($device, "IPOMANII-MIB::ipmEnvEmdConfigTempName.0", "-Oqv");
     $current    = snmp_get($device, "IPOMANII-MIB::ipmEnvEmdStatusTemperature.0", "-Oqv") / 10;
     $high_limit = snmp_get($device, "IPOMANII-MIB::ipmEnvEmdConfigTempHighSetPoint.0", "-Oqv");
