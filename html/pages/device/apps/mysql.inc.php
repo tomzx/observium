@@ -1,13 +1,11 @@
 <?php
-global $config;
 
 $app_sections = array('system' => "System",
                       'queries' => "Queries",
                       'innodb' => "InnoDB");
 
-include("app_navbar.inc.php");
 
-$graphs['system'] = array(
+$app_graphs['system'] = array(
                 'mysql_connections' => 'Connections',
                 'mysql_status' => 'Process List',
                 'mysql_files_tables' => 'Files and Tables',
@@ -17,7 +15,7 @@ $graphs['system'] = array(
                 'mysql_temporary_objects' => 'Temporary Objects'
                 );
 
-$graphs['queries'] = array(
+$app_graphs['queries'] = array(
                 'mysql_command_counters' => 'Command Counters',
                 'mysql_query_cache' => 'Query Cache',
                 'mysql_query_cache_memory' => 'Query Cache Memory',
@@ -26,7 +24,7 @@ $graphs['queries'] = array(
                 'mysql_sorts' => 'Sorts',
                 );
 
-$graphs['innodb'] = array(
+$app_graphs['innodb'] = array(
                 'mysql_innodb_buffer_pool' => 'InnoDB Buffer Pool',
                 'mysql_innodb_buffer_pool_activity' => 'InnoDB Buffer Pool Activity',
                 'mysql_innodb_insert_buffer' => 'InnoDB Insert Buffer',
@@ -37,20 +35,3 @@ $graphs['innodb'] = array(
                 'mysql_innodb_semaphores' => 'InnoDB semaphores',
                 'mysql_innodb_transactions' => 'InnoDB Transactions',
                 );
-
-foreach ($graphs[$vars['app_section']] as $key => $text)
-{
-  $graph_type = $key;
-  $graph_array['to']     = $config['time']['now'];
-  $graph_array['id']     = $app['app_id'];
-  $graph_array['type']   = "application_".$key;
-  echo('<h4>'.$text.'</h4>');
-
-  echo("<tr bgcolor='$row_colour'><td colspan=5>");
-
-  include("includes/print-graphrow.inc.php");
-
-  echo("</td></tr>");
-}
-
-?>

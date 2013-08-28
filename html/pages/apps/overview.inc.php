@@ -19,7 +19,8 @@ foreach ($app_list as $app)
 
   foreach ($app_devices as $app_device)
   {
-    $graph_type = $graphs[$app['app_type']][0];
+    $graph_type = $config['app'][$app['app_type']]['top'][0];
+
 
     $graph_array['type']   = "application_".$app['app_type']."_".$graph_type;
     $graph_array['id']     = $app_device['app_id'];
