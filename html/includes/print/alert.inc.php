@@ -54,8 +54,11 @@ function print_alert_row($vars)
           $param[] = $value;
           break;
         case 'entity_type':
-          $where .= ' AND `entity_type` = ?';
-          $param[] = $value;
+          if($value != 'all')
+          {
+            $where .= ' AND `entity_type` = ?';
+            $param[] = $value;
+          }
           break;
         case 'entity':
           $where .= ' AND `entity` = ?';
