@@ -26,15 +26,15 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
     </div>
   </div>
 
-  <div style="margin-bottom: 20px; margin-top: -10px;">
+  <div style="margin-bottom: 20px; margin-top: 10px;">
   <table width=100%>
     <tr>
-      <td><a class="btn btn-small" href="http://www.observium.org"><i style="font-size: small;" class="icon-globe"></i> Web</a></td>
-      <td><a class="btn btn-small" href="http://jira.observium.org/"><i style="font-size: small;" class="icon-bug"></i> Bugtracker</a></td>
-      <td><a class="btn btn-small" href="http://www.observium.org/wiki/Mailing_Lists"><i style="font-size: small;" class="icon-envelope"></i> Mailing List</a></td>
-      <td><a class="btn btn-small" href="http://twitter.com/observium"><i style="font-size: small;" class="icon-twitter-sign"></i> Twitter</a></td>
+      <td width="20%" align=center><a class="btn btn-small" href="http://www.observium.org"><i style="font-size: small;" class="icon-globe"></i> Web</a></td>
+      <td width="20%" align=center><a class="btn btn-small" href="http://jira.observium.org/"><i style="font-size: small;" class="icon-bug"></i> Bugtracker</a></td>
+      <td width="20%" align=center><a class="btn btn-small" href="http://www.observium.org/wiki/Mailing_Lists"><i style="font-size: small;" class="icon-envelope"></i> Mailing List</a></td>
+      <td width="20%" align=center><a class="btn btn-small" href="http://twitter.com/observium"><i style="font-size: small;" class="icon-twitter-sign"></i> Twitter</a></td>
       <!--<td><a class="btn btn-small" href="http://twitter.com/observium_svn"><i class="icon-twitter-sign"></i> SVN Twitter</a></td>-->
-      <td><a class="btn btn-small" href="http://www.facebook.com/pages/Observium/128354461353"><i style="font-size: small;" class="icon-facebook-sign"></i> Facebook</a></td>
+      <td width="20%" align=center><a class="btn btn-small" href="http://www.facebook.com/pages/Observium/128354461353"><i style="font-size: small;" class="icon-facebook-sign"></i> Facebook</a></td>
     </tr>
   </table>
   </div>
