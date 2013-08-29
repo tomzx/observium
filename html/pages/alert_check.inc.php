@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Observium Network Management and Monitoring System
+ * Copyright (C) 2006-2013, Adam Armstrong - http://www.observium.org
+ *
+ * @package    observium
+ * @subpackage webui
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
 // Alert test display and editing page.
 
 $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));

@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Observium Network Management and Monitoring System
+ * Copyright (C) 2006-2013, Adam Armstrong - http://www.observium.org
+ *
+ * @package    observium
+ * @subpackage webui
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
+ *
+ */
+
+
 // Page to display list of configured alert checks
 
 $alert_check = cache_alert_rules();
