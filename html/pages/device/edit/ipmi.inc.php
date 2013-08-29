@@ -38,21 +38,21 @@ if ($updated && $update_message)
   <div class="control-group">
     <label class="control-label" for="ipmi_hostname">IPMI/BMC Hostname</label>
     <div class="controls">
-      <input name="ipmi_hostname" type=text size="32" value="<?php echo(get_dev_attrib($device,'ipmi_hostname')); ?>"></input>
+      <input name="ipmi_hostname" type="text" size="32" value="<?php echo(get_dev_attrib($device,'ipmi_hostname')); ?>"></input>
     </div>
   </div>
 
   <div class="control-group">
     <label class="control-label" for="ipmi_username">IPMI/BMC Username</label>
     <div class="controls">
-      <input name="ipmi_username" type=text size="32" value="<?php echo(get_dev_attrib($device,'ipmi_username')); ?>"></input>
+      <input name="ipmi_username" type="text" size="32" value="<?php echo(get_dev_attrib($device,'ipmi_username')); ?>"></input>
     </div>
   </div>
 
   <div class="control-group">
     <label class="control-label" for="ipmi_password">IPMI/BMC Password</label>
     <div class="controls">
-      <input name="ipmi_password" type=text size="32" value="<?php echo(get_dev_attrib($device,'ipmi_password')); ?>"></input>
+      <input name="ipmi_password" type="password" size="32" value="<?php echo(get_dev_attrib($device,'ipmi_password')); ?>"></input>
     </div>
   </div>
 
