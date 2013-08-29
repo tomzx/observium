@@ -73,14 +73,31 @@ echo '
 <div class="row">';
 
 echo '
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div class="well info_box">
       <div class="title"><i class="oicon-bell"></i> Check Conditions</div>
       <div class="content">';
 
-$conditions = unserialize($check['conditions']);
+    echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
+    echo('<thead><tr>');
+    echo('<th style="width: 33%;">Metric</th>');
+    echo('<th style="width: 33%;">Condition</th>');
+    echo('<th style="width: 33%;">Value</th>');
+    echo('</tr></thead>');
 
-print_vars($conditions);
+
+  $conditions = unserialize($check['conditions']);
+
+  foreach($conditions as $condition)
+  {
+    echo '<tr>';
+    echo '<td>'.$condition['metric'].'</td>';
+    echo '<td>'.$condition['condition'].'</td>';
+    echo '<td>'.$condition['value'].'</td>';
+    echo '</tr>';
+  }
+
+    echo('</table>');
 
 
 echo '
@@ -88,14 +105,56 @@ echo '
     </div>
   </div>';
 
-
 echo '
-  <div class="col-md-6">
+  <div class="col-md-8">
     <div class="well info_box">
       <div class="title"><i class="oicon-bell"></i> Associations</div>
       <div class="content">';
 
-print_vars($assocs);
+    echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
+    echo('<thead><tr>');
+    echo('<th style="width: 45%;">Device Match</th>');
+    echo('<th style="width: 45%;">Entity Match</th>');
+    echo('</tr></thead>');
+
+
+    foreach($assocs as $assoc_id => $assoc)
+    {
+      echo('<tr>');
+      echo('<td>');
+      echo('<strong>');
+      $assoc['device_attributes'] = unserialize($assoc['device_attributes']);
+      if(is_array($assoc['device_attributes']))
+      {
+        foreach($assoc['device_attributes'] as $attribute)
+        {
+          echo($attribute['attrib'].' ');
+          echo($attribute['condition'].' ');
+          echo($attribute['value']);
+          echo('<br />');
+        }
+      } else {
+        echo("*");
+      }
+      echo("</strong><i>");
+      echo('</td>');
+      echo('<td><strong>');
+      $assoc['attributes'] = unserialize($assoc['attributes']);
+      if(is_array($assoc['attributes']))
+      {
+        foreach($assoc['attributes'] as $attribute)
+        {
+          echo($attribute['attrib'].' ');
+          echo($attribute['condition'].' ');
+          echo($attribute['value']);
+          echo('<br />');
+        }
+      } else {
+        echo("*");
+      }
+    }
+
+    echo('</table>');
 
 
 echo '
