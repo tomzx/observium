@@ -17,7 +17,7 @@ include_once($config['html_dir'].'/includes/graphs/functions.inc.php');
 
 $print_functions = array('addresses', 'events', 'mac_addresses', 'rows',
                          'status', 'arptable', 'fdbtable', 'navbar',
-                         'search_simple', 'syslogs', 'inventory');
+                         'search_simple', 'syslogs', 'inventory', 'alert');
 
 foreach($print_functions as $item)
 {

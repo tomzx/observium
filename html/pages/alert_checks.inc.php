@@ -17,7 +17,7 @@ foreach (dbFetchRows("SELECT * FROM `alert_table` LEFT JOIN `alert_table-state` 
   $alert_table[$entry['alert_test_id']][$entry['alert_table_id']] = $entry;
 }
 
-  echo '<table class="table table-condensed table-bordered table-striped table-rounded">
+  echo '<table class="table table-condensed table-bordered table-striped table-rounded table-hover">
     <thead>
       <tr>
         <th></th><th></th>
@@ -79,7 +79,7 @@ foreach($alert_check as $check)
     echo '</td>';
 
     echo '<td><strong>';
-    echo $check['alert_name'];
+    echo '<a href="', generate_url(array('page' => 'alert_check', 'alert_test_id' => $check['alert_test_id'])), '">' . $check['alert_name']. '</a>';
     echo '</td>';
 
     // Loop the tests used by this alert

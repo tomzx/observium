@@ -46,11 +46,12 @@ if (isset($config['enable_syslog']) && $config['enable_syslog'])
 }
 ?>
         <li><a href="<?php echo(generate_url(array('page'=>'pollerlog'))); ?>"><i class="menu-icon oicon-clipboard-report-bar"></i> Polling Information</a></li>
-<!--        <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon oicon-bell"></i> Alerts</a></li> -->
 
         <li class="divider"></li>
 
         <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon oicon-bell"></i> Alerts</a></li>
+        <li><a href="<?php echo(generate_url(array('page'=>'alert_checks'))); ?>"><i class="menu-icon oicon-eye"></i> Alert Checks</a></li>
+
 
         <li class="divider"></li>
 
