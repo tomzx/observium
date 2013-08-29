@@ -29,6 +29,14 @@ echo('<tr>
         <td>' . $device['os_text'] . ' ' . $device['version'] . ' ' . $device['features'] . ' </td>
       </tr>');
 
+if ($device['asset_tag'])
+{
+  echo('<tr>
+        <td class="entity">Asset tag</td>
+        <td>' . $device['asset_tag']. '</td>
+      </tr>');
+}
+
 if ($device['serial'])
 {
   echo('<tr>

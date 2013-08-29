@@ -49,6 +49,11 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
     {
       $serial = $agent_data['dmi']['system-serial-number'];
     }
+
+    if ($agent_data['dmi']['baseboard-asset-tag'])
+    {
+      $asset_tag = $agent_data['dmi']['baseboard-asset-tag'];
+    }
   }
 
 }
