@@ -355,7 +355,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
             if (isSNMPable($device))
             {
               $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
-              if (empty($snmphost) || dbFetchCell('SELECT COUNT(*) FROM `devices` WHERE `disabled` = 0 AND `sysName` = ?', array($snmphost)) == '0')
+              if (empty($snmphost) || strpos($snmphost, '.') === FALSE || dbFetchCell('SELECT COUNT(*) FROM `devices` WHERE `disabled` = 0 AND `sysName` = ?', array($snmphost)) == '0')
               {
                 $device_id = createHost($host, NULL, $snmpver, $port, $transport, $v3);
                 return $device_id;
@@ -377,7 +377,7 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
             if (isSNMPable($device))
             {
               $snmphost = snmp_get($device, "sysName.0", "-Oqv", "SNMPv2-MIB");
-              if (empty($snmphost) || dbFetchCell('SELECT COUNT(*) FROM `devices` WHERE `disabled` = 0 AND `sysName` = ?', array($snmphost)) == '0')
+              if (empty($snmphost) || strpos($snmphost, '.') === FALSE || dbFetchCell('SELECT COUNT(*) FROM `devices` WHERE `disabled` = 0 AND `sysName` = ?', array($snmphost)) == '0')
               {
                 $device_id = createHost($host, $community, $snmpver, $port, $transport);
                 return $device_id;
