@@ -29,12 +29,15 @@ function print_alert_row($vars)
 
   // Short? (no pagination, small out)
   $short = (isset($vars['short']) && $vars['short']);
-  // With pagination? (display page numbers in header)
-  $pagination = (isset($vars['pagination']) && $vars['pagination']);
-  $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
-  $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
-  $start = $pagesize * $pageno - $pagesize;
 
+  // With pagination? (display page numbers in header)
+  if(isset($vars['pagination']) && $vars['pagination'])
+  {
+    $pagination = TRUE;
+    $vars['pageno']     = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
+    $vars['pagesize']   = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
+    $start      = $vars['pagesize'] * $vars['pageno'] - $vars['pagesize'];
+  }
 
   $args = array();
   $where = ' WHERE 1 ';
@@ -83,22 +86,26 @@ function print_alert_row($vars)
     $param[] = $_SESSION['user_id'];
   }
 
-  $query = 'FROM `alert_table` ';
+  $query_count = 'SELECT COUNT(alert_table_id) FROM `alert_table`';
+  $query_count .= $query_perms;
+  $query_count .= $where . $query_device . $query_user;
+
+  // Query alerts count
+#  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
+
+  $query = 'SELECT * FROM `alert_table` ';
   $query .= 'LEFT JOIN  `alert_table-state` ON  `alert_table`.`alert_table_id` =  `alert_table-state`.`alert_table_id`';
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
-  $query_count = 'SELECT COUNT(alert_id) '.$query;
-
-  /// FIXME Mike: bad table column `type` they intersect with table `devices`
-  $query = 'SELECT * '.$query;
   $query .= ' ORDER BY `device_id`, `alert_test_id`, `entity_type`, `entity_id` DESC ';
-  $query .= "LIMIT $start,$pagesize";
+
+#  if(isset($pagination) && $pagination)
+#  {
+#    $query .= 'LIMIT '.$start.','.$vars['pagesize'];
+#  }
 
   // Fetch alerts
   $alerts = dbFetchRows($query, $param);
-
-  // Query alerts count
-  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
 
   $list = array('device' => FALSE, 'entity_id' => FALSE, 'entity_type' => FALSE, 'alert_test_id' => FALSE);
 
@@ -106,6 +113,8 @@ function print_alert_row($vars)
   {
     if (!isset($vars[$argument]) || empty($vars[$argument])) { $list[$argument] = TRUE; }
   }
+
+#  if ($pagination && !$short) { echo pagination($vars, $count); }
 
 echo('<table class="table table-condensed table-bordered table-striped table-rounded table-hover">
   <thead>

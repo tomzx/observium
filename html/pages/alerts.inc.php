@@ -67,6 +67,7 @@ print_navbar($navbar);
 $alert_rules = cache_alert_rules();
 
 // Print out a table of alerts matching $vars
+$vars['pagination'] = 1;
 print_alert_row($vars);
 
 ?>
