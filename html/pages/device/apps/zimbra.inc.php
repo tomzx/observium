@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Observium
  *
@@ -11,6 +10,21 @@
  *
  */
 
-$app_graphs['default'] = array('zimbra_mtaqueue' => 'Zimbra - MTA Queue size',
-                'zimbra_fdcount'  => 'Zimbra - Open file descriptors',
-                'zimbra_threads'  => 'Zimbra - Threads');
+$app_sections = array('system' => "System",
+                      'backend' => "Backend",
+                      'jvm' => "Java VM",
+                     );
+
+$app_graphs['system'] = array(
+                'zimbra_fdcount'  => 'Open file descriptors',
+                );
+
+$app_graphs['backend'] = array(
+                'zimbra_mtaqueue'     => 'MTA queue size',
+                'zimbra_connections'  => 'Open connections',
+                'zimbra_threads'      => 'Threads',
+                );
+
+$app_graphs['jvm'] = array(
+                'zimbra_jvmthreads'      => 'JVM Threads',
+                );

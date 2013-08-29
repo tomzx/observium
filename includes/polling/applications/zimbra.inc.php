@@ -105,7 +105,44 @@ if (!empty($agent_data['app']['zimbra']))
     timestamp,lmtp_rcvd_msgs,lmtp_rcvd_bytes,lmtp_rcvd_rcpt,lmtp_dlvd_msgs,lmtp_dlvd_bytes,db_conn_count,db_conn_ms_avg,ldap_dc_count,ldap_dc_ms_avg,mbox_add_msg_count,mbox_add_msg_ms_avg,mbox_get_count,mbox_get_ms_avg,mbox_cache,mbox_msg_cache,mbox_item_cache,soap_count,soap_ms_avg,imap_count,imap_ms_avg,pop_count,pop_ms_avg,idx_wrt_avg,idx_wrt_opened,idx_wrt_opened_cache_hit,calcache_hit,calcache_mem_hit,calcache_lru_size,idx_bytes_written,idx_bytes_written_avg,idx_bytes_read,idx_bytes_read_avg,bis_read,bis_seek_rate,db_pool_size,innodb_bp_hit_rate,lmtp_conn,lmtp_threads,pop_conn,pop_threads,pop_ssl_conn,pop_ssl_threads,imap_conn,imap_threads,imap_ssl_conn,imap_ssl_threads,http_idle_threads,http_threads,soap_sessions,mbox_cache_size,msg_cache_size,fd_cache_size,fd_cache_hit_rate,acl_cache_hit_rate,account_cache_size,account_cache_hit_rate,cos_cache_size,cos_cache_hit_rate,domain_cache_size,domain_cache_hit_rate,server_cache_size,server_cache_hit_rate,ucservice_cache_size,ucservice_cache_hit_rate,zimlet_cache_size,zimlet_cache_hit_rate,group_cache_size,group_cache_hit_rate,xmpp_cache_size,xmpp_cache_hit_rate,gc_parnew_count,gc_parnew_ms,gc_concurrentmarksweep_count,gc_concurrentmarksweep_ms,gc_minor_count,gc_minor_ms,gc_major_count,gc_major_ms,mpool_code_cache_used,mpool_code_cache_free,mpool_par_eden_space_used,mpool_par_eden_space_free,mpool_par_survivor_space_used,mpool_par_survivor_space_free,mpool_cms_old_gen_used,mpool_cms_old_gen_free,mpool_cms_perm_gen_used,mpool_cms_perm_gen_free,heap_used,heap_free
     04/24/2013 00:23:23,1,6506,1,1,6506,81,0.32098765432098764,1,0.0,1,36.0,84,0.0,100.0,50.0,34.59119496855346,0,0.0,138,10.405797101449275,0,0.0,0.0,0,0,0.0,0.0,0.0,0,0.0,0,0.0,1,0.0,0,1000,0,1,0,1,0,0,1,1,24,3,2,18,2,132,2000,1000,96.99490867673337,99.73302998524733,133,99.78571547607365,1,99.02449324324324,7,99.24445818173449,1,99.99996904482866,0,0.0,28,57.52625437572929,31,67.36491311592478,0,0.0,29250,487518,1382,103802,29250,487518,1382,103802,26258688,480000,83049792,24429248,13369344,0,216226736,186426448,125015776,9201952,312645872,210855696
     */
-  
+    
+    print_r($zimbra['mailboxd']);
+    
+    foreach (array_keys($zimbra['mailboxd'][0]) as $key)
+    {
+      for ($line = 0; $line < count($zimbra['mailboxd']); $line++)
+      {
+        // zmstat writes these CSV files every 30 seconds. The agent passes us the 10 last values, so we have the full 5 minute range.
+        // some of the variables should be added up to reach the total, but for most (gauges) we just want the latest value.
+        switch ($key)
+        {
+          case 'lmtp_rcvd_msgs':
+          case 'lmtp_rcvd_bytes':
+          case 'lmtp_rcvd_rcpt':
+          case 'lmtp_dlvd_msgs':
+          case 'lmtp_dlvd_bytes':
+          case 'mbox_add_msg_count':
+          case 'mbox_get_count':
+          case 'soap_count':
+          case 'imap_count':
+          case 'pop_count':
+          case 'idx_bytes_written':
+          case 'idx_bytes_read':
+          case 'bis_read':
+          case 'bis_seek_rate':
+          case 'gc_parnew_count':
+          case 'gc_parnew_ms':
+          case 'gc_concurrentmarksweep_count':
+          case 'gc_concurrentmarksweep_ms':
+            $zimbra['mailboxd-total'][$key] += $zimbra['mailboxd'][$line][$key];
+            break;
+          default:
+            $zimbra['mailboxd-total'][$key] = $zimbra['mailboxd'][$line][$key];
+            break;
+        }
+      }
+    }
+    
     $rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-zimbra-mailboxd.rrd";
     unset($rrd_values);
 
@@ -120,7 +157,7 @@ if (!empty($agent_data['app']['zimbra']))
       'mpool_par_eden_space_free','mpool_par_survivor_space_used','mpool_par_survivor_space_free','mpool_cms_old_gen_used','mpool_cms_old_gen_free','mpool_cms_perm_gen_used','mpool_cms_perm_gen_free',
       'heap_used','heap_free') as $key)
     {
-      $rrd_values[] = (is_numeric($zimbra['mailboxd'][0][$key]) ? $zimbra['mailboxd'][0][$key] : "U");
+      $rrd_values[] = (is_numeric($zimbra['mailboxd-total'][$key]) ? $zimbra['mailboxd-total'][$key] : "U");
     }
 
     if (!is_file($rrd_filename))

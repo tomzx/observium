@@ -27,7 +27,7 @@ print_navbar($navbar);
 unset($navbar);
 
 $where_array = array($device['device_id'], $vars['app']);
-if($vars['instance'])
+if ($vars['instance'])
 {
   $where = " AND `app_id` = ?";
   $where_array[] = $vars['instance'];
@@ -42,7 +42,7 @@ if (is_file("pages/device/apps/".mres($vars['app']).".inc.php"))
   include("pages/device/apps/".mres($vars['app']).".inc.php");
 
   // If an $app_sections array has been returned, build a menu
-  if(isset($app_sections) && is_array($app_sections))
+  if (isset($app_sections) && is_array($app_sections))
   {
     $navbar['brand'] = nicecase(mres($vars['app']));
     $navbar['class'] = "navbar-narrow";
@@ -54,7 +54,7 @@ if (is_file("pages/device/apps/".mres($vars['app']).".inc.php"))
       if ($vars['app_section'] == $app_section) { $navbar['options'][$app_section]['class'] = "active"; }
 
       $navbar['options'][$app_section]['url']  = generate_url($vars, array('app_section' => $app_section));
-      $navbar['options'][$app_section]['text'] = nicecase($app_section);
+      $navbar['options'][$app_section]['text'] = $text;
     }
     print_navbar($navbar);
     unset($navbar);
@@ -64,9 +64,8 @@ if (is_file("pages/device/apps/".mres($vars['app']).".inc.php"))
   }
 
   // If a matching app_section array exists within app_graphs, print the graphs.
-  if(isset($app_graphs[$vars['app_section']]) && is_array($app_graphs[$vars['app_section']]))
+  if (isset($app_graphs[$vars['app_section']]) && is_array($app_graphs[$vars['app_section']]))
   {
-
     echo '<table class="table table-striped table-hover">';
 
     foreach ($app_graphs[$vars['app_section']] as $key => $text) {

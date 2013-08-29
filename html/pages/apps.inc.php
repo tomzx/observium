@@ -29,7 +29,7 @@ foreach ($app_list as $app)
 </div>
 
 <?php
-if($vars['app'])
+if ($vars['app'])
 {
   if (is_file("pages/apps/".mres($vars['app']).".inc.php"))
   {

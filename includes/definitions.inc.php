@@ -1619,7 +1619,7 @@ $config['app']['unbound']['top']           = array('queries', 'queue', 'memory',
 $config['app']['freeradius']['top']        = array('access');
 $config['app']['powerdns-recursor']['top'] = array('queries', 'timeouts', 'cache', 'latency');
 $config['app']['exim-mailqueue']['top']    = array('total');
-$config['app']['zimbra']['top']            = array('threads','mtaqueue');
+$config['app']['zimbra']['top']            = array('threads','mtaqueue','fdcount');
 
 // This is used to provide pretty rewrites for lowercase things we drag out of the db and use in URLs
 
