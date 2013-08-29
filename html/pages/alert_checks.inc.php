@@ -48,7 +48,7 @@ foreach($alert_check as $check)
     // Generate list and popup for total number of entities which match this alert
     $entities = $alert_table[$check['alert_test_id']];
     #$entities_content = "";
-    $s = array('up' => 0, 'down' => 0, 'unknown' => 0);
+    $s = array('up' => 0, 'down' => 0, 'unknown' => 0, 'delay' => 0);
     #if(count($entities) < "15") { $e_sep = "<br />"; } else { $e_sep = ", "; }
     foreach($entities as $alert_table_id => $alert_table_entry)
     {
@@ -165,7 +165,7 @@ foreach($alert_check as $check)
     #echo overlib_link('#', count($entities), $entities_content,  NULL));
     echo '<b>', count($entities), '</b>';
     echo '<br />';
-    echo '<span class="green">', $s['up'], '</span>/<span class=red>', $s['down'], '</span>/<span class=gray>', $s['unknown'], '</span>';
+    echo '<span class="green">', $s['up'], '</span>/<span class=red>', $s['down'], '</span>/<span class=orange>', $s['delay'], '</span>/<span class=gray>', $s['unknown'], '</span>';
     echo '</td>';
 
 

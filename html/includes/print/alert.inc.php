@@ -11,33 +11,8 @@
  *
  */
 
-/**
- * Display alert_table entries.
- *
- * @param array $vars
- * @return none
- *
- */
-function print_alert_row($vars)
+function build_alert_table_query($vars)
 {
-
-  global $alert_rules;
-
-  // This should be set outside, but do it here if it isn't
-  if(!is_array($alert_rules)) { $alert_rules = cache_alert_rules(); }
-  /// WARN HERE
-
-  // Short? (no pagination, small out)
-  $short = (isset($vars['short']) && $vars['short']);
-
-  // With pagination? (display page numbers in header)
-  if(isset($vars['pagination']) && $vars['pagination'])
-  {
-    $pagination = TRUE;
-    $vars['pageno']     = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
-    $vars['pagesize']   = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
-    $start      = $vars['pagesize'] * $vars['pageno'] - $vars['pagesize'];
-  }
 
   $args = array();
   $where = ' WHERE 1 ';
@@ -93,6 +68,8 @@ function print_alert_row($vars)
   $query_count .= $query_perms;
   $query_count .= $where . $query_device . $query_user;
 
+  $query_count_param = $param;
+
   // Query alerts count
 #  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
 
@@ -106,6 +83,40 @@ function print_alert_row($vars)
 #  {
 #    $query .= 'LIMIT '.$start.','.$vars['pagesize'];
 #  }
+
+  return array($query, $param, $query_count);
+
+}
+
+/**
+ * Display alert_table entries.
+ *
+ * @param array $vars
+ * @return none
+ *
+ */
+function print_alert_row($vars)
+{
+
+  global $alert_rules;
+
+  // This should be set outside, but do it here if it isn't
+  if(!is_array($alert_rules)) { $alert_rules = cache_alert_rules(); }
+  /// WARN HERE
+
+  // Short? (no pagination, small out)
+  $short = (isset($vars['short']) && $vars['short']);
+
+  // With pagination? (display page numbers in header)
+  if(isset($vars['pagination']) && $vars['pagination'])
+  {
+    $pagination = TRUE;
+    $vars['pageno']     = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
+    $vars['pagesize']   = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
+    $start      = $vars['pagesize'] * $vars['pageno'] - $vars['pagesize'];
+  }
+
+  list($query, $param, $query_count) = build_alert_table_query($vars);
 
   // Fetch alerts
   $alerts = dbFetchRows($query, $param);
