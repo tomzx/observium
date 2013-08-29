@@ -1621,6 +1621,33 @@ $config['app']['powerdns-recursor']['top'] = array('queries', 'timeouts', 'cache
 $config['app']['exim-mailqueue']['top']    = array('total');
 $config['app']['zimbra']['top']            = array('threads','mtaqueue');
 
+// This is used to provide pretty rewrites for lowercase things we drag out of the db and use in URLs
+
+$config['nicecase'] = array(
+    "bgp_peer" => "BGP Peer",
+    "netscaler_vsvr" => "Netscaler vServer",
+    "netscaler_svc" => "Netscaler Service",
+    "mempool" => "Memory",
+    "ipsec_tunnels" => "IPSec Tunnels",
+    "vrf" => "VRFs",
+    "isis" => "IS-IS",
+    "cef" => "CEF",
+    "eigrp" => "EIGRP",
+    "ospf" => "OSPF",
+    "bgp" => "BGP",
+    "ases" => "ASes",
+    "vpns" => "VPNs",
+    "dbm" => "dBm",
+    "mysql" => "MySQL",
+    "powerdns" => "PowerDNS",
+    "bind" => "BIND",
+    "ntpd" => "NTPd",
+    "powerdns-recursor" => "PowerDNS Recursor",
+    "freeradius" => "FreeRADIUS",
+    "postfix_mailgraph" => "Postfix Mailgraph",
+    "" => "");
+
+
 
 // FIXME - remove this old variable from use
 

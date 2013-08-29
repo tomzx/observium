@@ -249,54 +249,16 @@ function data_uri($file, $mime)
 
 // This function does rewrites from the lowercase identifiers we use to the
 // standard capitalisation. UK English style plurals, please.
-// I also think this should perhaps be an array.
+// This uses $config['nicecase']
 function nicecase($item)
 {
-  switch ($item)
-  {
-    case "bgp_peer":
-      return "BGP Peer";
-    case "netscaler_vsvr":
-      return "Netscaler vServer";
-    case "netscaler_svc":
-      return "Netscaler Service";
-    case "mempool":
-      return "Memory";
-    case "ipsec_tunnels":
-      return "IPSEC Tunnels";
-    case "vrf":
-      return "VRFs";
-    case "isis":
-      return "IS-IS";
-    case "cef":
-      return "CEF";
-    case "eigrp":
-      return "EIGRP";
-    case "ospf":
-      return "OSPF";
-    case "bgp":
-      return "BGP";
-    case "ases":
-      return "ASes";
-    case "vpns":
-      return "VPNs";
-    case "dbm":
-      return "dBm";
-    case "mysql":
-      return" MySQL";
-    case "powerdns":
-      return "PowerDNS";
-    case "bind":
-      return "BIND";
-    case "ntpd":
-      return "NTPd";
-    case "powerdns-recursor":
-      return "PowerDNS Recursor";
-    case "freeradius":
-      return "FreeRADIUS";
-    default:
-      return ucfirst($item);
-  }
+
+  $mappings = $GLOBALS['config']['nicecase'];
+
+  if(isset($mappings[$item])) { return $mappings[$item]; }
+
+  return ucfirst($item);
+
 }
 
 function toner2colour($descr, $percent)
