@@ -56,7 +56,7 @@ if ($updated && $update_message)
   </div>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="oicon-ok oicon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
   </div>
 
 </form>

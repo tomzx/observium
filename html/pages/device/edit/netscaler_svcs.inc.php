@@ -65,6 +65,6 @@ foreach ($svcs as $svc)
 </fieldset>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary" name="submit" value="update-svcs"><i class="oicon-ok oicon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="update-svcs"><i class="icon-ok icon-white"></i> Save Changes</button>
   </div>
 </form>
