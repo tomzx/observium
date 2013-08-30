@@ -130,6 +130,8 @@ function print_alert_row($vars)
   }
 
   if(isset($vars['entity_id'])) { $list['device'] = FALSE; }
+#  if(isset($vars['alert_test_id'])) { $list['entity_type'] = FALSE; }
+
 
 #  if ($pagination && !$short) { echo pagination($vars, $count); }
 
@@ -170,7 +172,7 @@ echo '
     echo('<tr class="'.$alert['html_row_class'].'">');
     echo('<td style="width: 1px; background-color: '.$alert['table_tab_colour'].'; margin: 0px; padding: 0px"></td>');
     echo('<td style="width: 1px;"></td>');
-#    echo('<td>'.dechex($alert['alert_table_id']).'</td>');
+    echo('<td>'.dechex($alert['alert_table_id']).'</td>');
 
     // If we know the device, don't show the device
     if ($list['device']) {
@@ -178,7 +180,7 @@ echo '
     }
 
     // If we're showing all entity types, print the entity type here
-    if ($list['entity_type']) { echo('<td>'.$alert['entity_type'].'</td>'); }
+    if ($list['entity_type']) { echo('<td>'.nicecase($alert['entity_type']).'</td>'); }
 
     // Print link to the alert rule page
     if ($list['alert_test_id']) {
@@ -189,7 +191,7 @@ echo '
       echo('<td><span class="entity-title">'.generate_entity_link($alert['entity_type'], $alert['entity_id'], truncate($entity_descr, 40)).'</span></td>');
     }
     echo('<td>');
-    ## FIXME -- generate a nice popup with parsed information from the state array 
+    ## FIXME -- generate a nice popup with parsed information from the state array
     echo(overlib_link("", "view state", "<pre>".print_r(unserialize($alert['state']), TRUE)."</pre>", NULL));
     echo('</td>');
 
