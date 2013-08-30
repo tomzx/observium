@@ -153,9 +153,7 @@ if(is_numeric($vars['alert']) && FALSE)
     // Loop the associations which link this alert to this device
     foreach($alert_entry['assoc'] as $assoc_id => $assoc_data)
     {
-      #print_vars($assoc_id);
       $assoc = $alert_assoc[$assoc_id];
-
       echo('<tr>');
       echo('<td>');
       echo('<strong>');
@@ -172,9 +170,7 @@ if(is_numeric($vars['alert']) && FALSE)
         echo("*");
       }
       echo("</strong><i>");
-
       echo('</td>');
-
       echo('<td><strong>');
       if(is_array($assoc['attributes']))
       {

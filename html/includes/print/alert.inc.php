@@ -47,7 +47,7 @@ function build_alert_table_query($vars)
           if($vars['alerted'] == '1')
           {
             $where .= " AND `alert_status` = ?";
-            $param = '0';
+            $param[] = '0';
           }
           break;
       }

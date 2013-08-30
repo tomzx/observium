@@ -58,6 +58,13 @@ foreach (dbFetch("SELECT COUNT(*) AS `count`, `type` FROM `devices` GROUP BY `ty
   $stats['types'][$data['type']] = $data['count'];
 }
 
+// Per-apptype counts
+foreach (dbFetch("SELECT COUNT(*) AS `count`, `app_type` FROM `applications` GROUP BY `app_type`") as $data)
+{
+  $stats['app_types'][$data['app_type']] = $data['count'];
+}
+
+
 // Serialize and base64 encode stats array for transportation
 $stat_serial = serialize($stats);
 $stat_base64 = base64_encode($stat_serial);
