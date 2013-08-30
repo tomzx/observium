@@ -29,7 +29,7 @@ function check_entity($type, $entity, $data)
 
   #print_vars($data);
 
-  list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
+  list($entity_table, $entity_id_field, $entity_descr_field, $entity_ignore_field) = entity_type_translate ($type);
 
   foreach($alert_table[$type][$entity[$entity_id_field]] as $alert_test_id => $alert_args)
   {
@@ -85,13 +85,15 @@ function check_entity($type, $entity, $data)
 
           // Check to see if this alert has been suppressed by anything
 
+          ## FIXME -- not all of this is implemented
+
           // Have all alerts on the device been suppressed?
           if($device['ignore']) { $alert_suppressed = TRUE; $suppressed[] = "DEV"; }
           if(is_numeric($device['ignore_until']) && $device['ignore_until'] > time() ) { $alert_suppressed = TRUE; $suppressed[] = "DEV_UNTIL"; }
 
           // Have all alerts on the entity been suppressed?
 
-          if($entity['ignore']) { $alert_suppressed = TRUE; $suppressed[] = "ENTITY"; }
+          if($entity[$entity_ignore_field]) { $alert_suppressed = TRUE; $suppressed[] = "ENTITY"; }
           if(is_numeric($entity['ignore_until']) && $entity['ignore_until'] > time() ) { $alert_suppressed = TRUE; $suppressed[] = "ENTITY_UNTIL"; }
 
           // Have alerts from this alerter been suppressed?
@@ -536,24 +538,28 @@ function entity_type_translate ($entity_type)
   switch($entity_type)
   {
     case "mempool":
-      $entity_id_field    = "mempool_id";
-      $entity_descr_field = "mempool_descr";
-      $entity_table       = "mempools";
+      $entity_id_field      = "mempool_id";
+      $entity_descr_field   = "mempool_descr";
+      $entity_table         = "mempools";
       break;
     case "processor":
-      $entity_id_field    = "processor_id";
-      $entity_descr_field = "processor_descr";
-      $entity_table       = "processors";
+      $entity_id_field      = "processor_id";
+      $entity_descr_field   = "processor_descr";
+      $entity_table         = "processors";
       break;
     case "port":
-      $entity_id_field    = "port_id";
-      $entity_descr_field = "ifDescr";
-      $entity_table       = "ports";
+      $entity_id_field      = "port_id";
+      $entity_descr_field   = "ifDescr";
+      $entity_table         = "ports";
+      $entity_ignore_field  = "ignore";
+
       break;
     case "sensor":
-      $entity_id_field    = "sensor_id";
-      $entity_descr_field = "sensor_descr";
-      $entity_table       = "sensors";
+      $entity_id_field      = "sensor_id";
+      $entity_descr_field   = "sensor_descr";
+      $entity_table         = "sensors";
+      $entity_ignore_field  = "sensor_ignore";
+
       break;
     case "bgp_peer":
       $entity_id_field    = "bgpPeer_id";
@@ -561,14 +567,16 @@ function entity_type_translate ($entity_type)
       $entity_table       = "bgpPeers";
       break;
     case "netscaler_vsvr":
-      $entity_id_field    = "vsvr_id";
-      $entity_descr_field = "vsvr_label";
-      $entity_table       = "netscaler_vservers";
+      $entity_id_field      = "vsvr_id";
+      $entity_descr_field   = "vsvr_label";
+      $entity_table         = "netscaler_vservers";
+      $entity_ignore_field  = "vsvr_ignore";
       break;
     case "netscaler_svc":
-      $entity_id_field    = "svc_id";
-      $entity_descr_field = "svc_label";
-      $entity_table       = "netscaler_services";
+      $entity_id_field     = "svc_id";
+      $entity_descr_field  = "svc_label";
+      $entity_table        = "netscaler_services";
+      $entity_ignore_field = "svc_ignore";
       break;
     default:
       $entity_id_field    = $entity_type."_id";
@@ -579,7 +587,7 @@ function entity_type_translate ($entity_type)
 
   #echo("etype[".$entity_type."]");
 
-  return array($entity_table, $entity_id_field, $entity_descr_field);
+  return array($entity_table, $entity_id_field, $entity_descr_field, $entity_ignore_field);
 
 }
 
