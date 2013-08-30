@@ -75,7 +75,7 @@ echo '
 echo '
   <div class="col-md-4">
     <div class="well info_box">
-      <div class="title"><i class="oicon-bell"></i> Check Conditions</div>
+      <div class="title"><i class="oicon-traffic-light"></i> Check Conditions</div>
       <div class="content">';
 
     echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
@@ -108,7 +108,7 @@ echo '
 echo '
   <div class="col-md-8">
     <div class="well info_box">
-      <div class="title"><i class="oicon-bell"></i> Associations</div>
+      <div class="title"><i class="oicon-sql-join-left"></i> Associations</div>
       <div class="content">';
 
     echo('<table class="table table-condensed table-bordered table-striped table-rounded">');

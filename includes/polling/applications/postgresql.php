@@ -16,18 +16,18 @@ if (!empty($agent_data['app']['postgresql']))
     {
         // version, ccount, tDbs, tUsr, tHst, idle, select, update, delete, other
         rrdtool_create($rrd_filename, "--step 300 \
-                                        DS:$pgsql_data['cCount']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['tDbs']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['tUsr']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['tHst']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['idle']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['select']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['update']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['delete']:GAUGE:600:0:1000000 \
-                                        DS:$pgsql_data['other']:GAUGE:600:0:1000000 ".$config['rrd_rra']);
+                       DS:cCount:GAUGE:600:0:1000000 \
+                       DS:tDbs:GAUGE:600:0:1000000 \
+                       DS:tUsr:GAUGE:600:0:1000000 \
+                       DS:tHst:GAUGE:600:0:1000000 \
+                       DS:idle:GAUGE:600:0:1000000 \
+                       DS:select:GAUGE:600:0:1000000 \
+                       DS:update:GAUGE:600:0:1000000 \
+                       DS:delete:GAUGE:600:0:1000000 \
+                       DS:other:GAUGE:600:0:1000000 ".$config['rrd_rra']);
     }
 
-    rrdtool_update($rrd_filename, "N::$pgsql_data['cCount'],$pgsql_data['tDbs'],$pgsql_data['tUsr'],$pgsql_data['tHst'],$pgsql_data['idle'],$pgsql_data['select'],$pgsql_data['update'],$pgsql_data['delete'],$pgsql_data['other']");
+    rrdtool_update($rrd_filename.",". "N::".$pgsql_data['cCount'].",".$pgsql_data['tDbs'].",".$pgsql_data['tUsr'].",".$pgsql_data['tHst'].",".$pgsql_data['idle'].",".$pgsql_data['select'].",".$pgsql_data['update'].",".$pgsql_data['delete'].",".$pgsql_data['other']);
 }
 
 ?>

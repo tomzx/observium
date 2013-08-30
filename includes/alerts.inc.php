@@ -534,7 +534,6 @@ function match_entities($dev_attributes, $attributes, $entity_type)
 
 function entity_type_translate ($entity_type)
 {
-
   switch($entity_type)
   {
     case "mempool":
@@ -542,36 +541,42 @@ function entity_type_translate ($entity_type)
       $entity_descr_field   = "mempool_descr";
       $entity_table         = "mempools";
       break;
+
     case "processor":
       $entity_id_field      = "processor_id";
       $entity_descr_field   = "processor_descr";
       $entity_table         = "processors";
       break;
+
     case "port":
       $entity_id_field      = "port_id";
       $entity_descr_field   = "ifDescr";
       $entity_table         = "ports";
       $entity_ignore_field  = "ignore";
-
+      $entity_disable_field = "disable";
       break;
+
     case "sensor":
-      $entity_id_field      = "sensor_id";
-      $entity_descr_field   = "sensor_descr";
-      $entity_table         = "sensors";
-      $entity_ignore_field  = "sensor_ignore";
-
+      $entity_id_field       = "sensor_id";
+      $entity_descr_field    = "sensor_descr";
+      $entity_table          = "sensors";
+      $entity_ignore_field   = "sensor_ignore";
+      $entity_disable_field  = "sensor_disable";
       break;
+
     case "bgp_peer":
       $entity_id_field    = "bgpPeer_id";
       $entity_descr_field = "bgpPeerRemoteAddr";
       $entity_table       = "bgpPeers";
       break;
+
     case "netscaler_vsvr":
       $entity_id_field      = "vsvr_id";
       $entity_descr_field   = "vsvr_label";
       $entity_table         = "netscaler_vservers";
       $entity_ignore_field  = "vsvr_ignore";
       break;
+
     case "netscaler_svc":
       $entity_id_field     = "svc_id";
       $entity_descr_field  = "svc_label";
@@ -866,6 +871,8 @@ function process_alerts($device)
 
           }
         }
+
+#$css = data_uri($config['html_dir'].'/css/bootstrap-mini.css' ,'text/css');
 
 $message = '
 <head>

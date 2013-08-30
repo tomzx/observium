@@ -33,7 +33,7 @@ foreach ($devices as $device)
   }
 
   $rrdfile = get_port_rrdfilename($device, $int);
-  if ($rrdfile) && $ignore != 1)
+  if (($rrdfile) && ($ignore != 1))
   {
     $rrd_list[$i]['filename'] = $rrdfile;
     $rrd_list[$i]['descr'] = $port['label'];

@@ -39,9 +39,9 @@ function generate_alert_graph($graph_array)
    $vars['from']   = time();
    $vars['to']     = time()-8400;
 
-   echo("doing");
+   #echo("doing");
    include('html/includes/graphs/graph.inc.php');
-   echo("done");
+   #echo("done");
 
    return $image_data_uri;
 
