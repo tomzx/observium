@@ -13,7 +13,6 @@ if ($_SESSION['userlevel'] < '7')
   $panes['snmp']     = 'SNMP';
   $panes['ssh']     = 'SSH';
   $panes['ports']    = 'Ports';
-
   $panes['sensors']   = "Sensors";
 
   if (count($config['os'][$device['os']]['icons']))
@@ -29,6 +28,9 @@ if ($_SESSION['userlevel'] < '7')
   {
     $panes['services'] = 'Services';
   }
+
+  if ($device_loadbalancer_count['netscaler_vsvr']) { $panes['netscaler_vsvrs'] = 'NS vServers'; }
+  if ($device_loadbalancer_count['netscaler_services']) { $panes['netscaler_svcs'] = 'NS Services'; }
 
   $panes['ipmi']     = 'IPMI';
 

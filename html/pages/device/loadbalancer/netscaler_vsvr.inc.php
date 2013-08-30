@@ -1,5 +1,7 @@
 <?php
 
+// If we have a single vserver id, show data for that vserver
+
 if(is_numeric($vars['vsvr']))
 {
 
@@ -92,6 +94,8 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
 echo("</table>");
 
 } else {
+
+// If we dont' have a vserver ID, show data for all vservers
 
 if(!$vars['graph'])
 { $graph_type = "device_netscalervsvr_bits"; } else {

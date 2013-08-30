@@ -21,7 +21,7 @@ $image = getImage($device);
 echo('
             <tr class="'.$device['html_row_class'].'" style="vertical-align: middle;">
              <td style="width: 1px; background-color: '.$device['html_tab_colour'].'; margin: 0px; padding: 0px; min-width: 10px; max-width: 10px;"></td>
-             <td width="50" style="text-align: center; vertical-align: middle;">'.$image.'</td>
+             <td width="70" style="text-align: center; vertical-align: middle;">'.$image.'</td>
              <td style="vertical-align: middle;" valign="middle" style="padding: 0 15px;"><span style="font-size: 20px;">' . generate_device_link($device) . '</span>
              <br />' . $device['location'] . '</td>
              <td>');
