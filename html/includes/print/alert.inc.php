@@ -130,7 +130,7 @@ function print_alert_row($vars)
   }
 
   if(isset($vars['entity_id'])) { $list['device'] = FALSE; }
-#  if(isset($vars['alert_test_id'])) { $list['entity_type'] = FALSE; }
+  if(isset($vars['alert_test_id'])) { $list['entity_type'] = FALSE; }
 
 
 #  if ($pagination && !$short) { echo pagination($vars, $count); }
@@ -172,7 +172,7 @@ echo '
     echo('<tr class="'.$alert['html_row_class'].'">');
     echo('<td style="width: 1px; background-color: '.$alert['table_tab_colour'].'; margin: 0px; padding: 0px"></td>');
     echo('<td style="width: 1px;"></td>');
-    echo('<td>'.dechex($alert['alert_table_id']).'</td>');
+#    echo('<td>'.dechex($alert['alert_table_id']).'</td>');
 
     // If we know the device, don't show the device
     if ($list['device']) {
