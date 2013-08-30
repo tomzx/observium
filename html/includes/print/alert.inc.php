@@ -36,7 +36,8 @@ function build_alert_table_query($vars)
           }
           break;
         case 'entity':
-          $where .= ' AND `entity` = ?';
+        case 'entity_id':
+          $where .= ' AND `entity_id` = ?';
           $param[] = $value;
           break;
         case 'alert_test_id':
@@ -128,13 +129,15 @@ function print_alert_row($vars)
     if (!isset($vars[$argument]) || empty($vars[$argument])) { $list[$argument] = TRUE; }
   }
 
+  if(isset($vars['entity_id'])) { $list['device'] = FALSE; }
+
 #  if ($pagination && !$short) { echo pagination($vars, $count); }
 
 echo('<table class="table table-condensed table-bordered table-striped table-rounded table-hover">
   <thead>
     <tr>
-      <th></th>
-      <th></th>');
+      <th style="width: 1px;"></th>
+      <th style="width: 1px;"></th>');
 
 #      <th style="width: 5%;">Id</th>');
 
@@ -145,7 +148,7 @@ if($list['entity_id']) {      echo('      <th style="">Entity</th>'); }
 
 echo '
       <th style="width: 8%">State</th>
-      <th style="width: 15%;">Message</th>
+      <th>Message</th>
       <th style="width: 8%;">Checked</th>
       <th style="width: 8%;">Changed</th>
       <th style="width: 8%;">Alerted</th>
@@ -168,7 +171,11 @@ echo '
     echo('<td style="width: 1px; background-color: '.$alert['table_tab_colour'].'; margin: 0px; padding: 0px"></td>');
     echo('<td style="width: 1px;"></td>');
 #    echo('<td>'.dechex($alert['alert_table_id']).'</td>');
-    echo('<td><span class="entity-title">'.generate_device_link($device).'</span></td>');
+
+    // If we know the device, don't show the device
+    if ($list['device']) {
+      echo('<td><span class="entity-title">'.generate_device_link($device).'</span></td>');
+    }
 
     // If we're showing all entity types, print the entity type here
     if ($list['entity_type']) { echo('<td>'.$alert['entity_type'].'</td>'); }

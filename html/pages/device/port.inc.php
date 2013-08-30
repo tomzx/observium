@@ -68,6 +68,7 @@ $link_array = array('page'    => 'device',
                     'port'    => $port['port_id']);
 
 $navbar['options']['graphs']['text']   = 'Graphs';
+$navbar['options']['alerts']['text']   = 'Alerts';
 
 if (dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `measured_class` = 'port' AND `measured_entity` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'"))
 { $navbar['options']['sensors']['text'] = 'Sensors'; }
