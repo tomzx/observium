@@ -129,8 +129,8 @@ function humanize_device(&$device)
   }
   if ($device['ignore'] == '1')
   {
-    $device['html_row_class'] = "warning";
-    $device['html_tab_colour'] = "#aaaaaa";
+    $device['html_row_class'] = "suppressed";
+    $device['html_tab_colour'] = "#740074";
     if ($device['status'] == '1')
     {
       $device['html_row_class'] = "";

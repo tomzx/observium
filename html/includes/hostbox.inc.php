@@ -14,9 +14,9 @@ echo('  <tr class="'.$device['html_row_class'].'" onclick="location.href=\'devic
         );
 
 echo('<td width="55">');
-if ($port_count) { echo(' <img src="images/icons/port.png" align=absmiddle /> '.$port_count); }
+if ($port_count) { echo(' <i class="oicon-network-ethernet"></i> '.$port_count); }
 echo('<br />');
-if ($sensor_count) { echo(' <img src="images/icons/sensors.png" align=absmiddle /> '.$sensor_count); }
+if ($sensor_count) { echo(' <i class="oicon-dashboard"></i> '.$sensor_count); }
 echo('</td>');
 echo('    <td >' . $device['hardware'] . '<br />' . $device['features'] . '</td>');
 echo('    <td >' . $device['os_text'] . '<br />' . $device['version'] . '</td>');
