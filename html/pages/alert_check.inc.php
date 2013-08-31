@@ -17,6 +17,52 @@
 
 $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));
 
+if($vars['editing'])
+{
+  // We are editing. Lets see what we are editing.
+
+  if($vars['editing'] == "check_conditions")
+  {
+    $conds = array();
+    foreach(explode('\n', $vars['check_conditions']) AS $cond)
+    {
+      list($this['metric'], $this['condition'], $this['value']) = explode(" ", $cond);
+      $conds[] = $this;
+    }
+
+    $conds = serialize($conds);
+
+    $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
+
+  }
+
+
+  if ($rows_updated > 0)
+  {
+    $update_message = $rows_updated . " Record(s) updated.";
+    $updated = 1;
+  } elseif ($rows_updated = '-1') {
+    $update_message = "Record unchanged. No update necessary.";
+    $updated = -1;
+  } else {
+    $update_message = "Record update error.";
+    $updated = 0;
+  }
+
+  if ($updated && $update_message)
+  {
+    print_message($update_message);
+  } elseif ($update_message) {
+    print_error($update_message);
+  }
+
+  $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));
+
+}
+
+
+
+
 list($query, $param, $query_count) = build_alert_table_query($vars);
 
 $query = str_replace(" * ", " `alert_status` ", $query);
@@ -40,7 +86,11 @@ echo '
 <div class="row">
   <div class="col-md-12">
     <div class="well info_box">
-      <div class="title"><i class="oicon-bell"></i> Checker Details</div>
+      <div class="title"><i class="oicon-bell"></i> Checker Details</div>';
+
+#if ($_SESSION['userlevel'] >= '10') { echo '      <div class="title pull-right"><a href="'.generate_url($vars, array('edit' => "TRUE")).'"><i class="oicon-gear"></i> Edit</a></div>'; }
+
+echo '
       <div class="content">
 
         <table class="table table-striped table-bordered table-condensed table-rounded">
@@ -78,18 +128,26 @@ echo '
       <div class="title"><i class="oicon-traffic-light"></i> Check Conditions</div>
       <div class="content">';
 
+
+
     echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
     echo('<thead><tr>');
     echo('<th style="width: 33%;">Metric</th>');
     echo('<th style="width: 33%;">Condition</th>');
-    echo('<th style="width: 33%;">Value</th>');
-    echo('</tr></thead>');
+    if ($_SESSION['userlevel'] >= '10') {
+      echo '<th style="width: 33%;">Value <a href="#conditions_modal" class="pull-right" data-toggle="modal"> Edit</a></th>';
+    } else {
+      echo '<th style="width: 33%;">Value</th>';
+    }
+    echo '</tr></thead>';
 
 
   $conditions = unserialize($check['conditions']);
+  $condition_text = array();
 
   foreach($conditions as $condition)
   {
+    $condition_text[] = $condition['metric'].' '.$condition['condition'].' '.$condition['value'];
     echo '<tr>';
     echo '<td>'.$condition['metric'].'</td>';
     echo '<td>'.$condition['condition'].'</td>';
@@ -175,3 +233,29 @@ echo '
 </div>';
 
 ?>
+
+<div id="conditions_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <form id="edit" name="edit" method="post" class="form" action="">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Edit Check Conditions</h3>
+  </div>
+  <div class="modal-body">
+
+  <input type=hidden name="editing" value="check_conditions">
+
+  <fieldset>
+    <div class="control-group">
+      <div class="controls">
+        <input type="textarea" class="col-md-12" rows="3" name="check_conditions" value="<?php echo(htmlentities(implode("\n", $condition_text)));  ?>"/>
+      </div>
+    </div>
+  </fieldset>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+ </form>
+</div>

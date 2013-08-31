@@ -71,10 +71,27 @@ function format_timestamp($str)
   }
 }
 
-function format_unixtime($timestamp)
+/**
+ * Format unixtime.
+ *
+ * This function convert date/time string to format from
+ * config option $config['timestamp_format'].
+ * Can take an optional format parameter, which is passed to date();
+ *
+ * @param string $time
+ * @param string $format
+ * @return string
+ */
+
+function format_unixtime($time, $format = NULL)
 {
   global $config;
-  return date($config['timestamp_format'], $timestamp);
+  if($format != NULL)
+  {
+    return date($format, $time);
+  } else {
+    return date($config['timestamp_format'], $time);
+  }
 }
 
 
@@ -382,9 +399,10 @@ function pagination($vars, $total, $per_page = 10)
 
     $pagination.= "</ul>";
 
-    $pagination.= '<div style="clear: none; float: right;" class="input-prepend">
-       <span class="add-on"># per page</span>
-       <select name="type" id="type" class="span1"
+    $pagination.= '
+       <div class="pull-right input-prepend">
+       <span class="add-on well-shaded"># per page</span>
+       <select style="width: 75px;" name="type" id="type"
        onchange="window.open(this.options[this.selectedIndex].value,\'_top\')">';
 
     foreach (array('10','20','50','100','500','1000', '10000', '100000') as $pagesize)

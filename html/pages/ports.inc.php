@@ -12,12 +12,12 @@ if($vars['searchbar'] != 'hide')
 {
 
 ?>
-<form method="post" action="" style="margin-bottom: none;" id="ports-form">
-<table style="width: 100%;" class="table-transparent">
+<form method="post" action="" class="form form-inline" style="margin-bottom: none;" id="ports-form">
+<table style="width: 100%;" cellpadding="5" class="table-transparent">
  <tbody>
   <tr>
     <td>
-      <select name="device_id" id="device_id">
+      <select name="device_id" id="device_id" class="selectpicker">
         <option value="">All Devices</option>
 <?php
 
@@ -34,7 +34,7 @@ foreach (dbFetchRows('SELECT `device_id`, `hostname` FROM `devices` GROUP BY `ho
       </select>
     </td>
     <td>
-      <select name="state" id="state">
+      <select name="state" id="state" class="selectpicker">
         <option value="">All States</option>
         <option value="up" <?php if ($vars['state'] == "up") { echo("selected"); } ?>>Up</option>
         <option value="down"<?php if ($vars['state'] == "down") { echo("selected"); } ?>>Down</option>
@@ -42,7 +42,7 @@ foreach (dbFetchRows('SELECT `device_id`, `hostname` FROM `devices` GROUP BY `ho
       </select>
     </td>
     <td>
-      <select name="ifType" id="ifType">
+      <select name="ifType" id="ifType" class="selectpicker">
         <option value="">All Media</option>
 <?php
 foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `ifType`") as $data)
@@ -58,9 +58,10 @@ foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `i
        </select>
        </td>
        <td>
-        <input title="Port Description" type="text" name="ifAlias" id="ifAlias" <?php if (strlen($vars['ifAlias'])) {echo('value="'.$vars['ifAlias'].'"');} ?> />
+        <input placeholder="Port Description" title="Port Description" type="text" name="ifAlias" id="ifAlias" <?php if (strlen($vars['ifAlias'])) {echo('value="'.$vars['ifAlias'].'"');} ?> />
       </td>
-
+<?php
+/**
       <td width=80 rowspan=2>
         <label for="ignore">
         <input type=checkbox id="ignore" name="ignore" value=1 <?php if ($vars['ignore']) { echo("checked"); } ?> ></input> Ignored
@@ -72,8 +73,10 @@ foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `i
         <input type=checkbox id="deleted" name="deleted" value=1 <?php if ($vars['deleted']) { echo("checked"); } ?> > Deleted</input>
         </label>
         </td>
-        <td rowspan=2>
-        <select name="sort" id="sort" style="width: 110px;">
+**/
+?>
+        <td>
+        <select name="sort" id="sort" class="selectpicker">
 <?php
 $sorts = array('device' => 'Device',
               'port' => 'Port',
@@ -101,18 +104,13 @@ foreach ($sorts as $sort => $sort_text)
 
         </select>
         </td>
-        <td style="text-align: center;" rowspan=2>
-        <button type="submit" onClick="submitURL()" class="btn btn-large"><i class="icon-search"></i> Search</button>
-        <br />
-        <a href="<?php echo(generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare']))); ?>" title="Reset critera to default." >Reset</a>
-      </td>
   </tr>
   <tr>
     <td>
-      <input type="text" name="hostname" id="hostname" title="Hostname" <?php if (strlen($vars['hostname'])) {echo('value="'.$vars['hostname'].'"');} ?> />
+      <input placeholder="Hostname" type="text" name="hostname" id="hostname" title="Hostname" <?php if (strlen($vars['hostname'])) {echo('value="'.$vars['hostname'].'"');} ?> />
     </td>
     <td>
-      <select name="ifSpeed" id="ifSpeed">
+      <select name="ifSpeed" id="ifSpeed" class="selectpicker">
       <option value="">All Speeds</option>
 <?php
 foreach (dbFetchRows("SELECT `ifSpeed` FROM `ports` GROUP BY `ifSpeed` ORDER BY `ifSpeed`") as $data)
@@ -129,7 +127,7 @@ foreach (dbFetchRows("SELECT `ifSpeed` FROM `ports` GROUP BY `ifSpeed` ORDER BY 
 
     </td>
     <td>
-      <select name="port_descr_type" id="port_descr_type">
+      <select name="port_descr_type" id="port_descr_type" class="selectpicker">
         <option value="">All Port Types</option>
 <?php
 $ports = dbFetchRows("SELECT `port_descr_type` FROM `ports` GROUP BY `port_descr_type` ORDER BY `port_descr_type`");
@@ -149,7 +147,7 @@ foreach ($ports as $data)
 
     </td>
     <td>
-        <select name="location" id="location">
+        <select name="location" id="location" class="selectpicker">
           <option value="">All Locations</option>
           <?php
            // fix me function?
@@ -166,6 +164,12 @@ foreach ($ports as $data)
          ?>
         </select>
     </td>
+
+        <td style="text-align: center;">
+        <button type="submit" onClick="submitURL()" class="btn"><i class="icon-search"></i> Search</button>
+      </td>
+
+
   </tr>
  </tbody>
 </table>
@@ -272,6 +276,9 @@ echo('<div style="float: right;">');
   } else {
     echo('<a href="'. generate_url($vars, array('bare' => 'yes')).'">Header</a>');
   }
+
+  echo ' | <a href="'.generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare'])).'" title="Reset critera to default." >Reset</a>';
+
 
 echo('</div>
   </div>');

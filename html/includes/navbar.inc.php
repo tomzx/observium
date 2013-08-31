@@ -85,7 +85,9 @@ foreach (array('ipv4' => 'IPv4 Address', 'ipv6' => 'IPv6 Address', 'mac' => 'MAC
 
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
-              <a href="<?php echo(generate_url(array('page'=>'devices'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-servers"></i> Devices <b class="caret"></b></a>
+              <a class="hidden-sm hidden-xs" href="<?php echo(generate_url(array('page'=>'devices'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-servers"></i> Devices <b class="caret"></b></a>
+              <a class="hidden-lg hidden-md" href="<?php echo(generate_url(array('page'=>'devices'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-servers"></i> <b class="caret"></b></a>
+
               <ul class="dropdown-menu" style="width:200px;">
 
                 <li><a href="<?php echo(generate_url(array('page'=>'devices'))); ?>"><i class="oicon-servers"></i> All Devices</a></li>
@@ -122,6 +124,7 @@ function location_menu($array)
       elseif ($entry_data['level'] == "location")
       {
         echo('            <li><a href="' . generate_url(array('page'=>'devices','location'=> urlencode($entry))) . '/"><i class="menu-icon oicon-building"></i> ' . $entry . ' ('.$entry_data['count'].')</a></li>');
+
         continue;
       }
 
@@ -216,7 +219,9 @@ foreach ($config['device_types'] as $devtype)
             <li class="divider-vertical" style="margin:0;"></li>
 
             <li class="dropdown">
-              <a href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-network-ethernet"></i> Ports <b class="caret"></b></a>
+              <a class="hidden-sm hidden-xs" href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-network-ethernet"></i> Ports <b class="caret"></b></a>
+              <a class="hidden-lg hidden-md" href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-network-ethernet"></i> <b class="caret"></b></a>
+
               <ul class="dropdown-menu">
                 <li><a href="<?php echo(generate_url(array('page'=>'ports'))); ?>"><i class="oicon-network-ethernet"></i> All Ports&nbsp;<span class="right">(<?php echo($ports['count']); ?>)</span></a></li>
                 <li class="divider"></li>
@@ -298,7 +303,9 @@ $menu_sensors = $used_sensors;
 ?>
             <li class="divider-vertical" style="margin:0;"></li>
             <li class="dropdown">
-              <a href="<?php echo(generate_url(array('page'=>'ports'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-system-monitor"></i> Health <b class="caret"></b></a>
+              <a class="hidden-sm hidden-xs" href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-system-monitor"></i> Health <b class="caret"></b></a>
+              <a class="hidden-md hidden-lg"href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-system-monitor"></i> <b class="caret"></b></a>
+
               <ul class="dropdown-menu">
 
 <?php
@@ -375,7 +382,9 @@ if ($_SESSION['userlevel'] >= '5' && ($app_count) > "0")
 ?>
             <li class="divider-vertical" style="margin:0;"></li>
     <li class="dropdown">
-      <a href="<?php echo(generate_url(array('page'=>'apps'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-application-icon-large"></i> Apps <b class="caret"></b></a>
+      <a class="hidden-sm hidden-xs" href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-application-icon-large"></i> Apps <b class="caret"></b></a>
+      <a class="hidden-lg hidden-md" href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-application-icon-large"></i> <b class="caret"></b></a>
+
       <ul class="dropdown-menu">
 <?php
 
@@ -401,7 +410,8 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['count']+$routing['ospf'][
 ?>
      <li class="divider-vertical" style="margin:0;"></li>
      <li class="dropdown">
-       <a href="<?php echo(generate_url(array('page'=>'routing'))); ?>" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-arrow-branch-000-left"></i> Routing <b class="caret"></b></a>
+       <a class="hidden-sm hidden-xs" href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-arrow-branch-000-left"></i> Routing <b class="caret"></b></a>
+       <a class="hidden-lg hidden-md" href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-arrow-branch-000-left"></i> <b class="caret"></b></a>
        <ul class="dropdown-menu" style="width:200px;">
 
 <?php
@@ -455,9 +465,9 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['count']+$routing['ospf'][
 </ul>
           <ul class="nav pull-right">
 
-          <li class="dropdown">
-            <form id="searchform" class="navbar-search" action="" style="margin-left: 10px; margin-right: 10px;  margin-top: 5px; margin-bottom: -5px;">
-              <input onkeyup="lookup(this.value);" type="text" value="" class="dropdown-toggle" placeholder="Search" />
+          <li class="dropdown hidden-xs">
+            <form class="form" id="searchform" class="navbar-search" action="" style="margin-left: 10px; margin-right: 10px;  margin-top: 5px; margin-bottom: -5px;">
+              <input class="form-control input-sm" onkeyup="lookup(this.value);" type="text" value="" class="dropdown-toggle" placeholder="Search" />
             </form>
             <div id="suggestions" class="typeahead dropdown-menu"></div>
           </li>

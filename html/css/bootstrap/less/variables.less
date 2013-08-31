@@ -79,7 +79,6 @@
 @borderRadiusLarge:     5px;
 @borderRadiusSmall:     3px;
 
-
 // Tables
 // -------------------------
 @tableBackground:                   @white; // overall background-color
@@ -110,7 +109,6 @@
 
 @btnInverseBackground:              #444;
 @btnInverseBackgroundHighlight:     @grayDarker;
-
 
 // Forms
 // -------------------------
@@ -152,21 +150,6 @@
 @zindexFixedNavbar:       1030;
 @zindexModalBackdrop:     1040;
 @zindexModal:             1050;
-
-// Z-index master list
-// -------------------------
-// Used for a bird's eye view of components dependent on the z-axis
-// Try to avoid customizing these :)
-
-@zindex-navbar:            1000;
-@zindex-dropdown:          1000;
-@zindex-popover:           1010;
-@zindex-tooltip:           1030;
-@zindex-navbar-fixed:      1030;
-@zindex-modal-background:  1040;
-@zindex-modal:             1050;
-
-
 
 // Sprite icons path
 // -------------------------
@@ -290,43 +273,6 @@
 @popoverArrowOuterWidth:  @popoverArrowWidth + 1;
 @popoverArrowOuterColor:  rgba(0,0,0,.25);
 
-
-// Media queries breakpoints
-// --------------------------------------------------
-
-// Extra small screen / phone
-@screen-xs:                  480px;
-@screen-phone:               @screen-xs;
-
-// Small screen / tablet
-@screen-sm:                  768px;
-@screen-tablet:              @screen-sm;
-
-// Medium screen / desktop
-@screen-md:                  992px;
-@screen-desktop:             @screen-md;
-
-// Large screen / wide desktop
-@screen-lg:                  1200px;
-@screen-lg-desktop:          @screen-lg;
-
-// So media queries don't overlap when required, provide a maximum
-@screen-xs-max:              (@screen-sm - 1);
-@screen-sm-max:              (@screen-md - 1);
-@screen-md-max:              (@screen-lg - 1);
-
-// GRID
-// --------------------------------------------------
-
-// Number of columns in the grid system
-@grid-columns:              12;
-// Padding, to be divided by two and applied to the left and right of all columns
-@grid-gutter-width:         10px;
-// Point at which the navbar stops collapsing
-@grid-float-breakpoint:     @screen-tablet;
-
-
-
 // Default 940px grid
 // -------------------------
 @gridColumns:             12;
@@ -361,16 +307,3 @@
 // 768px-979px
 //@fluidGridColumnWidth768:      percentage(@gridColumnWidth768/@gridRowWidth768);
 //@fluidGridGutterWidth768:      percentage(@gridGutterWidth768/@gridRowWidth768);
-
-// Container sizes
-// --------------------------------------------------
-
-// Small screen / tablet
-@container-tablet:            ((720px + @grid-gutter-width));
-
-// Medium screen / desktop
-@container-desktop:           ((940px + @grid-gutter-width));
-
-// Large screen / wide desktop
-@container-lg-desktop:        ((1220px + @grid-gutter-width));
-

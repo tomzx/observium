@@ -156,8 +156,8 @@ echo('<table class="table table-condensed table-bordered table-striped table-rou
     <tr>
       <th style="width: 1px;"></th>
       <th style="width: 1px;"></th>');
-
-#      <th style="width: 5%;">Id</th>');
+      // No table id
+      //<th style="width: 5%;">Id</th>');
 
 if($list['device']) {         echo('      <th style="width: 15%">Device</th>'); }
 if($list['alert_test_id']) {  echo('      <th style="width: 15%">Alert</th>'); }
@@ -165,11 +165,11 @@ if($list['entity_type']) {    echo('      <th style="width: 10%">Type</th>'); }
 if($list['entity_id']) {      echo('      <th style="">Entity</th>'); }
 
 echo '
-      <th style="width: 8%">State</th>
+      <th style="width: 5%">State</th>
       <th>Message</th>
-      <th style="width: 8%;">Checked</th>
-      <th style="width: 8%;">Changed</th>
-      <th style="width: 8%;">Alerted</th>
+      <th style="width: 7.5%;">Checked</th>
+      <th style="width: 7.5%;">Changed</th>
+      <th style="width: 7.5%;">Alerted</th>
     </tr>
   </thead>
   <tbody>'.PHP_EOL;
@@ -197,7 +197,8 @@ echo '
     echo('<tr class="'.$alert['html_row_class'].'">');
     echo('<td style="width: 1px; background-color: '.$alert['table_tab_colour'].'; margin: 0px; padding: 0px"></td>');
     echo('<td style="width: 1px;"></td>');
-#    echo('<td>'.dechex($alert['alert_table_id']).'</td>');
+    // This would display the table id as hex, but even then it gets a bit long.
+    #echo('<td>'.dechex($alert['alert_table_id']).'</td>');
 
     // If we know the device, don't show the device
     if ($list['device']) {
@@ -218,14 +219,14 @@ echo '
 
     echo('<td>');
     ## FIXME -- generate a nice popup with parsed information from the state array
-    echo(overlib_link("", "view state", "<pre>".print_r(unserialize($alert['state']), TRUE)."</pre>", NULL));
+    echo(overlib_link("", "view", "<pre>".print_r(unserialize($alert['state']), TRUE)."</pre>", NULL));
     echo('</td>');
 
     echo('<td class="'.$alert['class'].'">'.$alert['last_message'].'</td>');
 
-    echo('<td>'.$alert['checked'].'</td>');
-    echo('<td>'.$alert['changed'].'</td>');
-    echo('<td>'.$alert['alerted'].'</td>');
+    echo('<td>'.overlib_link('', $alert['checked'], format_unixtime($alert['last_checked'], 'r'), NULL).'</td>');
+    echo('<td>'.overlib_link('', $alert['changed'], format_unixtime($alert['last_changed'], 'r'), NULL).'</td>');
+    echo('<td>'.overlib_link('', $alert['alerted'], format_unixtime($alert['last_alerted'], 'r'), NULL).'</td>');
 
     echo('</tr>');
 

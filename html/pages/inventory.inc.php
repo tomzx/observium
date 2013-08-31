@@ -51,7 +51,7 @@ $search[] = array('type'    => 'text',
                   'id'      => 'description',
                   'value'   => $vars['description']);
 
-print_search_simple($search);
+print_search_simple($search, 'Inventory');
 
 // Pagination
 $vars['pagination'] = TRUE;
@@ -60,7 +60,7 @@ if(!$vars['pageno']) { $vars['pageno'] = 1; }
 
 print_inventory($vars);
 
-$pagetitle[] = "Inventory";
+$pagetitle[] = 'Inventory';
 
 ?>
 
