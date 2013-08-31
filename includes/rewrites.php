@@ -25,23 +25,34 @@
 
 function humanize_alert_entry(&$entry)
 {
-
+   // Set colours and classes based on the status of the alert
    if($entry['alert_status'] == '1')
    {
+     // 1 means ok. Set blue text and disable row class
      $entry['class']  = "green"; $entry['table_tab_colour'] = "#194b7f"; $entry['html_row_class'] = "";
    } elseif($entry['alert_status'] == '0') {
+     // 0 means down. Set red text and error class
      $entry['class']  = "red"; $entry['table_tab_colour'] = "#cc0000"; $entry['html_row_class'] = "error";
    } elseif($entry['alert_status'] == '2') {
+     // 2 means the checks failed but we're waiting for x repetitions. set colour to orange and class to warning
      $entry['class']  = "purple"; $entry['table_tab_colour'] = "#ff6600"; $entry['html_row_class'] = "warning";
    } elseif($entry['alert_status'] == '3') {
+     // 3 means the checks failed but the alert is suppressed. set the colour to purple and the row class to suppressed
      $entry['class']  = "purple"; $entry['table_tab_colour'] = "#740074"; $entry['html_row_class'] = "suppressed";
    } else {
+     // Anything else set the colour to grey and the class to disabled.
      $entry['class']  = "gray"; $entry['table_tab_colour'] = "#555555"; $entry['html_row_class'] = "disabled";
    }
 
+    // Set the checked/changed/alerted entries to formatted date strings if they exist, else set them to never
     if(!isset($entry['last_checked']) || $entry['last_checked'] == '0') { $entry['checked'] = "<i>Never</i>"; } else { $entry['checked'] = formatUptime(time()-$entry['last_checked'], 'short-3'); }
     if(!isset($entry['last_changed']) || $entry['last_changed'] == '0') { $entry['changed'] = "<i>Never</i>"; } else { $entry['changed'] = formatUptime(time()-$entry['last_changed'], 'short-3'); }
     if(!isset($entry['last_alerted']) || $entry['last_alerted'] == '0') { $entry['alerted'] = "<i>Never</i>"; } else { $entry['alerted'] = formatUptime(time()-$entry['last_alerted'], 'short-3'); }
+
+    // Set humanized so we can check for it later.
+    $entry['humanized'] = TRUE;
+
+    // We return nothing as we're working on a reference.
 
 }
 
@@ -112,6 +123,7 @@ function humanize_device(&$device)
 {
   global $config;
 
+  // Expand the device state array from the php serialized string
   $device['state'] = unserialize($device['device_state']);
 
   // Set the HTML class and Tab color for the device based on status
@@ -121,9 +133,6 @@ function humanize_device(&$device)
     $device['html_tab_colour'] = "#cc0000";
   } else {
     $device['html_row_class'] = "";
-    /// This one looks too bright and out of place - adama
-    #$device['html_tab_colour'] = "#194BBF";
-    /// This one matches the logo. changes are not finished, lets see if we can add colour elsewhere. - adama
     $device['html_tab_colour'] = "#194B7F"; // Fucking dull gay colour, but at least there's a semicolon now - tom
                                             // Your mum's a semicolon - adama
   }
@@ -167,27 +176,36 @@ function humanize_device(&$device)
 
 function humanize_bgp (&$peer)
 {
-  // Peer is disabled, set all things grey.
+  // Set colours and classes based on the status of the peer
   if ($peer['bgpPeerAdminStatus'] == 'stop' || $peer['bgpPeerAdminStatus'] == 'halted')
   {
+    // Peer is disabled, set row to warning and text classes to muted.
     $peer['table_tab_colour'] = "#aaaaaa"; $peer['html_row_class'] = "warning"; $peer['state_class'] = "muted"; $peer['admin_class'] = "muted"; $peer['alert']=0; $peer['disabled']=1;
   } elseif ($peer['bgpPeerAdminStatus'] == "start" || $peer['bgpPeerAdminStatus'] == "running" ) {
     // Peer is enabled, set state green and check other things
     $peer['admin_class'] = "text-success";
     if ($peer['bgpPeerState'] == "established")
     {
+      // Peer is up, set colour to blue and disable row class
       $peer['state_class'] = "text-success"; $peer['table_tab_colour'] = "#194B7F"; $peer['html_row_class'] = "";
     } else {
+      // Peer is down, set colour to red and row class to error.
       $peer['state_class'] = "text-error"; $peer['table_tab_colour'] = "#cc0000"; $peer['html_row_class'] = "error";
     }
   }
 
+  // Set text and colour if peer is same AS, private AS or external.
   if ($peer['bgpPeerRemoteAs'] == $peer['bgpLocalAs'])                                    { $peer['peer_type'] = "<span style='color: #00f;'>iBGP</span>"; }
   elseif ($peer['bgpPeerRemoteAS'] >= '64512' && $peer['bgpPeerRemoteAS'] <= '65535')     { $peer['peer_type'] = "<span style='color: #f00;'>Priv eBGP</span>"; }
   else                                                                                    { $peer['peer_type'] = "<span style='color: #0a0;'>eBGP</span>"; }
 
+  // Format (compress) the local/remote IPs if they're IPv6
   $peer['human_localip']  = (strstr($peer['bgpPeerLocalAddr'],  ':')) ? Net_IPv6::compress($peer['bgpPeerLocalAddr'])  : $peer['bgpPeerLocalAddr'];
   $peer['human_remoteip'] = (strstr($peer['bgpPeerRemoteAddr'], ':')) ? Net_IPv6::compress($peer['bgpPeerRemoteAddr']) : $peer['bgpPeerRemoteAddr'];
+
+  // Set humanized entry in the array so we can tell later
+  $peer['humanized'] = TRUE;
+
 }
 
 
