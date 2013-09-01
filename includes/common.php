@@ -16,6 +16,63 @@ function hexStringToIPv4($string)
   return $ip;
 }
 
+/**
+ * Percent Colour
+ *
+ *   This function returns a colour based on a 0-100 value
+ *   It scales from green to red from 0-100 as default.
+ *
+ * @param integer $percent
+ * @param integer $brightness
+ * @param integer $max
+ * @param integer $min
+ * @param integer $thirdColorHex
+ * @return string
+ */
+
+function percent_class ($percent)
+{
+
+  if($percent < "25")
+  {
+    $class = "info";
+  } elseif ($percent < "50") {
+    $class = "";
+  } elseif ($percent < "75") {
+    $class = "success";
+  } elseif ($percent < "90") {
+    $class = "warning";
+  } else {
+    $class = "danger";
+  }
+
+  return $class;
+}
+
+function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdColourHex = '00')
+{
+    // Calculate first and second colour (Inverse relationship)
+    $first = (1-($value/$max))*$brightness;
+    $second = ($value/$max)*$brightness;
+
+    // Find the influence of the middle Colour (yellow if 1st and 2nd are red and green)
+    $diff = abs($first-$second);
+    $influence = ($brightness-$diff)/2;
+    $first = intval($first + $influence);
+    $second = intval($second + $influence);
+
+    // Convert to HEX, format and return
+    $firstHex = str_pad(dechex($first),2,0,STR_PAD_LEFT);
+    $secondHex = str_pad(dechex($second),2,0,STR_PAD_LEFT);
+
+    return '#'.$secondHex . $firstHex . $thirdColourHex;
+
+    // alternatives:
+    // return $thirdColourHex . $firstHex . $secondHex;
+    // return $firstHex . $thirdColourHex . $secondHex;
+
+}
+
 // Observium's SQL debugging. Choses nice output depending upon web or cli
 function print_sql($query)
 {

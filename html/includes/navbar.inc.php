@@ -467,7 +467,7 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['count']+$routing['ospf'][
 
           <li class="dropdown hidden-xs">
             <form class="form" id="searchform" class="navbar-search" action="" style="margin-left: 10px; margin-right: 10px;  margin-top: 5px; margin-bottom: -5px;">
-              <input class="form-control input-sm" onkeyup="lookup(this.value);" type="text" value="" class="dropdown-toggle" placeholder="Search" />
+              <input style="width: 145px;" onkeyup="lookup(this.value);" type="text" value="" class="dropdown-toggle" placeholder="Search" />
             </form>
             <div id="suggestions" class="typeahead dropdown-menu"></div>
           </li>
