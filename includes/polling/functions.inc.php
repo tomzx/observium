@@ -312,7 +312,7 @@ function poll_device($device, $options)
           include('includes/polling/'.$module.'.inc.php');
           $m_end   = utime();
           $m_run   = round($m_end - $m_start, 4);
-          $device_state['poller_mod_perf'][$module] = $m_run;
+          $device_state['poller_mod_perf'][$module] = number_format($m_run,4);
           echo("Module time: ".$m_run."s");
 
         } elseif (isset($attribs['poll_'.$module]) && $attribs['poll_'.$module] == "0") {
