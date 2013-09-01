@@ -224,30 +224,44 @@ foreach ($ports as $port)
     $port['state']['poll_time'] = $polled;
     $port['state']['poll_period'] = $polled_period;
 
+    // Record 32 and 64 bit counters for debugging later
     if ($config['debug_port'][$port['port_id']])
     {
       $port_debug  = $port['port_id']."|".$polled."|".$polled_period."|".$this_port['ifInOctets']."|".$this_port['ifOutOctets']."|".$this_port['ifHCInOctets']."|".$this_port['ifHCOutOctets'];
-      $port_debug .= "|".formatRates($port['stats']['ifInOctets_rate'])."|".formatRates($port['stats']['ifOutOctets_rate'])."\n";
-      file_put_contents("/tmp/port_debug_".$port['port_id'].".txt", $port_debug, FILE_APPEND);
-      echo("Wrote port debugging data");
     }
 
-    // Copy ifHC[In|Out] values to non-HC if they exist
-    // Check if they're greater than zero to work around stupid devices which expose HC counters, but don't populate them. HERPDERP. - adama
-    if($device['os'] == "netapp") { $hc_prefixes = array('HC', '64'); } else { $hc_prefixes = array('HC'); }
-    foreach($hc_prefixes as $hc_prefix)
+#    // Copy ifHC[In|Out] values to non-HC if they exist
+#    // Check if they're greater than zero to work around stupid devices which expose HC counters, but don't populate them. HERPDERP. - adama
+#    if($device['os'] == "netapp") { $hc_prefixes = array('HC', '64'); } else { $hc_prefixes = array('HC'); }
+#    foreach($hc_prefixes as $hc_prefix)
+#    {
+#      foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
+#      {
+#        $hcin = 'if'.$hc_prefix.'In'.$hc;
+#        $hcout = 'if'.$hc_prefix.'Out'.$hc;
+#        if (is_numeric($this_port[$hcin]) && $this_port[$hcin] > 0 && is_numeric($this_port[$hcout]) && $this_port[$hcout] > 0)
+#        {
+#          echo(" ".$hc_prefix." $hc, ");
+#          $this_port['ifIn'.$hc]  = $this_port[$hcin];
+#          $this_port['ifOut'.$hc] = $this_port[$hcout];
+#        }
+#      }
+#    }
+
+    // If we're not using SNMPv1, assumt there are 64-bit values and overwrite the 32-bit OIDs.
+    if($device['snmpver'] != "v1")
     {
+      // NetApp are dumb. Very Dumb. They invent their own random OIDs for 64-bit values. Bad netapp, why you so dumb?
+      if($device['os'] == "netapp") { $hc_prefixes = array('64'); } else { $hc_prefixes = array('HC'); }
+
       foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
       {
         $hcin = 'if'.$hc_prefix.'In'.$hc;
         $hcout = 'if'.$hc_prefix.'Out'.$hc;
-        if (is_numeric($this_port[$hcin]) && $this_port[$hcin] > 0 && is_numeric($this_port[$hcout]) && $this_port[$hcout] > 0)
-        {
-          echo(" ".$hc_prefix." $hc, ");
-          $this_port['ifIn'.$hc]  = $this_port[$hcin];
-          $this_port['ifOut'.$hc] = $this_port[$hcout];
-        }
+        $this_port['ifIn'.$hc]  = $this_port[$hcin];
+        $this_port['ifOut'.$hc] = $this_port[$hcout];
       }
+
     }
 
     // rewrite the ifPhysAddress
@@ -367,6 +381,15 @@ foreach ($ports as $port)
     $port['stats']['ifInBits_rate'] = round($port['stats']['ifInOctets_rate'] * 8);
     $port['stats']['ifOutBits_rate'] = round($port['stats']['ifOutOctets_rate'] * 8);
 
+    // If we have been told to debug this port, output the counters we collected earlier, with the rates stuck on the end.
+    if ($config['debug_port'][$port['port_id']])
+    {
+      $port_debug .= "|".formatRates($port['stats']['ifInOctets_rate'])."|".formatRates($port['stats']['ifOutOctets_rate'])."|".$device['snmpver']."\n";
+      file_put_contents("/tmp/port_debug_".$port['port_id'].".txt", $port_debug, FILE_APPEND);
+      echo("Wrote port debugging data");
+    }
+
+    // If we see a spike above ifSpeed, output it to /tmp/port_debug.txt
     if ($this_port['ifSpeed'] > "0" && ($port['stats']['ifInBits_rate'] > $this_port['ifSpeed'] || $port['stats']['ifOutBits_rate'] > $this_port['ifSpeed']))
     {
       echo("Spike above ifSpeed detected!");
