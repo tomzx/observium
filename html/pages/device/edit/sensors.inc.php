@@ -26,7 +26,7 @@ if ($_POST['submit'] == "update-sensors" && $_SESSION['userlevel'] == '10')
                           ORDER BY `sensor_type`,`sensor_class`,`sensor_index` ", array($device['device_id']));
 }
 
-print_vars($_POST);
+#print_vars($_POST);
 
 ?>
 
