@@ -374,9 +374,7 @@ if (is_array($pagetitle))
 
   <script type="text/javascript">$('.selectpicker').selectpicker();</script>
   <script type="text/javascript" src="js/mktree.js"></script>
-  <script type="text/javascript" src="js/sorttable.js"></script>
   <script type="text/javascript" src="js/jquery.switch.js"></script>
-  <script type="text/javascript" src="js/jquery-checkbox.js"></script>
   <script type="text/javascript" src="js/jquery.qtip.min.js"></script>
   <script type="text/javascript">
 

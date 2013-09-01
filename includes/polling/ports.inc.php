@@ -251,8 +251,11 @@ foreach ($ports as $port)
     // If we're not using SNMPv1, assumt there are 64-bit values and overwrite the 32-bit OIDs.
     if($device['snmpver'] != "v1")
     {
+
+      echo("replacing with 64-bit...");
+
       // NetApp are dumb. Very Dumb. They invent their own random OIDs for 64-bit values. Bad netapp, why you so dumb?
-      if($device['os'] == "netapp") { $hc_prefixes = array('64'); } else { $hc_prefixes = array('HC'); }
+      if($device['os'] == "netapp") { $hc_prefix = '64'; } else { $hc_prefix = 'HC'; }
 
       foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
       {

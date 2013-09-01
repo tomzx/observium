@@ -76,33 +76,13 @@ foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `i
 **/
 ?>
         <td>
-        <select name="sort" id="sort" class="selectpicker">
-<?php
-$sorts = array('device' => 'Device',
-              'port' => 'Port',
-              'speed' => 'Speed',
-              'traffic' => 'Traffic In+Out',
-              'traffic_in' => 'Traffic In',
-              'traffic_out' => 'Traffic Out',
-              'traffic_perc' => 'Traffic Percentage In+Out',
-              'traffic_perc_in' => 'Traffic Percentage In',
-              'traffic_perc_out' => 'Traffic Percentage Out',
-              'packets' => 'Packets In+Out',
-              'packets_in' => 'Packets In',
-              'packets_out' => 'Packets Out',
-              'errors' => 'Errors',
-              'media' => 'Media',
-              'descr' => 'Description');
 
-foreach ($sorts as $sort => $sort_text)
-{
-  echo('<option value="'.$sort.'" ');
-  if ($vars['sort'] == $sort)  { echo("selected"); }
-  echo('>'.$sort_text.'</option>');
-}
-?>
+<select class="selectpicker" multiple title='Choose one of the following...'>
+     <option>Mustard</option>
+      <option>Ketchup</option>
+      <option>Relish</option>
+  </select>
 
-        </select>
         </td>
   </tr>
   <tr>
@@ -165,7 +145,37 @@ foreach ($ports as $data)
         </select>
     </td>
 
-        <td style="text-align: center;">
+        <td>
+
+        <select name="sort" id="sort" class="selectpicker" title="Sort Order" style="width: 150px;" data-width="150px">
+<?php
+$sorts = array('device' => 'Device',
+              'port' => 'Port',
+              'speed' => 'Speed',
+              'traffic' => 'Traffic In+Out',
+              'traffic_in' => 'Traffic In',
+              'traffic_out' => 'Traffic Out',
+              'traffic_perc' => 'Traffic Percentage In+Out',
+              'traffic_perc_in' => 'Traffic Percentage In',
+              'traffic_perc_out' => 'Traffic Percentage Out',
+              'packets' => 'Packets In+Out',
+              'packets_in' => 'Packets In',
+              'packets_out' => 'Packets Out',
+              'errors' => 'Errors',
+              'media' => 'Media',
+              'descr' => 'Description');
+
+foreach ($sorts as $sort => $sort_text)
+{
+  echo('<option value="'.$sort.'" ');
+  if ($vars['sort'] == $sort)  { echo("selected"); }
+  echo('>'.$sort_text.'</option>');
+}
+?>
+
+        </select>
+
+
         <button type="submit" onClick="submitURL()" class="btn"><i class="icon-search"></i> Search</button>
       </td>
 

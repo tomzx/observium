@@ -24,12 +24,12 @@ function print_inventory($vars)
   if ($vars['page'] == 'device' && is_numeric($vars['device']) && device_permitted($vars['device']))
   {
     echo('<table class="table table-striped table-bordered table-condensed table-rounded"><tr><td>');
-    echo('<div class="btn-group pull-right" style="margin-top:3px;">
-      <button class="btn" onClick=  "expandTree(\'enttree\');return false;"><i class="icon-plus"></i> Expand All Nodes</button>
-      <button class="btn" onClick="collapseTree(\'enttree\');return false;"><i class="icon-minus"></i> Collapse All Nodes</button>
+    echo('<div class="btn-group pull-right" style="margin-top:5px; margin-right: 5px;">
+      <button class="btn btn-small" onClick=  "expandTree(\'enttree\');return false;"><i class="icon-plus muted small"></i> Expand</button>
+      <button class="btn btn-small" onClick="collapseTree(\'enttree\');return false;"><i class="icon-minus muted small"></i> Collapse</button>
     </div>');
 
-    echo("<div style='clear: both;'><ul class='mktree' id='enttree'>");
+    echo('<div style="clear: left; margin: 5px;"><ul class="mktree" id="enttree" style="margin-left: -10px;">');
     $level = 0;
     $ent['entPhysicalIndex'] = 0;
     print_ent_physical($ent['entPhysicalIndex'], $level, "liOpen");
@@ -37,7 +37,7 @@ function print_inventory($vars)
     echo('</td></tr></table>');
     return TRUE;
   }
-  
+
   // With pagination? (display page numbers in header)
   $pagination = (isset($vars['pagination']) && $vars['pagination']);
   $pageno = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
