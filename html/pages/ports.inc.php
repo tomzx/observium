@@ -77,12 +77,6 @@ foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `i
 ?>
         <td>
 
-<select class="selectpicker" multiple title='Choose one of the following...'>
-     <option>Mustard</option>
-      <option>Ketchup</option>
-      <option>Relish</option>
-  </select>
-
         </td>
   </tr>
   <tr>
@@ -93,6 +87,8 @@ foreach (dbFetchRows("SELECT `ifType` FROM `ports` GROUP BY `ifType` ORDER BY `i
       <select name="ifSpeed" id="ifSpeed" class="selectpicker">
       <option value="">All Speeds</option>
 <?php
+
+
 foreach (dbFetchRows("SELECT `ifSpeed` FROM `ports` GROUP BY `ifSpeed` ORDER BY `ifSpeed`") as $data)
 {
   if ($data['ifSpeed'])
@@ -292,6 +288,10 @@ echo('<div style="float: right;">');
 
 echo('</div>
   </div>');
+
+
+#print_vars($vars);
+
 
 $param = array();
 

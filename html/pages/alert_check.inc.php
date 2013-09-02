@@ -13,8 +13,6 @@
 
 // Alert test display and editing page.
 
-/// Put this bit in to a function.
-
 $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));
 
 if($vars['editing'])
@@ -29,13 +27,9 @@ if($vars['editing'])
       list($this['metric'], $this['condition'], $this['value']) = explode(" ", $cond);
       $conds[] = $this;
     }
-
     $conds = json_encode($conds);
-
     $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
-
   }
-
 
   if ($rows_updated > 0)
   {
@@ -56,27 +50,13 @@ if($vars['editing'])
     print_error($update_message);
   }
 
+  // Refresh the $check array to reflect the updates
   $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));
 
 }
 
-// Fetch the queries to build the alert table.
-list($query, $param, $query_count) = build_alert_table_query($vars);
-
-$query = str_replace(" * ", " `alert_status` ", $query);
-$entities = dbFetchRows($query, $param);
-
-$s = array('up' => 0, 'down' => 0, 'unknown' => 0, 'delay' => 0);
-foreach($entities as $alert_table_id => $alert_table_entry)
-{
-  if($alert_table_entry['alert_status'] == '1') { $s['up']++;
-  } elseif($alert_table_entry['alert_status'] == '0') { $s['down']++;
-  } elseif($alert_table_entry['alert_status'] == '2') { $s['delay']++;
-  } elseif($alert_table_entry['alert_status'] == '3') { $s['suppress']++;
-  } else { $s['unknown']++; }
-}
-
-$check['alert_status'] = '<span class="green">'. $s['up']. '</span>/<span class="purple">'. $s['suppress']. '</span>/<span class=red>'. $s['down']. '</span>/<span class=orange>'. $s['delay']. '</span>/<span class=gray>'. $s['unknown']. '</span>';
+// Process the alert checker to add classes and colours and count status.
+humanize_alert_check($check);
 
 /// End bit to go in to function
 
@@ -107,7 +87,7 @@ echo '
             <td><strong>', nicecase($check['entity_type']), '</strong></td>
             <td><strong>', $check['alert_name'], '</strong></td>
             <td><i>', $check['alert_message'], '</i></td>
-            <td><i>', $check['alert_status'], '</i></td>
+            <td><i>', $check['status_numbers'], '</i></td>
           </tr>
         </tbody></table>
       </div>

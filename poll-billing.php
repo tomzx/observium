@@ -73,7 +73,7 @@ function poll_bill($bill)
     if(is_numeric($port['bill_port_polled'])) { $period = $now - $port['bill_port_polled']; }
     echo("time: ".$now."|".$port['bill_port_polled']." period:".$period."\n");
 
-    if($port['snmpver'] == "1") {
+    if($port['snmpver'] == "1" || $port['port_64bit'] == "0") {
       // SNMPv1 - Use non 64-bit counters
       $oids = "IF-MIB::ifInOctets.".$port['ifIndex']." IF-MIB::ifOutOctets.".$port['ifIndex'];
       $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
@@ -85,13 +85,16 @@ function poll_bill($bill)
       $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
       $data = $data[$port['ifIndex']];
       $data = array('in' => $data['ifHCInOctets'], 'out' => $data['ifHCOutOctets']);
+
       // Fallback on 32-bit counters if 64-bit fails
-      if (empty($data['in']) && empty($data['out'])) {
-        $oids = "IF-MIB::ifInOctets.".$port['ifIndex']." IF-MIB::ifOutOctets.".$port['ifIndex'];
-        $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
-        $data = $data[$port['ifIndex']];
-        $data = array('in' => $data['ifInOctets'], 'out' => $data['ifOutOctets']);
+      // This is disabled because the only possible outcome is retarded data.
+      // if (empty($data['in']) && empty($data['out'])) {
+      //  $oids = "IF-MIB::ifInOctets.".$port['ifIndex']." IF-MIB::ifOutOctets.".$port['ifIndex'];
+      //  $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
+      //  $data = $data[$port['ifIndex']];
+      //  $data = array('in' => $data['ifInOctets'], 'out' => $data['ifOutOctets']);
       }
+
       if (isset($options['d'])) {
         print_vars($data);
       }

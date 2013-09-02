@@ -15,13 +15,65 @@
  */
 
 /**
- * Humanize Alert
+ * Humanize Alert Check
  *
- *   Process an array containing a row from `alert_entry` and `alert_entry-state` in place to add/modify elements.
+ *   Process an array containing a row from `alert_checks` and in place to add/modify elements.
  *
- * @param array $device
+ * @param array $alert_check
  * @return none
  */
+
+function humanize_alert_check(&$check)
+{
+
+  // Fetch the queries to build the alert table.
+  list($query, $param, $query_count) = build_alert_table_query(array('alert_test_id' => $check['alert_test_id']));
+
+  // Fetch a quick set of alert_status values to build the alert check status text
+  $query = str_replace(" * ", " `alert_status` ", $query);
+  $check['entities'] = dbFetchRows($query, $param);
+
+  $check['entity_status'] = array('up' => 0, 'down' => 0, 'unknown' => 0, 'delay' => 0, 'suppress' => 0);
+  foreach($check['entities'] as $alert_table_id => $alert_table_entry)
+  {
+    if($alert_table_entry['alert_status'] == '1')       { ++$check['entity_status']['up'];
+    } elseif($alert_table_entry['alert_status'] == '0') { ++$check['entity_status']['down'];
+    } elseif($alert_table_entry['alert_status'] == '2') { ++$check['entity_status']['delay'];
+    } elseif($alert_table_entry['alert_status'] == '3') { ++$check['entity_status']['suppress'];
+    } else                                              { ++$check['entity_status']['unknown']; }
+  }
+
+  if($check['entity_status']['up'] == count($entities))
+  {
+    $check['class']  = "green"; $check['table_tab_colour'] = "#194b7f"; $check['html_row_class'] = "";
+  } elseif($check['entity_status']['down'] > '0') {
+    $check['class']  = "red"; $check['table_tab_colour'] = "#cc0000"; $check['html_row_class'] = "error";
+  } elseif($check['entity_status']['delay'] > '0') {
+    $check['class']  = "orange"; $check['table_tab_colour'] = "#ff6600"; $check['html_row_class'] = "warning";
+  } elseif($check['entity_status']['suppress'] > '0') {
+    $check['class']  = "purple"; $check['table_tab_colour'] = "#740074"; $check['html_row_class'] = "suppressed";
+  } elseif($check['entity_status']['up'] > '0') {
+    $check['class']  = "green"; $check['table_tab_colour'] = "#194b7f"; $check['html_row_class'] = "";
+  } else {
+    $check['entity_status']['class']  = "gray"; $check['table_tab_colour'] = "#555555"; $check['html_row_class'] = "disabled";
+  }
+
+  $check['status_numbers'] = '<span class="green">'. $check['entity_status']['up']. '</span>/<span class="purple">'. $check['entity_status']['suppress'].
+         '</span>/<span class=red>'. $check['entity_status']['down']. '</span>/<span class=orange>'. $check['entity_status']['delay'].
+         '</span>/<span class=gray>'. $check['entity_status']['unknown']. '</span>';
+
+
+  // We return nothing, $check is modified in place.
+}
+
+ /**
+  * Humanize Alert
+  *
+  *   Process an array containing a row from `alert_entry` and `alert_entry-state` in place to add/modify elements.
+  *
+  * @param array $alert_entry
+  * @return none
+  */
 
 function humanize_alert_entry(&$entry)
 {

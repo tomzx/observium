@@ -92,15 +92,22 @@ if ($unknown) { echo('          <option value="other">Other</option>'); }
     <label class="control-label" for="sysLocation">Override sysLocation</label>
 
     <div class="controls">
-      <input onclick="edit.sysLocation.disabled=!edit.override_sysLocation.checked" type="checkbox"
-            name="override_sysLocation"<?php if ($override_sysLocation_bool) { echo(' checked="1"'); } ?> />
-      <span class="help-inline">Use custom location below.</span>
+      <input id="location_check" type="checkbox"
+            name="override_sysLocation"<?php if ($override_sysLocation_bool) { echo(' checked="1"'); } ?> data-id="location_check" data-label="Use custom location below.">
     </div>
   </div>
 
+<script>
+
+$('#location_check').click(function() {
+    $('#location_text').attr('disabled',! this.checked)
+});
+
+</script>
+
   <div class="control-group">
     <label class="control-label" for="sysLocation">Custom location</label>
-    <div class="controls">
+    <div class="controls" id="location_text">
       <input type=text name="sysLocation" size="32" <?php if (!$override_sysLocation_bool) { echo(' disabled="1"'); } ?>
               value="<?php echo($override_sysLocation_string); ?>" />
     </div>
