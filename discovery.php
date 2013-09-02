@@ -36,7 +36,6 @@ if (isset($options['d']))
   #  ini_set('error_reporting', 0);
 }
 
-
 include("includes/definitions.inc.php");
 include("includes/functions.php");
 include("includes/discovery/functions.inc.php");
@@ -44,15 +43,12 @@ include("includes/discovery/functions.inc.php");
 $start = utime();
 $runtime_stats = array();
 
-// Observium Device Discovery
-
-$options = getopt("h:m:i:n:d::a::qV");
-
 if (isset($options['V']))
 {
   print_message("Observium ".$config['version']);
   exit;
 }
+
 if (!isset($options['q']))
 {
   print_message("%gObservium v".$config['version'].PHP_EOL."%WDiscovery\n%n", 'color');
