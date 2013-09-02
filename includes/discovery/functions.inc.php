@@ -246,13 +246,16 @@ function discover_sensor(&$valid, $class, $device, $oid, $index, $type, $descr, 
       list($high_limit, $low_limit) = array($low_limit, $high_limit);
     }
 
-    $insert = array('poller_type' => $poller_type, 'sensor_class' => $class, 'device_id' => $device['device_id'], 'sensor_oid' => $oid, 'sensor_index' => $index, 'sensor_type' => $type, 'sensor_descr' => $descr,
+    $sensor_insert = array('poller_type' => $poller_type, 'sensor_class' => $class, 'device_id' => $device['device_id'], 'sensor_oid' => $oid, 'sensor_index' => $index, 'sensor_type' => $type, 'sensor_descr' => $descr,
                     'sensor_divisor' => $divisor, 'sensor_multiplier' => $multiplier, 'sensor_limit' => $high_limit, 'sensor_limit_warn' => $warn_limit, 'sensor_limit_low' => $low_limit,
                     'sensor_limit_low_warn' => $low_warn_limit, 'entPhysicalIndex' => $entPhysicalIndex, 'entPhysicalIndex_measured' => $entPhysicalIndex_measured, 'measured_class' => $measured_class, 'measured_entity' => $measured_entity );
 
-    $inserted = dbInsert($insert, 'sensors');
+    $sensor_id = dbInsert($sensor_insert, 'sensors');
+    
+    $state_insert = array('sensor_id' => $sensor_id, 'sensor_value' => $current, 'sensor_polled' => 'NOW()');
+    dbInsert($state_insert, 'sensors-state');
 
-    if ($debug) { echo("( $inserted inserted )\n"); }
+    if ($debug) { echo("( $sensor_id inserted )\n"); }
     echo("+");
     log_event("Sensor Added: ".mres($class)." ".mres($type)." ". mres($index)." ".mres($descr), $device, 'sensor', mysql_insert_id());
   }
