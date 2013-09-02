@@ -18,7 +18,7 @@ foreach (explode("\n", $data) as $ip)
     if (mysql_result(mysql_query("SELECT COUNT(device_id) FROM devices WHERE hostname = '$hostname'"),0) == '0')
     {
       if (gethostbyname($hostname) == gethostbyname($hostname.".".$config['mydomain'])) { $hostname = $hostname . ".".$config['mydomain']; }
-      addHost($hostname, $community, 'v2c');
+      add_device($hostname, $community, 'v2c');
       echo("Adding $hostname \n");
     }
   }

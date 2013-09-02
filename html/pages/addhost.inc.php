@@ -50,7 +50,7 @@ if ($_POST['hostname'])
     }
     if ($_POST['ignorerrd'] == 'confirm') { $config['rrd_override'] = TRUE; }
 
-    $result = addHost($hostname, $snmpver, $port);
+    $result = add_device($hostname, $snmpver, $port);
     if ($result)
     {
       print_success("Device added (id = $result)");

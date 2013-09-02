@@ -71,7 +71,7 @@ if (!empty($argv[1]))
       if ($seclevel == "nanp")
         { array_push($config['snmp']['v3'], $v3); }
 
-      $device_id = addHost($host, $snmpver, $port, $transport);
+      $device_id = add_device($host, $snmpver, $port, $transport);
 
     }
     elseif ($seclevel == "anp" or $seclevel == "authNoPriv")
@@ -100,7 +100,7 @@ if (!empty($argv[1]))
       }
 
       array_push($config['snmp']['v3'], $v3);
-      $device_id = addHost($host, $snmpver, $port, $transport);
+      $device_id = add_device($host, $snmpver, $port, $transport);
 
     }
     elseif ($seclevel == "ap" or $seclevel == "authPriv")
@@ -133,7 +133,7 @@ if (!empty($argv[1]))
       }
 
       array_push($config['snmp']['v3'], $v3);
-      $device_id = addHost($host, $snmpver, $port, $transport);
+      $device_id = add_device($host, $snmpver, $port, $transport);
 
     }
     else
@@ -167,7 +167,7 @@ if (!empty($argv[1]))
       $config['snmp']['community'] = array($community);
     }
 
-    $device_id = addHost($host, $snmpver, $port, $transport);
+    $device_id = add_device($host, $snmpver, $port, $transport);
   }
 
   if ($snmpver)
@@ -182,7 +182,7 @@ if (!empty($argv[1]))
   while (!$device_id && count($snmpversions))
   {
     $snmpver = array_shift($snmpversions);
-    $device_id = addHost($host, $snmpver, $port, $transport);
+    $device_id = add_device($host, $snmpver, $port, $transport);
   }
 
   if ($device_id)
@@ -197,15 +197,15 @@ print_message("%gObservium v".$config['version']."
 %WAdd Device%n
 
 USAGE:
-addhost.php <hostname> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
-addhost.php <hostname> [any|nanp|anp|ap] [v3] [user] [password] [enckey] [md5|sha] [aes|des] [port] [" . implode("|",$config['snmp']['transports']) . "]
+add_device.php <hostname> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
+add_device.php <hostname> [any|nanp|anp|ap] [v3] [user] [password] [enckey] [md5|sha] [aes|des] [port] [" . implode("|",$config['snmp']['transports']) . "]
 
 EXAMPLE:
-%WSNMPv1/2c%n: addhost.php <%Whostname%n> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
-%WSNMPv3%n   :         Defaults : addhost.php <%Whostname%n> any v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
-           No Auth, No Priv : addhost.php <%Whostname%n> nanp v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
-              Auth, No Priv : addhost.php <%Whostname%n> anp v3 <user> <password> [md5|sha] [port] [" . implode("|",$config['snmp']['transports']) . "]
-              Auth,    Priv : addhost.php <%Whostname%n> ap v3 <user> <password> <enckey> [md5|sha] [aes|des] [port] [" . implode("|",$config['snmp']['transports']) . "]
+%WSNMPv1/2c%n: add_device.php <%Whostname%n> [community] [v1|v2c] [port] [" . implode("|",$config['snmp']['transports']) . "]
+%WSNMPv3%n   :         Defaults : add_device.php <%Whostname%n> any v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
+           No Auth, No Priv : add_device.php <%Whostname%n> nanp v3 [user] [port] [" . implode("|",$config['snmp']['transports']) . "]
+              Auth, No Priv : add_device.php <%Whostname%n> anp v3 <user> <password> [md5|sha] [port] [" . implode("|",$config['snmp']['transports']) . "]
+              Auth,    Priv : add_device.php <%Whostname%n> ap v3 <user> <password> <enckey> [md5|sha] [aes|des] [port] [" . implode("|",$config['snmp']['transports']) . "]
 
 %rRemember to run discovery for the device afterwards.%n", 'color');
 
