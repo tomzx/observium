@@ -147,8 +147,8 @@ function check_entity($type, $entity, $data)
 
         unset($suppressed); unset($alert_suppressed);
 
-        // Serialize the state array before we put it into MySQL.
-        $update_array['state'] = serialize($update_array['state']);
+        // json_encode the state array before we put it into MySQL.
+        $update_array['state'] = json_encode($update_array['state']);
 #        $update_array['alert_table_id'] = $alert_args['alert_table_id'];
 
         /// Perhaps this is better done with SQL replace?
@@ -246,7 +246,7 @@ function cache_alert_rules()
   {
     if($entry['alerter'] == '') {$entry['alerter'] = "default"; }
     $alert_rules[$entry['alert_test_id']] = $entry;
-    $alert_rules[$entry['alert_test_id']]['conditions'] = unserialize($entry['conditions']);
+    $alert_rules[$entry['alert_test_id']]['conditions'] = json_decode($entry['conditions'], TRUE);
     $rules_count++;
   }
 
@@ -281,8 +281,8 @@ function cache_alert_assoc()
 
   foreach (dbFetchRows("SELECT * FROM `alert_assoc`") as $entry)
   {
-    $attributes = unserialize($entry['attributes']);
-    $dev_attrib = unserialize($entry['device_attributes']);
+    $attributes = json_decode($entry['attributes'], TRUE);
+    $dev_attrib = json_decode($entry['device_attributes'], TRUE);
     $alert_assoc[$entry['alert_assoc_id']]['entity_type'] = $entry['entity_type'];
     $alert_assoc[$entry['alert_assoc_id']]['attributes'] = $attributes;
     $alert_assoc[$entry['alert_assoc_id']]['device_attributes'] = $dev_attrib;
@@ -305,15 +305,15 @@ function cache_conditions()
 
   foreach (dbFetchRows("SELECT * FROM `alert_tests`") as $entry)
   {
-    $conditions = unserialize($entry['conditions']);
+    $conditions = json_decode($entry['conditions'], TRUE);
     $cache['cond'][$entry['alert_test_id']]['entity_type'] = $entry['entity_type'];
     $cache['cond'][$entry['alert_test_id']]['conditions'] = $conditions;
   }
 
   foreach (dbFetchRows("SELECT * FROM `alert_assoc`") as $entry)
   {
-    $attributes = unserialize($entry['attributes']);
-    $dev_attrib = unserialize($entry['device_attributes']);
+    $attributes = json_decode($entry['attributes'], TRUE);
+    $dev_attrib = json_decode($entry['device_attributes'], TRUE);
     $cache['assoc'][$entry['alert_assoc_id']]['entity_type']       = $entry['entity_type'];
     $cache['assoc'][$entry['alert_assoc_id']]['attributes']        = $attributes;
     $cache['assoc'][$entry['alert_assoc_id']]['device_attributes'] = $dev_attrib;
@@ -828,8 +828,8 @@ function process_alerts($device)
         #print_vars($alert);
         #print_vars($entry);
 
-        $state      = unserialize($entry['state']);
-        $conditions = unserialize($alert['conditions']);
+        $state      = json_decode($entry['state'], TRUE);
+        $conditions = json_decode($alert['conditions'], TRUE);
 
         #print_vars($conditions);
         #print_vars($state);

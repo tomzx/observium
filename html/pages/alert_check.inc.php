@@ -30,7 +30,7 @@ if($vars['editing'])
       $conds[] = $this;
     }
 
-    $conds = serialize($conds);
+    $conds = json_encode($conds);
 
     $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
 
@@ -60,9 +60,7 @@ if($vars['editing'])
 
 }
 
-
-
-
+// Fetch the queries to build the alert table.
 list($query, $param, $query_count) = build_alert_table_query($vars);
 
 $query = str_replace(" * ", " `alert_status` ", $query);
@@ -130,19 +128,20 @@ echo '
 
 
 
-    echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
-    echo('<thead><tr>');
-    echo('<th style="width: 33%;">Metric</th>');
-    echo('<th style="width: 33%;">Condition</th>');
-    if ($_SESSION['userlevel'] >= '10') {
-      echo '<th style="width: 33%;">Value <a href="#conditions_modal" class="pull-right" data-toggle="modal"> Edit</a></th>';
-    } else {
-      echo '<th style="width: 33%;">Value</th>';
-    }
-    echo '</tr></thead>';
+   echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
+   echo('<thead><tr>');
+   echo('<th style="width: 33%;">Metric</th>');
+   echo('<th style="width: 33%;">Condition</th>');
+   if ($_SESSION['userlevel'] >= '10') {
+     echo '<th style="width: 33%;">Value <a href="#conditions_modal" class="pull-right" data-toggle="modal"> Edit</a></th>';
+   } else {
+     echo '<th style="width: 33%;">Value</th>';
+   }
+   echo '</tr></thead>';
 
 
-  $conditions = unserialize($check['conditions']);
+  $conditions = json_decode($check['conditions'], TRUE);
+
   $condition_text = array();
 
   foreach($conditions as $condition)
@@ -181,7 +180,7 @@ echo '
       echo('<tr>');
       echo('<td>');
       echo('<strong>');
-      $assoc['device_attributes'] = unserialize($assoc['device_attributes']);
+      $assoc['device_attributes'] = json_decode($assoc['device_attributes'], TRUE);
       if(is_array($assoc['device_attributes']))
       {
         foreach($assoc['device_attributes'] as $attribute)
@@ -197,7 +196,7 @@ echo '
       echo("</strong><i>");
       echo('</td>');
       echo('<td><strong>');
-      $assoc['attributes'] = unserialize($assoc['attributes']);
+      $assoc['attributes'] = json_decode($assoc['attributes'], TRUE);
       if(is_array($assoc['attributes']))
       {
         foreach($assoc['attributes'] as $attribute)

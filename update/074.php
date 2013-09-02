@@ -2,7 +2,8 @@
 
 echo("\nUpdating netscaler service RRDs\n");
 
-foreach (dbFetchRows("SELECT * FROM `netscaler_services`") as $svc)
+//foreach (dbFetchRows("SELECT * FROM `netscaler_services`") as $svc)
+if(FALSE)
 {
 
   $device = device_by_id_cache($svc['device_id']);

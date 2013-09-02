@@ -20,8 +20,8 @@ $alert_check = cache_alert_rules();
 foreach (dbFetchRows("SELECT * FROM `alert_assoc` WHERE 1") as $entry)
 {
   $alert_assoc[$entry['alert_test_id']][$entry['alert_assoc_id']]['entity_type'] = $entry['entity_type'];
-  $alert_assoc[$entry['alert_test_id']][$entry['alert_assoc_id']]['attributes'] = unserialize($entry['attributes']);
-  $alert_assoc[$entry['alert_test_id']][$entry['alert_assoc_id']]['device_attributes'] = unserialize($entry['device_attributes']);
+  $alert_assoc[$entry['alert_test_id']][$entry['alert_assoc_id']]['attributes'] = json_decode($entry['attributes'], TRUE);
+  $alert_assoc[$entry['alert_test_id']][$entry['alert_assoc_id']]['device_attributes'] = json_decode($entry['device_attributes'], TRUE);
 }
 
 foreach (dbFetchRows("SELECT * FROM `alert_table` LEFT JOIN `alert_table-state` ON `alert_table`.`alert_table_id` = `alert_table-state`.`alert_table_id`") as $entry)
