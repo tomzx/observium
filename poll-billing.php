@@ -93,7 +93,7 @@ function poll_bill($bill)
       //  $data = snmp_get_multi($port, $oids, "-OQUs", "IF-MIB");
       //  $data = $data[$port['ifIndex']];
       //  $data = array('in' => $data['ifInOctets'], 'out' => $data['ifOutOctets']);
-      }
+      // }
 
       if (isset($options['d'])) {
         print_vars($data);
