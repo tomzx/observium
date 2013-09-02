@@ -8,7 +8,7 @@
  * @package    Simple Observium API
  * @subpackage functions
  * @author     Dennis de Houx <dennis@aio.be>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 

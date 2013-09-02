@@ -8,7 +8,7 @@
  * @package    observium
  * @subpackage web
  * @author     Dennis de Houx <info@all-in-one.be>
- * @copyright  (C) 2006 - 2012 Adam Armstrong
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  * @version    1.9.2
  *
  */
