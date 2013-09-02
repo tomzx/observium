@@ -219,7 +219,7 @@ echo '
 
     echo('<td>');
     ## FIXME -- generate a nice popup with parsed information from the state array
-    echo(overlib_link("", "view", "<pre>".print_r(unserialize($alert['state']), TRUE)."</pre>", NULL));
+    echo(overlib_link("", "view", "<pre>".print_r(json_decode($alert['state'], TRUE), TRUE)."</pre>", NULL));
     echo('</td>');
 
     echo('<td class="'.$alert['class'].'">'.$alert['last_message'].'</td>');

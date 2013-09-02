@@ -149,6 +149,7 @@ function check_entity($type, $entity, $data)
 
         // json_encode the state array before we put it into MySQL.
         $update_array['state'] = json_encode($update_array['state']);
+
 #        $update_array['alert_table_id'] = $alert_args['alert_table_id'];
 
         /// Perhaps this is better done with SQL replace?
@@ -160,8 +161,9 @@ function check_entity($type, $entity, $data)
           echo("INSERTING");
         }
 
-        dbUpdate($update_array, 'alert_table-state', '`alert_table_id` = ?', array($alert_args['alert_table_id']));
+ #print_vars($update_array);
 
+        dbUpdate($update_array, 'alert_table-state', '`alert_table_id` = ?', array($alert_args['alert_table_id']));
 
       } else {
         echo("Alert missing!");
