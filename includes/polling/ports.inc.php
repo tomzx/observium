@@ -252,19 +252,34 @@ foreach ($ports as $port)
     if($device['snmpver'] != "v1")
     {
 
-      echo("replacing with 64-bit...");
-
       // NetApp are dumb. Very Dumb. They invent their own random OIDs for 64-bit values. Bad netapp, why you so dumb?
       if($device['os'] == "netapp") { $hc_prefix = '64'; } else { $hc_prefix = 'HC'; }
 
-      foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
+      // We've never tested for 64bit. Lets do it now. Lots of devices seem to not support 64bit counters for all ports.
+      if($port['port_64bit'] == NULL)
       {
-        $hcin = 'if'.$hc_prefix.'In'.$hc;
-        $hcout = 'if'.$hc_prefix.'Out'.$hc;
-        $this_port['ifIn'.$hc]  = $this_port[$hcin];
-        $this_port['ifOut'.$hc] = $this_port[$hcout];
+        // We have 64-bit traffic counters. Lets set port_64bit
+        if (is_numeric($this_port['ifHCInOctets']) && is_numeric($this_port['ifHCOutOctets']))
+        {
+          $port['port_64bit'] = 1;
+          $port['update']['port_64bit'] = 1;
+        } else {
+          $port['port_64bit'] = 0;
+          $port['update']['port_64bit'] = 0;
+        }
       }
 
+      if($port['port_64bit'] == '1')
+      {
+        echo("replacing with 64-bit...");
+        foreach (array('Octets', 'UcastPkts', 'BroadcastPkts', 'MulticastPkts') as $hc)
+        {
+          $hcin = 'if'.$hc_prefix.'In'.$hc;
+          $hcout = 'if'.$hc_prefix.'Out'.$hc;
+          $this_port['ifIn'.$hc]  = $this_port[$hcin];
+          $this_port['ifOut'.$hc] = $this_port[$hcout];
+        }
+      }
     }
 
     // rewrite the ifPhysAddress
