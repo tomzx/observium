@@ -1,7 +1,15 @@
 <?php
 
-/* Observium Network Management and Monitoring System
- * Copyright (C) 2006-2013, Adam Armstrong - http://www.observium.org
+/**
+ * Observium
+ *
+ *   This file is part of Observium.
+ *
+ * @package    observium
+ * @subpackage discovery
+ * @subpackage functions
+ * @author     Adam Armstrong <adama@memetic.org>
+ * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
 
@@ -38,7 +46,6 @@ function discover_new_device_ip($host, $source = 'xdp', $protocol = NULL, $devic
                 $device_id = createHost($snmphost, $community, "v2c", "161", "udp");
                 $newdevice = device_by_id_cache($device_id, 1);
                 array_push($GLOBALS['devices'], $newdevice);
-                
                 if (!$protocol) { $protocol = strtoupper($source); }
                 if ($port)
                 {
@@ -49,7 +56,7 @@ function discover_new_device_ip($host, $source = 'xdp', $protocol = NULL, $devic
                 {
                   log_event("Device autodiscovered through $protocol on " . $device['hostname'], $remote_device_id);
                 }
-                        
+
                 return $device_id;
               } else {
                 echo("Already have host with sysName $snmphost\n");
@@ -662,4 +669,4 @@ function discover_process_ipv6(&$valid, $ifIndex,$ipv6_address,$ipv6_prefixlen,$
   }
 }
 
-?>
+// NO EOF
