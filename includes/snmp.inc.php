@@ -860,7 +860,7 @@ function snmp_gen_auth(&$device)
   switch ($device['snmpver'])
   {
     case 'v3':
-      $cmd = ' -v3 -l ' . escapeshellarg($device['authlevel']);
+      $cmd = ' -v3 -l ' . $device['authlevel'];
       /* NOTE.
        * For proper work of 'vlan-' context on cisco, it is necessary to add 'match prefix' in snmp-server config --mike
        * example: snmp-server group MONITOR v3 auth match prefix access SNMP-MONITOR
@@ -871,11 +871,11 @@ function snmp_gen_auth(&$device)
       {
         case 'authPriv':
           $cmd .= ' -x ' . escapeshellarg($device['cryptoalgo']);
-          $cmd .= ' -X "' . escapeshellarg($device['cryptopass']) . '"';
+          $cmd .= ' -X "' . $device['cryptopass'] . '"';
         case 'authNoPriv':
           $cmd .= ' -a ' . escapeshellarg($device['authalgo']);
-          $cmd .= ' -A "' . escapeshellarg($device['authpass']) . '"';
-          $cmd .= ' -u ' . escapeshellarg($device['authname']);
+          $cmd .= ' -A "' . $device['authpass'] . '"';
+          $cmd .= ' -u "' . $device['authname'] . '"';
           break;
         case 'noAuthNoPriv':
           // We have to provide a username anyway (see Net-SNMP doc)
@@ -889,7 +889,7 @@ function snmp_gen_auth(&$device)
     case 'v2c':
     case 'v1':
       $cmd  = ' -' . escapeshellarg($device['snmpver']);
-      $cmd .= ' -c ' . escapeshellarg($device['community']);
+      $cmd .= ' -c "' . $device['community'] . '"';
       if ($vlan) { $cmd .= '@' . $vlan; }
       break;
     default:
