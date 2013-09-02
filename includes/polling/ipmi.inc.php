@@ -15,7 +15,7 @@ if ($ipmi['host'] = get_dev_attrib($device,'ipmi_hostname'))
 
   if ($config['own_hostname'] != $device['hostname'] || $ipmi['host'] != 'localhost')
   {
-    $remote = " -H " . $ipmi['host'] . " -L USER -U " . $ipmi['user'] . " -P " . $ipmi['password'];
+    $remote = " -H " . escapeshellarg($ipmi['host']) . " -L USER -U " . escapeshellarg($ipmi['user']) . " -P " . escapeshellarg($ipmi['password']);
   }
 
   $ipmi_start = utime();

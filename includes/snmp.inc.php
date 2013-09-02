@@ -221,12 +221,14 @@ function string_to_oid($string)
 
 // Dirty attempt to parse snmp stuff. YUCK.
 
-function snmp_parser_quote($m) {
+function snmp_parser_quote($m)
+{
     return str_replace(array('.',' '),
       array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE'), $m[1]);
 }
 
-function snmp_parser_unquote($str) {
+function snmp_parser_unquote($str)
+{
     return str_replace(array('PLACEHOLDER-DOT', 'PLACEHOLDER-SPACE', 'PLACEHOLDER-ESCAPED-QUOTE'),
       array('.',' ','"'), $str);
 }
@@ -248,8 +250,7 @@ function snmp_parser_unquote($str) {
 
 function snmp_command ($command, $device, $oids, $options, $mib = NULL, $mibdir = NULL)
 {
-
-  global $debug,$config;
+  global $debug, $config;
 
   // Get the full command path from the config. Chose between bulkwalk and walk. Add max-reps if needed.
   switch($command)
@@ -279,35 +280,34 @@ function snmp_command ($command, $device, $oids, $options, $mib = NULL, $mibdir 
   {
      $timeout = $device['timeout'];
   } elseif (isset($config['snmp']['timeout'])) {
-     $timeout =  $config['snmp']['timeout'];
+     $timeout = $config['snmp']['timeout'];
   }
-  if (isset($timeout)) { $cmd .= " -t " . $timeout; }
+  if (isset($timeout)) { $cmd .= " -t " . escapeshellarg($timeout); }
 
   // Set retries if set in the database
   if (is_numeric($device['retries']) && $device['retries'] > 0)
   {
     $retries = $device['retries'];
   } elseif (isset($config['snmp']['retries'])) {
-    $retries =  $config['snmp']['retries'];
+    $retries = $config['snmp']['retries'];
   }
-  if (isset($retries)) { $cmd .= " -r " . $retries; }
+  if (isset($retries)) { $cmd .= " -r " . escapeshellarg($retries); }
 
   // If no transport is set in the database, default to UDP.
-  ## THIS IS PROBABLY NOT REQUIRED.
   if (!isset($device['transport']))
   {
     $device['transport'] = "udp";
   }
 
   // Add the SNMP authentication settings for the device
-  $cmd .= snmp_gen_auth ($device);
+  $cmd .= snmp_gen_auth($device);
 
   if ($options) { $cmd .= " " . $options; }
   if ($mib) { $cmd .= " -m " . $mib; }
   if ($mibdir) { $cmd .= " -M " . $mibdir; } else { $cmd .= " -M " . $config['mib_dir']; }
 
   // Add the device URI to the string
-  $cmd .= " ".$device['transport'].":".$device['hostname'].":".$device['port'];
+  $cmd .= " ".escapeshellarg($device['transport']).":".escapeshellarg($device['hostname']).":".escapeshellarg($device['port']);
 
   // Add the OID(s) to the strong
   $cmd .= " ".$oids;
@@ -427,6 +427,7 @@ function snmp_walk_parser($device, $oid, $oid_elements, $mib = NULL, $mibdir = N
       }
     }
   }
+
   return $array;
 }
 
@@ -839,12 +840,13 @@ function snmp_cache_portName($device, $array)
  * @param array $device
  */
 
-function snmp_gen_auth (&$device)
+function snmp_gen_auth(&$device)
 {
   global $debug;
 
   $cmd = '';
   $vlan = FALSE;
+
   if (isset($device['snmpcontext']))
   {
     if (is_numeric($device['snmpcontext']) && $device['snmpcontext'] > 0 && $device['snmpcontext'] < 4096 )
@@ -852,25 +854,26 @@ function snmp_gen_auth (&$device)
       $vlan = $device['snmpcontext'];
     }
   }
-  switch($device['snmpver'])
+
+  switch ($device['snmpver'])
   {
     case 'v3':
-      $cmd = ' -v3 -l ' . $device['authlevel'];
+      $cmd = ' -v3 -l ' . escapeshellarg($device['authlevel']);
       /* NOTE.
        * For proper work of 'vlan-' context on cisco, it is necessary to add 'match prefix' in snmp-server config --mike
        * example: snmp-server group MONITOR v3 auth match prefix access SNMP-MONITOR
        */
       $cmd .= ($vlan) ? ' -n "vlan-' . $vlan . '"' : ' -n ""'; // Some devices, like HP, always require option '-n'
 
-      switch($device['authlevel'])
+      switch ($device['authlevel'])
       {
         case 'authPriv':
-          $cmd .= ' -x ' . $device['cryptoalgo'];
-          $cmd .= ' -X "' . $device['cryptopass'] . '"';
+          $cmd .= ' -x ' . escapeshellarg($device['cryptoalgo']);
+          $cmd .= ' -X "' . escapeshellarg($device['cryptopass']) . '"';
         case 'authNoPriv':
-          $cmd .= ' -a ' . $device['authalgo'];
-          $cmd .= ' -A "' . $device['authpass'] . '"';
-          $cmd .= ' -u ' . $device['authname'];
+          $cmd .= ' -a ' . escapeshellarg($device['authalgo']);
+          $cmd .= ' -A "' . escapeshellarg($device['authpass']) . '"';
+          $cmd .= ' -u ' . escapeshellarg($device['authname']);
           break;
         case 'noAuthNoPriv':
           // We have to provide a username anyway (see Net-SNMP doc)
@@ -883,8 +886,8 @@ function snmp_gen_auth (&$device)
 
     case 'v2c':
     case 'v1':
-      $cmd  = ' -' . $device['snmpver'];
-      $cmd .= ' -c ' . $device['community'];
+      $cmd  = ' -' . escapeshellarg($device['snmpver']);
+      $cmd .= ' -c ' . escapeshellarg($device['community']);
       if ($vlan) { $cmd .= '@' . $vlan; }
       break;
     default:

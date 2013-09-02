@@ -297,6 +297,7 @@ function delete_device($id, $delete_rrd=FALSE)
   return $ret;
 }
 
+// FIXME ew, camelcase ;-)
 function addHost($host, $snmpver, $port = '161', $transport = 'udp')
 {
   global $config;
