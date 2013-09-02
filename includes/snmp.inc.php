@@ -336,6 +336,8 @@ function snmp_get_multi($device, $oids, $options = "-OQUs", $mib = NULL, $mibdir
 {
   global $debug,$config,$runtime_stats,$mibs_loaded;
 
+  if(is_array($oids)) { $oids = implode($oids, ' '); }
+
   $cmd = snmp_command('snmpget', $device, $oids, $options, $mib, $mibdir);
   $data = trim(external_exec($cmd));
 
