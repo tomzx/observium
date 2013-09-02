@@ -298,7 +298,7 @@ function delete_device($id, $delete_rrd=FALSE)
 }
 
 // FIXME ew, camelcase ;-)
-function addHost($host, $snmpver, $port = '161', $transport = 'udp')
+function add_device($host, $snmpver, $port = '161', $transport = 'udp')
 {
   global $config;
 
@@ -327,17 +327,17 @@ function addHost($host, $snmpver, $port = '161', $transport = 'udp')
         {
           // Try SNMPv2c
           $snmpver = 'v2c';
-          $ret = addHost($host, $snmpver, $port, $transport);
+          $ret = add_device($host, $snmpver, $port, $transport);
           if (!$ret)
           {
             //Try SNMPv3
             $snmpver = 'v3';
-            $ret = addHost($host, $snmpver, $port, $transport);
+            $ret = add_device($host, $snmpver, $port, $transport);
             if (!$ret)
             {
               // Try SNMPv1
               $snmpver = 'v1';
-              return addHost($host, $snmpver, $port, $transport);
+              return add_device($host, $snmpver, $port, $transport);
             } else {
               return $ret;
             }
