@@ -70,7 +70,7 @@ if($_COOKIE['user_id'] ) { setcookie("user_id",   NULL, time()+60*60*24*14, "/")
 
 $auth_success = 0;
 
-if (isset($_SESSION['username']) && $_SESSION['password'])
+if (isset($_SESSION['username']))
 {
   if (authenticate($_SESSION['username'],$_SESSION['password']) || auth_user_level($_SESSION['origusername']) >= 10)
   {

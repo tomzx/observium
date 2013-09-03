@@ -20,9 +20,10 @@ if ($config['auth_ldap_version'])
 if ($config['auth_ldap_kerberized'])
 {
   $_SESSION['username'] = $_SERVER['REMOTE_USER'];
+  $_SESSION['authenticated'] = TRUE;
 }
 
-function authenticate($username,$password)
+function authenticate($username, $password)
 {
   global $config, $debug, $ds;
 
@@ -278,6 +279,7 @@ function ldap_dn_from_username($username)
     if ($debug) { echo("LDAP[Filter][$filter][" . trim($config['auth_ldap_suffix'],',') . "]\n"); }
     $search = ldap_search($ds, trim($config['auth_ldap_suffix'],','), $filter);
     $entries = ldap_get_entries($ds, $search);
+
     if ($entries['count'])
     {
       $cache['ldap']['dn'][$username] = $entries[0]['dn'];
