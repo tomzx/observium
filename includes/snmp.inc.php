@@ -323,7 +323,7 @@ function snmp_command ($command, $device, $oids, $options, $mib = NULL, $mibdir 
  * Uses snmpget to fetch multiple OIDs and returns a parsed array.
  *
  * @param  array  $device
- * @param  string $oids
+ * @param  array $oids
  * @param  string $options
  * @param  string $mib
  * @param  string $mibdir
@@ -336,10 +336,27 @@ function snmp_get_multi($device, $oids, $options = "-OQUs", $mib = NULL, $mibdir
 {
   global $debug,$config,$runtime_stats,$mibs_loaded;
 
-  if(is_array($oids)) { $oids = implode($oids, ' '); }
+  if(is_array($oids))
+  {
+    $data = '';
+    $oid_chunks = array_chunk($oids, 16);
+    $q=0;
+    foreach($oid_chunks as $oid_chunk)
+    {
+      $oid_text = implode($oid_chunk, ' ');
+      $cmd   = snmp_command('snmpget', $device, $oid_text, $options, $mib, $mibdir);
+      $this_data = trim(external_exec($cmd));
+      echo str_pad(strlen($this_data),5) .' '.$cmd.PHP_EOL;
+      $data .= $this_data."\n";
+      ++$q;
+    }
+    echo 'Queries: '.$q.PHP_EOL;
 
-  $cmd = snmp_command('snmpget', $device, $oids, $options, $mib, $mibdir);
-  $data = trim(external_exec($cmd));
+  } else {
+    $cmd = snmp_command('snmpget', $device, $oids, $options, $mib, $mibdir);
+    $data = trim(external_exec($cmd));
+  }
+
 
   $runtime_stats['snmpget']++;
   foreach (explode("\n", $data) as $entry)
