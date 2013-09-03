@@ -8,6 +8,6 @@ RESULT=$(curl -s "http://$HOST:$PORT/api?mode=qstatus&output=xml&apikey=$APIKEY"
 
 if [ "$RESULT" != "" ];
 then
-  echo "<<<sabnzbd-qstatus>>>"
+  echo "<<<app-sabnzbd-qstatus>>>"
   echo "$RESULT"
 fi

@@ -10,6 +10,6 @@ RESULT=$(curl --basic -u $USERNAME:$PASSWORD -s --insecure http://$HOST:$PORT/ap
 
 if [ "$RESULT" != "" ];
 then
-  echo "<<<crashplan-server>>>"
+  echo "<<<app-crashplan-server>>>"
   echo "$RESULT"
 fi
