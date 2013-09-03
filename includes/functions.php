@@ -650,11 +650,11 @@ function is_ipv4_valid($ipv4_address, $ipv4_prefixlen = NULL)
 {
   if (strpos($ipv4_address, '/') !== FALSE) { list($ipv4_address, $ipv4_prefixlen) = explode('/', $ipv4_address); }
   // False if prefix less or equal 0 and more 32
-  if (is_numeric($ipv4_prefixlen) && $ipv4_prefixlen < '1' && $ipv4_prefixlen > '32') { return FALSE; }
+  if (is_numeric($ipv4_prefixlen) && ($ipv4_prefixlen < '1' || $ipv4_prefixlen > '32')) { return FALSE; }
   // False if invalid IPv4 syntax
   if (!Net_IPv4::validateIP($ipv4_address)) { return FALSE; }
   // False if loopback
-  if ($ipv4_address == '127.0.0.1') { return FALSE; }
+  if ($ipv4_address == '127.0.0.1' || $ipv4_address == '0.0.0.0') { return FALSE; }
   return TRUE;
 }
 
@@ -662,12 +662,12 @@ function is_ipv6_valid($ipv6_address, $ipv6_prefixlen = NULL)
 {
   if (strpos($ipv6_address, '/') !== FALSE) { list($ipv6_address, $ipv6_prefixlen) = explode('/', $ipv6_address); }
   // False if prefix less or equal 0 and more 128
-  if (is_numeric($ipv6_prefixlen) && $ipv6_prefixlen < '1' && $ipv6_prefixlen > '128') { return FALSE; }
+  if (is_numeric($ipv6_prefixlen) && ($ipv6_prefixlen < '1' || $ipv6_prefixlen > '128')) { return FALSE; }
   // False if invalid IPv6 syntax
   if (!Net_IPv6::checkIPv6($ipv6_address)) { return FALSE; }
   $ipv6_type = Net_IPv6::getAddressType($ipv6_address);
   // False if link-local or loopback
-  if ($ipv6_type == NET_IPV6_LOCAL_LINK || $ipv6_type == NET_IPV6_LOOPBACK) { return FALSE; }
+  if ($ipv6_type == NET_IPV6_LOCAL_LINK || $ipv6_type == NET_IPV6_LOOPBACK || $ipv6_type == NET_IPV6_UNSPECIFIED) { return FALSE; }
   return TRUE;
 }
 
