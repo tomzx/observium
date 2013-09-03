@@ -677,7 +677,8 @@ function match_network($nets, $ip, $first=false)
 // IPv6 "20:01:07:F8:00:12:00:01:00:00:00:00:00:05:02:72" => "2001:07f8:0012:0001:0000:0000:0005:0272"
 function hex2ip($ip_snmp)
 {
-  $ip = trim(str_replace(':', ' ', $ip_snmp));
+  $ip_snmp = trim(str_replace('"', '', $ip_snmp));
+  $ip = str_replace(':', ' ', $ip_snmp);
   if (!isHexString($ip)) { return $ip_snmp; };
   
   $ip_array = explode(' ', $ip);
@@ -700,14 +701,16 @@ function hex2ip($ip_snmp)
 /// Note. Return lowercase string.
 function ip2hex($ip, $separator = ' ')
 {
-  $ip = trim($ip);
+  $ip = trim(str_replace('"', '', $ip));
   $ip_hex = '';
-  if (strstr($ip, ':'))
+  $len = strlen($separator);
+  if (strpos($ip, ':') !== FALSE)
   {
     //IPv6
     $ip_hex = str_replace(':', '', Net_IPv6::uncompress($ip, TRUE));
     $ip_hex = preg_replace('/([a-f\d]{2})/i', "$1$separator", $ip_hex);
-  } else {
+  } elseif (strpos($ip, '.') !== FALSE)
+  {
     //IPv4
     foreach (explode('.', $ip) as $dec)
     {
@@ -715,7 +718,7 @@ function ip2hex($ip, $separator = ' ')
     }
   }
 
-  $ip_hex = substr(strtolower($ip_hex), 0, -1);
+  $ip_hex = substr(strtolower($ip_hex), 0, -$len);
   if ($ip_hex)
   {
     return $ip_hex;

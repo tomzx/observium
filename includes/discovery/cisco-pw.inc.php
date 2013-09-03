@@ -28,7 +28,7 @@ if ($config['enable_pseudowires'] && $device['os_group'] == "cisco")
 
   foreach ($pws as $pw_id => $pw)
   {
-        if ($pw['cpwVcPeerAddrType'] == "ipv4") { $peer_addr = hexStringToIPv4( $pw['cpwVcPeerAddr']); }
+        if ($pw['cpwVcPeerAddrType'] == "ipv4") { $peer_addr = hex2ip($pw['cpwVcPeerAddr']); }
         #if(!empty($pw['cpwVcMplsPeerLdpID'])    { list($peer_addr) = explode(":", $pw['cpwVcMplsPeerLdpID']); }
 
         $cpw_remote_device = @mysql_result(mysql_query("SELECT device_id FROM ipv4_addresses AS A, ports AS I WHERE A.ipv4_address = '".$peer_addr."' AND A.port_id = I.port_id"),0);

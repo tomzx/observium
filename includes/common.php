@@ -5,17 +5,6 @@
 // Debugging Include. This isn't in SVN.
 if(file_exists($config['install_dir']."/includes/debug/ref.inc.php")) { include($config['install_dir']."/includes/debug/ref.inc.php"); $ref_loaded = TRUE; }
 
-// Fix this shit, it's pretty uglytarded.
-function hexStringToIPv4($string)
-{
-  $string = str_replace('"', '', $string);
-  $string = trim($string);
-  list($a,$b,$c,$d) = explode(" ", $string);
-  $ip = hexdec($a).".".hexdec($b).".".hexdec($c).".".hexdec($d);
-
-  return $ip;
-}
-
 /**
  * Percent Colour
  *
@@ -32,7 +21,6 @@ function hexStringToIPv4($string)
 
 function percent_class ($percent)
 {
-
   if($percent < "25")
   {
     $class = "info";
