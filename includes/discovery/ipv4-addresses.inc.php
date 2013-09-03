@@ -1,64 +1,144 @@
 <?php
 
-echo("IPv4 Addresses : ");
+global $debug, $cache;
 
-$oids = trim(snmp_walk($device,"ipAdEntIfIndex","-Osq","IP-MIB"));
-$oids = str_replace("ipAdEntIfIndex.", "", $oids);
-foreach (explode("\n", $oids) as $data)
+$device_id = $device['device_id'];
+// Caching ifIndex
+//FIXME. Need common caching
+$query = 'SELECT `port_id`, `ifIndex` FROM `ports` WHERE `device_id` = ? GROUP BY `port_id`';
+foreach(dbFetchRows($query, array($device_id)) as $entry)
 {
-  $data = trim($data);
-  list($oid,$ifIndex) = explode(" ", $data);
-  $mask = trim(snmp_get($device,"ipAdEntNetMask.$oid","-Oqv","IP-MIB"));
-  $addr = Net_IPv4::parseAddress("$oid/$mask");
-  $network = $addr->network . "/" . $addr->bitmask;
-  $cidr = $addr->bitmask;
-
-  if (mysql_result(mysql_query("SELECT count(*) FROM `ports` WHERE device_id = '".$device['device_id']."' AND `ifIndex` = '$ifIndex'"), 0) != '0' && $oid != "0.0.0.0" && $oid != 'ipAdEntIfIndex')
-  {
-    $i_query = "SELECT port_id FROM `ports` WHERE device_id = '".$device['device_id']."' AND `ifIndex` = '$ifIndex'";
-    $port_id = mysql_result(mysql_query($i_query), 0);
-
-    if (mysql_result(mysql_query("SELECT COUNT(*) FROM `ipv4_networks` WHERE `ipv4_network` = '$network'"), 0) < '1')
-    {
-      mysql_query("INSERT INTO `ipv4_networks` (`ipv4_network`) VALUES ('$network')");
-      #echo("Create Subnet $network\n");
-      echo("S");
-    }
-
-    $ipv4_network_id = @mysql_result(mysql_query("SELECT `ipv4_network_id` from `ipv4_networks` WHERE `ipv4_network` = '$network'"), 0);
-
-    if (mysql_result(mysql_query("SELECT COUNT(*) FROM `ipv4_addresses` WHERE `ipv4_address` = '$oid' AND `ipv4_prefixlen` = '$cidr' AND `port_id` = '$port_id'"), 0) == '0')
-    {
-      mysql_query("INSERT INTO `ipv4_addresses` (`ipv4_address`, `ipv4_prefixlen`, `ipv4_network_id`, `port_id`) VALUES ('$oid', '$cidr', '$ipv4_network_id', '$port_id')");
-      #echo("Added $oid/$cidr to $port_id ( $hostname $ifIndex )\n $i_query\n");
-      echo("+");
-    } else { echo("."); }
-
-    $full_address = "$oid/$cidr|$ifIndex";
-    $valid_v4[$full_address] = 1;
-  } else { echo("!"); }
+  $entry_if = $entry['ifIndex'];
+  if (is_numeric($entry['port_id'])) { $cache['port_index'][$device_id][$entry_if] = $entry['port_id']; }
 }
 
-$sql   = "SELECT * FROM ipv4_addresses AS A, ports AS I WHERE I.device_id = '".$device['device_id']."' AND  A.port_id = I.port_id";
-$data = mysql_query($sql);
+echo("IPv4 Addresses : ");
 
-while ($row = mysql_fetch_assoc($data))
+$ip_version = 'ipv4';
+
+// Get IP addresses from IP-MIB
+$oids_ip = array('ipAdEntIfIndex', 'ipAdEntNetMask');
+//ipAdEntIfIndex.10.0.0.130 = 193
+//ipAdEntNetMask.10.0.0.130 = 255.255.255.252
+$oid_data = array();
+foreach ($oids_ip as $oid)
 {
-  $full_address = $row['ipv4_address'] . "/" . $row['ipv4_prefixlen'] . "|" . $row['ifIndex'];
+  $oid_data = snmpwalk_cache_oid($device, $oid, $oid_data, 'IP-MIB', mib_dirs());
+}
 
-  if (!$valid_v4[$full_address])
+// Rewrite IP-MIB array
+$ip_data = array();
+foreach ($oid_data as $ip_address => $entry)
+{
+  $ifIndex = $entry['ipAdEntIfIndex'];
+  if (is_ipv4_valid($ip_address, $entry['ipAdEntNetMask']) === FALSE) { continue; }
+  $ip_data[$ifIndex][$ip_address] = $entry;
+}
+if ($debug && $ip_data) { echo "IP-MIB\n"; print_vars($ip_data); }
+
+// Caching old IPv4 addresses table
+$query = 'SELECT * FROM `ipv4_addresses` AS A
+          LEFT JOIN `ports` AS I ON A.`port_id` = I.`port_id`
+          WHERE I.`device_id` = ?';
+foreach(dbFetchRows($query, array($device_id)) as $entry)
+{
+  $old_table[$entry['ifIndex']][$entry['ipv4_address']] = $entry;
+}
+
+// Process founded IPv4 addresses
+$valid[$ip_version] = array();
+$check_networks = array();
+if (count($ip_data))
+{
+  foreach ($ip_data as $ifIndex => $addresses)
   {
-    echo("-");
-    $query = @mysql_query("DELETE FROM `ipv4_addresses` WHERE `ipv4_address_id` = '".$row['ipv4_address_id']."'");
-    if (!mysql_result(mysql_query("SELECT count(*) FROM ipv4_addresses WHERE ipv4_network_id = '".$row['ipv4_network_id']."'"),0))
+    if (!isset($cache['port_index'][$device_id][$ifIndex])) { continue; } // continue if ifIndex not found
+    $port_id = $cache['port_index'][$device_id][$ifIndex];
+    foreach ($addresses as $ipv4_address => $entry)
     {
-      $query = @mysql_query("DELETE FROM `ipv4_networks` WHERE `ipv4_network_id` = '".$row['ipv4_network_id']."'");
+      $update_array = array();
+      $ipv4_mask = $entry['ipAdEntNetMask'];
+      $addr = Net_IPv4::parseAddress($ipv4_address.'/'.$ipv4_mask);
+      $ipv4_prefixlen = $addr->bitmask;
+      $ipv4_network = $addr->network . '/' . $ipv4_prefixlen;
+      $full_address = $ipv4_address . '/' . $ipv4_prefixlen;
+
+      // First check networks
+      $ipv4_network_id = dbFetchCell('SELECT `ipv4_network_id` FROM `ipv4_networks` WHERE `ipv4_network` = ?', array($ipv4_network));
+      if (empty($ipv4_network_id))
+      {
+        $ipv4_network_id = dbInsert(array('ipv4_network' => $ipv4_network), 'ipv4_networks');
+        echo('N');
+      }
+      // Check IPs in DB
+      if (isset($old_table[$ifIndex][$ipv4_address]))
+      {
+        foreach(array('ipv4_prefixlen', 'ipv4_network_id', 'port_id') as $param)
+        {
+          if ($old_table[$ifIndex][$ipv4_address][$param] != $$param) { $update_array[$param] = $$param; }
+        }
+        if (count($update_array))
+        {
+          // Updated
+          dbUpdate($update_array, 'ipv4_addresses', '`ipv4_address_id` = ?', array($old_table[$ifIndex][$ipv4_address]['ipv4_address_id']));
+          if (isset($update_array['port_id']))
+          {
+            log_event("IPv4 remove: $ipv4_address/".$old_table[$ifIndex][$ipv4_address]['ipv4_prefixlen'], $device, 'interface', $old_table[$ifIndex][$ipv4_address]['port_id']);
+            log_event("IPv4 add: $full_address", $device, 'interface', $port_id);
+          } else {
+            log_event("IPv4 change: $ipv4_address/".$old_table[$ifIndex][$ipv4_address]['ipv4_prefixlen']." -> $full_address", $device, 'interface', $port_id);
+          }
+          echo('U');
+          $check_networks[$ipv4_network_id] = 1;
+        } else {
+          // Not changed
+          echo('.');
+        }
+      } else {
+        // New IP
+        foreach(array('ipv4_address', 'ipv4_prefixlen', 'ipv4_network_id', 'port_id') as $param)
+        {
+          $update_array[$param] = $$param;
+        }
+        dbInsert($update_array, 'ipv4_addresses');
+        log_event("IPv4 add: $full_address", $device, 'interface', $port_id);
+        echo('+');
+      }
+      $valid_address = $full_address . '-' . $port_id;
+      $valid[$ip_version][$valid_address] = 1;
     }
   }
 }
 
-echo("\n");
+// Refetch and clean IP addresses from DB
+foreach(dbFetchRows($query, array($device_id)) as $entry)
+{
+  $full_address = $entry['ipv4_address'] . '/' . $entry['ipv4_prefixlen'];
+  $port_id = $entry['port_id'];
+  $valid_address = $full_address  . '-' . $port_id;
+  if (!isset($valid[$ip_version][$valid_address]))
+  {
+    // Delete IP
+    dbDelete('ipv4_addresses', '`ipv4_address_id` = ?', array($entry['ipv4_address_id']));
+    log_event("IPv4 remove: $full_address", $device, 'interface', $port_id);
+    echo('-');
+    $check_networks[$entry['ipv4_network_id']] = 1;
+  }
+}
+// Clean networks
+if (count($check_networks))
+{
+  foreach ($check_networks as $network_id => $n)
+  {
+    $count = dbFetchCell('SELECT COUNT(*) FROM `ipv4_addresses` WHERE `ipv4_network_id` = ?', array($network_id));
+    if (empty($count))
+    {
+      dbDelete('ipv4_networks', '`ipv4_network_id` = ?', array($network_id));
+      echo('n');
+    }
+  }
+}
 
-unset($valid_v4);
+echo(PHP_EOL);
 
 ?>

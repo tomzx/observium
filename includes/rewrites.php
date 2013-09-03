@@ -1356,6 +1356,11 @@ $rewrite_oids = array(
     'f10BgpM2PrefixOutPrefixes'         => '.1.3.6.1.4.1.6027.20.1.2.6.2.1.10',
     'f10BgpM2PrefixCountersSafi'        => '.1.3.6.1.4.1.6027.20.1.2.6.2.1.2',
     'f10BgpM2CfgPeerAdminStatus'        => '.1.3.6.1.4.1.6027.20.1.2.8.1.1.1'
+  ),
+  // IPV6-MIB
+  'IPV6-MIB' => array(
+    'ipv6AddrPfxLength'                 => '.1.3.6.1.2.1.55.1.8.1.2',
+    'ipv6AddrType'                      => '.1.3.6.1.2.1.55.1.8.1.3'
   )
 );
 
