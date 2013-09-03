@@ -334,25 +334,25 @@ function humanize_port(&$port)
   $port['out_rate'] = $port['ifOutOctets_rate'] * 8;
 
   // Colour in bps based on speed if > 50, else by UI convention.
-  $in_perc  = round($port['in_rate']/$port['ifSpeed']*100);
+  $in_perc = round($port['in_rate']/$port['ifSpeed']*100);
   if($port['in_rate'] == 0)
   {
     $port['bps_in_style'] = '';
   } elseif ($in_perc < '50') {
     $port['bps_in_style'] = 'color: #008C00;';
   } else {
-    $port['bps_in_style'] = 'color: ' . percent_colour(round($port['in_rate']/$port['ifSpeed']*100)) .'; ';
+    $port['bps_in_style'] = 'color: ' . percent_colour($in_perc) . '; ';
   }
 
   // Colour out bps based on speed if > 50, else by UI convention.
-  $out_perc  = round($port['out_rate']/$port['ifSpeed']*100);
+  $out_perc = round($port['out_rate']/$port['ifSpeed']*100);
   if($port['out_rate'] == 0)
   {
     $port['bps_out_style'] = '';
   } elseif ($out_perc < '50') {
     $port['bps_out_style'] = 'color: #394182;';
   } else {
-    $port['bps_out_style'] = 'color: ' . percent_colour(round($port['out_rate']/$port['ifSpeed']*100)) .'; ';
+    $port['bps_out_style'] = 'color: ' . percent_colour($out_perc) . '; ';
   }
 
   // Colour in and out pps based on UI convention

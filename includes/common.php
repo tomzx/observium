@@ -37,8 +37,11 @@ function percent_class ($percent)
   return $class;
 }
 
-function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdColourHex = '00')
+function percent_colour($value, $brightness = 128, $max = 100, $min = 0, $thirdColourHex = '00')
 {
+    if ($value > $max) { $value = $max; }
+    if ($value < $min) { $value = $min; }
+
     // Calculate first and second colour (Inverse relationship)
     $first = (1-($value/$max))*$brightness;
     $second = ($value/$max)*$brightness;
@@ -58,7 +61,6 @@ function percent_colour($value,$brightness = 128, $max = 100,$min = 0, $thirdCol
     // alternatives:
     // return $thirdColourHex . $firstHex . $secondHex;
     // return $firstHex . $thirdColourHex . $secondHex;
-
 }
 
 // Observium's SQL debugging. Choses nice output depending upon web or cli
