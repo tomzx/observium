@@ -144,11 +144,11 @@ if (count($ip_data))
           dbUpdate($update_array, 'ipv6_addresses', '`ipv6_address_id` = ?', array($old_table[$ifIndex][$ipv6_address]['ipv6_address_id']));
           if (isset($update_array['port_id']))
           {
-            log_event("IPv6 remove: $ipv6_compressed/".$old_table[$ifIndex][$ipv6_address]['ipv6_prefixlen'], $device, 'interface', $old_table[$ifIndex][$ipv6_address]['port_id']);
-            log_event("IPv6 add: $full_compressed", $device, 'interface', $port_id);
+            log_event("IPv6 removed: $ipv6_compressed/".$old_table[$ifIndex][$ipv6_address]['ipv6_prefixlen'], $device, 'interface', $old_table[$ifIndex][$ipv6_address]['port_id']);
+            log_event("IPv6 added: $full_compressed", $device, 'interface', $port_id);
           } elseif (isset($update_array['ipv6_prefixlen']))
           {
-            log_event("IPv6 change: $ipv6_compressed/".$old_table[$ifIndex][$ipv6_address]['ipv6_prefixlen']." -> $full_compressed", $device, 'interface', $port_id);
+            log_event("IPv6 changed: $ipv6_compressed/".$old_table[$ifIndex][$ipv6_address]['ipv6_prefixlen']." -> $full_compressed", $device, 'interface', $port_id);
           }
           echo('U');
           $check_networks[$ipv6_network_id] = 1;
@@ -163,7 +163,7 @@ if (count($ip_data))
           $update_array[$param] = $$param;
         }
         dbInsert($update_array, 'ipv6_addresses');
-        log_event("IPv6 add: $full_compressed", $device, 'interface', $port_id);
+        log_event("IPv6 added: $full_compressed", $device, 'interface', $port_id);
         echo('+');
       }
       $valid_address = $full_address . '-' . $port_id;
@@ -182,7 +182,7 @@ foreach(dbFetchRows($query, array($device_id)) as $entry)
   {
     // Delete IP
     dbDelete('ipv6_addresses', '`ipv6_address_id` = ?', array($entry['ipv6_address_id']));
-    log_event("IPv6 remove: $full_compressed", $device, 'interface', $port_id);
+    log_event("IPv6 removed: $full_compressed", $device, 'interface', $port_id);
     echo('-');
     $check_networks[$entry['ipv6_network_id']] = 1;
   }

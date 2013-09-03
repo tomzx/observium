@@ -654,7 +654,7 @@ function is_ipv4_valid($ipv4_address, $ipv4_prefixlen = NULL)
   // False if invalid IPv4 syntax
   if (!Net_IPv4::validateIP($ipv4_address)) { return FALSE; }
   // False if loopback
-  if ($ipv4_address == '127.0.0.1' || $ipv4_address == '0.0.0.0') { return FALSE; }
+  if ($ipv4_address == '0.0.0.0') { return FALSE; }
   return TRUE;
 }
 

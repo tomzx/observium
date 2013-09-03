@@ -83,10 +83,10 @@ if (count($ip_data))
           dbUpdate($update_array, 'ipv4_addresses', '`ipv4_address_id` = ?', array($old_table[$ifIndex][$ipv4_address]['ipv4_address_id']));
           if (isset($update_array['port_id']))
           {
-            log_event("IPv4 remove: $ipv4_address/".$old_table[$ifIndex][$ipv4_address]['ipv4_prefixlen'], $device, 'interface', $old_table[$ifIndex][$ipv4_address]['port_id']);
-            log_event("IPv4 add: $full_address", $device, 'interface', $port_id);
+            log_event("IPv4 removed: $ipv4_address/".$old_table[$ifIndex][$ipv4_address]['ipv4_prefixlen'], $device, 'interface', $old_table[$ifIndex][$ipv4_address]['port_id']);
+            log_event("IPv4 added: $full_address", $device, 'interface', $port_id);
           } else {
-            log_event("IPv4 change: $ipv4_address/".$old_table[$ifIndex][$ipv4_address]['ipv4_prefixlen']." -> $full_address", $device, 'interface', $port_id);
+            log_event("IPv4 changed: $ipv4_address/".$old_table[$ifIndex][$ipv4_address]['ipv4_prefixlen']." -> $full_address", $device, 'interface', $port_id);
           }
           echo('U');
           $check_networks[$ipv4_network_id] = 1;
@@ -101,7 +101,7 @@ if (count($ip_data))
           $update_array[$param] = $$param;
         }
         dbInsert($update_array, 'ipv4_addresses');
-        log_event("IPv4 add: $full_address", $device, 'interface', $port_id);
+        log_event("IPv4 added: $full_address", $device, 'interface', $port_id);
         echo('+');
       }
       $valid_address = $full_address . '-' . $port_id;
@@ -120,7 +120,7 @@ foreach(dbFetchRows($query, array($device_id)) as $entry)
   {
     // Delete IP
     dbDelete('ipv4_addresses', '`ipv4_address_id` = ?', array($entry['ipv4_address_id']));
-    log_event("IPv4 remove: $full_address", $device, 'interface', $port_id);
+    log_event("IPv4 removed: $full_address", $device, 'interface', $port_id);
     echo('-');
     $check_networks[$entry['ipv4_network_id']] = 1;
   }
