@@ -258,9 +258,9 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
     {
       $ipv6_network_id = $net['ipv6_network_id'];
       $sql = "SELECT P.`port_id`, P.`device_id` FROM `ipv6_addresses` AS A, `ipv6_networks` AS N, `ports` AS P
-              WHERE A.`port_id` = P.`port_id` AND P.device_id = ?
+              WHERE A.`port_id` = P.`port_id` AND P.device_id != ?
               AND A.`ipv6_network_id` = ? AND N.`ipv6_network_id` = A.`ipv6_network_id`
-              AND P.`ifAdminStatus` = 'up' AND A.ipv6_origin != 'linklayer' AND A.ipv6_origin != 'wellknown'";
+              AND P.`ifAdminStatus` = 'up' AND A.`ipv6_origin` != 'linklayer' AND A.`ipv6_origin` != 'wellknown'";
 
       $params = array($device['device_id'], $net['ipv6_network_id']);
 
