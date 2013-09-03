@@ -2,8 +2,7 @@
 
 if ($device['os'] == "netscaler")
 {
-  echo(" NetScaler ");
-  echo(" Caching OIDs:");
+  echo(" NS-ROOT-MIB ");
 
   if (!is_array($ns_sensor_array))
   {

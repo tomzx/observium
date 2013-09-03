@@ -2,7 +2,7 @@
 
 if ($device['os'] == "linux")
 {
-  echo("LM-SENSORS-MIB ");
+  echo(" LM-SENSORS-MIB ");
 
   $oids = snmp_walk($device, "lmTempSensorsDevice", "-Osqn", "LM-SENSORS-MIB");
   if ($debug) { echo($oids."\n"); }

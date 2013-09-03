@@ -4,7 +4,7 @@ if ($device['os'] == "papouch")
 {
   echo("Papouch ");
   
-  echo("TME ");
+  echo(" TME ");
 
   $descr = snmp_get($device, "SNMPv2-SMI::enterprises.18248.1.1.3.0", "-Oqv");
   $temperature = snmp_get($device, "SNMPv2-SMI::enterprises.18248.1.1.1.0", "-Oqv") / 10;
@@ -16,7 +16,7 @@ if ($device['os'] == "papouch")
     discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, "1", 'papouch-tme', $descr, '10', '1', NULL, NULL, NULL, NULL, $temperature);
   }
 
-  echo("TH2E ");
+  echo(" TH2E ");
 
   $temperature = snmp_get($device, "SNMPv2-SMI::enterprises.18248.20.1.2.1.1.2.1", "-Oqv") / 10;
 

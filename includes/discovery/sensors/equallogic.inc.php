@@ -6,7 +6,7 @@ $eqlgrpmemid = get_dev_attrib($device, 'eqlgrpmemid');
 
 if ($device['os'] == "equallogic" && (isset($eqlgrpmemid)))
 {
-  echo("EQLMEMBER-MIB ");
+  echo(" EQLMEMBER-MIB ");
   $oids = snmpwalk_cache_oid($device, "eqlMemberHealthDetailsFanTable", array(), "EQLMEMBER-MIB", mib_dirs("equallogic") );
 
   // copy of eqlMemberHealthDetailsFanIndex
@@ -93,5 +93,3 @@ if ($device['os'] == "equallogic" && (isset($eqlgrpmemid)))
     }
   }
 }
-
-?>

@@ -13,7 +13,7 @@ if ($device['os'] == "powerconnect")
   $index = 0;
   foreach (explode("\n",$temps) as $oids)
   {
-    echo("Powerconnect ");
+    echo(" FASTPATH-BOXSERVICES-PRIVATE-MIB ");
     list($oid,$current) = explode(' ',$oids);
     $divisor = "1";
     $multiplier = "1";

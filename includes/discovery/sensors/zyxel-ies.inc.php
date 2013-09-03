@@ -2,7 +2,7 @@
 
 if ($device['os'] == 'ies')
 {
-  echo("ZyXEL IES ");
+  echo(" ZYXEL-AS-MIB ");
 
   $oids = array();
 

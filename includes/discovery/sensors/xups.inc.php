@@ -3,7 +3,7 @@
 // XUPS-MIB
 if ($device['os'] == "powerware")
 {
-  echo("XUPS-MIB ");
+  echo(" XUPS-MIB ");
 
   $oids = snmp_walk($device, "xupsBatCurrent", "-Osqn", "XUPS-MIB");
   if ($debug) { echo($oids."\n"); }

@@ -2,7 +2,8 @@
 
 if ($device['os'] == "asyncos")
 {
-  echo("ASYNCOS-MAIL-MIB ");
+  echo(" ASYNCOS-MAIL-MIB ");
+
   $oids = snmpwalk_cache_oid($device, "fanTable", array(), "ASYNCOS-MAIL-MIB");
 
   if (is_array($oids))
