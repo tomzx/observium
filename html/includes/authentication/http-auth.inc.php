@@ -3,7 +3,6 @@
 if (isset($_SERVER['REMOTE_USER']))
 {
   $_SESSION['username'] = mres($_SERVER['REMOTE_USER']);
-  $_SESSION['authenticated'] = TRUE;
 }
 else        
 {

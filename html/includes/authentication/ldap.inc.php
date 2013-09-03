@@ -20,7 +20,6 @@ if ($config['auth_ldap_version'])
 if ($config['auth_ldap_kerberized'])
 {
   $_SESSION['username'] = $_SERVER['REMOTE_USER'];
-  $_SESSION['authenticated'] = TRUE;
 }
 
 function authenticate($username, $password)

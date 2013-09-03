@@ -77,7 +77,7 @@ if (isset($_SESSION['username']))
     $_SESSION['userlevel'] = auth_user_level($_SESSION['username']);
     $_SESSION['user_id'] = auth_user_id($_SESSION['username']);
 
-    if($_SESSION['cookie_test']) { $_SESSION['cookie_auth']; }
+    if ($_SESSION['cookie_test']) { $_SESSION['cookie_auth']; }
     if (!$_SESSION['authenticated'])
     {
       $_SESSION['authenticated'] = true;
