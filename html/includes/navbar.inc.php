@@ -512,9 +512,15 @@ if ($_SESSION['userlevel'] >= 10)
   echo('<li class="dropdown-submenu">');
   echo('  <a tabindex="-1" href="'.generate_url(array('page'=>'adduser')).'"><i class="oicon-users"></i> Users</a>');
   echo('  <ul class="dropdown-menu">');
-  echo('    <li><a href="'.generate_url(array('page'=>'adduser')).'"><i class="oicon-user--plus"></i> Add User</a></li>');
+  if (auth_usermanagement())
+  {
+    echo('    <li><a href="'.generate_url(array('page'=>'adduser')).'"><i class="oicon-user--plus"></i> Add User</a></li>');
+  }
   echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="oicon-user--pencil"></i> Edit User</a></li>');
-  echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="oicon-user--minus"></i> Remove User</a></li>');
+  if (auth_usermanagement())
+  {
+    echo('    <li><a href="'.generate_url(array('page'=>'edituser')).'"><i class="oicon-user--minus"></i> Remove User</a></li>');
+  }
   echo('    <li><a href="'.generate_url(array('page'=>'authlog')).'"><i class="oicon-user-detective"></i> Authentication Log</a></li>');
   echo('  </ul>');
   echo('</li>');
