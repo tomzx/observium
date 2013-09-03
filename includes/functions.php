@@ -653,7 +653,7 @@ function is_ipv4_valid($ipv4_address, $ipv4_prefixlen = NULL)
   if (is_numeric($ipv4_prefixlen) && ($ipv4_prefixlen < '1' || $ipv4_prefixlen > '32')) { return FALSE; }
   // False if invalid IPv4 syntax
   if (!Net_IPv4::validateIP($ipv4_address)) { return FALSE; }
-  // False if loopback
+  // False if 0.0.0.0
   if ($ipv4_address == '0.0.0.0') { return FALSE; }
   return TRUE;
 }
@@ -666,8 +666,8 @@ function is_ipv6_valid($ipv6_address, $ipv6_prefixlen = NULL)
   // False if invalid IPv6 syntax
   if (!Net_IPv6::checkIPv6($ipv6_address)) { return FALSE; }
   $ipv6_type = Net_IPv6::getAddressType($ipv6_address);
-  // False if link-local or loopback
-  if ($ipv6_type == NET_IPV6_LOCAL_LINK || $ipv6_type == NET_IPV6_LOOPBACK || $ipv6_type == NET_IPV6_UNSPECIFIED) { return FALSE; }
+  // False if link-local
+  if ($ipv6_type == NET_IPV6_LOCAL_LINK || $ipv6_type == NET_IPV6_UNSPECIFIED) { return FALSE; }
   return TRUE;
 }
 
