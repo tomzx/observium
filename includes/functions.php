@@ -175,7 +175,7 @@ function get_device_os($device)
   {
     foreach ($config['os'][$cos]['sysObjectID'] as $oid)
     {
-      if (strstr($sysObjectId, $oid)) { $os = $cos; break 2; }
+      if (strpos($sysObjectId, $oid) === 0) { $os = $cos; break 2; }
     }
   }
 

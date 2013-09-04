@@ -434,6 +434,7 @@ $config['os'][$os]['group']             = "vrp";
 $config['os'][$os]['text']              = "Huawei VRP";
 $config['os'][$os]['type']              = "network";
 $config['os'][$os]['icon']              = "huawei";
+$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.2011.2.";
 
 // ZTE
 
@@ -909,7 +910,8 @@ $config['os'][$os]['over'][1]['graph']  = "device_processor";
 $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory";
-$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.11.2.3.7.11";
+$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.11.2.3.7.11.";
+$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.11.2.3.7.8.";
 
 $os = "h3c";
 $config['os'][$os]['text']              = "H3C Comware";
@@ -922,6 +924,7 @@ $config['os'][$os]['over'][1]['text']   = "CPU Usage";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory";
 $config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.2011.10";
+$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.25506.1.";
 
 $os = "hh3c";
 $config['os'][$os]['text']              = "HP Comware";

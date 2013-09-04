@@ -341,9 +341,6 @@ function generate_url($vars, $new_vars = array())
   $url = $vars['page'];
   if ($url[strlen($url)-1] !== '/') { $url .= '/'; }
   unset($vars['page']);
-  /// FIXME - No idea why these appear. Try to fix them later. They're from the date picker in graphs.
-  unset($vars['?preset']);
-  unset($vars['preset']);
 
   foreach ($vars as $var => $value)
   {
