@@ -88,17 +88,24 @@ $segments = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 foreach ($segments as $pos => $segment)
 {
   $segment = urldecode($segment);
-  if ($pos == "0" && !strpos($segment, '='))
+  if ($pos == "0" && strpos($segment, '=') === FALSE)
   {
     $vars['page'] = $segment;
   } else {
-    list($name, $value) = explode("=", $segment);
+    list($name, $value) = explode('=', $segment, 2);
 
-    if ($value == "" || !isset($value))
+    if (!isset($value) || $value === '')
     {
-      $vars[$name] = yes;
+      $vars[$name] = 'yes';
     } else {
       $vars[$name] = urldecode($value);
+      // Override $value if this is base64 encoded json string.
+      $value = base64_decode($vars[$name]);
+      if (preg_match('/^[\[\{]\"/', $value))
+      {
+        $value = json_decode($value, TRUE);
+        if (is_array($value)) { $vars[$name] = $value; }
+      }
     }
   }
 }

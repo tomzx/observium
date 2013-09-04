@@ -11,13 +11,8 @@ $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
                     'tab' => 'ports');
 
-if (isset($vars['filters']))
-{
-  $filters_array = json_decode(base64_decode($vars['filters']), TRUE);
-} else {
-  $filters_array = array('deleted' => TRUE);
-}
-$link_array['filters'] = base64_encode(json_encode($filters_array));
+$filters_array = (isset($vars['filters'])) ? $vars['filters'] : array('deleted' => TRUE);
+$link_array['filters'] = $filters_array;
 
 $navbar = array('brand' => "Ports", 'class' => "navbar-narrow");
 
@@ -114,7 +109,7 @@ if (isset($vars['view']) && ($vars['view'] == 'basic' || $vars['view'] == 'detai
     } elseif ($option == 'all') {
       $option_array = $option_all;
     }
-    $navbar['options_right']['filters']['suboptions'][$option]['url'] = generate_url($vars, array('filters' => base64_encode(json_encode($option_array))));
+    $navbar['options_right']['filters']['suboptions'][$option]['url'] = generate_url($vars, array('filters' => $option_array));
   }
 }
 

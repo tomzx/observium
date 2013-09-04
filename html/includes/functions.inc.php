@@ -338,7 +338,8 @@ function generate_url($vars, $new_vars = array())
 {
   $vars = ($vars) ? array_merge($vars, $new_vars) : $new_vars;
 
-  $url = $vars['page']."/";
+  $url = $vars['page'];
+  if ($url[strlen($url)-1] !== '/') { $url .= '/'; }
   unset($vars['page']);
   /// FIXME - No idea why these appear. Try to fix them later. They're from the date picker in graphs.
   unset($vars['?preset']);
@@ -346,9 +347,12 @@ function generate_url($vars, $new_vars = array())
 
   foreach ($vars as $var => $value)
   {
-    if ($value == "0" || $value != "" && strstr($var, "opt") === FALSE && is_numeric($var) === FALSE)
+    if (is_array($value))
     {
-      $url .= urlencode($var) ."=".urlencode($value)."/";
+      $url .= urlencode($var) . '=' . base64_encode(json_encode($value)) . '/';
+    } elseif ($value == "0" || $value != "" && strstr($var, "opt") === FALSE && is_numeric($var) === FALSE)
+    {
+      $url .= urlencode($var) . '=' . urlencode($value).'/';
     }
   }
 
