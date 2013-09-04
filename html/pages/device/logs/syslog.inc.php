@@ -27,7 +27,7 @@ if ($timestamp_min)
                     'value'   => $vars['message']);
   //Priority field
   //$priorities[''] = 'All Priorities';
-  foreach (syslog_priorities() as $p => $priority)
+  foreach ($config['syslog']['priorities'] as $p => $priority)
   {
     if ($p > 7) { continue; }
     $priorities[$p] = ucfirst($priority['name']);
@@ -61,7 +61,7 @@ if ($timestamp_min)
                     'from'    => $vars['timestamp_from'],
                     'to'      => $vars['timestamp_to']);
 
-  print_search_simple($search);
+  print_search_simple($search, 'Syslog');
 
   // Pagination
   $vars['pagination'] = TRUE;

@@ -20,7 +20,7 @@ $search[] = array('type'    => 'text',
                   'value'   => $vars['message']);
 //Priority field
 //$priorities[''] = 'All Priorities';
-foreach (syslog_priorities() as $p => $priority)
+foreach ($config['syslog']['priorities'] as $p => $priority)
 {
   if ($p > 7) { continue; }
   $priorities[$p] = ucfirst($priority['name']);

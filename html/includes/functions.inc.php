@@ -94,33 +94,6 @@ function format_unixtime($time, $format = NULL)
   }
 }
 
-
-/**
- * Return array with syslog priorities.
- *
- * This function return array with syslog priority names and colors.
- *
- * @param none
- * @return array
- */
-function syslog_priorities()
-{
-  $priorities['0'] = array('name' => 'emergencies',   'color' => '#FF0000');
-  $priorities['1'] = array('name' => 'alerts',        'color' => '#EE2222');
-  $priorities['2'] = array('name' => 'critical',      'color' => '#DD3333');
-  $priorities['3'] = array('name' => 'errors',        'color' => '#BB4444');
-  $priorities['4'] = array('name' => 'warnings',      'color' => '#AA5555');
-  $priorities['5'] = array('name' => 'notifications', 'color' => '#555599');
-  $priorities['6'] = array('name' => 'informational', 'color' => '#00FF00');
-  $priorities['7'] = array('name' => 'debugging',     'color' => '#0000FF');
-  for ($i = 8; $i < 16; $i++)
-  {
-    $priorities[$i] = array('name' => 'other',        'color' => '#D2D8F9');
-  }
-
-  return $priorities;
-}
-
 // Old percent_colour
 //function percent_colour($percent)
 //{

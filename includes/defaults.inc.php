@@ -536,10 +536,14 @@ $config['ignore_mount_network']   = 1; // Ignore network mounted storage
 
 // Syslog Settings
 
-$config['syslog_filter'][] = "last message repeated";
-$config['syslog_filter'][] = "Connection from UDP: [";
-$config['syslog_filter'][] = "ipSystemStatsTable node ipSystemStatsOutFragOKs not implemented";
-$config['syslog_filter'][] = "diskio.c";  // Ignore some crappy stuff from SNMP daemon
+$config['syslog']['filter'][] = 'last message repeated';
+$config['syslog']['filter'][] = 'Connection from UDP: [';
+$config['syslog']['filter'][] = 'ipSystemStatsTable node ipSystemStatsOutFragOKs not implemented';
+$config['syslog']['filter'][] = 'diskio.c';  // Ignore some crappy stuff from SNMP daemon
+$config['syslog']['filter'][] = '/run/user/lightdm/gvfs: Permission denied';
+$config['syslog']['filter'][] = "Could not open output pipe '/dev/xconsole'";
+
+$config['syslog']['fifo']  = FALSE;       // Set this to a FIFO to take input from FIFO
 
 // Virtualization
 

@@ -58,15 +58,16 @@
  *
  */
 
-function print_search_simple($data, $title = '', $button = 'search')
+function print_search_simple($data, $title = NULL, $button = 'search')
 {
+
   // Form header
   $string = PHP_EOL . '<!-- START search form -->' . PHP_EOL;
   $string .= '<form method="POST" action="" class="form form-inline">' . PHP_EOL;
   $string .= '<div class="navbar">' . PHP_EOL;
   $string .= '<div class="navbar-inner">';
   $string .= '<div class="container">';
-  if ($title) { $string .= '  <a class="brand">' . $title . '</a>' . PHP_EOL; }
+  if (isset($title)) { $string .= '  <a class="brand">' . $title . '</a>' . PHP_EOL; }
 
   $string .= '<div class="nav" style="margin: 5px 0 5px 0;">';
 

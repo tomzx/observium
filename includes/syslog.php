@@ -59,7 +59,7 @@ function process_syslog($entry, $update)
 {
   global $config, $dev_cache;
 
-  foreach ($config['syslog_filter'] as $bi)
+  foreach ($config['syslog']['filter'] as $bi)
   {
     if (strpos($entry['msg'], $bi) !== FALSE)
     {

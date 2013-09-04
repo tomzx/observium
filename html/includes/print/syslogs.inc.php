@@ -28,6 +28,7 @@
  */
 function print_syslogs($vars)
 {
+
   // Short events? (no pagination, small out)
   $short = (isset($vars['short']) && $vars['short']);
   // With pagination? (display page numbers in header)
@@ -36,7 +37,7 @@ function print_syslogs($vars)
   $pagesize = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
   $start = $pagesize * $pageno - $pagesize;
 
-  $priorities = syslog_priorities();
+  $priorities = $GLOBALS['config']['syslog']['priorities'];
 
   $param = array();
   $where = ' WHERE 1 ';
@@ -113,8 +114,21 @@ function print_syslogs($vars)
 
   // Query syslog messages
   $entries = dbFetchRows($query, $param);
-  // Query syslog count
-  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
+  $count = count($entries);
+
+ if(!$count)
+ {
+
+  // There have been no entries returned. Print the warning.
+
+  print_warning('<h4>No syslog entries found!</h4>
+Check that the syslog daemon and Observium configuration options are set correctly, that your devices are configured to send syslog to Observium and that there are no firewalls blocking the messages.
+
+See <a href="http://www.observium.org/wiki/Category:Documentation" target="_blank">documentation</a> and <a href="http://www.observium.org/wiki/Configuration_Options#Syslog_Settings" target="_blank">configuration options</a> for more information.');
+
+ } else {
+
+  // Entries have been returned. Print the table.
 
   $list = array('device' => FALSE, 'priority' => TRUE); // For now (temporarily) priority always displayed
   if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'syslog') { $list['device'] = TRUE; }
@@ -155,7 +169,7 @@ function print_syslogs($vars)
     }
     if ($list['priority'])
     {
-      if (!$short) { $string .= '    <td style="color: ' . $priorities[$entry['priority']]['color'] . ';">(' . $entry['priority'] . ')&nbsp;' . $priorities[$entry['priority']]['name'] . '</td>' . PHP_EOL; }
+      if (!$short) { $string .= '    <td style="color: ' . $priorities[$entry['priority']]['color'] . ';">' . nicecase($priorities[$entry['priority']]['name']) . ' (' . $entry['priority'] . ')</td>' . PHP_EOL; }
     }
     if ($short)
     {
@@ -175,7 +189,10 @@ function print_syslogs($vars)
   if ($pagination && !$short) { echo pagination($vars, $count); }
 
   // Print syslog
-  echo($string);
+  echo $string;
+
+ }
+
 }
 
 ?>

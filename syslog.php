@@ -20,7 +20,17 @@ include($config['install_dir'] . "/includes/functions.php");
 
 $i = 1;
 
-$s = fopen('php://stdin','r');
+if($config['syslog']['fifo'] !== FALSE)
+{
+  // FIFO configured, try to grab logs from it
+  echo 'Opening FIFO: '.$config['syslog']['fifo'].PHP_EOL;
+  $s = fopen($config['syslog']['fifo'],'r');
+} else {
+  // No FIFO configured, take logs from stdin
+  echo 'Opening STDIN'.PHP_EOL;
+  $s = fopen('php://stdin','r');
+}
+
 while ($line = fgets($s))
 {
   //logfile($line);
