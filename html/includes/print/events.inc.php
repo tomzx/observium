@@ -46,11 +46,11 @@ function print_events($vars)
       {
         case 'device':
         case 'device_id':
-          $where .= ' AND E.device_id = ?';
+          $where .= ' AND E.`device_id` = ?';
           $param[] = $value;
           break;
         case 'port':
-          $where .= ' AND E.reference = ?';
+          $where .= ' AND E.`reference` = ?';
           $param[] = $value;
           break;
         case 'type':
@@ -58,7 +58,7 @@ function print_events($vars)
           $where .= ' AND (';
           foreach ($value as $v)
           {
-            $where .= "E.type = ? OR ";
+            $where .= "E.`type` = ? OR ";
             $param[] = $v;
           }
           $where = substr($where, 0, -4) . ')';
@@ -90,26 +90,26 @@ function print_events($vars)
     $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
-    $query_user = ' AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN `devices_perms` AS P ON D.`device_id` = P.`device_id` ';
+    $query_user = ' AND P.`user_id` = ? ';
     $param[] = $_SESSION['user_id'];
   }
 
   // Don't show ignored and disabled devices
   if ($vars['page'] != 'device')
   {
-    $query_device = ' AND D.ignore = 0 ';
-    if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+    $query_device = ' AND D.`ignore` = 0 ';
+    if (!$config['web_show_disabled']) { $query_device .= 'AND D.`disabled` = 0 '; }
   }
 
   $query = 'FROM `eventlog` AS E ';
-  $query .= 'LEFT JOIN `devices` AS D ON E.device_id = D.device_id ';
+  $query .= 'LEFT JOIN `devices` AS D ON E.`device_id` = D.`device_id` ';
   $query .= $query_perms;
   $query .= $where . $query_device . $query_user;
-  $query_count = 'SELECT COUNT(event_id) '.$query;
+  $query_count = 'SELECT COUNT(`event_id`) '.$query;
 
   /// FIXME Mike: bad table column `type` they intersect with table `devices`
-  $query = 'SELECT STRAIGHT_JOIN E.device_id, E.timestamp, E.message, E.type, E.reference '.$query;
+  $query = 'SELECT STRAIGHT_JOIN E.* '.$query;
   $query .= ' ORDER BY `event_id` DESC ';
   $query .= "LIMIT $start,$pagesize";
 
@@ -118,82 +118,92 @@ function print_events($vars)
 
   // Query events count
   if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
+  else { $count = count($entries); }
 
-  $list = array('device' => FALSE, 'port' => FALSE);
-  if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'eventlog') { $list['device'] = TRUE; }
-  if ($short || !isset($vars['port']) || empty($vars['port'])) { $list['port'] = TRUE; }
-
-  $string = '<table class="table table-bordered table-striped table-hover table-condensed-more">' . PHP_EOL;
-  if (!$short)
+  if(!$count)
   {
-    $string .= '  <thead>' . PHP_EOL;
-    $string .= '    <tr>' . PHP_EOL;
-    $string .= '      <th>Date</th>' . PHP_EOL;
-    if ($list['device']) { $string .= '      <th>Device</th>' . PHP_EOL; }
-    if ($list['port'])   { $string .= '      <th>Entity</th>' . PHP_EOL; }
-    $string .= '      <th>Message</th>' . PHP_EOL;
-    $string .= '    </tr>' . PHP_EOL;
-    $string .= '  </thead>' . PHP_EOL;
-  }
-  $string   .= '  <tbody>' . PHP_EOL;
+    // There have been no entries returned. Print the warning.
 
-  foreach ($entries as $entry)
-  {
+    print_warning('<h4>No eventlog entries found!</h4>');
 
-    $icon = geteventicon($entry['message']);
-    if ($icon) { $icon = '<img src="images/16/' . $icon . '" />'; }
+  } else {
+    // Entries have been returned. Print the table.
 
-    $string .= '  <tr>' . PHP_EOL;
-    if ($short)
+    $list = array('device' => FALSE, 'port' => FALSE);
+    if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'eventlog') { $list['device'] = TRUE; }
+    if ($short || !isset($vars['port']) || empty($vars['port'])) { $list['port'] = TRUE; }
+  
+    $string = '<table class="table table-bordered table-striped table-hover table-condensed-more">' . PHP_EOL;
+    if (!$short)
     {
-      $string .= '    <td width="100" class="syslog">';
-      $unixtime = strtotime($entry['timestamp']);
-      $timediff = time() - $unixtime;
-      $string .= overlib_link('', formatUptime($timediff, "short-3"), format_timestamp($entry['timestamp']), NULL) . '</td>' . PHP_EOL;
-    } else {
-      $string .= '    <td width="160">';
-      $string .= format_timestamp($entry['timestamp']) . '</td>' . PHP_EOL;
+      $string .= '  <thead>' . PHP_EOL;
+      $string .= '    <tr>' . PHP_EOL;
+      $string .= '      <th>Date</th>' . PHP_EOL;
+      if ($list['device']) { $string .= '      <th>Device</th>' . PHP_EOL; }
+      if ($list['port'])   { $string .= '      <th>Entity</th>' . PHP_EOL; }
+      $string .= '      <th>Message</th>' . PHP_EOL;
+      $string .= '    </tr>' . PHP_EOL;
+      $string .= '  </thead>' . PHP_EOL;
     }
-
-    if ($list['device'])
+    $string   .= '  <tbody>' . PHP_EOL;
+  
+    foreach ($entries as $entry)
     {
-      $dev = device_by_id_cache($entry['device_id']);
-      $device_vars = array('page'    => 'device',
-                           'device'  => $entry['device_id'],
-                           'tab'     => 'logs',
-                           'section' => 'eventlog');
-      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname']), $device_vars) . '</td>' . PHP_EOL;
-    }
-    if ($list['port'])
-    {
-      if ($entry['type'] == 'interface')
+  
+      $icon = geteventicon($entry['message']);
+      if ($icon) { $icon = '<img src="images/16/' . $icon . '" />'; }
+  
+      $string .= '  <tr>' . PHP_EOL;
+      if ($short)
       {
-        $this_if = getifbyid($entry['reference']);
-        humanize_port($this_if);
-        $entry['link'] = '<span class="entity">' . generate_port_link($this_if, makeshortif($this_if['label'])) . '</span>';
+        $string .= '    <td class="syslog" nowrap>';
+        $timediff = $GLOBALS['config']['time']['now'] - strtotime($entry['timestamp']);
+        $string .= overlib_link('', formatUptime($timediff, "short-3"), format_timestamp($entry['timestamp']), NULL) . '</td>' . PHP_EOL;
       } else {
-        $entry['link'] = 'System';
+        $string .= '    <td width="160">';
+        $string .= format_timestamp($entry['timestamp']) . '</td>' . PHP_EOL;
       }
-      if (!$short) { $string .= '    <td>' . $entry['link'] . '</td>' . PHP_EOL; }
+  
+      if ($list['device'])
+      {
+        $dev = device_by_id_cache($entry['device_id']);
+        $device_vars = array('page'    => 'device',
+                             'device'  => $entry['device_id'],
+                             'tab'     => 'logs',
+                             'section' => 'eventlog');
+        $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname']), $device_vars) . '</td>' . PHP_EOL;
+      }
+      if ($list['port'])
+      {
+        if ($entry['type'] == 'interface')
+        {
+          $this_if = getifbyid($entry['reference']);
+          humanize_port($this_if);
+          $entry['link'] = '<span class="entity">' . generate_port_link($this_if, makeshortif($this_if['label'])) . '</span>';
+        } else {
+          $entry['link'] = 'System';
+        }
+        if (!$short) { $string .= '    <td>' . $entry['link'] . '</td>' . PHP_EOL; }
+      }
+      if ($short)
+      {
+        $string .= '    <td class="syslog">' . $entry['link'] . ' ';
+      } else {
+        $string .= '    <td>';
+      }
+      $string .= htmlspecialchars($entry['message']) . '</td>' . PHP_EOL;
+      $string .= '  </tr>' . PHP_EOL;
     }
-    if ($short)
-    {
-      $string .= '    <td class="syslog">' . $entry['link'] . ' ';
-    } else {
-      $string .= '    <td>';
-    }
-    $string .= htmlspecialchars($entry['message']) . '</td>' . PHP_EOL;
-    $string .= '  </tr>' . PHP_EOL;
+  
+    $string .= '  </tbody>' . PHP_EOL;
+    $string .= '</table>';
+  
+    // Print pagination header
+    if ($pagination && !$short) { echo pagination($vars, $count); }
+  
+    // Print events
+    echo $string;
   }
-
-  $string .= '  </tbody>' . PHP_EOL;
-  $string .= '</table>';
-
-  // Print pagination header
-  if ($pagination && !$short) { echo pagination($vars, $count); }
-
-  // Print events
-  echo $string;
 }
 
 /**

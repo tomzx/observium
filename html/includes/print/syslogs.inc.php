@@ -118,83 +118,84 @@ function print_syslogs($vars)
   if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
   else { $count = count($entries); }
 
- if(!$count)
- {
+  if(!$count)
+  {
+    // There have been no entries returned. Print the warning.
 
-  // There have been no entries returned. Print the warning.
-
-  print_warning('<h4>No syslog entries found!</h4>
+    print_warning('<h4>No syslog entries found!</h4>
 Check that the syslog daemon and Observium configuration options are set correctly, that your devices are configured to send syslog to Observium and that there are no firewalls blocking the messages.
 
 See <a href="http://www.observium.org/wiki/Category:Documentation" target="_blank">documentation</a> and <a href="http://www.observium.org/wiki/Configuration_Options#Syslog_Settings" target="_blank">configuration options</a> for more information.');
 
- } else {
-
-  // Entries have been returned. Print the table.
-
-  $list = array('device' => FALSE, 'priority' => TRUE); // For now (temporarily) priority always displayed
-  if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'syslog') { $list['device'] = TRUE; }
-  if ($short || !isset($vars['priority']) || empty($vars['priority'])) { $list['priority'] = TRUE; }
-
-  $string = '<table class="table table-bordered table-striped table-hover table-condensed">' . PHP_EOL;
-  if (!$short)
-  {
-    $string .= '  <thead>' . PHP_EOL;
-    $string .= '    <tr>' . PHP_EOL;
-    $string .= '      <th>Date</th>' . PHP_EOL;
-    if ($list['device']) { $string .= '      <th>Device</th>' . PHP_EOL; }
-    if ($list['priority']) { $string .= '      <th>Priority</th>' . PHP_EOL; }
-    $string .= '      <th>Message</th>' . PHP_EOL;
-    $string .= '    </tr>' . PHP_EOL;
-    $string .= '  </thead>' . PHP_EOL;
+  } else {
+    // Entries have been returned. Print the table.
+  
+    $list = array('device' => FALSE, 'priority' => TRUE); // For now (temporarily) priority always displayed
+    if (!isset($vars['device']) || empty($vars['device']) || $vars['page'] == 'syslog') { $list['device'] = TRUE; }
+    if ($short || !isset($vars['priority']) || empty($vars['priority'])) { $list['priority'] = TRUE; }
+  
+    $string = '<table class="table table-bordered table-striped table-hover table-condensed-more">' . PHP_EOL;
+    if (!$short)
+    {
+      $string .= '  <thead>' . PHP_EOL;
+      $string .= '    <tr>' . PHP_EOL;
+      $string .= '      <th>Date</th>' . PHP_EOL;
+      if ($list['device']) { $string .= '      <th>Device</th>' . PHP_EOL; }
+      if ($list['priority']) { $string .= '      <th>Priority</th>' . PHP_EOL; }
+      $string .= '      <th>Message</th>' . PHP_EOL;
+      $string .= '    </tr>' . PHP_EOL;
+      $string .= '  </thead>' . PHP_EOL;
+    }
+    $string .= '  <tbody>' . PHP_EOL;
+  
+    foreach ($entries as $entry)
+    {
+      $string .= '  <tr>';
+      if ($short)
+      {
+        $string .= '    <td class="syslog" nowrap>';
+        $timediff = $GLOBALS['config']['time']['now'] - strtotime($entry['timestamp']);
+        $string .= overlib_link('', formatUptime($timediff, "short-3"), format_timestamp($entry['timestamp']), NULL) . '</td>' . PHP_EOL;
+      } else {
+        $string .= '    <td width="160">';
+        $string .= format_timestamp($entry['timestamp']) . '</td>' . PHP_EOL;
+      }
+  
+      if ($list['device'])
+      {
+        $dev = device_by_id_cache($entry['device_id']);
+        $device_vars = array('page'    => 'device',
+                             'device'  => $entry['device_id'],
+                             'tab'     => 'logs',
+                             'section' => 'syslog');
+        $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname']), $device_vars) . '</td>' . PHP_EOL;
+      }
+      if ($list['priority'])
+      {
+        if (!$short) { $string .= '    <td style="color: ' . $priorities[$entry['priority']]['color'] . ';" nowrap>' . nicecase($priorities[$entry['priority']]['name']) . ' (' . $entry['priority'] . ')</td>' . PHP_EOL; }
+      }
+      $entry['program'] = (empty($entry['program'])) ? '[[EMPTY]]' : $entry['program'];
+      if ($short)
+      {
+        $string .= '    <td class="syslog">';
+        $string .= '<strong style="color: ' . $priorities[$entry['priority']]['color'] . ';">' . $entry['program'] . '</strong> : ';
+      } else {
+        $string .= '    <td>';
+        $string .= '<strong>' . $entry['program'] . '</strong> : ';
+      }
+      $string .= htmlspecialchars($entry['msg']) . '</td>' . PHP_EOL;
+      $string .= '  </tr>' . PHP_EOL;
+    }
+  
+    $string .= '  </tbody>' . PHP_EOL;
+    $string .= '</table>' . PHP_EOL;
+  
+    // Print pagination header
+    if ($pagination && !$short) { echo pagination($vars, $count); }
+  
+    // Print syslog
+    echo $string;
   }
-  $string .= '  <tbody>' . PHP_EOL;
-
-  foreach ($entries as $entry)
-  {
-    $string .= '  <tr>';
-    if ($short)
-    {
-      $string .= '    <td width="160" class="syslog">';
-    } else {
-      $string .= '    <td width="160">';
-    }
-    $string .= format_timestamp($entry['timestamp']) . '</td>' . PHP_EOL;
-    if ($list['device'])
-    {
-      $dev = device_by_id_cache($entry['device_id']);
-      $device_vars = array('page'    => 'device',
-                           'device'  => $entry['device_id'],
-                           'tab'     => 'logs',
-                           'section' => 'syslog');
-      $string .= '    <td class="entity">' . generate_device_link($dev, shorthost($dev['hostname']), $device_vars) . '</td>' . PHP_EOL;
-    }
-    if ($list['priority'])
-    {
-      if (!$short) { $string .= '    <td style="color: ' . $priorities[$entry['priority']]['color'] . ';">' . nicecase($priorities[$entry['priority']]['name']) . ' (' . $entry['priority'] . ')</td>' . PHP_EOL; }
-    }
-    if ($short)
-    {
-      $string .= '    <td class="syslog">';
-    } else {
-      $string .= '    <td>';
-    }
-    $entry['program'] = ($entry['program'] === '') ? '[[EMPTY]]' : $entry['program'];
-    $string .= '<strong>' . $entry['program'] . ' :</strong> ' . htmlspecialchars($entry['msg']) . '</td>' . PHP_EOL;
-    $string .= '  </tr>' . PHP_EOL;
-  }
-
-  $string .= '  </tbody>' . PHP_EOL;
-  $string .= '</table>' . PHP_EOL;
-
-  // Print pagination header
-  if ($pagination && !$short) { echo pagination($vars, $count); }
-
-  // Print syslog
-  echo $string;
-
- }
-
 }
 
 ?>
