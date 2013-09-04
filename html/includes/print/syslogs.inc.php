@@ -49,7 +49,7 @@ function print_syslogs($vars)
       {
         case 'device':
         case 'device_id':
-          $where .= ' AND D.device_id = ?';
+          $where .= ' AND D.`device_id` = ?';
           $param[] = $value;
           break;
         case 'priority':
@@ -91,30 +91,32 @@ function print_syslogs($vars)
     $query_perms = '';
     $query_user = '';
   } else {
-    $query_perms = 'LEFT JOIN devices_perms AS P ON D.device_id = P.device_id ';
-    $query_user = ' AND P.user_id = ? ';
+    $query_perms = 'LEFT JOIN `devices_perms` AS P ON D.`device_id` = P.`device_id` ';
+    $query_user = ' AND P.`user_id` = ? ';
     $param[] = $_SESSION['user_id'];
   }
 
   // Don't show ignored and disabled devices
   if ($vars['page'] != 'device')
   {
-    $query_device = ' AND D.ignore = 0 ';
-    if (!$config['web_show_disabled']) { $query_device .= 'AND D.disabled = 0 '; }
+    $query_device = ' AND D.`ignore` = 0 ';
+    if (!$config['web_show_disabled']) { $query_device .= 'AND D.`disabled` = 0 '; }
   }
 
   $query = 'FROM `syslog` AS S ';
-  $query .= 'LEFT JOIN `devices` AS D ON S.device_id = D.device_id ';
+  $query .= 'LEFT JOIN `devices` AS D ON S.`device_id` = D.`device_id` ';
   $query .= $query_perms;
   $query .= $where . $query_user . $query_device;
-  $query_count = 'SELECT COUNT(seq) ' . $query;
+  $query_count = 'SELECT COUNT(`seq`) ' . $query;
   $query = 'SELECT STRAIGHT_JOIN * ' . $query;
   $query .= ' ORDER BY `seq` DESC ';
   $query .= "LIMIT $start,$pagesize";
 
   // Query syslog messages
   $entries = dbFetchRows($query, $param);
-  $count = count($entries);
+  // Query syslog count
+  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
+  else { $count = count($entries); }
 
  if(!$count)
  {
