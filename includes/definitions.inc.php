@@ -408,6 +408,8 @@ $config['os'][$os]['icon']              = "linksys";
 $config['os'][$os]['over'][0]['graph']  = "device_bits";
 $config['os'][$os]['over'][0]['text']   = "Traffic";
 $config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.9.6.1.83";
+$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.9.6.1.11.82";
+$config['os'][$os]['sysObjectID'][]     = ".1.3.6.1.4.1.3955";
 
 // Cisco Service Control OS / SCE
 
