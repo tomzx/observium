@@ -38,6 +38,14 @@ if (file_exists($rrdfile))
   print_graph_row_port($graph_array, $port);
   echo('</td></tr>');
 
+  echo('<tr><td>');
+  echo("<h4>Percent Utilisation</h4>");
+  $graph_array['type'] = "port_percent";
+
+  print_graph_row_port($graph_array, $port);
+  echo('</td></tr>');
+
+
 
   echo('<tr><td>');
   echo("<h4>Errors</h4>");
