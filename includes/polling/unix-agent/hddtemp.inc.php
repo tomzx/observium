@@ -16,14 +16,15 @@ print_vars($disks);
     echo "hddtemp: ";
     foreach ($disks as $disk)
     {
-      list($blockdevice,$descr,$temperature,$unit) = explode('|',$disk,4);
+      list($blockdevice,$descr,$value,$unit) = explode('|',$disk,4);
       $diskcount++;
-      discover_sensor($valid['sensor'], 'temperature', $device, '', $blockdevice, 'hddtemp', "$blockdevice: $descr", '1', '1', NULL, NULL, NULL, NULL, $temperature, 'agent');
-
-      $agent_sensors['temperature']['hddtemp'][$diskcount] = array('description' => "$blockdevice: $descr", 'current' => $temperature, 'index' => $blockdevice);
+      discover_sensor($valid['sensor'], 'temperature', $device, '', $blockdevice, 'hddtemp', "$blockdevice: $descr", '1', '1', NULL, NULL, NULL, NULL, $value, 'agent');
+      $agent_sensors['temperature']['hddtemp'][$blockdevice] = array('description' => "$blockdevice: $descr", 'current' => $value, 'index' => $blockdevice);
     }
     echo "\n";
   }
 }
+
+print_r($agent_sensors);
 
 ?>

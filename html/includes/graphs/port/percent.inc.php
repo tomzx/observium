@@ -14,13 +14,11 @@ $defs .= ' CDEF:out_max=out';
 $defs .= ' HRULE:100#555::';
 $defs .= ' HRULE:-100#555::';
 
-$colour_area_in = '53BBAD';
-$colour_line_in = '2D9284';
-$colour_area_out = 'FFAC72';
-$colour_line_out = 'C7763D';
+$colour_area_out = '3E629F';
+$colour_line_out = '070A64';
 
-$colour_area_out = 'FFF772';
-$colour_line_out = 'C7BF3D';
+$colour_area_in = '72B240';
+$colour_line_in = '285B00';
 
 
 #$colour_area_in_max = 'cc88cc';
