@@ -334,6 +334,7 @@ $config['app']['freeradius']['top']        = array('access');
 $config['app']['powerdns-recursor']['top'] = array('queries', 'timeouts', 'cache', 'latency');
 $config['app']['exim-mailqueue']['top']    = array('total');
 $config['app']['zimbra']['top']            = array('threads','mtaqueue','fdcount');
+$config['app']['crashplan']['top']         = array('bits', 'sessions', 'archivesize', 'disk');
 
 // Syslog colour and name translation
 
