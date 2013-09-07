@@ -191,6 +191,7 @@ echo '
     ### FIXME - This is probably duplicated effort from above. We should pass it $entity
     $entity_descr = entity_descr($alert['entity_type'], $alert['entity_id']);
 
+
     // Set the alert_rule from the prebuilt cache array
     $alert_rule = $alert_rules[$alert['alert_test_id']];
 

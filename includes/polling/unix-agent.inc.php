@@ -69,7 +69,7 @@ if ($device['os_group'] == "unix")
       if ($section == "postfix_qshape")  { $sa = "app"; $sb = "postfix_qshape"; }
       if ($section == "postfix_mailgraph")  { $sa = "app"; $sb = "postfix_mailgraph"; }
 #      if ($section == "drbd")   { $sa = "app"; $sb = "drbd"; }
-      
+
       # Workaround for older script where we didn't split into 3 possible parts yet
       if ($section == "app-powerdns-recursor") { $sa = "app"; $sb = "powerdns-recursor"; $sc = ""; }
 
@@ -85,7 +85,7 @@ if ($device['os_group'] == "unix")
         $agent_data[$section] = trim($data);
       }
     }
-    
+
     $agent_sensors = array(); # Init to empty to be able to use array_merge() later on
 
     if ($debug) { print_vars($agent_data); }
@@ -95,11 +95,13 @@ if ($device['os_group'] == "unix")
 
     foreach (array_keys($agent_data) as $key)
     {
-      if (file_exists("includes/polling/unix-agent/$key.inc.php"))
+      if (file_exists($config['install_dir'].'/includes/polling/unix-agent/'.$key.'.inc.php'))
       {
-        if ($debug) { echo("Including: unix-agent/$key.inc.php"); }
+        if ($debug) { echo('Including: unix-agent/'.$key.'.inc.php'); }
 
-        include("unix-agent/$key.inc.php");
+        include($config['install_dir'].'/includes/polling/unix-agent/'.$key.'.inc.php');
+      } else {
+        echo("No include:".$key.PHP_EOL);
       }
     }
 
@@ -107,7 +109,7 @@ if ($device['os_group'] == "unix")
     {
       foreach (array_keys($agent_data['app']) as $key)
       {
-        if (file_exists("includes/polling/applications/$key.inc.php"))
+        if (file_exists('includes/polling/applications/'.$key.'.inc.php'))
         {
           echo(" ");
           $app = @dbFetchRow("SELECT * FROM `applications` WHERE `device_id` = ? AND `app_type` = ?", array($device['device_id'],$key));
@@ -118,11 +120,11 @@ if ($device['os_group'] == "unix")
             echo("+");
           }
 
-          if ($debug) { echo("Including: applications/$key.inc.php"); }
+          if ($debug) { echo('Including: applications/'.$key.'.inc.php'); }
 
           echo($key);
 
-          include("includes/polling/applications/$key.inc.php");
+          include('includes/polling/applications/'.$key.'.inc.php');
         }
       }
     }
@@ -156,7 +158,7 @@ if ($device['os_group'] == "unix")
     if (!empty($agent_data['app']['memcached']))
     {
       foreach ($agent_data['app']['memcached'] as $memcached_host => $memcached_data)
-{
+      {
         if (dbFetchCell("SELECT COUNT(*) FROM `applications` WHERE `device_id` = ? AND `app_type` = ? AND `app_instance` = ?", array($device['device_id'], 'memcached', $memcached_host)) == "0")
         {
           echo("Found new application 'Memcached $instance'\n");

@@ -66,6 +66,8 @@ function messagebus_send($message)
 
 }
 
+// Returns a text description from an entity type and an id
+// A little inefficient.
 function entity_descr($type, $entity_id)
 {
   global $config, $entity_cache;
@@ -83,7 +85,7 @@ function entity_descr($type, $entity_id)
 }
 
 
-
+// Sorts an $array by a passed field.
 function array_sort($array, $on, $order='SORT_ASC')
 {
   $new_array = array();
@@ -138,11 +140,13 @@ function mac_clean_to_readable($mac)
   return implode($r, ':');
 }
 
+// Strip all non-alphanumeric characters from a string.
 function only_alphanumeric($string)
 {
   return preg_replace('/[^a-zA-Z0-9]/', '', $string);
 }
 
+// Write a line to the log
 function logfile($string)
 {
   global $config;
@@ -152,6 +156,8 @@ function logfile($string)
   fclose($fd);
 }
 
+// Print out an error if debugging is turned on
+// Is this used?
 function error($message)
 {
   global $config, $debug;
@@ -159,6 +165,7 @@ function error($message)
   if ($debug) { echo($message); }
 }
 
+// Detect the device's OS
 function get_device_os($device)
 {
   global $config, $debug;
@@ -195,6 +202,7 @@ function get_device_os($device)
   if ($os) { return $os; } else { return "generic"; }
 }
 
+// Fetch the number of input/output errors on an interface for $period.
 function interface_errors($rrd_file, $period = '-1d') // Returns the last in/out errors value in RRD
 {
   global $config;
@@ -213,6 +221,7 @@ function interface_errors($rrd_file, $period = '-1d') // Returns the last in/out
   return $errors;
 }
 
+// Rename a device
 function renamehost($id, $new, $source = 'console')
 {
   global $config;
