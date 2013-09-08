@@ -199,7 +199,7 @@ if ($device['os_group'] == "unix")
   }
 
   echo("Sensors: ");
-  foreach (array_keys($config['sensor_classes']) as $sensor_class)
+  foreach (array_keys($config['sensor_types']) as $sensor_class)
   {
     check_valid_sensors($device, $sensor_class, $valid['sensor'], 'agent');
   }

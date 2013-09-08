@@ -59,7 +59,7 @@ foreach ($sensors as $sensor)
   echo('<td>'.$sensor['sensor_type'].'</td>');
   echo('<td>'.$sensor['sensor_class'].'</td>');
   echo('<td>'.htmlentities($sensor['sensor_descr']).'</td>');
-  echo('<td>'.htmlentities($sensor['sensor_value']).$config['sensor_classes'][$sensor['sensor_class']].'</td>');
+  echo('<td>'.htmlentities($sensor['sensor_value']).$config['sensor_types'][$sensor['sensor_class']]['symbol'].'</td>');
   echo('<td><input class="input-mini" name="sensors['.$sensor['sensor_id'].'][sensor_limit_low]" size="4" value="'.htmlentities($sensor['sensor_limit_low']).'"></input></td>');
   echo('<td><input class="input-mini" name="sensors['.$sensor['sensor_id'].'][sensor_limit]" size="4" value="'.htmlentities($sensor['sensor_limit']).'"></input></td>');
 #  echo('<td><input type=checkbox name="sensors['.$sensor['sensor_id'].'][sensor_ignore]"' . ($sensor['sensor_ignore'] ? 'checked' : '') . '></td>');

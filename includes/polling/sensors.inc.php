@@ -38,9 +38,9 @@ if(dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `device_id` = ? AND `sensor
 
   // Call poll_sensor for each sensor type that we support.
 
-  foreach ($config['sensor_classes'] as $sensor_class => $sensor_unit)
+  foreach ($config['sensor_types'] as $sensor_class => $sensor_class_data)
   {
-    poll_sensor($device, $sensor_class, $sensor_unit, $oid_cache);
+    poll_sensor($device, $sensor_class, $sensor_class_data['symbol'], $oid_cache);
   }
 
 }
