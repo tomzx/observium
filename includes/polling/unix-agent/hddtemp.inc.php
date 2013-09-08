@@ -17,7 +17,7 @@ if ($agent_data['hddtemp'] != '|')
       # FIXME: should not use diskcount as index; drive serial preferred but hddtemp does not supply it.
       # Device name itself is just as useless as the actual position however.
       # In case of change in index, please provide an rrd-rename upgrade-script.
-      $diskcount++;
+      ++$diskcount;
       discover_sensor($valid['sensor'], 'temperature', $device, '', $diskcount, 'hddtemp', "$blockdevice: $descr", '1', '1', NULL, NULL, NULL, NULL, $value, 'agent');
       $agent_sensors['temperature']['hddtemp'][$blockdevice] = array('description' => "$blockdevice: $descr", 'current' => $value, 'index' => $diskcount);
     }
