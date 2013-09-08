@@ -6,7 +6,7 @@
 //               YES, THAT MEANS YOU                   //
 /////////////////////////////////////////////////////////
 
-include($config['install_dir'].'includes/definitions/os.inc.php');
+include($config['install_dir'].'/includes/definitions/os.inc.php');
 
 // Alert Graphs
 ## FIXME - this is ugly
