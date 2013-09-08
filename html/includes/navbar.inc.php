@@ -464,13 +464,25 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['count']+$routing['ospf'][
 ?>
 </ul>
           <ul class="nav pull-right">
-
           <li class="dropdown hidden-xs">
             <form class="form" id="searchform" class="navbar-search" action="" style="margin-left: 10px; margin-right: 10px;  margin-top: 5px; margin-bottom: -5px;">
               <input style="width: 145px;" onkeyup="lookup(this.value);" type="text" value="" class="dropdown-toggle" placeholder="Search" />
             </form>
             <div id="suggestions" class="typeahead dropdown-menu"></div>
           </li>
+<?php
+
+  if ($SESSION['touch'] == "yes")
+  {
+    $url = generate_url($vars, array('touch' => 'no'));
+  } else {
+    $url = generate_url($vars, array('touch' => 'yes'));
+  }
+
+  echo '<li><a href="', $url, '"> <i class="oicon-hand-point-090"></i></a></li>';
+
+?>
+
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i class="oicon-gear"></i> <b class="caret"></b></a>
