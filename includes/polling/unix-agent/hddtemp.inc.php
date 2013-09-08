@@ -19,10 +19,12 @@ if ($agent_data['hddtemp'] != '|')
       # In case of change in index, please provide an rrd-rename upgrade-script.
       ++$diskcount;
       discover_sensor($valid['sensor'], 'temperature', $device, '', $diskcount, 'hddtemp', "$blockdevice: $descr", '1', '1', NULL, NULL, NULL, NULL, $value, 'agent');
-      $agent_sensors['temperature']['hddtemp'][$blockdevice] = array('description' => "$blockdevice: $descr", 'current' => $value, 'index' => $diskcount);
+      $agent_sensors['temperature']['hddtemp'][$diskcount] = array('description' => "$blockdevice: $descr", 'current' => $value, 'index' => $diskcount);
     }
     echo "\n";
   }
 }
+
+print_r($agent_sensors);
 
 ?>
