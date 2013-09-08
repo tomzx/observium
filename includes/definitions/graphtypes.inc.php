@@ -1,21 +1,29 @@
 <?php
 
-// Graph Types
+// Graph sections is used to categorize /device/graphs/
 
 $config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', 'wireless', 'storage', 'vpdn', 'load balancer', 'appliance', 'poller', 'netapp');
+
+// Graph types
+
+$config['graph_types']['port']['bits']    = array('name' => 'Bits',       'descr' => "Traffic in bits/sec");
+$config['graph_types']['port']['upkts']   = array('name' => 'Ucast Pkts', 'descr' => "Unicast packets/sec");
+$config['graph_types']['port']['nupkts']  = array('name' => 'NU Pkts',    'descr' => "Non-unicast packets/sec");
+$config['graph_types']['port']['pktsize'] = array('name' => 'Pkt Size',   'descr' => "Average packet size");
+$config['graph_types']['port']['percent'] = array('name' => 'Percent',    'descr' => "Percent utilization");
+$config['graph_types']['port']['errors']  = array('name' => 'Errors',     'descr' => "Errors/sec");
 
 $config['graph_types']['device']['wifi_clients']['section'] = 'wireless';
 $config['graph_types']['device']['wifi_clients']['order'] = '0';
 $config['graph_types']['device']['wifi_clients']['descr'] = 'Wireless Clients';
 
-/// NetApp graphs
-
+// NetApp graphs
 $config['graph_types']['device']['netapp_ops']     = array('section' => 'netapp', 'descr' => 'NetApp Operations', 'order' => '0');
 $config['graph_types']['device']['netapp_net_io']  = array('section' => 'netapp', 'descr' => 'NetApp Network I/O', 'order' => '1');
 $config['graph_types']['device']['netapp_disk_io'] = array('section' => 'netapp', 'descr' => 'NetApp Disk I/O', 'order' => '2');
 $config['graph_types']['device']['netapp_tape_io'] = array('section' => 'netapp', 'descr' => 'NetApp Tape I/O', 'order' => '3');
 
-/// Poller graphs
+// Poller graphs
 $config['graph_types']['device']['poller_perf']['section'] = 'poller';
 $config['graph_types']['device']['poller_perf']['order'] = '0';
 $config['graph_types']['device']['poller_perf']['descr'] = 'Poller Duration';
