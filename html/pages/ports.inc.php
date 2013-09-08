@@ -4,7 +4,7 @@ $pagetitle[] = 'Ports';
 
 // Set Defaults here
 
-if(!isset($vars['format'])) { $vars['format'] = 'list_basic'; }
+if(!isset($vars['format'])) { $vars['format'] = 'list'; }
 
 echo('<div class="well" style="padding: 10px;">');
 
@@ -12,7 +12,7 @@ if($vars['searchbar'] != 'hide')
 {
 
 ?>
-<form method="post" action="" class="form form-inline" style="margin-bottom: none;" id="ports-form">
+<form method="post" action="" class="form form-inline" style="margin-bottom: 0;" id="ports-form">
 <table style="width: 100%;" cellpadding="5" class="table-transparent">
  <tbody>
   <tr>
@@ -207,90 +207,60 @@ function submitURL() {
 
 </script>
 
-
-<hr />
+</div>
 
 <?php }
 
-echo('<span style="font-weight: bold;">Lists</span> &#187; ');
 
-$menu_options = array('basic'      => 'Basic',
-                      'detail'     => 'Detail');
+$navbar = array('brand' => "Ports", 'class' => "navbar-narrow");
 
-$sep = "";
-foreach ($menu_options as $option => $text)
+$navbar['options']['basic']['text']   = 'Basic';
+// There is no detailed view for this yet.
+//$navbar['options']['detail']['text']  = 'Details';
+
+$navbar['options']['graphs']     = array('text' => 'Graphs');
+
+foreach ($navbar['options'] as $option => $array)
 {
-  echo($sep);
-  if ($vars['format'] == "list_".$option)
-  {
-    echo("<span class='pagemenu-selected'>");
-  }
-  echo('<a href="' . generate_url($vars, array('format' => "list_".$option)) . '">' . $text . '</a>');
-  if ($vars['format'] == "list_".$option)
-  {
-    echo("</span>");
-  }
-  $sep = " | ";
-}
-?>
-
- |
-
-<span style="font-weight: bold;">Graphs</span> &#187;
-
-<?php
-
-$menu_options = array('bits' => 'Bits',
-                      'upkts' => 'Unicast Packets',
-                      'nupkts' => 'Non-Unicast Packets',
-                      'errors' => 'Errors');
-
-$sep = "";
-foreach ($menu_options as $option => $text)
-{
-  echo($sep);
-  if ($vars['format'] == 'graph_'.$option)
-  {
-    echo('<span class="pagemenu-selected">');
-  }
-  echo('<a href="' . generate_url($vars, array('format' => 'graph_'.$option)) . '">' . $text . '</a>');
-  if ($vars['format'] == 'graph_'.$option)
-  {
-    echo("</span>");
-  }
-  $sep = " | ";
+  if ($vars['format'] == 'list' && !isset($vars['view'])) { $vars['view'] = 'basic'; }
+  if ($vars['format'] == 'list' && $vars['view'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
+  $navbar['options'][$option]['url'] = generate_url($vars,array('format' => 'list', 'view' => $option));
 }
 
-echo('<div style="float: right;">');
-?>
+foreach (array('graphs') as $type)
+{
+  foreach ($config['graph_types']['port'] as $option => $data)
+  {
+    if ($vars['format'] == $type && $vars['graph'] == $option)
+    {
+      $navbar['options'][$type]['suboptions'][$option]['class'] = 'active';
+      $navbar['options'][$type]['text'] .= " (".$data['name'].')';
+    }
+    $navbar['options'][$type]['suboptions'][$option]['text'] = $data['name'];
+    $navbar['options'][$type]['suboptions'][$option]['url'] = generate_url($vars, array('view' => NULL, 'format' => $type, 'graph' => $option));
+  }
+}
 
-  <a href="<?php echo(generate_url($vars)); ?>" title="Update the browser URL to reflect the search criteria." >Update URL</a> |
-
-<?php
   if ($vars['searchbar'] == "hide")
   {
-    echo('<a href="'. generate_url($vars, array('searchbar' => '')).'">Search</a>');
+    $navbar['options_right']['searchbar']     = array('text' => 'Show Search', 'url' => generate_url($vars, array('searchbar' => NULL)));
   } else {
-    echo('<a href="'. generate_url($vars, array('searchbar' => 'hide')).'">Search</a>');
+    $navbar['options_right']['searchbar']     = array('text' => 'Hide Search' , 'url' => generate_url($vars, array('searchbar' => 'hide')));
   }
-
-  echo("  | ");
 
   if ($vars['bare'] == "yes")
   {
-    echo('<a href="'. generate_url($vars, array('bare' => '')).'">Header</a>');
+    $navbar['options_right']['header']     = array('text' => 'Show Header', 'url' => generate_url($vars, array('bare' => NULL)));
   } else {
-    echo('<a href="'. generate_url($vars, array('bare' => 'yes')).'">Header</a>');
+    $navbar['options_right']['header']     = array('text' => 'Hide Header', 'url' => generate_url($vars, array('bare' => 'yes')));
   }
 
-  echo ' | <a href="'.generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare'])).'" title="Reset critera to default." >Reset</a>';
+  $navbar['options_right']['reset']        = array('text' => 'Reset', 'url' => generate_url(array('page' => 'ports', 'section' => $vars['section'], 'bare' => $vars['bare'])));
 
+print_navbar($navbar);
+unset($navbar);
 
-echo('</div>
-  </div>');
-
-
-#print_vars($vars);
+if($debug) { print_vars($vars); }
 
 
 $param = array();
@@ -390,16 +360,15 @@ $sql .= " ".$where;
 
 $row = 1;
 
-list($format, $subformat) = explode("_", $vars['format']);
 $ports = dbFetchRows($sql, $param);
 
 port_permitted_array($ports);
 
 include("includes/port-sort.inc.php");
 
-if(file_exists('pages/ports/'.$format.'.inc.php'))
+if(file_exists('pages/ports/'.$vars['format'].'.inc.php'))
 {
-  include('pages/ports/'.$format.'.inc.php');
+  include('pages/ports/'.$vars['format'].'.inc.php');
 } else {
   print_error("Wrong list format.");
 }

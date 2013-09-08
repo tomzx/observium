@@ -44,20 +44,16 @@ foreach ($navbar['options'] as $option => $array)
   $navbar['options'][$option]['url'] = generate_url($link_array,array('view' => $option));
 }
 
-$graph_types = array("bits" => "Bits",
-                     "upkts" => "Ucast Packets",
-                     "nupkts" => "NUcast Packets",
-                     "errors" => "Errors",
-                     "etherlike" => "Etherlike");
 foreach (array('graphs', 'minigraphs') as $type)
 {
-  foreach ($graph_types as $option => $text)
+  foreach ($config['graph_types']['port'] as $option => $data)
   {
     if ($vars['view'] == $type && $vars['graph'] == $option)
     {
       $navbar['options'][$type]['suboptions'][$option]['class'] = 'active';
+      $navbar['options'][$type]['text'] .= ' ('.$data['name'].')';
     }
-    $navbar['options'][$type]['suboptions'][$option]['text'] = $text;
+    $navbar['options'][$type]['suboptions'][$option]['text'] = $data['name'];
     $navbar['options'][$type]['suboptions'][$option]['url'] = generate_url($link_array, array('view' => $type, 'graph' => $option));
   }
 }

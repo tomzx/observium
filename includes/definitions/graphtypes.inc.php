@@ -12,6 +12,8 @@ $config['graph_types']['port']['nupkts']  = array('name' => 'NU Pkts',    'descr
 $config['graph_types']['port']['pktsize'] = array('name' => 'Pkt Size',   'descr' => "Average packet size");
 $config['graph_types']['port']['percent'] = array('name' => 'Percent',    'descr' => "Percent utilization");
 $config['graph_types']['port']['errors']  = array('name' => 'Errors',     'descr' => "Errors/sec");
+$config['graph_types']['port']['etherlike']  = array('name' => 'Ethernet Errors',     'descr' => "Detailed Errors/sec for Ethernet-like interfaces");
+
 
 $config['graph_types']['device']['wifi_clients']['section'] = 'wireless';
 $config['graph_types']['device']['wifi_clients']['order'] = '0';

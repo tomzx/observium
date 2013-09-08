@@ -14,11 +14,12 @@ foreach ($ports as $port)
   if ($port['in_errors'] > 0 || $port['out_errors'] > 0)
   {
     $error_img = generate_port_link($port,"<img src='images/16/chart_curve_error.png' alt='Interface Errors' border=0>",errors);
+
   } else { $error_img = ""; }
 
     humanize_port($port);
 
-    $graph_type = "port_" . $subformat;
+    $graph_type = "port_" . $vars['graph'];
 
     $graph_array           = array();
 
