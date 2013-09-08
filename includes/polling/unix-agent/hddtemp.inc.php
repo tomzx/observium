@@ -4,8 +4,6 @@ global $agent_sensors;
 
 if ($agent_data['hddtemp'] != '|')
 {
-
-
   $disks = explode('||',trim($agent_data['hddtemp'],'|'));
 
   if (count($disks))
@@ -24,7 +22,5 @@ if ($agent_data['hddtemp'] != '|')
     echo "\n";
   }
 }
-
-print_r($agent_sensors);
 
 ?>
