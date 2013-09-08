@@ -6,10 +6,10 @@ $pagetitle[] = 'Ports';
 
 if(!isset($vars['format'])) { $vars['format'] = 'list'; }
 
-echo('<div class="well" style="padding: 10px;">');
-
 if($vars['searchbar'] != 'hide')
 {
+
+echo('<div class="well" style="padding: 10px;">');
 
 ?>
 <form method="post" action="" class="form form-inline" style="margin-bottom: 0;" id="ports-form">

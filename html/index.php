@@ -175,12 +175,15 @@ if ($config['page_refresh']) { echo('  <meta http-equiv="refresh" content="'.$co
   <link rel="shortcut icon" href="<?php echo($config['favicon']);  ?>" />
 <?php
 if ($_SESSION['widescreen']) { echo('<link rel="stylesheet" href="css/styles-wide.css" type="text/css" />'); }
-?>
-</head>
 
-<body>
+echo '</head>';
 
-<?php
+if($vars['bare'] == 'yes')
+{
+  echo '<body style="padding-top: 10px;">';
+} else {
+  echo '<body>';
+}
 
 if ($_SESSION['authenticated'])
 {
