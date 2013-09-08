@@ -252,7 +252,7 @@ if (strpos($port['label'], "oopback") === false && !$graph_type)
       }
     }
 
-    foreach (dbFetchRows("SELECT `ipv6_network_id` FROM `ipv6_addresses` WHERE `port_id` = ? AND `ipv6_compressed` != '::1'", array($port['port_id'])) as $net)
+    foreach (dbFetchRows("SELECT *,`ipv6_network_id` FROM `ipv6_addresses` WHERE `port_id` = ? AND `ipv6_compressed` != ?", array($port['port_id'], "::1")) as $net)
     {
       $ipv6_network_id = $net['ipv6_network_id'];
       $sql = "SELECT P.`port_id`, P.`device_id` FROM `ipv6_addresses` AS A, `ipv6_networks` AS N, `ports` AS P
