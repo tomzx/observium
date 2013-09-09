@@ -35,6 +35,7 @@ foreach ($oid_data as $key => $entry)
   $ip_address = hex2ip(str_replace($ip_version.'.', '', $key));
   $ifIndex = $entry['ipAddressIfIndex'];
   $entry['ipAddressPrefix'] = end(explode('.', $entry['ipAddressPrefix']));
+  if (!is_numeric($entry['ipAddressPrefix'])) { $entry['ipAddressPrefix'] = '128'; }
   if (is_ipv6_valid($ip_address, $entry['ipAddressPrefix']) === FALSE) { continue; }
   foreach ($oids_ip as $oid)
   {
@@ -62,6 +63,7 @@ if ($device['os_group'] == 'cisco' && !count($ip_data))
     $ip_address = hex2ip(str_replace($ip_version.'.', '', $key));
     $ifIndex = $entry['cIpAddressIfIndex'];
     $entry['cIpAddressPrefix'] = end(explode('.', $entry['cIpAddressPrefix']));
+    if (!is_numeric($entry['cIpAddressPrefix'])) { $entry['cIpAddressPrefix'] = '128'; }
     if (is_ipv6_valid($ip_address, $entry['cIpAddressPrefix']) === FALSE) { continue; }
     foreach ($oids_ip as $oid)
     {
@@ -89,6 +91,7 @@ if (!count($ip_data))
   {
     list($ifIndex, $ip_address) = explode('.', $key, 2);
     $ip_address = snmp2ipv6($ip_address);
+    if (!is_numeric($entry['ipv6AddrPfxLength'])) { $entry['ipv6AddrPfxLength'] = '128'; }
     if (is_ipv6_valid($ip_address, $entry['ipv6AddrPfxLength']) === FALSE) { continue; }
     $ip_data[$ifIndex][$ip_address]['ipAddressIfIndex'] = $ifIndex;
     $ip_data[$ifIndex][$ip_address]['ipAddressPrefix'] = $entry['ipv6AddrPfxLength'];

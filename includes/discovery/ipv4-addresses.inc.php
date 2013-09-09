@@ -31,6 +31,7 @@ $ip_data = array();
 foreach ($oid_data as $ip_address => $entry)
 {
   $ifIndex = $entry['ipAdEntIfIndex'];
+  if (!is_numeric($entry['ipAdEntNetMask'])) { $entry['ipAdEntNetMask'] = '32'; }
   if (is_ipv4_valid($ip_address, $entry['ipAdEntNetMask']) === FALSE) { continue; }
   $ip_data[$ifIndex][$ip_address] = $entry;
 }
