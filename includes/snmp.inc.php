@@ -465,11 +465,13 @@ function snmp_walk($device, $oid, $options = NULL, $mib = NULL, $mibdir = NULL, 
   }
   else
   {
-    if (preg_match("/No more variables left in this MIB View \(It is past the end of the MIB tree\)$/",$data))  {
-    # Bit ugly :-(
-    $d_ex = explode("\n",$data);
-    unset($d_ex[count($d_ex)-1]);
-    $data = implode("\n",$d_ex);
+    if (preg_match('/No more variables left in this MIB View \(It is past the end of the MIB tree\)$/', $data)
+     || preg_match('/End of MIB$/', $data))
+    {
+      # Bit ugly :-(
+      $d_ex = explode("\n",$data);
+      unset($d_ex[count($d_ex)-1]);
+      $data = implode("\n",$d_ex);
     }
   }
   $runtime_stats['snmpwalk']++;
