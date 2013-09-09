@@ -18,7 +18,13 @@ if (!strstr($ciscomodel, " ") && strlen($ciscomodel) >= '3')
 $poll_device['sysDescr'] = str_replace(", Inc.", "", $poll_device['sysDescr']); // Make the two formats the same
 $poll_device['sysDescr'] = str_replace("\n", " ", $poll_device['sysDescr']);
 
-list(,,$hardware,,,,,,,$version,,,$features) = explode(" ", $poll_device['sysDescr']);
-list(,$features) = explode("-", $features);
+if (!strstr($poll_device['sysDescr'], "Cisco Systems Catalyst 1900"))
+{
+  list(,,$hardware,,,,,,,$version,,,$features) = explode(" ", $poll_device['sysDescr']);
+  list(,$features) = explode("-", $features);
+} else {
+  list(,$version) = explode(',',$poll_device['sysDescr'],2);
+  $hardware = "1900";
+}
 
 ?>

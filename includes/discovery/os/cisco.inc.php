@@ -10,6 +10,12 @@ if (empty($os))
   if (strstr($sysDescr, "IOS-XE")) { $os = "iosxe"; }
   if (strstr($sysDescr, "IOS XR")) { $os = "iosxr"; }
 
+  if (strstr($sysDescr, "Cisco Catalyst Operating System Software")) { $os = "catos"; }
+  else if (strstr($sysDescr, "Cisco Systems Catalyst 1900")) { $os = "catos"; } //Who use this ancient switch?
+
+  if (strpos($sysDescr, "Cisco PIX") !== FALSE) { $os = "pixos"; }
+  if (strpos($sysDescr, "Cisco Adaptive Security Appliance") !== FALSE) { $os = "asa"; }
+
   if (strstr($sysDescr, "/Cisco Service Control/")) { $os = "ciscoscos"; }
 
 }
