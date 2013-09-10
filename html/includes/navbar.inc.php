@@ -472,14 +472,20 @@ if ($_SESSION['userlevel'] >= '5' && ($routing['bgp']['count']+$routing['ospf'][
           </li>
 <?php
 
-  if ($SESSION['touch'] == "yes")
+  if ($_SESSION['touch'] == "yes")
   {
     $url = generate_url($vars, array('touch' => 'no'));
   } else {
     $url = generate_url($vars, array('touch' => 'yes'));
   }
 
-  echo '<li><a href="', $url, '"> <i class="oicon-hand-point-090"></i></a></li>';
+  $browser = detect_browser(TRUE);
+  if ($vars['touch'] == 'yes')  { $icon = 'oicon-hand-point-090'; }
+  elseif ($browser == 'mobile') { $icon = 'icon-mobile-phone'; }
+  elseif ($browser == 'tablet') { $icon = 'icon-tablet'; }
+  else                          { $icon = 'icon-laptop'; }
+  
+  echo '<li><a href="', $url, '"> <i class="', $icon, '"></i></a></li>';
 
 ?>
 

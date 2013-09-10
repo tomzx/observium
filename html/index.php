@@ -185,6 +185,11 @@ if($vars['bare'] == 'yes')
   echo '<body>';
 }
 
+// Determine type of web browser.
+if (detect_browser() == 'mobile') { $_SESSION['touch'] = 'yes'; }
+if ($vars['touch'] == "yes") { $_SESSION['touch'] = 'yes'; }
+if ($vars['touch'] == "no") { unset($_SESSION['touch'], $vars['touch']); }
+
 if ($_SESSION['authenticated'])
 {
   // Do various queries which we use in multiple places
@@ -380,10 +385,7 @@ if (is_array($pagetitle))
   <script src="js/bootstrap.min.js"></script>
 
 <?php
-
-  if($vars['touch'] == "yes") { $_SESSION['touch'] = yes; }
-  if($vars['touch'] == "no") { unset($_SESSION['touch']); }
-  if(!isset($_SESSION['touch']))
+  if (!isset($_SESSION['touch']))
   {
     echo '<script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>';
   }
