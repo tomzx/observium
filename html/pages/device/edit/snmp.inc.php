@@ -97,9 +97,9 @@ if ($updated && $update_message)
         <label class="control-label" for="authlevel">Auth Level</label>
         <div class="controls">
           <select name="authlevel">
-            <option value="NoAuthNoPriv" <?php echo($device['authlevel'] == 'NoAuthNoPriv' ? 'selected' : ''); ?> >NoAuthNoPriv</option>
-            <option value="AuthNoPriv"   <?php echo($device['authlevel'] == 'authNoPriv' ? 'selected' : ''); ?> >authNoPriv</option>
-            <option value="AuthPriv"     <?php echo($device['authlevel'] == 'authPriv' ? 'selected' : ''); ?> >authPriv</option>
+            <option value="noAuthNoPriv" <?php echo($device['authlevel'] == 'noAuthNoPriv' ? 'selected' : ''); ?> >noAuthNoPriv</option>
+            <option value="authNoPriv"   <?php echo($device['authlevel'] == 'authNoPriv' ? 'selected' : ''); ?> >authNoPriv</option>
+            <option value="authPriv"     <?php echo($device['authlevel'] == 'authPriv' ? 'selected' : ''); ?> >authPriv</option>
           </select>
         </div>
       </div>
