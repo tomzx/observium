@@ -25,6 +25,16 @@ echo(" entPhySensorPrecision");
 $oids = snmpwalk_cache_multi_oid($device, "entPhySensorPrecision", $oids, "ENTITY-SENSOR-MIB");
 echo(" entPhySensorValue");
 $oids = snmpwalk_cache_multi_oid($device, "entPhySensorValue", $oids, "ENTITY-SENSOR-MIB");
+if ($device['os'] == 'arista_eos')
+{
+  foreach ( array('aristaEntSensorThresholdLowWarning',
+             'aristaEntSensorThresholdLowCritical',
+             'aristaEntSensorThresholdHighWarning',
+             'aristaEntSensorThresholdHighCritical') as $column ) {
+    echo(" " . $column);
+    $oids = snmpwalk_cache_multi_oid($device, $column, $oids, "ARISTA-ENTITY-SENSOR-MIB", mib_dirs('arista'));
+  }
+}
 
 $entitysensor['voltsDC']   = "voltage";
 $entitysensor['voltsAC']   = "voltage";
@@ -82,10 +92,30 @@ if (is_array($oids))
 
       if ($current == "-127") { $thisisnotbullshit = FALSE; }
 
+      $lowlimit = NULL;
+      $lowwarn = NULL;
+      $highwarn = NULL;
+      $highlimit = NULL;
+      if ($device['os'] == 'arista_eos') {
+        $lowlimit = $entry['aristaEntSensorThresholdLowCritical'];
+        $lowwarn = $entry['aristaEntSensorThresholdLowWarning'];
+        $highwarn = $entry['aristaEntSensorThresholdHighWarning'];
+        $highlimit = $entry['aristaEntSensorThresholdHighCritical'];
+        $lowlimit = $lowlimit * $multiplier / $divisor;
+        $lowwarn = $lowwarn * $multiplier / $divisor;
+        $highwarn = $highwarn * $multiplier / $divisor;
+        $highlimit = $highlimit * $multiplier / $divisor;
+        # FIXME: The MIB can return -1000000000 or +1000000000, if there
+        # should be no threshold there.  We don't use NULL in that case
+        # because observium then calculates its own threshold using
+        # sensor_limit() or sensor_low_limit(), but instead it should
+        # have a flag value for "the device has no limit for this sensor".
+      }
+
       if ($thisisnotbullshit && mysql_result(mysql_query("SELECT COUNT(*) FROM `sensors` WHERE `device_id` = '".$device['device_id']."' AND `sensor_class` = '".$type."' AND `sensor_type` = 'cisco-entity-sensor' AND `sensor_index` = '".$index."'"),0) == "0")
       // Check to make sure we've not already seen this sensor via cisco's entity sensor mib
       {
-        discover_sensor($valid['sensor'], $type, $device, $oid, $index, 'entity-sensor', $descr, $divisor, $multiplier, NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], $type, $device, $oid, $index, 'entity-sensor', $descr, $divisor, $multiplier, $lowlimit, $lowwarn, $highwarn, $highlimit, $current);
       }
     }
   }
