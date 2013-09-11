@@ -138,7 +138,7 @@ if ($updated && $update_message)
       <div class="control-group">
         <label class="control-label" for="cryptoalgo">Crypto Algorithm</label>
         <div class="controls">
-          <select name="authalgo">
+          <select name="cryptoalgo">
             <option value="AES">AES</option>
             <option value="DES" <?php echo($device['cryptoalgo'] == "DES" ? 'selected' : ''); ?> >DES</option>
           </select>
