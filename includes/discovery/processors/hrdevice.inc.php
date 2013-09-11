@@ -42,7 +42,7 @@ if (is_array($hrDevice_array))
         echo("Moved RRD ");
       }
 
-      if ($device['os'] == "arista-eos" && $index == "1") { unset($descr); }
+      if ($device['os'] == "arista_eos" && $index == "1") { unset($descr); }
 
       if (isset($descr) && $descr != "An electronic chip that makes the computer work.")
       {
