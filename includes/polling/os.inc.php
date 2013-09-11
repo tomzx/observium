@@ -15,7 +15,7 @@ else
   echo("Generic :(\n");
 }
 
-  $update_fields = array('version', 'features', 'hardware', 'serial', 'icon','kernel', 'distro', 'distro_ver', 'arch', 'asset_tag');
+  $update_fields = array('version', 'features', 'hardware', 'serial', 'kernel', 'distro', 'distro_ver', 'arch', 'asset_tag');
 
   foreach($update_fields AS $field)
   {
