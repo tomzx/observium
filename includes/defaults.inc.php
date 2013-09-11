@@ -66,7 +66,7 @@ $config['rrd_rra'] .= "                         RRA:MAX:0.5:6:1440      RRA:MAX:
 
 #$config['rrdcached']    = "unix:/var/run/rrdcached.sock";
 
-$config['rrd_override'] = FALSE;         // Override RRD files if already exists.
+$config['rrd_override'] = TRUE;         // Allow adding of devices if RRD directory already exists.
 
 // Web Interface Settings
 
