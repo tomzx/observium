@@ -19,13 +19,12 @@ else
 
   foreach($update_fields AS $field)
   {
-    if (isset($$field) && $$field != $device[$field])
+    if ($$field != $device[$field])
     {
       $update_array[$field] = $$field;
-      log_event($field." -> ".$$field, $device, 'system');
+      log_event(ucfirst($field)." -> ".$$field, $device, 'system');
     }
   }
-
 
 echo("\nHardware: ".$hardware." Version: ".$version." Features: ".$features." Serial: ".$serial." Asset: ".$asset_tag."\n");
 

@@ -21,9 +21,7 @@ if ($device['os'] == "linux" || $device['os'] == "endian")
   if(strpos($features, "/usr/bin/distro")) { unset($features); }
 
   list($distro, $distro_ver) = explode(" ", $features);
-  unset($features);
-
-
+  #unset($features);
 
   // Detect Dell hardware via OpenManage SNMP
   $hw = snmp_get($device, ".1.3.6.1.4.1.674.10892.1.300.10.1.9.1", "-Oqv", "MIB-Dell-10892");

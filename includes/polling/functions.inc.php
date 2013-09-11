@@ -378,7 +378,7 @@ function poll_device($device, $options)
       rrdtool_update($poller_rrd, "N:".$device_time);
     }
 
-    if ($debug) { echo("Updating " . $device['hostname'] . " - ".print_vars($update_array)." \n"); }
+    if ($debug) { echo("Updating " . $device['hostname'] . " - ");print_vars($update_array);echo(" \n"); }
 
     $updated = dbUpdate($update_array, 'devices', '`device_id` = ?', array($device['device_id']));
     if ($updated) { echo("UPDATED!\n"); }
