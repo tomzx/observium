@@ -3,7 +3,7 @@
 $file = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("screenos_sessions.rrd");
 
 $rrd_list[0]['filename'] = $file;
-$rrd_list[0]['descr'] = "Maxiumum";
+$rrd_list[0]['descr'] = "Maximum";
 $rrd_list[0]['ds'] = "max";
 
 $rrd_list[1]['filename'] = $file;
