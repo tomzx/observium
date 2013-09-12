@@ -25,7 +25,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     $descr = "Input"; if ($ups_array[0]['upsInputNumLines'] > 1) { $descr .= " Phase $index"; }
     
     ## Input voltage
-    $oid   = "UPS-MIB:upsInputVoltage.$index"; # or 1.3.6.1.2.1.33.1.3.3.1.3.$index
+    $oid   = "1.3.6.1.2.1.33.1.3.3.1.3.$index"; # UPS-MIB:upsInputVoltage.$index
     $value = $ups_array[$phase]['upsInputVoltage'];
     
     # FIXME maybe use upsConfigLowVoltageTransferPoint and upsConfigHighVoltageTransferPoint as limits? (upsConfig table)
@@ -38,7 +38,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
     ## Input frequency
-    $oid   = "UPS-MIB:upsInputFrequency.$index"; # or 1.3.6.1.2.1.33.1.3.3.1.2.$index
+    $oid   = "1.3.6.1.2.1.33.1.3.3.1.2.$index"; # UPS-MIB:upsInputFrequency.$index
     $value = $ups_array[$phase]['upsInputFrequency'];
     discover_sensor($valid['sensor'], 'frequency', $device, $oid, "upsInputEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -48,7 +48,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
     ## Input current
-    $oid   = "UPS-MIB:upsInputCurrent.$index"; # or 1.3.6.1.2.1.33.1.3.3.1.4.$index
+    $oid   = "1.3.6.1.2.1.33.1.3.3.1.4.$index"; # UPS-MIB:upsInputCurrent.$index
     $value = $ups_array[$phase]['upsInputCurrent'];
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsInputEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -58,7 +58,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
     ## Input power
-    $oid   = "UPS-MIB:upsInputTruePower.$index"; # or 1.3.6.1.2.1.33.1.3.3.1.5.$index
+    $oid   = "1.3.6.1.2.1.33.1.3.3.1.5.$index"; # UPS-MIB:upsInputTruePower.$index
     $value = $ups_array[$phase]['upsInputTruePower'];
     discover_sensor($valid['sensor'], 'power', $device, $oid, "upsInputEntry.".$index, $type, $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -69,7 +69,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     $descr = "Output"; if ($ups_array[0]['upsOutputNumLines'] > 1) { $descr .= " Phase $index"; }
     
     ## Output voltage
-    $oid   = "UPS-MIB:upsOutputVoltage.$index"; # or 1.3.6.1.2.1.33.1.4.4.1.2.$index
+    $oid   = "1.3.6.1.2.1.33.1.4.4.1.2.$index"; # UPS-MIB:upsOutputVoltage.$index
     $value = $ups_array[$phase]['upsOutputVoltage'];
     discover_sensor($valid['sensor'], 'voltage', $device, $oid, "upsOutputEntry.".$index, $type, $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -79,7 +79,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
     ## Output current
-    $oid   = "UPS-MIB:upsOutputCurrent.$index"; # or 1.3.6.1.2.1.33.1.4.4.1.3.$index
+    $oid   = "1.3.6.1.2.1.33.1.4.4.1.3.$index"; # UPS-MIB:upsOutputCurrent.$index
     $value = $ups_array[$phase]['upsOutputCurrent'];
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsOutputEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -89,7 +89,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
     ## Output power
-    $oid   = "UPS-MIB:upsOutputPower.$index"; # or 1.3.6.1.2.1.33.1.4.4.1.4.$index
+    $oid   = "1.3.6.1.2.1.33.1.4.4.1.4.$index"; # UPS-MIB:upsOutputPower.$index
     $value = $ups_array[$phase]['upsOutputPower'];
     discover_sensor($valid['sensor'], 'power', $device, $oid, "upsOutputEntry.".$index, $type, $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -98,7 +98,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     # Bypass
     
     ## Bypass voltage
-    $oid   = "UPS-MIB:upsBypassVoltage.$index"; # or 1.3.6.1.2.1.33.1.5.3.1.2.$index
+    $oid   = "1.3.6.1.2.1.33.1.5.3.1.2.$index"; # UPS-MIB:upsBypassVoltage.$index
     $value = $ups_array[$phase]['upsBypassVoltage'];
     discover_sensor($valid['sensor'], 'voltage', $device, $oid, "upsBypassEntry.".$index, $type, $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -108,7 +108,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
     ## Bypass current
-    $oid   = "UPS-MIB:upsBypassCurrent.$index"; # or 1.3.6.1.2.1.33.1.5.3.1.3.$index
+    $oid   = "1.3.6.1.2.1.33.1.5.3.1.3.$index"; # UPS-MIB:upsBypassCurrent.$index
     $value = $ups_array[$phase]['upsBypassCurrent'];
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBypassEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -118,7 +118,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
     if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
     ## Bypass power
-    $oid   = "UPS-MIB:upsBypassPower.$index"; # or 1.3.6.1.2.1.33.1.5.3.1.4.$index
+    $oid   = "1.3.6.1.2.1.33.1.5.3.1.4.$index"; # UPS-MIB:upsBypassPower.$index
     $value = $ups_array[$phase]['upsBypassPower'];
     discover_sensor($valid['sensor'], 'power', $device, $oid, "upsBypassEntry.".$index, $type, $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -130,7 +130,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
 
   if (isset($ups_array[0]['upsBatteryTemperature']))
   {
-    $oid = "UPS-MIB:upsBatteryTemperature.0"; # or 1.3.6.1.2.1.33.1.2.7.0
+    $oid = "1.3.6.1.2.1.33.1.2.7.0"; # UPS-MIB:upsBatteryTemperature.0
 
     discover_sensor($valid['sensor'], 'temperature', $device, $oid, "upsBatteryTemperature", 'ups-mib', "Battery", 1, 1, NULL, NULL, NULL, NULL, $ups_array[0]['upsBatteryTemperature']);
 
@@ -142,7 +142,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
 
   if (isset($ups_array[0]['upsBatteryCurrent']))
   {
-    $oid = "UPS-MIB:upsBatteryCurrent.0"; # or 1.3.6.1.2.1.33.1.2.6.0
+    $oid = "1.3.6.1.2.1.33.1.2.6.0"; # UPS-MIB:upsBatteryCurrent.0
 
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBatteryCurrent", 'ups-mib', "Battery", 10, 1, NULL, NULL, NULL, NULL, $ups_array[0]['upsBatteryCurrent']);
 
@@ -154,7 +154,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
 
   if (isset($ups_array[0]['upsBatteryVoltage']))
   {
-    $oid = "UPS-MIB:upsBatteryVoltage.0"; # or 1.3.6.1.2.1.33.1.2.5.0
+    $oid = "1.3.6.1.2.1.33.1.2.5.0"; # UPS-MIB:upsBatteryVoltage.0
 
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBatteryVoltage", 'ups-mib', "Battery", 10, 1, NULL, NULL, NULL, NULL, $ups_array[0]['upsBatteryVoltage']);
 
@@ -165,7 +165,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
   }
 
   ## Output Frequency
-  $oid   = "UPS-MIB:upsOutputFrequency.0"; # or 1.3.6.1.2.1.33.1.4.2.0
+  $oid   = "1.3.6.1.2.1.33.1.4.2.0"; # UPS-MIB:upsOutputFrequency.0
   $value = snmp_get($device, $oid, "-Oqv") / 10;
   discover_sensor($valid['sensor'], 'frequency', $device, $oid, "upsOutputFrequency", 'ups-mib', "Output", 10, 1, NULL, NULL, NULL, NULL, $value);
 
@@ -175,7 +175,7 @@ if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modul
   if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
 
   ## Bypass Frequency
-  $oid   = "UPS-MIB:upsBypassFrequency.0"; # or 1.3.6.1.2.1.33.1.5.1.0
+  $oid   = "1.3.6.1.2.1.33.1.5.1.0"; # UPS-MIB:upsBypassFrequency.0
   $value = snmp_get($device, $oid, "-Oqv") / 10;
   discover_sensor($valid['sensor'], 'frequency', $device, $oid, "upsBypassFrequency", 'ups-mib', "Bypass", 10, 1, NULL, NULL, NULL, NULL, $value);
 
