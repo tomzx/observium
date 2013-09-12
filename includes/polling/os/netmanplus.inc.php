@@ -1,6 +1,6 @@
 <?php
 
-include("includes/polling/os/rfc1628.inc.php");
+include("includes/polling/os/ups-mib.inc.php");
 
 
 ?>
