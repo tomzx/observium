@@ -1,7 +1,7 @@
 <?php
 
 // RFC1628 UPS
-if (isset($config['modules_compat']['rfc1628'][$device['os']]) && $config['modules_compat']['rfc1628'][$device['os']])
+if (isset($config['modules_compat']['ups-mib'][$device['os']]) && $config['modules_compat']['ups-mib'][$device['os']])
 {
   echo("UPS-MIB ");
 
