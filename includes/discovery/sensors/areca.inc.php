@@ -88,4 +88,4 @@ if ($device['os'] == "areca")
   }
 }
 
-?>
+// EOF

@@ -1,5 +1,7 @@
 <?php
 
+// FIXME - Could do with a rewrite (see UPS-MIB for example of code style)
+
 // XUPS-MIB
 if ($device['os'] == "powerware")
 {
@@ -190,4 +192,4 @@ if ($device['os'] == "powerware")
   }
 }
 
-?>
+// EOF

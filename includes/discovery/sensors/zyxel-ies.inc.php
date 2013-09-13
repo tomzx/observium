@@ -23,4 +23,4 @@ if ($device['os'] == 'ies')
   }
 }
 
-?>
+// EOF

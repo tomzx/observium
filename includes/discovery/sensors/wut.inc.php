@@ -33,4 +33,4 @@ if ($device['os'] == "wut")
   }
 }
 
-?>
+// EOF

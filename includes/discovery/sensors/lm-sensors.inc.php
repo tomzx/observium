@@ -69,4 +69,4 @@ if ($device['os'] == "linux")
   }
 }
 
-?>
+// EOF

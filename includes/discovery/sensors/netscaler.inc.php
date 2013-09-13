@@ -31,3 +31,4 @@ if ($device['os'] == "netscaler")
   unset($ns_sensor_array);
 }
 
+// EOF

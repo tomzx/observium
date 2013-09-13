@@ -54,3 +54,5 @@ if ($device['os'] == "linux")
 }
 
 unset($sm_sensor_array);
+
+// EOF

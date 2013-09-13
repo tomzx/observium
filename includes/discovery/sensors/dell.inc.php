@@ -126,4 +126,4 @@ if (strstr($device['hardware'], "Dell"))
   }
 }
 
-?>
+// EOF

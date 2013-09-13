@@ -60,4 +60,4 @@ if ($device['os'] == "cometsystem-p85xx")
   }
 }
 
-?>
+// EOF

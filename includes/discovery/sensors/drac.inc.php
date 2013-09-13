@@ -81,4 +81,4 @@ if ($device['os'] == 'drac')
   }
 }
 
-?>
+// EOF

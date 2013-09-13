@@ -79,4 +79,4 @@ if ($device['os'] == "papouch")
   }
 }
 
-?>
+// EOF

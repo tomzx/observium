@@ -1,11 +1,45 @@
 <?php
 
-if ($device['os'] == "akcp" || $device['os'] == "minkelsrms")
+// FIXME - Could do with a rewrite (see UPS-MIB for example of code style)
+
+if ($device['os'] == 'sensorprobe' || $device['os'] == 'minkelsrms')
 {
   $oids = snmp_walk($device, ".1.3.6.1.4.1.3854.1.2.2.1.16.1.4", "-Osqn", "");
   if ($debug) { echo($oids."\n"); }
   $oids = trim($oids);
-  if ($oids) echo("AKCP ");
+  if ($oids) echo("HHMSAGENT-MIB ");
+  foreach (explode("\n", $oids) as $data)
+  {
+    $data = trim($data);
+    if ($data)
+    {
+      list($oid,$status) = explode(" ", $data,2);
+      if ($status != 0) # 2 = normal, 0 = not connected
+      {
+        $split_oid = explode('.',$oid);
+        $index = $split_oid[count($split_oid)-1];
+        $descr_oid = ".1.3.6.1.4.1.3854.1.2.2.1.17.1.1.$index";
+        $oid = ".1.3.6.1.4.1.3854.1.2.2.1.17.1.3.$index";
+        $warnlimit_oid = ".1.3.6.1.4.1.3854.1.2.2.1.17.1.7.$index";
+        $limit_oid = ".1.3.6.1.4.1.3854.1.2.2.1.17.1.8.$index";
+        $warnlowlimit_oid = ".1.3.6.1.4.1.3854.1.2.2.1.17.1.9.$index";
+        $lowlimit_oid = ".1.3.6.1.4.1.3854.1.2.2.1.17.1.10.$index";
+
+        $descr = trim(snmp_get($device, $descr_oid, "-Oqv", ""),'"');
+        $humidity = snmp_get($device, $oid, "-Oqv", "");
+        $warnlimit = snmp_get($device, $warnlimit_oid, "-Oqv", "");
+        $limit = snmp_get($device, $limit_oid, "-Oqv", "");
+        $lowlimit = snmp_get($device, $lowlimit_oid, "-Oqv", "");
+        $warnlowlimit = snmp_get($device, $warnlowlimit_oid, "-Oqv", "");
+
+        discover_sensor($valid['sensor'], 'humidity', $device, $oid, $index, 'akcp', $descr, '1', '1', $lowlimit, $warnlowlimit, $limit, $warnlimit, $humidity);
+      }
+    }
+  }
+
+  $oids = snmp_walk($device, ".1.3.6.1.4.1.3854.1.2.2.1.16.1.4", "-Osqn", "");
+  if ($debug) { echo($oids."\n"); }
+  $oids = trim($oids);
   foreach (explode("\n", $oids) as $data)
   {
     $data = trim($data);
@@ -36,4 +70,4 @@ if ($device['os'] == "akcp" || $device['os'] == "minkelsrms")
   }
 }
 
-?>
+// EOF

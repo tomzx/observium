@@ -179,4 +179,4 @@ if ($device['os'] == "ipoman")
   }
 }
 
-?>
+// EOF
