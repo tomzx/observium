@@ -1,4 +1,4 @@
-<?
+<?php
 
 // Definitions related to the applications system
 
