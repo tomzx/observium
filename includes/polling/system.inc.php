@@ -42,7 +42,7 @@
         list($type_msg,$ten_ms) = explode(":", $hrSystemUptime);
         $uptime = $ten_ms/100;
         echo("Found Wrong type: interpreting as seconds instead of timeticks ($uptime seconds)\n");
-       $uptime_msg = "Using integer SNMP Agent hrSystemUptime";
+        $uptime_msg = "Using integer SNMP Agent hrSystemUptime";
       } else {
         // HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (63050465) 7 days, 7:08:24.65
         $hours = $hours + ($days * 24);
@@ -63,15 +63,15 @@
       $secs = $secs + ($mins * 60);
       $uptime = $secs;
       $uptime_msg = "Using SNMP Agent sysUpTime";
-    }
 
-    // Last check snmpEngineTime and fix if needed uptime (sysUpTime 68 year rollover issue)
-    // SNMP-FRAMEWORK-MIB::snmpEngineTime.0 = INTEGER: 72393514 seconds
-    $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
-    if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $uptime)
-    {
-      $uptime = $snmpEngineTime;
-      $uptime_msg = "Using SNMP Agent snmpEngineTime";
+      // Last check snmpEngineTime and fix if needed uptime (sysUpTime 68 year rollover issue)
+      // SNMP-FRAMEWORK-MIB::snmpEngineTime.0 = INTEGER: 72393514 seconds
+      $snmpEngineTime = (integer)snmp_get($device, "snmpEngineTime.0", "-OUqv", "SNMP-FRAMEWORK-MIB");
+      if (is_numeric($snmpEngineTime) && $snmpEngineTime > 0 && $snmpEngineTime > $uptime)
+      {
+        $uptime = $snmpEngineTime;
+        $uptime_msg = "Using SNMP Agent snmpEngineTime";
+      }
     }
   }
   echo($uptime_msg." (".$uptime." seconds)\n");
