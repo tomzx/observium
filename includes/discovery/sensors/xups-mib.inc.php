@@ -7,189 +7,181 @@ if ($device['os'] == "powerware")
 {
   echo(" XUPS-MIB ");
 
-  $oids = snmp_walk($device, "xupsBatCurrent", "-Osqn", "XUPS-MIB");
-  if ($debug) { echo($oids."\n"); }
-  $oids = trim($oids);
-  foreach (explode("\n", $oids) as $data)
+  echo("Caching OIDs: ");
+  $xups_array = array();
+  echo("xupsInput ");
+  $xups_array = snmpwalk_cache_multi_oid($device, "xupsInput", $xups_array, "XUPS-MIB");
+  echo("xupsOutput ");
+  $xups_array = snmpwalk_cache_multi_oid($device, "xupsOutput", $xups_array, "XUPS-MIB");
+  echo("xupsBypass ");
+  $xups_array = snmpwalk_cache_multi_oid($device, "xupsBypass", $xups_array, "XUPS-MIB");
+
+  foreach (array_slice(array_keys($xups_array),1) as $phase)
   {
-    $data = trim($data);
-    if ($data)
+    # FIXME: to poll: [xupsOutputLoad] => 15
+
+    # Skip garbage output:
+    # xupsOutput.6.0 = 0
+    # xupsOutput.7.0 = 0
+    # xupsOutput.8.0 = 0
+    if (!isset($xups_array[$phase]['xupsInputPhase'])) { break; }
+    
+    # Input
+    $index = $xups_array[$phase]['xupsInputPhase'];
+    $descr = "Input"; if ($xups_array[0]['xupsInputNumPhases'] > 1) { $descr .= " Phase $index"; }
+    
+    ## Input voltage
+    $oid   = "1.3.6.1.4.1.534.1.3.4.1.2.$index"; # XUPS-MIB:xupsInputVoltage.$index
+    $value = $xups_array[$phase]['xupsInputVoltage'];
+    
+    discover_sensor($valid['sensor'], 'voltage', $device, $oid, "xupsInputEntry.".$index, 'xups', $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
+
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-voltage-xups-3.4.1.2." . $index . ".rrd");
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-voltage-xups-xupsInputEntry." . $index . ".rrd");
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
+
+    ## Input current
+    $oid   = "1.3.6.1.4.1.534.1.3.4.1.3.$index"; # XUPS-MIB:xupsInputCurrent.$index
+    $value = $xups_array[$phase]['xupsInputCurrent'];
+    
+    if ($value < 10000) # xupsInputCurrent.1 = 136137420 ? really? You're nuts.
     {
-      list($oid,$descr) = explode(" ", $data,2);
-      $split_oid = explode('.',$oid);
-      $current_id = $split_oid[count($split_oid)-1];
-      $current_oid  = "1.3.6.1.4.1.534.1.2.3.$current_id";
-      $divisor = 1;
-      $current = snmp_get($device, $current_oid, "-O vq");
-      $descr = "Battery" . (count(explode("\n",$oids)) == 1 ? '' : ' ' . ($current_id+1));
-      $type = "xups";
-      $index = "1.2.3.".$current_id;
-
-      discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+      discover_sensor($valid['sensor'], 'current', $device, $oid, "xupsInputEntry.".$index, 'xups', $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
     }
+
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-current-xups-3.4.1.3." . $index . ".rrd");
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-current-xups-xupsInputEntry." . $index . ".rrd");
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
+
+    ## Input power
+    $oid   = "1.3.6.1.4.1.534.1.3.4.1.4.$index"; # XUPS-MIB:xupsInputWatts.$index
+    $value = $xups_array[$phase]['xupsInputWatts'];
+    discover_sensor($valid['sensor'], 'power', $device, $oid, "xupsInputEntry.".$index, 'xups', $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
+
+    ## No rename code for input power, this is a new measurement
+
+    # Output
+    $index = $xups_array[$phase]['xupsOutputLinePhase'];
+    $descr = "Output"; if ($xups_array[0]['xupsOutputNumPhases'] > 1) { $descr .= " Phase $index"; }
+    
+    ## Output voltage
+    $oid   = "1.3.6.1.4.1.534.1.4.4.1.2.$index"; # XUPS-MIB:xupsOutputVoltage.$index
+    $value = $xups_array[$phase]['xupsOutputVoltage'];
+    discover_sensor($valid['sensor'], 'voltage', $device, $oid, "xupsOutputEntry.".$index, 'xups', $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
+
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-voltage-xups-4.4.1.2." . $index . ".rrd");
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-voltage-xups-xupsOutputEntry." . $index . ".rrd");
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
+
+    ## Output current
+    $oid   = "1.3.6.1.4.1.534.1.4.4.1.3.$index"; # XUPS-MIB:xupsOutputCurrent.$index
+    $value = $xups_array[$phase]['xupsOutputCurrent'];
+    discover_sensor($valid['sensor'], 'current', $device, $oid, "xupsOutputEntry.".$index, 'xups', $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
+
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-current-xups-4.4.1.3." . $index . ".rrd");
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-current-xups-xupsOutputEntry." . $index . ".rrd");
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
+
+    ## Output power
+    $oid   = "1.3.6.1.4.1.534.1.4.4.1.4.$index"; # XUPS-MIB:xupsOutputWatts.$index
+    $value = $xups_array[$phase]['xupsOutputWatts'];
+    discover_sensor($valid['sensor'], 'power', $device, $oid, "xupsOutputEntry.".$index, 'xups', $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
+
+    ## No rename code for output power, this is a new measurement
+
+    # Bypass
+    $index = $xups_array[$phase]['xupsBypassLinePhase'];
+    $descr = "Bypass"; if ($xups_array[0]['xupsBypassNumPhases'] > 1) { $descr .= " Phase $index"; }
+    
+    ## Bypass voltage
+    $oid   = "1.3.6.1.4.1.534.1.5.3.1.2.$index"; # XUPS-MIB:xupsBypassVoltage.$index
+    $value = $xups_array[$phase]['xupsBypassVoltage'];
+    discover_sensor($valid['sensor'], 'voltage', $device, $oid, "xupsBypassEntry.".$index, 'xups', $descr, 1, 1, NULL, NULL, NULL, NULL, $value);
+
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-voltage-xups-5.3.1.2." . $index . ".rrd");
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-voltage-xups-xupsBypassEntry." . $index . ".rrd");
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
   }
 
-  $oids = trim(snmp_walk($device, "xupsOutputCurrent", "-OsqnU", "XUPS-MIB"));
-  if ($debug) { echo($oids."\n"); }
-  list($unused,$numPhase) = explode(' ',$oids);
-  for($i = 1; $i <= $numPhase;$i++)
-  {
-    $current_oid  = "1.3.6.1.4.1.534.1.4.4.1.3.$i";
-    $descr      = "Output"; if ($numPhase > 1) $descr .= " Phase $i";
-    $current    = snmp_get($device, $current_oid, "-Oqv");
-    $type       = "xups";
-    $divisor    = 1;
-    $index      = "4.4.1.3.".$i;
+  ## Input frequency
+  $oid   = "1.3.6.1.4.1.534.1.3.1.0.$index"; # XUPS-MIB:xupsInputFrequency.0
+  $value = $xups_array[0]['xupsInputFrequency'] / 10;
+  discover_sensor($valid['sensor'], 'frequency', $device, $oid, "xupsInputFrequency.0", 'xups', "Input", 10, 1, NULL, NULL, NULL, NULL, $value);
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+  ## Rename code for older revisions
+  $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-frequency-xups-3.1.0.rrd");
+  $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/" . safename("sensor-frequency-xups-xupsInputFrequency.0.rrd");
+  if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
+
+  ## Output Frequency
+  $oid   = "1.3.6.1.4.534.1.4.2.0"; # XUPS-MIB:xupsOutputFrequency.0
+  $value = $xups_array[0]['xupsOutputFrequency'] / 10;
+  discover_sensor($valid['sensor'], 'frequency', $device, $oid, "xupsOutputFrequency.0", 'xups', "Output", 10, 1, NULL, NULL, NULL, NULL, $value);
+
+  ## Rename code for older revisions
+  $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-frequency-xups-4.2.0.rrd";
+  $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-frequency-xups-xupsOutputFrequency.0.rrd";
+  if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
+
+  ## Bypass Frequency
+  $oid   = "1.3.6.1.4.534.1.5.1.0"; # XUPS-MIB:xupsBypassFrequency.0
+  $value = $xups_array[0]['xupsBypassFrequency'] / 10;
+  discover_sensor($valid['sensor'], 'frequency', $device, $oid, "xupsBypassFrequency.0", 'xups', "Bypass", 10, 1, NULL, NULL, NULL, NULL, $value);
+
+  ## Rename code for older revisions
+  $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-frequency-xups-5.1.0.rrd";
+  $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-frequency-xups-xupsBypassFrequency.0.rrd";
+  if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
+
+  $xups_array = array();
+  $xups_array = snmpwalk_cache_multi_oid($device, "xupsBattery", $xups_array, "XUPS-MIB");
+  $xups_array = snmpwalk_cache_multi_oid($device, "xupsEnvironment", $xups_array, "XUPS-MIB");
+
+  if (isset($xups_array[0]['upsBatCurrent']))
+  {
+    $oid = "1.3.6.1.4.1.534.1.2.3.0"; # XUPS-MIB:xupsBatCurrent.0
+
+    discover_sensor($valid['sensor'], 'current', $device, $oid, "xupsBatCurrent.0", 'xups', "Battery", 1, 1, NULL, NULL, NULL, NULL, $xups_array[0]['xupsBatCurrent']);
+
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-current-xups-1.2.3.0.rrd";
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-current-xups-xupsBatCurrent.0.rrd";
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
   }
 
-  $oids = trim(snmp_walk($device, "xupsInputCurrent", "-OsqnU", "XUPS-MIB"));
-  if ($debug) { echo($oids."\n"); }
-  list($unused,$numPhase) = explode(' ',$oids);
-  for($i = 1; $i <= $numPhase;$i++)
+  if (isset($xups_array[0]['xupsBatVoltage']))
   {
-    $current_oid   = "1.3.6.1.4.1.534.1.3.4.1.3.$i";
-    $descr      = "Input"; if ($numPhase > 1) $descr .= " Phase $i";
-    $current    = snmp_get($device, $current_oid, "-Oqv");
-    $type       = "xups";
-    $divisor    = 1;
-    $index      = "3.4.1.3.".$i;
+    $oid = "1.3.6.1.4.1.534.1.2.2.0"; # XUPS-MIB:xupsBatVoltage.0
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+    discover_sensor($valid['sensor'], 'current', $device, $oid, "xupsBatVoltage.0", 'xups', "Battery", 1, 1, NULL, NULL, NULL, NULL, $xups_array[0]['xupsBatVoltage']);
+
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-current-xups-1.2.5.0.rrd";
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-current-xups-xupsBatVoltage.0.rrd";
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
   }
 
-  # I'm not sure if there is provision for frequency of multiple phases in this MIB -TL
-
-  # XUPS-MIB::xupsInputFrequency.0 = INTEGER: 500
-  $freq_oid = ".1.3.6.1.4.1.534.1.3.1.0";
-  $descr    = "Input";
-  $divisor  = 10;
-  $current  = snmp_get($device, $freq_oid, "-Oqv") / $divisor;
-  $type     = "xups";
-  $index    = '3.1.0';
-  discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
-
-  # XUPS-MIB::xupsOutputFrequency.0 = INTEGER: 500
-  $freq_oid = "1.3.6.1.4.1.534.1.4.2.0";
-  $descr    = "Output";
-  $divisor  = 10;
-  $current  = snmp_get($device, $freq_oid, "-Oqv") / $divisor;
-  $type     = "xups";
-  $index    = '4.2.0';
-  discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
-
-  # XUPS-MIB::xupsBypassFrequency.0 = INTEGER: 500
-  $freq_oid = "1.3.6.1.4.1.534.1.5.1.0";
-  $descr    = "Bypass";
-  $divisor  = 10;
-  $current  = snmp_get($device, $freq_oid, "-Oqv");
-  if ($current != "")
+  if (isset($xups_array[0]['xupsEnvAmbientTemp']))
   {
-    # Bypass is not always available in SNMP
-    $current /= $divisor;
-    $type     = "xups";
-    $index    = '5.1.0';
-    discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
-  }
+    $oid  = ".1.3.6.1.4.1.534.1.6.1.0"; # XUPS-MIB:xupsEnvAmbientTemp.0
 
-  # XUPS-MIB::xupsEnvAmbientTemp.0 = INTEGER: 52
-  # XUPS-MIB::xupsEnvAmbientLowerLimit.0 = INTEGER: 0
-  # XUPS-MIB::xupsEnvAmbientUpperLimit.0 = INTEGER: 70
-  $oids = snmp_walk($device, "xupsEnvAmbientTemp", "-Osqn", "XUPS-MIB");
-  if ($debug) { echo($oids."\n"); }
-  $oids = trim($oids);
-  if ($oids) echo("Powerware Ambient Temperature ");
-  foreach (explode("\n", $oids) as $data)
-  {
-    $data = trim($data);
-    if ($data)
-    {
-      list($oid,$descr) = explode(" ", $data,2);
-      $split_oid = explode('.',$oid);
-      $temperature_id = $split_oid[count($split_oid)-1];
-      $temperature_oid  = ".1.3.6.1.4.1.534.1.6.1.$temperature_id";
-      $lowlimit = snmp_get($device,"upsEnvAmbientLowerLimit.$temperature_id", "-Ovq", "XUPS-MIB");
-      $highlimit = snmp_get($device,"upsEnvAmbientUpperLimit.$temperature_id", "-Ovq", "XUPS-MIB");
-      $temperature = snmp_get($device, $temperature_oid, "-Ovq");
-      $descr = "Ambient" . (count(explode("\n",$oids)) == 1 ? '' : ' ' . ($temperature_id+1));
+    $lowlimit = $xups_array[0]['upsEnvAmbientLowerLimit'];
+    $highlimit = $xups_array[0]['upsEnvAmbientUpperLimit'];
 
-      discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, '1.6.1.'.$temperature_id, 'powerware', $descr, '1', '1', $lowlimit, NULL, NULL, $highlimit, $temperature);
-    }
-  }
+    discover_sensor($valid['sensor'], 'temperature', $device, $oid, "xupsEnvAmbientTemp.0", 'xups', "Ambient", 1, 1, NULL, NULL, NULL, NULL, $xups_array[0]['xupsEnvAmbientTemp']);
 
-  # XUPS-MIB::xupsBatVoltage.0 = INTEGER: 51
-  $oids = snmp_walk($device, "xupsBatVoltage", "-Osqn", "XUPS-MIB");
-  if ($debug) { echo($oids."\n"); }
-  $oids = trim($oids);
-  foreach (explode("\n", $oids) as $data)
-  {
-    $data = trim($data);
-    if ($data)
-    {
-      list($oid,$descr) = explode(" ", $data,2);
-      $split_oid = explode('.',$oid);
-      $volt_id = $split_oid[count($split_oid)-1];
-      $volt_oid  = ".1.3.6.1.4.1.534.1.2.2.$volt_id";
-      $divisor = 1;
-      $volt = snmp_get($device, $volt_oid, "-O vq") / $divisor;
-      $descr = "Battery" . (count(explode("\n",$oids)) == 1 ? '' : ' ' . ($volt_id+1));
-      $type = "xups";
-      $index = '1.2.5.'.$volt_id;
-
-      discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $volt);
-    }
-  }
-
-  # XUPS-MIB::xupsInputNumPhases.0 = INTEGER: 1
-  $oids = trim(snmp_walk($device, "xupsInputNumPhases", "-OsqnU", "XUPS-MIB"));
-  if ($debug) { echo($oids."\n"); }
-  list($unused,$numPhase) = explode(' ',$oids);
-  for($i = 1; $i <= $numPhase;$i++)
-  {
-    # XUPS-MIB::xupsInputVoltage.1 = INTEGER: 228
-    $volt_oid = ".1.3.6.1.4.1.534.1.3.4.1.2.$i";
-    $descr    = "Output"; if ($numPhase > 1) $descr .= " Phase $i";
-    $type     = "xups";
-    $divisor  = 1;
-    $current  = snmp_get($device, $volt_oid, "-Oqv") / $divisor;
-    $index    = '3.4.1.2.'.$i;
-
-    discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
-  }
-
-  # XUPS-MIB::xupsOutputNumPhases.0 = INTEGER: 1
-  $oids = trim(snmp_walk($device, "xupsOutputNumPhases", "-OsqnU"));
-  if ($debug) { echo($oids."\n"); }
-  list($unused,$numPhase) = explode(' ',$oids);
-  for($i = 1; $i <= $numPhase;$i++)
-  {
-    # XUPS-MIB::xupsOutputVoltage.1 = INTEGER: 228
-    $volt_oid = ".1.3.6.1.4.1.534.1.4.4.1.2.$i";
-    $descr    = "Output"; if ($numPhase > 1) $descr .= " Phase $i";
-    $type     = "xups";
-    $divisor  = 1;
-    $current  = snmp_get($device, $volt_oid, "-Oqv") / $divisor;
-    $index    = '4.4.1.2.'.$i;
-
-    discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
-  }
-
-  # XUPS-MIB::xupsBypassNumPhases.0 = INTEGER: 1
-  $oids = trim(snmp_walk($device, "xupsBypassNumPhases", "-OsqnU"));
-  if ($debug) { echo($oids."\n"); }
-  list($unused,$numPhase) = explode(' ',$oids);
-  for($i = 1; $i <= $numPhase;$i++)
-  {
-    $volt_oid = ".1.3.6.1.4.1.534.1.5.3.1.2.$i";
-    $descr    = "Bypass"; if ($numPhase > 1) $descr .= " Phase $i";
-    $type     = "xups";
-    $divisor  = 1;
-    $current  = snmp_get($device, $volt_oid, "-Oqv") / $divisor;
-    $index    = '5.3.1.2.'.$i;
-
-    discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+    ## Rename code for older revisions
+    $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-temperature-powerware-1.6.1.0.rrd";
+    $new_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-temperature-xups-xupsEnvAmbientTemp.0.rrd";
+    if (is_file($old_rrd)) { rename($old_rrd,$new_rrd); echo("Moved RRD "); }
   }
 }
+
+unset($xups_array);
 
 // EOF

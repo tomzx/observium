@@ -39,7 +39,7 @@ if (isset($config['modules_compat']['ups-mib'][$device['os']]) && $config['modul
 
     ## Input frequency
     $oid   = "1.3.6.1.2.1.33.1.3.3.1.2.$index"; # UPS-MIB:upsInputFrequency.$index
-    $value = $ups_array[$phase]['upsInputFrequency'];
+    $value = $ups_array[$phase]['upsInputFrequency'] / 10;
     discover_sensor($valid['sensor'], 'frequency', $device, $oid, "upsInputEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
     ## Rename code for older revisions
@@ -49,7 +49,7 @@ if (isset($config['modules_compat']['ups-mib'][$device['os']]) && $config['modul
 
     ## Input current
     $oid   = "1.3.6.1.2.1.33.1.3.3.1.4.$index"; # UPS-MIB:upsInputCurrent.$index
-    $value = $ups_array[$phase]['upsInputCurrent'];
+    $value = $ups_array[$phase]['upsInputCurrent'] / 10;
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsInputEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
     ## Rename code for older revisions
@@ -80,7 +80,7 @@ if (isset($config['modules_compat']['ups-mib'][$device['os']]) && $config['modul
 
     ## Output current
     $oid   = "1.3.6.1.2.1.33.1.4.4.1.3.$index"; # UPS-MIB:upsOutputCurrent.$index
-    $value = $ups_array[$phase]['upsOutputCurrent'];
+    $value = $ups_array[$phase]['upsOutputCurrent'] / 10;
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsOutputEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
     ## Rename code for older revisions
@@ -109,7 +109,7 @@ if (isset($config['modules_compat']['ups-mib'][$device['os']]) && $config['modul
 
     ## Bypass current
     $oid   = "1.3.6.1.2.1.33.1.5.3.1.3.$index"; # UPS-MIB:upsBypassCurrent.$index
-    $value = $ups_array[$phase]['upsBypassCurrent'];
+    $value = $ups_array[$phase]['upsBypassCurrent'] / 10;
     discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBypassEntry.".$index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $value);
 
     ## Rename code for older revisions
@@ -144,7 +144,7 @@ if (isset($config['modules_compat']['ups-mib'][$device['os']]) && $config['modul
   {
     $oid = "1.3.6.1.2.1.33.1.2.6.0"; # UPS-MIB:upsBatteryCurrent.0
 
-    discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBatteryCurrent", 'ups-mib', "Battery", 10, 1, NULL, NULL, NULL, NULL, $ups_array[0]['upsBatteryCurrent']);
+    discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBatteryCurrent", 'ups-mib', "Battery", 10, 1, NULL, NULL, NULL, NULL, $ups_array[0]['upsBatteryCurrent'] / 10);
 
     ## Rename code for older revisions
     $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-current-rfc1628-500.rrd";
@@ -156,7 +156,7 @@ if (isset($config['modules_compat']['ups-mib'][$device['os']]) && $config['modul
   {
     $oid = "1.3.6.1.2.1.33.1.2.5.0"; # UPS-MIB:upsBatteryVoltage.0
 
-    discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBatteryVoltage", 'ups-mib', "Battery", 10, 1, NULL, NULL, NULL, NULL, $ups_array[0]['upsBatteryVoltage']);
+    discover_sensor($valid['sensor'], 'current', $device, $oid, "upsBatteryVoltage", 'ups-mib', "Battery", 10, 1, NULL, NULL, NULL, NULL, $ups_array[0]['upsBatteryVoltage'] / 10);
 
     ## Rename code for older revisions
     $old_rrd  = $config['rrd_dir'] . "/".$device['hostname']."/sensor-current-rfc1628-1.2.5.0.rrd";
