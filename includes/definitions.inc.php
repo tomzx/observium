@@ -91,20 +91,19 @@ if (isset($config['enable_printers']) && $config['enable_printers'])
 
 // Syslog colour and name translation
 
-  $config['syslog']['priorities']['0'] = array('name' => 'emergency',   'color' => '#D94640');
-  $config['syslog']['priorities']['1'] = array('name' => 'alert',        'color' => '#D94640');
-  $config['syslog']['priorities']['2'] = array('name' => 'critical',      'color' => '#D94640');
-  $config['syslog']['priorities']['3'] = array('name' => 'error',        'color' => '#E88126');
-  $config['syslog']['priorities']['4'] = array('name' => 'warning',      'color' => '#F2CA3F');
-  $config['syslog']['priorities']['5'] = array('name' => 'notification', 'color' => '#107373');
-  $config['syslog']['priorities']['6'] = array('name' => 'informational', 'color' => '#499CA6');
-  $config['syslog']['priorities']['7'] = array('name' => 'debugging',     'color' => '#5AA637');
-  $config['syslog']['priorities']['8'] = array('name' => 'other',         'color' => '#5AA637');
+$config['syslog']['priorities']['0'] = array('name' => 'emergency',   'color' => '#D94640');
+$config['syslog']['priorities']['1'] = array('name' => 'alert',        'color' => '#D94640');
+$config['syslog']['priorities']['2'] = array('name' => 'critical',      'color' => '#D94640');
+$config['syslog']['priorities']['3'] = array('name' => 'error',        'color' => '#E88126');
+$config['syslog']['priorities']['4'] = array('name' => 'warning',      'color' => '#F2CA3F');
+$config['syslog']['priorities']['5'] = array('name' => 'notification', 'color' => '#107373');
+$config['syslog']['priorities']['6'] = array('name' => 'informational', 'color' => '#499CA6');
+$config['syslog']['priorities']['7'] = array('name' => 'debugging',     'color' => '#5AA637');
 
-  for ($i = 8; $i < 16; $i++)
-  {
-    $config['syslog']['priorities'][$i] = array('name' => 'other',        'color' => '#D2D8F9');
-  }
+for ($i = 8; $i < 16; $i++)
+{
+  $config['syslog']['priorities'][$i] = array('name' => 'other',        'color' => '#D2D8F9');
+}
 
 // This is used to provide pretty rewrites for lowercase things we drag out of the db and use in URLs
 
@@ -202,29 +201,18 @@ if (isset($config['cdp_autocreate']))
   $config['dp_autocreate'] = $config['cdp_autocreate'];
 }
 
-// Detect if we're on CLI or WEB.
-if (php_sapi_name() !== 'cli' || !isset($_SERVER["argv"][0]) || isset($_SERVER['REQUEST_METHOD'])  || isset($_SERVER['REMOTE_ADDR']))
-{
-  $cli = FALSE;
-} else {
-  $cli = TRUE;
-}
-
-
 // If we're on SSL, let's properly detect it
 function is_ssl()
 {
-  if ( isset($_SERVER['HTTPS']) )
+  if (isset($_SERVER['HTTPS']))
   {
-      if ( 'on' == strtolower($_SERVER['HTTPS']) )
-          return true;
-      if ( '1' == $_SERVER['HTTPS'] )
-          return true;
-  } elseif ( isset($_SERVER['SERVER_PORT']) && ( '443' == $_SERVER['SERVER_PORT'] ) )
+    if ('on' == strtolower($_SERVER['HTTPS'])) { return TRUE; }
+    if ('1' == $_SERVER['HTTPS']) { return TRUE; }
+  } elseif (isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT']))
   {
-    return true;
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 if (is_ssl())
 {

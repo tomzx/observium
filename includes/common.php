@@ -300,13 +300,13 @@ function shorthost($hostname, $len = 0)
   return ($shorthost);
 }
 
-function isCli()
+function is_cli()
 {
   if (php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR']))
   {
-    return true;
+    return TRUE;
   } else {
-    return false;
+    return FALSE;
   }
 }
 
@@ -379,7 +379,7 @@ function print_message($text, $type='')
       break;
   }
 
-  if (isCli())
+  if (is_cli())
   {
     include_once($config['install_dir'] . "/includes/pear/Console/Color2.php");
 

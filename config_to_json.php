@@ -12,22 +12,23 @@ $config_file = 'config.php';
 // move to observium install dir
 chdir(dirname($argv[0]));
 
-function iscli() {
- 
-     if(php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR'])) {
-          return true;
-     } else {
-          return false;
-     }
+function is_cli()
+{
+  if (php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR']))
+  {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
 }
 
 // check if we are running throw the CLI, otherwise abort
 
-if ( iscli() ) {
-
-    require_once($defaults_config_file);
-    require_once($config_file);
-    print(json_encode($config));
+if (is_cli())
+{
+  require_once($defaults_config_file);
+  require_once($config_file);
+  print(json_encode($config));
 }
 
 ?>

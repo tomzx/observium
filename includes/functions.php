@@ -620,7 +620,7 @@ function createHost($host, $community = NULL, $snmpver, $port = 161, $transport 
     $device_id = dbInsert($device, 'devices');
     if ($device_id)
     {
-      if (isCli())
+      if (is_cli())
       {
         print_success("Now discovering ".$device['hostname']." (id = ".$device_id.")");
         $device['device_id'] = $device_id;
