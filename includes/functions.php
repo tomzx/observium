@@ -655,6 +655,18 @@ function hoststatus($id)
   return dbFetchCell("SELECT `status` FROM `devices` WHERE `device_id` = ?", array($id));
 }
 
+// Returns IP version for string or FALSE if string not an IP
+// get_ip_version('127.0.0.1')   === 4
+// get_ip_version('::1')         === 6
+// get_ip_version('my_hostname') === FALSE
+function get_ip_version($address)
+{
+  $address_version = FALSE;
+  if (Net_IPv4::validateIP($address))    { $address_version = 4; }
+  elseif (Net_IPv6::checkIPv6($address)) { $address_version = 6; }
+  return $address_version;
+}
+
 function is_ipv4_valid($ipv4_address, $ipv4_prefixlen = NULL)
 {
   if (strpos($ipv4_address, '/') !== FALSE) { list($ipv4_address, $ipv4_prefixlen) = explode('/', $ipv4_address); }

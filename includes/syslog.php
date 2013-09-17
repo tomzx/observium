@@ -10,6 +10,8 @@ function get_cache($host, $value)
 {
   global $dev_cache;
   
+  $host = strtolower(trim($host));
+  
   // Check cache expiration
   $now = time();
   $expired = TRUE;
@@ -25,31 +27,34 @@ function get_cache($host, $value)
     {
       case 'device_id':
         // Try by hostname
-        $dev_cache[$host]['device_id'] = dbFetchCell('SELECT `device_id` FROM devices WHERE `hostname` = ? OR `sysName` = ?', array($host, $host));
+        $dev_cache[$host]['device_id'] = dbFetchCell('SELECT `device_id` FROM `devices` WHERE `hostname` = ? OR `sysName` = ?', array($host, $host));
         // If failed, try by IP
         if (!is_numeric($dev_cache[$host]['device_id']))
         {
-          $ip = strtolower($host);
-          $address_type = (is_numeric(stripos($addr, ':abcdef'))) ? $address_type = 'ipv6' : $address_type = 'ipv4';
-          if ($address_type == 'ipv6') { $ip = Net_IPv6::uncompress($ip, TRUE); }
-          $address_count = dbFetchCell('SELECT COUNT(*) FROM `'.$address_type.'_addresses` WHERE '.$address_type.'_address = ?;', array($ip));
-          if ($address_count)
+          $ip = $host;
+          $ip_version = get_ip_version($ip);
+          if ($ip_version !== FALSE)
           {
-            $query = 'SELECT `device_id` FROM `'.$address_type.'_addresses` AS A, `ports` AS I WHERE A.'.$address_type.'_address = ? AND I.port_id = A.port_id';
-            // If more than one IP address, also check the status of the port.
-            if ($address_count > 1) { $query .= " AND I.`ifOperStatus` = 'up'"; }
-            $dev_cache[$host]['device_id'] = dbFetchCell($query, array($ip));
+            if ($ip_version == 6) { $ip = Net_IPv6::uncompress($ip, TRUE); }
+            $address_count = dbFetchCell('SELECT COUNT(*) FROM `ipv'.$ip_version.'_addresses` WHERE `ipv'.$ip_version.'_address` = ?;', array($ip));
+            if ($address_count)
+            {
+              $query = 'SELECT `device_id` FROM `ipv'.$ip_version.'_addresses` AS A, `ports` AS I WHERE A.`ipv'.$ip_version.'_address` = ? AND I.`port_id` = A.`port_id`';
+              // If more than one IP address, also check the status of the port.
+              if ($address_count > 1) { $query .= " AND I.`ifOperStatus` = 'up'"; }
+              $dev_cache[$host]['device_id'] = dbFetchCell($query, array($ip));
+            }
           }
         }
         break;
       case 'os':
-        $dev_cache[$host]['os'] = dbFetchCell('SELECT `os` FROM devices WHERE `device_id` = ?', array(get_cache($host, 'device_id')));
+        $dev_cache[$host]['os'] = dbFetchCell('SELECT `os` FROM `devices` WHERE `device_id` = ?', array(get_cache($host, 'device_id')));
         break;
       case 'version':
-        $dev_cache[$host]['version'] = dbFetchCell('SELECT `version` FROM devices WHERE `device_id`= ?', array(get_cache($host, 'device_id')));
+        $dev_cache[$host]['version'] = dbFetchCell('SELECT `version` FROM `devices` WHERE `device_id`= ?', array(get_cache($host, 'device_id')));
         break;
       default:
-        return null;
+        return NULL;
     }
   }
   return $dev_cache[$host][$value];
@@ -57,7 +62,7 @@ function get_cache($host, $value)
 
 function process_syslog($entry, $update)
 {
-  global $config, $dev_cache;
+  global $config;
 
   foreach ($config['syslog']['filter'] as $bi)
   {
@@ -86,7 +91,7 @@ function process_syslog($entry, $update)
       if (strstr($entry['msg'], "%"))
       {
         $entry['msg'] = preg_replace("/^%(.+?):\ /", "\\1||", $entry['msg']);
-        list(,$entry[msg]) = split(": %", $entry['msg']);
+        list(,$entry['msg']) = explode(": %", $entry['msg']);
         $entry['msg'] = "%" . $entry['msg'];
         $entry['msg'] = preg_replace("/^%(.+?):\ /", "\\1||", $entry['msg']);
       }
@@ -120,7 +125,7 @@ function process_syslog($entry, $update)
       }
       unset($matches);
 
-    } elseif($os == 'linux') {
+    } elseif ($os == 'linux') {
       $matches = array();
       // User_CommonName/123.213.132.231:39872 VERIFY OK: depth=1, /C=PL/ST=Malopolska/O=VLO/CN=v-lo.krakow.pl/emailAddress=root@v-lo.krakow.pl
       if ($entry['facility'] == 'daemon' && preg_match('#/([0-9]{1,3}\.) {3}[0-9]{1,3}:[0-9]{4,} ([A-Z]([A-Za-z])+( ?)) {2,}:#', $entry['msg']))

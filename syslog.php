@@ -13,6 +13,12 @@
  *
  */
 
+//Uncomment this lines for debugging
+#fclose(STDOUT);
+#fclose(STDERR);
+#$STDOUT = fopen("/tmp/syslog.out", "wb");
+#$STDERR = fopen("/tmp/syslog.err", "wb");
+
 include_once("includes/defaults.inc.php");
 include_once("config.php");
 include_once("includes/definitions.inc.php");
@@ -20,14 +26,14 @@ include($config['install_dir'] . "/includes/functions.php");
 
 $i = 1;
 
-if($config['syslog']['fifo'] !== FALSE)
+if (isset($config['syslog']['fifo']) && $config['syslog']['fifo'] !== FALSE)
 {
   // FIFO configured, try to grab logs from it
-  echo 'Opening FIFO: '.$config['syslog']['fifo'].PHP_EOL;
+  #echo 'Opening FIFO: '.$config['syslog']['fifo'].PHP_EOL; //No any echo to STDOUT/STDERR!
   $s = fopen($config['syslog']['fifo'],'r');
 } else {
   // No FIFO configured, take logs from stdin
-  echo 'Opening STDIN'.PHP_EOL;
+  #echo 'Opening STDIN'.PHP_EOL;                            //No any echo to STDOUT/STDERR!
   $s = fopen('php://stdin','r');
 }
 
