@@ -281,7 +281,7 @@ input.search-query{padding-right:14px;padding-right:4px \9;padding-left:14px;pad
 .form-search .radio input[type="radio"],.form-search .checkbox input[type="checkbox"],.form-inline .radio input[type="radio"],.form-inline .checkbox input[type="checkbox"]{float:left;margin-right:3px;margin-left:0;}
 .control-group{margin-bottom:10px;}
 legend+.control-group{margin-top:20px;-webkit-margin-top-collapse:separate;}
-.form-horizontal .control-group{margin-bottom:20px;*zoom:1;}.form-horizontal .control-group:before,.form-horizontal .control-group:after{display:table;content:"";line-height:0;}
+.form-horizontal .control-group{margin-bottom:10px;*zoom:1;}.form-horizontal .control-group:before,.form-horizontal .control-group:after{display:table;content:"";line-height:0;}
 .form-horizontal .control-group:after{clear:both;}
 .form-horizontal .control-group:before,.form-horizontal .control-group:after{content:" ";display:table;}
 .form-horizontal .control-group:after{clear:both;}

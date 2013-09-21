@@ -114,7 +114,12 @@ echo '
       <div class="title" style="float: right; margin-bottom: -13px; margin-top: -2px;"><a href="#conditions_modal" data-toggle="modal"><i class="oicon-pencil"></i> Edit</a></div>
       <div class="content">';
 
-
+      if($check['and'] == 1)
+			{
+			  echo 'Requires all conditions to match';
+			} else {
+				echo 'Requires all conditions to match';
+			}
 
    echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
    echo('<thead><tr>');

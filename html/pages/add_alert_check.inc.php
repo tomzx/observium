@@ -46,7 +46,7 @@
 		$check_array['alert_message'] = $_POST['alert_message'];
 		$check_array['severity'] = $_POST['alert_severity'];
 		$check_array['alerter'] = NULL;
-		$check_array['and'] = '1';   
+		$check_array['and'] = $_POST['and'];   
     $check_array['delay'] = $_POST['alert_delay'];		
 		$check_array['enable'] = '1';
 
@@ -162,7 +162,14 @@
       <div class="title"><i class="oicon-traffic-light"></i> Checker Conditions</div>
       <div class="title" style="float: right; margin-bottom: -10px;"><a href="#" class="tooltip-from-element" data-tooltip-id="tooltip-help-conditions"><i class="oicon-question"></i></a></div>
       <div class="content">
+			  <div style="margin-bottom: 10px;">
+            <select name="alert_and" class="selectpicker">
+              <option value="0" data-icon="oicon-or">Require any condition</option>
+							<option value="1" data-icon="oicon-and" selected>Require all conditions</option>
+		        </select>
+					</div>
         <textarea class="col-md-12" rows="3" name="check_conditions"></textarea>
+				
       </div> <!-- content -->
     </div> <!-- infobox -->
 		
@@ -210,8 +217,6 @@ ifOperStatus equals down</pre>
 			<pre>attribute_1 condition value_1
 attribute_2 condition value_2
 attribute_3 condition value_3</pre>
-
-Device attributes include: <span class=label>hostname</span>, <span class="label">sysName</span>, <span class="label">sysDescr</span>, <span class="label">sysContact</span>, <span class="label">version</span>, <span class="label">distro</span>, <span class="label">distro_ver</span>, <span class="label">kernel</span>, <span class="label">arch</span>, <span class="label">features</span>, <span class="label">location</span>, <span class="label">location_[city|county|state|country]</span>, <span class="label">os</span>, <span class="label">type</span> and <span class="label">serial</span>.<br />
 
       For example, to match a network device with core in its hostname
 			<pre>type equals network 
