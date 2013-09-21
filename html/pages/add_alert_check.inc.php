@@ -10,8 +10,8 @@
  * @copyright  (C) 2006 - 2013 Adam Armstrong
  *
  */
- 
-  // Hardcode exit if user doesn't have global write permissions. 
+
+ // Hardcode exit if user doesn't have global write permissions. 
   if ($_SESSION['userlevel'] < 10)
   {
     include("includes/error-no-perm.inc.php");
@@ -20,10 +20,15 @@
 
   if(isset($_POST['submit']) && $_POST['submit'] == "add_alert_check")
 	{
-	  r($_POST);
+	  
+		echo '<div class="alert alert-info">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		<div class="pull-left" style="padding:0 5px 0 0"><i class="oicon-information"></i></div>
+		<h4>Adding alert checker</h4>';
+		
 		foreach( array('entity_type', 'alert_name', 'alert_severity', 'check_conditions', 'assoc_device_conditions', 'assoc_entity_conditions') as $var)
 		{
-		  if(!isset($_POST[$var]) || strlen($_POST[$var]) == '0') { echo("boo"); break 2; }
+		  if(!isset($_POST[$var]) || strlen($_POST[$var]) == '0') { echo("Missing required data.</div>"); break 2; }
 		}
 		
 		$check_array = array();
@@ -49,8 +54,8 @@
 			
 		if(is_numeric($check_id))
 		{
-		
-		  echo('Alert inserted as <a href="'.generate_url(array('page' => 'alert_check', 'alert_test_id' => $check_id)).'">'.$check_id.'</a><br />');
+		  
+		  echo('<p>Alert inserted as <a href="'.generate_url(array('page' => 'alert_check', 'alert_test_id' => $check_id)).'">'.$check_id.'</a></p>');
 		
 		  $assoc_array = array();
 			$assoc_array['alert_test_id'] = $check_id;
@@ -78,9 +83,14 @@
 			$assoc_id = dbInsert('alert_assoc', $assoc_array);
 			if(is_numeric($assoc_id))
   		{
-	  	  echo("Association inserted as ".$assoc_id."<br />");
-      }
+	  	  echo("<p>Association inserted as ".$assoc_id."</p>");
+      } else {
+        echo('<p class="red">Association creation failed.</p>');
+			}
+		} else {
+        echo('<p class="red">Alert creation failed. Please note that the alert name <b>must</b> be unique.</p>');
 		}
+		echo '</div>';
   }	
 	
 ?>
