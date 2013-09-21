@@ -162,7 +162,7 @@
       <div class="title"><i class="oicon-traffic-light"></i> Checker Conditions</div>
       <div class="title" style="float: right; margin-bottom: -10px;"><a href="#" class="tooltip-from-element" data-tooltip-id="tooltip-help-conditions"><i class="oicon-question"></i></a></div>
       <div class="content">
-        <textarea class="col-md-12" rows="4" name="check_conditions"></textarea>
+        <textarea class="col-md-12" rows="3" name="check_conditions"></textarea>
       </div> <!-- content -->
     </div> <!-- infobox -->
 		
@@ -172,11 +172,11 @@
       <div class="content">
 			  <div class="control-group">
 	  		  <label>Device Association</label>
-	  		  <textarea class="col-md-12" rows="4" name="assoc_device_conditions"></textarea>
+	  		  <textarea class="col-md-12" rows="3" name="assoc_device_conditions" placeholder=""></textarea>
 					</div>
 	  		<div class="control-group">
 				  <label>Entity Association</label>
-          <textarea class="col-md-12" rows="4" name="assoc_entity_conditions"></textarea>
+          <textarea class="col-md-12" rows="3" name="assoc_entity_conditions"></textarea>
         </div>
 		  </div> <!-- content -->
     </div> <!-- infobox -->
@@ -210,6 +210,8 @@ ifOperStatus equals down</pre>
 			<pre>attribute_1 condition value_1
 attribute_2 condition value_2
 attribute_3 condition value_3</pre>
+
+Device attributes include: <span class=label>hostname</span>, <span class="label">sysName</span>, <span class="label">sysDescr</span>, <span class="label">sysContact</span>, <span class="label">version</span>, <span class="label">distro</span>, <span class="label">distro_ver</span>, <span class="label">kernel</span>, <span class="label">arch</span>, <span class="label">features</span>, <span class="label">location</span>, <span class="label">location_[city|county|state|country]</span>, <span class="label">os</span>, <span class="label">type</span> and <span class="label">serial</span>.<br />
 
       For example, to match a network device with core in its hostname
 			<pre>type equals network 

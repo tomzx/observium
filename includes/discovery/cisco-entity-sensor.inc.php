@@ -54,6 +54,8 @@ if ($device['os_group'] == "cisco")
     {
       #echo("[" . $entry['entSensorType'] . "|" . $entry['entSensorValue']. "|" . $index . "]");
 
+      $ok = TRUE;
+
       if ($entitysensor[$entry['entSensorType']] && is_numeric($entry['entSensorValue']) && is_numeric($index))
       {
         $entPhysicalIndex = $index;
@@ -91,6 +93,9 @@ if ($device['os_group'] == "cisco")
 
         #echo("$index : ".$entry['entSensorScale']."|");
 
+        // Returning blatantly broken value. IGNORE.
+        if ($current == "-32768") {$ok = FALSE; }
+
         // FIXME this stuff is foul
         if ($entry['entSensorScale'] == "nano")  { $divisor = "1000000000"; $multiplier = "1";  }
         if ($entry['entSensorScale'] == "micro") { $divisor = "1000000"; $multiplier = "1";  }
@@ -111,31 +116,29 @@ if ($device['os_group'] == "cisco")
           foreach ($t_oids[$index] as $t_index => $entry)
           {
             // Critical Limit
-            if ($entry['entSensorThresholdSeverity'] == "major" && $entry['entSensorThresholdRelation'] == "greaterOrEqual")
+            if ($entry['entSensorThresholdSeverity'] == "major" && $entry['entSensorThresholdRelation'] == "greaterOrEqual" && $entry['entSensorThresholdValue'] != "-32768")
             {
               $limit = $entry['entSensorThresholdValue'] * $multiplier / $divisor;
             }
 
-            if ($entry['entSensorThresholdSeverity'] == "major" && $entry['entSensorThresholdRelation'] == "lessOrEqual")
+            if ($entry['entSensorThresholdSeverity'] == "major" && $entry['entSensorThresholdRelation'] == "lessOrEqual" && $entry['entSensorThresholdValue'] != "-32768")
             {
               $limit_low = $entry['entSensorThresholdValue'] * $multiplier / $divisor;
             }
 
             // Warning Limit
-            if ($entry['entSensorThresholdSeverity'] == "minor" && $entry['entSensorThresholdRelation'] == "greaterOrEqual")
+            if ($entry['entSensorThresholdSeverity'] == "minor" && $entry['entSensorThresholdRelation'] == "greaterOrEqual" && $entry['entSensorThresholdSeverity'] != "-32768")
             {
               $warn_limit = $entry['entSensorThresholdValue'] * $multiplier / $divisor;
             }
 
-            if ($entry['entSensorThresholdSeverity'] == "minor" && $entry['entSensorThresholdRelation'] == "lessOrEqual")
+            if ($entry['entSensorThresholdSeverity'] == "minor" && $entry['entSensorThresholdRelation'] == "lessOrEqual" && $entry['entSensorThresholdSeverity'] != "-32768")
             {
               $warn_limit_low = $entry['entSensorThresholdValue'] * $multiplier / $divisor;
             }
           }
         }
         // End Threshold code
-
-        $ok = TRUE;
 
         if ($current == "-127") { $ok = FALSE; }                              // False reading
 #        if ($type == "temperature" && $current < 1) { $ok = FALSE; }        // False reading. Temperature <1 :)

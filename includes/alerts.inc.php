@@ -850,14 +850,14 @@ function process_alerts($device)
         }
 
         $graphs = ""; $metric_text = "";
-        foreach($state['metrics'] AS $metric => $value)
-        {
+        #foreach($state['metrics'] AS $metric => $value)
+        #{
           $metric_text .= $metric ." = ".$value.PHP_EOL."<br />";
-          if(is_array($config['alert_graphs'][$entry['entity_type']][$metric]))
+          if(is_array($config['entities'][$entry['entity_type']]['graph']))
           {
             // We can draw a graph for this type/metric pair!
 
-            $graph_array = $config['alert_graphs'][$entry['entity_type']][$metric];
+            $graph_array = $config['entities'][$entry['entity_type']][graph];
             foreach($graph_array as $key => $val)
             {
               // Check to see if we need to do any substitution
@@ -876,7 +876,7 @@ function process_alerts($device)
             unset($graph_array);
 
           }
-        }
+        #}
 
 #$css = data_uri($config['html_dir'].'/css/bootstrap-mini.css' ,'text/css');
 
