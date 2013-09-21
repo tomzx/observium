@@ -1,4 +1,4 @@
-/* glue: 0.3 hash: af0e3c3edc */
+/* glue: 0.3 hash: 31b8aca026 */
 [class^="oicon-"], [class*=" oicon-"] { display: inline-block;  margin-top: 1px;  *margin-right: .3em;  vertical-align: text-top; background-image: url("../img/sprite.png");  background-position: 16px 16px;  background-repeat: no-repeat; }
 .oicon-widescreen{background-position:0px 0px;width:24px;height:24px;}
 .oicon-non-widescreen{background-position:-24px 0px;width:24px;height:24px;}
@@ -198,11 +198,12 @@
 .oicon-arrow-incident-green{background-position:-16px -216px;width:16px;height:16px;}
 .oicon-arrow-incident-blue{background-position:-32px -216px;width:16px;height:16px;}
 .oicon-arrow-in{background-position:-48px -216px;width:16px;height:16px;}
-.oicon-arrow-branch-gyr{background-position:-64px -216px;width:16px;height:16px;}
-.oicon-arrow-branch-byr{background-position:-80px -216px;width:16px;height:16px;}
-.oicon-arrow-branch-bgr{background-position:-96px -216px;width:16px;height:16px;}
-.oicon-arrow-branch-000-left{background-position:-112px -216px;width:16px;height:16px;}
-.oicon-application-terminal{background-position:-128px -216px;width:16px;height:16px;}
-.oicon-application-icon-large{background-position:-144px -216px;width:16px;height:16px;}
-.oicon-application-block{background-position:-160px -216px;width:16px;height:16px;}
-.oicon-application--exclamation{background-position:-176px -216px;width:16px;height:16px;}
+.oicon-arrow-circle{background-position:-64px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-gyr{background-position:-80px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-byr{background-position:-96px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-bgr{background-position:-112px -216px;width:16px;height:16px;}
+.oicon-arrow-branch-000-left{background-position:-128px -216px;width:16px;height:16px;}
+.oicon-application-terminal{background-position:-144px -216px;width:16px;height:16px;}
+.oicon-application-icon-large{background-position:-160px -216px;width:16px;height:16px;}
+.oicon-application-block{background-position:-176px -216px;width:16px;height:16px;}
+.oicon-application--exclamation{background-position:-192px -216px;width:16px;height:16px;}

@@ -109,6 +109,7 @@ for ($i = 8; $i < 16; $i++)
 
 $config['nicecase'] = array(
     "bgp_peer" => "BGP Peer",
+	"cbgp_peer" => "BGP Peer (AFI/SAFI)",
     "netscaler_vsvr" => "Netscaler vServer",
     "netscaler_svc" => "Netscaler Service",
     "mempool" => "Memory",
@@ -129,6 +130,10 @@ $config['nicecase'] = array(
     "powerdns-recursor" => "PowerDNS Recursor",
     "freeradius" => "FreeRADIUS",
     "postfix_mailgraph" => "Postfix Mailgraph",
+	"ge" => "Greater or equal", 
+	"le" => "Less or equal", 
+	"notequals" => "Doesn't equal",
+    "notmatch"  => "Doesn't match",
     "" => "");
 
 // FIXME - different icons for power/volt/current

@@ -196,9 +196,7 @@ function nicecase($item)
 {
 
   $mappings = $GLOBALS['config']['nicecase'];
-
   if(isset($mappings[$item])) { return $mappings[$item]; }
-
   return ucfirst($item);
 
 }

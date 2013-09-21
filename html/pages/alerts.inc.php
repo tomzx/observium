@@ -52,19 +52,21 @@ foreach ($types as $thing)
 
 $navbar['options_right']['alarmed']['url']  = generate_url($vars, array('page' => 'alerts', 'alerted' => '1'));
 $navbar['options_right']['alarmed']['text'] = 'Alarmed Only';
+$navbar['options_right']['alarmed']['icon'] = 'oicon-exclamation-red';
 if ($vars['alerted'] == '1') { $navbar['options_right']['alarmed']['class'] = 'active';
 $navbar['options_right']['alarmed']['url']  = generate_url($vars, array('page' => 'alerts', 'alerted' => NULL));}
 
 
 $navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alerts', 'action'=>'update'));
 $navbar['options_right']['update']['text'] = 'Regenerate';
+$navbar['options_right']['update']['icon'] = 'oicon-arrow-circle';
 if ($vars['action'] == 'update') { $navbar['options_right']['update']['class'] = 'active'; }
 
 // Print out the navbar defined above
 print_navbar($navbar);
 
 // Cache the alert_tests table for use later
-$alert_rules = cache_alert_rules();
+$alert_rules = cache_alert_rules($vars);
 
 // Print out a table of alerts matching $vars
 $vars['pagination'] = 1;

@@ -22,7 +22,7 @@ if($vars['editing'])
   if($vars['editing'] == "check_conditions")
   {
     $conds = array();
-    foreach(explode('\n', $vars['check_conditions']) AS $cond)
+    foreach(explode("\n", $vars['check_conditions']) AS $cond)
     {
       list($this['metric'], $this['condition'], $this['value']) = explode(" ", $cond);
       $conds[] = $this;
@@ -217,16 +217,17 @@ echo '
  <form id="edit" name="edit" method="post" class="form" action="">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Edit Check Conditions</h3>
+    <h3 id="myModalLabel"><i class="oicon-traffic-light"></i> Edit Check Conditions</h3>
   </div>
   <div class="modal-body">
 
   <input type=hidden name="editing" value="check_conditions">
-
+  <span class="help-block">Please exercise care when editing here.</span>
+	
   <fieldset>
     <div class="control-group">
       <div class="controls">
-        <input type="textarea" class="col-md-12" rows="3" name="check_conditions" value="<?php echo(htmlentities(implode("\n", $condition_text)));  ?>"/>
+        <textarea class="col-md-12" rows="4" name="check_conditions"><?php echo(htmlentities(implode("\n", $condition_text))); ?></textarea>
       </div>
     </div>
   </fieldset>

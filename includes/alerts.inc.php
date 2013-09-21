@@ -194,9 +194,9 @@ function cache_device_conditions($device)
   {
     if(match_device($device, $assoc['device_attributes']))
     {
-      echo(" Matched $assoc_key");
+      // echo(" Matched $assoc_key");
     } else {
-      echo(" Did not match $assoc_key");
+      // echo(" Did not match $assoc_key");
       unset($conditions['assoc'][$assoc_key]);
     }
   }
@@ -238,13 +238,17 @@ function cache_device_alert_table($device_id)
  * @return array
 */
 
-function cache_alert_rules()
+function cache_alert_rules($vars)
 {
 
   $alert_rules = array();
   $rule_count = 0;
-
-  foreach (dbFetchRows("SELECT * FROM `alert_tests`") as $entry)
+  $where = 'WHERE 1';
+  $args = array();
+  
+  if(isset($vars['entity_type'])) { $where .= ' AND `entity_type` = ?'; $args[] = $vars['entity_type']; }
+  
+  foreach (dbFetchRows("SELECT * FROM `alert_tests` ". $where, $args) as $entry)
   {
     if($entry['alerter'] == '') {$entry['alerter'] = "default"; }
     $alert_rules[$entry['alert_test_id']] = $entry;
@@ -721,7 +725,7 @@ function update_device_alert_table($device)
   foreach ($conditions['assoc'] as $assoc_id => $assoc)
   {
     // Check that the entity_type matches the one we're interested in.
-    echo("Matching $assoc_id (".$assoc['entity_type'].")");
+    // echo("Matching $assoc_id (".$assoc['entity_type'].")");
 
     list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($assoc['entity_type']);
 
@@ -735,7 +739,7 @@ function update_device_alert_table($device)
       $alert_count++;
     }
 
-    echo(count($entities)." matched".PHP_EOL);
+    // echo(count($entities)." matched".PHP_EOL);
 
     echo("\n");
 

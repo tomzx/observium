@@ -11,11 +11,27 @@
  *
  */
 
+// Run Actions
+ 
+if($vars['action'] == 'update')
+{
+  echo '<div class="well">';
+  foreach(dbFetchRows("SELECT * FROM `devices`") AS $device)
+  {
+    update_device_alert_table($device);
+  }
+  echo '</div>';
+  
+  unset($vars['action']);
+
+}
 
 // Page to display list of configured alert checks
 
-$alert_check = cache_alert_rules();
-#$alert_assoc = cache_alert_assoc();
+$alert_check = cache_alert_rules($vars);
+#$alert_assoc = cache_alert_assoc($vars);
+
+// Build header menu
 
 foreach (dbFetchRows("SELECT * FROM `alert_assoc` WHERE 1") as $entry)
 {
@@ -23,6 +39,45 @@ foreach (dbFetchRows("SELECT * FROM `alert_assoc` WHERE 1") as $entry)
   $alert_assoc[$entry['alert_test_id']][$entry['alert_assoc_id']]['attributes'] = json_decode($entry['attributes'], TRUE);
   $alert_assoc[$entry['alert_test_id']][$entry['alert_assoc_id']]['device_attributes'] = json_decode($entry['device_attributes'], TRUE);
 }
+
+$navbar['class'] = "navbar-narrow";
+$navbar['brand'] = "Alert Types";
+
+$types = dbFetchRows("SELECT `entity_type` FROM `alert_table` GROUP BY `entity_type`");
+
+$navbar['options']['all']['url'] = generate_url($vars, array('page' => 'alert_checks', 'entity_type' => NULL));
+$navbar['options']['all']['text'] = htmlspecialchars(nicecase('all'));
+if (!isset($vars['entity_type'])) {
+  $navbar['options']['all']['class'] = "active";
+  $navbar['options']['all']['url'] = generate_url($vars, array('page' => 'alerts_checks', 'entity_type' => NULL));
+}
+
+foreach ($types as $thing)
+{
+  if ($vars['entity_type'] == $thing['entity_type'])
+  {
+    $navbar['options'][$thing['entity_type']]['class'] = "active";
+    $navbar['options'][$thing['entity_type']]['url'] = generate_url($vars, array('page' => 'alert_checks', 'entity_type' => NULL));
+  } else {
+    $navbar['options'][$thing['entity_type']]['url'] = generate_url($vars, array('page' => 'alert_checks', 'entity_type' => $thing['entity_type']));
+  }
+  $navbar['options'][$thing['entity_type']]['text'] = htmlspecialchars(nicecase($thing['entity_type']));
+}
+
+
+$navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alert_checks', 'action'=>'update'));
+$navbar['options_right']['update']['text'] = 'Regenerate';
+$navbar['options_right']['update']['icon'] = 'oicon-arrow-circle';
+// We don't really need to highlight Regenerate, as it's not a display option, but an action.
+// if ($vars['action'] == 'update') { $navbar['options_right']['update']['class'] = 'active'; }
+
+$navbar['options_right']['add']['url']  = generate_url(array('page' => 'add_alert_check'));
+$navbar['options_right']['add']['text'] = 'Add Check';
+$navbar['options_right']['add']['icon'] = 'oicon-plus-circle';
+
+// Print out the navbar defined above
+print_navbar($navbar);
+
 
 foreach (dbFetchRows("SELECT * FROM `alert_table` LEFT JOIN `alert_table-state` ON `alert_table`.`alert_table_id` = `alert_table-state`.`alert_table_id`") as $entry)
 {
@@ -42,6 +97,7 @@ foreach (dbFetchRows("SELECT * FROM `alert_table` LEFT JOIN `alert_table-state` 
   </thead>
   <tbody>', PHP_EOL;
 
+  
 foreach($alert_check as $check)
 {
 
