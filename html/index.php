@@ -43,6 +43,7 @@ include($config['html_dir'] . "/includes/functions.inc.php");
 
   <base href="<?php echo($config['base_url']); ?>" />
   <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap-select.css" rel="stylesheet" type="text/css" />
   <link href="css/google-code-prettify.css" rel="stylesheet" type="text/css" />
   <link href="css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
   <link href="css/mktree.css" rel="stylesheet" type="text/css" />

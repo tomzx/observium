@@ -108,15 +108,15 @@
         <div class="control-group">
           <label class="control-label" for="entity_type">Entity Type</label>
           <div class="controls">
-            <select name="entity_type" class="selectpicker">
+            <select name="entity_type" class="selectpicker" data-show-icon="true">
               <?php
-              // This should go in definitions
-		          $entity_types = array('port', 'processor', 'mempool', 'netscaler_svc', 'netscaler_vsvr', 'sensor', 'bgp_peer', 'cbgp_peer');
-		          foreach($entity_types as $entity_type)
+
+		          foreach($config['entities'] as $entity_type => $entity_type_array)
 		          {
 		            echo '<option value="'.$entity_type.'" ';
+								if(!isset($entity_type_array['icon'])) { $entity_type_array['icon'] = $config['entity_default']['icon']; }
                 echo($vars['entity_type'] == $entity_type  || ($vars['entity_type'] == '')  ? 'selected' : ''); 
-		            echo '>'.nicecase($entity_type).'</option>';
+		            echo ' data-icon="'.$entity_type_array['icon'].'"> '.nicecase($entity_type).'</option>';
               }		  
 		          ?>
             </select>

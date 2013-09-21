@@ -18,6 +18,9 @@ include($config['install_dir'].'/includes/definitions/vmware_guestid.inc.php');
 // Apps system definitions
 include($config['install_dir'].'/includes/definitions/apps.inc.php');
 
+// Entity type definitions
+include($config['install_dir'].'/includes/definitions/entities.inc.php');
+
 // Alert Graphs
 ## FIXME - this is ugly
 
