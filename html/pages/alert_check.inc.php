@@ -18,11 +18,10 @@ $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", arr
 if(($_SESSION['userlevel'] < 10))
 {
  // No editing for you!
-} 
+}
 elseif($vars['editing'])
 {
   // We are editing. Lets see what we are editing.
-
   if($vars['editing'] == "check_conditions")
   {
     $conds = array();
@@ -34,6 +33,27 @@ elseif($vars['editing'])
     $conds = json_encode($conds);
     $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
   }
+  elseif($vars['editing'] == "assoc_conditions")
+  {
+    $d_conds = array();
+    foreach(explode("\n", $vars['assoc_device_conditions']) AS $cond)
+    {
+      list($this['attribute'], $this['condition'], $this['value']) = explode(" ", $cond);
+      $d_conds[] = $this;
+    }
+    $d_conds = json_encode($d_conds);
+
+    $e_conds = array();
+    foreach(explode("\n", $vars['assoc_entity_conditions']) AS $cond)
+    {
+      list($this['attribute'], $this['condition'], $this['value']) = explode(" ", $cond);
+      $e_conds[] = $this;
+    }
+    $e_conds = json_encode($e_conds);
+    $rows_updated = dbUpdate(array('device_attributes' => $d_conds, 'attributes' => $e_conds), 'alert_assoc', '`alert_assoc_id` = ?', array($vars['assoc_id']));
+
+  }
+
 
   if ($rows_updated > 0)
   {
@@ -114,7 +134,12 @@ echo '
       <div class="title" style="float: right; margin-bottom: -13px; margin-top: -2px;"><a href="#conditions_modal" data-toggle="modal"><i class="oicon-pencil"></i> Edit</a></div>
       <div class="content">';
 
-
+      if($check['and'] == 1)
+			{
+			  echo 'Requires all conditions to match';
+			} else {
+				echo 'Requires all conditions to match';
+			}
 
    echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
    echo('<thead><tr>');
@@ -156,11 +181,12 @@ echo '
       <div class="title"><i class="oicon-sql-join-left"></i> Associations</div>
       <div class="content">';
 
-    echo('<table class="table table-condensed table-bordered table-striped table-rounded">');
-    echo('<thead><tr>');
-    echo('<th style="width: 45%;">Device Match</th>');
-    echo('<th style="width: 45%;">Entity Match</th>');
-    echo('</tr></thead>');
+    echo '<table class="table table-condensed table-bordered table-striped table-rounded">';
+    echo '<thead><tr>';
+    echo '<th style="width: 45%;">Device Match</th>';
+    echo '<th style="">Entity Match</th>';
+    echo '<th style="width: 10%;"></th>';
+    echo '</tr></thead>';
 
 
     foreach($assocs as $assoc_id => $assoc)
@@ -169,6 +195,7 @@ echo '
       echo('<td>');
       echo('<strong>');
       $assoc['device_attributes'] = json_decode($assoc['device_attributes'], TRUE);
+      $assoc_dev_text = array();
       if(is_array($assoc['device_attributes']))
       {
         foreach($assoc['device_attributes'] as $attribute)
@@ -177,6 +204,7 @@ echo '
           echo($attribute['condition'].' ');
           echo($attribute['value']);
           echo('<br />');
+          $assoc_dev_text[] = $attribute['attrib'].' '.$attribute['condition'].' '.$attribute['value'];
         }
       } else {
         echo("*");
@@ -185,6 +213,7 @@ echo '
       echo('</td>');
       echo('<td><strong>');
       $assoc['attributes'] = json_decode($assoc['attributes'], TRUE);
+      $assoc_entity_text = array();
       if(is_array($assoc['attributes']))
       {
         foreach($assoc['attributes'] as $attribute)
@@ -193,13 +222,55 @@ echo '
           echo($attribute['condition'].' ');
           echo($attribute['value']);
           echo('<br />');
+          $assoc_entity_text[] = $attribute['attrib'].' '.$attribute['condition'].' '.$attribute['value'];
         }
       } else {
         echo("*");
       }
     }
+    echo '</td>';
+    echo '<td><a href="#assoc_modal_',$assoc['alert_assoc_id'],'" data-toggle="modal"><i class="oicon-pencil"></i> Edit</a></td>';
+    echo '</table>';
+?>
 
-    echo('</table>');
+<div id="assoc_modal_<?php echo $assoc['alert_assoc_id']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <form id="edit" name="edit" method="post" class="form" action="">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><i class="oicon-sql-join-inner"></i> Edit Association Conditions</h3>
+  </div>
+  <div class="modal-body">
+
+  <input type=hidden name="editing" value="assoc_conditions">
+  <input type=hidden name="assoc_id" value = "<?php echo $assoc['alert_assoc_id']; ?>">
+  <span class="help-block">Please exercise care when editing here.</span>
+
+  <fieldset>
+    <div class="control-group">
+      <label>Device match</label>
+      <div class="controls">
+        <textarea class="col-md-12" rows="4" name="assoc_device_conditions"><?php echo(htmlentities(implode("\n", $assoc_dev_text))); ?></textarea>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Entity match</label>
+      <div class="controls">
+        <textarea class="col-md-12" rows="4" name="assoc_entity_conditions"><?php echo(htmlentities(implode("\n", $assoc_entity_text))); ?></textarea>
+      </div>
+    </div>
+  </fieldset>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+ </form>
+</div>
+
+<?
+
 
 
 echo '

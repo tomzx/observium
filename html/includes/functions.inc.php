@@ -36,7 +36,7 @@ function generate_alert_graph($graph_array)
    $vars['height'] = '150';
    $vars['width']  = '400';
    $vars['legend'] = 'no';
-   $vars['from']   = $config['time']['day'];
+   $vars['from']   = $config['time']['twoday'];
    $vars['to']     = $config['time']['now'];
 
    #echo("doing");

@@ -40,6 +40,8 @@ include("includes/definitions.inc.php");
 include("includes/functions.php");
 include("includes/discovery/functions.inc.php");
 
+$cli = TRUE;
+
 $start = utime();
 $runtime_stats = array();
 

@@ -167,9 +167,9 @@ if($list['entity_id']) {      echo('      <th style="">Entity</th>'); }
 echo '
       <th style="width: 5%">State</th>
       <th>Message</th>
-      <th style="width: 7.5%;">Checked</th>
-      <th style="width: 7.5%;">Changed</th>
-      <th style="width: 7.5%;">Alerted</th>
+      <th style="width: 8.5%;">Checked</th>
+      <th style="width: 8.5%;">Changed</th>
+      <th style="width: 8.5%;">Alerted</th>
     </tr>
   </thead>
   <tbody>'.PHP_EOL;

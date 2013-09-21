@@ -40,6 +40,8 @@ include("includes/definitions.inc.php");
 include("includes/functions.php");
 include("includes/polling/functions.inc.php");
 
+$cli = TRUE;
+
 $poller_start = utime();
 
 if (isset($options['V']))

@@ -26,13 +26,20 @@ include_once($config['install_dir'] . "/includes/pear/Mail/Mail.php");
 
 $start = utime();
 
-$options = getopt("h:m:i:n:r::d::a::qV");
+$options = getopt("h:m:i:n:r:s::d::a::qV");
 
 if (isset($options['V']))
 {
   print_message("Observium ".$config['version']);
   exit;
 }
+
+if (isset($options['s']))
+{
+  // User has asked for spam. LETS MAKE THE SPAM. (sends alerts even if they have already been sent)
+  $spam = TRUE;
+}
+
 if (!isset($options['q']))
 {
   print_message("%gObservium v".$config['version'].PHP_EOL."%WAlerter\n%n", 'color');
