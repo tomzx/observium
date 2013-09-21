@@ -12,8 +12,12 @@
  */
 
 // Run Actions
- 
-if($vars['action'] == 'update')
+
+if(($_SESSION['userlevel'] < 10))
+{
+ // No editing for you!
+} 
+elseif($vars['action'] == 'update')
 {
   echo '<div class="well">';
   foreach(dbFetchRows("SELECT * FROM `devices`") AS $device)
@@ -23,8 +27,21 @@ if($vars['action'] == 'update')
   echo '</div>';
   
   unset($vars['action']);
+}
+elseif($vars['submit'] == "delete_alert_checker" && $vars['confirm'] == "confirm")
+{
+
+    // Maybe expand this to output more info.
+
+    dbDelete('alert_tests', '`alert_test_id` = ?', array($vars['alert_test_id']));
+    dbDelete('alert_table', '`alert_test_id` = ?', array($vars['alert_test_id']));
+    dbDelete('alert_assoc', '`alert_test_id` = ?', array($vars['alert_test_id']));
+		
+		print_message("Deleting all traces of alert checker ".$vars['alert_test_id']);
 
 }
+
+
 
 // Page to display list of configured alert checks
 

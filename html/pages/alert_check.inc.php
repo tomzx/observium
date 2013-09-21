@@ -15,7 +15,11 @@
 
 $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));
 
-if($vars['editing'])
+if(($_SESSION['userlevel'] < 10))
+{
+ // No editing for you!
+} 
+elseif($vars['editing'])
 {
   // We are editing. Lets see what we are editing.
 
@@ -60,12 +64,15 @@ humanize_alert_check($check);
 
 /// End bit to go in to function
 
-echo '
+?>
+
 <div class="row">
   <div class="col-md-12">
     <div class="well info_box">
-      <div class="title"><i class="oicon-bell"></i> Checker Details</div>';
+      <div class="title"><i class="oicon-bell"></i> Checker Details</div>
+      <div class="title" style="float: right; margin-bottom: -10px;"><a href=""><a href="#delete_alert_modal" data-toggle="modal"><i class="oicon-minus-circle"></i> Delete</a></div>
 
+			<?php
 #if ($_SESSION['userlevel'] >= '10') { echo '      <div class="title pull-right"><a href="'.generate_url($vars, array('edit' => "TRUE")).'"><i class="oicon-gear"></i> Edit</a></div>'; }
 
 echo '
@@ -104,6 +111,7 @@ echo '
   <div class="col-md-4">
     <div class="well info_box">
       <div class="title"><i class="oicon-traffic-light"></i> Check Conditions</div>
+      <div class="title" style="float: right; margin-bottom: -13px; margin-top: -2px;"><a href="#conditions_modal" data-toggle="modal"><i class="oicon-pencil"></i> Edit</a></div>
       <div class="content">';
 
 
@@ -113,7 +121,7 @@ echo '
    echo('<th style="width: 33%;">Metric</th>');
    echo('<th style="width: 33%;">Condition</th>');
    if ($_SESSION['userlevel'] >= '10') {
-     echo '<th style="width: 33%;">Value <a href="#conditions_modal" class="pull-right" data-toggle="modal"> Edit</a></th>';
+     echo '<th style="width: 33%;">Value</th>';
    } else {
      echo '<th style="width: 33%;">Value</th>';
    }
@@ -236,6 +244,54 @@ echo '
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+  </div>
+ </form>
+</div>
+
+<div id="delete_alert_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="delete_alert" aria-hidden="true">
+ <form id="edit" name="edit" method="post" class="form" action="<?php echo(generate_url(array('page' => 'alert_checks'))); ?>">
+  <input type="hidden" name="alert_test_id" value="<?php echo($check['alert_test_id']); ?>">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><i class="oicon-minus-circle"></i> Delete Alert Checker <?php echo($check['alert_test_id']); ?></h3>
+  </div>
+  <div class="modal-body">
+
+  <span class="help-block">This will completely delete the alert checker and all device/entity associations.</span>
+  <fieldset>
+    <div class="control-group">
+      <label class="control-label" for="confirm">
+        <strong>Confirm</strong>
+      </label>
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name="confirm" value="confirm" onchange="javascript: showWarning(this.checked);" />
+          Yes, please delete this alert checker! 
+        </label>
+ 
+ <script type="text/javascript">
+        function showWarning(checked) {
+          $('#warning').toggle();
+          if (checked) {
+            $('#delete_button').removeAttr('disabled');
+          } else {
+            $('#delete_button').attr('disabled', 'disabled');
+          }
+        }
+      </script>
+ 
+</div>
+    </div>
+  </fieldset>
+
+	<div class="alert alert-message alert-danger" id="warning" style="display:none;">
+    <h4 class="alert-heading"><i class="icon-warning-sign"></i> Warning!</h4>
+    Are you sure you want to delete his alert checker? 
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button id="delete_button" type="submit" class="btn btn-danger" name="submit" value="delete_alert_checker" disabled><i class="icon-trash icon-white"></i> Delete Alert</button>
   </div>
  </form>
 </div>
