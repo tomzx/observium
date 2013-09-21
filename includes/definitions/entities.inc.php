@@ -20,6 +20,12 @@ $config['entities']['mempool']['entity_table']           = "mempools";
 $config['entities']['mempool']['icon']                   = "oicon-memory";
 $config['entities']['mempool']['graph']                  = array('type' => 'mempool_usage', 'id' => '@mempool_id');
 
+$config['entities']['processor']['entity_id_field']        = 'processor_id';
+$config['entities']['processor']['entity_descr_field']     = "processor_descr";
+$config['entities']['processor']['entity_table']           = "processors";
+$config['entities']['processor']['icon']                   = "oicon-processor";
+$config['entities']['processor']['graph']                  = array('type' => 'processor_usage', 'id' => '@processor_id');
+
 $config['entities']['sensor']['entity_id_field']         = "sensor_id";
 $config['entities']['sensor']['entity_descr_field']      = "sensor_descr";
 $config['entities']['sensor']['entity_table']            = "sensors";

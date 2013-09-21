@@ -56,16 +56,18 @@ include($config['install_dir'] . "/includes/pear/Net/IPv4.php");
 include($config['install_dir'] . "/includes/pear/Net/IPv6.php");
 include($config['install_dir'] . "/includes/pear/Net/MAC.php");
 
+// Push $_GET into $vars to be compatible with web interface naming
+
+foreach ($_GET as $name => $value)
+{
+  $vars[$name] = $value;
+}
+
 include($config['html_dir'] . "/includes/graphs/graph.inc.php");
 
 $end = utime(); $run = $end - $start;;
 
 if($debug) { echo("<br />Runtime ".$run." secs");
-
-echo('<br />MySQL: Cell    '.($db_stats['fetchcell']+0).'/'.round($db_stats['fetchcell_sec']+0,3).'s'.
-                  ' Row    '.($db_stats['fetchrow']+0). '/'.round($db_stats['fetchrow_sec']+0,3).'s'.
-                  ' Rows   '.($db_stats['fetchrows']+0).'/'.round($db_stats['fetchrows_sec']+0,3).'s'.
-                  ' Column '.($db_stats['fetchcol']+0). '/'.round($db_stats['fetchcol_sec']+0,3).'s');
 
 }
 

@@ -13,7 +13,7 @@
  *
  */
 
-//Uncomment this lines for debugging
+// Uncomment these lines for debugging
 #fclose(STDOUT);
 #fclose(STDERR);
 #$STDOUT = fopen("/tmp/syslog.out", "wb");

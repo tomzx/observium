@@ -14,6 +14,6 @@ $colour_minmax = "c5c5c5";
 $graph_max = 1;
 $unit_text = "Usage";
 
-include("includes/graphs/generic_simplex.inc.php");
+include($config['html_dir']."/includes/graphs/generic_simplex.inc.php");
 
 ?>

@@ -1,13 +1,6 @@
 <?php
 
-// Push $_GET into $vars to be compatible with web interface naming
-
 $total_start = utime();
-
-foreach ($_GET as $name => $value)
-{
-  $vars[$name] = $value;
-}
 
 preg_match('/^(?P<type>[a-z0-9A-Z-]+)_(?P<subtype>.+)/', $vars['type'], $graphtype);
 

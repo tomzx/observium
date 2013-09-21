@@ -36,8 +36,8 @@ function generate_alert_graph($graph_array)
    $vars['height'] = '150';
    $vars['width']  = '400';
    $vars['legend'] = 'no';
-   $vars['from']   = $config['time']['now'];
-   $vars['to']     = $config['time']['day'];
+   $vars['from']   = $config['time']['day'];
+   $vars['to']     = $config['time']['now'];
 
    #echo("doing");
    include($config['html_dir'].'/includes/graphs/graph.inc.php');

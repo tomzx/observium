@@ -3,7 +3,7 @@
 $scale_min = "0";
 $scale_max = "100";
 
-include("includes/graphs/common.inc.php");
+include($config['html_dir']."/includes/graphs/common.inc.php");
 
 $rrd_options .= " -b 1024";
 

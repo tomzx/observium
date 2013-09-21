@@ -3,7 +3,7 @@
 // Draw generic bits graph
 // args: ds_in, ds_out, rrd_filename, bg, legend, from, to, width, height, inverse, percentile
 
-include("includes/graphs/common.inc.php");
+include($config['html_dir']."/includes/graphs/common.inc.php");
 
 $unit_text = str_pad(truncate($unit_text,18,''),18);
 $line_text = str_pad(truncate($line_text,12,''),12);

@@ -6,7 +6,7 @@ function graph_error($string)
 
   $vars['bg'] = "FFBBBB";
 
-  include("includes/graphs/common.inc.php");
+  include($config['html_dir']."/includes/graphs/common.inc.php");
 
   $rrd_options .= " HRULE:0#555555";
   $rrd_options .= " --title='".$string."'";

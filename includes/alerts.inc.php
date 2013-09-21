@@ -850,33 +850,32 @@ function process_alerts($device)
         }
 
         $graphs = ""; $metric_text = "";
-        #foreach($state['metrics'] AS $metric => $value)
-        #{
+        foreach($state['metrics'] AS $metric => $value)
+        {
           $metric_text .= $metric ." = ".$value.PHP_EOL."<br />";
-          if(is_array($config['entities'][$entry['entity_type']]['graph']))
+        }
+
+        if(is_array($config['entities'][$entry['entity_type']]['graph']))
+        {
+          // We can draw a graph for this type/metric pair!
+
+          $graph_array = $config['entities'][$entry['entity_type']][graph];
+          foreach($graph_array as $key => $val)
           {
-            // We can draw a graph for this type/metric pair!
-
-            $graph_array = $config['entities'][$entry['entity_type']][graph];
-            foreach($graph_array as $key => $val)
+            // Check to see if we need to do any substitution
+            if (substr($val,0,1)=="@")
             {
-              // Check to see if we need to do any substitution
-              if (substr($val,0,1)=="@")
-              {
-                $nval = substr($val,1);
-                echo(" replaced ".$val." with ". $entity[$nval] ." from entity. ".PHP_EOL."<br />");
-                $graph_array[$key] = $entity[$nval];
-              }
+              $nval = substr($val,1);
+              echo(" replaced ".$val." with ". $entity[$nval] ." from entity. ".PHP_EOL."<br />");
+              $graph_array[$key] = $entity[$nval];
             }
-
-            print_vars($graph_array);
-
-            $image_data_uri = generate_alert_graph($graph_array);
-            $graphs .= '<img src="'.$image_data_uri.'">'."<br />";
-            unset($graph_array);
-
           }
-        #}
+          print_r($graph_array);
+          $image_data_uri = generate_alert_graph($graph_array);
+          print_r(strlen($image_data_uri));
+          $graphs .= '<img src="'.$image_data_uri.'">'."<br />";
+          unset($graph_array);
+       }
 
 #$css = data_uri($config['html_dir'].'/css/bootstrap-mini.css' ,'text/css');
 

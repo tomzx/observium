@@ -3,7 +3,7 @@
 // Draw generic bits graph
 // args: ds_in, ds_out, rrd_filename, bg, legend, from, to, width, height, inverse, previous
 
-include("includes/graphs/common.inc.php");
+include($config['html_dir']."/includes/graphs/common.inc.php");
 
 if($format == "octets" || $format == "bytes")
 {
