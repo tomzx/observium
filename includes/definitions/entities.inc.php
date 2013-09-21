@@ -38,18 +38,23 @@ $config['entities']['bgp_peer']['entity_id_field']       = "bgpPeer_id";
 $config['entities']['bgp_peer']['entity_descr_field']    = "bgpPeerRemoteAddr";
 $config['entities']['bgp_peer']['entity_table']          = "bgpPeers";
 $config['entities']['bgp_peer']['icon']                  = "oicon-chain";
+$config['entities']['bgp_peer']['graph']                 = array('type' => 'bgp_updates', 'id' => '@bgpPeer_id');
+
 
 $config['entities']['netscaler_vsvr']['entity_id_field']      = "vsvr_id";
 $config['entities']['netscaler_vsvr']['entity_descr_field']   = "vsvr_label";
 $config['entities']['netscaler_vsvr']['entity_table']         = "netscaler_vservers";
 $config['entities']['netscaler_vsvr']['entity_ignore_field']  = "vsvr_ignore";
 $config['entities']['netscaler_vsvr']['icon']                 = "oicon-server";
+$config['entities']['netscaler_vsvr']['graph']                = array('type' => 'netscalervsvr_bits', 'id' => '@vsvr_id');
 
 $config['entities']['netscaler_svc']['entity_id_field']     = "svc_id";
 $config['entities']['netscaler_svc']['entity_descr_field']  = "svc_label";
 $config['entities']['netscaler_svc']['entity_table']        = "netscaler_services";
 $config['entities']['netscaler_svc']['entity_ignore_field'] = "svc_ignore";
 $config['entities']['netscaler_svc']['icon']                = "oicon-service-bell";
+$config['entities']['netscaler_svc']['graph']               = array('type' => 'netscalersvc_bits', 'id' => '@svc_id');
+
 
 $config['entities']['port']['entity_id_field']           = "port_id";
 $config['entities']['port']['entity_descr_field']        = "ifDescr";
