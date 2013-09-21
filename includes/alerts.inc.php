@@ -27,7 +27,7 @@ function check_entity($type, $entity, $data)
 
   echo("\nChecking alerts\n");
 
-  #print_vars($data);
+  if($GLOBALS['debug']) { print_vars($data); }
 
   list($entity_table, $entity_id_field, $entity_descr_field, $entity_ignore_field) = entity_type_translate ($type);
 
@@ -822,7 +822,7 @@ function process_alerts($device)
       echo('Alert status set. ');
 
       // Has this been alerted more frequently than the alert interval in the config?
-      if((time() - $entry['last_alerted']) < $config['alerts']['interval']) { $entry['suppress_alert'] = TRUE; }
+      if((time() - $entry['last_alerted']) < $config['alerts']['interval'] && !isset($GLOBALS['spam'])) { $entry['suppress_alert'] = TRUE; }
 
       ## FIXME -- this time should be configurable per-alert or per-entity or something
       if($entry['suppress_alert'] != TRUE)
