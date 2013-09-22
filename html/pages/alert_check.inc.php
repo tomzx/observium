@@ -269,9 +269,7 @@ echo '
  </form>
 </div>
 
-<?
-
-
+<?php
 
 echo '
       </div>
@@ -302,7 +300,6 @@ echo '
 
   <input type=hidden name="editing" value="check_conditions">
   <span class="help-block">Please exercise care when editing here.</span>
-	
   <fieldset>
     <div class="control-group">
       <div class="controls">
@@ -337,9 +334,9 @@ echo '
       <div class="controls">
         <label class="checkbox">
           <input type="checkbox" name="confirm" value="confirm" onchange="javascript: showWarning(this.checked);" />
-          Yes, please delete this alert checker! 
+          Yes, please delete this alert checker!
         </label>
- 
+
  <script type="text/javascript">
         function showWarning(checked) {
           $('#warning').toggle();
@@ -350,14 +347,14 @@ echo '
           }
         }
       </script>
- 
+
 </div>
     </div>
   </fieldset>
 
 	<div class="alert alert-message alert-danger" id="warning" style="display:none;">
     <h4 class="alert-heading"><i class="icon-warning-sign"></i> Warning!</h4>
-    Are you sure you want to delete his alert checker? 
+    Are you sure you want to delete his alert checker?
   </div>
   </div>
   <div class="modal-footer">
