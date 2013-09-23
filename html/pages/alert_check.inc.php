@@ -13,6 +13,8 @@
 
 // Alert test display and editing page.
 
+include($config['html_dir']."/includes/alerting-navbar.inc.php");
+
 $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));
 
 if(($_SESSION['userlevel'] < 10))

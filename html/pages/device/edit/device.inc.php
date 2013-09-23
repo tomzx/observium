@@ -72,7 +72,7 @@ if ($updated && $update_message)
   <div class="control-group">
     <label class="control-label" for="type">Type</label>
     <div class="controls">
-      <select name="type">
+      <select class="selectpicker" name="type">
 <?php
 $unknown = 1;
 foreach ($config['device_types'] as $type)
@@ -92,8 +92,8 @@ if ($unknown) { echo('          <option value="other">Other</option>'); }
     <label class="control-label" for="sysLocation">Override sysLocation</label>
 
     <div class="controls">
-      <input id="location_check" type="checkbox"
-            name="override_sysLocation"<?php if ($override_sysLocation_bool) { echo(' checked="1"'); } ?> data-id="location_check" data-label="Use custom location below.">
+      <input id="location_check" type="checkbox" onclick="edit.sysLocation.disabled=!edit.override_sysLocation.checked"
+            name="override_sysLocation" <?php if ($override_sysLocation_bool) { echo(' checked="1"'); } ?> data-id="location_check" data-label="Use custom location below.">
     </div>
   </div>
 

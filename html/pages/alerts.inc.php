@@ -11,6 +11,7 @@
  *
  */
 
+include($config['html_dir']."/includes/alerting-navbar.inc.php");
 
 // Run actions
 

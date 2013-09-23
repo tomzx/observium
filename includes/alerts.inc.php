@@ -894,7 +894,7 @@ $message = '
 <table class="observium">
   <tbody>
     <tr>
-      <td align="center">
+      <td>
         <table class="observium" id="deviceinfo">
   <tbody>
     <tr><td colspan=2 class="header">Alert</td></tr>
