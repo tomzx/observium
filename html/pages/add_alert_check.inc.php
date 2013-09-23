@@ -11,6 +11,8 @@
  *
  */
 
+include($config['html_dir']."/includes/alerting-navbar.inc.php");
+
  // Hardcode exit if user doesn't have global write permissions. 
   if ($_SESSION['userlevel'] < 10)
   {

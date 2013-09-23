@@ -11,37 +11,7 @@
  *
  */
 
-// Run Actions
-
-if(($_SESSION['userlevel'] < 10))
-{
- // No editing for you!
-} 
-elseif($vars['action'] == 'update')
-{
-  echo '<div class="well">';
-  foreach(dbFetchRows("SELECT * FROM `devices`") AS $device)
-  {
-    update_device_alert_table($device);
-  }
-  echo '</div>';
-  
-  unset($vars['action']);
-}
-elseif($vars['submit'] == "delete_alert_checker" && $vars['confirm'] == "confirm")
-{
-
-    // Maybe expand this to output more info.
-
-    dbDelete('alert_tests', '`alert_test_id` = ?', array($vars['alert_test_id']));
-    dbDelete('alert_table', '`alert_test_id` = ?', array($vars['alert_test_id']));
-    dbDelete('alert_assoc', '`alert_test_id` = ?', array($vars['alert_test_id']));
-		
-		print_message("Deleting all traces of alert checker ".$vars['alert_test_id']);
-
-}
-
-
+include($config['html_dir']."/includes/alerting-navbar.inc.php");
 
 // Page to display list of configured alert checks
 
@@ -58,7 +28,7 @@ foreach (dbFetchRows("SELECT * FROM `alert_assoc` WHERE 1") as $entry)
 }
 
 $navbar['class'] = "navbar-narrow";
-$navbar['brand'] = "Alert Types";
+$navbar['brand'] = "Alert Checks";
 
 $types = dbFetchRows("SELECT `entity_type` FROM `alert_table` GROUP BY `entity_type`");
 
@@ -80,17 +50,6 @@ foreach ($types as $thing)
   }
   $navbar['options'][$thing['entity_type']]['text'] = htmlspecialchars(nicecase($thing['entity_type']));
 }
-
-
-$navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alert_checks', 'action'=>'update'));
-$navbar['options_right']['update']['text'] = 'Regenerate';
-$navbar['options_right']['update']['icon'] = 'oicon-arrow-circle';
-// We don't really need to highlight Regenerate, as it's not a display option, but an action.
-// if ($vars['action'] == 'update') { $navbar['options_right']['update']['class'] = 'active'; }
-
-$navbar['options_right']['add']['url']  = generate_url(array('page' => 'add_alert_check'));
-$navbar['options_right']['add']['text'] = 'Add Check';
-$navbar['options_right']['add']['icon'] = 'oicon-plus-circle';
 
 // Print out the navbar defined above
 print_navbar($navbar);

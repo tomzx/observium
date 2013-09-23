@@ -316,11 +316,13 @@ function humanize_port(&$port)
     list($port['label']) = explode("thomson", $port['label']);
   }
 
-  if ($port['ifAdminStatus'] == "down")                                                 { $port['table_tab_colour'] = "#aaaaaa"; $port['row_class'] = "";
-  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down")           { $port['table_tab_colour'] = "#cc0000"; $port['row_class'] = "error";
-  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $port['table_tab_colour'] = "#ff6600"; $port['row_class'] = "warning";
-  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "testing")        { $port['table_tab_colour'] = "#85004b"; $port['row_class'] = "info";
-  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up")             { $port['table_tab_colour'] = "#194B7F"; $port['row_class'] = ""; }
+  $port['admin_status'] = $port['ifAdminStatus'];
+  if ($port['ifAdminStatus'] == "down")                                                 { $port['table_tab_colour'] = "#aaaaaa"; $port['row_class'] = ""; $port['admin_status'] = 'disabled';
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "down")           { $port['table_tab_colour'] = "#cc0000"; $port['row_class'] = "error"; $port['admin_status'] = 'enabled';
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "lowerLayerDown") { $port['table_tab_colour'] = "#ff6600"; $port['row_class'] = "warning"; $port['admin_status'] = 'enabled';
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "testing")        { $port['table_tab_colour'] = "#85004b"; $port['row_class'] = "info"; $port['admin_status'] = 'enabled';
+  } elseif ($port['ifAdminStatus'] == "up" && $port['ifOperStatus']== "up")             { $port['table_tab_colour'] = "#194B7F"; $port['row_class'] = ""; $port['admin_status'] = 'enabled'; }
+#  } elseif ($port['ifAdminStatus'] == "up" { $port['table_tab_colour'] = "#aaaaaa"; $port['row_class'] = ""; $port['admin_status'] = 'enabled'; }
   else { $port['table_tab_colour'] = "#aaaaaa"; $port['row_class'] = ""; }
 
   // If the device is down, colour the row/tab as 'warning' meaning that the entity is down because of something below it.
