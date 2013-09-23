@@ -24,30 +24,30 @@ elseif($vars['editing'])
   // We are editing. Lets see what we are editing.
   if($vars['editing'] == "check_conditions")
   {
-    $conds = array();
+    $conds = array(); $cond_array = array();
     foreach(explode("\n", $vars['check_conditions']) AS $cond)
     {
-      list($this['metric'], $this['condition'], $this['value']) = explode(" ", $cond);
-      $conds[] = $this;
+      list($cond_array['metric'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      $conds[] = $cond_array;
     }
     $conds = json_encode($conds);
     $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
   }
   elseif($vars['editing'] == "assoc_conditions")
   {
-    $d_conds = array();
-    foreach(explode("\n", $vars['assoc_device_conditions']) AS $cond)
+    $d_conds = array(); $cond_array = array();
+    foreach(explode("\n", trim($vars['assoc_device_conditions'])) AS $cond)
     {
-      list($this['attribute'], $this['condition'], $this['value']) = explode(" ", $cond);
-      $d_conds[] = $this;
+      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      $d_conds[] = $cond_array;
     }
     $d_conds = json_encode($d_conds);
 
-    $e_conds = array();
-    foreach(explode("\n", $vars['assoc_entity_conditions']) AS $cond)
+    $e_conds = array(); $cond_array = array();
+    foreach(explode("\n", trim($vars['assoc_entity_conditions'])) AS $cond)
     {
-      list($this['attribute'], $this['condition'], $this['value']) = explode(" ", $cond);
-      $e_conds[] = $this;
+      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      $e_conds[] = $cond_array;
     }
     $e_conds = json_encode($e_conds);
     $rows_updated = dbUpdate(array('device_attributes' => $d_conds, 'attributes' => $e_conds), 'alert_assoc', '`alert_assoc_id` = ?', array($vars['assoc_id']));
@@ -227,10 +227,9 @@ echo '
       } else {
         echo("*");
       }
-    }
-    echo '</td>';
-    echo '<td><a href="#assoc_modal_',$assoc['alert_assoc_id'],'" data-toggle="modal"><i class="oicon-pencil"></i> Edit</a></td>';
-    echo '</table>';
+      echo '</td>';
+      echo '<td><a href="#assoc_modal_',$assoc['alert_assoc_id'],'" data-toggle="modal"><i class="oicon-pencil"></i> Edit</a></td>';
+
 ?>
 
 <div id="assoc_modal_<?php echo $assoc['alert_assoc_id']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -270,6 +269,10 @@ echo '
 </div>
 
 <?php
+
+
+    }
+    echo '</table>';
 
 echo '
       </div>
