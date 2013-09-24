@@ -84,7 +84,7 @@ function build_alert_table_query($vars)
   $query_count .= $where . $query_device . $query_user;
 
   // Query alerts count
-#  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
+  if ($pagination && !$short) { $count = dbFetchCell($query_count, $param); }
 
   // Build the query to get the list of entries
   $query = 'SELECT * FROM `alert_table` ';
@@ -93,10 +93,10 @@ function build_alert_table_query($vars)
   $query .= $where . $query_device . $query_user;
   $query .= ' ORDER BY `device_id`, `alert_test_id`, `entity_type`, `entity_id` DESC ';
 
-#  if(isset($pagination) && $pagination)
-#  {
-#    $query .= 'LIMIT '.$start.','.$vars['pagesize'];
-#  }
+  if(isset($vars['pagination']) && $vars['pagination'])
+  {
+    $query .= 'LIMIT '.$vars['start'].','.$vars['pagesize'];
+  }
 
   return array($query, $param, $query_count);
 
@@ -109,7 +109,7 @@ function build_alert_table_query($vars)
  * @return none
  *
  */
-function print_alert_row($vars)
+function print_alert_table($vars)
 {
 
   global $alert_rules;
@@ -124,15 +124,15 @@ function print_alert_row($vars)
   // With pagination? (display page numbers in header)
   if(isset($vars['pagination']) && $vars['pagination'])
   {
-    $pagination = TRUE;
     $vars['pageno']     = (isset($vars['pageno']) && !empty($vars['pageno'])) ? $vars['pageno'] : 1;
     $vars['pagesize']   = (isset($vars['pagesize']) && !empty($vars['pagesize'])) ? $vars['pagesize'] : 10;
-    $start      = $vars['pagesize'] * $vars['pageno'] - $vars['pagesize'];
+    $vars['start']      = $vars['pagesize'] * $vars['pageno'] - $vars['pagesize'];
   }
 
   list($query, $param, $query_count) = build_alert_table_query($vars);
 
   // Fetch alerts
+  $count = dbFetchCell($query_count, $param);
   $alerts = dbFetchRows($query, $param);
 
   // Set which columns we're going to show.
@@ -148,8 +148,7 @@ function print_alert_row($vars)
   // Hide entity_type if we know the alert_test_id
   if(isset($vars['alert_test_id'])) { $list['entity_type'] = FALSE; }
 
-
-#  if ($pagination && !$short) { echo pagination($vars, $count); }
+  if ($vars['pagination'] && !$short) { echo pagination($vars, $count); }
 
 echo('<table class="table table-condensed table-bordered table-striped table-rounded table-hover">
   <thead>

@@ -43,6 +43,8 @@ function humanize_alert_check(&$check)
     } else                                              { ++$check['entity_status']['unknown']; }
   }
 
+  $check['num_entities'] = count($check['entities']);
+
   if($check['entity_status']['up'] == count($entities))
   {
     $check['class']  = "green"; $check['table_tab_colour'] = "#194b7f"; $check['html_row_class'] = "";

@@ -15,16 +15,7 @@ include($config['html_dir']."/includes/alerting-navbar.inc.php");
 
 // Run actions
 
-if($vars['action'] == 'update')
-{
-  foreach(dbFetchRows("SELECT * FROM `devices`") AS $device)
-  {
-    update_device_alert_table($device);
-  }
-
-  unset($vars['action']);
-
-}
+// End actions
 
 $navbar['class'] = "navbar-narrow";
 $navbar['brand'] = "Alert Types";
@@ -64,7 +55,9 @@ print_navbar($navbar);
 $alert_rules = cache_alert_rules($vars);
 
 // Print out a table of alerts matching $vars
-$vars['pagination'] = 1;
-print_alert_row($vars);
+$vars['pagination'] = TRUE;
+if(!$vars['pagesize']) { $vars['pagesize'] = 50; }
+if(!$vars['pageno']) { $vars['pageno'] = 1; }
+print_alert_table($vars);
 
 ?>

@@ -286,7 +286,11 @@ echo '
 <div class="row" style="margin-top: 10px;">
   <div class="col-md-12">';
 
-  print_alert_row(array('alert_test_id' => $vars['alert_test_id']));
+  $vars['pagination'] = TRUE;
+  if(!$vars['pagesize']) { $vars['pagesize'] = 50; }
+  if(!$vars['pageno']) { $vars['pageno'] = 1; }
+
+  print_alert_table($vars);
 
 echo '
 

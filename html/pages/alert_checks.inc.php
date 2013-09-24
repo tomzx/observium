@@ -65,15 +65,15 @@ foreach (dbFetchRows("SELECT * FROM `alert_table` LEFT JOIN `alert_table-state` 
     <tr>
     <th></th><th></th>
     <th style="width: 25px">Id</th>
-    <th style="width: 110px">Name</th>
+    <th style="width: 250px">Name</th>
     <th style="width: 300px">Tests</th>
-    <th>Match</th>
+    <th>Device Match / Entity Match</th>
     <th style="width: 40px">Entities</th>
     </tr>
   </thead>
   <tbody>', PHP_EOL;
 
-  
+
 foreach($alert_check as $check)
 {
 
@@ -95,7 +95,8 @@ foreach($alert_check as $check)
   echo '</td>';
 
   echo '<td><strong>';
-  echo '<a href="', generate_url(array('page' => 'alert_check', 'alert_test_id' => $check['alert_test_id'])), '">' . $check['alert_name']. '</a>';
+  echo '<a href="', generate_url(array('page' => 'alert_check', 'alert_test_id' => $check['alert_test_id'])), '">' . $check['alert_name']. '</a></strong><br />';
+  echo '<small>',$check['alert_message'],'</small>';
   echo '</td>';
 
   // Loop the tests used by this alert
@@ -110,12 +111,12 @@ foreach($alert_check as $check)
   echo('</strong></td>');
 
   echo('<td>');
-  echo('<table class="table table-condensed-more table-bordered table-striped table-rounded">');
-  echo '<thead>';
-  echo('<tr>');
-  echo('<th style="width: 50%;">Device Match</th>');
-  echo('<th style="width: 50%;">Entity Match</th>');
-  echo('</tr>');
+  echo('<table class="table table-condensed-more table-bordered table-striped table-rounded" style="margin-bottom: 0px;">');
+#  echo '<thead>';
+#  echo('<tr>');
+#  echo('<th style="width: 50%;">Device Match</th>');
+#  echo('<th style="width: 50%;">Entity Match</th>');
+#  echo('</tr>');
   echo '</thead>';
 
   // Loop the associations which link this alert to this device
@@ -123,7 +124,7 @@ foreach($alert_check as $check)
   {
 
     echo('<tr>');
-    echo('<td>');
+    echo('<td width="50%">');
     if(is_array($assoc['device_attributes']))
     {
     foreach($assoc['device_attributes'] as $attribute)
@@ -167,7 +168,7 @@ foreach($alert_check as $check)
   // We assume each row here is going to be two lines, so we just <br /> them.
   echo '<td>';
   #echo overlib_link('#', count($entities), $entities_content,  NULL));
-  echo '<b>', count($entities), '</b>';
+  echo '<b>', $check['num_entities'], '</b>';
   echo '<br />';
   echo $check['status_numbers'];
   echo '</td>';
