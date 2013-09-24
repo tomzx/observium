@@ -29,7 +29,7 @@ function check_entity($type, $entity, $data)
 
   if($GLOBALS['debug']) { print_vars($data); }
 
-  list($entity_table, $entity_id_field, $entity_descr_field, $entity_ignore_field) = entity_type_translate ($type);
+  list($entity_table, $entity_id_field, $entity_name_field, $entity_ignore_field) = entity_type_translate ($type);
 
   foreach($alert_table[$type][$entity[$entity_id_field]] as $alert_test_id => $alert_args)
   {
@@ -194,16 +194,23 @@ function cache_device_conditions($device)
   {
     if(match_device($device, $assoc['device_attributes']))
     {
-      // echo(" Matched $assoc_key");
+      $assoc['alert_test_id'];
+      $conditions['cond'][$assoc['alert_test_id']]['assoc'][$assoc_key] = $conditions['assoc'][$assoc_key];
+      $cond_new['cond'][$assoc['alert_test_id']] = $conditions['cond'][$assoc['alert_test_id']];
     } else {
-      // echo(" Did not match $assoc_key");
       unset($conditions['assoc'][$assoc_key]);
     }
   }
-  return $conditions;
+
+  foreach($cond_new['cond'] as $test_id => $test)
+  {
+
+print_vars($test);
+    echo("Matched ".$test['alert_name']);
+  }
+
+  return $cond_new;
 }
-
-
 
 /**
  * Fetch array of alerts to a supplied device from `alert_table`
@@ -245,9 +252,9 @@ function cache_alert_rules($vars)
   $rule_count = 0;
   $where = 'WHERE 1';
   $args = array();
-  
+
   if(isset($vars['entity_type'])) { $where .= ' AND `entity_type` = ?'; $args[] = $vars['entity_type']; }
-  
+
   foreach (dbFetchRows("SELECT * FROM `alert_tests` ". $where, $args) as $entry)
   {
     if($entry['alerter'] == '') {$entry['alerter'] = "default"; }
@@ -311,6 +318,7 @@ function cache_conditions()
 
   foreach (dbFetchRows("SELECT * FROM `alert_tests`") as $entry)
   {
+    $cache['cond'][$entry['alert_test_id']] = $entry;
     $conditions = json_decode($entry['conditions'], TRUE);
     $cache['cond'][$entry['alert_test_id']]['entity_type'] = $entry['entity_type'];
     $cache['cond'][$entry['alert_test_id']]['conditions'] = $conditions;
@@ -320,10 +328,9 @@ function cache_conditions()
   {
     $attributes = json_decode($entry['attributes'], TRUE);
     $dev_attrib = json_decode($entry['device_attributes'], TRUE);
-    $cache['assoc'][$entry['alert_assoc_id']]['entity_type']       = $entry['entity_type'];
+    $cache['assoc'][$entry['alert_assoc_id']]                      = $entry;
     $cache['assoc'][$entry['alert_assoc_id']]['attributes']        = $attributes;
     $cache['assoc'][$entry['alert_assoc_id']]['device_attributes'] = $dev_attrib;
-    $cache['assoc'][$entry['alert_assoc_id']]['alert_test_id']     = $entry['alert_test_id'];
   }
 
   return $cache;
@@ -376,9 +383,20 @@ function test_condition($value_a, $condition, $value_b)
         if(preg_match('/^'.$valueb.'$/', $value)) { $alert = TRUE; } else { $alert = FALSE; }
         break;
       case 'notmatch':
+      case '!match':
         $value_b = str_replace('*', '.*', $value_b);
         $value_b = str_replace('?', '.', $value_b);
         if(preg_match('/^'.$valueb.'$/', $value)) { $alert = FALSE; } else { $alert = TRUE; }
+        break;
+      case 'regexp':
+      case 'regex':
+        if(preg_match('/'.$valueb.'/', $value)) { $alert = TRUE; } else { $alert = FALSE; }
+        break;
+      case 'notregexp':
+      case 'notregex':
+      case '!regexp':
+      case '!regex':
+        if(preg_match('/'.$valueb.'/', $value)) { $alert = FALSE; } else { $alert = TRUE; }
         break;
       default:
         $alert = FALSE;
@@ -390,45 +408,8 @@ function test_condition($value_a, $condition, $value_b)
 
 
 /**
- * Return an array of devices which match a set of attribute rules.
- *
- * @param array attributes
- * @return array
-*/
-
-/// FIXME - perhaps do this from device cache?
-
-function match_devices($attributes)
-{
-
-  $sql  = "SELECT * FROM `devices`";
-  $sql .= ' WHERE 1';
-
-  foreach($attributes as $attrib)
-  {
-    switch ($attrib['condition'])
-    {
-      case 'equals':
-        $sql .= " AND `".$attrib['attrib']."` = ?";
-        $param[] = $attrib['value'];
-        break;
-      case 'match':
-        $attrib['value'] = str_replace("*", "%", $attrib['value']);
-        $sql .= " AND `".$attrib['attrib']."` LIKE ?";
-        $param[] = $attrib['value'];
-        break;
-    }
-  }
-
-  $devices = dbFetchRows($sql, $param);
-
-  return $devices;
-
-}
-
-/**
  * Test if a device matches a set of attributes
- * Uses a supplied device array for matching.
+ * Matches using the database entry for the supplied device_id
  *
  * @param array device
  * @param array attributes
@@ -441,77 +422,31 @@ function match_device($device, $attributes)
   // Short circuit this check if the device is either disabled or ignored.
   if($device['disable'] == 1 || $device['ignore'] == 1) { return FALSE; }
 
-  $failed  = 0;
-  $success = 0;
+  $sql   = "SELECT count(*) FROM `devices`";
+  $sql  .= " WHERE device_id = ?";
+  $param[] = $device['device_id'];
 
   foreach($attributes as $attrib)
   {
     switch ($attrib['condition'])
     {
       case 'equals':
-        if($device[$attrib['attrib']] == $attrib['value']) { $success++; } else { $fail++; }
-        break;
-      case 'match':
-        $attrib['value'] = str_replace('*', '.*', $attrib['value']);
-        $attrib['value'] = str_replace('?', '.', $attrib['value']);
-        if(preg_match('/^'.$attrib['value'].'$/', $device[$attrib['attrib']])) { $success++; } else { $fail++; }
-        break;
-    }
-  }
-
-  if(strlen($attributes) == 0) { $success++; }
-
-  if($fail || $success == 0) {
-    return FALSE;
-  } else {
-    return TRUE;
-  }
-
-}
-
-/**
- * Return an array of entities of a certain type which match device attribute and entity attribute rules.
- *
- * @param array dev_attributes
- * @param array attributes
- * @param string entity_type
- * @return array
-*/
-
-/// FIXME - this is going to be horribly slow.
-
-function match_entities($dev_attributes, $attributes, $entity_type)
-{
-
-  list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($entity_type);
-
-  $sql   = "SELECT * FROM `devices` AS D, `".mres($entity_table)."` AS E";
-  $sql  .= " WHERE E.device_id = D.device_id";
-
-  foreach($dev_attributes as $attrib)
-  {
-    switch ($attrib['condition'])
-    {
-      case 'equals':
-        $sql .= " AND D.`".mres($attrib['attrib'])."` = ?";
+      case '=':
+        $sql .= " AND `".$attrib['attrib']."` = ?";
         $param[] = $attrib['value'];
         break;
-      case 'match':
-        $attrib['value'] = str_replace("*", "%", $attrib['value']);
-        $sql .= " AND `".mres($attrib['attrib'])."` LIKE ?";
+      case 'notequals':
+      case '!=':
+        $sql .= " AND `".$attrib['attrib']."` != ?";
         $param[] = $attrib['value'];
         break;
-    }
-  }
-
-  foreach($attributes as $attrib)
-  {
-    switch ($attrib['condition'])
-    {
-      case 'equals':
-        $sql .= " AND E.`".$attrib['attrib']."` = ?";
+      case "lt":
+      case "less":
+      case "<":
+        $sql .= " AND `".$attrib['attrib']."` < ?";
         $param[] = $attrib['value'];
         break;
+      case "gt":
       case "greater":
       case ">":
         $sql .= " AND `".$attrib['attrib']."` > ?";
@@ -522,11 +457,29 @@ function match_entities($dev_attributes, $attributes, $entity_type)
         $sql .= " AND `".$attrib['attrib']."` LIKE ?";
         $param[] = $attrib['value'];
         break;
+      case 'regexp':
+        $sql .= " AND `".$attrib['attrib']."` REGEXP ?";
+        $param[] = $attrib['value'];
+        break;
+      case 'notmatch':
+        $attrib['value'] = str_replace("*", "%", $attrib['value']);
+        $sql .= " AND `".$attrib['attrib']."` NOT LIKE ?";
+        $param[] = $attrib['value'];
+        break;
+      case 'notregexp':
+        $sql .= " AND `".$attrib['attrib']."` NOT REGEXP ?";
+        $param[] = $attrib['value'];
+        break;
     }
   }
 
-  $entities = dbFetchRows($sql, $param);
-  return $entities;
+  $device_count = dbFetchCell($sql, $param);
+
+  if($device_count == 0) {
+    return FALSE;
+  } else {
+    return TRUE;
+  }
 
 }
 
@@ -538,68 +491,31 @@ function match_entities($dev_attributes, $attributes, $entity_type)
  * @return string entity_id
 */
 
-function entity_type_translate ($entity_type)
+function entity_type_translate_array ($entity_type)
 {
-  switch($entity_type)
+
+  global $config;
+
+  foreach(array('id_field', 'name_field', 'info_field', 'table', 'ignore_field', 'disable_field', 'icon', 'graph') AS $field)
   {
-    case "mempool":
-      $entity_id_field      = "mempool_id";
-      $entity_descr_field   = "mempool_descr";
-      $entity_table         = "mempools";
-      break;
-
-    case "processor":
-      $entity_id_field      = "processor_id";
-      $entity_descr_field   = "processor_descr";
-      $entity_table         = "processors";
-      break;
-
-    case "port":
-      $entity_id_field      = "port_id";
-      $entity_descr_field   = "ifDescr";
-      $entity_table         = "ports";
-      $entity_ignore_field  = "ignore";
-      $entity_disable_field = "disable";
-      break;
-
-    case "sensor":
-      $entity_id_field       = "sensor_id";
-      $entity_descr_field    = "sensor_descr";
-      $entity_table          = "sensors";
-      $entity_ignore_field   = "sensor_ignore";
-      $entity_disable_field  = "sensor_disable";
-      break;
-
-    case "bgp_peer":
-      $entity_id_field    = "bgpPeer_id";
-      $entity_descr_field = "bgpPeerRemoteAddr";
-      $entity_table       = "bgpPeers";
-      break;
-
-    case "netscaler_vsvr":
-      $entity_id_field      = "vsvr_id";
-      $entity_descr_field   = "vsvr_label";
-      $entity_table         = "netscaler_vservers";
-      $entity_ignore_field  = "vsvr_ignore";
-      break;
-
-    case "netscaler_svc":
-      $entity_id_field     = "svc_id";
-      $entity_descr_field  = "svc_label";
-      $entity_table        = "netscaler_services";
-      $entity_ignore_field = "svc_ignore";
-      break;
-    default:
-      $entity_id_field    = $entity_type."_id";
-      $entity_descr_field = $entity_type."_descr";
-      $entity_table       = $entity_type."s";
-      break;
+    if(isset($config['entities'][$entity_type][$field]))
+    {
+      $data[$field] = $config['entities'][$entity_type][$field];
+    }
+    elseif(isset($config['entities']['default'][$field]))
+    {
+      $data[$field] = $config['entities']['default'][$field];
+    }
   }
 
-  #echo("etype[".$entity_type."]");
+  return $data;
 
-  return array($entity_table, $entity_id_field, $entity_descr_field, $entity_ignore_field);
+}
 
+function entity_type_translate ($entity_type)
+{
+  $data = entity_type_translate_array($entity_type);
+  return array($data['table'], $data['id_field'], $data['name_field'], $data['ignore_field']);
 }
 
 
@@ -619,7 +535,7 @@ function match_device_entities($device_id, $attributes, $entity_type)
 
   $param = array();
 
-  list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($entity_type);
+  list($entity_table, $entity_id_field, $entity_name_field) = entity_type_translate ($entity_type);
 
   $sql   = "SELECT * FROM `".mres($entity_table)."`";
   $sql  .= " WHERE device_id = ?";
@@ -629,18 +545,37 @@ function match_device_entities($device_id, $attributes, $entity_type)
   {
     switch ($attrib['condition'])
     {
+      case 'eq':
       case 'equals':
       case '=':
         $sql .= " AND `".$attrib['attrib']."` = ?";
         $param[] = $attrib['value'];
         break;
+      case 'ne':
       case 'notequals':
       case '!=':
         $sql .= " AND `".$attrib['attrib']."` != ?";
         $param[] = $attrib['value'];
         break;
-      case "greater":
-      case ">":
+      case 'le':
+      case '<=':
+        $sql .= " AND `".$attrib['attrib']."` < ?";
+        $param[] = $attrib['value'];
+        break;
+      case 'ge':
+      case '>=':
+        $sql .= " AND `".$attrib['attrib']."` > ?";
+        $param[] = $attrib['value'];
+        break;
+      case 'lt':
+      case 'less':
+      case '<':
+        $sql .= " AND `".$attrib['attrib']."` < ?";
+        $param[] = $attrib['value'];
+        break;
+      case 'gt':
+      case 'greater':
+      case '>':
         $sql .= " AND `".$attrib['attrib']."` > ?";
         $param[] = $attrib['value'];
         break;
@@ -649,9 +584,17 @@ function match_device_entities($device_id, $attributes, $entity_type)
         $sql .= " AND `".$attrib['attrib']."` LIKE ?";
         $param[] = $attrib['value'];
         break;
+      case 'regexp':
+        $sql .= " AND `".$attrib['attrib']."` REGEXP ?";
+        $param[] = $attrib['value'];
+        break;
       case 'notmatch':
         $attrib['value'] = str_replace("*", "%", $attrib['value']);
         $sql .= " AND `".$attrib['attrib']."` NOT LIKE ?";
+        $param[] = $attrib['value'];
+        break;
+      case 'notregexp':
+        $sql .= " AND `".$attrib['attrib']."` NOT REGEXP ?";
         $param[] = $attrib['value'];
         break;
     }
@@ -712,7 +655,7 @@ function update_device_alert_table($device)
   $dbc = array();
   $alert_table = array();
 
-  echo("Building alerts for device ".$device['hostname'].PHP_EOL);
+  echo("<h4>Building alerts for device ".$device['hostname'].'</h4>');
 
   $conditions = cache_device_conditions($device);
 
@@ -722,27 +665,30 @@ function update_device_alert_table($device)
     $dbc[$db_c['entity_type']][$db_c['entity_id']][$db_c['alert_test_id']] = $db_c;
   }
 
-  foreach ($conditions['assoc'] as $assoc_id => $assoc)
+  foreach($conditions['cond'] as $alert_test_id => $alert_test)
   {
-    // Check that the entity_type matches the one we're interested in.
-    // echo("Matching $assoc_id (".$assoc['entity_type'].")");
-
-    list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($assoc['entity_type']);
-
-    $alert = $conditions['cond'][$assoc['alert_test_id']];
-
-    $entities = match_device_entities($device['device_id'], $assoc['attributes'], $assoc['entity_type']);
-
-    foreach($entities AS $id => $entity)
+    foreach ($alert_test['assoc'] as $assoc_id => $assoc)
     {
-      $alert_table[$assoc['entity_type']][$entity[$entity_id_field]][$assoc['alert_test_id']][] = $assoc_id;
-      $alert_count++;
+      // Check that the entity_type matches the one we're interested in.
+      // echo("Matching $assoc_id (".$assoc['entity_type'].")");
+
+      list($entity_table, $entity_id_field, $entity_name_field) = entity_type_translate ($assoc['entity_type']);
+
+      $alert = $conditions['cond'][$assoc['alert_test_id']];
+
+      $entities = match_device_entities($device['device_id'], $assoc['attributes'], $assoc['entity_type']);
+
+      foreach($entities AS $id => $entity)
+      {
+        $alert_table[$assoc['entity_type']][$entity[$entity_id_field]][$assoc['alert_test_id']][] = $assoc_id;
+        $alert_count++;
+      }
+
+      // echo(count($entities)." matched".PHP_EOL);
+
+      echo("\n");
+
     }
-
-    // echo(count($entities)." matched".PHP_EOL);
-
-    echo("\n");
-
   }
 
   foreach($alert_table AS $entity_type => $entities)
@@ -819,29 +765,22 @@ function process_alerts($device)
 
     if($entry['alert_status'] == '0')
     {
-      echo('Alert status set. ');
+      echo('Alert tripped. ');
 
       // Has this been alerted more frequently than the alert interval in the config?
+      /// Fixme -- this should be configurable per-entity or per-checker
       if((time() - $entry['last_alerted']) < $config['alerts']['interval'] && !isset($GLOBALS['spam'])) { $entry['suppress_alert'] = TRUE; }
 
-      ## FIXME -- this time should be configurable per-alert or per-entity or something
       if($entry['suppress_alert'] != TRUE)
       {
-        echo('Not alerted today. ');
+        echo('Requires notification. ');
         $alert = $alert_rules[$entry['alert_test_id']];
-        #dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($entry['alert_test_id']));
-
-        #print_vars($alert);
-        #print_vars($entry);
 
         $state      = json_decode($entry['state'], TRUE);
         $conditions = json_decode($alert['conditions'], TRUE);
 
-        #print_vars($conditions);
-        #print_vars($state);
-
         $entity = get_entity_by_id_cache($entry['entity_type'], $entry['entity_id']);
-        $entity_descr = entity_descr($entry['entity_type'], $entry['entity_id']);
+        $entity['descr'] = $entity[$entity_descr_field];
 
         $condition_text = "";
         foreach($state['failed'] AS $failed)
@@ -899,7 +838,12 @@ $message = '
   <tbody>
     <tr><td colspan=2 class="header">Alert</td></tr>
     <tr><td><b>Alert</b></font></td><td class="red">'.$alert['alert_message'].'</font></td></tr>
-    <tr><td><b>Entity</b></font></td><td>'.generate_entity_link($entry['entity_type'], $entry['entity_id']).'</font></td></tr>
+    <tr><td><b>Entity</b></font></td><td>'.generate_entity_link($entry['entity_type'], $entry['entity_id']).'</font></td></tr>';
+if(strlen($entity_descr) > 0)
+{
+  $message .= '<tr><td><b>Descr</b></font></td><td>'.$entity_descr.'</font>';
+}
+$message .= '
     <tr><td><b>Conditions</b></font></td><td>'.$condition_text.'</font></td></tr>
     <tr><td><b>Metrics</b></font></td><td>'.$metric_text.'</font></td></tr>
     <tr><td><b>Duration</b></font></td><td>'.formatUptime(time() - $entry['last_changed']).'</font></td></tr>
@@ -917,12 +861,12 @@ $message = '
 </body>
 </html>';
 
-        alert_notify($device, "ALERT: [".$device['hostname']."] [".$alert['entity_type']."] [".$entity_descr."] ".$alert['alert_message'],  $message);
+        alert_notify($device, "ALERT: [".$device['hostname']."] [".$alert['entity_type']."] [".$entity_name."] ".$alert['alert_message'],  $message);
 
         $update_array['last_alerted'] = time();
         dbUpdate($update_array, 'alert_table-state', '`alert_table_id` = ?', array($entry['alert_table_id']));
 
-      } else { echo("Already alerted this period.".(time() - $entry['last_alerted'])); }
+      } else { echo("No notification required. ".(time() - $entry['last_alerted'])); }
     } elseif($entry['alert_status'] == '1') { echo("Status: OK. "); } else { echo("Unknown status."); }
       echo(PHP_EOL);
   }

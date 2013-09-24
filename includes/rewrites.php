@@ -139,27 +139,27 @@ function formatMac($mac)
   return $mac;
 }
 
-function rewrite_entity_descr ($descr)
+function rewrite_entity_name ($string)
 {
-  $descr = str_replace("Distributed Forwarding Card", "DFC", $descr);
-  $descr = preg_replace("/7600 Series SPA Interface Processor-/", "7600 SIP-", $descr);
-  $descr = preg_replace("/Rev\.\ [0-9\.]+\ /", "", $descr);
-  $descr = preg_replace("/12000 Series Performance Route Processor/", "12000 PRP", $descr);
-  $descr = preg_replace("/^12000/", "", $descr);
-  $descr = preg_replace("/Gigabit Ethernet/", "GigE", $descr);
-  $descr = preg_replace("/^ASR1000\ /", "", $descr);
-  $descr = str_replace("Routing Processor", "RP", $descr);
-  $descr = str_replace("Route Processor", "RP", $descr);
-  $descr = str_replace("Switching Processor", "SP", $descr);
-  $descr = str_replace("Sub-Module", "Module ", $descr);
-  $descr = str_replace("DFC Card", "DFC", $descr);
-  $descr = str_replace("Centralized Forwarding Card", "CFC", $descr);
-  $descr = str_replace("Power Supply Module", "PSU ", $descr);
-  $descr = str_replace("/Voltage Sensor/", "Voltage", $descr);
-  $descr = preg_replace("/^temperatures /", "", $descr);
-  $descr = preg_replace("/^voltages /", "", $descr);
+  $string = str_replace("Distributed Forwarding Card", "DFC", $string);
+  $string = preg_replace("/7600 Series SPA Interface Processor-/", "7600 SIP-", $string);
+  $string = preg_replace("/Rev\.\ [0-9\.]+\ /", "", $string);
+  $string = preg_replace("/12000 Series Performance Route Processor/", "12000 PRP", $string);
+  $string = preg_replace("/^12000/", "", $string);
+  $string = preg_replace("/Gigabit Ethernet/", "GigE", $string);
+  $string = preg_replace("/^ASR1000\ /", "", $string);
+  $string = str_replace("Routing Processor", "RP", $string);
+  $string = str_replace("Route Processor", "RP", $string);
+  $string = str_replace("Switching Processor", "SP", $string);
+  $string = str_replace("Sub-Module", "Module ", $string);
+  $string = str_replace("DFC Card", "DFC", $string);
+  $string = str_replace("Centralized Forwarding Card", "CFC", $string);
+  $string = str_replace("Power Supply Module", "PSU ", $string);
+  $string = str_replace("/Voltage Sensor/", "Voltage", $string);
+  $string = preg_replace("/^temperatures /", "", $string);
+  $string = preg_replace("/^voltages /", "", $string);
 
-  return $descr;
+  return $string;
 }
 
 /**

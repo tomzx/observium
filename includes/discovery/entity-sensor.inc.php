@@ -63,10 +63,10 @@ if (is_array($oids))
 #      if ($descr || $device['os'] == "iosxr")
       if ($descr)
       {
-        $descr = rewrite_entity_descr($descr);
+        $descr = rewrite_entity_name($descr);
       } else {
         $descr = $entity_array[$index]['entPhysicalDescr'];
-        $descr = rewrite_entity_descr($descr);
+        $descr = rewrite_entity_name($descr);
       }
 
       $thisisnotbullshit = TRUE;

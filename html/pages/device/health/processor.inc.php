@@ -21,7 +21,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $proc)
 
   $text_descr = $proc['processor_descr'];
 
-  $text_descr = rewrite_entity_descr($text_descr);
+  $text_descr = rewrite_entity_name($text_descr);
 
   $proc_popup  = "onmouseover=\"return overlib('<div class=entity-title>".$device['hostname']." - ".$text_descr;
   $proc_popup .= "</div><img src=\'graph.php?id=" . $proc['processor_id'] . "&amp;type=".$graph_type."&amp;from=".$config['time']['month']."&amp;to=".$config['time']['now']."&amp;width=400&amp;height=125\'>";

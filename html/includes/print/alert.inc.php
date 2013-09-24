@@ -187,9 +187,9 @@ echo '
     // Get the device array using the cache
     $device = device_by_id_cache($alert['device_id']);
 
-    // Get the entity_descr.
+    // Get the entity_name.
     ### FIXME - This is probably duplicated effort from above. We should pass it $entity
-    $entity_descr = entity_descr($alert['entity_type'], $alert['entity_id']);
+    $entity_name = entity_name($alert['entity_type'], $alert['entity_id']);
 
 
     // Set the alert_rule from the prebuilt cache array
@@ -215,7 +215,7 @@ echo '
     }
 
     if($list['entity_id']) {
-      echo('<td><span class="entity-title">'.generate_entity_link($alert['entity_type'], $alert['entity_id'], truncate($entity_descr, 40)).'</span></td>');
+      echo('<td><span class="entity-title">'.generate_entity_link($alert['entity_type'], $alert['entity_id'], truncate($entity_name, 40)).'</span></td>');
     }
 
     echo('<td>');

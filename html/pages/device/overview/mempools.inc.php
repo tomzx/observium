@@ -23,7 +23,7 @@ if (count($mempools))
   foreach ($mempools as $mempool)
   {
     $percent= round($mempool['mempool_perc'],0);
-    $text_descr = rewrite_entity_descr($mempool['mempool_descr']);
+    $text_descr = rewrite_entity_name($mempool['mempool_descr']);
     $total = formatStorage($mempool['mempool_total']);
     $used = formatStorage($mempool['mempool_used']);
     $free = formatStorage($mempool['mempool_free']);

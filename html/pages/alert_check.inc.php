@@ -29,7 +29,7 @@ elseif($vars['editing'])
     $conds = array(); $cond_array = array();
     foreach(explode("\n", $vars['check_conditions']) AS $cond)
     {
-      list($cond_array['metric'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      list($cond_array['metric'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond, 3);
       $conds[] = $cond_array;
     }
     $conds = json_encode($conds);
@@ -40,7 +40,7 @@ elseif($vars['editing'])
     $d_conds = array(); $cond_array = array();
     foreach(explode("\n", trim($vars['assoc_device_conditions'])) AS $cond)
     {
-      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond, 3);
       $d_conds[] = $cond_array;
     }
     $d_conds = json_encode($d_conds);
@@ -48,7 +48,7 @@ elseif($vars['editing'])
     $e_conds = array(); $cond_array = array();
     foreach(explode("\n", trim($vars['assoc_entity_conditions'])) AS $cond)
     {
-      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond, 3);
       $e_conds[] = $cond_array;
     }
     $e_conds = json_encode($e_conds);

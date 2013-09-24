@@ -616,7 +616,7 @@ function get_entity_by_id_cache($type, $id)
   /// FIXME. entity_type_translate() defined in includes/alerts.inc.php. Adama, why?
   if ($type !== 'port')
   {
-    list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate($type);
+    list($entity_table, $entity_id_field, $entity_name_field) = entity_type_translate($type);
   }
 
   if (is_array($cache[$type][$id]))
