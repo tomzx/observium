@@ -57,12 +57,6 @@ $navbar['options_right']['alarmed']['icon'] = 'oicon-exclamation-red';
 if ($vars['alerted'] == '1') { $navbar['options_right']['alarmed']['class'] = 'active';
 $navbar['options_right']['alarmed']['url']  = generate_url($vars, array('page' => 'alerts', 'alerted' => NULL));}
 
-
-$navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alerts', 'action'=>'update'));
-$navbar['options_right']['update']['text'] = 'Regenerate';
-$navbar['options_right']['update']['icon'] = 'oicon-arrow-circle';
-if ($vars['action'] == 'update') { $navbar['options_right']['update']['class'] = 'active'; }
-
 // Print out the navbar defined above
 print_navbar($navbar);
 

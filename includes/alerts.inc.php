@@ -202,12 +202,11 @@ function cache_device_conditions($device)
     }
   }
 
-  foreach($cond_new['cond'] as $test_id => $test)
-  {
-
-print_vars($test);
-    echo("Matched ".$test['alert_name']);
-  }
+#  foreach($cond_new['cond'] as $test_id => $test)
+#  {
+    #print_vars($test);
+#    echo('<span class="label label-info">Matched '.$test['alert_name'].'</span> ');
+#  }
 
   return $cond_new;
 }
@@ -496,7 +495,7 @@ function entity_type_translate_array ($entity_type)
 
   global $config;
 
-  foreach(array('id_field', 'name_field', 'info_field', 'table', 'ignore_field', 'disable_field', 'icon', 'graph') AS $field)
+  foreach(array('id_field', 'name_field', 'info_field', 'table', 'ignore_field', 'disable_field', 'deleted_field', 'icon', 'graph') AS $field)
   {
     if(isset($config['entities'][$entity_type][$field]))
     {
@@ -537,9 +536,19 @@ function match_device_entities($device_id, $attributes, $entity_type)
 
   list($entity_table, $entity_id_field, $entity_name_field) = entity_type_translate ($entity_type);
 
+  $entity_type = entity_type_translate_array($entity_type);
+
   $sql   = "SELECT * FROM `".mres($entity_table)."`";
   $sql  .= " WHERE device_id = ?";
   $param[] = $device_id;
+
+  #print_vars($entity_type);
+
+  if(isset($entity_type['deleted_field']))
+  {
+    $sql .= " AND `".$entity_type['deleted_field']."` != ?";
+    $param[] = '1';
+  }
 
   foreach($attributes as $attrib)
   {
@@ -659,14 +668,23 @@ function update_device_alert_table($device)
 
   $conditions = cache_device_conditions($device);
 
+  foreach($conditions['cond'] as $test_id => $test)
+  {
+    #print_vars($test);
+#    echo('<span class="label label-info">Matched '.$test['alert_name'].'</span> ');
+  }
+
   $db_cs = dbFetchRows("SELECT * FROM `alert_table` WHERE `device_id` = ?", array($device['device_id']));
   foreach($db_cs as $db_c)
   {
     $dbc[$db_c['entity_type']][$db_c['entity_id']][$db_c['alert_test_id']] = $db_c;
   }
 
+  echo '<h5>Checkers matching this device</h5> ';
+
   foreach($conditions['cond'] as $alert_test_id => $alert_test)
   {
+    echo('<span class="label label-info">'.$alert_test['alert_name'].'</span> ');
     foreach ($alert_test['assoc'] as $assoc_id => $assoc)
     {
       // Check that the entity_type matches the one we're interested in.
@@ -687,18 +705,23 @@ function update_device_alert_table($device)
       // echo(count($entities)." matched".PHP_EOL);
 
       echo("\n");
-
     }
   }
+
+  echo '<h5>Matching entities</h5>';
 
   foreach($alert_table AS $entity_type => $entities)
   {
     foreach($entities AS $entity_id => $entity)
     {
+      $entity_name = entity_name($entity_type, $entity_id);
+      echo('<span class="label label-ok">'.$entity_name.'</span> ');
+
       foreach($entity AS $alert_test_id => $b)
       {
-        echo(str_pad($entity_type, "20").str_pad($entity_id, "20").str_pad($alert_test_id, "20"));
-        echo(str_pad(implode($b,","), "20"));
+#        echo(str_pad($entity_type, "20").str_pad($entity_id, "20").str_pad($alert_test_id, "20"));
+#        echo(str_pad(implode($b,","), "20"));
+        echo('<span class="label label-info">'.$conditions['cond'][$alert_test_id]['alert_name'].'</span> ');
         if(isset($dbc[$entity_type][$entity_id][$alert_test_id]))
         {
           if($dbc[$entity_type][$entity_id][$alert_test_id]['alert_assocs'] != implode($b,",")) { $update_array = array('alert_assocs' => implode($b,","));  }
@@ -714,8 +737,9 @@ function update_device_alert_table($device)
           dbInsert(array('alert_table_id' => $alert_table_id), 'alert_table-state');
           echo("insert");
         }
-        echo(PHP_EOL);
       }
+      echo('<br />');
+      echo(PHP_EOL);
     }
   }
 

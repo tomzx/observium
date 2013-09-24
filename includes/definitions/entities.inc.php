@@ -57,12 +57,13 @@ $config['entities']['netscaler_svc']['graph']               = array('type' => 'n
 
 
 $config['entities']['port']['id_field']           = "port_id";
-$config['entities']['port']['name_field']        = "ifDescr";
+$config['entities']['port']['name_field']         = "ifDescr";
 $config['entities']['port']['table']              = "ports";
 $config['entities']['port']['ignore_field']       = "ignore";
 $config['entities']['port']['disable_field']      = "disable";
-$config['entities']['port']['icon']                      = "oicon-network-ethernet";
-$config['entities']['port']['graph']                     = array('type' => 'port_bits', 'id' => '@port_id');
+$config['entities']['port']['deleted_field']      = "deleted";
+$config['entities']['port']['icon']               = "oicon-network-ethernet";
+$config['entities']['port']['graph']              = array('type' => 'port_bits', 'id' => '@port_id');
 
 $config['default']['icon']                      = "oicon-circle-metal";
 

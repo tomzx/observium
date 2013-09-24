@@ -27,7 +27,7 @@ foreach ($pages as $page_name => $page_desc)
   $navbar['options'][$page_name]['text'] = htmlspecialchars($page_desc);
 }
 
-$navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alert_checks', 'action'=>'update'));
+$navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alert_regenerate', 'action'=>'update'));
 $navbar['options_right']['update']['text'] = 'Regenerate';
 $navbar['options_right']['update']['icon'] = 'oicon-arrow-circle';
 // We don't really need to highlight Regenerate, as it's not a display option, but an action.
@@ -46,17 +46,6 @@ unset($navbar);
 if(($_SESSION['userlevel'] < 10))
 {
  // No editing for you!
-}
-elseif($vars['action'] == 'update')
-{
-  echo '<div class="well">';
-  foreach(dbFetchRows("SELECT * FROM `devices`") AS $device)
-  {
-    update_device_alert_table($device);
-  }
-  echo '</div>';
-
-  unset($vars['action']);
 }
 elseif($vars['submit'] == "delete_alert_checker" && $vars['confirm'] == "confirm")
 {
