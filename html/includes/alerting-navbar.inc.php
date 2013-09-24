@@ -27,7 +27,7 @@ foreach ($pages as $page_name => $page_desc)
   $navbar['options'][$page_name]['text'] = htmlspecialchars($page_desc);
 }
 
-$navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alert_regenerate', 'action'=>'update'));
+$navbar['options_right']['update']['url']  = generate_url(array('page' => 'alert_regenerate', 'action'=>'update'));
 $navbar['options_right']['update']['text'] = 'Regenerate';
 $navbar['options_right']['update']['icon'] = 'oicon-arrow-circle';
 // We don't really need to highlight Regenerate, as it's not a display option, but an action.
