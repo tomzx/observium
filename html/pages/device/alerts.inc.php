@@ -30,10 +30,16 @@ print_navbar($navbar);
 
 if($vars['action'] == 'update')
 {
+  echo '<div class="well">';
   update_device_alert_table($device);
   $alert_table = cache_device_alert_table($device['device_id']);
+  echo '</div>';
 }
 
-print_alert_row($vars);
+  $vars['pagination'] = TRUE;
+  if(!$vars['pagesize']) { $vars['pagesize'] = 50; }
+  if(!$vars['pageno']) { $vars['pageno'] = 1; }
+
+  print_alert_table($vars);
 
 ?>

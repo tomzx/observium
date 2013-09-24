@@ -22,7 +22,7 @@ if (count($processors))
 
   foreach ($processors as $proc)
   {
-    $text_descr = rewrite_entity_descr($proc['processor_descr']);
+    $text_descr = rewrite_entity_name($proc['processor_descr']);
 
     # disable short hrDeviceDescr. need to make this prettier.
     #$text_descr = short_hrDeviceDescr($proc['processor_descr']);

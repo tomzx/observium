@@ -13,32 +13,38 @@
 
 // Alert test display and editing page.
 
+include($config['html_dir']."/includes/alerting-navbar.inc.php");
+
 $check = dbFetchRow("SELECT * FROM `alert_tests` WHERE `alert_test_id` = ?", array($vars['alert_test_id']));
 
 if(($_SESSION['userlevel'] < 10))
 {
  // No editing for you!
 }
-elseif($vars['editing'])
+elseif($vars['submit'])
 {
   // We are editing. Lets see what we are editing.
-  if($vars['editing'] == "check_conditions")
+  if($vars['submit'] == "check_conditions")
   {
     $conds = array(); $cond_array = array();
     foreach(explode("\n", $vars['check_conditions']) AS $cond)
     {
-      list($cond_array['metric'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      list($cond_array['metric'], $cond_array['condition'], $cond_array['value']) = explode(" ", trim($cond), 3);
       $conds[] = $cond_array;
     }
     $conds = json_encode($conds);
     $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
   }
-  elseif($vars['editing'] == "assoc_conditions")
+  elseif($vars['submit'] == "delete_assoc")
+  {
+    $rows_updated = dbDelete('alert_assoc', '`alert_assoc_id` = ?', array($vars['assoc_id']));
+  }
+  elseif($vars['submit'] == "assoc_conditions")
   {
     $d_conds = array(); $cond_array = array();
     foreach(explode("\n", trim($vars['assoc_device_conditions'])) AS $cond)
     {
-      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", trim($cond), 3);
       $d_conds[] = $cond_array;
     }
     $d_conds = json_encode($d_conds);
@@ -46,14 +52,13 @@ elseif($vars['editing'])
     $e_conds = array(); $cond_array = array();
     foreach(explode("\n", trim($vars['assoc_entity_conditions'])) AS $cond)
     {
-      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", $cond);
+      list($cond_array['attrib'], $cond_array['condition'], $cond_array['value']) = explode(" ", trim($cond), 3);
       $e_conds[] = $cond_array;
     }
     $e_conds = json_encode($e_conds);
     $rows_updated = dbUpdate(array('device_attributes' => $d_conds, 'attributes' => $e_conds), 'alert_assoc', '`alert_assoc_id` = ?', array($vars['assoc_id']));
 
   }
-
 
   if ($rows_updated > 0)
   {
@@ -228,9 +233,52 @@ echo '
         echo("*");
       }
       echo '</td>';
-      echo '<td><a href="#assoc_modal_',$assoc['alert_assoc_id'],'" data-toggle="modal"><i class="oicon-pencil"></i> Edit</a></td>';
+      echo '<td style="text-align: right;"><a href="#assoc_modal_',$assoc['alert_assoc_id'],'" data-toggle="modal"><i class="oicon-pencil"></i></a> <a href="#assoc_del_modal_',$assoc['alert_assoc_id'],'" data-toggle="modal"><i class="oicon-minus-circle"></i></a></td>';
 
 ?>
+
+<div id="assoc_del_modal_<?php echo $assoc['alert_assoc_id']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="delete_alert" aria-hidden="true">
+ <form id="edit" name="edit" method="post" class="form" action="">
+  <input type="hidden" name="assoc_id" value = "<?php echo $assoc['alert_assoc_id']; ?>">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><i class="oicon-minus-circle"></i> Delete Assocation Rule <?php echo($assoc['alert_assoc_id']); ?></h3>
+  </div>
+  <div class="modal-body">
+
+  <span class="help-block">This will delete the selected association rule.</span>
+  <fieldset>
+    <div class="control-group">
+      <label class="control-label" for="confirm">
+        <strong>Confirm</strong>
+      </label>
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name="confirm" value="confirm" onchange="javascript: showWarning<?php echo $assoc['alert_assoc_id']; ?>(this.checked);" />
+          Yes, please delete this association rule!
+        </label>
+
+        <script type="text/javascript">
+        function showWarning<?php echo $assoc['alert_assoc_id']; ?>(checked) {
+          if (checked) { $('#delete_button<?php echo $assoc['alert_assoc_id']; ?>').removeAttr('disabled'); } else { $('#delete_button<?php echo $assoc['alert_assoc_id']; ?>').attr('disabled', 'disabled'); }
+        }
+      </script>
+      </div>
+    </div>
+  </fieldset>
+
+        <div class="alert alert-message alert-danger" id="warning" style="display:none;">
+    <h4 class="alert-heading"><i class="icon-warning-sign"></i> Warning!</h4>
+    Are you sure you want to delete this alert association?
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button id="delete_button<?php echo $assoc['alert_assoc_id']; ?>" type="submit" class="btn btn-danger" name="submit" value="delete_assoc" disabled><i class="icon-trash icon-white"></i> Delete Association</button>
+  </div>
+ </form>
+</div>
+
 
 <div id="assoc_modal_<?php echo $assoc['alert_assoc_id']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
  <form id="edit" name="edit" method="post" class="form" action="">
@@ -240,7 +288,6 @@ echo '
   </div>
   <div class="modal-body">
 
-  <input type=hidden name="editing" value="assoc_conditions">
   <input type=hidden name="assoc_id" value = "<?php echo $assoc['alert_assoc_id']; ?>">
   <span class="help-block">Please exercise care when editing here.</span>
 
@@ -263,7 +310,7 @@ echo '
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="assoc_conditions"><i class="icon-ok icon-white"></i> Save Changes</button>
   </div>
  </form>
 </div>
@@ -284,7 +331,11 @@ echo '
 <div class="row" style="margin-top: 10px;">
   <div class="col-md-12">';
 
-  print_alert_row(array('alert_test_id' => $vars['alert_test_id']));
+  $vars['pagination'] = TRUE;
+  if(!$vars['pagesize']) { $vars['pagesize'] = 50; }
+  if(!$vars['pageno']) { $vars['pageno'] = 1; }
+
+  print_alert_table($vars);
 
 echo '
 
@@ -300,8 +351,6 @@ echo '
     <h3 id="myModalLabel"><i class="oicon-traffic-light"></i> Edit Check Conditions</h3>
   </div>
   <div class="modal-body">
-
-  <input type=hidden name="editing" value="check_conditions">
   <span class="help-block">Please exercise care when editing here.</span>
   <fieldset>
     <div class="control-group">
@@ -314,7 +363,7 @@ echo '
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button type="submit" class="btn btn-primary" name="submit" value="save"><i class="icon-ok icon-white"></i> Save Changes</button>
+    <button type="submit" class="btn btn-primary" name="submit" value="check_conditions"><i class="icon-ok icon-white"></i> Save Changes</button>
   </div>
  </form>
 </div>

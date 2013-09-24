@@ -11,37 +11,7 @@
  *
  */
 
-// Run Actions
-
-if(($_SESSION['userlevel'] < 10))
-{
- // No editing for you!
-} 
-elseif($vars['action'] == 'update')
-{
-  echo '<div class="well">';
-  foreach(dbFetchRows("SELECT * FROM `devices`") AS $device)
-  {
-    update_device_alert_table($device);
-  }
-  echo '</div>';
-  
-  unset($vars['action']);
-}
-elseif($vars['submit'] == "delete_alert_checker" && $vars['confirm'] == "confirm")
-{
-
-    // Maybe expand this to output more info.
-
-    dbDelete('alert_tests', '`alert_test_id` = ?', array($vars['alert_test_id']));
-    dbDelete('alert_table', '`alert_test_id` = ?', array($vars['alert_test_id']));
-    dbDelete('alert_assoc', '`alert_test_id` = ?', array($vars['alert_test_id']));
-		
-		print_message("Deleting all traces of alert checker ".$vars['alert_test_id']);
-
-}
-
-
+include($config['html_dir']."/includes/alerting-navbar.inc.php");
 
 // Page to display list of configured alert checks
 
@@ -58,7 +28,7 @@ foreach (dbFetchRows("SELECT * FROM `alert_assoc` WHERE 1") as $entry)
 }
 
 $navbar['class'] = "navbar-narrow";
-$navbar['brand'] = "Alert Types";
+$navbar['brand'] = "Alert Checks";
 
 $types = dbFetchRows("SELECT `entity_type` FROM `alert_table` GROUP BY `entity_type`");
 
@@ -81,17 +51,6 @@ foreach ($types as $thing)
   $navbar['options'][$thing['entity_type']]['text'] = htmlspecialchars(nicecase($thing['entity_type']));
 }
 
-
-$navbar['options_right']['update']['url']  = generate_url($vars, array('page' => 'alert_checks', 'action'=>'update'));
-$navbar['options_right']['update']['text'] = 'Regenerate';
-$navbar['options_right']['update']['icon'] = 'oicon-arrow-circle';
-// We don't really need to highlight Regenerate, as it's not a display option, but an action.
-// if ($vars['action'] == 'update') { $navbar['options_right']['update']['class'] = 'active'; }
-
-$navbar['options_right']['add']['url']  = generate_url(array('page' => 'add_alert_check'));
-$navbar['options_right']['add']['text'] = 'Add Check';
-$navbar['options_right']['add']['icon'] = 'oicon-plus-circle';
-
 // Print out the navbar defined above
 print_navbar($navbar);
 
@@ -106,15 +65,15 @@ foreach (dbFetchRows("SELECT * FROM `alert_table` LEFT JOIN `alert_table-state` 
     <tr>
     <th></th><th></th>
     <th style="width: 25px">Id</th>
-    <th style="width: 110px">Name</th>
+    <th style="width: 250px">Name</th>
     <th style="width: 300px">Tests</th>
-    <th>Match</th>
+    <th>Device Match / Entity Match</th>
     <th style="width: 40px">Entities</th>
     </tr>
   </thead>
   <tbody>', PHP_EOL;
 
-  
+
 foreach($alert_check as $check)
 {
 
@@ -136,7 +95,8 @@ foreach($alert_check as $check)
   echo '</td>';
 
   echo '<td><strong>';
-  echo '<a href="', generate_url(array('page' => 'alert_check', 'alert_test_id' => $check['alert_test_id'])), '">' . $check['alert_name']. '</a>';
+  echo '<a href="', generate_url(array('page' => 'alert_check', 'alert_test_id' => $check['alert_test_id'])), '">' . $check['alert_name']. '</a></strong><br />';
+  echo '<small>',$check['alert_message'],'</small>';
   echo '</td>';
 
   // Loop the tests used by this alert
@@ -151,12 +111,12 @@ foreach($alert_check as $check)
   echo('</strong></td>');
 
   echo('<td>');
-  echo('<table class="table table-condensed-more table-bordered table-striped table-rounded">');
-  echo '<thead>';
-  echo('<tr>');
-  echo('<th style="width: 50%;">Device Match</th>');
-  echo('<th style="width: 50%;">Entity Match</th>');
-  echo('</tr>');
+  echo('<table class="table table-condensed-more table-bordered table-striped table-rounded" style="margin-bottom: 0px;">');
+#  echo '<thead>';
+#  echo('<tr>');
+#  echo('<th style="width: 50%;">Device Match</th>');
+#  echo('<th style="width: 50%;">Entity Match</th>');
+#  echo('</tr>');
   echo '</thead>';
 
   // Loop the associations which link this alert to this device
@@ -164,7 +124,7 @@ foreach($alert_check as $check)
   {
 
     echo('<tr>');
-    echo('<td>');
+    echo('<td width="50%">');
     if(is_array($assoc['device_attributes']))
     {
     foreach($assoc['device_attributes'] as $attribute)
@@ -208,7 +168,7 @@ foreach($alert_check as $check)
   // We assume each row here is going to be two lines, so we just <br /> them.
   echo '<td>';
   #echo overlib_link('#', count($entities), $entities_content,  NULL));
-  echo '<b>', count($entities), '</b>';
+  echo '<b>', $check['num_entities'], '</b>';
   echo '<br />';
   echo $check['status_numbers'];
   echo '</td>';

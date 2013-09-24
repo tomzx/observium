@@ -224,7 +224,7 @@ function generate_link($text, $vars, $new_vars = array())
 function pagination($vars, $total, $per_page = 10)
 {
   if (is_numeric($vars['pageno']))   { $page = $vars['pageno']; } else { $page = "1"; }
-  if (is_numeric($vars['pagesize'])) { $per_page = $vars['pagesize']; } else { $per_page = "10"; }
+  if (is_numeric($vars['pagesize'])) { $per_page = $vars['pagesize']; }
 
   $adjacents = "5";
 
@@ -233,6 +233,7 @@ function pagination($vars, $total, $per_page = 10)
 
   $prev = $page - 1;
   $next = $page + 1;
+
   $lastpage = ceil($total/$per_page);
   $lpm1 = $lastpage - 1;
 

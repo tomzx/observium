@@ -16,7 +16,7 @@ $sql .= " WHERE `device_id` = ?";
 
 foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
 {
-  $text_descr = rewrite_entity_descr($mempool['mempool_descr']);
+  $text_descr = rewrite_entity_name($mempool['mempool_descr']);
 
   $mempool_url   = "device/".$device['device_id']."/health/mempool/";
   $mini_url = "graph.php?id=".$mempool['mempool_id']."&amp;type=".$graph_type."&amp;from=".$config['time']['day']."&amp;to=".$config['time']['now']."&amp;width=80&amp;height=20&amp;bg=f4f4f4";

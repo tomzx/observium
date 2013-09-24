@@ -68,7 +68,7 @@ function messagebus_send($message)
 
 // Returns a text description from an entity type and an id
 // A little inefficient.
-function entity_descr($type, $entity_id)
+function entity_name($type, $entity_id)
 {
   global $config, $entity_cache;
 
@@ -77,9 +77,9 @@ function entity_descr($type, $entity_id)
     $entity = get_entity_by_id_cache($type, $entity_id);
   }
 
-  list($entity_table, $entity_id_field, $entity_descr_field) = entity_type_translate ($type);
+  list($entity_table, $entity_id_field, $entity_name_field) = entity_type_translate ($type);
 
-  $text = $entity[$entity_descr_field];
+  $text = $entity[$entity_name_field];
 
   return($text);
 }

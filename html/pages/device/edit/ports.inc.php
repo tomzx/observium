@@ -40,7 +40,7 @@ if ($updated && $update_message)
     <tr align=center>
       <th><button class='btn btn-mini btn-primary' type='submit' value='Save' title='Save current port disable/ignore settings'><i class="icon-ok icon-white"></i> Save</button></td>
       <th><!-- <button class='btn btn-mini btn-danger' type='submit' value='Reset' id='form-reset' title='Reset form to previously-saved settings'><i class="oicon-remove oicon-white"></i> Reset</button> --></th>
-      <th><button class='btn btn-mini' type='submit' value='Alerted' id='alerted-toggle' title='Toggle alerting on all currently-alerted ports'>Alerted</button>
+      <th><button class='btn btn-mini' type='submit' value='Alerted' id='alerted-toggle' title='Toggle alerting on all currently-alerted ports'>Enabled & Down</button>
           <button class='btn btn-mini' type='submit' value='Down' id='down-select' title='Disable alerting on all currently-down ports'>Down</button></th>
       <th><button class='btn btn-mini' type='submit' value='Toggle' id='disable-toggle' title='Toggle polling for all ports'>Toggle</button>
           <button class='btn btn-mini' type='submit' value='Select' id='disable-select' title='Disable polling on all ports'>All</button></th>
@@ -147,7 +147,7 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIn
   $dowecare  = ($port['ignore'] == 0 && $port['disabled'] == 0) ? $isportbad : !$isportbad;
   $outofsync = $dowecare ? " class='red'" : " class='green'";
 
-  echo("<span $enabled>".$port['ifAdminStatus']."</span> / <span name='operstatus_".$port['port_id']."'".$outofsync.">". $port['ifOperStatus']."</span></td>");
+  echo("<span $enabled>".$port['admin_status']."</span> / <span name='operstatus_".$port['port_id']."'".$outofsync.">". $port['ifOperStatus']."</span></td>");
 
   echo('<td align=center style="vertical-align: middle;">');
   echo("<div id='disabled_".$port['port_id']."' class='switch switch-mini' data-on='danger' data-off='primary' data-on-label='No' data-off-label='Yes'><input type=checkbox name='disabled_".$port['port_id']."'".($port['disabled'] ? 'checked' : '')."></div>");

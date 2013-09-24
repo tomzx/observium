@@ -48,12 +48,12 @@ foreach (dbFetchRows("SELECT * FROM `cef_switching` WHERE `device_id` = ?  ORDER
   if (!$entity['entPhysicalModelName'] && $entity['entPhysicalContainedIn'])
   {
     $parent_entity = dbFetchRow("SELECT * FROM `entPhysical` WHERE device_id = ? AND `entPhysicalIndex` = ?", array($device['device_id'], $entity['entPhysicalContainedIn']));
-    $entity_descr = $entity['entPhysicalName'] . " (" . $parent_entity['entPhysicalModelName'] .")";
+    $entity_name = $entity['entPhysicalName'] . " (" . $parent_entity['entPhysicalModelName'] .")";
   } else {
-    $entity_descr = $entity['entPhysicalName'] . " (" . $entity['entPhysicalModelName'] .")";
+    $entity_name = $entity['entPhysicalName'] . " (" . $entity['entPhysicalModelName'] .")";
   }
 
-  echo("<tr bgcolor=$bg_colour><td>".$entity_descr."</td>
+  echo("<tr bgcolor=$bg_colour><td>".$entity_name."</td>
             <td>".$cef['afi']."</td>
             <td>");
 
