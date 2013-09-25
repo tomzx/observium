@@ -22,6 +22,29 @@
  * @return none
  *
  */
+
+
+function print_tabbar($tabbar)
+{
+
+    $output = '<ul class="nav nav-tabs">';
+    foreach ($tabbar['options'] as $option => $array)
+    {
+      if($array['right'] == TRUE) { $array['class'] .= ' pull-right'; }
+      $output .= '<li class="' . $array['class'] . '">';
+      $output .= '<a href="'.$array['url'].'">';
+      if(isset($array['icon'])) {}
+      {
+        $output .= '<i class="'.$array['icon'].'"></i> ';
+      }
+      $output .= $array['text'].'</a></li>';
+    }
+    $output .= '</ul>';
+
+    echo $output;
+
+}
+
 function print_navbar($navbar)
 {
   global $config;
@@ -30,7 +53,7 @@ function print_navbar($navbar)
 
   ?>
 
-  <div class="navbar <?php echo $navbar['class']; ?>">
+  <div class="navbar <?php echo $navbar['class']; ?>" style="<?php echo $navbar['style']; ?>">
     <div class="navbar-inner">
       <div class="container">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#nav-<?php echo $id; ?>">
@@ -48,7 +71,7 @@ function print_navbar($navbar)
   {
     foreach ($navbar[$array_name] as $option => $array)
     {
-      if (strstr($array['class'], 'pull-right') || $array_name == 'options_right') {
+      if (strstr($array['class'], 'pull-right') || $array_name == 'options_right' || $array['right'] == TRUE) {
         $array['class'] = str_replace('pull-right', '', $array['class']);
         $newbar['options_right'][$option] = $array;
       } else {
@@ -56,7 +79,7 @@ function print_navbar($navbar)
       }
     }
   }
-  
+
   foreach (array('options', 'options_right') as $array_name)
   {
     if ($array_name == 'options_right') {

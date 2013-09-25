@@ -804,7 +804,11 @@ function process_alerts($device)
         $conditions = json_decode($alert['conditions'], TRUE);
 
         $entity = get_entity_by_id_cache($entry['entity_type'], $entry['entity_id']);
-        $entity['descr'] = $entity[$entity_descr_field];
+
+        $entity_field_array = entity_type_translate_array($entity['entity_type']);
+
+        $entity['name'] = $entity[$entity_field_array['name_field']];
+        $entity['descr'] = $entity[$entity_field_array['descr_field']];
 
         $condition_text = "";
         foreach($state['failed'] AS $failed)
@@ -863,9 +867,9 @@ $message = '
     <tr><td colspan=2 class="header">Alert</td></tr>
     <tr><td><b>Alert</b></font></td><td class="red">'.$alert['alert_message'].'</font></td></tr>
     <tr><td><b>Entity</b></font></td><td>'.generate_entity_link($entry['entity_type'], $entry['entity_id']).'</font></td></tr>';
-if(strlen($entity_descr) > 0)
+if(strlen($entity['descr']) > 0)
 {
-  $message .= '<tr><td><b>Descr</b></font></td><td>'.$entity_descr.'</font>';
+  $message .= '<tr><td><b>Descr</b></font></td><td>'.$entity['descr'].'</font>';
 }
 $message .= '
     <tr><td><b>Conditions</b></font></td><td>'.$condition_text.'</font></td></tr>
@@ -885,7 +889,7 @@ $message .= '
 </body>
 </html>';
 
-        alert_notify($device, "ALERT: [".$device['hostname']."] [".$alert['entity_type']."] [".$entity_name."] ".$alert['alert_message'],  $message);
+        alert_notify($device, "ALERT: [".$device['hostname']."] [".$alert['entity_type']."] [".$entity['name']."] ".$alert['alert_message'],  $message);
 
         $update_array['last_alerted'] = time();
         dbUpdate($update_array, 'alert_table-state', '`alert_table_id` = ?', array($entry['alert_table_id']));

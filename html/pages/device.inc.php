@@ -90,30 +90,20 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
   if ($config['os'][$device['os']]['group']) { $device['os_group'] = $config['os'][$device['os']]['group']; }
 
   // Print the device header inside a table.
-  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="vertical-align: middle; margin-top: 5px; margin-bottom: 10px;">');
+  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="vertical-align: middle; margin-bottom: 10px;">');
   include("includes/device-header.inc.php");
   echo('</table>');
 
   // Show tabs if the user has access to this device
   if (device_permitted($device['device_id']))
   {
-  echo('<ul class="nav nav-tabs">');
 
-   if ($config['show_overview_tab'])
+    if ($config['show_overview_tab'])
     {
-      echo('
-  <li class="' . $select['overview'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'overview')).'">
-      <i class="oicon-server"></i> Overview
-    </a>
-  </li>');
+      $navbar['options']['overview'] = array('text' => 'Overview', 'icon' => 'oicon-server');
     }
 
-    echo('<li class="' . $select['graphs'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'graphs')).'">
-      <i class="oicon-chart-up"></i> Graphs
-    </a>
-  </li>');
+    $navbar['options']['graphs'] = array('text' => 'Graphs', 'icon' => 'oicon-chart-up');
 
     $health =  dbFetchCell("SELECT COUNT(*) FROM storage WHERE device_id = '" . $device['device_id'] . "'") +
                dbFetchCell("SELECT COUNT(sensor_id) FROM sensors WHERE device_id = '" . $device['device_id'] . "'") +
@@ -123,71 +113,43 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 
     if ($health)
     {
-      echo('<li class="' . $select['health'] . '">
-      <a href="'.generate_device_url($device, array('tab' => 'health')).'">
-        <i class="oicon-system-monitor"></i> Health
-      </a>
-    </li>');
+      $navbar['options']['health'] = array('text' => 'Health', 'icon' => 'oicon-system-monitor');
     }
 
     // Print applications tab if there are matching entries in `applications` table
     if (dbFetchCell("SELECT COUNT(app_id) FROM applications WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['apps'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'apps')).'">
-      <i class="oicon-application-icon-large"></i> Apps
-    </a>
-  </li>');
+      $navbar['options']['apps'] = array('text' => 'Apps', 'icon' => 'oicon-application-icon-large');
     }
 
     // Print the collectd tab if there is a matching directory
     if (isset($config['collectd_dir']) && is_dir($config['collectd_dir'] . "/" . $device['hostname'] ."/"))
     {
-      echo('<li class="' . $select['collectd'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'collectd')).'">
-      <i class="oicon-chart-up-color"></i> CollectD
-    </a>
-  </li>');
+      $navbar['options']['collectd'] = array('text' => 'Collectd', 'icon' => 'oicon-chart-up-color');
     }
 
     // Print the munin tab if there are matchng entries in the munin_plugins table
     if (dbFetchCell("SELECT COUNT(mplug_id) FROM munin_plugins WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['munin'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'munin')). '">
-      <i class="oicon-chart-down-color"></i> Munin
-    </a>
-  </li>');
+      $navbar['options']['graphs'] = array('text' => 'Graphs', 'icon' => 'oicon-chart-up');
     }
 
     // Print the port tab if there are matching entries in the ports table
     if (dbFetchCell("SELECT COUNT(port_id) FROM ports WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['ports'] . $select['port'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'ports')). '">
-      <i class="oicon-network-ethernet"></i> Ports
-    </a>
-  </li>');
+      $navbar['options']['ports'] = array('text' => 'Ports', 'icon' => 'oicon-network-ethernet');
     }
 
     // Print the SLAs tab if there are matching entries in the slas table
     if (dbFetchCell("SELECT COUNT(sla_id) FROM slas WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['slas'] . $select['sla'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'slas')). '">
-      <i class="oicon-chart-up"></i> SLAs
-    </a>
-  </li>');
+      $navbar['options']['slas'] = array('text' => 'SLAs', 'icon' => 'oicon-chart-up');
     }
 
     // Print the acceess points tab if there are matching entries in the accesspoints table
     if (dbFetchCell("SELECT COUNT(accesspoint_id) FROM accesspoints WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['accesspoints'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'accesspoints')). '">
-      <i class="oicon-wi-fi-zone"></i> Access Points
-    </a>
-  </li>');
+      $navbar['options']['accesspoints'] = array('text' => 'Access Points', 'icon' => 'oicon-wi-fi-zone');
     }
 
     // Build array of smokeping files for use in tab building and smokeping page.
@@ -223,31 +185,19 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Print latency tab if there are smokeping files with source or destination matching this hostname
     if (count($smokeping_files['in'][$device['hostname']]) || count($smokeping_files['out'][$device['hostname']]))
     {
-      echo('<li class="' . $select['latency'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'latency')).'">
-      <i class="oicon-paper-plane"></i> Ping
-    </a>
-  </li>');
+      $navbar['options']['latency'] = array('text' => 'Ping', 'icon' => 'oicon-paper-plane');
     }
 
     // Print vlans tab if there are matching entries in the vlans table
     if (dbFetchCell("SELECT COUNT(vlan_id) FROM vlans WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['vlans'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'vlans')).'">
-      <i class="oicon-arrow-branch-bgr"></i> VLANs
-    </a>
-  </li>');
+      $navbar['options']['vlans'] = array('text' => 'VLANs', 'icon' => 'oicon-arrow-branch-bgr');
     }
 
     // Pring Virtual Machines tab if there are matching entries in the vminfo table
     if (dbFetchCell("SELECT COUNT(id) FROM vminfo WHERE device_id = '" . $device["device_id"] . "'") > '0')
     {
-      echo('<li class="' . $select['vm'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'vm')).'">
-      <i class="oicon-network-cloud"></i> Virtual Machines
-    </a>
-  </li>');
+      $navbar['options']['vm'] = array('text' => 'VMs', 'icon' => 'oicon-network-cloud');
     }
 
     // $loadbalancer_tabs is used in device/loadbalancer/ to build the submenu. we do it here to save queries
@@ -272,11 +222,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Print the load balancer tab if the loadbalancer_tabs array has entries.
     if (is_array($loadbalancer_tabs))
     {
-      echo('<li class="' . $select['loadbalancer'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'loadbalancer')).'">
-      <i class="oicon-arrow-split"></i> Load Balancer
-    </a>
-  </li>');
+      $navbar['options']['loadbalancer'] = array('text' => 'Load Balancer', 'icon' => 'oicon-arrow-split');
     }
 
     // $routing_tabs is used in device/routing/ to build the tabs menu. we built it here to save some queries
@@ -305,21 +251,13 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Print routing tab if any of the routing tables contain matching entries
     if (is_array($routing_tabs))
     {
-      echo('<li class="' . $select['routing'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'routing')).'">
-      <i class="oicon-arrow-branch-000-left"></i> Routing
-    </a>
-  </li>');
+      $navbar['options']['routing'] = array('text' => 'Routing', 'icon' => 'oicon-arrow-branch-000-left');
     }
 
     // Print the pseudowire tab if any of the routing tables contain matching entries
     if (dbFetchCell("SELECT COUNT(*) FROM `pseudowires` WHERE `device_id` = ?", array($device['device_id'])))
     {
-      echo('<li class="' . $select['pseudowires'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'pseudowires')).'">
-      <i class="oicon-layer-shape-curve"></i> Pseudowires
-    </a>
-  </li>');
+      $navbar['options']['pseudowires'] = array('text' => 'Pseudowires', 'icon' => 'oicon-layer-shape-curve');
     }
 
 // moved to ports tab
@@ -336,68 +274,39 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Print the packages tab if there are matching entries in the packages table
     if (dbFetchCell("SELECT COUNT(*) FROM `packages` WHERE device_id = '".$device['device_id']."'") > '0')
     {
-      echo('<li class="' . $select['packages'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'packages')).'">
-      <i class="oicon-box-zipper"></i> Pkgs
-    </a>
-  </li>');
+      $navbar['options']['packages'] = array('text' => 'Pkgs', 'icon' => 'oicon-box-zipper');
     }
 
     // Print the inventory tab if inventory is enabled and either entphysical or hrdevice tables have entries
     if ($config['enable_inventory'] && dbFetchCell("SELECT * FROM `entPhysical` WHERE device_id = '".$device['device_id']."'") > '0')
     {
-      echo('<li class="' . $select['entphysical'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'entphysical')).'">
-      <i class="menu-icon oicon-wooden-box"></i> Inventory
-    </a>
-  </li>');
+      $navbar['options']['entphysical'] = array('text' => 'Inventory', 'icon' => 'oicon-wooden-box');
     }
     elseif ($config['enable_inventory'] && dbFetchCell("SELECT * FROM `hrDevice` WHERE device_id = '".$device['device_id']."'") > '0')
     {
-      echo('<li class="' . $select['hrdevice'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'hrdevice')).'">
-      <i class="menu-icon oicon-wooden-box"></i> Inventory
-    </a>
-  </li>');
+      $navbar['options']['hrdevice'] = array('text' => 'Inventory', 'icon' => 'oicon-wooden-box');
     }
 
     // Print service tab if show_services enabled and there are entries in the services table
     ## DEPRECATED
     if ($config['show_services'] && dbFetchCell("SELECT COUNT(service_id) FROM services WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['services'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'services')).'">
-      <i class="oicon-target"></i> Services
-    </a>
-  </li>');
+      $navbar['options']['services'] = array('text' => 'Services', 'icon' => 'oicon-target');
     }
 
     // Print toner tab if there are entries in the toner table
     if (dbFetchCell("SELECT COUNT(toner_id) FROM toner WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      echo('<li class="' . $select['printing'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'printing')).'">
-      <i class="oicon-printer-color"></i> Printing
-    </a>
-  </li>');
+      $navbar['options']['printing'] = array('text' => 'Printing', 'icon' => 'oicon-printer-color');
     }
 
-
     // Always print logs tab
-    echo('<li class="' . $select['logs'] . '">
-      <a href="'.generate_device_url($device, array('tab' => 'logs')).'">
-        <i class="oicon-clipboard-audit"></i> Logs
-      </a>
-    </li>');
+    $navbar['options']['logs'] = array('text' => 'Logs', 'icon' => 'oicon-clipboard-audit');
 
     // Always print alerts tab
-    echo('<li class="' . $select['alerts'] . '">
-      <a href="'.generate_device_url($device, array('tab' => 'alerts')).'">
-        <i class="oicon-bell"></i> Alerts
-      </a>
-    </li>');
+    $navbar['options']['alerts'] = array('text' => 'Alerts', 'icon' => 'oicon-bell');
 
-   // If the user has global read privileges, check for a device config. 
+   // If the user has global read privileges, check for a device config.
    if ($_SESSION['userlevel'] >= 7)
     {
       $device_config_file = get_rancid_filename($device['hostname']);
@@ -406,11 +315,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Print the config tab if we have a device config
     if ($device_config_file)
     {
-      echo('<li class="' . $select['showconfig'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'showconfig')).'/">
-      <i class="oicon-application-terminal"></i> Config
-    </a>
-  </li>');
+      $navbar['options']['showconfig'] = array('text' => 'Config', 'icon' => 'oicon-application-terminal');
     }
 
     // If nfsen is enabled, check for an nfsen file
@@ -422,31 +327,72 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Print the netflow tab if we have an nfsen file
     if ($nfsen_rrd_file)
     {
-      echo('<li class="' . $select['nfsen'] . '">
-    <a href="'.generate_device_url($device, array('tab' => 'nfsen')).'">
-      <i class="oicon-funnel"></i> Netflow
-    </a>
-  </li>');
+      $navbar['options']['nfsen'] = array('text' => 'Netflow', 'icon' => 'oicon-funnel');
     }
 
     // If the user has global write permissions, show them the edit tab
     if ($_SESSION['userlevel'] >= "10")
     {
-      echo('<li class="' . $select['edit'] . ' pull-right" >
-    <a href="'.generate_device_url($device, array('tab' => 'edit')).'">
-      <i class="oicon-gear"></i>
-    </a>
-  </li>');
-
-   // always print the performance tab
-   echo('<li class="' . $select['perf'] . ' pull-right">
-    <a href="'.generate_device_url($device, array('tab' => 'perf')).'">
-      <i class="oicon-time"></i>
-    </a>
-  </li>');
-
+      $navbar['options']['perf'] = array('text' => NULL, 'icon' => 'oicon-time', 'right' => TRUE);
+      $navbar['options']['edit'] = array('text' => NULL, 'icon' => 'oicon-gear', 'right' => TRUE);
     }
-     echo("</ul>");
+
+?>
+
+<script>
+(function ($) {
+
+	$(function(){
+
+		// fix sub nav on scroll
+		var $win = $(window),
+				$body = $('body'),
+				$nav = $('.subnav'),
+				navHeight = $('.navbar').first().height(),
+				subnavHeight = $('.subnav').first().height(),
+				subnavTop = $('.subnav').length && $('.subnav').offset().top - navHeight,
+				marginTop = parseInt($body.css('margin-top'), 10);
+				isFixed = 0;
+
+		processScroll();
+
+		$win.on('scroll', processScroll);
+
+		function processScroll() {
+			var i, scrollTop = $win.scrollTop();
+
+			if (scrollTop >= subnavTop && !isFixed) {
+				isFixed = 1;
+				$nav.addClass('subnav-fixed');
+				$body.css('margin-top', marginTop + subnavHeight + 'px');
+			} else if (scrollTop <= subnavTop && isFixed) {
+				isFixed = 0;
+				$nav.removeClass('subnav-fixed');
+				$body.css('margin-top', marginTop + 'px');
+			}
+		}
+
+	});
+
+})(window.jQuery);
+</script>
+
+<?php
+
+$navbar['class'] = 'navbar-narrow subnav';
+
+foreach ($navbar['options'] as $option => $array)
+{
+  if ($vars['tab'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
+  $navbar['options'][$option]['url'] = generate_device_url($device, array('tab'=>$option));
+}
+
+#print_tabbar($navbar);
+
+print_navbar($navbar);
+unset($navbar);
+
+
  }
 
   // Check that the user can view the device, or is viewing a permitted port on the device

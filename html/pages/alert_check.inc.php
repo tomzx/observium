@@ -33,7 +33,7 @@ elseif($vars['submit'])
       $conds[] = $cond_array;
     }
     $conds = json_encode($conds);
-    $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
+    $rows_updated = dbUpdate(array('conditions' => $conds, 'and' => $vars['alert_and']), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
   }
   elseif($vars['submit'] == "delete_assoc")
   {
@@ -110,15 +110,17 @@ echo '
             <th style="width: 15%;">Entity Type</th>
             <th style="width: 20%;">Name</th>
             <th style="width: 50%;">Message</th>
+            <th style="width: 5%;">Delay</th>
             <th style="width: 10%;">Status</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>', $check['alert_test_id'], '</strong></td>
-            <td><strong>', nicecase($check['entity_type']), '</strong></td>
-            <td><strong>', $check['alert_name'], '</strong></td>
+            <td>', $check['alert_test_id'], '</td>
+            <td>', nicecase($check['entity_type']), '</td>
+            <td>', $check['alert_name'], '</td>
             <td><i>', $check['alert_message'], '</i></td>
+            <td>', $check['delay'], '</td>
             <td><i>', $check['status_numbers'], '</i></td>
           </tr>
         </tbody></table>
@@ -198,7 +200,7 @@ echo '
     {
       echo('<tr>');
       echo('<td>');
-      echo('<strong>');
+      echo('');
       $assoc['device_attributes'] = json_decode($assoc['device_attributes'], TRUE);
       $assoc_dev_text = array();
       if(is_array($assoc['device_attributes']))
@@ -214,9 +216,9 @@ echo '
       } else {
         echo("*");
       }
-      echo("</strong><i>");
+      echo("<i>");
       echo('</td>');
-      echo('<td><strong>');
+      echo('<td>');
       $assoc['attributes'] = json_decode($assoc['attributes'], TRUE);
       $assoc_entity_text = array();
       if(is_array($assoc['attributes']))
@@ -250,7 +252,7 @@ echo '
   <fieldset>
     <div class="control-group">
       <label class="control-label" for="confirm">
-        <strong>Confirm</strong>
+        Confirm
       </label>
       <div class="controls">
         <label class="checkbox">
@@ -355,6 +357,14 @@ echo '
   <fieldset>
     <div class="control-group">
       <div class="controls">
+      <select name="alert_and" class="selectpicker">
+        <option value="0" data-icon="oicon-or" <?php if($check['and'] == '0') { echo 'selected'; } ?>>Require any condition</option>
+        <option value="1" data-icon="oicon-and" <?php if($check['and'] == '1') { echo 'selected'; } ?>>Require all conditions</option>
+      </select>
+     </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
         <textarea class="col-md-12" rows="4" name="check_conditions"><?php echo(htmlentities(implode("\n", $condition_text))); ?></textarea>
       </div>
     </div>
@@ -381,7 +391,7 @@ echo '
   <fieldset>
     <div class="control-group">
       <label class="control-label" for="confirm">
-        <strong>Confirm</strong>
+        Confirm
       </label>
       <div class="controls">
         <label class="checkbox">

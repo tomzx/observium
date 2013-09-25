@@ -106,7 +106,7 @@ function show_map($config)
       resolution: '<?php echo $config['frontpage']['map']['resolution']; ?>',
       displayMode: 'markers',
       keepAspectRatio: 0,
-      width: 1160,
+      width: 1215,
       height: 480,
       is3D: true,
       legend: 'none',

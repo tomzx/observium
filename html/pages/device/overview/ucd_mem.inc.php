@@ -15,7 +15,7 @@ $avai_perc = round(($device_state['ucd_mem']['mem_avail'] / $device_state['ucd_m
 
     $graph_array = array();
     $graph_array['height'] = "100";
-    $graph_array['width']  = "476";
+    $graph_array['width']  = "512";
     $graph_array['to']     = $config['time']['now'];
     $graph_array['device']     = $device['device_id'];
     $graph_array['type']   = 'device_ucd_memory';

@@ -23,7 +23,7 @@ foreach ($pages as $page_name => $page_desc)
   {
     $navbar['options'][$page_name]['class'] = "active";
   }
-  $navbar['options'][$page_name]['url'] = generate_url($vars, array('page' => $page_name));
+  $navbar['options'][$page_name]['url'] = generate_url(array('page' => $page_name));
   $navbar['options'][$page_name]['text'] = htmlspecialchars($page_desc);
 }
 

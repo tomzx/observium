@@ -1,9 +1,10 @@
-<div style="width: 700px; margin: auto; margin-top: 30px;">
-    <div style="margin: auto; width:700px; padding:5px;">
-      <table border="0" cellpadding="0" cellspacing="0">
-        <tr>
-          <td><img src="images/login-hamster.png" alt="Login required" /></td>
-          <td>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="well" style="padding: 50px; background-image: url('/images/login-hamster-large.png');  background-position: left 10px top -65px; background-repeat: no-repeat;">
+      <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-9">
             <form action="" method="post" name="logonform" class="form-horizontal">
               <fieldset>
                 <div class="control-group">
@@ -38,7 +39,6 @@ if(function_exists('mcrypt_decrypt') && function_exists('mcrypt_encrypt'))
                       Remember my login on this computer
                     </label>
 <?php
-} else {
 }
 ?>
                   </div>
@@ -52,19 +52,24 @@ if(function_exists('mcrypt_decrypt') && function_exists('mcrypt_encrypt'))
 <?php
 if (isset($auth_message))
 {
-  echo('<tr><td colspan="2" style="font-weight: bold; color: #cc0000;">' . $auth_message . '</td></tr>');
+  echo('<tr><td colspan="3" style="font-weight: bold; color: #cc0000;">' . $auth_message . '</td></tr>');
 }
 ?>
             </table>
             </fieldset>
             </form>
-          </td>
-        </tr>
-      </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php
+
+
 if (isset($config['login_message']))
 {
-  echo('<div style="margin-top: 10px;text-align: center; font-weight: bold; color: #cc0000; width: 470px;">'.$config['login_message'].'</div>');
+  echo('<div class=row><div class="col-md-6 col-md-offset-3"><div style="margin-top: 10px;text-align: center; font-weight: bold; color: #cc0000;">'.$config['login_message'].'</div></div></div>');
 }
 ?>
 <script type="text/javascript">
