@@ -1,3 +1,16 @@
+.navbar .brand-observium {
+  background: url('/images/brand-observium.png');
+  width: 162px;
+}
+
+.navbar-inner { 
+  padding: 0;
+}
+
+.navbar .brand {
+  margin-left: 0;
+}
+
 @media (min-width: 980px) {
 
         .subnav-fixed {
