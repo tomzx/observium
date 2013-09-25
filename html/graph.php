@@ -12,6 +12,8 @@
  *
  */
 
+#ob_start();
+
 function utime()
 {
   $time = explode(" ", microtime());

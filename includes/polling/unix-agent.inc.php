@@ -68,7 +68,7 @@ if ($device['os_group'] == "unix")
       if ($section == "freeradius")  { $sa = "app"; $sb = "freeradius"; }
       if ($section == "postfix_qshape")  { $sa = "app"; $sb = "postfix_qshape"; }
       if ($section == "postfix_mailgraph")  { $sa = "app"; $sb = "postfix_mailgraph"; }
-#      if ($section == "drbd")   { $sa = "app"; $sb = "drbd"; }
+      # DO -NOT- ADD NEW IFS ABOVE -- use <<<app-$foo>>> in your application script
 
       # Workaround for older script where we didn't split into 3 possible parts yet
       if ($section == "app-powerdns-recursor") { $sa = "app"; $sb = "powerdns-recursor"; $sc = ""; }
