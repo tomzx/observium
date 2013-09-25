@@ -122,7 +122,7 @@ if ($error_msg) {
       graph_error("Missing RRD Datafile");
     }
 
-  } elseif($command_only) {
+  } elseif(isset($vars['command_only']) && $vars['command_only'] == TRUE) {
 
     $graph_start = utime();
     $return = rrdtool_graph($graphfile, $rrd_options);

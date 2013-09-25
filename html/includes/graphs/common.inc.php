@@ -1,13 +1,12 @@
 <?php
 
-if($vars['from' > $vars['to']]) { echo("FAIL"); die; }
-
 if ($vars['from'])    { $from   = mres($vars['from']); }
 if ($vars['to'])      { $to     = mres($vars['to']);     }
 
 if ($vars['width'])   { $width  = mres($vars['width']);  }
 if($config['trim_tobias']) { $width+=12; }
 if ($vars['height'])  { $height = mres($vars['height']); }
+
 if ($vars['inverse']) { $in = 'out'; $out = 'in'; $inverse = TRUE; } else { $in = 'in'; $out = 'out'; $inverse = FALSE; }
 
 if ($vars['legend'] == 'no')  { $rrd_options .= ' -g'; $legend = 'no'; }

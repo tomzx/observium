@@ -158,8 +158,8 @@ if (!$auth)
 
 /// Run the graph to get data array out of it
 
-$_GET = $graph_array;
-$command_only = 1;
+$vars = array_merge($vars, $graph_array);
+$vars['command_only'] = 1;
 include("includes/graphs/graph.inc.php");
 
 /// Print options navbar
