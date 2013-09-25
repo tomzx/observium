@@ -32,7 +32,7 @@ print_navbar($navbar);
 
 $graph_enable = $graph_enable[$vars['group']];
 
-echo('<table class="table table-condensed table-striped table-hover">');
+echo('<table class="table table-condensed table-striped table-hover table-bordered">');
 
 foreach ($graph_enable as $graph => $entry)
 {

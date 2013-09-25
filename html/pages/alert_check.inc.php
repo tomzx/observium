@@ -33,7 +33,7 @@ elseif($vars['submit'])
       $conds[] = $cond_array;
     }
     $conds = json_encode($conds);
-    $rows_updated = dbUpdate(array('conditions' => $conds), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
+    $rows_updated = dbUpdate(array('conditions' => $conds, 'and' => $vars['alert_and']), 'alert_tests', '`alert_test_id` = ?',array($vars['alert_test_id']));
   }
   elseif($vars['submit'] == "delete_assoc")
   {
@@ -355,6 +355,14 @@ echo '
   <div class="modal-body">
   <span class="help-block">Please exercise care when editing here.</span>
   <fieldset>
+    <div class="control-group">
+      <div class="controls">
+      <select name="alert_and" class="selectpicker">
+        <option value="0" data-icon="oicon-or" <?php if($check['and'] == '0') { echo 'selected'; } ?>>Require any condition</option>
+        <option value="1" data-icon="oicon-and" <?php if($check['and'] == '1') { echo 'selected'; } ?>>Require all conditions</option>
+      </select>
+     </div>
+    </div>
     <div class="control-group">
       <div class="controls">
         <textarea class="col-md-12" rows="4" name="check_conditions"><?php echo(htmlentities(implode("\n", $condition_text))); ?></textarea>

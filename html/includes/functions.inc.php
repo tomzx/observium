@@ -721,11 +721,13 @@ function percentage_bar($args)
   $left = '100' - $total;
   if($left > '0') { $output .= '<div class="bar" style="width:'.$left.'%;"></div>'; }
 
+  if($left > '0') { $output .= '<div class="bar-text" style="margin-left: -100px; margin-top: 0px; float: right; text-align: right; '.$style_b.'">'.$args['text'].'</div>'; }
+
   foreach($args['bars'] as $bar)
   {
-    $output .= '<div class="bar-text" style="width:'.$bar['percent'].'%; padding-left: 4px;">'.$bar['text'].'</div>';
+    $output .= '<div class="bar-text" style="width:'.$bar['percent'].'%; max-width:'.$bar['percent'].'%; padding-left: 4px;">'.$bar['text'].'</div>';
   }
-  if($left > '0') { $output .= '<div class="bar-text" style="margin-left: -100px; float: right; text-align: right; '.$style_b.'">'.$args['text'].'</div>'; }
+#  if($left > '0') { $output .= '<div class="bar-text" style="margin-left: -100px; margin-top: -16px; float: right; text-align: right; '.$style_b.'">'.$args['text'].'</div>'; }
 
   $output .= '</div>';
 
