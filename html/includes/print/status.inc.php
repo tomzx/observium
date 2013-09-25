@@ -273,7 +273,7 @@ function print_status_boxes($status)
     if($entry['wide']) { $class .= ' statusbox-wide'; }
 
     echo('<div class="alert statusbox '.$class.'">');
-    echo('<h4>'.$entry['device_link'].'</h4>');
+    echo('<span class="header">'.$entry['device_link'].'</span>');
     echo('<p>');
     echo($entry['class'] .' '.$entry['event'].'<br />');
     echo('<span class="entity">'.$entry['entity_link'].'</span><br />');
