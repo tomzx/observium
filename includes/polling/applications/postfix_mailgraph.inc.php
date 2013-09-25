@@ -28,9 +28,9 @@ if (!empty($agent_data['app']['postfix_mailgraph']))
   }
 
   # Workaround for old agent script
-  if (!isset($queue_data['rcvd'])) { $queue_data['rcvd'] = $queue_data['received']; }
+  if (!isset($queue_data['recv'])) { echo "DAFUQ " . $queue_data['recv'] ; $queue_data['recv'] = $queue_data['received']; }
 
-  foreach (array('sent','rcvd','bounced','rejected','virus', 'spam', 'greylisted', 'delayed') as $key)
+  foreach (array('sent','recv','bounced','rejected','virus', 'spam', 'greylisted', 'delayed') as $key)
   {
     $rrd_values[] = (is_numeric($queue_data[$key]) ? $queue_data[$key] : "U");
   }
