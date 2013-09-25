@@ -27,7 +27,7 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
   </div>
 
   <div style="margin-bottom: 20px; margin-top: 10px;">
-  <table width=100%>
+  <table width=100% style="background: transparent;">
     <tr>
       <td width="20%" align=center><a class="btn btn-small" href="http://www.observium.org"><i style="font-size: small;" class="icon-globe"></i> Web</a></td>
       <td width="20%" align=center><a class="btn btn-small" href="http://jira.observium.org/"><i style="font-size: small;" class="icon-bug"></i> Bugtracker</a></td>

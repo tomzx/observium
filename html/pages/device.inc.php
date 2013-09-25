@@ -90,7 +90,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
   if ($config['os'][$device['os']]['group']) { $device['os_group'] = $config['os'][$device['os']]['group']; }
 
   // Print the device header inside a table.
-  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="vertical-align: middle; margin-top: 5px; margin-bottom: 10px;">');
+  echo('<table class="table table-hover table-striped table-bordered table-condensed table-rounded" style="vertical-align: middle; margin-bottom: 10px;">');
   include("includes/device-header.inc.php");
   echo('</table>');
 
