@@ -12,7 +12,7 @@
  *
  */
 
-ob_start();
+#ob_start();
 
 function utime()
 {

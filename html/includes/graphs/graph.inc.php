@@ -1,6 +1,6 @@
 <?php
 
-ob_clean();
+#ob_clean();
 
 $total_start = utime();
 

@@ -8,7 +8,7 @@ if(isset($_SESSION['widescreen']))
   $graph_width=1700;
   $thumb_width=180;
 } else {
-  $graph_width=1075;
+  $graph_width=1159;
   $thumb_width=113;
 }
 
