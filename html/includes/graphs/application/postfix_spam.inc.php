@@ -6,7 +6,7 @@ $scale_min    = 0;
 $colours      = "mixed";
 $nototal      = (($width < 550) ? 1 : 0);
 $unit_text    = "Messages/minute";
-$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-postfix-mailgraph-" . $app['app_id'] . ".rrd";
+$rrd_filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/app-postfix-mailgraph.rrd";
 $array        = array(
                       'virus' => array('descr' => 'Virus'),
                       'spam' => array('descr' => 'Spam'),
