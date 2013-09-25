@@ -111,11 +111,13 @@ foreach ($segments as $pos => $segment)
   }
 }
 
+# No array_merge used here, for clarity and reliability.
 foreach ($_GET as $name => $value)
 {
   $vars[$name] = urldecode($value);
 }
 
+# See above.
 foreach ($_POST as $name => $value)
 {
   $vars[$name] = $value;
@@ -235,9 +237,6 @@ if ($_SESSION['authenticated'])
   exit;
 }
 
-?>
-<?php
-
 $runtime_end = utime(); $runtime = $runtime_end - $runtime_start;
 $gentime = substr($runtime, 0, 5);
 $fullsize = memory_get_usage();
@@ -337,7 +336,6 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
               </table>
             </div>
           </li>
-
         </ul>
       </div>
     </div>
@@ -391,7 +389,6 @@ if (is_array($pagetitle))
     echo '<script src="js/twitter-bootstrap-hover-dropdown.min.js"></script>';
   }
 ?>
-
 
   <script src="js/bootstrap-datetimepicker.min.js"></script>
   <script src="js/bootstrap-select.min.js"></script>

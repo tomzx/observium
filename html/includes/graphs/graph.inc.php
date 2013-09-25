@@ -1,5 +1,7 @@
 <?php
 
+ob_clean();
+
 $total_start = utime();
 
 preg_match('/^(?P<type>[a-z0-9A-Z-]+)_(?P<subtype>.+)/', $vars['type'], $graphtype);
