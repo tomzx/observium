@@ -383,7 +383,8 @@ $navbar['class'] = 'navbar-narrow subnav';
 
 foreach ($navbar['options'] as $option => $array)
 {
-  if ($vars['tab'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
+  if(!isset($vars['tab'])) { $vars['tab'] = $option; }
+  if($vars['tab'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
   $navbar['options'][$option]['url'] = generate_device_url($device, array('tab'=>$option));
 }
 

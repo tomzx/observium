@@ -7,11 +7,12 @@
 .well {
   min-height: 20px;
   padding: @baseMargin;
-  margin-bottom: @baseMargin;
-  background-color: @wellBackground;
-  border: 1px solid @grayBorder;
-  .border-radius(@baseBorderRadius);
-  // .box-shadow(inset 0 1px 1px rgba(0,0,0,.05));
+  margin-bottom: 10px;
+  background-color: @well-bg;
+  border: 1px solid darken(@well-bg, 7%);
+  border-radius: @border-radius-base;
+//  #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+//  .box-shadow(inset 0 1px 1px rgba(0,0,0,.05));
   blockquote {
     border-color: #ddd;
     border-color: rgba(0,0,0,.15);
@@ -19,42 +20,45 @@
 }
 
 // Sizes
-.well-large {
+.well-lg {
   padding: 24px;
-  .border-radius(@borderRadiusLarge);
+  border-radius: @border-radius-large;
 }
-
-.well-small {
-  padding: @baseMargin / 2;
-  margin-bottom: @baseMargin;
-  .border-radius(@baseBorderRadius);
+.well-sm {
+  padding: 9px;
+  border-radius: @border-radius-small;
 }
 
 .well-shaded {
-   #gradient > .vertical(@gradientLight, @gradientDark);
+  #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
 }
 
 // Info boxes, as used on the overview pages
 
-.info_box { 
+.info_box {
 //    margin-top: @baseMargin * 2;
 //    margin-bottom: 0; // This will cause some messy things in places, but it prevents double margin for infoboxes. adama.
-//    margin-top: @baseMargin;
+    margin-top: @baseMargin * 2;
     padding-bottom: 10px;
 }
 
-.info_box .title { 
-    position: relative; 
+.info_box:first-of-type {
+    margin-top: @baseMargin * 1;
+}
+
+
+.info_box .title {
+    position: relative;
     top : -@baseMargin * 2;
     margin-left: 0em;
     padding: 2px 7px;
-    display: inline; 
+    display: inline;
     font-size: 1em;
 
     .border-radius(@baseBorderRadius);
 
     border: 1px solid @grayBorder;
-	
+
     background-color: @grayEvenLighter;
     #gradient > .vertical(@gradientLight, @gradientDark);
 
@@ -68,3 +72,4 @@
 .info_box .content {
   margin-top: -@baseMargin;
 }
+

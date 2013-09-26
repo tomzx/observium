@@ -6,12 +6,12 @@ $config['graph_sections'] = array('general', 'system', 'firewall', 'netstats', '
 
 // Graph types
 
-$config['graph_types']['port']['bits']    = array('name' => 'Bits',       'descr' => "Traffic in bits/sec");
-$config['graph_types']['port']['upkts']   = array('name' => 'Ucast Pkts', 'descr' => "Unicast packets/sec");
-$config['graph_types']['port']['nupkts']  = array('name' => 'NU Pkts',    'descr' => "Non-unicast packets/sec");
-$config['graph_types']['port']['pktsize'] = array('name' => 'Pkt Size',   'descr' => "Average packet size");
-$config['graph_types']['port']['percent'] = array('name' => 'Percent',    'descr' => "Percent utilization");
-$config['graph_types']['port']['errors']  = array('name' => 'Errors',     'descr' => "Errors/sec");
+$config['graph_types']['port']['bits']       = array('name' => 'Bits',       'descr' => "Traffic in bits/sec");
+$config['graph_types']['port']['upkts']      = array('name' => 'Ucast Pkts', 'descr' => "Unicast packets/sec");
+$config['graph_types']['port']['nupkts']     = array('name' => 'NU Pkts',    'descr' => "Non-unicast packets/sec");
+$config['graph_types']['port']['pktsize']    = array('name' => 'Pkt Size',   'descr' => "Average packet size");
+$config['graph_types']['port']['percent']    = array('name' => 'Percent',    'descr' => "Percent utilization");
+$config['graph_types']['port']['errors']     = array('name' => 'Errors',     'descr' => "Errors/sec");
 $config['graph_types']['port']['etherlike']  = array('name' => 'Ethernet Errors',     'descr' => "Detailed Errors/sec for Ethernet-like interfaces");
 
 
