@@ -56,7 +56,7 @@ if($vars['searchbar'] != "hide")
 
 ?>
 
-<form method="post" class="form form-inline" action="" id="devices-form">
+<form method="post" class="form form-inline" action="" id="devices-form" style="margin-bottom:0;">
 
 <?php
 
@@ -221,41 +221,31 @@ function submitURL() {
 
 </script>
 
-<hr style="margin: 0px 0px 10px 0px;">
+</div>
 
 <?php
 
 }
 
-echo('<span style="font-weight: bold;">Lists</span> &#187; ');
+$navbar['brand'] = "Devices";
 
-$menu_options = array('basic'      => 'Basic',
-                      'detail'     => 'Detail',
-                      'status'     => 'Status');
+$navbar = array('brand' => "Ports", 'class' => "navbar-narrow");
 
-$sep = "";
-foreach ($menu_options as $option => $text)
+$navbar['options']['basic']['text']    = 'Basic';
+$navbar['options']['detail']['text']   = 'Details';
+$navbar['options']['status']['text']   = 'Status';
+
+// There is no detailed view for this yet.
+//$navbar['options']['detail']['text']  = 'Details';
+
+$navbar['options']['graphs']     = array('text' => 'Graphs');
+
+foreach ($navbar['options'] as $option => $array)
 {
-  echo($sep);
-  if ($vars['format'] == $option)
-  {
-    echo("<span class='pagemenu-selected'>");
-  }
-  echo('<a href="' . generate_url($vars, array('format' => $option)) . '">' . $text . '</a>');
-  if ($vars['format'] == $option)
-  {
-    echo("</span>");
-  }
-  $sep = " | ";
+  if (!isset($vars['format'])) { $vars['format'] = 'basic'; }
+  if ($vars['format'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
+  $navbar['options'][$option]['url'] = generate_url($vars,array('format' => $option));
 }
-
-?>
-
- |
-
-<span style="font-weight: bold;">Graphs</span> &#187;
-
-<?php
 
 $menu_options = array('bits'      => 'Bits',
                       'processor' => 'CPU',
@@ -265,52 +255,42 @@ $menu_options = array('bits'      => 'Bits',
                       'diskio'    => 'Disk I/O',
                       'poller_perf' => 'Poll Time'
                       );
-$sep = "";
-foreach ($menu_options as $option => $text)
+
+foreach (array('graphs') as $type)
 {
-  echo($sep);
-  if ($vars['format'] == 'graph_'.$option)
+  foreach ($config['graph_types']['device'] as $option => $data)
   {
-    echo("<span class='pagemenu-selected'>");
+    if(!isset($data['name'])) { $data['name'] = nicecase($option);}
+
+
+    if ($vars['format'] == $type && $vars['graph'] == $option)
+    {
+      $navbar['options'][$type]['suboptions'][$option]['class'] = 'active';
+      $navbar['options'][$type]['text'] .= " (".$data['name'].')';
+    }
+    $navbar['options'][$type]['suboptions'][$option]['text'] = $data['name'];
+    $navbar['options'][$type]['suboptions'][$option]['url'] = generate_url($vars, array('view' => NULL, 'format' => $type, 'graph' => $option));
   }
-  echo('<a href="' . generate_url($vars, array('format' => 'graph_'.$option)) . '">' . $text . '</a>');
-  if ($vars['format'] == 'graph_'.$option)
-  {
-    echo("</span>");
-  }
-  $sep = " | ";
 }
-
-?>
-
-<div style="float: right;">
-
-<?php
 
   if ($vars['searchbar'] == "hide")
   {
-    echo('<a href="'. generate_url($vars, array('searchbar' => '')).'">Search</a>');
+    $navbar['options_right']['searchbar']     = array('text' => 'Show Search', 'url' => generate_url($vars, array('searchbar' => NULL)));
   } else {
-    echo('<a href="'. generate_url($vars, array('searchbar' => 'hide')).'">No Search</a>');
+    $navbar['options_right']['searchbar']     = array('text' => 'Hide Search' , 'url' => generate_url($vars, array('searchbar' => 'hide')));
   }
-
-  echo("  | ");
 
   if ($vars['bare'] == "yes")
   {
-    echo('<a href="'. generate_url($vars, array('bare' => '')).'">Header</a>');
+    $navbar['options_right']['header']     = array('text' => 'Show Header', 'url' => generate_url($vars, array('bare' => NULL)));
   } else {
-    echo('<a href="'. generate_url($vars, array('bare' => 'yes')).'">No Header</a>');
+    $navbar['options_right']['header']     = array('text' => 'Hide Header', 'url' => generate_url($vars, array('bare' => 'yes')));
   }
 
-?>
-  | <a href="<?php echo(generate_url(array('page' => 'devices', 'section' => $vars['section'], 'bare' => $vars['bare']))); ?>" title="Reset critera to default." >Reset</a>
+  $navbar['options_right']['reset']        = array('text' => 'Reset', 'url' => generate_url(array('page' => 'devices', 'section' => $vars['section'], 'bare' => $vars['bare'])));
 
-
-  </div>
-</div>
-
-<?php
+print_navbar($navbar);
+unset($navbar);
 
 $query = "SELECT * FROM `devices` " . $where . " ORDER BY hostname";
 

@@ -184,8 +184,12 @@
 
 @navbarHeight:                    40px;
 @navbarBackgroundHighlight:       #ffffff;
-@navbarBackground:                darken(@navbarBackgroundHighlight, 5%);
-@navbarBorder:                    darken(@navbarBackground, 12%);
+
+// @navbarBackground:                darken(@navbarBackgroundHighlight, 5%);
+// @navbarBorder:                    darken(@navbarBackground, 12%);
+
+@navbarBackground:                @navbar-default-bg;;
+@navbarBorder:                    darken(@navbar-default-bg, 6.5%);
 
 @navbarText:                      #777;
 @navbarLinkColor:                 #777;

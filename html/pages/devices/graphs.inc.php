@@ -9,7 +9,7 @@
     {
       if (!$location_filter || $device['location'] == $location_filter)
       {
-        $graph_type = "device_".$subformat;
+        $graph_type = "device_".$vars['graph'];
 
     $graph_array           = array();
 
