@@ -65,7 +65,7 @@ if (is_file("pages/device/health/".mres($vars['metric']).".inc.php"))
    include("pages/device/health/".mres($vars['metric']).".inc.php");
 } else {
 
-  echo('<table class="table table-condensed table-striped table-hover">');
+  echo('<table class="table table-condensed table-striped table-hover table-bordered">');
 
   foreach ($datas as $type)
   {

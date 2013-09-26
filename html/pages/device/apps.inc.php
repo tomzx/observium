@@ -66,7 +66,7 @@ if (is_file("pages/device/apps/".mres($vars['app']).".inc.php"))
   // If a matching app_section array exists within app_graphs, print the graphs.
   if (isset($app_graphs[$vars['app_section']]) && is_array($app_graphs[$vars['app_section']]))
   {
-    echo '<table class="table table-striped table-hover">';
+    echo '<table class="table table-striped table-hover table-bordered table-condensed">';
 
     foreach ($app_graphs[$vars['app_section']] as $key => $text) {
       $graph_type            = $key;

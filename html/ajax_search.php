@@ -46,7 +46,7 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
   if (strlen($queryString) >0)
   {
     $found = 0;
-  
+
     /// SEARCH DEVICES
     $results = dbFetchRows("SELECT * FROM `devices` WHERE `hostname` LIKE '%" . $queryString . "%' OR `location` LIKE '%" . $queryString . "%' ORDER BY hostname LIMIT 8");
     if (count($results))

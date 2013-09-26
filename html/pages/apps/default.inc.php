@@ -9,19 +9,16 @@ $graph_array_zoom['height'] = "150";
 $graph_array_zoom['width']  = "400";
 $graph_array['legend']      = "no";
 
-echo('<table class="table table-hover table-condensed table-striped-two "');
+echo('<table class="table table-hover table-condensed table-striped table-bordered">');
 $app_devices = dbFetchRows("SELECT * FROM `devices` AS D, `applications` AS A WHERE D.device_id = A.device_id AND A.app_type = ? ORDER BY hostname", array($vars['app']));
 
 foreach ($app_devices as $app_device)
 {
   echo('<tr>');
-  echo('<th width=300px><h4>'.generate_device_link($app_device, $app_device['hostname'], array('tab'=>'apps','app'=>$vars['app'])).'</h4></td>');
-  echo('<td width=100px>'.$app_device['app_instance'].'</td>');
-  echo('<td width=100px>'.$app_device['app_status'].'</td>');
-  echo('<td></td>');
-  echo('</tr>');
-  echo('<tr>');
-  echo('<td colspan=4>');
+  echo('<td>');
+  if(isset($app_device['app_instance'])) { $app_device['instance_text'] = ' ('.$app_device['app_instance'].')'; }
+  echo('<h4>'.generate_device_link($app_device, $app_device['hostname'], array('tab'=>'apps','app'=>$vars['app'])).$app_device['instance_text'].'</h4>');
+#  echo(''.$app_device['app_status'].'</div>');
 
   foreach ($config['app'][$vars['app']]['top'] as $graph_type)
   {
