@@ -51,8 +51,8 @@
 function show_map($config)
 {
 ?>
-<div class="row">
-  <div class="col-md-12" style="padding: 10px;">
+<div class="row" style="margin-bottom: 10px;">
+  <div class="col-md-12">
   <script type='text/javascript' src='https://www.google.com/jsapi'></script>
   <script type='text/javascript'>
     google.load('visualization', '1.1', {'packages': ['geochart']});
@@ -106,14 +106,15 @@ function show_map($config)
       resolution: '<?php echo $config['frontpage']['map']['resolution']; ?>',
       displayMode: 'markers',
       keepAspectRatio: 0,
-      width: 1215,
+      width: 1240,
       height: 480,
       is3D: true,
       legend: 'none',
       enableRegionInteractivity: true,
       <?php if ($config['frontpage']['map']['realworld']) { echo "\t\t  datalessRegionColor: '#93CA76',"; } else {
                       echo "\t\t  datalessRegionColor: '#d5d5d5',"; } ?>
-      <?php if ($config['frontpage']['map']['realworld']) { echo "\t\t  backgroundColor: {fill: '#cceef0'},"; } ?>
+      <?php if ($config['frontpage']['map']['realworld']) { echo "\t\t  backgroundColor: {fill: '#000000'},"; } ?>
+      backgroundColor: {fill: 'transparent'},
       magnifyingGlass: {enable: true, zoomFactor: 5},
       colorAxis: {values: [0, 1, 2, 3], colors: ['darkgreen', 'orange', 'orangered', 'red']},
       markerOpacity: 0.75,
@@ -320,7 +321,7 @@ function show_map($config)
   {
     // Show Status Boxes
     echo("<div class=\"row\">\n");
-    echo("  <div class=\"col-md-12\">\n");
+    echo('  <div class="col-md-12" style="padding-right: 0px;">'.PHP_EOL);
     print_status_boxes($config['frontpage']['device_status']);
     echo("  </div>\n");
     echo("</div>\n");
