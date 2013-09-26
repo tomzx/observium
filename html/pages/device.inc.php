@@ -388,6 +388,9 @@ foreach ($navbar['options'] as $option => $array)
   $navbar['options'][$option]['url'] = generate_device_url($device, array('tab'=>$option));
 }
 
+  if($vars['tab'] == 'port') { $navbar['options']['ports']['class'] .= " active"; }
+
+
 #print_tabbar($navbar);
 
 print_navbar($navbar);
