@@ -60,9 +60,6 @@ if (count($processors))
     # disable short hrDeviceDescr. need to make this prettier.
     #$text_descr = short_hrDeviceDescr($proc['processor_descr']);
     $percent = $proc['processor_usage'];
-    $background = get_percentage_colours($percent);
-    $graph_colour = str_replace("#", "", $row_colour);
-
     $total_percent .+ $percent;
     ++$numprocs;
 
@@ -97,6 +94,7 @@ if (count($processors))
   }
 
   $average_percent = $total_percent / $numprocs;
+  $background = get_percentage_colours($average_percent);
 
     echo('<table class="table table-condensed-more table-striped table-bordered">');
     echo('<tr>
