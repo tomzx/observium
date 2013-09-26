@@ -68,7 +68,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? A
     $graph_array['id']     = $svc['svc_id'];
     $graph_array['type']   = $graph_type;
 
-    echo('<h3>'.$graph_text.'</h3>');
+    echo('<h4>'.$graph_text.'</h4>');
 
     include("includes/print-graphrow.inc.php");
 
