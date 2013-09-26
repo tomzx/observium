@@ -85,7 +85,13 @@ echo("</div>");
 echo('<div class="col-md-6">');
 
 // Right Pane
-include("overview/processors.inc.php");
+if ($device['os_group'] == "unix")
+{
+  include("overview/processors-unix.inc.php");
+} else {
+  include("overview/processors.inc.php");
+}
+
 if (is_array($device_state['ucd_mem']))
 {
   include("overview/ucd_mem.inc.php");
