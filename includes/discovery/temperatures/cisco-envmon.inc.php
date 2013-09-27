@@ -1,34 +1,54 @@
 <?php
 
-// FIXME - dbFacile and fewer SNMP_GETs
+  // Deprecated CISCO-ENVMON-MIB
 
-#if (mysql_result(mysql_query("SELECT COUNT(*) FROM `sensors` WHERE `device_id` = '".$device['device_id']."' AND `sensor_class` = 'temperature' AND (`sensor_type` = 'cisco-entity-sensor' OR `sensor_type` = 'entity-sensor')"),0) == "0" && ($device['os_group'] == "cisco"))
-#{
   echo("CISCO-ENVMON-MIB: ");
-  $oids = snmp_walk($device, ".1.3.6.1.4.1.9.9.13.1.3.1.2", "-Osqn", "CISCO-ENVMON-MIB");
-  $oids = str_replace('.1.3.6.1.4.1.9.9.13.1.3.1.2.','',$oids);
-  $oids = trim($oids);
-  foreach (explode("\n", $oids) as $data)
-  {
-    $data = trim($data);
-    if ($data)
-    {
-      list($index) = explode(" ", $data);
-      $oid  = ".1.3.6.1.4.1.9.9.13.1.3.1.3.$index";
-      $descr_oid = ".1.3.6.1.4.1.9.9.13.1.3.1.2.$index";
-      $descr = snmp_get($device, $descr_oid, "-Oqv", "CISCO-ENVMON-MIB");
-      $temperature = snmp_get($device, $oid, "-Oqv", "CISCO-ENVMON-MIB");
-      if (!strstr($descr, "No") && !strstr($temperature, "No") && $temperature != "" && $descr != "")
-      {
-        $descr = str_replace("\"", "", $descr);
-        $descr = str_replace("temperature", "", $descr);
-        $descr = str_replace("temperature", "", $descr);
-        $descr = trim($descr);
 
-        discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, 'cisco', $descr, '1', '1', NULL, NULL, NULL, NULL, $temperature);
-      }
-    }
+  // Temperatures:
+
+  echo("Temp ");
+
+  $oids = array();
+  echo(" ciscoEnvMonTemperatureStatusDescr");
+  $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonTemperatureStatusDescr", $oids, "CISCO-ENVMON-MIB");
+  echo(" ciscoEnvMonTemperatureStatusValue");
+  $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonTemperatureStatusValue", $oids, "CISCO-ENVMON-MIB");
+  echo(" ciscoEnvMonTemperatureThreshold");
+  $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonTemperatureThreshold", $oids, "CISCO-ENVMON-MIB");
+
+
+  foreach ($oids as $index => $entry)
+  {
+    $oid  = '.1.3.6.1.4.1.9.9.13.1.3.1.3.'.$index;
+    discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, 'cisco-envmon', $entry['ciscoEnvMonTemperatureStatusDescr'], '1', '1',
+                    NULL, NULL, $entry['ciscoEnvMonTemperatureThreshold'], NULL, $entry['ciscoEnvMonTemperatureStatusValue']);
   }
-#}
+
+  // Voltages
+
+  echo("Volts ");
+
+  $oids = array();
+  echo(" ciscoEnvMonVoltageStatusDescr");
+  $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonVoltageStatusDescr", $oids, "CISCO-ENVMON-MIB");
+  echo(" ciscoEnvMonVoltageStatusValue");
+  $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonVoltageStatusValue", $oids, "CISCO-ENVMON-MIB");
+  echo(" ciscoEnvMonVoltageThresholdLow");
+  $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonVoltageThresholdLow", $oids, "CISCO-ENVMON-MIB");
+  echo(" ciscoEnvMonVoltageThresholdHigh");
+  $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonVoltageThresholdHigh", $oids, "CISCO-ENVMON-MIB");
+
+
+  foreach ($oids as $index => $entry)
+  {
+    $oid  = '.1.3.6.1.4.1.9.9.13.1.2.1.3.'.$index;
+    discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'cisco-envmon', $entry['ciscoEnvMonVoltageStatusDescr'], '1', '1',
+                    $entry['ciscoEnvMonVoltageThresholdLow'], NULL, $entry['ciscoEnvMonVoltageThresholdHigh'], NULL, $entry['ciscoEnvMonVoltageStatusValue']);
+  }
+
+
+
+
+
 
 ?>
