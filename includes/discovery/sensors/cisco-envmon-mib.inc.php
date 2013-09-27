@@ -1,12 +1,13 @@
 <?php
 
+if ($device['os_group'] == "cisco")
+{
   // Deprecated CISCO-ENVMON-MIB
 
-  echo("CISCO-ENVMON-MIB: ");
+  echo(" CISCO-ENVMON-MIB ");
 
   // Temperatures:
-
-  echo("Temp ");
+  echo(" Temp ");
 
   $oids = array();
   echo(" ciscoEnvMonTemperatureStatusDescr");
@@ -16,7 +17,6 @@
   echo(" ciscoEnvMonTemperatureThreshold");
   $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonTemperatureThreshold", $oids, "CISCO-ENVMON-MIB");
 
-
   foreach ($oids as $index => $entry)
   {
     $oid  = '.1.3.6.1.4.1.9.9.13.1.3.1.3.'.$index;
@@ -25,8 +25,7 @@
   }
 
   // Voltages
-
-  echo("Volts ");
+  echo(" Volts ");
 
   $oids = array();
   echo(" ciscoEnvMonVoltageStatusDescr");
@@ -38,17 +37,12 @@
   echo(" ciscoEnvMonVoltageThresholdHigh");
   $oids = snmpwalk_cache_multi_oid($device, "ciscoEnvMonVoltageThresholdHigh", $oids, "CISCO-ENVMON-MIB");
 
-
   foreach ($oids as $index => $entry)
   {
     $oid  = '.1.3.6.1.4.1.9.9.13.1.2.1.3.'.$index;
     discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'cisco-envmon', $entry['ciscoEnvMonVoltageStatusDescr'], '1', '1',
                     $entry['ciscoEnvMonVoltageThresholdLow'], NULL, $entry['ciscoEnvMonVoltageThresholdHigh'], NULL, $entry['ciscoEnvMonVoltageStatusValue']);
   }
+}
 
-
-
-
-
-
-?>
+// EOF
