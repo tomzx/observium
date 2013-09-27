@@ -53,6 +53,13 @@ $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "QNAP TurboNAS";
 $config['os'][$os]['ifXmcbc']           = 1;
 
+$os = "dss";
+$config['os'][$os]['type']              = "storage";
+$config['os'][$os]['group']             = "unix";
+$config['os'][$os]['text']              = "Open-E DSS";
+$config['os'][$os]['icon']              = "open-e";
+$config['os'][$os]['ifXmcbc']           = 1;
+
 $os = "endian";
 $config['os'][$os]['text']              = "Endian";
 $config['os'][$os]['type']              = "firewall";

@@ -202,7 +202,7 @@ function get_device_os($device)
       if (strpos($sysObjectId, $oid) === 0) { $os = $cos; break 2; }
     }
   }
-
+  
   if (!$os)
   {
     $dir_handle = @opendir($config['install_dir'] . "/includes/discovery/os") or die("Unable to open $path");
@@ -210,6 +210,7 @@ function get_device_os($device)
      {
       if (preg_match("/.php$/", $file))
       {
+        print_debug("Including $file");
         include($config['install_dir'] . "/includes/discovery/os/" . $file);
       }
     }
