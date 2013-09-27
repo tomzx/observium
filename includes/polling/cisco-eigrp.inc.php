@@ -71,7 +71,7 @@ foreach ($ports_poll AS $id => $eigrp_port)
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create ($rrd_filename, " --step 300 \
+    rrdtool_create ($rrd_filename, " \
      DS:MeanSrtt:GAUGE:600:0:10000 \
      DS:UMcasts:COUNTER:600:0:10000000000 \
      DS:RMcasts:COUNTER:600:0:10000000000 \
@@ -82,7 +82,7 @@ foreach ($ports_poll AS $id => $eigrp_port)
      DS:AcksSuppressed:COUNTER:600:0:10000000000 \
      DS:RetransSent:COUNTER:600:0:10000000000 \
      DS:OOSrvcd:COUNTER:600:0:10000000000 \
-     ".$config['rrd_rra']);
+     ");
   }
 
   foreach(array("MeanSrtt", "UMcasts", "RMcasts", "UUcasts", "RUcasts", "McastExcepts", "CRpkts", "AcksSuppressed", "RetransSent", "OOSrvcd") as $oid) { $eigrp_update[] = $eigrp_port['cEigrp'.$oid]; }

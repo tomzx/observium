@@ -43,7 +43,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $mempool)
 
   if (!is_file($mempool_rrd))
   {
-   rrdtool_create($mempool_rrd, "--step 300 DS:used:GAUGE:600:0:U DS:free:GAUGE:600:0:U ".$config['rrd_rra']);
+   rrdtool_create($mempool_rrd, " DS:used:GAUGE:600:0:U DS:free:GAUGE:600:0:U ");
   }
   rrdtool_update($mempool_rrd,"N:".$mempool['used'].":".$mempool['free']);
 

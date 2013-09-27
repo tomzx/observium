@@ -88,7 +88,6 @@ if ($device['os'] == "netscaler")
 
   $oids = array_merge($oids_gauge, $oids_counter);
   unset($snmpstring, $rrdupdate, $snmpdata, $snmpdata_cmd, $rrd_create);
-  $rrd_create = $config['rrd_rra'];
 
   foreach ($oids_gauge as $oid)
   {
@@ -246,8 +245,6 @@ if ($device['os'] == "netscaler")
 ##  $oids = array_merge($oids_gauge, $oids_counter);
 
   unset($snmpstring, $rrdupdate, $snmpdata, $snmpdata_cmd, $rrd_create);
-
-  $rrd_create = $config['rrd_rra'];
 
   foreach ($oids as $oid)
   {

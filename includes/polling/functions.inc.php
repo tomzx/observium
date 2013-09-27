@@ -113,9 +113,9 @@ function poll_sensor($device, $class, $unit, &$oid_cache)
 
     if (!is_file($rrd_file))
     {
-      rrdtool_create($rrd_file,"--step 300 \
-      DS:sensor:GAUGE:600:-20000:U ".$config['rrd_rra']);
-      //DS:sensor:GAUGE:600:-20000:20000 ".$config['rrd_rra']);
+      rrdtool_create($rrd_file," \
+      DS:sensor:GAUGE:600:-20000:U ");
+      //DS:sensor:GAUGE:600:-20000:20000 ");
     }
 
     echo("$sensor_value $unit ");
@@ -245,7 +245,7 @@ function poll_device($device, $options)
 
   if (!is_file($rrd))
   {
-    rrdtool_create ($rrd, "DS:status:GAUGE:600:0:1 ".$config['rrd_rra']);
+    rrdtool_create ($rrd, "DS:status:GAUGE:600:0:1 ");
   }
 
   if ($status == "1" || $status == "0")
@@ -259,7 +259,7 @@ function poll_device($device, $options)
   $ping_rrd  = $config['rrd_dir'] . '/' . $device['hostname'] . '/ping.rrd';
   if (!is_file($ping_rrd))
   {
-    rrdtool_create ($ping_rrd, "DS:ping:GAUGE:600:0:65535 " . $config['rrd_rra']);
+    rrdtool_create ($ping_rrd, "DS:ping:GAUGE:600:0:65535 " );
   }
   if ($device['pingable'])
   {
@@ -272,7 +272,7 @@ function poll_device($device, $options)
   $ping_snmp_rrd  = $config['rrd_dir'] . '/' . $device['hostname'] . '/ping_snmp.rrd';
   if (!is_file($ping_snmp_rrd))
   {
-    rrdtool_create ($ping_snmp_rrd, "DS:ping_snmp:GAUGE:600:0:65535 " . $config['rrd_rra']);
+    rrdtool_create ($ping_snmp_rrd, "DS:ping_snmp:GAUGE:600:0:65535 " );
   }
   if ($device['snmpable'])
   {
@@ -373,7 +373,7 @@ function poll_device($device, $options)
       $poller_rrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/perf-poller.rrd";
       if (!is_file($poller_rrd))
       {
-        rrdtool_create ($poller_rrd, "DS:val:GAUGE:600:0:38400 ".$config['rrd_rra']);
+        rrdtool_create ($poller_rrd, "DS:val:GAUGE:600:0:38400 ");
       }
       rrdtool_update($poller_rrd, "N:".$device_time);
     }

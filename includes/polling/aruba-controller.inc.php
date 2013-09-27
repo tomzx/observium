@@ -26,7 +26,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
   $rrdfile = $host_rrd . "/aruba-controller".safename(".rrd");
   if (!is_file($rrdfile))
   {
-    rrdtool_create($rrdfile," --step 300 DS:NUMAPS:GAUGE:600:0:12500000000 DS:NUMCLIENTS:GAUGE:600:0:12500000000 ".$config['rrd_rra']);
+    rrdtool_create($rrdfile,"DS:NUMAPS:GAUGE:600:0:12500000000 DS:NUMCLIENTS:GAUGE:600:0:12500000000 ");
   }
 
   $cont_rrd_update="$polled:".$aruba_stats[0]['wlsxSwitchTotalNumAccessPoints'].":".$aruba_stats[0]['wlsxSwitchTotalNumStationsAssociated'];
@@ -37,7 +37,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
 
   if (!is_file($wificlientsrrd))
   {
-    rrdtool_create($wificlientsrrd,"--step 300 DS:wificlients:GAUGE:600:-273:10000 ".$config['rrd_rra']);
+    rrdtool_create($wificlientsrrd,"DS:wificlients:GAUGE:600:-273:10000 ");
   }
 
   rrdtool_update($wificlientsrrd,"N:".$aruba_stats[0]['wlsxSwitchTotalNumStationsAssociated']);
@@ -88,7 +88,7 @@ if ($device['type'] == 'wireless' && $device['os'] == 'arubaos')
         $dslist.="DS:nummonbssid:GAUGE:600:0:200 ";
         $dslist.="DS:numasoclients:GAUGE:600:0:500 ";
         $dslist.="DS:interference:GAUGE:600:0:2000 ";
-        rrdtool_create($rrd_file, "--step 300 $dslist ".$config['rrd_rra']);
+        rrdtool_create($rrd_file, "$dslist ");
       }
 
       rrdtool_update($rrd_file,  "$polled:".$channel.":".$txpow.":".$radioutil.":".$nummonclients.":".$nummonbssid.":".$numasoclients.":".$interference);

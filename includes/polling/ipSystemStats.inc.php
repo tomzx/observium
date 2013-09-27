@@ -72,7 +72,6 @@ if ($ipSystemStats)
 
     $rrdfile = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("ipSystemStats-".$af.".rrd");
 
-    $rrd_create = $config['rrd_rra'];
     $rrdupdate = "N";
 
     foreach ($oids as $oid)

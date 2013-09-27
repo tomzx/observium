@@ -479,7 +479,7 @@ foreach ($ports as $port)
     $rrdfile = get_port_rrdfilename($device, $port);
     if (!is_file($rrdfile))
     {
-      rrdtool_create($rrdfile," --step 300 \
+      rrdtool_create($rrdfile,"  \
       DS:INOCTETS:DERIVE:600:0:12500000000 \
       DS:OUTOCTETS:DERIVE:600:0:12500000000 \
       DS:INERRORS:DERIVE:600:0:12500000000 \
@@ -494,7 +494,7 @@ foreach ($ports as $port)
       DS:INBROADCASTPKTS:DERIVE:600:0:12500000000 \
       DS:OUTBROADCASTPKTS:DERIVE:600:0:12500000000 \
       DS:INMULTICASTPKTS:DERIVE:600:0:12500000000 \
-      DS:OUTMULTICASTPKTS:DERIVE:600:0:12500000000 ".$config['rrd_rra']);
+      DS:OUTMULTICASTPKTS:DERIVE:600:0:12500000000 ");
     }
 
     $this_port['rrd_update']  = array($this_port['ifInOctets'], $this_port['ifOutOctets'], $this_port['ifInErrors'], $this_port['ifOutErrors'],

@@ -25,9 +25,9 @@ if (!empty($agent_data['app']['zimbra']))
 
     if (!is_file($rrd_filename))
     {
-      rrdtool_create($rrd_filename, "--step 300 \
+      rrdtool_create($rrd_filename, " \
         DS:kBytes:GAUGE:600:0:125000000000 \
-        DS:requests:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+        DS:requests:GAUGE:600:0:125000000000 ");
     }
 
     rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));
@@ -50,9 +50,9 @@ if (!empty($agent_data['app']['zimbra']))
 
     if (!is_file($rrd_filename))
     {
-      rrdtool_create($rrd_filename, "--step 300 \
+      rrdtool_create($rrd_filename, " \
         DS:fdSystem:GAUGE:600:0:125000000000 \
-        DS:fdMailboxd:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+        DS:fdMailboxd:GAUGE:600:0:125000000000 ");
     }
 
     rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));
@@ -77,7 +77,7 @@ if (!empty($agent_data['app']['zimbra']))
 
     if (!is_file($rrd_filename))
     {
-      rrdtool_create($rrd_filename, "--step 300 \
+      rrdtool_create($rrd_filename, " \
         DS:AnonymousIoService:GAUGE:600:0:10000 \
         DS:CloudRoutingReader:GAUGE:600:0:10000 \
         DS:GC:GAUGE:600:0:10000 \
@@ -93,7 +93,7 @@ if (!empty($agent_data['app']['zimbra']))
         DS:btpool:GAUGE:600:0:10000 \
         DS:pool:GAUGE:600:0:10000 \
         DS:other:GAUGE:600:0:10000 \
-        DS:total:GAUGE:600:0:10000 ".$config['rrd_rra']);
+        DS:total:GAUGE:600:0:10000 ");
     }
 
     rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));
@@ -162,7 +162,7 @@ if (!empty($agent_data['app']['zimbra']))
 
     if (!is_file($rrd_filename))
     {
-      rrdtool_create($rrd_filename, "--step 300 \
+      rrdtool_create($rrd_filename, " \
         DS:lmtpRcvdMsgs:DERIVE:600:0:125000000000 \
         DS:lmtpRcvdBytes:DERIVE:600:0:125000000000 \
         DS:lmtpRcvdRcpt:DERIVE:600:0:125000000000 \
@@ -252,7 +252,7 @@ if (!empty($agent_data['app']['zimbra']))
         DS:mpoolCmsPermGenUsed:GAUGE:600:0:125000000000 \
         DS:mpoolCmsPermGenFree:GAUGE:600:0:125000000000 \
         DS:heapUsed:GAUGE:600:0:125000000000 \
-        DS:heapFree:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+        DS:heapFree:GAUGE:600:0:125000000000 ");
     }
 
     rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));
@@ -279,14 +279,14 @@ if (!empty($agent_data['app']['zimbra']))
 
         if (!is_file($rrd_filename))
         {
-          rrdtool_create($rrd_filename, "--step 300 \
+          rrdtool_create($rrd_filename, " \
             DS:totalCPU:GAUGE:600:0:100 \
             DS:utime:GAUGE:600:0:U \
             DS:stime:GAUGE:600:0:U \
             DS:totalMB:GAUGE:600:0:U \
             DS:rssMB:GAUGE:600:0:U \
             DS:sharedMB:GAUGE:600:0:U \
-            DS:processCount:GAUGE:600:0:U ".$config['rrd_rra']);
+            DS:processCount:GAUGE:600:0:U ");
         }
 
         rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));
@@ -380,8 +380,8 @@ if (!empty($agent_data['app']['zimbra']))
       if (!is_file($rrd_filename))
       {
       $debug=1;
-        rrdtool_create($rrd_filename, "--step 300 "
-          . $ds_list . $config['rrd_rra']);
+        rrdtool_create($rrd_filename, " "
+          . $ds_list );
       $debug=0;
       }
 

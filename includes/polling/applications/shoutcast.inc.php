@@ -33,7 +33,7 @@ foreach ($servers as $item=>$server)
 
     if (!is_file($rrdfile))
     {
-      rrdtool_create($rrdfile, "--step 300 \
+      rrdtool_create($rrdfile, " \
                 DS:bitrate:GAUGE:600:0:125000000000 \
                 DS:traf_in:GAUGE:600:0:125000000000 \
                 DS:traf_out:GAUGE:600:0:125000000000 \
@@ -41,7 +41,7 @@ foreach ($servers as $item=>$server)
                 DS:status:GAUGE:600:0:125000000000 \
                 DS:peak:GAUGE:600:0:125000000000 \
                 DS:max:GAUGE:600:0:125000000000 \
-                DS:unique:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+                DS:unique:GAUGE:600:0:125000000000 ");
     }
 
     rrdtool_update($rrdfile,  "N:$bitrate:$traf_in:$traf_out:$current:$status:$peak:$max:$unique");

@@ -66,8 +66,6 @@ foreach ($ipsec_array as $index => $tunnel)
 
   $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/ipsectunnel-".$address.".rrd";
 
-  $rrd_create = $config['rrd_rra'];
-
   foreach ($oids as $oid)
   {
     $oid_ds = truncate(str_replace("cipSec", "", $oid), 19, '');

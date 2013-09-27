@@ -265,11 +265,11 @@ if (!empty($agent_data['app']['bind']['global']))
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create($rrd_filename, "--step 300 \
+    rrdtool_create($rrd_filename, " \
         DS:query:DERIVE:600:0:7500000 \
         DS:status:DERIVE:600:0:7500000 \
         DS:notify:DERIVE:600:0:7500000 \
-        DS:update:DERIVE:600:0:7500000 ".$config['rrd_rra']);
+        DS:update:DERIVE:600:0:7500000 ");
   }
 
   rrdtool_update($rrd_filename,  "N:$req_in[QUERY]:$req_in[STATUS]:$req_in[NOTIFY]:$req_in[UPDATE]");
@@ -279,7 +279,7 @@ if (!empty($agent_data['app']['bind']['global']))
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create($rrd_filename, "--step 300 $rrdcreate_rrtypes ".$config['rrd_rra']);
+    rrdtool_create($rrd_filename, " $rrdcreate_rrtypes ");
   }
 
   $rrd_data = "";
@@ -300,7 +300,7 @@ if (!empty($agent_data['app']['bind']['global']))
     {
       $rrdcreate_ns_stats .= " DS:$field:DERIVE:600:0:7500000";
     }
-    rrdtool_create($rrd_filename, "--step 300 $rrdcreate_ns_stats ".$config['rrd_rra']);
+    rrdtool_create($rrd_filename, " $rrdcreate_ns_stats ");
   }
 
   $rrd_data = "";
@@ -321,7 +321,7 @@ if (!empty($agent_data['app']['bind']['global']))
     {
       $rrdcreate_zone_maint .= " DS:$field:DERIVE:600:0:7500000";
     }
-    rrdtool_create($rrd_filename, "--step 300 $rrdcreate_zone_maint ".$config['rrd_rra']);
+    rrdtool_create($rrd_filename, " $rrdcreate_zone_maint ");
   }
 
   $rrd_data = "";
@@ -338,7 +338,7 @@ if (!empty($agent_data['app']['bind']['global']))
 
     if (!is_file($rrd_filename))
     {
-      rrdtool_create($rrd_filename, "--step 300 $rrdcreate_rrtypes ".$config['rrd_rra']);
+      rrdtool_create($rrd_filename, " $rrdcreate_rrtypes ");
     }
 
     $rrd_data = "";
@@ -362,7 +362,7 @@ if (!empty($agent_data['app']['bind']['global']))
       {
         $rrdcreate_resolver .= " DS:$field:DERIVE:600:0:7500000";
       }
-      rrdtool_create($rrd_filename, "--step 300 $rrdcreate_resolver ".$config['rrd_rra']);
+      rrdtool_create($rrd_filename, " $rrdcreate_resolver ");
     }
 
     $rrd_data = "";
@@ -386,7 +386,7 @@ if (!empty($agent_data['app']['bind']['global']))
         $rrdcreate_cache .= " DS:$rrtype:GAUGE:600:0:1000000";
         $rrdcreate_cache .= " DS:NEG_$rrtype:GAUGE:600:0:1000000";
       }
-      rrdtool_create($rrd_filename, "--step 300 $rrdcreate_cache ".$config['rrd_rra']);
+      rrdtool_create($rrd_filename, " $rrdcreate_cache ");
     }
 
     $rrd_data = "";

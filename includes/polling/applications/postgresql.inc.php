@@ -15,7 +15,7 @@ if (!empty($agent_data['app']['postgresql']))
 
     if (!is_file($rrd_filename)) {
         // version, ccount, tDbs, tUsr, tHst, idle, select, update, delete, other
-        rrdtool_create($rrd_filename, "--step 300 \
+        rrdtool_create($rrd_filename, " \
                                         DS:cCount:GAUGE:600:0:1000000 \
                                         DS:tDbs:GAUGE:600:0:1000000 \
                                         DS:tUsr:GAUGE:600:0:1000000 \
@@ -33,7 +33,7 @@ if (!empty($agent_data['app']['postgresql']))
                                         DS:tup_fetched:COUNTER:600:0:100000000000000 \
                                         DS:tup_inserted:COUNTER:600:0:100000000000000 \
                                         DS:tup_updated:COUNTER:600:0:100000000000000 \
-                                        DS:tup_deleted:COUNTER:600:0:100000000000000".$config['rrd_rra']);
+                                        DS:tup_deleted:COUNTER:600:0:100000000000000");
     }
 
     rrdtool_update($rrd_filename, "N:".$pgsql_data['cCount'].":".$pgsql_data['tDbs'].":".

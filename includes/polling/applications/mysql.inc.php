@@ -105,7 +105,7 @@ if (!empty($agent_data['app']['mysql']))
 
   if (!is_file($mysql_rrd))
   {
-    rrdtool_create ($mysql_rrd, "--step 300 \
+    rrdtool_create ($mysql_rrd, " \
       DS:IDBLBSe:GAUGE:600:0:125000000000 \
       DS:IBLFh:DERIVE:600:0:125000000000 \
       DS:IBLWn:DERIVE:600:0:125000000000 \
@@ -184,7 +184,7 @@ if (!empty($agent_data['app']['mysql']))
       DS:CRSt:DERIVE:600:0:125000000000 \
       DS:CSt:DERIVE:600:0:125000000000 \
       DS:CUe:DERIVE:600:0:125000000000 \
-      DS:CUMi:DERIVE:600:0:125000000000 ".$config['rrd_rra']);
+      DS:CUMi:DERIVE:600:0:125000000000 ");
   }
 
   rrdtool_update($mysql_rrd, "N:" . implode(':', $values));
@@ -221,7 +221,7 @@ if (!empty($agent_data['app']['mysql']))
 
   if (!is_file($mysql_status_rrd))
   {
-    rrdtool_create ($mysql_status_rrd, "--step 300 ".$rrd_create." ".$config['rrd_rra']);
+    rrdtool_create ($mysql_status_rrd, " ".$rrd_create." ");
   }
 
   rrdtool_update($mysql_status_rrd, "N:" . implode(':', $values));

@@ -34,7 +34,7 @@ if (!is_file($rrdfile))
    DS:INPKTS:COUNTER:600:U:10000000000 \
    DS:OUTPKTS:COUNTER:600:U:10000000000 \
    DS:CALLS:COUNTER:600:U:10000000000 \
-   DS:REGISTRATIONS:COUNTER:600:U:10000000000 ".$config['rrd_rra']);
+   DS:REGISTRATIONS:COUNTER:600:U:10000000000 ");
 }
 
 $rrdupdate = "N:$rxbytes:$txbytes:$rxpkts:$rxbytes:$calls:$registrations";

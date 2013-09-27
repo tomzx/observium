@@ -12,9 +12,9 @@ if (!is_null($clusterusers) and !is_null($iveusers))
 {
  if (!is_file($rrd_filename))
  {
-  rrdtool_create($rrd_filename, " --step 300 \
+  rrdtool_create($rrd_filename, "  \
         DS:clusterusers:GAUGE:600:0:3000000 \
-        DS:iveusers:GAUGE:600:0:3000000 ".$config['rrd_rra']); }
+        DS:iveusers:GAUGE:600:0:3000000 "); }
   rrdtool_update("$rrd_filename", "N:$clusterusers:$iveusers");
   $graphs['juniperive_users'] = TRUE;
 }
@@ -27,9 +27,9 @@ if (is_numeric($meetingusers) and is_numeric($meetings))
 {
  if (!is_file($rrd_filename))
  {
-  rrdtool_create($rrd_filename, " --step 300 \
+  rrdtool_create($rrd_filename, "  \
         DS:meetingusers:GAUGE:600:0:3000000 \
-        DS:meetings:GAUGE:600:0:3000000 ".$config['rrd_rra']); }
+        DS:meetings:GAUGE:600:0:3000000 "); }
   rrdtool_update("$rrd_filename", "N:$meetingusers:$meetings");
   $graphs['juniperive_meetings'] = TRUE;
 }
@@ -42,9 +42,9 @@ if (!is_null($webusers) and !is_null($mailusers))
 {
  if (!is_file($rrd_filename))
  {
-  rrdtool_create($rrd_filename, " --step 300 \
+  rrdtool_create($rrd_filename, "  \
         DS:webusers:GAUGE:600:0:3000000 \
-        DS:mailusers:GAUGE:600:0:3000000 ".$config['rrd_rra']); }
+        DS:mailusers:GAUGE:600:0:3000000 "); }
   rrdtool_update("$rrd_filename", "N:$webusers:$mailusers");
   $graphs['juniperive_connections'] = TRUE;
 }
@@ -57,9 +57,9 @@ if (!is_null($diskpercent) and !is_null($logpercent))
 {
  if (!is_file($rrd_filename))
  {
-  rrdtool_create($rrd_filename, " --step 300 \
+  rrdtool_create($rrd_filename, "  \
         DS:diskpercent:GAUGE:600:0:3000000 \
-        DS:logpercent:GAUGE:600:0:3000000 ".$config['rrd_rra']); }
+        DS:logpercent:GAUGE:600:0:3000000 "); }
   rrdtool_update("$rrd_filename", "N:$diskpercent:$logpercent");
   $graphs['juniperive_storage'] = TRUE;
 }

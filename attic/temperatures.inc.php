@@ -31,20 +31,7 @@ while ($sensor = mysql_fetch_assoc($sensor_data))
 
   if (!is_file($rrd_file))
   {
-    rrdtool_create($rrd_file,"--step 300 \
-     DS:sensor:GAUGE:600:-273:1000 \
-     RRA:AVERAGE:0.5:1:600 \
-     RRA:AVERAGE:0.5:6:700 \
-     RRA:AVERAGE:0.5:24:775 \
-     RRA:AVERAGE:0.5:288:797 \
-     RRA:MAX:0.5:1:600 \
-     RRA:MAX:0.5:6:700 \
-     RRA:MAX:0.5:24:775 \
-     RRA:MAX:0.5:288:797\
-     RRA:MIN:0.5:1:600 \
-     RRA:MIN:0.5:6:700 \
-     RRA:MIN:0.5:24:775 \
-     RRA:MIN:0.5:288:797");
+    rrdtool_create($rrd_file,"DS:sensor:GAUGE:600:-273:1000");
   }
 
   echo("$sensor_value $unit\n");

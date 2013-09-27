@@ -171,7 +171,7 @@ if(count($ma_array))
         rrdtool_create($rrdfile,"DS:IN:COUNTER:600:0:12500000000 \
           DS:OUT:COUNTER:600:0:12500000000 \
           DS:PIN:COUNTER:600:0:12500000000 \
-          DS:POUT:COUNTER:600:0:12500000000 " . $config['rrd_rra']);
+          DS:POUT:COUNTER:600:0:12500000000 " );
       }
 
       // FIXME - use memory tables to make sure these values don't go backwards?

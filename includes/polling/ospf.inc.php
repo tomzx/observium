@@ -324,11 +324,11 @@ $filename = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("osp
 
 if (!is_file($filename))
 {
-  rrdtool_create($filename, "--step 300 \
+  rrdtool_create($filename, " \
           DS:instances:GAUGE:600:0:1000000 \
           DS:areas:GAUGE:600:0:1000000 \
           DS:ports:GAUGE:600:0:1000000 \
-          DS:neighbours:GAUGE:600:0:1000000 ".$config['rrd_rra']);
+          DS:neighbours:GAUGE:600:0:1000000 ");
  }
 
 $rrd_update  = "N:".$ospf_instance_count.":".$ospf_area_count.":".$ospf_port_count.":".$ospf_neighbour_count;

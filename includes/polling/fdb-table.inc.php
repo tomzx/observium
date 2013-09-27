@@ -153,7 +153,7 @@ if ($fdb_count)
   $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/fdb_count.rrd";
   if (!is_file($rrd_file))
   {
-    rrdtool_create($rrd_file, "DS:fdb:GAUGE:600:0:U ".$config['rrd_rra']);
+    rrdtool_create($rrd_file, "DS:fdb:GAUGE:600:0:U ");
   }
   rrdtool_update($rrd_file, "N:".$fdb_count);
   $graphs['fdb_count'] = TRUE;

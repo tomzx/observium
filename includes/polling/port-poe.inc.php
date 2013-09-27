@@ -9,8 +9,6 @@ if (isset($port_stats[$port['ifIndex']]) && $port['ifType'] == "ethernetCsmacd")
 
     if (!file_exists($rrdfile))
     {
-      $rrd_create .= $config['rrd_rra'];
-
       // FIXME CISCOSPECIFIC
       $rrd_create .= " DS:PortPwrAllocated:GAUGE:600:0:U";
       $rrd_create .= " DS:PortPwrAvailable:GAUGE:600:0:U";

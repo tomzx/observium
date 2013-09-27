@@ -14,7 +14,7 @@ list ($stratum, $offset, $frequency, $jitter, $noise, $stability, $uptime, $buff
 
 if (!is_file($rrd_filename))
 {
-  rrdtool_create($rrd_filename, "--step 300 \
+  rrdtool_create($rrd_filename, " \
         DS:stratum:GAUGE:600:-1000:1000 \
         DS:offset:GAUGE:600:-1000:1000 \
         DS:frequency:GAUGE:600:-1000:1000 \
@@ -28,7 +28,7 @@ if (!is_file($rrd_filename))
         DS:packets_drop:DERIVE:600:0:125000000000 \
         DS:packets_ignore:DERIVE:600:0:125000000000 \
         DS:packets_recv:DERIVE:600:0:125000000000 \
-        DS:packets_sent:DERIVE:600:0:125000000000 ".$config['rrd_rra']);
+        DS:packets_sent:DERIVE:600:0:125000000000 ");
 }
 
 rrdtool_update($rrd_filename,  "N:$stratum:$offset:$frequency:$jitter:$noise:$stability:$uptime:$buffer_recv:$buffer_free:$buffer_used:$packets_drop:$packets_ignore:$packets_recv:$packets_sent");

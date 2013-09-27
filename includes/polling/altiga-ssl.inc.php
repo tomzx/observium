@@ -14,7 +14,6 @@ if ($device['os'] == "asa" || $device['os'] == "pix")
   $rrd_create .= " DS:TotalSessions:COUNTER:600:U:100000 DS:ActiveSessions:GAUGE:600:0:U DS:MaxSessions:GAUGE:600:0:U";
   $rrd_create .= " DS:PreDecryptOctets:COUNTER:600:U:100000000000 DS:PostDecryptOctets:COUNTER:600:U:100000000000 DS:PreEncryptOctets:COUNTER:600:U:100000000000";
   $rrd_create .= " DS:PostEncryptOctets:COUNTER:600:U:100000000000";
-  $rrd_create .= $config['rrd_rra'];
 
   if (!file_exists($rrdfile))
   {

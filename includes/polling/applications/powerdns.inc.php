@@ -22,7 +22,7 @@ if (!empty($agent_data['app']['powerdns']))
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create($rrd_filename, "--step 300 \
+    rrdtool_create($rrd_filename, " \
         DS:corruptPackets:DERIVE:600:0:125000000000 \
         DS:def_cacheInserts:DERIVE:600:0:125000000000 \
         DS:def_cacheLookup:DERIVE:600:0:125000000000 \
@@ -44,7 +44,7 @@ if (!empty($agent_data['app']['powerdns']))
         DS:q_udp4Answers:DERIVE:600:0:125000000000 \
         DS:q_udp4Queries:DERIVE:600:0:125000000000 \
         DS:q_udp6Answers:DERIVE:600:0:125000000000 \
-        DS:q_udp6Queries:DERIVE:600:0:125000000000 ".$config['rrd_rra']);
+        DS:q_udp6Queries:DERIVE:600:0:125000000000 ");
   }
 
   rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));

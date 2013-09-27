@@ -21,8 +21,8 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $processor)
 
   if (!is_file($procrrd))
   {
-    rrdtool_create($procrrd, "--step 300 \
-     DS:usage:GAUGE:600:-273:1000 ".$config['rrd_rra']);
+    rrdtool_create($procrrd, " \
+     DS:usage:GAUGE:600:-273:1000 ");
   }
 
   $proc = trim(str_replace("\"", "", $proc));

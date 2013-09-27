@@ -15,10 +15,10 @@ $sessfailed = $snmpdata[0]['nsResSessFailed'];
 
 if (!is_file($sessrrd))
 {
-   rrdtool_create($sessrrd, " --step 300 \
+   rrdtool_create($sessrrd, "  \
      DS:allocate:GAUGE:600:0:3000000 \
      DS:max:GAUGE:600:0:3000000 \
-     DS:failed:GAUGE:600:0:1000 ".$config['rrd_rra']);
+     DS:failed:GAUGE:600:0:1000 ");
 }
 
 rrdtool_update("$sessrrd", "N:$sessalloc:$sessmax:$sessfailed");

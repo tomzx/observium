@@ -85,8 +85,7 @@
           if (empty($data['label'])) { $data['label'] = $name; }
           if (empty($data['draw'])) { $data['draw'] = "LINE1.5"; }
 
-          $cmd  = "--step 300 DS:val:".$data['type'].":600:0:U ";
-          $cmd .= $config['rrd_rra'];
+          $cmd  = " DS:val:".$data['type'].":600:0:U ";
           $ds_uniq = $mplug_id."_".$name;
           $filename = $plugin_rrd."_".$name.".rrd";
           if (!is_file($filename))

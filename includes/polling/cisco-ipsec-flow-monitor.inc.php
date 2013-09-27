@@ -65,7 +65,6 @@ if ($device['os_group'] == "cisco")
   $rrd_create .= " DS:ProtocolUseFails:COUNTER:600:0:100000000000";
   $rrd_create .= " DS:NoSaFails:COUNTER:600:0:100000000000";
   $rrd_create .= " DS:SysCapFails:COUNTER:600:0:100000000000";
-  $rrd_create .= $config['rrd_rra'];
 
   if (is_file($rrd_filename) || $data['cipSecGlobalActiveTunnels'])
   {

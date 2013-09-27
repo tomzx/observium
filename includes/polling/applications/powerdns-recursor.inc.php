@@ -79,8 +79,7 @@ if (!empty($agent_data['app']['powerdns-recursor']))
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create($rrd_filename, "--step 300 \
-        DS:outQ_all:DERIVE:600:0:125000000000 \
+    rrdtool_create($rrd_filename, " \ DS:outQ_all:DERIVE:600:0:125000000000 \
         DS:outQ_dont:DERIVE:600:0:125000000000 \
         DS:outQ_tcp:DERIVE:600:0:125000000000 \
         DS:outQ_throttled:DERIVE:600:0:125000000000 \
@@ -129,7 +128,7 @@ if (!empty($agent_data['app']['powerdns-recursor']))
         DS:throttleEntries:DERIVE:600:0:125000000000 \
         DS:uptime:DERIVE:600:0:125000000000 \
         DS:cpuTimeSys:DERIVE:600:0:125000000000 \
-        DS:cpuTimeUser:DERIVE:600:0:125000000000 ".$config['rrd_rra']);
+        DS:cpuTimeUser:DERIVE:600:0:125000000000 ");
   }
 
   rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));

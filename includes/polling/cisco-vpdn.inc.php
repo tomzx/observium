@@ -21,7 +21,7 @@ if ($device['os_group'] == "cisco")
     {
       if (!file_exists($rrd_filename))
       {
-        rrdtool_create($rrd_filename, " DS:tunnels:GAUGE:600:0:U DS:sessions:GAUGE:600:0:U DS:denied:COUNTER:600:0:100000" . $config['rrd_rra']);
+        rrdtool_create($rrd_filename, " DS:tunnels:GAUGE:600:0:U DS:sessions:GAUGE:600:0:U DS:denied:COUNTER:600:0:100000" );
       }
 
       rrdtool_update($rrd_filename, array($vpdn['cvpdnSystemTunnelTotal'], $vpdn['cvpdnSystemSessionTotal'], $vpdn['cvpdnSystemDeniedUsersTotal']));
