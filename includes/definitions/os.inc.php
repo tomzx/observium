@@ -1265,10 +1265,20 @@ $config['os'][$os]['over'][1]['text']   = "Processors";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory";
 
+// Draytek firewall/routers
+
 $os = "draytek";
 $config['os'][$os]['text']              = "Draytek";
 $config['os'][$os]['type']              = "firewall";
 $config['os'][$os]['icon']              = "draytek";
+
+// SmartEdge OS
+
+$os = "seos";
+$config['os'][$os]['text']              = "SmartEdge OS";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "ericsson";
+
 
 foreach ($config['os'] as $this_os => $blah)
 {
