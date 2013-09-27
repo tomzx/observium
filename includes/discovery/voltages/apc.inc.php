@@ -229,6 +229,26 @@ if ($device['os'] == "apc")
 
       discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
     }
+
+    ## Modular Distribution System ##########################################################################
+    $oids = snmp_walk($device, "isxModularDistSysVoltageLtoN", "-OsqnU", "PowerNet-MIB");
+    if ($debug) { echo($oids."\n"); }
+    if ($oids)
+    {
+      echo(" Voltage In ");
+      foreach (explode("\n", $oids) as $data)
+      {
+        list($oid,$current) = explode(" ",$data);
+        $divisor = 10;
+        $split_oid = explode('.',$oid);
+        $phase = $split_oid[count($split_oid)-1];
+        $type = "apc";
+        $index = "LtoN:".$phase;
+        $descr = "Phase $phase Line to Neutral";
+
+        discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+      }
+    }
   }
 }
 
