@@ -4,9 +4,11 @@
 
 if ($device['os'] == "junos" || $device['os_group'] == "junos")
 {
-  echo("JunOS ");
+  echo(" JUNIPER-MIB ");
+  
   $oids = snmp_walk($device,"1.3.6.1.4.1.2636.3.1.13.1.7","-Osqn","JUNIPER-MIB", mib_dirs('junos'));
   $oids = trim($oids);
+
   foreach (explode("\n", $oids) as $data)
   {
     $data = trim($data);
@@ -32,4 +34,4 @@ if ($device['os'] == "junos" || $device['os_group'] == "junos")
   }
 }
 
-?>
+// EOF
