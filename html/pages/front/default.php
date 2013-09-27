@@ -72,10 +72,10 @@ function show_map($config)
       $locations_down = array();
       $devicesArray = array();
       foreach (dbFetchRows("SELECT * FROM devices") as $device) {
-      $devicesArray[] = array("device_id" => $device['device_id'], "hostname" => $device['hostname'], "location" => $device['location'], "status" => $device['status'], "ignore" => $device['ignore'], "disabled" => $device['disabled'], "location_lat" =>  $device['location_lat'], "location_lon" =>  $device['location_lon']);
+        $devicesArray[] = array("device_id" => $device['device_id'], "hostname" => $device['hostname'], "location" => $device['location'], "status" => $device['status'], "ignore" => $device['ignore'], "disabled" => $device['disabled'], "location_lat" =>  $device['location_lat'], "location_lon" =>  $device['location_lon']);
       }
       foreach (getlocations() as $location) {
-      $location = addslashes($location);
+      $location_html = htmlentities($location);
       $devices = array();
       $devices_down = array();
       $devices_up = array();
@@ -91,9 +91,9 @@ function show_map($config)
       }
       $count = (($count < 100) ? $count : "100");
       if ($down > 0) {
-        $locations_down[]   = "[".$lat.", ".$lon.", '".$location."', ".$down.", ".$count*$down.", '".count($devices_up). " Devices OK, " . count($devices_down). " Devices DOWN: (". implode(", ", $devices_down).")']";
+        $locations_down[]   = "[".$lat.", ".$lon.", '".$location_html."', ".$down.", ".$count*$down.", '".count($devices_up). " Devices OK, " . count($devices_down). " Devices DOWN: (". implode(", ", $devices_down).")']";
       } else {
-        $locations_up[] = "[".$lat.", ".$lon.", '".$location."', 0, ".$count.", '".count($devices_up). " Devices UP: (". implode(", ", $devices_up).")']";
+        $locations_up[] = "[".$lat.", ".$lon.", '".$location_html."', 0, ".$count.", '".count($devices_up). " Devices UP: (". implode(", ", $devices_up).")']";
       }
       }
       unset($devicesArray);
@@ -131,7 +131,7 @@ function show_map($config)
       var item = selection[0];
       var url = '<?php echo generate_url(array("page" => "devices")); ?>';
       var location = data.getValue(item.row, 2);
-      url = url+'location='+location+'/';
+      url = url+'location='+encodeURIComponent(location)+'/';
       window.location = url;
     }
     };
