@@ -76,34 +76,36 @@ if (!$auth)
   $graph_array['legend'] = "no";
   $graph_array['to']     = $config['time']['now'];
 
-  print_optionbar_start();
-  echo($title);
 
-  echo('<div class="pull-right">');
-  ?>
-  <form action="" style="margin-top: -5px;">
-  <select name='type' id='type' class="selectpicker" onchange="window.open(this.options[this.selectedIndex].value,'_top')" >
-  <?php
+  $navbar = array('brand' => "Graph", 'class' => "navbar-narrow");
+
+
+  foreach($title_array AS $key => $element)
+  {
+    $navbar['options'][$key] = $element;
+  }
+
+  $navbar['options']['graph']     = array('text' => 'Graph');
 
   sort($types);
 
   foreach ($types as $avail_type)
   {
-    echo("<option value='".generate_url($vars, array('type' => $type."_".$avail_type, 'page' => "graphs"))."'");
-    if ($avail_type == $subtype) { echo(" selected"); }
-    echo(">".nicecase($avail_type)."</option>");
+    if($subtype == $avail_type)
+    {
+      $navbar['options']['graph']['suboptions'][$avail_type]['class'] = 'active';
+      $navbar['options']['graph']['text'] .= ' ('.$avail_type.')';
+    }
+    $navbar['options']['graph']['suboptions'][$avail_type]['text'] = $avail_type;
+    $navbar['options']['graph']['suboptions'][$avail_type]['url'] = generate_url($vars, array('type' => $type."_".$avail_type, 'page' => "graphs"));
   }
-          ?>
-    </select>
-  </form>
-  <?php
-  echo('</div>');
 
-  print_optionbar_end();
+
+  print_navbar($navbar);
 
   // Start form for the custom range.
 
-  print_optionbar_start();
+  echo '<div class="well well-shaded">';
 
   $thumb_array = array('sixhour' => '6 Hours',
                        'day' => '24 Hours',

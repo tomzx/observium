@@ -42,6 +42,12 @@ if (is_numeric($vars['id']) && ($auth || port_permitted($vars['id'])))
   $title  = generate_device_link($device);
   $title .= " :: Port  <b>".generate_port_link($port) ."</b>";
 
+  $title_array   = array();
+  $title_array[] = array('text' => $device['hostname'], 'url' => generate_url(array('page' => 'device', 'device' => $device['device_id'])));
+  $title_array[] = array('text' => 'Ports', 'url' => generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'ports')));
+  $title_array[] = array('text' => $port['label'], 'url' => generate_url(array('page' => 'device', 'device' => $device['device_id'], 'tab' => 'ports')));
+
+
   $graph_title = shorthost($device['hostname']) . " :: " . strtolower(makeshortif($port['ifDescr']))."";
   $auth   = TRUE;
   $rrd_filename = get_port_rrdfilename($device, $port);
