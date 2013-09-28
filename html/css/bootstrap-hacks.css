@@ -80,12 +80,3 @@
   box-shadow: none;
   -webkit-box-shadow: none;
 }
-
-.navbar-narrow .chevron
-{
-  background-image: url("/images/navbar-narrow-chevron.png");
-  background-repeat: no-repeat;
-  height: 30px;
-  width: 16px;
-  margin: 0px;
-}
