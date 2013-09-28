@@ -202,7 +202,7 @@ function rrdtool_create($filename,$ds, $options='')
     print_message("[%gRRD Disabled%n] ");
   } else {
     if (! $options){
-      $options=$config['rrd_rra'];
+      $options=$config['rrd']['rra'];
     }
     $step=" --step ".$config['rrd']['step']." ";
     $command = $config['rrdtool'] . " create $filename $ds $step $options";
