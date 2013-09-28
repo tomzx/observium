@@ -16,7 +16,7 @@ if (!empty($agent_data['app']['postfix_mailgraph']))
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create($rrd_filename, "--step 300 \
+    rrdtool_create($rrd_filename, " \
                     DS:sent:COUNTER:600:0:1000000 \
                     DS:received:COUNTER:600:0:1000000 \
                     DS:bounced:COUNTER:600:0:1000000 \
@@ -24,7 +24,7 @@ if (!empty($agent_data['app']['postfix_mailgraph']))
                     DS:virus:COUNTER:600:0:1000000 \
                     DS:spam:COUNTER:600:0:1000000 \
                     DS:greylisted:COUNTER:600:0:1000000 \
-                    DS:delayed:COUNTER:600:0:1000000 ".$config['rrd_rra']);
+                    DS:delayed:COUNTER:600:0:1000000 ");
   }
 
   # Workaround for old agent script
@@ -34,7 +34,7 @@ if (!empty($agent_data['app']['postfix_mailgraph']))
   {
     $rrd_values[] = (is_numeric($queue_data[$key]) ? $queue_data[$key] : "U");
   }
-                                          
+
   rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));
 }
 ?>

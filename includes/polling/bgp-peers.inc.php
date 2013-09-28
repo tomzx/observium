@@ -283,7 +283,7 @@ if ($config['enable_bgp'])
         DS:bgpPeerInUpdates:COUNTER:600:U:100000000000 \
         DS:bgpPeerOutTotal:COUNTER:600:U:100000000000 \
         DS:bgpPeerInTotal:COUNTER:600:U:100000000000 \
-        DS:bgpPeerEstablished:GAUGE:600:0:U " . $config['rrd_rra'];
+        DS:bgpPeerEstablished:GAUGE:600:0:U " ;
 
       rrdtool_create($peer_rrd, $create_rrd);
     }
@@ -410,7 +410,7 @@ if ($config['enable_bgp'])
            DS:DeniedPrefixes:GAUGE:600:U:100000000000 \
            DS:AdvertisedPrefixes:GAUGE:600:U:100000000000 \
            DS:SuppressedPrefixes:GAUGE:600:U:100000000000 \
-           DS:WithdrawnPrefixes:GAUGE:600:U:100000000000 ".$config['rrd_rra'];
+           DS:WithdrawnPrefixes:GAUGE:600:U:100000000000 ";
           rrdtool_create($cbgp_rrd, $rrd_create);
         }
         rrdtool_update($cbgp_rrd, "N:$cbgpPeerAcceptedPrefixes:$cbgpPeerDeniedPrefixes:$cbgpPeerAdvertisedPrefixes:$cbgpPeerSuppressedPrefixes:$cbgpPeerWithdrawnPrefixes");

@@ -82,7 +82,7 @@ if (!$auth)
   echo('<div class="pull-right">');
   ?>
   <form action="" style="margin-top: -5px;">
-  <select name='type' id='type' onchange="window.open(this.options[this.selectedIndex].value,'_top')" >
+  <select name='type' id='type' class="selectpicker" onchange="window.open(this.options[this.selectedIndex].value,'_top')" >
   <?php
 
   sort($types);

@@ -38,7 +38,7 @@ $features = snmp_get($device, "NETAPP-MIB::productCPUArch.0", "-Osqv", "NETAPP-M
 
 $rrd_filename   = $host_rrd . "/netapp_stats.rrd";
 
-$rrd_create = " --step 300 \
+$rrd_create = "  \
      DS:iscsi_ops:COUNTER:600:0:10000000000 \
      DS:fcp_ops:COUNTER:600:0:10000000000 \
      DS:nfs_ops:COUNTER:600:0:10000000000 \
@@ -49,7 +49,7 @@ $rrd_create = " --step 300 \
      DS:disk_rd:COUNTER:600:0:10000000000 \
      DS:disk_wr:COUNTER:600:0:10000000000 \
      DS:tape_rd:COUNTER:600:0:10000000000 \
-     DS:tape_wr:COUNTER:600:0:10000000000 ".$config['rrd_rra'];
+     DS:tape_wr:COUNTER:600:0:10000000000 ";
 
 $snmpdata = snmp_get_multi($device, "iscsi64Ops.0 fcp64Ops.0 misc64NfsOps.0 misc64CifsOps.0 misc64HttpOps.0 misc64NetRcvdBytes.0 misc64NetSentBytes.0 misc64DiskReadBytes.0 misc64DiskWriteBytes.0 misc64TapeReadBytes.0 misc64TapeWriteBytes.0", "-OQUs", "NETAPP-MIB", mib_dirs(array("netapp")));
 

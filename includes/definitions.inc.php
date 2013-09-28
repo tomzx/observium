@@ -150,6 +150,7 @@ $config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Vo
 $config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'oicon-thermometer-high');
 $config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'oicon-arrow-incident-red');
 
+
 $config['routing_types']['ospf']       = array( 'text' => 'OSPF');
 $config['routing_types']['cef']       = array( 'text' => 'CEF');
 $config['routing_types']['bgp']       = array( 'text' => 'BGP');

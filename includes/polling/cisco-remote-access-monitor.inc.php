@@ -45,7 +45,6 @@ if ($device['os_group'] == "cisco")
   $rrd_create .= " DS:lb:GAUGE:600:0:U";
   $rrd_create .= " DS:svc:GAUGE:600:0:U";
   $rrd_create .= " DS:webvpn:GAUGE:600:0:U";
-  $rrd_create .= $config['rrd_rra'];
 
   if (is_file($rrd_filename) || $data['crasEmailNumSessions'] || $data['crasIPSecNumSessions'] || $data['crasL2LNumSessions'] || $data['crasLBNumSessions'] || $data['crasSVCNumSessions'] || $data['crasWebvpnSessions'])
   {

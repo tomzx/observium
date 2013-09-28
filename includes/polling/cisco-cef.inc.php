@@ -57,10 +57,10 @@ if ($device['os_group'] == "cisco")
 
           if (!is_file($filename))
           {
-            rrdtool_create($filename, "--step 300 \
+            rrdtool_create($filename, " \
             DS:drop:DERIVE:600:0:1000000 \
             DS:punt:DERIVE:600:0:1000000 \
-            DS:hostpunt:DERIVE:600:0:1000000 ".$config['rrd_rra']);
+            DS:hostpunt:DERIVE:600:0:1000000 ");
           }
 
           // Copy HC to non-HC if they exist

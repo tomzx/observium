@@ -10,8 +10,6 @@ if ($port_stats[$port['ifIndex']] && $port['ifType'] == "ethernetCsmacd"
   $old_rrdfile = $config['rrd_dir'] . "/" . $device['hostname'] . "/" . safename("etherlike-".$port['ifIndex'].".rrd");
   $rrdfile = get_port_rrdfilename($device, $port, "dot3");
 
-  $rrd_create = $config['rrd_rra'];
-
   if (!file_exists($rrdfile))
   {
     if (file_exists($old_rrdfile))

@@ -14,7 +14,7 @@ if (!empty($agent_data['app']['drbd'][$app['app_instance']]))
   }
 
   if (!is_file($rrd_filename)) {
-    rrdtool_create ($rrd_filename, "--step 300 \
+    rrdtool_create ($rrd_filename, " \
         DS:ns:DERIVE:600:0:125000000000 \
         DS:nr:DERIVE:600:0:125000000000 \
         DS:dw:DERIVE:600:0:125000000000 \
@@ -25,7 +25,7 @@ if (!empty($agent_data['app']['drbd'][$app['app_instance']]))
         DS:pe:GAUGE:600:0:125000000000 \
         DS:ua:GAUGE:600:0:125000000000 \
         DS:ap:GAUGE:600:0:125000000000 \
-        DS:oos:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+        DS:oos:GAUGE:600:0:125000000000 ");
   }
 
   $ds_list = array('ns','nr','dw','dr','al','bm','lo','pe','ua','ap','oos');

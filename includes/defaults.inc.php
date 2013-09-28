@@ -57,10 +57,12 @@ $config['svn']            = "/usr/bin/svn";
 // These settings make quite large RRDs.
 // They store 4 years of 1-day resolution data.
 
+/// Default Poller Interval
+$config['rrd']['step']=300;
 //                      7 days of 5 min         62 days of 30 min       120 days of 2 hour       4 years of 1 day
-$config['rrd_rra']  = " RRA:AVERAGE:0.5:1:2016  RRA:AVERAGE:0.5:6:2976  RRA:AVERAGE:0.5:24:1440  RRA:AVERAGE:0.5:288:1440 ";
-$config['rrd_rra'] .= "                         RRA:MIN:0.5:6:1440      RRA:MIN:0.5:96:360       RRA:MIN:0.5:288:1440 ";
-$config['rrd_rra'] .= "                         RRA:MAX:0.5:6:1440      RRA:MAX:0.5:96:360       RRA:MAX:0.5:288:1440 ";
+$config['rrd']['rra']  = "RRA:AVERAGE:0.5:1:2016  RRA:AVERAGE:0.5:6:2976  RRA:AVERAGE:0.5:24:1440  RRA:AVERAGE:0.5:288:1440 ";
+$config['rrd']['rra'] .= "                         RRA:MIN:0.5:6:1440      RRA:MIN:0.5:96:360       RRA:MIN:0.5:288:1440 ";
+$config['rrd']['rra'] .= "                         RRA:MAX:0.5:6:1440      RRA:MAX:0.5:96:360       RRA:MAX:0.5:288:1440 ";
 
 // RRDCacheD - Make sure it can write to your RRD dir!
 

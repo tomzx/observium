@@ -1,7 +1,11 @@
 <?php
 
+# FIXME - consolidated 4 files, but could probably do with a rewrite; duplicate code blocks and snmpwalks ahead! -TL
+
 if ($device['os'] == 'sentry3')
 {
+  echo(" Sentry3-MIB ");
+
   $divisor = "100";
   $outlet_divisor = $divisor;
   $multiplier = "1";
@@ -9,9 +13,9 @@ if ($device['os'] == 'sentry3')
   # These PDUs may have > 1 "tower" accessible via a single management interface
   $tower_count = snmp_get($device,"systemTowerCount.0", "-Ovq", "Sentry3-MIB");
   $towers=1;
-  while ($towers <= $tower_count) {
 
-    /////////////////////////////////
+  while ($towers <= $tower_count)
+  {
     # Check for Infeeds
     $infeed_oids = snmp_walk($device, "infeedID.$towers.1", "-Osqn", "Sentry3-MIB");
     if ($debug) { echo($infeed_oids."\n"); }
@@ -42,7 +46,6 @@ if ($device['os'] == 'sentry3')
           discover_sensor($valid['sensor'], 'current', $device, $infeed_oid, $towers, 'sentry3', $descr, $divisor, $multiplier, $low_limit, $low_warn_limit, $high_warn_limit, $high_limit, $current);
         }
 
-        /////////////////////////////////
         # Check for per-outlet polling
         #$outlet_oids = snmp_walk($device, "outletLoadValue.$towers.$infeed_index", "-Osqn", "Sentry3-MIB");
         $outlet_oids = snmp_walk($device, "outletLoadValue.$towers.1", "-Osqn", "Sentry3-MIB");
@@ -108,6 +111,87 @@ if ($device['os'] == 'sentry3')
   } // while ($towers <= $tower_count)
 
   unset($towers);
+
+  $oids = snmp_walk($device, "tempHumidSensorHumidValue", "-Osqn", "Sentry3-MIB");
+  $divisor = "1";
+  $multiplier = "1";
+  if ($debug) { echo($oids."\n"); }
+  $oids = trim($oids);
+  foreach (explode("\n", $oids) as $data)
+  {
+    $data = trim($data);
+    if ($data)
+    {
+      list($oid,$descr) = explode(" ", $data,2);
+      $split_oid = explode('.',$oid);
+      $index = $split_oid[count($split_oid)-1];
+
+      #tempHumidSensorHumidValue
+      $humidity_oid = "1.3.6.1.4.1.1718.3.2.5.1.10.1.".$index;
+      $descr = "Removable Sensor " . $index;
+      $low_warn_limit  = "0";
+      $low_limit       = snmp_get($device,"tempHumidSensorHumidLowThresh.1.$index", "-Ovq", "Sentry3-MIB");
+      $high_warn_limit = "0";
+      $high_limit      = snmp_get($device,"tempHumidSensorHumidHighThresh.1.$index", "-Ovq", "Sentry3-MIB");
+      $current         = snmp_get($device,"$humidity_oid", "-Ovq", "Sentry3-MIB");
+
+      if ($current >= 0) {
+        discover_sensor($valid['sensor'], 'humidity', $device, $humidity_oid, $index, 'sentry3', $descr, $divisor, $multiplier, $low_limit, $low_warn_limit, $high_warn_limit, $high_limit, $current);
+      }
+    }
+    unset($data);
+  }
+  unset($oids);
+
+  $oids = snmp_walk($device, "tempHumidSensorTempValue", "-Osqn", "Sentry3-MIB");
+  if ($debug) { echo($oids."\n"); }
+  $oids = trim($oids);
+  $divisor = "10";
+  $multiplier = "1";
+  foreach (explode("\n", $oids) as $data)
+  {
+    $data = trim($data);
+    if ($data)
+    {
+      list($oid,$descr) = explode(" ", $data,2);
+      $split_oid = explode('.',$oid);
+      $index = $split_oid[count($split_oid)-1];
+
+      #tempHumidSensorTempValue
+      $temperature_oid = "1.3.6.1.4.1.1718.3.2.5.1.6.1.".$index;
+      $descr = "Removable Sensor " . $index;
+      $low_warn_limit  = NULL;
+      $low_limit       = snmp_get($device,"tempHumidSensorTempLowThresh.1.$index", "-Ovq", "Sentry3-MIB") / $divisor;
+      $high_warn_limit = NULL;
+      $high_limit      = snmp_get($device,"tempHumidSensorTempHighThresh.1.$index", "-Ovq", "Sentry3-MIB") / $divisor;
+      $current         = snmp_get($device,"$temperature_oid", "-Ovq", "Sentry3-MIB") / $divisor;
+
+      if ($current >= 0) {
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $index, 'sentry3', $descr, $divisor, $multiplier, $low_limit, $low_warn_limit, $high_warn_limit, $high_limit, $current);
+      }
+    }
+  }
+
+  $oids = snmp_walk($device, "infeedVoltage", "-OsqnU", "Sentry3-MIB");
+  if ($debug) { echo($oids."\n"); }
+  $divisor = 10;
+  $type = "sentry3";
+
+  foreach (explode("\n", $oids) as $data)
+  {
+    $data = trim($data);
+    if ($data)
+    {
+      list($oid,$descr) = explode(" ", $data,2);
+      $split_oid = explode('.',$oid);
+      $descr = "Tower " . $index;
+      $index = $split_oid[count($split_oid)-1];
+      $oid  = "1.3.6.1.4.1.1718.3.2.2.1.11.1." . $index;
+      $current = snmp_get($device, $oid, "-Oqv") / $divisor;
+
+      discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, $descr, $divisor, 1, NULL, NULL, NULL, NULL, $current);
+    }
+  }
 }
 
-?>
+// EOF

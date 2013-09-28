@@ -42,13 +42,12 @@ if (!empty($agent_data['app']['nfs']))
 
   if (!is_file($rrd_filename))
   {
-    $definition = "--step 300 ";
     foreach ($nfsLabel as $key => $values) {
       foreach ($values as $name) {
         $definition.=" DS:".($key.$name).":DERIVE:600:0:12500000 ";
       }
     }
-    rrdtool_create($rrd_filename, $definition." ".$config['rrd_rra']);
+    rrdtool_create($rrd_filename, $definition." ");
   }
   $datas = array();
   foreach ($nfsLabel as $key => $values) {

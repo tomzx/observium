@@ -46,7 +46,7 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
   if (strlen($queryString) >0)
   {
     $found = 0;
-  
+
     /// SEARCH DEVICES
     $results = dbFetchRows("SELECT * FROM `devices` WHERE `hostname` LIKE '%" . $queryString . "%' OR `location` LIKE '%" . $queryString . "%' ORDER BY hostname LIMIT 8");
     if (count($results))
@@ -69,9 +69,9 @@ if (isset($_POST['queryString']) || isset($_GET['queryString']))
         $num_ports = dbFetchCell("SELECT COUNT(*) FROM `ports` WHERE device_id = ?", array($result['device_id']));
         echo('<dl style="border-left: 10px solid '.$result['html_tab_colour'].'; " class="dl-horizontal dl-search">
                 <dt style="padding-left: 10px; text-align: center;">'.$result['icon'].'</dt>
-                  <dd><h5>'.highlight_search($name).'</h5>
+                  <dd><strong>'.highlight_search($name).'</>
                     <small>'.$result['hardware'].' | '.$config['os'][$result['os']]['text'].' '. $result['version'] .'
-                    <br /> '.highlight_search($result['location']).' | '.$num_ports.'ports</small></dd>
+                    <br /> '.highlight_search($result['location']).' | '.$num_ports.' ports</small></dd>
                 </dl>');
       }
 

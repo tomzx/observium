@@ -11,7 +11,7 @@ $graph_types = array("bits"   => "Bits",
 
 $i=0;
 
-echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('<table class="table table-striped table-condensed table-bordered" style="margin-top: 10px;">');
 echo('  <thead>');
 echo('  </thead>');
 
@@ -36,7 +36,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? A
   if (count($vsvrs))
   {
     echo('<tr><td colspan="5">');
-    echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+    echo('<table class="table table-striped table-bordered table-condensed" style="margin-top: 10px;">');
     echo("  <thead>\n");
     echo("    <th>Vserver</th>");
     echo("    <th>Address</th>");
@@ -68,7 +68,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_services` WHERE `device_id` = ? A
     $graph_array['id']     = $svc['svc_id'];
     $graph_array['type']   = $graph_type;
 
-    echo('<h3>'.$graph_text.'</h3>');
+    echo('<h4>'.$graph_text.'</h4>');
 
     include("includes/print-graphrow.inc.php");
 
@@ -129,7 +129,7 @@ foreach ($graph_types as $type => $descr)
 
 print_navbar($navbar); unset($navbar);
 
-echo("<table class=\"table table-striped table-condensed\" style=\"margin-top: 10px;\">\n");
+echo('<table class="table table-striped table-condensed table-bordered" style="margin-top: 10px;">');
 echo("  <thead>\n");
 echo("    <tr>\n");
 echo("      <th>Service</th>\n");

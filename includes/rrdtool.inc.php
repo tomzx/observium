@@ -193,7 +193,7 @@ function rrdtool($command, $filename, $options)
  * @param string options
  */
 
-function rrdtool_create($filename, $options)
+function rrdtool_create($filename,$ds, $options='')
 {
   global $config, $debug;
 
@@ -201,7 +201,11 @@ function rrdtool_create($filename, $options)
   {
     print_message("[%gRRD Disabled%n] ");
   } else {
-    $command = $config['rrdtool'] . " create $filename $options";
+    if (! $options){
+      $options=$config['rrd_rra'];
+    }
+    $step=" --step ".$config['rrd']['step']." ";
+    $command = $config['rrdtool'] . " create $filename $ds $step $options";
   }
   if ($debug) { print_message("RRD[%g".$command."%n] ", 'color'); }
 

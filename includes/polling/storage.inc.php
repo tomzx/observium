@@ -15,7 +15,7 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $storage)
 
   if (!is_file($storage_rrd))
   {
-   rrdtool_create($storage_rrd, "--step 300 DS:used:GAUGE:600:0:U DS:free:GAUGE:600:0:U ".$config['rrd_rra']);
+   rrdtool_create($storage_rrd, " DS:used:GAUGE:600:0:U DS:free:GAUGE:600:0:U ");
   }
 
   $file = $config['install_dir']."/includes/polling/storage-".$storage['storage_mib'].".inc.php";

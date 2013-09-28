@@ -43,7 +43,7 @@ if (!empty($agent_data['app']['crashplan']))
 
       if (!is_file($rrd_filename))
       {
-        rrdtool_create($rrd_filename, "--step 300 \
+        rrdtool_create($rrd_filename, " \
           DS:totalBytes:GAUGE:600:0:125000000000 \
           DS:usedBytes:GAUGE:600:0:125000000000 \
           DS:usedPercentage:GAUGE:600:0:100 \
@@ -61,7 +61,7 @@ if (!empty($agent_data['app']['crashplan']))
           DS:userCount:GAUGE:600:0:125000000000 \
           DS:computerCount:GAUGE:600:0:125000000000 \
           DS:onlineComputerCount:GAUGE:600:0:125000000000 \
-          DS:backupSessionCount:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+          DS:backupSessionCount:GAUGE:600:0:125000000000 ");
       }
 
       rrdtool_update($rrd_filename, "N:" . implode(':', $rrd_values));

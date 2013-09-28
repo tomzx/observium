@@ -53,6 +53,13 @@ $config['os'][$os]['group']             = "unix";
 $config['os'][$os]['text']              = "QNAP TurboNAS";
 $config['os'][$os]['ifXmcbc']           = 1;
 
+$os = "dss";
+$config['os'][$os]['type']              = "storage";
+$config['os'][$os]['group']             = "unix";
+$config['os'][$os]['text']              = "Open-E DSS";
+$config['os'][$os]['icon']              = "open-e";
+$config['os'][$os]['ifXmcbc']           = 1;
+
 $os = "endian";
 $config['os'][$os]['text']              = "Endian";
 $config['os'][$os]['type']              = "firewall";
@@ -1265,10 +1272,20 @@ $config['os'][$os]['over'][1]['text']   = "Processors";
 $config['os'][$os]['over'][2]['graph']  = "device_mempool";
 $config['os'][$os]['over'][2]['text']   = "Memory";
 
+// Draytek firewall/routers
+
 $os = "draytek";
 $config['os'][$os]['text']              = "Draytek";
 $config['os'][$os]['type']              = "firewall";
 $config['os'][$os]['icon']              = "draytek";
+
+// SmartEdge OS
+
+$os = "seos";
+$config['os'][$os]['text']              = "SmartEdge OS";
+$config['os'][$os]['type']              = "network";
+$config['os'][$os]['icon']              = "ericsson";
+
 
 foreach ($config['os'] as $this_os => $blah)
 {

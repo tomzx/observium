@@ -34,7 +34,6 @@ foreach ($serverfarm_array as $index => $vserver)
   }
 
   $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/vserver-".$classmap_id.".rrd";
-  $rrd_create = $config['rrd_rra'];
 
   foreach ($oids as $oid)
   {

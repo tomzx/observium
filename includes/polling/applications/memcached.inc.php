@@ -75,7 +75,7 @@ if (!empty($agent_data['app']['memcached']))
       }
       elseif (!is_file($rrd_filename))
       {
-        rrdtool_create ($rrd_filename, "--step 300 \
+        rrdtool_create ($rrd_filename, " \
         DS:uptime:GAUGE:600:0:125000000000 \
         DS:threads:GAUGE:600:0:125000000000 \
         DS:rusage_user:GAUGE:600:0:125000000000 \
@@ -95,7 +95,7 @@ if (!empty($agent_data['app']['memcached']))
         DS:evictions:DERIVE:600:0:125000000000 \
         DS:bytes_read:DERIVE:600:0:125000000000 \
         DS:bytes_written:DERIVE:600:0:125000000000 \
-        ".$config['rrd_rra']);
+        ");
       }
       
       // Construct the data

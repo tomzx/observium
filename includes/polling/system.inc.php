@@ -88,7 +88,7 @@
 
     if (!is_file($uptime_rrd))
     {
-      rrdtool_create ($uptime_rrd, "DS:uptime:GAUGE:600:0:U ".$config['rrd_rra']);
+      rrdtool_create ($uptime_rrd, "DS:uptime:GAUGE:600:0:U ");
     }
     rrdtool_update($uptime_rrd, "N:".$uptime);
 

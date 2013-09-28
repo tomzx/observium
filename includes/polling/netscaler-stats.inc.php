@@ -28,8 +28,6 @@ if ($device['os'] == "netscaler")
   unset($snmpstring, $rrdupdate, $snmpdata, $snmpdata_cmd, $rrd_create);
   $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netscaler-stats-tcp.rrd";
 
-  $rrd_create = $config['rrd_rra'];
-
   foreach ($oids_gauge as $oid)
   {
     $oid_ds = truncate(str_replace("tcp", "", str_replace("Active", "Ac", str_replace("Passive", "Ps", str_replace("Zombie", "Zom", $oid)))), 19, '');

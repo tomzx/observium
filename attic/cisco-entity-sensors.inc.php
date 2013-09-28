@@ -21,20 +21,7 @@ while ($sensor = mysql_fetch_assoc($sensors))
 
   if (!is_file($rrd))
   {
-    rrdtool_create($rrd,"--step 300 \
-      DS:value:GAUGE:600:-1000:U \
-      RRA:AVERAGE:0.5:1:2304 \
-      RRA:AVERAGE:0.5:6:1536 \
-      RRA:AVERAGE:0.5:24:2268 \
-      RRA:AVERAGE:0.5:288:1890 \
-      RRA:MAX:0.5:1:2304 \
-      RRA:MAX:0.5:6:1536 \
-      RRA:MAX:0.5:24:2268 \
-      RRA:MAX:0.5:288:1890 \
-      RRA:MIN:0.5:1:2304 \
-      RRA:MIN:0.5:6:1536 \
-      RRA:MIN:0.5:24:2268 \
-      RRA:MIN:0.5:288:1890");
+    rrdtool_create($rrd,"DS:value:GAUGE:600:-1000:U");
   }
 
   $entSensorValue = entPhysical_scale($entSensorValue, $sensor['entSensorScale']);

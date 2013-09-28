@@ -287,6 +287,42 @@ if ($device['os'] == "apc")
       }
     }
   }
+
+  # Modular Distribution System
+  $oids = snmp_walk($device, "isxModularDistModuleBreakerCurrent", "-OsqnU", "PowerNet-MIB");
+  if ($debug) { echo($oids."\n"); }
+  if ($oids) {
+    echo(" Modular APC Out ");
+    $type = "apc";
+    foreach (explode("\n", $oids) as $data)
+    {
+      $data = trim($data);
+      if ($data)
+      {
+        list($oid,$current) = explode(" ", $data);
+        $split_oid = explode('.',$oid);
+        $phase = $split_oid[count($split_oid)-1];
+        $breaker = $split_oid[count($split_oid)-2];
+        $index = str_pad($breaker, 2, "0", STR_PAD_LEFT) . "-" . $phase;
+        $descr = "Breaker $breaker Phase $phase";
+        discover_sensor($valid['sensor'], 'current', $device, $oid, $index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $current);
+      }
+    }
+    $oids = snmp_walk($device, "isxModularDistSysCurrentAmps", "-OsqnU", "PowerNet-MIB");
+    foreach (explode("\n", $oids) as $data)
+    {
+      $data = trim($data);
+      if ($data)
+      {
+        list($oid,$current) = explode(" ", $data);
+        $split_oid = explode('.',$oid);
+        $phase = $split_oid[count($split_oid)-1];
+        $index = ".$phase";
+        $descr = "Phase $phase overall";
+        discover_sensor($valid['sensor'], 'current', $device, $oid, $index, $type, $descr, 10, 1, NULL, NULL, NULL, NULL, $current);
+      }
+    }
+  }
 }
 
 ?>

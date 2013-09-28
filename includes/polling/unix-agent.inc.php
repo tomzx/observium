@@ -47,7 +47,7 @@ if ($device['os_group'] == "unix")
     $agent_rrd = $config['rrd_dir'] . "/" . $device['hostname'] . "/agent.rrd";
     if (!is_file($agent_rrd))
     {
-      rrdtool_create ($agent_rrd, "DS:time:GAUGE:600:0:U ".$config['rrd_rra']);
+      rrdtool_create ($agent_rrd, "DS:time:GAUGE:600:0:U ");
     }
     rrdtool_update($agent_rrd, "N:".$agent_time);
     $graphs['agent'] = TRUE;

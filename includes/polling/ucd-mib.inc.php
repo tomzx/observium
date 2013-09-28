@@ -36,11 +36,11 @@ $ss = snmpwalk_cache_oid($device, "systemStats", array(), "UCD-SNMP-MIB");
 $ss = $ss[0]; // Insert Nazi joke here.
 
 // Create CPU RRD if it doesn't already exist
-$cpu_rrd_create = " --step 300 \
+$cpu_rrd_create = " \
    DS:user:COUNTER:600:0:U \
    DS:system:COUNTER:600:0:U \
    DS:nice:COUNTER:600:0:U \
-   DS:idle:COUNTER:600:0:U ".$config['rrd_rra'];
+   DS:idle:COUNTER:600:0:U ";
 
 // This is how we currently collect. We should collect one RRD per stat, for ease of handling differen formats,
 // and because it is per-host and no big performance hit. See new format below
@@ -68,7 +68,7 @@ foreach ($collect_oids as $oid)
     $filename = $host_rrd . "/ucd_".$oid.".rrd";
     if (!is_file($filename))
     {
-      rrdtool_create($filename, " --step 300 DS:value:COUNTER:600:0:U ".$config['rrd_rra']);
+      rrdtool_create($filename, " DS:value:COUNTER:600:0:U ");
     }
     rrdtool_update($filename, "N:".$value);
     $graphs['ucd_cpu'] = TRUE;
@@ -98,7 +98,7 @@ if (is_numeric($ss['ssRawInterrupts'])) { $graphs['ucd_interrupts'] = TRUE; }
 #UCD-SNMP-MIB::memSwapError.0 = INTEGER: noError(0)
 #UCD-SNMP-MIB::memSwapErrorMsg.0 = STRING:
 
-$mem_rrd_create = " --step 300 \
+$mem_rrd_create = " \
      DS:totalswap:GAUGE:600:0:10000000000 \
      DS:availswap:GAUGE:600:0:10000000000 \
      DS:totalreal:GAUGE:600:0:10000000000 \
@@ -106,7 +106,7 @@ $mem_rrd_create = " --step 300 \
      DS:totalfree:GAUGE:600:0:10000000000 \
      DS:shared:GAUGE:600:0:10000000000 \
      DS:buffered:GAUGE:600:0:10000000000 \
-     DS:cached:GAUGE:600:0:10000000000 ".$config['rrd_rra'];
+     DS:cached:GAUGE:600:0:10000000000 ";
 
 $snmpdata = snmp_get_multi($device, "memTotalSwap.0 memAvailSwap.0 memTotalReal.0 memAvailReal.0 memTotalFree.0 memShared.0 memBuffer.0 memCached.0", "-OQUs", "UCD-SNMP-MIB");
 if (is_array($snmpdata[0]))
@@ -153,7 +153,7 @@ if (is_numeric($load_raw[2]['laLoadInt']))
 {
   if (!is_file($load_rrd))
   {
-    rrdtool_create($load_rrd, " --step 300 DS:1min:GAUGE:600:0:500000 DS:5min:GAUGE:600:0:500000 DS:15min:GAUGE:600:0:500000 ".$config['rrd_rra']);
+    rrdtool_create($load_rrd, "DS:1min:GAUGE:600:0:500000 DS:5min:GAUGE:600:0:500000 DS:15min:GAUGE:600:0:500000 ");
   }
   rrdtool_update($load_rrd, array($load_raw[1]['laLoadInt'], $load_raw[2]['laLoadInt'], $load_raw[3]['laLoadInt']));
   $graphs['ucd_load'] = "TRUE";

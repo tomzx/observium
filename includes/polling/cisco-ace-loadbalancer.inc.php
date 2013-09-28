@@ -49,8 +49,6 @@ foreach ($rserver_array as $index => $serverfarm)
     $rrdupdate .= ":$value";
   }
 
-  $rrd_create .= " ".$config['rrd_rra'];
-
   if (isset($serverfarms[$clean_index]))
   {
     if (!file_exists($rrd_file)) { rrdtool_create($rrd_file, $rrd_create); }

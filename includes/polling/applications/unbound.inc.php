@@ -132,7 +132,7 @@ if (!empty($agent_data['app']['unbound']))
 
       if (!is_file($rrd_filename))
       {
-        rrdtool_create($rrd_filename, "--step 300 \
+        rrdtool_create($rrd_filename, " \
           DS:numQueries:DERIVE:600:0:125000000000 \
           DS:cacheHits:DERIVE:600:0:125000000000 \
           DS:cacheMiss:DERIVE:600:0:125000000000 \
@@ -145,7 +145,7 @@ if (!empty($agent_data['app']['unbound']))
           DS:reqListCurrentAll:GAUGE:600:0:125000000000 \
           DS:reqListCurrentUser:GAUGE:600:0:125000000000 \
           DS:recursionTimeAvg:GAUGE:600:0:125000000000 \
-          DS:recursionTimeMedian:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+          DS:recursionTimeMedian:GAUGE:600:0:125000000000 ");
       }
 
       foreach(array("$thread.num.queries","$thread.num.cachehits","$thread.num.cachemiss","$thread.num.prefetch","$thread.num.recursivereplies","$thread.requestlist.avg",
@@ -172,12 +172,12 @@ if (!empty($agent_data['app']['unbound']))
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create($rrd_filename, "--step 300 \
+    rrdtool_create($rrd_filename, " \
       DS:memTotal:GAUGE:600:0:125000000000 \
       DS:memCacheRRset:GAUGE:600:0:125000000000 \
       DS:memCacheMessage:GAUGE:600:0:125000000000 \
       DS:memModIterator:GAUGE:600:0:125000000000 \
-      DS:memModValidator:GAUGE:600:0:125000000000 ".$config['rrd_rra']);
+      DS:memModValidator:GAUGE:600:0:125000000000 ");
     }
 
   foreach(array("mem.total.sbrk","mem.cache.rrset","mem.cache.message","mem.mod.iterator","mem.mod.validator") as $key)
@@ -242,7 +242,7 @@ if (!empty($agent_data['app']['unbound']))
 
   if (!is_file($rrd_filename))
   {
-    rrdtool_create($rrd_filename, "--step 300 " . $rrd_queries . $config['rrd_rra']);
+    rrdtool_create($rrd_filename, "" . $rrd_queries );
   }
 
   # We return 0 in the following loops because unbound does not show these values if they are 0.

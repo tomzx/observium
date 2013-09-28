@@ -12,8 +12,6 @@ if ($device['os'] != "Snom")
   unset($snmpstring, $rrdupdate, $snmpdata, $snmpdata_cmd, $rrd_create);
   $rrd_file = $config['rrd_dir'] . "/" . $device['hostname'] . "/netstats-udp.rrd";
 
-  $rrd_create = $config['rrd_rra'];
-
   foreach ($oids as $oid)
   {
     $oid_ds = truncate($oid, 19, '');

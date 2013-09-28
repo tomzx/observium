@@ -20,12 +20,7 @@ foreach (dbFetchRows("SELECT * FROM `sensors` WHERE `sensor_class` = ? AND `devi
 
   if (!is_file($rrd_file))
   {
-    rrdtool_create($rrd_file,"--step 300 \
-     DS:sensor:GAUGE:600:-273:1000 \
-     RRA:AVERAGE:0.5:1:1200 \
-     RRA:MIN:0.5:12:2400 \
-     RRA:MAX:0.5:12:2400 \
-     RRA:AVERAGE:0.5:12:2400");
+    rrdtool_create($rrd_file," DS:sensor:GAUGE:600:-273:1000");
   }
 
   echo("$sensor_value $unit\n");

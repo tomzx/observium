@@ -13,6 +13,7 @@ $current      = dbFetchCell("select count(*) from sensors WHERE sensor_class='cu
 $freqs        = dbFetchCell("select count(*) from sensors WHERE sensor_class='frequency' AND device_id = ?", array($device['device_id']));
 $power        = dbFetchCell("select count(*) from sensors WHERE sensor_class='power' AND device_id = ?", array($device['device_id']));
 $dBm        = dbFetchCell("select count(*) from sensors WHERE sensor_class='dBm' AND device_id = ?", array($device['device_id']));
+$status        = dbFetchCell("select count(*) from sensors WHERE sensor_class='status' AND device_id = ?", array($device['device_id']));
 
 unset($datas);
 $datas[] = 'overview';
@@ -28,6 +29,7 @@ if ($freqs) { $datas[] = 'frequency'; }
 if ($current) { $datas[] = 'current'; }
 if ($power) { $datas[] = 'power'; }
 if ($dBm) { $datas[] = 'dbm'; }
+if ($status) { $datas[] = 'status'; }
 
 $type_text['overview'] = "Overview";
 $type_text['temperature'] = "Temperature";
@@ -42,6 +44,7 @@ $type_text['frequency'] = "Frequency";
 $type_text['current'] = "Current";
 $type_text['power'] = "Power";
 $type_text['dbm'] = "dBm";
+$type_text['status'] = "Status";
 
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],
@@ -65,7 +68,7 @@ if (is_file("pages/device/health/".mres($vars['metric']).".inc.php"))
    include("pages/device/health/".mres($vars['metric']).".inc.php");
 } else {
 
-  echo('<table class="table table-condensed table-striped table-hover">');
+  echo('<table class="table table-condensed table-striped table-hover table-bordered">');
 
   foreach ($datas as $type)
   {

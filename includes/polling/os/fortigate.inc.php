@@ -23,7 +23,7 @@ if (is_numeric($sessions))
 {
   if (!is_file($sessrrd))
   {
-    rrdtool_create($sessrrd," --step 300 DS:sessions:GAUGE:600:0:3000000 ".$config['rrd_rra']);
+    rrdtool_create($sessrrd,"  DS:sessions:GAUGE:600:0:3000000 ");
   }
   print "Sessions: $sessions\n";
   rrdtool_update($sessrrd,"N:".$sessions);
@@ -37,7 +37,7 @@ if (is_numeric($cpu_usage))
 {
   if (!is_file($cpurrd))
   {
-    rrdtool_create($cpurrd," --step 300 DS:LOAD:GAUGE:600:-1:100 ".$config['rrd_rra']);
+    rrdtool_create($cpurrd,"  DS:LOAD:GAUGE:600:-1:100 ");
   }
   echo("CPU: $cpu_usage%\n");
   rrdtool_update($cpurrd, " N:$cpu_usage");

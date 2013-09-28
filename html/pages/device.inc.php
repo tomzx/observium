@@ -131,7 +131,7 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Print the munin tab if there are matchng entries in the munin_plugins table
     if (dbFetchCell("SELECT COUNT(mplug_id) FROM munin_plugins WHERE device_id = '" . $device['device_id'] . "'") > '0')
     {
-      $navbar['options']['graphs'] = array('text' => 'Graphs', 'icon' => 'oicon-chart-up');
+      $navbar['options']['munin'] = array('text' => 'Munin', 'icon' => 'oicon-chart-up');
     }
 
     // Print the port tab if there are matching entries in the ports table
@@ -387,6 +387,9 @@ foreach ($navbar['options'] as $option => $array)
   if($vars['tab'] == $option) { $navbar['options'][$option]['class'] .= " active"; }
   $navbar['options'][$option]['url'] = generate_device_url($device, array('tab'=>$option));
 }
+
+  if($vars['tab'] == 'port') { $navbar['options']['ports']['class'] .= " active"; }
+
 
 #print_tabbar($navbar);
 

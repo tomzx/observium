@@ -14,8 +14,8 @@ if ($config['enable_printers'])
 
     if (!is_file($tonerrrd))
     {
-      rrdtool_create($tonerrrd,"--step 300 \
-      DS:toner:GAUGE:600:0:20000 ".$config['rrd_rra']);
+      rrdtool_create($tonerrrd," \
+      DS:toner:GAUGE:600:0:20000 ");
     }
 
     echo($tonerperc . " %\n");
@@ -45,8 +45,8 @@ if ($config['enable_printers'])
 
       if (!is_file($pagecountrrd))
       {
-        rrdtool_create($pagecountrrd,"--step 300 \
-        DS:pagecount:GAUGE:600:0:U ".$config['rrd_rra']);
+        rrdtool_create($pagecountrrd," \
+        DS:pagecount:GAUGE:600:0:U ");
       }
 
       set_dev_attrib($device, "pagecounter", $pages);
@@ -67,8 +67,8 @@ if ($config['enable_printers'])
 
       if (!is_file($drumrrd))
       {
-        rrdtool_create($drumrrd,"--step 300 \
-        DS:drum:GAUGE:600:0:100 ".$config['rrd_rra']);
+        rrdtool_create($drumrrd," \
+        DS:drum:GAUGE:600:0:100 ");
       }
 
       set_dev_attrib($device, "drum", $level);
@@ -98,8 +98,8 @@ if ($config['enable_printers'])
 
         if (!is_file($drumrrd))
         {
-          rrdtool_create($drumrrd,"--step 300 \
-          DS:drum:GAUGE:600:0:100 ".$config['rrd_rra']);
+          rrdtool_create($drumrrd," \
+          DS:drum:GAUGE:600:0:100 ");
         }
 
         set_dev_attrib($device, "drum-" . $letter, $level);
@@ -129,8 +129,8 @@ if ($config['enable_printers'])
 
         if (!is_file($rrd))
         {
-          rrdtool_create($rrd,"--step 300 \
-          DS:level:GAUGE:600:0:100 ".$config['rrd_rra']);
+          rrdtool_create($rrd," \
+          DS:level:GAUGE:600:0:100 ");
         }
 
         set_dev_attrib($device, $value, $level);

@@ -16,7 +16,7 @@ if (is_numeric($a_val))
 {
   if (!is_file($a_rrd))
   {
-    rrdtool_create($a_rrd," --step 300 DS:DEPTH:ABSOLUTE:600:0:U ".$config['rrd_rra']);
+    rrdtool_create($a_rrd,"  DS:DEPTH:ABSOLUTE:600:0:U ");
   }
   echo("Work Queue: $a_val\n");
   rrdtool_update($a_rrd, " N:$a_val");

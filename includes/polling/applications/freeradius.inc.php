@@ -42,7 +42,7 @@ if (!empty($agent_data['app']['freeradius']))
 
   if (!is_file($freeradius_rrd))
   {
-    rrdtool_create($freeradius_rrd, "--step 300 \
+    rrdtool_create($freeradius_rrd, " \
         DS:AccessAccepts:COUNTER:600:0:125000000000 \
         DS:AccessChallenges:COUNTER:600:0:125000000000 \
         DS:AccessRejects:COUNTER:600:0:125000000000 \
@@ -59,7 +59,7 @@ if (!empty($agent_data['app']['freeradius']))
         DS:AuthInvalidReqs:COUNTER:600:0:125000000000 \
         DS:AuthMalformedReqs:COUNTER:600:0:125000000000 \
         DS:AuthResponses:COUNTER:600:0:125000000000 \
-        DS:AuthUnknownTypes:COUNTER:600:0:125000000000 ".$config['rrd_rra']);
+        DS:AuthUnknownTypes:COUNTER:600:0:125000000000 ");
   }
 
   rrdtool_update($freeradius_rrd, "N:" . implode(':', $values));

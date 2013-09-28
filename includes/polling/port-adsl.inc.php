@@ -47,7 +47,6 @@ if (isset($port_stats[$port['ifIndex']]['adslLineCoding']))
 
   $rrdfile = get_port_rrdfilename($device, $port, "adsl");
 
-  $rrd_create  = " --step 300";
   $rrd_create .= " DS:AtucCurrSnrMgn:GAUGE:600:0:635";
   $rrd_create .= " DS:AtucCurrAtn:GAUGE:600:0:635";
   $rrd_create .= " DS:AtucCurrOutputPwr:GAUGE:600:0:635";
@@ -71,7 +70,6 @@ if (isset($port_stats[$port['ifIndex']]['adslLineCoding']))
   $rrd_create .= " DS:AtucChanUncorrectBl:COUNTER:600:U:100000000000";
   $rrd_create .= " DS:AturChanCorrectedBl:COUNTER:600:U:100000000000";
   $rrd_create .= " DS:AturChanUncorrectBl:COUNTER:600:U:100000000000";
-  $rrd_create .= $config['rrd_rra'];
 
   $adsl_oids = array('AtucCurrSnrMgn','AtucCurrAtn','AtucCurrOutputPwr','AtucCurrAttainableRate','AtucChanCurrTxRate','AturCurrSnrMgn','AturCurrAtn','AturCurrOutputPwr','AturCurrAttainableRate','AturChanCurrTxRate','AtucPerfLofs','AtucPerfLoss','AtucPerfLprs','AtucPerfESs','AtucPerfInits','AturPerfLofs','AturPerfLoss','AturPerfLprs','AturPerfESs','AtucChanCorrectedBlks','AtucChanUncorrectBlks','AturChanCorrectedBlks','AturChanUncorrectBlks');
 

@@ -11,7 +11,7 @@ $graph_types = array("bits"   => "Bits",
                      "reqs"   => "Requests",
                      "hitmiss" => "Hit/Miss");
 
-echo("<table class='table table-striped table-condensed table-bordered' style=\"margin-top: 10px;\">");
+echo('<table class="table table-striped table-condensed table-bordered" style="margin-top: 10px;">');
 echo("  <thead>");
 echo("    <tr>");
 echo("      <th>vServer</th>");
@@ -35,7 +35,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   }
 
   echo("<tr>");
-  echo('<td class=object-name><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_label'] . '</a></td>');
+  echo('<td class="entity-name"><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_label'] . '</a></td>');
   echo("<td>" . implode($vsvr['addrs'], "<br />") . "</td>");
   echo('<td>'.$vsvr['vsvr_type'].'<br />'.$vsvr['vsvr_entitytype'].'</td>');
   echo("<td><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span><br />".$vsvr['num_services']." service(s)</td>");
@@ -48,7 +48,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
   if (count($svcs))
   {
     echo('<tr><td colspan="5">');
-    echo("<table class=\"table table-striped table-condensed table-bordered\" style=\"margin-top: 10px;\">");
+    echo('<table class="table table-striped table-condensed table-bordered" style="margin-top: 10px;">');
     echo("  <thead>");
     echo("    <th>Service</th>");
     echo("    <th>Address</th>");
@@ -60,7 +60,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
     {
       if ($svc['svc_state'] == "up") { $svc_class="green"; $svc_row=""; } else { $svc_class="red"; $svc_row = "error"; }
       echo('<tr class="'.$svc_row.'">');
-      echo('<td class=object-name><a href="'.generate_url($vars, array('type' => 'netscaler_services', 'vsvr' => NULL, 'svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_label'] . '</a></td>');
+      echo('<td class="entity-name"><a href="'.generate_url($vars, array('type' => 'netscaler_services', 'vsvr' => NULL, 'svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_label'] . '</a></td>');
       echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
       echo("<td width=100><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
       echo("<td width=150>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");
@@ -81,7 +81,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? A
     $graph_array['id']     = $vsvr['vsvr_id'];
     $graph_array['type']   = $graph_type;
 
-    echo('<h3>'.$graph_text.'</h3>');
+    echo('<h4>'.$graph_text.'</h4>');
 
     include("includes/print-graphrow.inc.php");
 
@@ -145,7 +145,7 @@ print_navbar($navbar); unset($navbar);
 
 if($vars['view'] == "graphs" || $vars['view'] == "services") { $table_class="table-striped-two"; } else { $table_class="table-striped"; }
 
-echo('<table class="table table-striped table-condensed" style="margin-top: 10px;">');
+echo('<table class="table table-striped table-condensed table-bordered" style="margin-top: 10px;">');
 echo('  <thead>');
 echo('    <tr>');
 echo('      <th>vServer</th>');
@@ -169,7 +169,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
   }
 
   echo("<tr>");
-  echo('<td class=object-name><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_label'] . '</a></td>');
+  echo('<td class="entity-name"><a href="'.generate_url($vars, array('vsvr' => $vsvr['vsvr_id'], 'view' => NULL, 'graph' => NULL)).'">' . $vsvr['vsvr_label'] . '</a></td>');
   echo("<td>" . implode($vsvr['addrs'], "<br />") . "</td>");
   echo('<td>'.$vsvr['vsvr_type'].'<br />'.$vsvr['vsvr_entitytype'].'</td>');
   echo("<td><span class='".$vsvr_class."'>" . $vsvr['vsvr_state'] . "</span><br />".$vsvr['num_services']." service(s)</td>");
@@ -182,7 +182,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
    echo('<tr><td colspan="5">');
    if (count($svcs))
    {
-    echo('<table class="table table-striped table-condensed">');
+    echo('<table class="table table-striped table-condensed table-bordered">');
     echo("  <thead>");
     echo("    <th>Service</th>");
     echo("    <th>Address</th>");
@@ -195,7 +195,7 @@ foreach (dbFetchRows("SELECT * FROM `netscaler_vservers` WHERE `device_id` = ? O
     {
       if ($svc['svc_state'] == "up") { $svc_class="green"; unset($svc_row);} else { $svc_class="red"; $svc_row = "error"; }
       echo('<tr class="'.$svc_row.'">');
-      echo('<td class="object-name"><a href="'.generate_url($vars, array('svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_label'] . '</a></td>');
+      echo('<td class="entity-name"><a href="'.generate_url($vars, array('type' => 'netscaler_services', 'svc' => $svc['svc_id'], 'view' => NULL, 'graph' => NULL)).'">' . $svc['svc_label'] . '</a></td>');
       echo("<td width=320>" . $svc['svc_ip'] . ":" . $svc['svc_port'] . "</a></td>");
       echo("<td width=100><span class='".$svc_class."'>" . $svc['svc_state'] . "</span></td>");
       echo("<td width=150>" . format_si($svc['svc_bps_in']*8) . "bps</a></td>");

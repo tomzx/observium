@@ -4,7 +4,8 @@
 
 if ($device['os'] == "junose")
 {
-  echo("JunOSe: ");
+  echo(" Juniper-System-MIB ");
+
   $oids = snmpwalk_cache_multi_oid($device, "juniSystemTempValue", array(), "Juniper-System-MIB", mib_dirs('junose'));
   if (is_array($oids))
   {
@@ -25,4 +26,4 @@ if ($device['os'] == "junose")
   }
 }
 
-?>
+// EOF
