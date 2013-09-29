@@ -30,7 +30,6 @@ if($_POST['toggle_discovery'] && isset($config['discovery_modules'][$_POST['togg
 ?>
 
 <div class="row">
-    <div class="row">
       <div class="col-md-6">
 
 <fieldset>
@@ -135,7 +134,6 @@ echo('</table>
 
 </div>
     </div>
-  </div>
 </div>');
 
 ?>
