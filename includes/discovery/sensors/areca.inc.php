@@ -21,7 +21,7 @@ if ($device['os'] == "areca")
       $oid  = "1.3.6.1.4.1.18928.1.2.2.1.9.1.3." . $index;
       $current = snmp_get($device, $oid, "-Oqv", "");
 
-      discover_sensor($valid['sensor'], 'fanspeed', $device, $oid, $index, $type, trim($descr,'"'), '1', '1', NULL, NULL, NULL, NULL, $current);
+      discover_sensor($valid['sensor'], 'fanspeed', $device, $oid, $index, $type, trim($descr,'"'), 1, 1, NULL, NULL, NULL, NULL, $current);
     }
   }
 
@@ -42,7 +42,7 @@ if ($device['os'] == "areca")
       $descr = "Hard disk $temperature_id";
       if ($temperature != -128) # -128 = not measured/present
       {
-        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, zeropad($temperature_id), $type, $descr, '1', '1', NULL, NULL, NULL, NULL, $temperature);
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, zeropad($temperature_id), $type, $descr, 1, 1, NULL, NULL, NULL, NULL, $temperature);
       }
     }
   }
@@ -62,7 +62,7 @@ if ($device['os'] == "areca")
       $oid  = "1.3.6.1.4.1.18928.1.2.2.1.10.1.3." . $index;
       $current = snmp_get($device, $oid, "-Oqv", "");
 
-      discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, $type, trim($descr,'"'), '1', '1', NULL, NULL, NULL, NULL, $current);
+      discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, $type, trim($descr,'"'), 1, 1, NULL, NULL, NULL, NULL, $current);
     }
   }
 
@@ -82,7 +82,7 @@ if ($device['os'] == "areca")
       $current = snmp_get($device, $oid, "-Oqv", "") / $divisor;
       if (trim($descr,'"') != 'Battery Status') # Battery Status is charge percentage, or 255 when no BBU
       {
-        discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, trim($descr,'"'), $divisor, '1', NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, $type, trim($descr,'"'), $divisor, 1, NULL, NULL, NULL, NULL, $current);
       }
     }
   }

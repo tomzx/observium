@@ -34,7 +34,7 @@ if ($device['os'] == "equallogic" && (isset($eqlgrpmemid)))
         if ($entry['eqlMemberHealthDetailsFanValue'] <> 0)
           {
           discover_sensor($valid['sensor'], 'fanspeed', $device, $entry['oid'], $numindex, 'equallogic',
-            $entry['eqlMemberHealthDetailsFanName'], '1', '1',
+            $entry['eqlMemberHealthDetailsFanName'], 1, 1,
             $entry['eqlMemberHealthDetailsFanLowCriticalThreshold'],
             $entry['eqlMemberHealthDetailsFanLowWarningThreshold'],
             $entry['eqlMemberHealthDetailsFanHighCriticalThreshold'],
@@ -82,7 +82,7 @@ if ($device['os'] == "equallogic" && (isset($eqlgrpmemid)))
       if ($entry['eqlMemberHealthDetailsTemperatureValue'] <> 0)
         {
         discover_sensor($valid['sensor'], 'temperature', $device, $entry['oid'], $numindex, 'equallogic',
-          $entry['eqlMemberHealthDetailsTemperatureName'], '1', '1', 
+          $entry['eqlMemberHealthDetailsTemperatureName'], 1, 1, 
           $entry['eqlMemberHealthDetailsTemperatureLowCriticalThreshold'], 
           $entry['eqlMemberHealthDetailsTemperatureLowWarningThreshold'], 
           $entry['eqlMemberHealthDetailsTemperatureHighCriticalThreshold'], 

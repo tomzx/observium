@@ -1,5 +1,7 @@
 <?php
 
+# FIXME could do with a rewrite perhaps, with MIB and walk
+
 if ($device['os'] == "nos" )
 {
   echo("nos ");
@@ -37,7 +39,7 @@ if ($device['os'] == "nos" )
           $sensortype = 'temperature';
         }
 
-        discover_sensor($valid['sensor'], $sensortype, $device, $sensor_oid, $oid, '', trim($descr), '1', '1', NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], $sensortype, $device, $sensor_oid, $oid, '', trim($descr), 1, 1, NULL, NULL, NULL, NULL, $current);
       }
     }
   }

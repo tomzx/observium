@@ -14,7 +14,7 @@ if ($device['os'] == "asyncos")
       $entry['oid']     = ".1.3.6.1.4.1.15497.1.1.1.10.1.2.".$index;
       $entry['current'] = $entry['fanRPMs'];
 
-      discover_sensor($valid['sensor'], 'fanspeed', $device, $entry['oid'], $index, 'asyncos-fan', $entry['descr'], '1', '1', NULL, NULL, NULL, NULL, $entry['current']);
+      discover_sensor($valid['sensor'], 'fanspeed', $device, $entry['oid'], $index, 'asyncos-fan', $entry['descr'], 1, 1, NULL, NULL, NULL, NULL, $entry['current']);
     }
   }
 
@@ -28,7 +28,7 @@ if ($device['os'] == "asyncos")
       $entry['oid']     = ".1.3.6.1.4.1.15497.1.1.1.9.1.2.".$index;
       $entry['current'] = $entry['degreesCelcius'];
 
-      discover_sensor($valid['sensor'], 'temperature', $device, $entry['oid'], $index, 'asyncos-temp', $entry['descr'], '1', '1', '10', NULL, NULL, '45', $entry['current'],'snmp',NULL,NULL);
+      discover_sensor($valid['sensor'], 'temperature', $device, $entry['oid'], $index, 'asyncos-temp', $entry['descr'], 1, 1, '10', NULL, NULL, '45', $entry['current'],'snmp',NULL,NULL);
     }
   }
 }

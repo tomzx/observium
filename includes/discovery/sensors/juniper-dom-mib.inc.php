@@ -25,7 +25,7 @@ if ($device['os'] == "junos" || $device['os_group'] == "junose")
       $entry['port']    = get_port_by_index_cache($device['device_id'], $index);
 
       if (is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
-      discover_sensor($valid['sensor'], 'current', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], '1000000', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
+      discover_sensor($valid['sensor'], 'current', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], '1000000', 1, $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
     }
   }
 
@@ -55,7 +55,7 @@ if ($device['os'] == "junos" || $device['os_group'] == "junose")
       $entry['port']    = get_port_by_index_cache($device['device_id'], $index);
 
       if (is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
-      discover_sensor($valid['sensor'], 'temperature', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], '1', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
+      discover_sensor($valid['sensor'], 'temperature', $device, $entry['oid'], $index, 'juniper-dom', $entry['descr'], 1, 1, $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
     }
   }
 
@@ -80,7 +80,7 @@ if ($device['os'] == "junos" || $device['os_group'] == "junose")
       $entry['highw'] = $entry['jnxDomCurrentRxLaserPowerHighWarningThreshold']/100;
       $entry['port']  = get_port_by_index_cache($device['device_id'], $index);
       if (is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
-      discover_sensor($valid['sensor'], 'dbm', $device, $entry['oid'], $index, 'juniper-dom-rx', $entry['descr'], '100', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
+      discover_sensor($valid['sensor'], 'dbm', $device, $entry['oid'], $index, 'juniper-dom-rx', $entry['descr'], '100', 1, $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
     }
   }
 
@@ -105,7 +105,7 @@ if ($device['os'] == "junos" || $device['os_group'] == "junose")
       $entry['highw'] = $entry['jnxDomCurrentTxLaserOutputPowerHighWarningThreshold']/100;
       $entry['port']  = get_port_by_index_cache($device['device_id'], $index);
       if (is_array($entry['port'])) { $entry['e_t'] = 'port'; $entry['e_e'] = $entry['port']['port_id']; }
-      discover_sensor($valid['sensor'], 'dbm', $device, $entry['oid'], $index, 'juniper-dom-tx', $entry['descr'], '100', '1', $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
+      discover_sensor($valid['sensor'], 'dbm', $device, $entry['oid'], $index, 'juniper-dom-tx', $entry['descr'], '100', 1, $entry['low'], $entry['loww'], $entry['high'], $entry['highw'], $entry['current'],'snmp',NULL,NULL,$entry['e_t'], $entry['e_e']);
     }
   }
 }

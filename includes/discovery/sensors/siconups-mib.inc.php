@@ -17,7 +17,7 @@ if ($device['os'] == "netvision")
     $warnlimit = NULL;
     $limit = NULL;
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, 'netvision', $descr, '10', '1', $lowlimit, NULL, NULL, NULL, $current);
+    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, 'netvision', $descr, '10', 1, $lowlimit, NULL, NULL, NULL, $current);
   }
 
   for ($i = 1; $i <= 3; $i++)
@@ -31,7 +31,7 @@ if ($device['os'] == "netvision")
     $warnlimit = NULL;
     $limit = NULL;
 
-    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, 'netvision', $descr, '10', '1', $lowlimit, NULL, NULL, NULL, $current);
+    discover_sensor($valid['sensor'], 'current', $device, $current_oid, $index, 'netvision', $descr, '10', 1, $lowlimit, NULL, NULL, NULL, $current);
   }
 
   $freq_oid   = "1.3.6.1.4.1.4555.1.1.1.1.3.2.0";
@@ -39,14 +39,14 @@ if ($device['os'] == "netvision")
   $current    = snmp_get($device, $freq_oid, "-Oqv") / 10;
   $divisor  = 10;
   $index      = '3.2.0';
-  discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, 'netvision', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+  discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, 'netvision', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $current);
 
   $freq_oid   = "1.3.6.1.4.1.4555.1.1.1.1.4.2.0";
   $descr      = "Output";
   $current    = snmp_get($device, $freq_oid, "-Oqv") / 10;
   $divisor  = 10;
   $index      = '4.2.0';
-  discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, 'netvision', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+  discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, 'netvision', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $current);
 
   // Battery voltage
   $volt_oid = "1.3.6.1.4.1.4555.1.1.1.1.2.5.0";
@@ -55,7 +55,7 @@ if ($device['os'] == "netvision")
   $divisor = 10;
   $index = 200;
 
-  discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'netvision', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $volt);
+  discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'netvision', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $volt);
 
   for ($i = 1; $i <= 3 ;$i++)
   {
@@ -65,7 +65,7 @@ if ($device['os'] == "netvision")
     $divisor = 10;
     $index = $i;
 
-    discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'netvision', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $volt);
+    discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'netvision', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $volt);
   }
 
   for ($i = 1; $i <= 3 ;$i++)
@@ -76,7 +76,7 @@ if ($device['os'] == "netvision")
     $divisor = 10;
     $index = 100+$i;
 
-    discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'netvision', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $volt);
+    discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'netvision', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $volt);
   }
 }
 

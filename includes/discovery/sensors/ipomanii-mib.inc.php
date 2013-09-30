@@ -36,7 +36,7 @@ if ($device['os'] == "ipoman")
       $current = $entry['inletStatusCurrent'] / $divisor;
       $high_limit = $entry['inletConfigCurrentHigh'] / 10;
 
-      discover_sensor($valid['sensor'], 'current', $device, $cur_oid, '1.3.1.3.'.$index, 'ipoman', $descr, $divisor, '1', NULL, NULL, NULL, $high_limit, $current);
+      discover_sensor($valid['sensor'], 'current', $device, $cur_oid, '1.3.1.3.'.$index, 'ipoman', $descr, $divisor, 1, NULL, NULL, NULL, $high_limit, $current);
       // FIXME: iPoMan 1201 also says it has 2 inlets, at least until firmware 1.06 - wtf?
     }
   }
@@ -51,7 +51,7 @@ if ($device['os'] == "ipoman")
       $current = $entry['outletStatusCurrent'] / $divisor;
       $high_limit = $entry['outletConfigCurrentHigh'] / 10;
 
-      discover_sensor($valid['sensor'], 'current', $device, $cur_oid, '2.3.1.3.'.$index, 'ipoman', $descr, $divisor, '1', NULL, NULL, NULL, $high_limit, $current);
+      discover_sensor($valid['sensor'], 'current', $device, $cur_oid, '2.3.1.3.'.$index, 'ipoman', $descr, $divisor, 1, NULL, NULL, NULL, $high_limit, $current);
     }
   }
 
@@ -74,7 +74,7 @@ if ($device['os'] == "ipoman")
       $current = $entry['inletStatusFrequency'] / 10;
       $low_limit = $entry['inletConfigFrequencyLow'];
       $high_limit = $entry['inletConfigFrequencyHigh'];
-      discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, 'ipoman', $descr, $divisor, '1', $low_limit, NULL, NULL, $high_limit, $current);
+      discover_sensor($valid['sensor'], 'frequency', $device, $freq_oid, $index, 'ipoman', $descr, $divisor, 1, $low_limit, NULL, NULL, $high_limit, $current);
       // FIXME: iPoMan 1201 also says it has 2 inlets, at least until firmware 1.06 - wtf?
     }
   }
@@ -95,7 +95,7 @@ if ($device['os'] == "ipoman")
       $current_oid = ".1.3.6.1.4.1.2468.1.4.2.1.5.1.1.3.0";
       $descr = trim(str_replace("\"", "", $descr));
 
-      discover_sensor($valid['sensor'], 'humidity', $device, $current_oid, "1", 'ipoman', $descr, '10', '1', $low_limit, NULL, NULL, $high_limit, $current);
+      discover_sensor($valid['sensor'], 'humidity', $device, $current_oid, "1", 'ipoman', $descr, '10', 1, $low_limit, NULL, NULL, $high_limit, $current);
     }
   }
   
@@ -111,7 +111,7 @@ if ($device['os'] == "ipoman")
       $current_oid = ".1.3.6.1.4.1.2468.1.4.2.1.5.1.1.2.0";
       $descr = trim(str_replace("\"", "", $descr));
 
-      discover_sensor($valid['sensor'], 'temperature', $device, $current_oid, "1", 'ipoman', $descr, '10', '1', $low_limit, NULL, NULL, $high_limit, $current);
+      discover_sensor($valid['sensor'], 'temperature', $device, $current_oid, "1", 'ipoman', $descr, '10', 1, $low_limit, NULL, NULL, $high_limit, $current);
     }
   }
 
@@ -135,7 +135,7 @@ if ($device['os'] == "ipoman")
 #      $descr = (trim($cache['ipoman']['in'][$index]['inletConfigDesc'],'"') != '' ? trim($cache['ipoman']['in'][$index]['inletConfigDesc'],'"') : "Inlet $index");
 #      $power = $entry['inletStatusWH'] / $divisor;
 #
-#      discover_sensor($valid['sensor'], 'power', $device, $cur_oid, '1.3.1.3.'.$index, 'ipoman', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $power);
+#      discover_sensor($valid['sensor'], 'power', $device, $cur_oid, '1.3.1.3.'.$index, 'ipoman', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $power);
 #      // FIXME: iPoMan 1201 also says it has 2 inlets, at least until firmware 1.06 - wtf?
 #    }
 #  }
@@ -149,7 +149,7 @@ if ($device['os'] == "ipoman")
       $descr = (trim($cache['ipoman']['out'][$index]['outletConfigDesc'],'"') != '' ? trim($cache['ipoman']['out'][$index]['outletConfigDesc'],'"') : "Output $index");
       $power = $entry['outletStatusWH'] / $divisor;
 
-      discover_sensor($valid['sensor'], 'power', $device, $cur_oid, '2.3.1.3.'.$index, 'ipoman', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $power);
+      discover_sensor($valid['sensor'], 'power', $device, $cur_oid, '2.3.1.3.'.$index, 'ipoman', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $power);
     }
   }
 
@@ -173,7 +173,7 @@ if ($device['os'] == "ipoman")
       $low_limit = $entry['inletConfigVoltageLow'];
       $high_limit = $entry['inletConfigVoltageHigh'];
 
-      discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'ipoman', $descr, $divisor, '1', $low_limit, NULL, NULL, $high_limit, $current);
+      discover_sensor($valid['sensor'], 'voltage', $device, $volt_oid, $index, 'ipoman', $descr, $divisor, 1, $low_limit, NULL, NULL, $high_limit, $current);
       // FIXME: iPoMan 1201 also says it has 2 inlets, at least until firmware 1.06 - wtf?
     }
   }

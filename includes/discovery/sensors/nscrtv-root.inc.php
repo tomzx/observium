@@ -33,7 +33,7 @@ if ($device['os'] == "jdsu_edfa")
         $high_limit = -4.8;  
       }
 
-      discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'jdsu-edfa-power', $descr, $divisor, '1', $low_limit, $low_warn_limit, $high_warn_limit, $high_limit, $current);
+      discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'jdsu-edfa-power', $descr, $divisor, 1, $low_limit, $low_warn_limit, $high_warn_limit, $high_limit, $current);
     }
   }
   
@@ -56,7 +56,7 @@ if ($device['os'] == "jdsu_edfa")
       
       if ($current != 0) {
         $descr = "Pump Bias $index";
-        discover_sensor($valid['sensor'], 'current', $device, $oid, $index, 'jdsu-edfa-pump-bias', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], 'current', $device, $oid, $index, 'jdsu-edfa-pump-bias', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $current);
       }
     }
   }
@@ -79,7 +79,7 @@ if ($device['os'] == "jdsu_edfa")
 
       if ($current != 0) {
         $descr = "Pump TEC $index";
-        discover_sensor($valid['sensor'], 'current', $device, $oid, $index, 'jdsu-edfa-pump-tec', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], 'current', $device, $oid, $index, 'jdsu-edfa-pump-tec', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $current);
       }
     }
   }
@@ -101,7 +101,7 @@ if ($device['os'] == "jdsu_edfa")
 
       if ($current != 0) {
         $descr = "Pump Temperature $index";
-        discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, 'jdsu-edfa-pump-temp', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, 'jdsu-edfa-pump-temp', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $current);
       }
     }
   }

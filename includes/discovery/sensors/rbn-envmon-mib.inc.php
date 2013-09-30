@@ -24,7 +24,7 @@ if ($device['os'] == "seos")
       $oid_value = explode(" ", $descr_value[1]);
       if ($descr != "")
       {
-        discover_sensor($valid['sensor'], 'temperature', $device, $oid_value[0], $index, 'seos', $descr, '1', '1', NULL, NULL, NULL, NULL, $oid_value[1]);
+        discover_sensor($valid['sensor'], 'temperature', $device, $oid_value[0], $index, 'seos', $descr, 1, 1, NULL, NULL, NULL, NULL, $oid_value[1]);
       }
     }
   }
@@ -44,7 +44,7 @@ if ($device['os'] == "seos")
       $high_limit = ($desired * 1.15) / 1000;
       if ($descr != "" and $value)
       {
-        discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'seos', $descr, '1000', '1', $low_limit, NULL, $high_limit, NULL, $value);
+        discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'seos', $descr, '1000', 1, $low_limit, NULL, $high_limit, NULL, $value);
       }
     }
   }

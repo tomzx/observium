@@ -28,7 +28,7 @@ if ($device['os'] == "junos" || $device['os_group'] == "junos")
         $descr = str_replace("sensor", "", $descr);
         $descr = trim($descr);
 
-        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $oid, 'junos', $descr, '1', '1', NULL, NULL, NULL, NULL, $temperature);
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $oid, 'junos', $descr, 1, 1, NULL, NULL, NULL, NULL, $temperature);
       }
     }
   }

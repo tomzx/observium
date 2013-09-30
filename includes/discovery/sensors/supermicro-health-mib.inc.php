@@ -47,7 +47,7 @@ if ($device['os'] == "linux")
 
       if ($monitor === 'true') # Needs === because PHP is an idiot. == will always result in TRUE.
       {
-        discover_sensor($valid['sensor'], $sensortype, $device, $sensor_oid, $index, 'supermicro', $descr, $divisor, '1', $low_limit, NULL, NULL, $limit, $current / $divisor);
+        discover_sensor($valid['sensor'], $sensortype, $device, $sensor_oid, $index, 'supermicro', $descr, $divisor, 1, $low_limit, NULL, NULL, $limit, $current / $divisor);
       }
     }
   }

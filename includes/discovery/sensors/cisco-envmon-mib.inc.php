@@ -20,7 +20,7 @@ if ($device['os_group'] == "cisco")
   foreach ($oids as $index => $entry)
   {
     $oid  = '.1.3.6.1.4.1.9.9.13.1.3.1.3.'.$index;
-    discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, 'cisco-envmon', $entry['ciscoEnvMonTemperatureStatusDescr'], '1', '1',
+    discover_sensor($valid['sensor'], 'temperature', $device, $oid, $index, 'cisco-envmon', $entry['ciscoEnvMonTemperatureStatusDescr'], 1, 1,
                     NULL, NULL, $entry['ciscoEnvMonTemperatureThreshold'], NULL, $entry['ciscoEnvMonTemperatureStatusValue']);
   }
 
@@ -40,7 +40,7 @@ if ($device['os_group'] == "cisco")
   foreach ($oids as $index => $entry)
   {
     $oid  = '.1.3.6.1.4.1.9.9.13.1.2.1.3.'.$index;
-    discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'cisco-envmon', $entry['ciscoEnvMonVoltageStatusDescr'], '1', '1',
+    discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'cisco-envmon', $entry['ciscoEnvMonVoltageStatusDescr'], 1, 1,
                     $entry['ciscoEnvMonVoltageThresholdLow'], NULL, $entry['ciscoEnvMonVoltageThresholdHigh'], NULL, $entry['ciscoEnvMonVoltageStatusValue']);
   }
 }

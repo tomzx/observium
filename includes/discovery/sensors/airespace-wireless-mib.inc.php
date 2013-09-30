@@ -15,7 +15,7 @@ if ($device['os'] == "wlc")
     {
       $descr = "Unit Temperature ". $index;
       echo " $descr, ";
-      discover_sensor($valid['sensor'], 'temperature', $device, $cur_oid.$index, $index, 'wlc', $descr, "1", '1', NULL, $low[$index]['bsnTemperatureAlarmLowLimit'], $high[$index]['bsnTemperatureAlarmHighLimit'], NULL, $temp[$index]['bsnSensorTemperature'], "snmp",$index);
+      discover_sensor($valid['sensor'], 'temperature', $device, $cur_oid.$index, $index, 'wlc', $descr, "1", 1, NULL, $low[$index]['bsnTemperatureAlarmLowLimit'], $high[$index]['bsnTemperatureAlarmHighLimit'], NULL, $temp[$index]['bsnSensorTemperature'], "snmp",$index);
     }
   }
 }

@@ -77,7 +77,7 @@ if (strstr($device['hardware'], "Dell"))
         $lowlimit     = snmp_get($device, $lowlimit_oid, "-Oqv", "MIB-Dell-10892");
         if (empty($lowlimit)) { $lowlimit = null; }
 
-        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'dell', $descr, '10', '1', $lowlimit/10, $lowwarnlimit/10, $warnlimit/10, $limit/10, $temperature/10);
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'dell', $descr, '10', 1, $lowlimit/10, $lowwarnlimit/10, $warnlimit/10, $limit/10, $temperature/10);
       }
     }
   }
@@ -119,7 +119,7 @@ if (strstr($device['hardware'], "Dell"))
           $lowlimit     = snmp_get($device, $lowlimit_oid, "-Oqv", "MIB-Dell-10892");
           if (empty($lowlimit)) { $lowlimit = null; }
 
-          discover_sensor($valid['sensor'], 'fanspeed', $device, $fanspeed_oid, $fanspeed_id, 'dell', $descr, '1', '1', $lowlimit, $lowwarnlimit, $warnlimit, $limit, $fanspeed);
+          discover_sensor($valid['sensor'], 'fanspeed', $device, $fanspeed_oid, $fanspeed_id, 'dell', $descr, 1, 1, $lowlimit, $lowwarnlimit, $warnlimit, $limit, $fanspeed);
         }
       }
     }

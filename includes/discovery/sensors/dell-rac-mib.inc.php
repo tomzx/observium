@@ -76,7 +76,7 @@ if ($device['os'] == 'drac')
   
     if ($dsens['desc'] != "" && is_numeric($temp) && $temp > "0")
     {
-      discover_sensor($valid['sensor'], 'temperature', $device, $dsens['oid'], $index, 'dell-rac', $dsens['desc'], '1', '1', NULL, NULL, NULL, NULL, $temp);
+      discover_sensor($valid['sensor'], 'temperature', $device, $dsens['oid'], $index, 'dell-rac', $dsens['desc'], 1, 1, NULL, NULL, NULL, NULL, $temp);
     }
   }
 }

@@ -23,7 +23,7 @@ if ($device['os'] == "linux")
       $descr = trim($descr);
       if ($temperature != "0" && $temperature <= "1000")
       {
-        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'lmsensors', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $temperature);
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'lmsensors', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $temperature);
       }
     }
   }
@@ -44,7 +44,7 @@ if ($device['os'] == "linux")
       $descr = trim(str_ireplace("fan-", "", $descr));
       if ($current > '0')
       {
-        discover_sensor($valid['sensor'], 'fanspeed', $device, $oid, $index, 'lmsensors', $descr, '1', '1', NULL, NULL, NULL, NULL, $current);
+        discover_sensor($valid['sensor'], 'fanspeed', $device, $oid, $index, 'lmsensors', $descr, 1, 1, NULL, NULL, NULL, NULL, $current);
       }
     }
   }
@@ -64,7 +64,7 @@ if ($device['os'] == "linux")
       $oid  = "1.3.6.1.4.1.2021.13.16.4.1.3." . $index;
       $current = snmp_get($device, $oid, "-Oqv", "LM-SENSORS-MIB") / $divisor;
 
-      discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'lmsensors', $descr, $divisor, '1', NULL, NULL, NULL, NULL, $current);
+      discover_sensor($valid['sensor'], 'voltage', $device, $oid, $index, 'lmsensors', $descr, $divisor, 1, NULL, NULL, NULL, NULL, $current);
     }
   }
 }

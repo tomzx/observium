@@ -35,7 +35,7 @@ if ($device['os'] == "deltaups")
     // Prevent NULL returned values from being added as sensors
     if ($value != "NULL")
     {
-      discover_sensor($valid['sensor'], $eachValue['class'], $device, $eachValue['OID'], $index, "DeltaUPS", $eachValue['descr'], $eachValue['divisor'], '1', NULL, NULL, NULL, NULL, $value);
+      discover_sensor($valid['sensor'], $eachValue['class'], $device, $eachValue['OID'], $index, "DeltaUPS", $eachValue['descr'], $eachValue['divisor'], 1, NULL, NULL, NULL, NULL, $value);
     }
   }
 }

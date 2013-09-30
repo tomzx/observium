@@ -32,7 +32,7 @@ if ($device['os'] == 'sensorprobe' || $device['os'] == 'minkelsrms')
         $lowlimit = snmp_get($device, $lowlimit_oid, "-Oqv", "");
         $warnlowlimit = snmp_get($device, $warnlowlimit_oid, "-Oqv", "");
 
-        discover_sensor($valid['sensor'], 'humidity', $device, $oid, $index, 'akcp', $descr, '1', '1', $lowlimit, $warnlowlimit, $limit, $warnlimit, $humidity);
+        discover_sensor($valid['sensor'], 'humidity', $device, $oid, $index, 'akcp', $descr, 1, 1, $lowlimit, $warnlowlimit, $limit, $warnlimit, $humidity);
       }
     }
   }
@@ -64,7 +64,7 @@ if ($device['os'] == 'sensorprobe' || $device['os'] == 'minkelsrms')
         $limit        = snmp_get($device, $limit_oid, "-Oqv", "");
         $lowlimit     = snmp_get($device, $lowlimit_oid, "-Oqv", "");
 
-        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'akcp', $descr, '1', '1', $lowlimit, $low_warn_limit, $warnlimit, $limit, $temperature);
+        discover_sensor($valid['sensor'], 'temperature', $device, $temperature_oid, $temperature_id, 'akcp', $descr, 1, 1, $lowlimit, $low_warn_limit, $warnlimit, $limit, $temperature);
       }
     }
   }
