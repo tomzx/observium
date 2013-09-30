@@ -364,11 +364,11 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
 			if (scrollTop >= subnavTop && !isFixed) {
 				isFixed = 1;
 				$nav.addClass('subnav-fixed');
-				$body.css('margin-top', marginTop + subnavHeight + 'px');
+//				$body.css('margin-top', marginTop + subnavHeight + 'px');
 			} else if (scrollTop <= subnavTop && isFixed) {
 				isFixed = 0;
 				$nav.removeClass('subnav-fixed');
-				$body.css('margin-top', marginTop + 'px');
+//				$body.css('margin-top', marginTop + 'px');
 			}
 		}
 
