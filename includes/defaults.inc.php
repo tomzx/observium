@@ -102,7 +102,7 @@ $config['login_remember_me'] =  TRUE;    // Enable or disable the remember me fe
 $config['web_mouseover']    = TRUE;      // Enable or disable mouseover popups.
 $config['web_show_disabled'] = TRUE;     // Show or not disabled devices on major pages.
 
-$config['old_graphs']              = 1;   // RRDfiles from before the great rra reform. This is default for a while.
+$config['old_graphs']              = 0;   // RRDfiles from before the great rra reform. Set this to 1 if you have old RRDs.
 
 $config['int_customers']           = 1;  // Enable Customer Port Parsing
 $config['int_customers_graphs' ]   = 1;  // Enable Customer Port List Graphs
