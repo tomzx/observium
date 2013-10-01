@@ -158,13 +158,14 @@ if (!$auth)
   print_search_simple($search, '', 'update');
   unset($search);
 
-/// Run the graph to get data array out of it
+// Run the graph to get data array out of it
 
 $vars = array_merge($vars, $graph_array);
 $vars['command_only'] = 1;
 include("includes/graphs/graph.inc.php");
+unset($vars['command_only']);
 
-/// Print options navbar
+// Print options navbar
 
 $navbar = array();
 $navbar['brand'] = "Options";
