@@ -13,7 +13,6 @@ if ($device['os'] == 'ies')
   {
     foreach ($oids as $index => $entry)
     {
-      $entPhysicalIndex = $index;
       $descr = trim(snmp_get($device, "accessSwitchSysTempDescr.".$index, "-Oqv", "ZYXEL-AS-MIB"),'"');
       $oid = ".1.3.6.1.4.1.890.1.5.1.1.6.1.2.".$index;
       $current = $entry['accessSwitchSysTempCurValue'];

@@ -1,12 +1,10 @@
 <?php
 
-/* Detection for JDSU OEM Erbium Dotted Fibre Aplifiers */
+/* Detection for JDSU OEM Erbium Dotted Fibre Amplifiers */
 
 if ($device['os'] == "jdsu_edfa")
 {
-
   // Voltage Sensors
-
   $oids = snmp_walk($device, "oaDCPowerName", "-OsqnU", "NSCRTV-ROOT");
   if ($debug) { echo($oids."\n"); }
   $divisor = 10;
@@ -38,7 +36,6 @@ if ($device['os'] == "jdsu_edfa")
   }
   
   // Pump Sensors
-  
   $oids = snmp_walk($device, "oaPumpBIAS", "-OsqnU", "NSCRTV-ROOT");
   if ($debug) { echo($oids."\n"); }
   $divisor = 1000;
@@ -106,3 +103,5 @@ if ($device['os'] == "jdsu_edfa")
     }
   }
 }
+
+// EOF

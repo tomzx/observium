@@ -2,7 +2,6 @@
 
 // Mikrotik RouterOS
 
-
 if ($device['os'] == "routeros")
 {
   echo(" MIKROTIK-MIB ");
@@ -35,4 +34,5 @@ if ($device['os'] == "routeros")
     }
   }
 }
-?>
+
+// EOF
