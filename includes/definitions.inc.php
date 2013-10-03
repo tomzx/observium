@@ -112,7 +112,7 @@ for ($i = 8; $i < 16; $i++)
 
 $config['nicecase'] = array(
     "bgp_peer" => "BGP Peer",
-	"cbgp_peer" => "BGP Peer (AFI/SAFI)",
+    "cbgp_peer" => "BGP Peer (AFI/SAFI)",
     "netscaler_vsvr" => "Netscaler vServer",
     "netscaler_svc" => "Netscaler Service",
     "mempool" => "Memory",
@@ -133,10 +133,10 @@ $config['nicecase'] = array(
     "powerdns-recursor" => "PowerDNS Recursor",
     "freeradius" => "FreeRADIUS",
     "postfix_mailgraph" => "Postfix Mailgraph",
-	"ge" => "Greater or equal", 
-	"le" => "Less or equal", 
-	"notequals" => "Doesn't equal",
-    "notmatch"  => "Doesn't match",
+    "ge" => "Greater or equal", 
+    "le" => "Less or equal", 
+    "notequals" => "Doesn't equal",
+    "notmatch" => "Doesn't match",
     "" => "");
 
 // FIXME - different icons for power/volt/current
@@ -149,9 +149,10 @@ $config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Wa
 $config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'oicon-voltage');
 $config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'oicon-thermometer-high');
 $config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'oicon-arrow-incident-red');
+$config['sensor_types']['airflow']     = array( 'symbol' => 'CFM', 'text' => 'Airflow', 'icon' => 'oicon-weather-wind');
 
-
-$config['routing_types']['ospf']       = array( 'text' => 'OSPF');
+$config['routing_types']['isis']      = array( 'text' => 'ISIS');
+$config['routing_types']['ospf']      = array( 'text' => 'OSPF');
 $config['routing_types']['cef']       = array( 'text' => 'CEF');
 $config['routing_types']['bgp']       = array( 'text' => 'BGP');
 $config['routing_types']['vrf']       = array( 'text' => 'VRFs');
@@ -173,9 +174,8 @@ if (!isset($config['html_dir'])) { $config['html_dir'] = $config['install_dir'] 
 if (!isset($config['rrd_dir']))  { $config['rrd_dir']  = $config['install_dir'] . '/rrd'; }
 if (!isset($config['log_file'])) { $config['log_file'] = $config['install_dir'] . '/observium.log'; }
 if (!isset($config['temp_dir'])) { $config['temp_dir'] = '/tmp'; }
-/// FIXME. I really do not understand why a separate option $config['mibdir']. -- mike
-if (!isset($config['mibdir']))   { $config['mibdir']   = $config['install_dir'] . '/mibs'; }
-$config['mib_dir'] = $config['mibdir'];
+if (!isset($config['mib_dir']))  { $config['mib_dir']   = $config['install_dir'] . '/mibs'; }
+$config['mibdir'] = $config['mib_dir']; // Temporary fallback variable, because some old code seems to still use it, should be mib_dir!
 
 if (isset($config['cdp_autocreate']))
 {
@@ -238,6 +238,7 @@ $config['ipmi_unit']['Volts']     = 'voltage';
 $config['ipmi_unit']['degrees C'] = 'temperature';
 $config['ipmi_unit']['RPM']       = 'fanspeed';
 $config['ipmi_unit']['Watts']     = 'power';
+$config['ipmi_unit']['CFM']       = 'airflow';
 $config['ipmi_unit']['discrete']  = '';
 
 // End includes/definitions.inc.php

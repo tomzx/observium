@@ -36,6 +36,8 @@ if ($device['os'] == 'drac')
       $oid = ".1.3.6.1.4.1.674.10892.2.4.2.1.5.".$index;
       $low = NULL;
       $high = NULL;
+
+      ## FIXME this type of inventing/calculating should be done in the Observium voltage function instead!
       if ($entry['drsPSUVoltsReading'] > 360 and $entry['drsPSUVoltsReading'] < 440)
       {
         // european 400V +/- 10%
@@ -59,7 +61,7 @@ if ($device['os'] == 'drac')
     }
   }
 
-  // FIXME: temperatures could be rewritten to walk tables, like the other sensors above, perhaps?
+  // FIXME: temperatures could be rewritten to walk tables, like the other sensors above, perhaps? Unless these are all of them...
   $drac = array();
   $drac['front']['desc'] = "Chassis Front Panel Temperature";
   $drac['front']['oid'] = ".1.3.6.1.4.1.674.10892.2.3.1.10.0";

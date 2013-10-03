@@ -333,7 +333,7 @@ if ($menu_sensors)
   echo('<li class="divider"></li>');
 }
 
-foreach (array('fanspeed','humidity','temperature') as $item)
+foreach (array('fanspeed','humidity','temperature','airflow') as $item)
 {
   if ($menu_sensors[$item])
   {

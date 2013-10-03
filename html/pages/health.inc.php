@@ -4,6 +4,7 @@ $datas = array('processor','mempool','storage');
 
 if ($toner_exists) $datas[] = 'toner';
 
+// FIXME this should loop an array with sensor types, so new ones get added automatically!
 if ($used_sensors['temperature']) $datas[] = 'temperature';
 if ($used_sensors['humidity']) $datas[] = 'humidity';
 if ($used_sensors['fanspeed']) $datas[] = 'fanspeed';
@@ -13,8 +14,9 @@ if ($used_sensors['current']) $datas[] = 'current';
 if ($used_sensors['power']) $datas[] = 'power';
 if ($used_sensors['dbm']) $datas[] = 'dbm';
 if ($used_sensors['status']) $datas[] = 'status';
+if ($used_sensors['airflow']) $datas[] = 'airflow';
 
-// FIXME generalize -> static-config ?
+// FIXME this should be used from definitions!
 $type_text['overview'] = "Overview";
 $type_text['temperature'] = "Temperature";
 $type_text['humidity'] = "Humidity";
@@ -30,6 +32,7 @@ $type_text['power'] = "Power";
 $type_text['toner'] = "Toner";
 $type_text['dbm'] = "dBm";
 $type_text['status'] = "Status";
+$type_text['airflow'] = "Airflow";
 
 if (!$vars['metric']) { $vars['metric'] = "processor"; }
 if (!$vars['view']) { $vars['view'] = "detail"; }

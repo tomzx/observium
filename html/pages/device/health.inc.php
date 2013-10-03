@@ -12,11 +12,14 @@ $volts        = dbFetchCell("select count(*) from sensors WHERE sensor_class='vo
 $current      = dbFetchCell("select count(*) from sensors WHERE sensor_class='current' AND device_id = ?", array($device['device_id']));
 $freqs        = dbFetchCell("select count(*) from sensors WHERE sensor_class='frequency' AND device_id = ?", array($device['device_id']));
 $power        = dbFetchCell("select count(*) from sensors WHERE sensor_class='power' AND device_id = ?", array($device['device_id']));
-$dBm        = dbFetchCell("select count(*) from sensors WHERE sensor_class='dBm' AND device_id = ?", array($device['device_id']));
-$status        = dbFetchCell("select count(*) from sensors WHERE sensor_class='status' AND device_id = ?", array($device['device_id']));
+$dBm          = dbFetchCell("select count(*) from sensors WHERE sensor_class='dBm' AND device_id = ?", array($device['device_id']));
+$airflow      = dbFetchCell("select count(*) from sensors WHERE sensor_class='airflow' AND device_id = ?", array($device['device_id']));
+$status       = dbFetchCell("select count(*) from sensors WHERE sensor_class='status' AND device_id = ?", array($device['device_id']));
 
 unset($datas);
 $datas[] = 'overview';
+
+# FIXME could come from somewhere else?
 if ($processor) { $datas[] = 'processor'; }
 if ($mempools) { $datas[] = 'mempool'; }
 if ($storage) { $datas[] = 'storage'; }
@@ -30,7 +33,9 @@ if ($current) { $datas[] = 'current'; }
 if ($power) { $datas[] = 'power'; }
 if ($dBm) { $datas[] = 'dbm'; }
 if ($status) { $datas[] = 'status'; }
+if ($airflow) { $datas[] = 'airflow'; }
 
+# FIXME this should definitely come from definitions
 $type_text['overview'] = "Overview";
 $type_text['temperature'] = "Temperature";
 $type_text['humidity'] = "Humidity";
@@ -45,6 +50,7 @@ $type_text['current'] = "Current";
 $type_text['power'] = "Power";
 $type_text['dbm'] = "dBm";
 $type_text['status'] = "Status";
+$type_text['airflow'] = "Airflow";
 
 $link_array = array('page'    => 'device',
                     'device'  => $device['device_id'],

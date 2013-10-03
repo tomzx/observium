@@ -104,6 +104,7 @@ include("overview/storage.inc.php");
 if (is_array($entity_state['group']['c6kxbar'])) { include("overview/c6kxbar.inc.php"); }
 
 include("overview/toner.inc.php");
+# FIXME this should be an array running a single piece of code with variables depending on sensor type instead of umpteen includes.
 include("overview/sensors/temperatures.inc.php");
 include("overview/sensors/humidity.inc.php");
 include("overview/sensors/fanspeeds.inc.php");
@@ -112,6 +113,7 @@ include("overview/sensors/voltages.inc.php");
 include("overview/sensors/current.inc.php");
 include("overview/sensors/power.inc.php");
 include("overview/sensors/frequencies.inc.php");
+include("overview/sensors/airflow.inc.php");
 include("overview/sensors/status.inc.php");
 
 include("overview/events.inc.php");
