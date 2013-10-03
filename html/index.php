@@ -260,7 +260,7 @@ if ($cachesize < 0) { $cachesize = 0; } // Silly PHP!
         <ul class="nav">
           <li class="divider-vertical" style="margin:0;"></li>
 
-          <li><a href="http://www.observium.org">Observium <?php echo $config['version']; ?></a></li>
+          <li><a href="http://www.observium.org"><?php echo $config['product']; ?> <?php echo $config['version']; ?></a></li>
           <li class="divider-vertical" style="margin:0;"></li>
         </ul>
 

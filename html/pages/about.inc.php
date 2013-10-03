@@ -1,4 +1,4 @@
-<h2>About Observium</h2>
+<h2 style="margin-top:0;">About <?php echo($config['product_long']); ?></h2>
 <div class="row">
   <div class="col-md-6">
 <?php
@@ -16,7 +16,7 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
     <div class="content">
         <table class="table table-striped table-condensed-more">
           <tbody>
-            <tr><td><b>Observium</b></td><td><?php echo($observium_version); ?></td></tr>
+            <tr><td><b><?php echo($config['product']); ?></b></td><td><?php echo($observium_version); ?></td></tr>
             <tr><td><b>Apache</b></td><td><?php echo($apache_version); ?></td></tr>
             <tr><td><b>PHP</b></td><td><?php echo($php_version); ?></td></tr>
             <tr><td><b>MySQL</b></td><td><?php echo($mysql_version); ?></td></tr>
@@ -45,9 +45,9 @@ $rrdtool_version = implode(" ",array_slice(explode(" ",shell_exec($config['rrdto
         <dl class="dl-horizontal" style="margin: 0px 0px 5px 0px;">
           <dt style="text-align: left;"><i class="icon-user"></i> Adam Armstrong</dt><dd>Project Leader</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Tom Laermans</dt><dd>Committer & Developer</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Geert Hauwaerts</dt><dd>Developer</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Mike Stupalov</dt><dd>Committer & Developer</dd>
           <dt style="text-align: left;"><i class="icon-user"></i> Dennis de Houx</dt><dd>Developer</dd>
-          <dt style="text-align: left;"><i class="icon-user"></i> Mike Stupalov</dt><dd>Developer</dd>
+          <dt style="text-align: left;"><i class="icon-user"></i> Geert Hauwaerts</dt><dd>Developer</dd>
         </dl>
     </div>
   </div>
@@ -164,7 +164,7 @@ echo("
     <div class="title"><i class="oicon-notebook"></i> License</div>
     <div class="content">
       <pre>
-<?php include("../LICENSE"); ?>
+        <?php include("../LICENSE"); ?>
       </pre>
     </div>
   </div>

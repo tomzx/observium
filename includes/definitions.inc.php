@@ -160,35 +160,7 @@ $config['routing_types']['vrf']       = array( 'text' => 'VRFs');
 // No changes below this line //
 ////////////////////////////////
 
-$config['version']  = "0.SVN.ERROR";
-
-$svn_new = TRUE;
-if (file_exists($config['install_dir'] . '/.svn/entries'))
-{
-  $svn = File($config['install_dir'] . '/.svn/entries');
-  if ((int)$svn[0] < 12)
-  {
-    // SVN version < 1.7
-    $svn_rev = trim($svn[3]);
-    list($svn_date) = explode("T", trim($svn[9]));
-    $svn_new = FALSE;
-  }
-}
-if ($svn_new)
-{
-  // SVN version >= 1.7
-  $xml = simplexml_load_string(shell_exec($config['svn'] . ' info --xml ' . $config['install_dir']));
-  if ($xml != false)
-  {
-    $svn_rev = $xml->entry->commit->attributes()->revision;
-    $svn_date = $xml->entry->commit->date;
-  }
-}
-if (!empty($svn_rev))
-{
-  list($svn_year, $svn_month, $svn_day) = explode("-", $svn_date);
-  $config['version'] = "0." . ($svn_year-2000) . "." . ($svn_month+0) . "." . $svn_rev;
-}
+include($config['install_dir'].'/includes/definitions/version.inc.php');
 
 if (isset($config['rrdgraph_def_text']))
 {
