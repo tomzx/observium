@@ -1036,6 +1036,15 @@ $config['os'][$os]['icon']              = "akcp";
 $config['os'][$os]['over'][0]['graph']  = "device_temperature";
 $config['os'][$os]['over'][0]['text']   = "temperature";
 
+$os = "roomalert";
+$config['os'][$os]['text']              = "AVTECH RoomAlert";
+$config['os'][$os]['type']              = "environment";
+$config['os'][$os]['icon']              = "avtech";
+$config['os'][$os]['over'][0]['graph']  = "device_temperature";
+$config['os'][$os]['over'][0]['text']   = "temperature";
+$config['os'][$os]['over'][1]['graph']  = "device_humidity";
+$config['os'][$os]['over'][1]['text']   = "humidity";
+
 $os = "minkelsrms";
 $config['os'][$os]['text']              = "Minkels RMS";
 $config['os'][$os]['type']              = "environment";

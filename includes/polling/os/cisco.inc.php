@@ -11,8 +11,6 @@ elseif( false )
   # Other regexp for other type of string
 }
 
-echo("\n".$poll_device['sysDescr']."\n");
-
 $oids = "entPhysicalModelName.1 entPhysicalContainedIn.1 entPhysicalName.1 entPhysicalSoftwareRev.1 entPhysicalModelName.1001 entPhysicalContainedIn.1001 cardDescr.1 cardSlotNumber.1";
 
 $data = snmp_get_multi($device, $oids, "-OQUs", "ENTITY-MIB:OLD-CISCO-CHASSIS-MIB", mib_dirs(array("cisco")));
