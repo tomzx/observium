@@ -133,21 +133,14 @@ foreach (dbFetchRows("SELECT * FROM `ports` WHERE `device_id` = ? ORDER BY `ifIn
 {
   humanize_port($port);
 
-  echo("<tr>");
+  #print_vars($port);
+
+  echo '<tr class="'.$port['row_class'].'">';
   echo("<td align=center>". $port['ifIndex']."</td>");
   echo("<td align=left>".$port['label']."<br />".$port['ifAlias']."</td>");
-
-  $enabled = ($port['ifAdminStatus'] == 'up') ? " class='green'" : "";
-
   echo("<td align=left>".fixiftype($port['ifType']) . "<br />");
 
-  # Mark interfaces which are OperDown (but not AdminDown) yet not ignored or disabled, or up yet ignored or disabled
-  # - as to draw the attention to a possible problem.
-  $isportbad = ($port['ifOperStatus'] != 'up' && $port['ifAdminStatus'] != 'down') ? 1 : 0;
-  $dowecare  = ($port['ignore'] == 0 && $port['disabled'] == 0) ? $isportbad : !$isportbad;
-  $outofsync = $dowecare ? " class='red'" : " class='green'";
-
-  echo("<span $enabled>".$port['admin_status']."</span> / <span name='operstatus_".$port['port_id']."'".$outofsync.">". $port['ifOperStatus']."</span></td>");
+  echo('<span>'.$port['admin_status'].'</span> / <span name="operstatus_'.$port['port_id'].'" class="'.$port['row_class'].'">'. $port['ifOperStatus'].'</span></td>');
 
   echo('<td align=center style="vertical-align: middle;">');
   echo("<div id='disabled_".$port['port_id']."' class='switch switch-mini' data-on='danger' data-off='primary' data-on-label='No' data-off-label='Yes'><input type=checkbox name='disabled_".$port['port_id']."'".($port['disabled'] ? 'checked' : '')."></div>");
