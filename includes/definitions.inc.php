@@ -139,17 +139,19 @@ $config['nicecase'] = array(
     "notmatch" => "Doesn't match",
     "" => "");
 
-// FIXME - different icons for power/volt/current
+// FIXME - different icons for power/volt/current, also for airflow vs fanspeed
 
-$config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'oicon-current');
-$config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'oicon-frequency');
+// The order these are entered here defines the order they are shown in the web interface
+$config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'oicon-thermometer-high');
 $config['sensor_types']['humidity']    = array( 'symbol' => '%',   'text' => 'Percent', 'icon' => 'oicon-water');
 $config['sensor_types']['fanspeed']    = array( 'symbol' => 'RPM', 'text' => 'RPM',     'icon' => 'oicon-weather-wind');
-$config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Watts',   'icon' => 'oicon-power');
-$config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'oicon-voltage');
-$config['sensor_types']['temperature'] = array( 'symbol' => 'C',   'text' => 'Celsius', 'icon' => 'oicon-thermometer-high');
-$config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'oicon-arrow-incident-red');
 $config['sensor_types']['airflow']     = array( 'symbol' => 'CFM', 'text' => 'Airflow', 'icon' => 'oicon-weather-wind');
+$config['sensor_types']['voltage']     = array( 'symbol' => 'V',   'text' => 'Volts',   'icon' => 'oicon-voltage');
+$config['sensor_types']['current']     = array( 'symbol' => 'A',   'text' => 'Amperes', 'icon' => 'oicon-current');
+$config['sensor_types']['power']       = array( 'symbol' => 'W',   'text' => 'Watts',   'icon' => 'oicon-power');
+$config['sensor_types']['frequency']   = array( 'symbol' => 'Hz',  'text' => 'Hertz',   'icon' => 'oicon-frequency');
+$config['sensor_types']['dbm']         = array( 'symbol' => 'dBm', 'text' => 'dBm',     'icon' => 'oicon-arrow-incident-red');
+$config['sensor_types']['state']       = array( 'symbol' => '',    'text' => '',        'icon' => 'oicon-state');
 
 $config['routing_types']['isis']      = array( 'text' => 'ISIS');
 $config['routing_types']['ospf']      = array( 'text' => 'OSPF');
