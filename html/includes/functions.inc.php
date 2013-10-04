@@ -194,11 +194,10 @@ function data_uri($file, $mime)
 // This uses $config['nicecase']
 function nicecase($item)
 {
-
   $mappings = $GLOBALS['config']['nicecase'];
-  if(isset($mappings[$item])) { return $mappings[$item]; }
-  return ucfirst($item);
+  if (isset($mappings[$item])) { return $mappings[$item]; }
 
+  return ucfirst($item);
 }
 
 function toner2colour($descr, $percent)

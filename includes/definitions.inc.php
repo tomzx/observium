@@ -137,6 +137,7 @@ $config['nicecase'] = array(
     "le" => "Less or equal", 
     "notequals" => "Doesn't equal",
     "notmatch" => "Doesn't match",
+    "diskio" => "Disk I/O",
     "" => "");
 
 // FIXME - different icons for power/volt/current, also for airflow vs fanspeed
