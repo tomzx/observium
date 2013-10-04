@@ -40,7 +40,7 @@ foreach (dbFetchRows("SELECT * FROM `slas` WHERE `device_id` = ? AND `deleted` =
 
   if (!is_file($slarrd))
   {
-    rrdtool_create($slarrd, " \ DS:rtt:GAUGE:600:0:300000 ");
+    rrdtool_create($slarrd, "DS:rtt:GAUGE:600:0:300000");
   }
 
   if (isset($sla_table[$sla['sla_nr']]))
