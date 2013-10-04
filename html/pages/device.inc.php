@@ -303,8 +303,10 @@ if (device_permitted($vars['device']) || $check_device == $vars['device'])
     // Always print logs tab
     $navbar['options']['logs'] = array('text' => 'Logs', 'icon' => 'oicon-clipboard-audit');
 
-    // Always print alerts tab
-    $navbar['options']['alerts'] = array('text' => 'Alerts', 'icon' => 'oicon-bell');
+    // Print alerts tab
+    if(EDITION != 'community') {
+      $navbar['options']['alerts'] = array('text' => 'Alerts', 'icon' => 'oicon-bell');
+    }
 
    // If the user has global read privileges, check for a device config.
    if ($_SESSION['userlevel'] >= 7)

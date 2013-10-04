@@ -47,10 +47,14 @@ if (isset($config['enable_syslog']) && $config['enable_syslog'])
 ?>
         <li><a href="<?php echo(generate_url(array('page'=>'pollerlog'))); ?>"><i class="menu-icon oicon-clipboard-report-bar"></i> Polling Information</a></li>
 
+<?php if(EDITION != 'community') {  ?>
+
         <li class="divider"></li>
 
         <li><a href="<?php echo(generate_url(array('page'=>'alerts'))); ?>"><i class="menu-icon oicon-bell"></i> Alerts</a></li>
         <li><a href="<?php echo(generate_url(array('page'=>'alert_checks'))); ?>"><i class="menu-icon oicon-eye"></i> Alert Checks</a></li>
+
+<?php } ?>
 
 
         <li class="divider"></li>
@@ -228,7 +232,7 @@ foreach ($config['device_types'] as $devtype)
 
 <?php
 
-if ($config['enable_billing']) { echo('<li><a href="bills/"><i class="oicon-money-coin"></i> Traffic Bills</a></li>'); $ifbreak = 1; }
+if (EDITION != 'community' && $config['enable_billing']) { echo('<li><a href="bills/"><i class="oicon-money-coin"></i> Traffic Bills</a></li>'); $ifbreak = 1; }
 
 if ($config['enable_pseudowires']) { echo('<li><a href="pseudowires/"><i class="oicon-layer-shape-curve"></i> Pseudowires</a></li>'); $ifbreak = 1; }
 

@@ -218,6 +218,15 @@ if ($_SESSION['authenticated'])
     print_error('Observium now requires mcrypt to be installed for use by the "remember me" function. Please install the php5-mcrypt package on Ubuntu/Debian or the php-mcrypt package on RHEL/Centos. Alternatively, you can disable this feature by setting $config[\'login_remember_me\'] = FALSE; in your config.');
   }
 
+  print_message("<b>Important Observium release changes.</b>
+
+                 The Observium releasing system is changing. In order to better deliver feature improvements and bug fixes to Enterprise and Service Provider users, we're restructuring the SVN release mechanism. In addition to the existing cutting-edge rolling release which allows us to immediately deliver feature improvements and bug fixes, we've added a new rolling stable release combining reliability with rapid bug fixes. These two releases are now available to subscribers.
+
+                 Future updates to the community edition of Observium will be provided via semi-annual .tar.gz releases. Please install the most recent .tar.gz release to remove this notification.
+
+                 <a href='http://www.observium.org/Editions_Split'>More Information</a>", 'info');
+
+
   // Authenticated. Print a page.
   if (isset($vars['page']) && !strstr("..", $vars['page']) &&  is_file("pages/" . $vars['page'] . ".inc.php"))
   {

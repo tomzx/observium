@@ -68,7 +68,10 @@ $link_array = array('page'    => 'device',
                     'port'    => $port['port_id']);
 
 $navbar['options']['graphs']['text']   = 'Graphs';
-$navbar['options']['alerts']['text']   = 'Alerts';
+
+if(EDITION != 'community') {
+  $navbar['options']['alerts']['text']   = 'Alerts';
+}
 
 if (dbFetchCell("SELECT COUNT(*) FROM `sensors` WHERE `measured_class` = 'port' AND `measured_entity` = '".$port['port_id']."' and `device_id` = '".$device['device_id']."'"))
 { $navbar['options']['sensors']['text'] = 'Sensors'; }
@@ -113,13 +116,14 @@ if (dbFetchCell("SELECT COUNT(*) FROM juniAtmVp WHERE port_id = '".$port['port_i
   }
 }
 
-if ($_SESSION['userlevel'] == '10' && $config['enable_billing'])
+if(EDITION != 'community' && $_SESSION['userlevel'] == '10' && $config['enable_billing'])
 {
   $navbar['options_right']['bills'] = array('text' => 'Create Bill', 'icon' => 'oicon-money-coin', 'url' => generate_url(array('page' => 'bills', 'view' => 'add', 'port' => $port['port_id'])));
 }
 
 if ($_SESSION['userlevel'] == '10' )
 {
+  // This doesn't exist yet.
   $navbar['options_right']['data']['text'] = 'Data';
 }
 
