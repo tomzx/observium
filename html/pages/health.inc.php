@@ -37,24 +37,30 @@ foreach ($datas as $texttype)
   echo('</li>');
 
 }
+
 echo('</ul><ul class="nav pull-right">');
+
 if ($vars['view'] == "graphs")
 {
-    $class = "active";
-  } else { unset($class); }
+  $class = "active";
+} else {
+  unset($class);
+}
 
-  echo('<li class="pull-right '.$class.'">');
-  echo(generate_link("Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "graphs")));
-  echo('</li>');
+echo('<li class="pull-right '.$class.'">');
+echo(generate_link("Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "graphs")));
+echo('</li>');
 
 if ($vars['view'] != "graphs")
 {
-    $class = "active";
-  } else { unset($class); }
+  $class = "active";
+} else {
+  unset($class);
+}
 
-  echo('<li class="pull-right '.$class.'">');
-  echo(generate_link("No Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "detail")));
-  echo('</li>');
+echo('<li class="pull-right '.$class.'">');
+echo(generate_link("No Graphs",$link_array,array('metric'=> $vars['metric'], 'view' => "detail")));
+echo('</li>');
 
 echo('</ul></div></div>');
 
@@ -64,7 +70,14 @@ if (in_array($vars['metric'],array_keys($used_sensors))
   || $vars['metric'] == 'toner'
   || $vars['metric'] == 'mempool')
 {
-  include('pages/health/'.$vars['metric'].'.inc.php');
+  $sensor_type = $vars['metric'];
+
+  if (file_exists('pages/health/'.$vars['metric'].'.inc.php'))
+  {
+    include('pages/health/'.$vars['metric'].'.inc.php');
+  } else {
+    include('pages/health/sensors.inc.php');
+  }
 }
 else
 {

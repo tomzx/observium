@@ -1,10 +1,12 @@
 <?php
 
+global $sensor_type;
+
 $sql  = "SELECT *, `sensors`.`sensor_id` AS `sensor_id`";
 $sql .= " FROM `sensors`";
 $sql .= " JOIN `devices` ON `sensors`.`device_id` = `devices`.`device_id`";
 $sql .= " LEFT JOIN  `sensors-state` ON `sensors`.`sensor_id` = `sensors-state`.`sensor_id`";
-$sql .= " WHERE `sensors`.`sensor_class` = '".$class."'";
+$sql .= " WHERE `sensors`.`sensor_class` = '".$sensor_type."'";
 $sql .= " ORDER BY `devices`.`hostname`, `sensors`.`sensor_descr`";
 
 if ($vars['view'] == "graphs") { $stripe_class = "table-striped-two"; } else { $stripe_class = "table-striped"; }
@@ -47,7 +49,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
     $graph_array           = array();
     $graph_array['to']     = $config['time']['now'];
     $graph_array['id']     = $sensor['sensor_id'];
-    $graph_array['type']   = $graph_type;
+    $graph_array['type']   = "sensor_$sensor_type";
     $graph_array['legend'] = "no";
 
     $link_array = $graph_array;
@@ -65,14 +67,14 @@ foreach (dbFetchRows($sql, $param) as $sensor)
 
     $sensor['sensor_descr'] = truncate($sensor['sensor_descr'], 48, '');
 
-    if ($class == "frequency") {
+    if ($sensor_type == "frequency") { # FIXME again here, why different for freq? format_si() only diff here.
       echo('<tr>
           <td class=strong>' . generate_device_link($sensor) . '</td>
           <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
           <td>'.$alert.'</td>
           <td>'.overlib_link($link_graph, $sensor_minigraph, $overlib_content).'</td>
-          <td style="font-weight: bold;">' . format_si($sensor['sensor_value']) . $unit . '</td>
-          <td>' . format_si(round($sensor['sensor_limit_low'],2)) . $unit . ' - ' . format_si(round($sensor['sensor_limit'],2)) . $unit . '</td>
+          <td style="font-weight: bold;">' . format_si($sensor['sensor_value']) . $config['sensor_types'][$sensor_type]['symbol'] . '</td>
+          <td>' . format_si(round($sensor['sensor_limit_low'],2)) . $config['sensor_types'][$sensor_type]['symbol'] . ' - ' . format_si(round($sensor['sensor_limit'],2)) . $config['sensor_types'][$sensor_type]['symbol'] . '</td>
         </tr>
       ');
     } else{
@@ -81,8 +83,8 @@ foreach (dbFetchRows($sql, $param) as $sensor)
           <td>'.overlib_link($link, $sensor['sensor_descr'],$overlib_content).'</td>
           <td>'.$alert.'</td>
           <td>'.overlib_link($link_graph, $sensor_minigraph, $overlib_content).'</td>
-          <td style="font-weight: bold;">' . $sensor['sensor_value'] . $unit . '</td>
-          <td>' . round($sensor['sensor_limit_low'],2) . $unit . ' - ' . round($sensor['sensor_limit'],2) . $unit . '</td>
+          <td style="font-weight: bold;">' . $sensor['sensor_value'] . $config['sensor_types'][$sensor_type]['symbol'] . '</td>
+          <td>' . round($sensor['sensor_limit_low'],2) . $config['sensor_types'][$sensor_type]['symbol'] . ' - ' . round($sensor['sensor_limit'],2) . $config['sensor_types'][$sensor_type]['symbol'] . '</td>
         </tr>
       ');
     }
@@ -94,7 +96,7 @@ foreach (dbFetchRows($sql, $param) as $sensor)
       unset($graph_array['height'], $graph_array['width'], $graph_array['legend']);
       $graph_array['to']     = $config['time']['now'];
       $graph_array['id']     = $sensor['sensor_id'];
-      $graph_array['type']   = $graph_type;
+      $graph_array['type']   = "sensor_$sensor_type";
 
       include("includes/print-graphrow.inc.php");
 
