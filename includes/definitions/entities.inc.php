@@ -20,6 +20,12 @@ $config['entities']['mempool']['table']           = "mempools";
 $config['entities']['mempool']['icon']                   = "oicon-memory";
 $config['entities']['mempool']['graph']                  = array('type' => 'mempool_usage', 'id' => '@mempool_id');
 
+$config['entities']['storage']['id_field']        = 'storage_id';
+$config['entities']['storage']['name_field']     = "storage_descr";
+$config['entities']['storage']['table']           = "storage";
+$config['entities']['storage']['icon']                   = "oicon-drive";
+$config['entities']['storage']['graph']                  = array('type' => 'storage_usage', 'id' => '@storage_id');
+
 $config['entities']['processor']['id_field']        = 'processor_id';
 $config['entities']['processor']['name_field']     = "processor_descr";
 $config['entities']['processor']['table']           = "processors";

@@ -56,6 +56,11 @@ foreach (dbFetchRows($sql, array($device['device_id'])) as $storage)
     'storage_units' => $storage['units'], 'storage_perc' => $percent), 'storage-state', '`storage_id` = ?', array($storage['storage_id']));
   $graphs['storage'] = TRUE;
 
+  // Check alerts
+
+  check_entity('storage', $mempool, array('storage_perc' => $percent));
+
+
   echo("\n");
 }
 
