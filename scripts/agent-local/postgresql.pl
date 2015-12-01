@@ -84,7 +84,8 @@ $all =~ /\w+ (\d\.\d)/;
 $version=$1;
 
 # get the stats
-if ($version =~ /^(8|9)\.\d$/) {
+if ($version =~ /^9\.[4]$/) {
+if ($version =~ /^(8|9)\.[0123]$/) {
     $cmd="select datname, usename, client_addr, current_query from pg_stat_activity";
 }
 
@@ -116,6 +117,23 @@ for (; $all=$query->fetchrow_hashref() ;) {
 	    $update++;
 	}
 	elsif (lc($all->{current_query}) =~ /^delete/) {
+	    $delete++;
+	}
+	else {
+	    $other++;
+	}
+    }
+    if ($all->{query}) {
+	if ($all->{query} =~ /<IDLE>/) {
+	    $idle++;
+	}
+	elsif (lc($all->{query}) =~ /^select/) {
+	    $select++;
+	}
+	elsif (lc($all->{query}) =~ /^update/) {
+	    $update++;
+	}
+	elsif (lc($all->{query}) =~ /^delete/) {
 	    $delete++;
 	}
 	else {
