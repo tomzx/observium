@@ -51,7 +51,7 @@ if ($config['enable_bgp'])
 
   echo("BGP Sessions: ");
 
-  $bgpLocalAs = snmp_get($device, 'bgpLocalAs.0', '-Oqvn', 'BGP4-MIB', mib_dirs());
+  $bgpLocalAs = snmp_walk($device, 'bgpLocalAs', '-Oqvn', 'BGP4-MIB', mib_dirs());
   if ($device['os'] == 'junos' && $bgpLocalAs == '0')
   {
     // On JunOS BGP4-MIB::bgpLocalAs.0 is always '0'.
