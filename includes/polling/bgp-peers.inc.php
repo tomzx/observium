@@ -2,11 +2,16 @@
 
 /// We should walk, so we can discover here too.
 
-global $debug;
+$table_rows = array();
+$c_table_rows = array();
 
-if ($config['enable_bgp'])
+// 'BGP4-MIB', 'CISCO-BGP4-MIB', 'BGP4-V2-MIB-JUNIPER', 'FORCE10-BGP4-V2-MIB', 'ARISTA-BGP4V2-MIB'
+if ($config['enable_bgp'] && is_device_mib($device, 'BGP4-MIB')) // Note, BGP4-MIB is main MIB, without it, the rest will not be checked
 {
 
+  // Get Local ASN
+  $bgpLocalAs = snmp_walk($device, 'bgpLocalAs', '-OUQvn', 'BGP4-MIB', mib_dirs());
+  
   echo("BGP Peers: ");
 
   $bgp_oids  = array('bgpPeerState', 'bgpPeerAdminStatus', 'bgpPeerInUpdates', 'bgpPeerOutUpdates',
